@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Porthd\Timer\:
+    resource: '../Classes/*'
+
+  Porthd\Timer\Command\UpdateTimerCommand:
+    tags:
+      - name: 'console.command'
+        command: 'timer:updateTimerCommand'
+        description: 'Update starttime and endtime in various tables, where a timer is defined.'
+        public: true

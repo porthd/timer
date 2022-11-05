@@ -1,0 +1,7 @@
+# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.useTestContent
+flagTestContent = true
+# cat=timer/internalTimer; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.selectInternatTimer
+useInternalTimer = 2047
+
+# cat=timer/timerBasic; type=string; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.baseTimeZone
+baseTimeZone = Europe/Berlin

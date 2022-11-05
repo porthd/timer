@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z"
+          product-name="timer">
+        <header/>
+        <body>
+            <trans-unit id="command.scheduler.title.timer.updater">
+                <source>Update starttime and endtime in various tables</source>
+                <target>Startzeit und Endzeit in verschiedenen Tabellen aktualisieren</target>
+            </trans-unit>
+
+            <trans-unit id="tx_timer_general.tab.timer">
+                <source>Select the timer-modell</source>
+                <target>Wählen Sie das Timer-Modell aus</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_general.field.tx_timer_scheduler">
+                <source>allow to modify the start- and endtime of this element with the schduler by a command-line-task (CLI)</source>
+                <target>erlauben, die Start- und Endzeit dieses Elements mit dem Planer über eine Befehlszeilenaufgabe (CLI) zu ändern</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_general.field.tx_timer_timer">
+                <source>flexform-parameter for selected timer of active periods</source>
+                <target>Flexform-Parameter für ausgewählten Timer aktiver Perioden</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_general.field.tx_timer_selector">
+                <source>Select the timer-model</source>
+                <target>Wählen Sie das Timer-Modell aus</target>
+            </trans-unit>
+
+            <trans-unit id="tx_timer_domain_model_event.model.title">
+                <source>Simple event-model</source>
+                <target>Einfaches Event-Modell</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.tab.single">
+                <source>Event</source>
+                <target>Vorfall</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.tab.teaser">
+                <source>Teaser</source>
+                <target>Teaser</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.palette.timerlang">
+                <source>Lanuage-parts</source>
+                <target>Sprachteile</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.palette.timerteaserlink">
+                <source>Aspects</source>
+                <target>Aspekte</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.field.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.field.description">
+                <source>Informations</source>
+                <target>Informationen</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.field.teaser_slogan">
+                <source>Slogan</source>
+                <target>Slogan</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.field.teaser_infotext">
+                <source>Shortinfos</source>
+                <target>Kurzinfos</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_event.field.flag_test">
+                <source>For tests only</source>
+                <target>Nur für Tests</target>
+            </trans-unit>
+
+            <trans-unit id="tx_timer_domain_model_listing.model.title">
+                <source>Simple listing-model</source>
+                <target>Einfaches Listing-Modell</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_listing.tab.single">
+                <source>listing times</source>
+                <target>Auflistungszeiten</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_listing.palette.timerlang">
+                <source>Lanuage-parts</source>
+                <target>Sprachteile</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_listing.palette.timerteaserlink">
+                <source>Aspects</source>
+                <target>Aspekte</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_listing.field.title">
+                <source>Title</source>
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_listing.field.description">
+                <source>Informations</source>
+                <target>Informationen</target>
+            </trans-unit>
+
+            <trans-unit id="backend.contentElement.event.title">
+                <source>Timer for simple events</source>
+                <target>Timer für einfache Ereignisse</target>
+            </trans-unit>
+            <trans-unit id="extension.configuration.template.flag.useTestContent">
+                <source>Flag for TestContent: Only if the value is 1,true or TRUE, you can activate the predefined content-elements of this extension for your tests.</source>
+                <target>Flag for TestContent: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.</target>
+            </trans-unit>
+            <trans-unit id="extension.configuration.template.flag.flagPreviewTimerFrontend">
+                <source>Show preview-mark everytime on the page (inclusive a dat-time-form for temporäry previews).</source>
+                <target>Vorschau-Markierung immer auf der Seite anzeigen (inklusive Datum-Uhrzeit-Formular für temporäre Vorschauen).</target>
+            </trans-unit>
+            <trans-unit id="extension.configuration.template.flag.defaultBaseTimeZone">
+                <source>Default Timezone: Each timer-event is defined for its own timezone. You define her, which timezone will set on default by the typo3-backend. The default-value by blank or undefined zones is `UTC`.</source>
+                <target>Default Timezone: Jedes Timer-Event ist für seine eigene Zeitzone definiert. Sie legen hier fest, welche Zeitzone vom Typo3-Backend standardmäßig eingestellt wird. Der Default-Wert bei leeren oder undefinierten Zonen ist `UTC`.</target>
+            </trans-unit>
+            <trans-unit id="extension.configuration.template.flag.selectInternatTimer">
+                <source>Activate predefined Timer: Summarize the values to activate only the timer you really need. (all = 2047  // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024)</source>
+                <target>Vordefinierten Timer aktivieren: Fassen Sie die Werte zusammen, um nur den wirklich benötigten Timer zu aktivieren. (all = 2047 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024)</target>
+            </trans-unit>
+
+            <trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.title">
+                <source>Periods after Date (i.e. Yearly)</source>
+                <target>Zeiträume nach dem Datum (z. B. jährlich)</target>
+            </trans-unit>
+            <trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.description">
+                <source>Remark an active delay-time after as special date repeating in flexible ways</source>
+                <target>Bemerken Sie eine aktive Verzögerungszeit danach als Sonderdatum, das sich flexibel wiederholen lässt</target>
+            </trans-unit>
+            <trans-unit id="tx_timer.tca.general.div.timerParams.lable">
+                <source>Periods</source>
+                <target>Perioden</target>
+            </trans-unit>
+            <trans-unit id="tx_timer.tca.element.name.timerTimersimul">
+                <source>timer-test</source>
+                <target>Timer-Test</target>
+            </trans-unit>
+            <trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libFLuidContent">
+                <source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
+                <target>Schlüssel für Pfade: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.fluidContent`</target>
+            </trans-unit>
+            <trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libContentElement">
+                <source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.contentElment`</source>
+                <target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElment`</target>
+            </trans-unit>
+            <trans-unit id="newContentElement.tx_timer_timersimul.pages.forList">
+                <source>list of page-id for pages, which contains events used by the example content-element `tx_timer_timersimul`</source>
+                <target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElment`</target>
+            </trans-unit>
+            <trans-unit id="backend.pageModul.timerTimersimul.info">
+                <source>This content-element is only for propose of testing and adding some example-code to the extension.</source>
+                <target>Dieses Inhaltselement dient nur zum Testen und Hinzufügen von Beispielcode zur Erweiterung.</target>
+            </trans-unit>
+
+            <trans-unit id="task.timer.updateTimesByTimer.title">
+                <source>Update start- and endtime by timer</source>
+                <target>Start- und Endzeit per Timer aktualisieren</target>
+            </trans-unit>
+            <trans-unit id="task.timer.updateTimesByTimer.help">
+                <source><![CDATA[ <br /> The Commandcontroller will update the field starttime and endtime in a selected table, if the tx_timer_select-Field is not empty and the field `deleted`is zero. <br /> The yaml-file contains the list of table in the array ``. The subarray `where-equal` of a table contain additional field-value-pairs for the where-block of the query. <br /> The array `rootline` restricts the results to rows, which aree part of the branch with the listed pids in its root/branch. <br /> ]]></source>
+                <target><![CDATA[ <br /> Der Commandcontroller aktualisiert die Felder starttime und endtime in einer selektierten Tabelle, wenn das tx_timer_select-Field nicht leer und das Feld `deleted`null ist. <br /> Die yaml-Datei enthält die Liste der Tabellen im Array ``. Das Subarray `where-equal` einer Tabelle enthält zusätzliche Feld-Wert-Paare für den Where-Block der Abfrage. <br /> Das Array `rootline` schränkt die Ergebnisse auf Zeilen ein, die Teil des Zweigs mit den aufgelisteten PIDs in seinem Stamm/Zweig sind. <br /> ]]></target>
+            </trans-unit>
+            <trans-unit id="task.timer.updateTimesByTimer.yamltablelist">
+                <source>The yaml-file contains the List of table, which should be updated, and the cache-commands
+                    <target>Die yaml-Datei enthält die Liste der Tabellen, die aktualisiert werden sollen, und die Cache-Anweisungen</target>
+                </source>
+            </trans-unit>
+            <trans-unit id="task.timer.exception.yamlNotExit.1">
+                <source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
+                <target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable `%s`.</target>
+            </trans-unit>
+            <trans-unit id="task.timer.warning.yamlNotAllUpdated.3">
+                <source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
+                <target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable `%s`.</target>
+            </trans-unit>
+
+            <trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.title">
+                <source>Reset of publishingDate and Expiration Date</source>
+                <target>Zurücksetzen von Veröffentlichungsdatum und Ablaufdatum</target>
+            </trans-unit>
+            <trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.message">
+                <source>The fields `starttime`(publishingDate) and `endtime`(Expiration Date) have been changed to zero.</source>
+                <target>Die Felder `starttime`(publishingDate) und `endtime`(expiration date) wurden auf Null geändert.</target>
+            </trans-unit>
+
+            <trans-unit id="tt_content.CType.div._timer_">
+                <source>timer</source>
+                <target>Timer</target>
+            </trans-unit>
+            <trans-unit id="tt_content.CType.timer_timersimul">
+                <source>Timer Simulation</source>
+                <target>Timer-Simulation</target>
+            </trans-unit>
+            <trans-unit id="timer.typoescript.constants.pathes.templates">
+                <source>Templtes:Path to template root (FE)</source>
+                <target>Vorlagen:Pfad zum Vorlagenstamm (FE)</target>
+            </trans-unit>
+            <trans-unit id="timer.typoescript.constants.pathes.partials">
+                <source>Partials:Path to template partials (FE)</source>
+                <target>Partials:Pfad zu Template-Partials (FE)</target>
+            </trans-unit>
+            <trans-unit id="timer.typoescript.constants.pathes.layout">
+                <source>Layout:Path to template layouts (FE)</source>
+                <target>Layout:Pfad zu Vorlagenlayouts (FE)</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

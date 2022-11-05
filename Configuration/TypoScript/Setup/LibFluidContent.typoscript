@@ -1,0 +1,23 @@
+#tt_content.timer_timersimul = FLUIDTEMPLATE
+lib.fluidContent {
+    templateRootPaths {
+        {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_timersimul.view.templateRootPath}
+    }
+    partialRootPaths {
+        {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_timersimul.view.partialRootPath}
+    }
+    layoutRootPaths {
+        {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_timersimul.view.layoutRootPath}
+    }
+}
+lib.contentElement {
+    templateRootPaths {
+        {$contentElement.tx_timer_timersimul.pathSlotNumber.contentElement} = {$contentElement.tx_timer_timersimul.view.templateRootPath}
+    }
+    partialRootPaths {
+        {$contentElement.tx_timer_timersimul.pathSlotNumber.contentElement} = {$contentElement.tx_timer_timersimul.view.partialRootPath}
+    }
+    layoutRootPaths {
+        {$contentElement.tx_timer_timersimul.pathSlotNumber.contentElement} = {$contentElement.tx_timer_timersimul.view.layoutRootPath}
+    }
+}

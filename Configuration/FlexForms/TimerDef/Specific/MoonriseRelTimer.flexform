@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta type="array">
+        <langChildren>0</langChildren>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <TCEforms>
+            <sheetTitle>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.sheet.title
+            </sheetTitle>
+            <sheetShortDescr>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.sheet.shortDescr
+            </sheetShortDescr>
+            <sheetDescription>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.sheet.description
+            </sheetDescription>
+            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_moonrisereltimer.xlf</cshFile>
+        </TCEforms>
+        <type>array</type>
+        <el>
+            <moonStatus>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.field.moonStatus.title
+                    </label>
+                    <config>
+                        <type>select</type>
+                        <renderType>selectSingleBox</renderType>
+                        <allowNonIdValues>1</allowNonIdValues>
+                        <items type="array">
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.select.moonStatus.moonrise
+                                </numIndex>
+                                <numIndex index="1">moonrise</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.select.moonStatus.moonset
+                                </numIndex>
+                                <numIndex index="1">moonset</numIndex>
+                            </numIndex>
+                        </items>
+                        <minitems>1</minitems>
+                        <maxitems>1</maxitems>
+                        <size>3</size>
+                        <default>moonrise</default>
+                    </config>
+                </TCEforms>
+            </moonStatus>
+            <relMinToSelectedTimerEvent>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.field.relMinToSelectedTimerEvent
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval>int</eval>
+                        <range>
+                            <lower>-1439</lower>
+                            <upper>1439</upper>
+                        </range>
+                        <default>0</default>
+                    </config>
+                </TCEforms>
+            </relMinToSelectedTimerEvent>
+            <durationMinutes>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.field.durationMinutes
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval>int,required</eval>
+                        <range>
+                            <lower>-1439</lower>
+                            <upper>1439</upper>
+                        </range>
+                        <default>60</default>
+                    </config>
+                </TCEforms>
+            </durationMinutes>
+            <latitude>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.field.latitude.title
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval>double2</eval>
+                        <default>53.0751600</default>
+                    </config>
+                </TCEforms>
+            </latitude>
+            <longitude>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.field.longitude.title
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>20</size>
+                        <eval>double2</eval>
+                        <default>8.8077700</default>
+                    </config>
+                </TCEforms>
+            </longitude>
+        </el>
+    </ROOT>
+</T3DataStructure>

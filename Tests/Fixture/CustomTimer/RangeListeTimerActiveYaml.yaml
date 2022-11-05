@@ -1,0 +1,25 @@
+rangelist:
+  -
+    title: 'All days of the week from 06:00 to 12:00'
+    description: '- Testkonfiguration -'
+    selector: txTimerDaily
+    params:
+      startTimeSeconds: '21600'
+      durationMinutes: '360'
+      useTimeZoneOfFrontend: false
+      timeZoneOfEvent: 'Europe/Berlin'
+      ultimateBeginningTimer: '0001-01-01 00:00:00'
+      ultimateEndingTimer: '9999-12-31 23:59:59'
+      activeWeekday: '127'
+  -
+    :title: 'Wendesday to Sunday from 02:00 to 07:00'
+    description: '- Testkonfiguration -'
+    selector: txTimerDaily
+    params:
+      startTimeSeconds: '7200'
+      durationMinutes: '300'
+      useTimeZoneOfFrontend: false
+      timeZoneOfEvent: 'Europe/Berlin'
+      ultimateBeginningTimer: '0001-01-01 00:00:00'
+      ultimateEndingTimer: '9999-12-31 23:59:59'
+      activeWeekday: '124'

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta type="array">
+        <langChildren>0</langChildren>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <TCEforms>
+            <sheetTitle>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayly.sheet.title
+            </sheetTitle>
+            <sheetShortDescr>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.sheet.shortDescr
+            </sheetShortDescr>
+            <sheetDescription>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayly.sheet.description
+            </sheetDescription>
+            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_weekdaylytimer.xlf</cshFile>
+        </TCEforms>
+        <type>array</type>
+        <el>
+            <activeWeekday>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayly.field.activeWeekday
+                    </label>
+                    <config>
+                        <type>check</type>
+                        <renderType>checkboxToggle</renderType>
+                        <items type="array">
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.monday
+                                </numIndex>
+                                <numIndex index="1">1</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.tuesday
+                                </numIndex>
+                                <numIndex index="1">2</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.wednesday
+                                </numIndex>
+                                <numIndex index="1">4</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.thursday
+                                </numIndex>
+                                <numIndex index="1">8</numIndex>
+                            </numIndex>
+                            <numIndex index="4" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.friday
+                                </numIndex>
+                                <numIndex index="1">16</numIndex>
+                            </numIndex>
+                            <numIndex index="5" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.saturday
+                                </numIndex>
+                                <numIndex index="1">32</numIndex>
+                            </numIndex>
+                            <numIndex index="6" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.sunday
+                                </numIndex>
+                                <numIndex index="1">64</numIndex>
+                            </numIndex>
+                        </items>
+                        <col>4</col>
+                        <eval>required</eval>
+                        <default>31</default>
+                    </config>
+
+                </TCEforms>
+            </activeWeekday>
+        </el>
+    </ROOT>
+</T3DataStructure>

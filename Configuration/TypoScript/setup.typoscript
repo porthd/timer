@@ -1,0 +1,4 @@
+@import 'EXT:timer/Configuration/TypoScript/Setup/Config.typoscript'
+@import 'EXT:timer/Configuration/TypoScript/Setup/LibFluidContent.typoscript'
+@import 'EXT:timer/Configuration/TypoScript/Setup/TimersimulFrontend.typoscript'
+@import 'EXT:timer/Configuration/TypoScript/Setup/TimersimulBackend.typoscript'

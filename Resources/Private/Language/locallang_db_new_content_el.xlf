@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2020-10-17T10:23:55+02:00" product-name="timer">
+        <header/>
+        <body>
+            <trans-unit id="wizards.newContentElement.timersimul_title">
+                <source>Timer Simulation</source>
+            </trans-unit>
+            <trans-unit id="wizards.newContentElement.timersimul_description">
+                <source>Simulate the time of the presentation of a page</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

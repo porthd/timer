@@ -1,0 +1,39 @@
+#
+#  /***************************************************************
+#    *
+#    *  Copyright notice
+#    *
+#    *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+#    *
+#    *  All rights reserved
+#    *
+#    *  This script is free software; you can redistribute it and/or modify
+#    *  it under the terms of the GNU General Public License as published by
+#    *  the Free Software Foundation; either version 3 of the License, or
+#    *  (at your option) any later version.
+#    *
+#    *  The GNU General Public License can be found at
+#    *  http://www.gnu.org/copyleft/gpl.html.
+#    *
+#    *  This copyright notice MUST APPEAR in all copies of the script!
+#    ***************************************************************/
+#
+#  #
+rangelist:
+  -
+    selector: 'txTimerDatePeriod'
+    title: 'every year: christmas 25.12. - fullday active'
+    description: '- free to fill -'
+    params:
+      startTimeSeconds: '1970-12-25 00:00:00'
+      durationMinutes: 1440
+      periodLength: 1
+      periodUnit: 'DY'
+  # allowed PeriodUnits:  `TM`, `TH`, `DD`, `DW`, `DM`, `DY`
+  -
+    selector: 'txTimerDaily'
+    title: 'every day from 12:00 - 14:00'
+    description: '- free to fill -'
+    params:
+      startTimeSeconds: 43200
+      durationMinutes: 240

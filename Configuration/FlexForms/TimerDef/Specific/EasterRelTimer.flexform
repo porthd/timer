@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta type="array">
+        <langChildren>0</langChildren>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <TCEforms>
+            <sheetTitle>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.sheet.title
+            </sheetTitle>
+            <sheetShortDescr>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.sheet.shortDescr
+            </sheetShortDescr>
+            <sheetDescription>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.sheet.description
+            </sheetDescription>
+            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_easterreltimer.xlf</cshFile>
+        </TCEforms>
+        <type>array</type>
+        <el>
+            <namedDateMidnight>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.field.namedDate.title
+                    </label>
+                    <config>
+                        <!-- https://www.erzbistum-koeln.de/presse_und_medien/magazin/Katholische-bewegliche-Feiertage-und-Hochfeste-2020-und-2021/ -->
+                        <type>select</type>
+                        <renderType>selectSingle</renderType>
+                        <allowNonIdValues>1</allowNonIdValues>
+                        <items type="array">
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.easter
+                                </numIndex>
+                                <numIndex index="1">easter</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.ascensionOfChrist
+                                </numIndex>
+                                <numIndex index="1">ascension</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.pentecost
+                                </numIndex>
+                                <numIndex index="1">pentecost</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.towlday
+                                </numIndex>
+                                <numIndex index="1">towlday</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.firstAdvent
+                                </numIndex>
+                                <numIndex index="1">firstadvent</numIndex>
+                            </numIndex>
+                            <numIndex index="4" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.christmas
+                                </numIndex>
+                                <numIndex index="1">christmas</numIndex>
+                            </numIndex>
+                            <numIndex index="5" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.roseMonday
+                                </numIndex>
+                                <numIndex index="1">rosemonday</numIndex>
+                            </numIndex>
+                            <numIndex index="6" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.goodFriday
+                                </numIndex>
+                                <numIndex index="1">goodfriday</numIndex>
+                            </numIndex>
+                        </items>
+                        <minitems>1</minitems>
+                        <size>3</size>
+                        <default>easter</default>
+                    </config>
+                </TCEforms>
+            </namedDateMidnight>
+            <relMinToSelectedTimerEvent>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.field.relMinToSelectedTimerEvent
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval1>int</eval1>
+                        <!-- 446400 = 10*30*24*60+10*24*60 -->
+                        <range>
+                            <lower>-444444</lower>
+                            <upper>444444</upper>
+                        </range>
+                        <default>0</default>
+                    </config>
+                </TCEforms>
+            </relMinToSelectedTimerEvent>
+            <calendarUse>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.field.calendarUse.title
+                    </label>
+                    <config>
+                        <type>select</type>
+                        <renderType>selectSingle</renderType>
+                        <items type="array">
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_default
+                                </numIndex>
+                                <numIndex index="1">0</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_roman
+                                </numIndex>
+                                <numIndex index="1">1</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_always_gregorian
+                                </numIndex>
+                                <numIndex index="1">2</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_always_julian
+                                </numIndex>
+                                <numIndex index="1">3</numIndex>
+                            </numIndex>
+                        </items>
+                        <minitems>1</minitems>
+                        <size>3</size>
+                        <default>1</default>
+                    </config>
+                </TCEforms>
+            </calendarUse>
+            <durationMinutes>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.field.durationMinutes
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval>int,required</eval>
+                        <!-- 446400 = 10*30*24*60+10*24*60 -->
+                        <range>
+                            <lower>-444444</lower>
+                            <upper>444444</upper>
+                        </range>
+                        <default>60</default>
+                    </config>
+                </TCEforms>
+            </durationMinutes>
+        </el>
+    </ROOT>
+</T3DataStructure>

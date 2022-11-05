@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta type="array">
+        <langChildren>0</langChildren>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <TCEforms>
+            <sheetTitle>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.sheet.title
+            </sheetTitle>
+            <sheetShortDescr>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.sheet.shortDescr
+            </sheetShortDescr>
+            <sheetDescription>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.sheet.description
+            </sheetDescription>
+            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_dateperiodtimer.xlf</cshFile>
+        </TCEforms>
+        <type>array</type>
+        <el>
+            <startTimeSeconds>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.field.startTimeSeconds
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <renderType>inputDateTime</renderType>
+                        <dbType>datetime</dbType>
+                        <size>24</size>
+                        <max>24</max>
+                        <eval>datetime,required</eval>
+                        <default>1970-01-01 23:01:00</default>
+                    </config>
+                </TCEforms>
+            </startTimeSeconds>
+            <durationMinutes>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.field.durationMinutes
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval>int,required</eval>
+                        <default>120</default>
+                    </config>
+                </TCEforms>
+            </durationMinutes>
+            <periodLength>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.field.periodLength
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval>int,required</eval>
+                        <range>
+                            <lower>1</lower>
+                        </range>
+                        <default>1</default>
+                    </config>
+                </TCEforms>
+            </periodLength>
+            <periodUnit>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.field.periodUnit
+                    </label>
+                    <config>
+                        <type>select</type>
+                        <renderType>selectSingle</renderType>
+                        <allowNonIdValues>1</allowNonIdValues>
+                        <items type="array">
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.selectPeriodUnit.minute
+                                </numIndex>
+                                <numIndex index="1">TM</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.selectPeriodUnit.hour
+                                </numIndex>
+                                <numIndex index="1">TH</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.selectPeriodUnit.day
+                                </numIndex>
+                                <numIndex index="1">DD</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.selectPeriodUnit.week
+                                </numIndex>
+                                <numIndex index="1">DW</numIndex>
+                            </numIndex>
+                            <numIndex index="4" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.selectPeriodUnit.month
+                                </numIndex>
+                                <numIndex index="1">DM</numIndex>
+                            </numIndex>
+                            <numIndex index="5" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.selectPeriodUnit.year
+                                </numIndex>
+                                <numIndex index="1">DY</numIndex>
+                            </numIndex>
+                        </items>
+                        <minitems>1</minitems>
+                        <maxitems>1</maxitems>
+                        <size>4</size>
+                        <default>DD</default>
+                    </config>
+                </TCEforms>
+            </periodUnit>
+        </el>
+    </ROOT>
+</T3DataStructure>

@@ -1,0 +1,206 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:timer="http://www.mobger.de/2019/timer"
+      data-namespace-typo3-fluid="true"
+>
+<head>
+<f:comment>
+    <!--***************************************************************
+    *
+    *  Copyright notice
+    *
+    *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+    *
+    *  All rights reserved
+    *
+    *  This script is free software; you can redistribute it and/or modify
+    *  it under the terms of the GNU General Public License as published by
+    *  the Free Software Foundation; either version 3 of the License, or
+    *  (at your option) any later version.
+    *
+    *  The GNU General Public License can be found at
+    *  http://www.gnu.org/copyleft/gpl.html.
+    *
+    *  This copyright notice MUST APPEAR in all copies of the script!
+    *************************************************************** -->
+</f:comment>
+</head>
+<body>
+
+<f:layout name="Default"/>
+
+<f:section name="Prolog">
+    <section>
+        <f:if condition="{data.header}">
+            <f:then>
+                <f:render partial="Header/All" arguments="{_all}"/>
+            </f:then>
+            <f:else>
+                <h2>
+                    <f:translate key="content.timersimul.prolog.title.default"
+                                 extensionName="timer"
+                    />
+                </h2>
+            </f:else>
+        </f:if>
+        <div>
+            <f:if condition="{data.bodytext}">
+                <f:then>
+                    <f:format.html parseFuncTSPath="lib.parseFunc_RTE">{data.bodytext}</f:format.html>
+                    <br/>
+                </f:then>
+                <f:else>
+                    <f:translate key="content.timersimul.prolog.bodytext.default"
+                                 extensionName="timer"
+                    />
+                </f:else>
+            </f:if>
+        </div>
+    </section>
+</f:section>
+<f:section name="Viewhelper">
+    <section>
+        <h2>
+            <f:translate key="content.timersimul.viewhelper.title.default"
+                         extensionName="timer"
+            />
+        </h2>
+        <div>
+            <f:translate key="content.timersimul.viewhelper.main.default"
+                         extensionName="timer"
+            />
+        </div>
+        <h3><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                         extensionName="timer"
+        /></h3>
+        <div>
+            <f:translate key="content.timersimul.viewhelper.prolog.formatDate"
+                         extensionName="timer"
+            /><br />
+        </div>
+        <h3>
+            <f:translate key="content.timersimul.viewhelper.subtitle.flex"
+                         extensionName="timer"
+            />
+        </h3>
+        <div>
+            <f:translate key="content.timersimul.viewhelper.prolog.flex"
+                         extensionName="timer"
+            /><br />
+            <table>
+                <tr>
+                    <th>
+                        <f:translate key="content.timersimul.viewhelper.header.flex.key"
+                                     extensionName="timer"
+                        />
+                    </th>
+                    <th>
+                        <f:translate key="content.timersimul.viewhelper.header.flex.value"
+                                     extensionName="timer"
+                        />
+                    </th>
+                </tr>
+                <timer:flex flexstring="{data.tx_timer_timer}" as="timerflex" flattenkeys="data,general,timer,sDEF,lDEF,vDEF">
+                    <f:for each="{timerflex}" as="value" key="key">
+                        <tr>
+                            <td>{key}</td>
+                            <td>{value}</td>
+                        </tr>
+                    </f:for>
+                </timer:flex>
+            </table><br />
+        </div>
+
+        <h3>
+            <f:translate key="content.timersimul.viewhelper.subtitle.isActive"
+                         extensionName="timer"
+            />
+        </h3>
+        <div>
+            <f:translate key="content.timersimul.viewhelper.prolog.isActive"
+                         extensionName="timer"
+            /><br />
+            <timer:isActive     flexlist="{data.tx_timer_timer}"
+                                selector="{data.tx_timer_selector}"
+                                timestamp="1600000000"
+            >
+                <f:then>
+                    <em><f:translate key="content.timersimul.viewhelper.prologresult.isActive.active"
+                                 extensionName="timer"
+                    /></em>
+                    <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                                     extensionName="timer"
+                    /></h4>
+                    TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
+                </f:then>
+                <f:else>
+                    <del><f:translate key="content.timersimul.viewhelper.prologresult.isActive.inactive"
+                                 extensionName="timer"
+                    /></del>
+                    <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                                     extensionName="timer"
+                    /></h4>
+                    TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
+                </f:else>
+            </timer:isActive><br />
+            <f:translate key="content.timersimul.viewhelper.postprolog.isActive"
+                         extensionName="timer"
+            /><br />
+            <timer:flex flexstring="{data.tx_timer_timer}" as="timerflex" flattenkeys="data,general,timer,sDEF,lDEF,vDEF">
+                <timer:isActive paramlist="{timerflex}"
+                                timestamp="1600003600"
+                                selector="{data.tx_timer_selector}"
+                                timezone="Asia/Dubai"
+                >
+                    <f:then>
+                        <em><f:translate key="content.timersimul.viewhelper.prologresult.isActive.active"
+                                         extensionName="timer"
+                        /></em><br />
+                        <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                                         extensionName="timer"
+                        /></h4>
+                        TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
+                        timer: <timer:format.date  format="Y-m-d H:i:s">1600000000</timer:format.date><br />
+                        timer(Bangkok): <timer:format.date timezone="Asia/Bangkok" format="Y-m-d H:i:s">1600000000</timer:format.date><br />
+                        timer(Dubai): <timer:format.date timezone="Asia/Dubai" format="Y-m-d H:i:s">1600000000</timer:format.date>
+                    </f:then>
+                    <f:else>
+                        <del><f:translate key="content.timersimul.viewhelper.prologresult.isActive.inactive"
+                            extensionName="timer"
+                            /></del><br />
+                        <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                            extensionName="timer"
+                            /></h4>
+                        TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
+                        timer: <timer:format.date  format="Y-m-d H:i:s">1600000000</timer:format.date><br />
+                        timer(Bangkok): <timer:format.date timezone="Asia/Bangkok" format="Y-m-d H:i:s">1600000000</timer:format.date><br />
+                        timer(Dubai): <timer:format.date timezone="Asia/Dubai" format="Y-m-d H:i:s">1600000000</timer:format.date>
+                    </f:else>
+                </timer:isActive>
+            </timer:flex>
+        </div>
+
+    </section>
+</f:section>
+
+<f:section name="Events">
+    <section>
+        <h2>
+            <f:translate key="content.timersimul.events.title.default"
+                         extensionName="timer"
+            />
+        </h2>
+        <ol>
+            <f:for each="{examplelist}" as="entry">
+                <li><strong> {entry.data.timer.title} ({entry.data.timer.tx_timer_selector} - {entry.data.gap} min) </strong><br/>
+                    <span>
+                        [ <f:format.date date="{entry.data.range.beginning}" format="d.m.Y - H:i:s"/>
+                        - <f:format.date date="{entry.data.range.ending}" format="d.m.Y - H:i:s"/> ]
+                    </span>
+                </li>
+            </f:for>
+        </ol>
+    </section>
+</f:section>
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="en" datatype="plaintext" original="messages" date="2020-12-12T02:13:03Z" product-name="timer">
+		<header/>
+		<body>
+
+			<trans-unit id="yamlPeriodFilePath.alttitle">
+				<source>yaml-file with list of active periods</source>
+				<target>yaml-Datei mit Liste der aktiven Perioden</target>
+			</trans-unit>
+			<trans-unit id="yamlPeriodFilePath.description">
+				<source>The reference-time defines border of the active time at each weekday.</source>
+			</trans-unit>
+			<trans-unit id="yamlPeriodFilePath.details">
+				<source># example YAML-structure (remove #)
+<pre>
+	periodList:
+		-
+			title: 'winter holidays Bremen'
+			configuration:
+				description: '- free to fill -'
+			start: '2022-01-31 00:00:00'
+			stop: '2022-02-01 23:59:59'
+			zone: 'Europe/Berlin'
+</pre>
+				</source>
+				<target># Beispiel YAML-Struktur (entferne #)
+<pre>
+	periodList:
+		-
+			title: 'Winterferien Bremen'
+			configuration:
+				description: '- für freie Texteingabe nutzbar -'
+			start: '2022-01-31 00:00:00'
+			stop: '2022-02-01 23:59:59'
+			zone: 'Europe/Berlin'
+</pre>
+				</target>
+			</trans-unit>
+
+			<trans-unit id="yamlTextField.alttitle">
+				<source>yaml-text-field for list of active periods (no validation-check)</source>
+				<target>yaml-Textfeld mit Liste der aktiven Perioden (keine Validierungsprüfung)</target>
+			</trans-unit>
+			<trans-unit id="yamlTextField.description">
+				<source>descr yamlTextField.</source>
+			</trans-unit>
+			<trans-unit id="yamlTextField.details">
+				<source># example YAML-structure (remove #)
+<pre>
+	periodList:
+		-
+			title: 'winter holidays Bremen'
+			configuration:
+				description: '- free to fill -'
+			start: '2022-01-31 00:00:00'
+			stop: '2022-02-01 23:59:59'
+			zone: 'Europe/Berlin'
+</pre>
+				</source>
+				<target># Beispiel YAML-Struktur (entferne #)
+<pre>
+	periodList:
+		-
+			title: 'Winterferien Bremen'
+			configuration:
+				description: '- für freie Texteingabe nutzbar -'
+			start: '2022-01-31 00:00:00'
+			stop: '2022-02-01 23:59:59'
+			zone: 'Europe/Berlin'
+</pre>
+				</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

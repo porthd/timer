@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta type="array">
+        <langChildren>0</langChildren>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <TCEforms>
+            <sheetTitle>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.sheet.title
+            </sheetTitle>
+            <sheetShortDescr>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.sheet.shortDescr
+            </sheetShortDescr>
+            <sheetDescription>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.sheet.description
+            </sheetDescription>
+            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_weekdayinmonthtimer.xlf</cshFile>
+        </TCEforms>
+        <type>array</type>
+        <el>
+            <nthWeekdayInMonth>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.field.nthWeekdayInMonth
+                    </label>
+                    <config>
+                        <type>check</type>
+                        <renderType>checkboxToggle</renderType>
+                        <cols>4</cols>
+                        <eval>required</eval>
+                        <default>1</default>
+                        <items>
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.nthDay.first
+                                </numIndex>
+                                <numIndex index="1">1</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.nthDay.second
+                                </numIndex>
+                                <numIndex index="1">2</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.nthDay.third
+                                </numIndex>
+                                <numIndex index="1">4</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.nthDay.forth
+                                </numIndex>
+                                <numIndex index="1">8</numIndex>
+                            </numIndex>
+                            <numIndex index="4" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.nthDay.fifth
+                                </numIndex>
+                                <numIndex index="1">16</numIndex>
+                            </numIndex>
+                        </items>
+                    </config>
+                </TCEforms>
+            </nthWeekdayInMonth>
+            <activeWeekday>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.field.activeWeekday
+                    </label>
+                    <config>
+                        <type>check</type>
+                        <renderType>checkboxToggle</renderType>
+                        <items type="array">
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.monday
+                                </numIndex>
+                                <numIndex index="1">2</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.tuesday
+                                </numIndex>
+                                <numIndex index="1">4</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.wednesday
+                                </numIndex>
+                                <numIndex index="1">8</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.thursday
+                                </numIndex>
+                                <numIndex index="1">16</numIndex>
+                            </numIndex>
+                            <numIndex index="4" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.friday
+                                </numIndex>
+                                <numIndex index="1">32</numIndex>
+                            </numIndex>
+                            <numIndex index="5" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.saturday
+                                </numIndex>
+                                <numIndex index="1">64</numIndex>
+                            </numIndex>
+                            <numIndex index="6" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.select.activeWeekday.sunday
+                                </numIndex>
+                                <numIndex index="1">1</numIndex>
+                            </numIndex>
+                        </items>
+                        <col>4</col>
+                        <eval>required</eval>
+                        <default>31</default>
+                    </config>
+                </TCEforms>
+            </activeWeekday>
+            <startCountAtEnd>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.field.startCountAtEnd
+                    </label>
+                    <config>
+                        <type>check</type>
+                        <renderType>checkboxToggle</renderType>
+                        <items>
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.field.useTimeZoneOfFrontend.toggle
+                                </numIndex>
+                                <numIndex index="1">0</numIndex>
+                            </numIndex>
+                        </items>
+                    </config>
+                </TCEforms>
+            </startCountAtEnd>
+            <startTimeSeconds>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.field.startTimeSeconds
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>24</size>
+                        <eval>time</eval>
+                        <default>43200</default>
+                    </config>
+                </TCEforms>
+            </startTimeSeconds>
+            <durationMinutes>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.field.durationMinutes
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>10</size>
+                        <eval>int,required</eval>
+                        <range>
+                            <lower>-1439</lower>
+                            <upper>1439</upper>
+                        </range>
+                        <default>60</default>
+                    </config>
+                </TCEforms>
+            </durationMinutes>
+            <activeMonth>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.field.activeMonth
+                    </label>
+                    <config>
+                        <type>check</type>
+                        <renderType>checkboxToggle</renderType>
+                        <items type="array">
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.january
+                                </numIndex>
+                                <numIndex index="1">1</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.february
+                                </numIndex>
+                                <numIndex index="1">2</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.march
+                                </numIndex>
+                                <numIndex index="1">4</numIndex>
+                            </numIndex>
+                            <numIndex index="3" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.april
+                                </numIndex>
+                                <numIndex index="1">8</numIndex>
+                            </numIndex>
+                            <numIndex index="4" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.may
+                                </numIndex>
+                                <numIndex index="1">16</numIndex>
+                            </numIndex>
+                            <numIndex index="5" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.june
+                                </numIndex>
+                                <numIndex index="1">32</numIndex>
+                            </numIndex>
+                            <numIndex index="6" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.july
+                                </numIndex>
+                                <numIndex index="1">64</numIndex>
+                            </numIndex>
+                            <numIndex index="7" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.august
+                                </numIndex>
+                                <numIndex index="1">128</numIndex>
+                            </numIndex>
+                            <numIndex index="8" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.september
+                                </numIndex>
+                                <numIndex index="1">256</numIndex>
+                            </numIndex>
+                            <numIndex index="9" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.october
+                                </numIndex>
+                                <numIndex index="1">512</numIndex>
+                            </numIndex>
+                            <numIndex index="10" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.november
+                                </numIndex>
+                                <numIndex index="1">1024</numIndex>
+                            </numIndex>
+                            <numIndex index="11" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.select.activeMonth.december
+                                </numIndex>
+                                <numIndex index="1">2048</numIndex>
+                            </numIndex>
+                        </items>
+                        <col>4</col>
+                        <eval>required</eval>
+                        <default>4095</default>
+                    </config>
+                </TCEforms>
+            </activeMonth>
+        </el>
+    </ROOT>
+</T3DataStructure>

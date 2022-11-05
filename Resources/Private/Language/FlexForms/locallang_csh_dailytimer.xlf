@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="en" datatype="plaintext" original="messages" date="2020-12-12T02:13:03Z" product-name="timer">
+		<header/>
+		<body>
+			<trans-unit id="startTimeSeconds.alttitle">
+				<source>reference time</source>
+			</trans-unit>
+			<trans-unit id="startTimeSeconds.description">
+				<source>The reference-time defines border of the active time at each weekday.</source>
+			</trans-unit>
+			<trans-unit id="startTimeSeconds.details">
+				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
+					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
+					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
+					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
+					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
+					&lt;br&gt;You can although define it from the end.&lt;br&gt;
+					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
+					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
+					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
+				</source>
+			</trans-unit>
+
+			<trans-unit id="durationMinutes.alttitle">
+				<source>active minutes</source>
+			</trans-unit>
+			<trans-unit id="durationMinutes.description">
+				<source>descr durationMinutes.</source>
+			</trans-unit>
+			<trans-unit id="durationMinutes.details">
+				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
+					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
+					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
+					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
+					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
+					&lt;br&gt;You can although define it from the end.&lt;br&gt;
+					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
+					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
+					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
+				</source>
+			</trans-unit>
+
+			<trans-unit id="activeWeekday.alttitle">
+				<source>allowed weekdays</source>
+			</trans-unit>
+			<trans-unit id="activeWeekday.description">
+				<source>You have to select at least one weekday.</source>
+			</trans-unit>
+			<trans-unit id="activeWeekday.details">
+				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
+					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
+					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
+					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
+					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
+					&lt;br&gt;You can although define it from the end.&lt;br&gt;
+					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
+					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
+					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
+				</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
