@@ -11,49 +11,18 @@ tt_content.timer_timersimul {
         #if.isTrue.field = record
 
         # the table name from which the data is fetched from
-        # + stdWrap
         table = tx_timer_domain_model_event
 
-        # dataprocessor ist similiar to dbQuery-processor and can use the following conditions
-        #    'pidInList',
-        #    'uidInList',
-        #    'languageField',
-        #    'selectFields',
-        #    'max',
-        #    'begin',
-        #    'groupBy',
-        #    'orderBy',
-        #    'join',
-        #    'leftjoin',
-        #    'rightjoin',
-        #    'recursive',
-        #    'where'
-        # The orderBy won't work, because the dataprocessor generate a list of periodics in natural time-line-sorting
-        # All properties from .select :ref:`select` can be used directly
-        # + stdWrap
+        # defines, the pages or sysfolders, on which the datas are defined.
         pidInList.stdWrap.cObject = TEXT
         pidInList.stdWrap.cObject.field = pages
         recursive = 1
 
 
-        # define the list of parameters, which are similiar to the viewhelper RangeList
-        # the shown values are the optional parameters to get the wished list of periodical events
-        # time-zone of the frontend
-        #            zoneInFrontend =
-        #            datetimeStart =
-        #            datetimeFormat =
-        # list ascending the events above the Datetime
-        # If you want the forbidden below the Timestamp than type `true` or `1`
-        #            reverse = false
-
-        # The target variable to be handed to the ContentObject again, can
-        # be used in Fluid e.g. to iterate over the objects. defaults to
-        # "records" when not defined
-        # + stdWrap
+        # output variable with the resulting list
         as = examplelist
 
     }
 
 }
 
-#tt_content.tx_timer = < lib.fluidContent
