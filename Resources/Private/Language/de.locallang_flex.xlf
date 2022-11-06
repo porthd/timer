@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z" product-name="flexformtimer">
+		<header/>
+		<body>
+			<!-- Names for the backend associated to flexform -->
+			<trans-unit id="tca.txTimerSelector.txTimerDaily.select.name">
+				<source>time on daily every selected weekday</source>
+				<target>Uhrzeit täglich an jedem ausgewählten Wochentag</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerDatePeriod.select.name">
+				<source>Period around date every year</source>
+				<target>Zeitraum um Datum jedes Jahr</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerDefault.select.name">
+				<source> </source>
+				<target> </target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerEasterRel.select.name">
+				<source>Period relativ to Easter and other christian Holydays</source>
+				<target>Zeitraum relativ zu Ostern und anderen christlichen Feiertagen</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerMoonphaseRel.select.name">
+				<source>Timer relativ to the phase of moon </source>
+				<target>Timer relativ zur Mondphase</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerMoonriseRel.select.name">
+				<source>Timer relativ to calculated moonrise or moonset on referred day</source>
+				<target>Timer relativ zum berechneten Mondaufgang oder Monduntergang beim Bezugstag</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerPeriodList.select.name">
+				<source>merged list of timegaps in yaml (not correctly working - 20221104)</source>
+				<target>Zusammengeführte Liste von Zeitspannen in yaml (nicht korrekt arbeitend - 20221104)</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerRangeList.select.name">
+				<source>merged list of timer in yaml (not correct working 20221105)</source>
+				<target>Zusammengeführte Liste von Timern in yaml (nicht korrekt arbeitend 20221105)</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerSunriseRel.select.name">
+				<source>period around some sunpositions every day</source>
+				<target>Zeitraum um einige Sonnenstände jeden Tag</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerWeekdayInMonth.select.name">
+				<source>Active areas filtered by weekday(s), month position(s) and month(s)</source>
+				<target>Aktive Bereiche gefilter über Wochentag(e), Monatsposition(en) und Monat(e)</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerWeekdayly.select.name">
+				<source>daily for weekdays</source>
+				<target>täglich für Wochentage</target>
+			</trans-unit>
+
+
+			<!-- txTimerDaily -->
+			<trans-unit id="flexform.timer.txTimerDaily.sheet.title">
+				<source>daily repeat</source>
+				<target>Täglich wiederholen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.sheet.shortDescr">
+				<source>daily shortdescr</source>
+				<target>tägliche Kurzbeschreibung</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.sheet.description">
+				<source>select the daily active range for pre-selected weekdays </source>
+				<target>Wählen Sie den täglichen aktiven Bereich für vorgewählte Wochentage</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.field.startTimeSeconds">
+				<source>Reference time for active period</source>
+				<target>Bezugszeitpunkt für aktiven Zeitspanne</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDefault.field.nothing.title">
+				<source>nothing</source>
+				<target>nichts</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.field.durationMinutes">
+				<source>time span between -1439 and +1439 minutes</source>
+				<target>Zeitspanne zwischen -1439 und +1439 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.field.activeWeekday">
+				<source>active weekday</source>
+				<target>aktiver Wochentag</target>
+			</trans-unit>
+
+			<!-- txTimerDatePeriod -->
+			<trans-unit id="flexform.timer.txTimerDatePeriod.sheet.title">
+				<source>active datetime-range</source>
+				<target>aktiver Datums-Zeit-Bereich</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.sheet.description">
+				<source>active range relative to an start-datetime with an adjustable length of the period</source>
+				<target>aktiver Bereich relativ zu einer Start-Datum-Uhrzeit mit einstellbarer Periodenlänge</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.startTimeSeconds">
+				<source>start of period</source>
+				<target>Beginn der Periode</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.durationMinutes">
+                <source>active time span relative to startpoint in minutes</source>
+                <target>Aktive Zeitspanne relativ zum Periodenstart in Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.periodLength">
+				<source>period length</source>
+				<target>Periodenlänge</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.periodUnit">
+				<source>period unit</source>
+				<target>Zeitraum Einheit</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.minute">
+				<source>minute</source>
+				<target>Minute</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.hour">
+				<source>hour</source>
+				<target>Stunde</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.day">
+				<source>day</source>
+				<target>Tag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.week">
+				<source>week</source>
+				<target>Woche</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.month">
+				<source>month (31. may +1M (!= 30 Jun) = 1. Jul)</source>
+				<target>Monat (31. Mai +1M (!= 30. Jun) = 1. Jul)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.year">
+				<source>year</source>
+				<target>Jahr</target>
+			</trans-unit>
+
+			<!-- defaultTimer -->
+			<trans-unit id="flexform.timer.txTimerDefault.sheet.title">
+				<source>no timer [default]</source>
+				<target>kein Timer [Standard]</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDefault.sheet.description">
+				<source>There ist no timer defined. The starttime and endtime won't be change by the timer-extension.</source>
+				<target>Es ist kein Timer definiert. Die Start- und Endzeit wird durch die Timer-Erweiterung nicht verändert.</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDefault.field.defaultTimer">
+				<source>[there are no parameter needed]</source>
+				<target>[es werden keine Parameter benötigt]</target>
+			</trans-unit>
+
+			<!-- easterRelTimer -->
+			<trans-unit id="flexform.timer.txTimerEasterRel.sheet.title">
+				<source>christian dates related</source>
+				<target>christliche Daten bezogen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.sheet.description">
+				<source>Define an active range relativ to important christian dates like christmas oder easter-sunday</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu wichtigen christlichen Terminen wie Weihnachten oder Ostersonntag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.namedDate.title">
+				<source>selection of named dates like easter</source>
+				<target>Auswahl benannter Feiertage wie Ostern</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.goodFriday">
+				<source>good friday (*)</source>
+				<target>Karfreitag (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.easter">
+				<source>easter (*)</source>
+				<target>Ostern (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.ascensionOfChrist">
+				<source>ascension of Christ (*)</source>
+				<target>Christi Himmelfahrt (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.pentecost">
+				<source>pentecost (*)</source>
+				<target>Pfingsten (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.firstAdvent">
+				<source>first advent</source>
+				<target>erste Advent</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.christmas">
+				<source>christmas</source>
+				<target>Weihnachten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.roseMonday">
+				<source>rose monday (*)</source>
+				<target>Rosenmontag (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.towlday">
+				<source>towl-day</source>
+				<target>Welthandtuchtag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relative to the selected named date</source>
+				<target>Minuten relativ zum ausgewählten benannten Datum</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.durationMinutes">
+                <source>time span between -444444 and +444444 minutes</source>
+                <target>Zeitspanne zwischen -444444 und +444444 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.calendarUse.title">
+				<source>Use of Calendar for easter</source>
+				<target>Verwendung des Kalenders für Ostern</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_default">
+				<source>cal_easter_default (julian for &lt; 1753; gregorian otherwise)</source>
+				<target>cal_easter_default (julianisch für &lt; 1753; sonst gregorianisch)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_roman">
+				<source>cal_easter_roman (julian for &lt; 1583; gregorian otherwise)</source>
+				<target>cal_easter_roman (julianisch für &lt; 1583; ansonsten gregorianisch)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_always_gregorian">
+				<source>cal_easter_always_gregorian (proleptic gregorian for ever)</source>
+				<target>cal_easter_always_gregorian (proleptischer Gregorianer für immer)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_always_julian">
+				<source>cal_easter_always_julian (proleptic gregorian for ever)</source>
+				<target>cal_easter_always_julian (proleptischer Gregorianer für immer)</target>
+			</trans-unit>
+
+			<!-- General for all timer txTimerGeneral  -->
+			<trans-unit id="flexform.timer.txTimerGeneral.sheet.title">
+				<source>Generalities</source>
+				<target>Allgemeines</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.sheet.description">
+				<source>Define timezone and its usage and define the general range of activity. Remark the following: Before 1583 only the julian calendar was in use. Britannien used the gregorian calendar since 1752. You must know, what are you doing, if you use dates before 1752.</source>
+				<target>Definieren Sie die Zeitzone und ihre Verwendung. Definieren Sie den allgemeinen Aktivitätsbereich. Beachten Sie Folgendes: Vor 1583 war nur der Julianische Kalender in Gebrauch. Britannien verwendet den gregorianischen Kalender seit 1752. Sie müssen wissen, was Sie tun, wenn Sie Daten vor 1752 verwenden.</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.timeZoneOfEvent">
+				<source>time-zone of event</source>
+				<target>Zeitzone des Ereignisses</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.useTimeZoneOfFrontend">
+				<source>fixed timezone</source>
+				<target>feste Zeitzone</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.useTimeZoneOfFrontend.toggle">
+				<source>off=fixed timezone for event, on=timezone everytime defined by frontend user</source>
+				<target>aus=fest definierte Zeitzone für Ereignis, an=Zeitzone wird dynamisch definiert durch Frontend-Nutzer</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.toggle.frontendRelated">
+				<source>no, defined by frontend</source>
+				<target>Nein, definiert durch Frontend</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.toggle.fixedByFlexform">
+				<source>yes, defined in field `timeZoneOfEvent`</source>
+				<target>ja, definiert im Feld `timeZoneOfEvent`</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.ultimateBeginningTimer">
+				<source>Beginning of the period for calculations of the timer periods</source>
+				<target>Beginn der Zeitraums für Berechnungen der Perioden des Timers</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.ultimateEndingTimer">
+				<source>Ending of the period for calculations of the timer periods</source>
+				<target>Beginn der Zeitraums für Berechnungen der Perioden des Timers</target>
+			</trans-unit>
+			<!-- helpful stuff txTimerGeneral -->
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.monday">
+				<source>monday</source>
+				<target>Montag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.tuesday">
+				<source>tuesday</source>
+				<target>Dienstag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.wednesday">
+				<source>wednesday</source>
+				<target>Mittwoch</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.thursday">
+				<source>thursday</source>
+				<target>Donnerstag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.friday">
+				<source>friday</source>
+				<target>Freitag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.saturday">
+				<source>saturday</source>
+				<target>Samstag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.sunday">
+				<source>sunday</source>
+				<target>Sonntag</target>
+			</trans-unit>
+
+
+			<!-- txTimerMoonriseRel -->
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.sheet.title">
+				<source>moonrise</source>
+				<target>Mondaufgang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.sheet.description">
+				<source>Define active ramnges relativ to moonrise or moonset</source>
+				<target>Definieren Sie aktive Bereiche relativ zu Mondaufgang oder Monduntergang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.moonStatus.title">
+				<source>status of moon</source>
+				<target>Status des Mondes</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.select.moonStatus.moonrise">
+				<source>moonrise</source>
+				<target>Mondaufgang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.select.moonStatus.moonset">
+				<source>moonset</source>
+				<target>Monduntergang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relativ to the selected moon-status</source>
+				<target>Minuten relativ zum gewählten Mondstand</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.durationMinutes">
+                <source>time span between -1439 and +1439 minutes</source>
+                <target>Zeitspanne zwischen -1439 und +1439 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.latitude.title">
+				<source>latitude</source>
+				<target>Breite</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.longitude.title">
+				<source>longitude</source>
+				<target>Längengrad</target>
+			</trans-unit>
+
+			<!-- txTimerMoonphaseRel -->
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.sheet.title">
+				<source>Moonphase</source>
+				<target>Mond Phase</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.sheet.description">
+				<source>Define the active period starting relative to 0:00 clock of the day on which the moon phases (full, half new, new, half full) take place.</source>
+				<target>Definieren Sie die aktive Zeitspanne, die relativ zu 0:00 Uhr des Tages startet, an welchen die Mondphasen (voll, halbneu, neu, halbvoll) stattfindet.</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.field.moonPhase.title">
+				<source>moonphase</source>
+				<target>Mond Phase</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.newMoon">
+				<source>new moon</source>
+				<target>Neumond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.firstQuarter">
+				<source>half filled moon</source>
+				<target>halbvoller Mond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.fullMoon">
+				<source>full moon</source>
+				<target>Vollmond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.thirdQuarter">
+				<source>half emptied moon</source>
+				<target>halb geleerter Mond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.field.relMinToSelectedTimerEvent">
+				<source>starttime defined by the distance in minutes relative to the beginning of the day with the selected moon phase</source>
+				<target>Startzeitpunkt definiert durch den Abstand in Minuten relativ zum Beginn des Tages mit der gewählten Mondphase</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.field.durationMinutes">
+                <source>time span between -14400 and +14400 minutes</source>
+                <target>Zeitspanne zwischen -14400 und +14400 Minuten</target>
+			</trans-unit>
+
+			<!-- txTimerPeriodList -->
+			<trans-unit id="flexform.timer.txTimerPeriodList.sheet.title">
+				<source>list of single timegaps from Yaml-files (not working yet)</source>
+				<target>Liste mit Einzelbereichen aus Yaml-Dateien (not working yet)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerPeriodList.sheet.description">
+				<source>Gets a list of timer-definitions from a yaml-file and from a textfield. It uses the gaps as a setlist for flexible range-definitions.</source>
+				<target>Erhält eine Liste von Timer-Definitionen von einer yaml-Datei und aus einem YAML-Text-Feld. Diese nutzt es als Setliste für die flexible Bestimmung der aktiven Bereiche.</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlPeriodFilePath">
+				<source>yaml-file with list of active periods</source>
+				<target>yaml-Datei mit Liste der aktiven Perioden</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlTextField.label">
+				<source>yaml-text-field for list of active periods (no validation-check)</source>
+				<target>yaml-Textfeld mit Liste der aktiven Perioden (keine Validierungsprüfung)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlTextField.placeholder">
+				<source># example YAML-structure (remove #)
+#periodList:
+#  -
+#    title: 'winter holidays Bremen'
+#    configuration:
+#      description: '- free to fill -'
+#    start: '2022-01-31 00:00:00'
+#    stop: '2022-02-01 23:59:59'
+#    zone: 'Europe/Berlin'</source>
+				<target># Beispiel YAML-Struktur (entferne #)
+#periodList:
+#  -
+#    title: 'Winterferien Bremen'
+#    configuration:
+#      description: '- für freie Texteingabe nutzbar -'
+#    start: '2022-01-31 00:00:00'
+#    stop: '2022-02-01 23:59:59'
+#    zone: 'Europe/Berlin'</target>
+			</trans-unit>
+
+			<!-- txTimerRangeList -->
+			<trans-unit id="flexform.timer.txTimerRangeList.sheet.title">
+				<source>rangelist from yaml-definitions</source>
+				<target>Bereichslisten aus Yaml-Definitionen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerRangeList.sheet.description">
+				<source>gets a list of timer-definitions from a yaml-file and/or from database-rows, merge overlapping active ranges together and subtract forbidden ranges like holidays, ... from the calculated full-ranges to the real ranges</source>
+				<target>ruft eine Liste von Timer-Definitionen aus einer yaml-Datei und/oder aus Datenbankzeilen ab, führt überlappende aktive Bereiche zusammen und subtrahiert verbotene Bereiche wie Feiertage, ... von den berechneten vollen Bereichen zu den tatsächlichen Bereichen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlActiveFilePath">
+				<source>file-path of yaml-definitions with list of active periods</source>
+				<target>Dateipfad der Yaml-Definitionen mit Liste der aktiven Perioden</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlForbiddenFilePath">
+				<source>file-path of yaml-definitions with list of forbidden periods</source>
+				<target>Dateipfad der Yaml-Definitionen mit Liste verbotener Zeiträume</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.databaseActiveRangeList">
+				<source>list of rows in the database with definitions for active periods</source>
+				<target>Liste der Zeilen in der Datenbank mit Definitionen für aktive Zeiträume</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.databaseForbiddenRangeList">
+				<source>list of rows in the database with definitions for forbidden periods</source>
+				<target>Liste der Zeilen in der Datenbank mit Definitionen für verbotene Zeiträume</target>
+			</trans-unit>
+
+			<!-- txTimerSunriseRel -->
+			<trans-unit id="flexform.timer.txTimerSunriseRel.sheet.title">
+				<source>sunrise</source>
+				<target>Sonnenaufgang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.sheet.description">
+				<source>Define an active range relativ to various sunpositions (sunrise, sunset, ...)</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu verschiedenen Sonnenständen (Sonnenaufgang, Sonnenuntergang, ...)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.latitude.title">
+				<source>latitude</source>
+				<target>Breite</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.longitude.title">
+				<source>longitude</source>
+				<target>Längengrad</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.sunPosition.title">
+				<source>relative sunposition timer</source>
+				<target>Relativer Sonnenstand-Timer</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.defined">
+				<source>Active time defined by minute interval and time duration</source>
+				<target>Aktive Zeit definiert durch Minutenabstand und Zeitdauer</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.sunrise">
+				<source>sunrise (= 90°35')</source>
+				<target>Sonnenaufgang (= 90°35')</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.sunset">
+				<source>sunset (= 90°35')</source>
+				<target>Sonnenuntergang (= 90°35')</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.transit">
+				<source>time of highest sun (transition time differ to 12:00)</source>
+				<target>Zeitpunkt der höchsten Sonne (Übergangszeit abweichend von 12:00)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.civilTwilightBegin">
+				<source>Civil Twilight Begin (= 96°)</source>
+				<target>Bürgerlicher Dämmerungsbeginn (= 96°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.civilTwilightEnd">
+				<source>Civil Twilight End (= -96°)</source>
+				<target>Ende der zivilen Dämmerung (= -96°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.nauticalTwilightBegin">
+				<source>Nautical Twilight Beginn (= 102°)</source>
+				<target>Nautischer Dämmerungsbeginn (= 102°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.nauticalTwilightEnd">
+				<source>Nautical Twilight End (= -102°)</source>
+				<target>Nautisches Dämmerungsende (= -102°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.astronomicalTwilightBegin">
+				<source>Astromical Twilight Beginn (= 108°)</source>
+				<target>Astromischer Zwielichtbeginn (= 108°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.astronomicalTwilightEnd">
+				<source>Astromical Twilight End (= -108°)</source>
+				<target>Astromisches Zwielichtende (= -108°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relativ to the selected time-marker</source>
+				<target>Minuten relativ zum ausgewählten Zeitmarker</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.durationMinutes">
+                <source>time span between -1340 and +1340 minutes</source>
+                <target>Zeitspanne zwischen -1340 und +1340 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.durationNatural">
+				<source>Active duration defined by fixed times or by the distance to the next position of the sun specified here (respect natural order)</source>
+				<target>Aktive Zeitdauer definiert durch feste Zeiten oder durch den Abstand zu nächsten hier festgelegten Sonnenstand (natürliche Reihenfolge beachten)</target>
+			</trans-unit>
+
+			<!-- weekdayInMonth -->
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.sheet.title">
+				<source>weekday in Month</source>
+				<target>Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.sheet.description">
+				<source>Defines an active range define by Weekday and month like '2.nd Thursday every month'</source>
+				<target>Definiert einen aktiven Bereich definiert durch Wochentag und Monat wie '2.Donnerstag jeden Monat'</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startTimeSeconds">
+				<source>starttime</source>
+				<target>Startzeitpunkt</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.nthWeekdayInMonth">
+				<source>position of weekday in the month</source>
+				<target>Position des Wochentages innerhalb des Monats</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.first">
+				<source>first weekday of the month</source>
+				<target>erster Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.second">
+				<source>second weekday of the month</source>
+				<target>zweiter Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.third">
+				<source>third weekday of the month</source>
+				<target>dritter Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.forth">
+				<source>forth weekday of the month</source>
+				<target>vierten Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.fifth">
+				<source>fifth weekday of the month</source>
+				<target>fünfter Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startCountAtEnd">
+				<source>Switch ON, if the active weekday(s) should be counted from the end of the month</source>
+				<target>Schalte ON, wenn der(die) aktive(n) Wochentag(e) vom Monatsende her gezählt werden soll(en)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startCountAtEnd.startToEnd">
+				<source>norm</source>
+				<target>Norm</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startCountAtEnd.endToStart">
+				<source>anti</source>
+				<target>Anti</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.activeWeekday">
+				<source>active weekday</source>
+				<target>aktiver Wochentag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.activeMonth">
+				<source>active month</source>
+				<target>aktiver Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.january">
+				<source>january</source>
+				<target>Januar</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.february">
+				<source>february</source>
+				<target>Februar</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.march">
+				<source>march</source>
+				<target>Marsch</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.april">
+				<source>april</source>
+				<target>April</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.may">
+				<source>may</source>
+				<target>kann</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.june">
+				<source>june</source>
+				<target>Juni</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.july">
+				<source>july</source>
+				<target>Juli</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.august">
+				<source>august</source>
+				<target>August</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.september">
+				<source>september</source>
+				<target>September</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.october">
+				<source>october</source>
+				<target>Oktober</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.november">
+				<source>november</source>
+				<target>November</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.december">
+				<source>december</source>
+				<target>Dezember</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.durationMinutes">
+                <source>time span between -1439 and +1439 minutes</source>
+                <target>Zeitspanne zwischen -1439 und +1439 Minuten</target>
+			</trans-unit>
+
+			<!-- weekdayly -->
+			<trans-unit id="flexform.timer.txTimerWeekdayly.sheet.title">
+				<source>weekdays</source>
+				<target>Wochentage</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayly.sheet.description">
+				<source>Defines a full day as active range for selected weekdays</source>
+				<target>Definiert einen ganzen Tag als aktiven Bereich für ausgewählte Wochentage</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayly.field.activeWeekday">
+				<source>active weekday</source>
+				<target>aktiver Wochentag</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
