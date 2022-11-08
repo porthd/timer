@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -39,25 +39,24 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class DatePeriodTimer implements TimerInterface
 {
     protected const TIMER_NAME = 'txTimerDatePeriod';
-    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE = TimerConst::ARG_USE_ACTIVE_TIMEZONE;
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
     protected const ARG_REQ_START_TIME = 'startTimeSeconds';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
     protected const ARG_REQ_PERIOD_LENGTH = 'periodLength';
     protected const ARG_REQ_PERIOD_UNIT = 'periodUnit';
+
+    protected const KEY_PREFIX_TIME = 'T';
+    protected const KEY_PREFIX_DATE = 'D';
 
     protected const ARG_REQ_LIST = [
         self::ARG_REQ_START_TIME,
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_REQ_PERIOD_LENGTH,
         self::ARG_REQ_PERIOD_UNIT,
-        TimerConst::ARG_ULTIMATE_RANGE_BEGINN,
-        TimerConst::ARG_ULTIMATE_RANGE_END,
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
     ];
     protected const ARG_OPT_LIST = [
-        TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
     ];
 
     /**
@@ -158,9 +157,9 @@ class DatePeriodTimer implements TimerInterface
      */
     protected function validateZone(array $params = []): bool
     {
-        return !(isset($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT])) ||
+        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT])) ||
             TcaUtility::isTimeZoneInList(
-                $params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]
+                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
             );
     }
 
@@ -172,15 +171,15 @@ class DatePeriodTimer implements TimerInterface
      */
     protected function validateUltimate(array $params = []): bool
     {
-        $flag = (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]));
+        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
         $flag = $flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
                 ));
-        $flag = $flag && (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_END]));
+        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
         return ($flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_END]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_END]
                 )));
     }
 
@@ -208,7 +207,7 @@ class DatePeriodTimer implements TimerInterface
     protected function validateStartTime(array $params = []): bool
     {
         return (
-            DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME, $params[self::ARG_REQ_START_TIME]) !== false
+            DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME, $params[self::ARG_REQ_START_TIME]) !== false
         );
     }
 
@@ -273,8 +272,8 @@ class DatePeriodTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
-            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[TimerConst::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
+            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[self::ARG_ULTIMATE_RANGE_END]);
     }
 
     /**
@@ -300,12 +299,12 @@ class DatePeriodTimer implements TimerInterface
         $timeString = $params[self::ARG_REQ_START_TIME];
         // if you use this, the UTC-timestamp will be one hour less relativ to the time below, if I had interpreted the results correctly???
         // The calculation of the summertime in de DateTime-Object is mysteriously to me! I don`t get it.
-        //        $startTime = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
+        //        $startTime = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
         //            $timeString,
         //            $dateLikeEventZone->getTimezone()
         //        );
 
-        $startTime = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
+        $startTime = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
             $timeString
         );
         $startTime->setTimezone($dateLikeEventZone->getTimezone());
@@ -377,7 +376,7 @@ class DatePeriodTimer implements TimerInterface
         DateTime $dateLikeEventZone
     ): TimerStartStopRange {
         $flag = false;
-        $timeUnitCode = (($unitPrefix === TimerConst::KEY_PREFIX_TIME) ? TimerConst::KEY_PREFIX_TIME : TimerConst::KEY_PREFIX_DATE) . $unit;
+        $timeUnitCode = (($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
         if ($unitValue > 0) {
             $periodsBelow = DateTimeUtility::diffPeriod($startTime, $dateLikeEventZone, $unitValue,
                     $timeUnitCode) - 2;  // I think, `-1` should although work.
@@ -463,7 +462,7 @@ class DatePeriodTimer implements TimerInterface
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
 
         $timeString = $params[self::ARG_REQ_START_TIME];
-        $startTime = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
+        $startTime = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
             $timeString,
             $timeZone
         );
@@ -472,7 +471,7 @@ class DatePeriodTimer implements TimerInterface
 
         $unitRaw = strtoupper($params[self::ARG_REQ_PERIOD_UNIT]);
         $unitPrefix = strtoupper($unitRaw[0]);
-        $unitPrefix = (($unitPrefix !== TimerConst::KEY_PREFIX_TIME) ? '' : $unitPrefix);
+        $unitPrefix = (($unitPrefix !== self::KEY_PREFIX_TIME) ? '' : $unitPrefix);
         $unit = (string)$unitRaw[1];
         return [$delayMin, $startTime, $unitValue, $unitPrefix, $unit];
     }
@@ -497,7 +496,7 @@ class DatePeriodTimer implements TimerInterface
         DateTime $dateLikeEventZone
     ): TimerStartStopRange {
         $flag = false;
-        $timeUnitCode = (($unitPrefix === TimerConst::KEY_PREFIX_TIME) ? TimerConst::KEY_PREFIX_TIME : TimerConst::KEY_PREFIX_DATE) . $unit;
+        $timeUnitCode = (($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
         if ($unitValue > 0) {
             $periodsAfter = DateTimeUtility::diffPeriod($startTime, $dateLikeEventZone, $unitValue,
                     $timeUnitCode) + 3;  // I think, `-1` should although work.
@@ -558,7 +557,7 @@ class DatePeriodTimer implements TimerInterface
 //    protected function prevFittingPeriodRange($startTime, $unitPrefix, $unitValue, $unit, $delayMin, DateTime $dateLikeEventZone): TimerStartStopRange
 //    {
 //        $flag = false;
-//        $timeUnitCode = (($unitPrefix === TimerConst::KEY_PREFIX_TIME) ? TimerConst::KEY_PREFIX_TIME : TimerConst::KEY_PREFIX_DATE) . $unit;
+//        $timeUnitCode = (($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
 //        if ($unitValue > 0) {
 //            $periodsBelow = DateTimeUtility::diffPeriod($startTime, $dateLikeEventZone, $unitValue, $timeUnitCode) - 2;  // I think, `-1` should although work.
 //        } else {

@@ -6,7 +6,7 @@ namespace Porthd\Timer\DataProcessing;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -24,6 +24,7 @@ namespace Porthd\Timer\DataProcessing;
 use DateTime;
 use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\TimerInterface;
 use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\ListOfEventsService;
@@ -63,7 +64,7 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *         # define the list of parameters, which are similiar to the viewhelper RangeList
  *         # the shown values are the optional parameters
  *         # time-zone of the frontend
- *         # zoneInFrontend =
+ *         # timezone =
  *
  *         # if `datetimeStart` ist not defined, the current date will be used
  *         # datetimeStart =
@@ -94,7 +95,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *     }
  * }
  *
- * where "as" means the variable to be containing the result-set from the DB query.
  */
 class RangeListQueryProcessor implements DataProcessorInterface
 {
@@ -153,8 +153,8 @@ class RangeListQueryProcessor implements DataProcessorInterface
             (in_array($processorConfiguration[TimerConst::ARGUMENT_REVERSE], [1, true, 'true', 'TRUE', '1'])) :
             false
         );
-        $maxCount = (((isset($processorConfiguration[TimerConst::ARGUMENT_COUNT_HARD_BREAK])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_COUNT_HARD_BREAK] > 0)) ?
-            ((int)$processorConfiguration[TimerConst::ARGUMENT_COUNT_HARD_BREAK]) :
+        $maxCount = (((isset($processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT] > 0)) ?
+            ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT]) :
             TimerConst::SAVE_LIMIT_MAX_EVENTS
         );
         $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
@@ -198,7 +198,7 @@ class RangeListQueryProcessor implements DataProcessorInterface
         if (isset($arguments[TimerConst::ARGUMENT_DATETIME_START])) {
             $timeFormat = ((isset($arguments[TimerConst::ARGUMENT_DATETIME_FORMAT])) ?
                 $arguments[TimerConst::ARGUMENT_DATETIME_FORMAT] :
-                TimerConst::DEFAULT_DATETIME_FORMAT
+                TimerInterface::TIMER_FORMAT_DATETIME
             );
             if (
                 ($frontendDateTime = DateTime::createFromFormat(
@@ -220,14 +220,14 @@ class RangeListQueryProcessor implements DataProcessorInterface
         }
         if ((isset($arguments[TimerConst::ARGUMENT_MAX_LATE])) &&
             (false === DateTime::createFromFormat(
-                    TimerConst::DEFAULT_DATETIME_FORMAT,
+                    TimerInterface::TIMER_FORMAT_DATETIME,
                     $arguments[TimerConst::ARGUMENT_MAX_LATE],
                     new DateTimeZone($timeZone))
             )
         ) {
             throw new TimerException(
                 'The date-string `' . $arguments[TimerConst::ARGUMENT_MAX_LATE] . '`could not converted to a datetime-Object. ' .
-                'Check especially your format of date-time (should be: `' . TimerConst::DEFAULT_DATETIME_FORMAT . '`). ',
+                'Check especially your format of date-time (should be: `' . TimerInterface::TIMER_FORMAT_DATETIME . '`). ',
                 1648555534
             );
         }

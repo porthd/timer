@@ -6,7 +6,7 @@ namespace Porthd\Timer\DataProcessing;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -74,7 +74,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *     }
  * }
  *
- * where "as" means the variable to be containing the result-set from the DB query.
  */
 class SortListQueryProcessor implements DataProcessorInterface
 {
@@ -126,8 +125,8 @@ class SortListQueryProcessor implements DataProcessorInterface
             (in_array($processorConfiguration[TimerConst::ARGUMENT_REVERSE], [1, true, 'true', 'TRUE', '1'])) :
             false
         );
-        $maxCount = (((isset($processorConfiguration[TimerConst::ARGUMENT_COUNT_HARD_BREAK])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_COUNT_HARD_BREAK] > 0)) ?
-            ((int)$processorConfiguration[TimerConst::ARGUMENT_COUNT_HARD_BREAK]) :
+        $maxCount = (((isset($processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT] > 0)) ?
+            ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT]) :
             TimerConst::SAVE_LIMIT_MAX_EVENTS
         );
         $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
@@ -166,7 +165,7 @@ class SortListQueryProcessor implements DataProcessorInterface
         if (isset($arguments[TimerConst::ARGUMENT_DATETIME_START])) {
             $timeFormat = ((isset($arguments[TimerConst::ARGUMENT_DATETIME_FORMAT])) ?
                 $arguments[TimerConst::ARGUMENT_DATETIME_FORMAT] :
-                TimerConst::DEFAULT_DATETIME_FORMAT
+                TimerInterface::TIMER_FORMAT_DATETIME
             );
             if (
                 ($frontendDateTime = DateTime::createFromFormat(

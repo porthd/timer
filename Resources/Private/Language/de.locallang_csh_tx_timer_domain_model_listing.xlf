@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2020-02-15T09:59:40Z" product-name="timer">
+		<header/>
+		<body>
+			<trans-unit id="tx_timer_timer.description">
+				<source>Flexform-Parameter für ausgewählte Zeit aktiver Perioden</source>
+			</trans-unit>
+			<trans-unit id="tx_timer_selector.description">
+				<source>Auswahl der verfügbaren Zeit</source>
+			</trans-unit>
+			<trans-unit id="title.description">
+				<source>Titel</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>Informationen</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -51,15 +51,15 @@ class DailyTimer implements TimerInterface
     protected const ARG_REQ_LIST = [
         self::ARG_REQ_START_TIME,
         self::ARG_REQ_DURATION_MINUTES,
-        TimerConst::ARG_ULTIMATE_RANGE_BEGINN,
-        TimerConst::ARG_ULTIMATE_RANGE_END,
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
     ];
     protected const ARG_OPT_ACTIVE_WEEKDAY = 'activeWeekday';
 
     protected const ARG_OPT_LIST = [
         self::ARG_OPT_ACTIVE_WEEKDAY,
-        TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT,
-        TimerConst::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+        self::ARG_USE_ACTIVE_TIMEZONE,
     ];
 
     /**
@@ -155,9 +155,9 @@ class DailyTimer implements TimerInterface
      */
     protected function validateZone(array $params = []): bool
     {
-        return !(isset($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]))||
+        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
             TcaUtility::isTimeZoneInList(
-                $params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]
+                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
             );
     }
 
@@ -169,15 +169,15 @@ class DailyTimer implements TimerInterface
      */
     protected function validateUltimate(array $params = []): bool
     {
-        $flag = (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]));
+        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
         $flag = $flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
                 ));
-        $flag = $flag && (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_END]));
+        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
         return ($flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_END]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_END]
                 )));
     }
 
@@ -270,8 +270,8 @@ class DailyTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
-            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[TimerConst::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
+            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[self::ARG_ULTIMATE_RANGE_END]);
     }
 
     /**
@@ -307,8 +307,8 @@ class DailyTimer implements TimerInterface
         $dateTestString = $dateLikeEventZone->format('H:i:s');
         if ($startTimerString <= $dateTestString) {
             if ($delayMin >= 0) {
-                $dateStartString = $dateLikeEventZone->format(TimerConst::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStart = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
+                $dateStartString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
+                $dateStart = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
                     $dateStartString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -316,8 +316,8 @@ class DailyTimer implements TimerInterface
                 $dateStop->add(new DateInterval('PT' . abs($delayMin) . 'M'));
                 $weekDayNumber = 2 ** ($dateStart->format('N') - 1); // MO = 1, ... So = 7
             } else {
-                $dateStopString = $dateLikeEventZone->format(TimerConst::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStop = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
+                $dateStopString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
+                $dateStop = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
                     $dateStopString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -331,8 +331,8 @@ class DailyTimer implements TimerInterface
             }
         } else { // remeber $startTimerString is ever greater than $dateTestString
             if ($delayMin >= 0) {
-                $dateStartString = $dateLikeEventZone->format(TimerConst::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStart = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
+                $dateStartString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
+                $dateStart = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
                     $dateStartString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -341,8 +341,8 @@ class DailyTimer implements TimerInterface
                 $dateStop->add(new DateInterval('PT' . abs($delayMin) . 'M'));
                 $weekDayNumber = 2 ** ($dateStart->format('N') - 1); // MO = 1, ... So = 7
             } else {
-                $dateStopString = $dateLikeEventZone->format(TimerConst::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStop = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
+                $dateStopString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
+                $dateStop = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
                     $dateStopString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -387,8 +387,8 @@ class DailyTimer implements TimerInterface
         $nextRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
         $count = 0;
         do {
-            $dateBorder = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
-                $testTag->format(TimerConst::TIMER_FORMAT_DATE) . ' ' . $startTimeUtc->format(TimerConst::TIMER_FORMAT_TIME),
+            $dateBorder = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+                $testTag->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimeUtc->format(self::TIMER_FORMAT_TIME),
                 $dateBelowNextActive->getTimezone()
             );
 
@@ -450,8 +450,8 @@ class DailyTimer implements TimerInterface
         $prevRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
         $count = 0;
         do {
-            $dateBorder = DateTime::createFromFormat(TimerConst::TIMER_FORMAT_DATETIME,
-                $testTag->format(TimerConst::TIMER_FORMAT_DATE) . ' ' . $startTimeUtc->format(TimerConst::TIMER_FORMAT_TIME),
+            $dateBorder = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+                $testTag->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimeUtc->format(self::TIMER_FORMAT_TIME),
                 $dateAbovePrevActive->getTimezone()
             );
 

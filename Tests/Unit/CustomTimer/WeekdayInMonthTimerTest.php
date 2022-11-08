@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -27,15 +27,14 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class WeekdayInMonthTimerTest extends TestCase
 {
-    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
+    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
+    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
+    protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerWeekdayInMonth';
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
@@ -588,7 +587,7 @@ class WeekdayInMonthTimerTest extends TestCase
 //            ],
 //            [
 //                'params' => [
-//                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
 //                ],
 //                'active' => 'Lauder/Furz',
 //            ],
@@ -612,8 +611,8 @@ class WeekdayInMonthTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -625,8 +624,8 @@ class WeekdayInMonthTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -640,8 +639,8 @@ class WeekdayInMonthTimerTest extends TestCase
                 ],
                 [
                     'params' => [
-                        TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerConst::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -654,8 +653,8 @@ class WeekdayInMonthTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -667,8 +666,8 @@ class WeekdayInMonthTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -1237,10 +1236,10 @@ class WeekdayInMonthTimerTest extends TestCase
                 $endCalc = clone $dateOkayEnd;
                 $endCalc->add(new DateInterval('P7D'));
                 foreach ([
-                             [$dateOkayStart, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-                             [$dateOkayEnd, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                             [$dateFailStart, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-                             [$dateFailEnd, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                             [$dateOkayStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                             [$dateOkayEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                             [$dateFailStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                             [$dateFailEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
                          ]
                          as $helper) {
                     $result[] = [
@@ -1326,22 +1325,22 @@ class WeekdayInMonthTimerTest extends TestCase
             foreach ([
                          [$dateOkayStart,
                             [
-                                 'beginning' => $nextYearStart->format(TimerConst::TIMER_FORMAT_DATETIME),
-                                 'ending' => $nextYearEnd->format(TimerConst::TIMER_FORMAT_DATETIME),
+                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
                                  'exist' => true,
                              ],
                          ],
                          [$dateOkayEnd,
                              [
-                                 'beginning' => $nextYearStart->format(TimerConst::TIMER_FORMAT_DATETIME),
-                                 'ending' => $nextYearEnd->format(TimerConst::TIMER_FORMAT_DATETIME),
+                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
                                  'exist' => true,
                              ],
                          ],
                          [$dateFailEnd,
                              [
-                                 'beginning' => $nextYearStart->format(TimerConst::TIMER_FORMAT_DATETIME),
-                                 'ending' => $nextYearEnd->format(TimerConst::TIMER_FORMAT_DATETIME),
+                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
                                  'exist' => true,
                              ],
                          ],
@@ -1403,9 +1402,9 @@ class WeekdayInMonthTimerTest extends TestCase
             $nextRangeEnd = clone $dateOkayEnd;
             $nextRangeEnd->add(new DateInterval('P1D'));
             foreach ([
-                [$dateOkayEnd,  ['beginning' => $nextRangeStart->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-                         [$dateOkayStart,  ['beginning' => $nextRangeStart->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-                         [$dateFailEnd,  ['beginning' => $nextRangeStart->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                [$dateOkayEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                         [$dateOkayStart,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                         [$dateFailEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
                          ]
                      as $helper) {
                 $result[] = [
@@ -1464,8 +1463,8 @@ class WeekdayInMonthTimerTest extends TestCase
 
             /** @var TimerStartStopRange $result */
             $result = $this->subject->nextActive($value, $setting);
-            $flag = ($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-            $flag = $flag && ($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
             $this->assertTrue(
                 ($flag),
@@ -1645,10 +1644,10 @@ class WeekdayInMonthTimerTest extends TestCase
 //                $endCalc = clone $dateOkayEnd;
 //                $endCalc->add(new DateInterval('P7D'));
 //                foreach ([
-//                             [$dateOkayStart, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                             [$dateOkayEnd, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-////                             [$dateFailStart, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                             [$dateFailEnd, ['beginning' => $startCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                             [$dateOkayStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                             [$dateOkayEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+////                             [$dateFailStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                             [$dateFailEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
 //                         ]
 //                         as $helper) {
 //                    $result[] = [
@@ -1734,22 +1733,22 @@ class WeekdayInMonthTimerTest extends TestCase
 //            foreach ([
 //                         [$dateOkayStart,
 //                            [
-//                                 'beginning' => $nextYearStart->format(TimerConst::TIMER_FORMAT_DATETIME),
-//                                 'ending' => $nextYearEnd->format(TimerConst::TIMER_FORMAT_DATETIME),
+//                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+//                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
 //                                 'exist' => true,
 //                             ],
 //                         ],
 //                         [$dateOkayEnd,
 //                             [
-//                                 'beginning' => $nextYearStart->format(TimerConst::TIMER_FORMAT_DATETIME),
-//                                 'ending' => $nextYearEnd->format(TimerConst::TIMER_FORMAT_DATETIME),
+//                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+//                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
 //                                 'exist' => true,
 //                             ],
 //                         ],
 //                         [$dateFailEnd,
 //                             [
-//                                 'beginning' => $nextYearStart->format(TimerConst::TIMER_FORMAT_DATETIME),
-//                                 'ending' => $nextYearEnd->format(TimerConst::TIMER_FORMAT_DATETIME),
+//                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+//                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
 //                                 'exist' => true,
 //                             ],
 //                         ],
@@ -1811,9 +1810,9 @@ class WeekdayInMonthTimerTest extends TestCase
 //            $nextRangeEnd = clone $dateOkayEnd;
 //            $nextRangeEnd->add(new DateInterval('P1D'));
 //            foreach ([
-//                [$dateOkayEnd,  ['beginning' => $nextRangeStart->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                         [$dateOkayStart,  ['beginning' => $nextRangeStart->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                         [$dateFailEnd,  ['beginning' => $nextRangeStart->format(TimerConst::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerConst::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                [$dateOkayEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                         [$dateOkayStart,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                         [$dateFailEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
 //                         ]
 //                     as $helper) {
 //                $result[] = [
@@ -1872,8 +1871,8 @@ class WeekdayInMonthTimerTest extends TestCase
 
             /** @var TimerStartStopRange $result */
             $result = $this->subject->prevActive($value, $setting);
-            $flag = ($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-            $flag = $flag && ($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
             $this->assertTrue(
                 ($flag),

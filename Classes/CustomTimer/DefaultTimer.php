@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -35,8 +35,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class DefaultTimer implements TimerInterface
 {
     public const TIMER_NAME = 'default';  // must named default,otherwise TYPO3 will not recognize this default
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
+
     public const TIMER_SELECTOR_DEFAULT = [
         '',
         'default',

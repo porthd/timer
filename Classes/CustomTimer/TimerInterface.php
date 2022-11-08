@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -39,6 +39,16 @@ interface TimerInterface
         self::ENUM_RANGE_IN_RANGE_WITH_HIGHER_LIMIT,
         self::ENUM_RANGE_INCLUDED,
     ];
+
+    public const ARG_USE_ACTIVE_TIMEZONE = 'useTimeZoneOfFrontend';
+    public const ARG_EVER_TIME_ZONE_OF_EVENT = 'timeZoneOfEvent';
+    public const ARG_ULTIMATE_RANGE_BEGINN = 'ultimateBeginningTimer';
+    public const ARG_ULTIMATE_RANGE_END = 'ultimateEndingTimer';
+
+    public const TIMER_FORMAT_DATE = 'Y-m-d';
+    public const TIMER_FORMAT_TIME = 'H:i:s';
+    public const TIMER_FORMAT_DATETIME = self::TIMER_FORMAT_DATE . ' ' . self::TIMER_FORMAT_TIME;
+
 
     /**
      * Give your timer an unique individual name. The name should only contain the following chars:[a-zA-Z0-9-_]

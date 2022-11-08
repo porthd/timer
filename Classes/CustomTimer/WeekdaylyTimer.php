@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -40,19 +40,15 @@ class WeekdaylyTimer implements TimerInterface
 {
 
     protected const TIMER_NAME = 'txTimerWeekdayly';
-    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
     protected const ARG_REQ_ACTIVE_WEEKDAY = 'activeWeekday';
     protected const ARG_REQ_LIST = [
         self::ARG_REQ_ACTIVE_WEEKDAY,
-        TimerConst::ARG_ULTIMATE_RANGE_BEGINN,
-        TimerConst::ARG_ULTIMATE_RANGE_END,
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
     ];
     protected const ARG_OPT_LIST = [
-        TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT,
-        TimerConst::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+        self::ARG_USE_ACTIVE_TIMEZONE,
     ];
 
     /**
@@ -170,9 +166,9 @@ class WeekdaylyTimer implements TimerInterface
      */
     protected function validateZone(array $params = []): bool
     {
-        return !(isset($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]))||
+        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
             TcaUtility::isTimeZoneInList(
-                $params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]
+                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
             );
     }
 
@@ -183,15 +179,15 @@ class WeekdaylyTimer implements TimerInterface
      */
     protected function validateUltimate(array $params = []): bool
     {
-        $flag = (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]));
+        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
         $flag = $flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
                 ));
-        $flag = $flag && (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_END]));
+        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
         return ($flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_END]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_END]
                 )));
     }
 
@@ -236,8 +232,8 @@ class WeekdaylyTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
-            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[TimerConst::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
+            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[self::ARG_ULTIMATE_RANGE_END]);
     }
 
     /**

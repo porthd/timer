@@ -6,7 +6,7 @@ namespace Porthd\Timer\Services;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -37,11 +37,15 @@ class ListOfEventsService
 
     protected const ARGUMENT_START_DATETIME = 'start';
     protected const ARGUMENT_STOP_DATETIME = 'stop';
-    protected const SUBKEY_TIMER = 'timer';
     protected const SUBKEY_RANGE = 'range';
     protected const SUBKEY_GAP_MIN = 'gapMin';
     protected const ARGUMENT_KEY = 'key';
 
+    protected const KEY_EVENT_LIST_GAP = 'gap';
+    protected const KEY_EVENT_LIST_RANGE = 'range';
+    protected const KEY_EVENT_LIST_TIMER = 'timer';
+
+    protected const DEFAULT_MAX_COUNT = 25;
     /**
      * @param DateTime $highestEndStopTime
      * @param TimerStartStopRange $range
@@ -147,8 +151,7 @@ class ListOfEventsService
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
-        $getterSelectName = TimerConst::GETTER_TIMER_FIELD_SELECT;
-        $getterFlexParameter = TimerConst::GETTER_TIMER_FIELD_FLEX_ACTIVE;
+        [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         foreach ($eventsTimerList as $key => $item) {
             [$timerSelectName, $timerFlexParameter] = self::extractSelectorAndTimer($item, $getterSelectName,
                 $getterFlexParameter);
@@ -170,9 +173,9 @@ class ListOfEventsService
                 ($flagAllowed)
             ) {
 
-                $timerItem[TimerConst::KEY_EVENT_LIST_TIMER] = $item;
-                $timerItem[TimerConst::KEY_EVENT_LIST_RANGE] = clone $range;
-                $timerItem[TimerConst::KEY_EVENT_LIST_GAP] = ceil(
+                $timerItem[self::KEY_EVENT_LIST_TIMER] = $item;
+                $timerItem[self::KEY_EVENT_LIST_RANGE] = clone $range;
+                $timerItem[self::KEY_EVENT_LIST_GAP] = ceil(
                     abs(
                         ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60)
                 );
@@ -194,8 +197,7 @@ class ListOfEventsService
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
-        $getterSelectName = TimerConst::GETTER_TIMER_FIELD_SELECT;
-        $getterFlexParameter = TimerConst::GETTER_TIMER_FIELD_FLEX_ACTIVE;
+        [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         foreach ($eventsTimerList as $key => $item) {
             [$timerSelectName, $timerFlexParameterList] = self::extractSelectorAndTimer($item, $getterSelectName,
                 $getterFlexParameter);
@@ -216,9 +218,9 @@ class ListOfEventsService
                 ($range->getBeginning() < $range->getEnding()) &&
                 ($flagAllowed)
             ) {
-                $timerItem[TimerConst::KEY_EVENT_LIST_TIMER] = $item;
-                $timerItem[TimerConst::KEY_EVENT_LIST_RANGE] = clone $range;
-                $timerItem[TimerConst::KEY_EVENT_LIST_GAP] = ceil(
+                $timerItem[self::KEY_EVENT_LIST_TIMER] = $item;
+                $timerItem[self::KEY_EVENT_LIST_RANGE] = clone $range;
+                $timerItem[self::KEY_EVENT_LIST_GAP] = ceil(
                     abs(
                         ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60)
                 );
@@ -252,8 +254,7 @@ class ListOfEventsService
         );
         $limitInfos = new stdClass();
         self::reinitBelowLimitInfos($limitInfos, $timerEventZone);
-        $getterSelectName = TimerConst::GETTER_TIMER_FIELD_SELECT;
-        $getterFlexParameter = TimerConst::GETTER_TIMER_FIELD_FLEX_ACTIVE;
+        [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
 
         $listOfEvents = [];
         if (!empty($listOfTimers)) {
@@ -265,7 +266,7 @@ class ListOfEventsService
             while ($count <= $maxCount) {
                 foreach ($listOfTimers as $key => $timerItem) {
                     /** @var TimerStartStopRange $range */
-                    $range = clone $timerItem[TimerConst::KEY_EVENT_LIST_RANGE];
+                    $range = clone $timerItem[self::KEY_EVENT_LIST_RANGE];
                     if ($range->hasResultExist()) {
                         if ($limitInfos->index < 0) {
                             // The first entrie is the best result
@@ -296,7 +297,7 @@ class ListOfEventsService
                 $listOfEvents[$count] = clone $listOfTimers[$limitInfos->index];
                 $count++;
                 [$timerSelectName, $timerFlexParameter] = self::extractSelectorAndTimer(
-                    $listOfTimers[$limitInfos->index][TimerConst::KEY_EVENT_LIST_TIMER],
+                    $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_TIMER],
                     $getterSelectName,
                     $getterFlexParameter
                 );
@@ -315,8 +316,8 @@ class ListOfEventsService
                 ) {
 
 
-                    $listOfTimers[$limitInfos->index][TimerConst::KEY_EVENT_LIST_RANGE] = clone $range;
-                    $listOfTimers[$limitInfos->index][TimerConst::KEY_EVENT_LIST_GAP] = abs(
+                    $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_RANGE] = clone $range;
+                    $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_GAP] = abs(
                         ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
                     );
                 } else {
@@ -358,8 +359,7 @@ class ListOfEventsService
         );
         $limitInfos = new stdClass();
         self::reinitAboveLimitInfos($limitInfos, $timerEventZone);
-        $getterSelectName = TimerConst::GETTER_TIMER_FIELD_SELECT;
-        $getterFlexParameter = TimerConst::GETTER_TIMER_FIELD_FLEX_ACTIVE;
+        [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         $listOfEvents = [];
         if (!empty($listOfTimers)) {
             $count = 0;
@@ -370,7 +370,7 @@ class ListOfEventsService
             while ($count <= $maxCount) {
                 foreach ($listOfTimers as $key => $timerItem) {
                     /** @var TimerStartStopRange $range */
-                    $range = clone $timerItem[TimerConst::KEY_EVENT_LIST_RANGE];
+                    $range = clone $timerItem[self::KEY_EVENT_LIST_RANGE];
                     if ($range->hasResultExist()) {
                         if ($limitInfos->index < 0) {
                             // The first entrie is the best result
@@ -397,7 +397,7 @@ class ListOfEventsService
                 $listOfEvents[$count] = $listOfTimers[$limitInfos->index];
                 $count++;
                 [$timerSelectName, $timerFlexParameter] = self::extractSelectorAndTimer(
-                    $listOfTimers[$limitInfos->index][TimerConst::KEY_EVENT_LIST_TIMER],
+                    $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_TIMER],
                     $getterSelectName,
                     $getterFlexParameter
                 );
@@ -415,8 +415,8 @@ class ListOfEventsService
                     )
                 ) {
 
-                    $listOfTimers[$limitInfos->index][TimerConst::KEY_EVENT_LIST_RANGE] = clone $range;
-                    $listOfTimers[$limitInfos->index][TimerConst::KEY_EVENT_LIST_GAP] = abs(
+                    $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_RANGE] = clone $range;
+                    $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_GAP] = abs(
                         ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
                     );
                 } else {
@@ -445,7 +445,7 @@ class ListOfEventsService
     public static function getListRestrictions(
         array $arguments,
         DateTime $basicDateTime,
-        $defaultMax = TimerConst::DEFAULT_MAX_COUNT
+        $defaultMax = self::DEFAULT_MAX_COUNT
     ): LoopLimiter {
         $loopLimiter = new LoopLimiter();
         if (
@@ -458,7 +458,7 @@ class ListOfEventsService
         }
         if (isset($arguments[TimerConst::ARGUMENT_MAX_LATE])) {
             $myDate = DateTime::createFromFormat(
-                TimerConst::DEFAULT_DATETIME_FORMAT,
+                TimerInterface::TIMER_FORMAT_DATETIME,
                 $arguments[TimerConst::ARGUMENT_MAX_LATE],
                 $basicDateTime->getTimezone()
             );
@@ -595,6 +595,27 @@ class ListOfEventsService
         );
 //        $timerFlexParameter = array_merge(...$timerFlexParameter);
         return [$timerSelectName, $timerFlexParameter];
+    }/**
+ * @return string[]
+ */
+    protected static function generateGetterNamesForTimerFields(): array
+    {
+        $getterSelectName = 'get' . ucfirst(str_replace(' ',
+                    '',
+                    ucwords(
+                        str_replace('_', ' ', TimerConst::TIMER_FIELD_SELECT)
+                    )
+                )
+            );
+        $getterFlexParameter = 'get' . ucfirst(
+                str_replace(' ',
+                    '',
+                    ucwords(
+                        str_replace('_', ' ', TimerConst::TIMER_FIELD_FLEX_ACTIVE)
+                    )
+                )
+            );
+        return [$getterSelectName, $getterFlexParameter];
     }
 
 }

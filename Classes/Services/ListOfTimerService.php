@@ -6,7 +6,7 @@ namespace Porthd\Timer\Services;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -29,9 +29,7 @@ use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\CustomTimer\TimerInterface;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
-use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\TcaUtility;
-use ReflectionClass;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 

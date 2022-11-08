@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -33,10 +33,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class EasterRelTimerTest extends TestCase
 {
-    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
+    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
+    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
+    protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerEasterRel';
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
@@ -1094,7 +1094,7 @@ class EasterRelTimerTest extends TestCase
 //            ],
 //            [
 //                'params' => [
-//                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
 //                ],
 //                'active' => 'Lauder/Furz',
 //            ],
@@ -1118,8 +1118,8 @@ class EasterRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -1131,8 +1131,8 @@ class EasterRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -1146,8 +1146,8 @@ class EasterRelTimerTest extends TestCase
                 ],
                 [
                     'params' => [
-                        TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerConst::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -1160,8 +1160,8 @@ class EasterRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -1173,8 +1173,8 @@ class EasterRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -1613,10 +1613,10 @@ class EasterRelTimerTest extends TestCase
             $diffEndObj = $result->getEnding()->diff(date_create_from_format('Y-m-d H:i:s', $expects['ending']));
             $diffBegin = (int)$diffBeginObj->format('%i');
             $diffEnd = (int)$diffEndObj->format('%i');
-            $flag = (($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['beginning']) ||
+            $flag = (($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['beginning']) ||
                 (abs($diffBegin) <= 60) // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             );
-            $flag = $flag && (($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
+            $flag = $flag && (($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
                     (abs($diffEnd) <= 60)); // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             $flag = $flag && ($result->hasResultExist() === $expects['exist']);
             $this->assertTrue(
@@ -2011,10 +2011,10 @@ class EasterRelTimerTest extends TestCase
             $diffEndObj = $result->getEnding()->diff(date_create_from_format('Y-m-d H:i:s', $expects['ending']));
             $diffBegin = (int)$diffBeginObj->format('%i');
             $diffEnd = (int)$diffEndObj->format('%i');
-            $flag = (($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['beginning']) ||
+            $flag = (($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['beginning']) ||
                 (abs($diffBegin) <= 60) // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             );
-            $flag = $flag && (($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
+            $flag = $flag && (($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
                     (abs($diffEnd) <= 60)); // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             $flag = $flag && ($result->hasResultExist() === $expects['exist']);
             $this->assertTrue(

@@ -6,7 +6,7 @@ namespace Porthd\Timer\Utilities;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -63,6 +63,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class DateTimeUtility
 {
     public const BASE_TEST_DATE = '1980/1/1';
+
+
+    protected const KEY_UNIT_MINUTE = 'TM';
+    protected const KEY_UNIT_HOUR = 'TH';
+    protected const KEY_UNIT_DAY = 'DD';
+    protected const KEY_UNIT_WEEK = 'DW';
+    protected const KEY_UNIT_MONTH = 'DM';
+    protected const KEY_UNIT_YEAR = 'DY';
 
     /**
      * test: ?
@@ -172,33 +180,33 @@ class DateTimeUtility
         $calcDateTime = clone $destDateTime;
         $differenz = $calcDateTime->diff($startTime);
         switch ($periodUnit) {
-            case TimerConst::KEY_UNIT_MINUTE :
+            case self::KEY_UNIT_MINUTE :
                 $rawCount = floor(
                     (($differenz->days ?: 0) * 1440 + (($differenz->h ?: 0) * 60) + ($differenz->i ?: 0)) / abs($periodLength)
                 );
                 break;
-            case TimerConst::KEY_UNIT_HOUR :
+            case self::KEY_UNIT_HOUR :
                 $rawCount = floor(
                     (($differenz->days ?: 0) * 24 + $differenz->h) / abs($periodLength)
                 );
                 break;
-            case TimerConst::KEY_UNIT_DAY :
+            case self::KEY_UNIT_DAY :
                 $rawCount = floor(
                     ($differenz->days ?: 0) / abs($periodLength)
                 );
 
                 break;
-            case TimerConst::KEY_UNIT_WEEK :
+            case self::KEY_UNIT_WEEK :
                 $rawCount = floor(
                     ($differenz->days ?: 0) / abs(7*$periodLength)
                 );
                 break;
-            case TimerConst::KEY_UNIT_MONTH :
+            case self::KEY_UNIT_MONTH :
                 $rawCount = floor(
                     (($differenz->m ?: 0) + ($differenz->y ?: 0) * 12) / abs($periodLength)
                 );
                 break;
-            case TimerConst::KEY_UNIT_YEAR :
+            case self::KEY_UNIT_YEAR :
                 $rawCount = floor(
                     ($differenz->y ?: 0) / abs($periodLength)
                 );
@@ -206,9 +214,9 @@ class DateTimeUtility
             default :
                 throw new TimerException('The period-Unit is not defined by this extension `' .
                     TimerConst::EXTENSION_NAME . '`.' . ' Check your spelling and the definitions in the flexforms. ' .
-                    'Allowed are `' . TimerConst::KEY_UNIT_MINUTE . '`,`' . TimerConst::KEY_UNIT_HOUR . '`,`' .
-                    TimerConst::KEY_UNIT_DAY . '`,`' . TimerConst::KEY_UNIT_MONTH . '` and `' .
-                    TimerConst::KEY_UNIT_YEAR . '`.',
+                    'Allowed are `' . self::KEY_UNIT_MINUTE . '`,`' . self::KEY_UNIT_HOUR . '`,`' .
+                    self::KEY_UNIT_DAY . '`,`' . self::KEY_UNIT_MONTH . '` and `' .
+                    self::KEY_UNIT_YEAR . '`.',
                     1601984604
                 );
         }

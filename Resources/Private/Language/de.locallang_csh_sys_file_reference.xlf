@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z" product-name="timer">
+		<header/>
+		<body>
+			<trans-unit id="tx_timer_scheduler.description">
+				<source>allow to use a task to update the starttime and endtime</source>
+				<target>Flexform-Parameter für ausgewählten Timer aktiver Perioden</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_timer.description">
+				<source>flexform-parameter for selected timer of active periods</source>
+				<target>Flexform-Parameter für ausgewählten Timer aktiver Perioden</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_selector.description">
+				<source>selection of avaiable timer</source>
+				<target>Auswahl verfügbarer Timer</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

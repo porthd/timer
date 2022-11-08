@@ -4,8 +4,8 @@ Die Basis für diese Dokumentation ist die deutsche Variante `de.ReadMe.md`.
 Die englische Variante wurde mit Hilfe von `google.translate.de` übersetzt.
 Der Dokumentation ist eine Präsentatin beigefügt, die ich im Jahre 2022 für das TYPO3-Barcamp in Kamp-Lintfort vorbereitet hatte
 
-## ATTENTION
-8. November 2022: The timer `RangeListTimer` and `PeriodListTimer` did not work correctly.
+## ACHTUNG
+8. November 2022: Die Timer `RangeListTimer` und `PeriodListTimer` funktionieren bisher nicht wie gewünscht.
 
 ##Motivation
 TYPO3 stellt in seinen Standardtabellen die Felder `starttime` und `endtime` zur Verfügung. Über die Felder können Seiten zu bestimmten Zeiten ein- und ausgeblendet werden. Diese Felder werden auch beim Caching berücksichtigt.

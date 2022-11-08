@@ -6,7 +6,7 @@ namespace Porthd\Timer\Hooks\Backend;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -56,9 +56,7 @@ class StartEndTimerManipulationHook
         if ((
                 (isset($fieldArray[TimerConst::TIMER_FIELD_SELECT])) ||
                 (isset($fieldArray[TimerConst::TIMER_FIELD_FLEX_ACTIVE]))
-            ) // && // the values of starttime and endtiem are not rlevant for the checking
-//            (!isset($fieldArray[TimerConst::TIMER_FIELD_STARTTIME])) &&
-//            (!isset($fieldArray[TimerConst::TIMER_FIELD_ENDTIME]))
+            ) 
         ) {
             // Reset the values of starttiem and endtime
             // Dont change them here, This is job of the scheduler

@@ -6,7 +6,7 @@ namespace Porthd\Timer\Utilities;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -22,6 +22,7 @@ namespace Porthd\Timer\Utilities;
  ***************************************************************/
 
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\TimerInterface;
 use Porthd\Timer\Exception\TimerException;
 
 
@@ -37,33 +38,33 @@ class GeneralTimerUtility
      */
     public static function getTimeZoneOfEvent(string $activeZoneName, array $params = []): string
     {
-        if ((isset($params[TimerConst::ARG_USE_ACTIVE_TIMEZONE])) &&
-            (in_array($params[TimerConst::ARG_USE_ACTIVE_TIMEZONE], ['1', 'true', 'TRUE', 1, true]))
+        if ((isset($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE])) &&
+            (in_array($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE], ['1', 'true', 'TRUE', 1, true]))
         ) {
             return $activeZoneName;
         }
-        if ((isset($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT])) &&
-            (is_numeric($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT])) &&
-            (($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT] - (int)$params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]) === 0)
+        if ((isset($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) &&
+            (is_numeric($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) &&
+            (($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT] - (int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]) === 0)
         ) {
-            $paramTimeZoneName = timezone_name_from_abbr("", ((int)$params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]), 0);
+            $paramTimeZoneName = timezone_name_from_abbr("", ((int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]), 0);
         } else {
-            if (!empty($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT])) {
-                $paramTimeZoneName = $params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT];
+            if (!empty($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) {
+                $paramTimeZoneName = $params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT];
             } else {
                 $paramTimeZoneName = $activeZoneName;
             }
         }
         if ($paramTimeZoneName === false) {
             throw new TimerException(
-                'The timezone-definition in de Timer-Flexform `' . TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT . '` is unknown. `'
-                . $params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT] .
+                'The timezone-definition in de Timer-Flexform `' . TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT . '` is unknown. `'
+                . $params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT] .
                 '`. Check the Definition in the current flexform or in the definitions for the RangeListTimer.',
                 134456897
             );
 
         }
-        return ((isset($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT])) && (is_string($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT])) ?
+        return ((isset($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) && (is_string($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) ?
             $paramTimeZoneName :
             $activeZoneName
         );

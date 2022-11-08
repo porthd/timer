@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -41,10 +41,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PeriodListTimerTest extends TestCase
 {
-    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
+    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
+    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
+    protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerPeriodList';
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
@@ -139,7 +139,7 @@ class PeriodListTimerTest extends TestCase
 //            ],
 //            [
 //                'params' => [
-//                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
 //                ],
 //                'active' => 'Lauder/Furz',
 //            ],
@@ -163,8 +163,8 @@ class PeriodListTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -176,8 +176,8 @@ class PeriodListTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -191,8 +191,8 @@ class PeriodListTimerTest extends TestCase
                 ],
                 [
                     'params' => [
-                        TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerConst::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -205,8 +205,8 @@ class PeriodListTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -218,8 +218,8 @@ class PeriodListTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -676,24 +676,6 @@ class PeriodListTimerTest extends TestCase
     {
         /** the function of TYPO3 `getFileAbsFileName` don't allow files outside the webpath */
         $prefixPath = '/var/www/html/web/typo3conf/ext/timer/Tests/Unit/CustomTimer';
-//        $listOfTimerClasses =         [
-//            \Porthd\Timer\CustomTimer\DailyTimer::class, // => 1
-//            \Porthd\Timer\CustomTimer\DatePeriodTimer::class, // => 2
-//            \Porthd\Timer\CustomTimer\DefaultTimer::class, // => 4
-//            \Porthd\Timer\CustomTimer\EasterRelTimer::class,
-//            \Porthd\Timer\CustomTimer\HourlyTimer::class,
-//            \Porthd\Timer\CustomTimer\MoonphaseRelTimer::class,
-//            \Porthd\Timer\CustomTimer\MoonriseRelTimer::class,
-//            \Porthd\Timer\CustomTimer\PeriodListTimer::class,
-//            \Porthd\Timer\CustomTimer\RangeListTimer::class,
-//            \Porthd\Timer\CustomTimer\SunriseRelTimer::class,
-//            \Porthd\Timer\CustomTimer\WeekdayInMonthTimer::class,
-//            \Porthd\Timer\CustomTimer\WeekdaylyTimer::class,
-//        ];
-//        $activateBitWiseTimerClasses = 2047;
-//        \Porthd\Timer\Utilities\ConfigurationUtility::addExtLocalconfTimerAdding($activateBitWiseTimerClasses,  $listOfTimerClasses);
-//        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER] = $listOfTimerClasses;
-        $result = [];
         $general = [
             'useTimeZoneOfFrontend' => 0,
             'timeZoneOfEvent' => 'Europe/Berlin',
@@ -1047,8 +1029,8 @@ class PeriodListTimerTest extends TestCase
             $testValue = clone $params['testValueObj'];
             /** @var TimerStartStopRange $result */
             $result = $this->subject->nextActive($testValue, $setting);
-            $flag = ($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-            $flag = $flag && ($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
             $this->assertTrue(
                 ($flag),
@@ -1248,8 +1230,8 @@ class PeriodListTimerTest extends TestCase
             $testValue = clone $params['testValueObj'];
             /** @var TimerStartStopRange $result */
             $result = $this->subject->prevActive($testValue, $setting);
-            $flag = ($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-            $flag = $flag && ($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
             $this->assertTrue(
                 ($flag),

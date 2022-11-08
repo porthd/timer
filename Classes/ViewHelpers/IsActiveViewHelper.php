@@ -6,7 +6,7 @@ namespace Porthd\Timer\ViewHelpers;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -41,7 +41,7 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
     protected const ARGUMENT_FLEX_PARAM = 'flexlist';
     protected const ARGUMENT_REF_TIMESTAMP = 'timestamp';
     protected const ARGUMENT_SELECTOR = 'selector';
-    protected const ARGUMENT_ACTIVEZONE = 'timezone';
+    protected const ARGUMENT_ACTIVEZONE = TimerConst::ARGUMENT_ACTIVEZONE;
 
     /**
      * Initializes the arguments

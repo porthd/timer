@@ -2,7 +2,6 @@ lib.dataprocessor.timer.media.pages  = TYPO3\CMS\Frontend\DataProcessing\FilesPr
 lib.dataprocessor.timer.media.pages {
     references.fieldName = media
     references.table = pages
-#    references.data = levelmedia: -1, slide
     as = myfiles
 }
 lib.dataprocessor.timer.media.sorted  = Porthd\Timer\DataProcessing\SortListQueryProcessor
@@ -10,60 +9,3 @@ lib.dataprocessor.timer.media.sorted {
         fieldName = myfiles
         as = mysortedfiles
 }
-#tt_content.timer_timersimul >
-#tt_content.timer_timersimul < lib.contentElement
-#tt_content.timer_timersimul {
-#
-#    templateName = Timersimul
-#
-#    dataProcessing.10 = Porthd\Timer\DataProcessing\RangeListQueryProcessor
-#    dataProcessing.10 {
-#        # regular if syntax
-#        #if.isTrue.field = record
-#
-#        # the table name from which the data is fetched from
-#        # + stdWrap
-#        table = tx_timer_domain_model_event
-#
-#        # dataprocessor ist similiar to dbQuery-processor and can use the following conditions
-#        #    'pidInList',
-#        #    'uidInList',
-#        #    'languageField',
-#        #    'selectFields',
-#        #    'max',
-#        #    'begin',
-#        #    'groupBy',
-#        #    'orderBy',
-#        #    'join',
-#        #    'leftjoin',
-#        #    'rightjoin',
-#        #    'recursive',
-#        #    'where'
-#        # The orderBy won't work, because the dataprocessor generate a list of periodics in natural time-line-sorting
-#        # All properties from .select :ref:`select` can be used directly
-#        # + stdWrap
-#        pidInList = {$contentElement.tx_timer_timersimul.dataProcessing.20.pidInList}
-#        recursive = 1
-#
-#
-#        # define the list of parameters, which are similiar to the viewhelper RangeList
-#        # the shown values are the optional parameters to get the wished list of periodical events
-#        # time-zone of the frontend
-#        #            zoneInFrontend =
-#        #            datetimeStart =
-#        #            datetimeFormat =
-#        # list ascending the events above the Datetime
-#        # If you want the forbidden below the Timestamp than type `true` or `1`
-#        #            reverse = false
-#
-#        # The target variable to be handed to the ContentObject again, can
-#        # be used in Fluid e.g. to iterate over the objects. defaults to
-#        # "records" when not defined
-#        # + stdWrap
-#        as = examplelist
-#
-#    }
-#
-#}
-#
-##tt_content.tx_timer = < lib.fluidContent

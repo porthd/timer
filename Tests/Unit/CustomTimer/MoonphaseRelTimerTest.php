@@ -6,7 +6,7 @@ namespace Porthd\Timer\Tests\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -27,16 +27,16 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\MoonphaseRelTimer;
+use Porthd\Timer\CustomTimer\TimerInterface;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class MoonphaseRelTimerTest extends TestCase
 {
-    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
+    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
+    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
+    protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerMoonphaseRel';
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
@@ -619,7 +619,7 @@ class MoonphaseRelTimerTest extends TestCase
 //            ],
 //            [
 //                'params' => [
-//                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
 //                ],
 //                'active' => 'Lauder/Furz',
 //            ],
@@ -643,8 +643,8 @@ class MoonphaseRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -656,8 +656,8 @@ class MoonphaseRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -671,8 +671,8 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
                 [
                     'params' => [
-                        TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerConst::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -685,8 +685,8 @@ class MoonphaseRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -698,8 +698,8 @@ class MoonphaseRelTimerTest extends TestCase
             ],
             [
                 'params' => [
-                    TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerConst::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -1172,8 +1172,8 @@ class MoonphaseRelTimerTest extends TestCase
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
             $result = $this->subject->nextActive($value, $setting);
-            $flag = ($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-            $flag = $flag && ($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
             $this->assertTrue(
                 ($flag),
@@ -1327,8 +1327,8 @@ class MoonphaseRelTimerTest extends TestCase
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
             $result = $this->subject->prevActive($value, $setting);
-            $flag = ($result->getBeginning()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-            $flag = $flag && ($result->getEnding()->format(TimerConst::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
             $this->assertTrue(
                 ($flag),

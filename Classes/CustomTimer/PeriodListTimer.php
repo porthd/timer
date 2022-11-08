@@ -24,27 +24,20 @@ namespace Porthd\Timer\CustomTimer;
 
 use DateInterval;
 use DateTime;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Domain\Model\Listing;
-use Porthd\Timer\Domain\Repository\GeneralRepository;
-use Porthd\Timer\Domain\Repository\ListingRepository;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\ListOfTimerService;
-use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
-use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 
 class PeriodListTimer implements TimerInterface, LoggerAwareInterface
@@ -82,23 +75,12 @@ class PeriodListTimer implements TimerInterface, LoggerAwareInterface
     }
 
     public const TIMER_NAME = 'txTimerPeriodList';
-    protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
-    protected const ARG_ULTIMATE_RANGE_BEGINN = TimerConst::ARG_ULTIMATE_RANGE_BEGINN;
-    protected const ARG_ULTIMATE_RANGE_END = TimerConst::ARG_ULTIMATE_RANGE_END;
-protected const ARG_USE_TIMEZONE_FRONTEND =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
+
 
     protected const ARG_YAML_PERIOD_FILE_PATH = 'yamlPeriodFilePath';
     protected const ARG_YAML_PERIOD_FIELD = 'yamlTextField';
 
     protected const YAML_LIST_KEY = 'periodlist';
-//    protected const YAML_LIST_ITEM_SELECTOR = 'selector';
-//    protected const YAML_LIST_ITEM_TITLE = 'title';
-//    protected const YAML_LIST_ITEM_DESCRIPTION = 'description';
-//    protected const YAML_LIST_ITEM_PARAMS = 'params';
-//    protected const YAML_LIST_ITEM_RANGE = 'range';
-//    protected const MAX_TIME_LIMIT_ACTIVE_COUNT = 10; // eproduction per timer-level
-//    protected const MAX_TIME_LIMIT_FORBIDDEN_COUNT = 10; // eproduction per timer-level
 
     protected const MAX_TIME_LIMIT_MERGE_COUNT = 4; // count of loops to check for overlapping ranges
 
@@ -109,13 +91,13 @@ protected const ARG_USE_TIMEZONE_FRONTEND =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
     ];
 
     protected const ARG_REQ_LIST = [
-        TimerConst::ARG_ULTIMATE_RANGE_BEGINN,
-        TimerConst::ARG_ULTIMATE_RANGE_END,
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
     ];
     protected const ARG_OPT_LIST = [
         self::ARG_YAML_PERIOD_FILE_PATH,
         self::ARG_YAML_PERIOD_FIELD,
-        self::ARG_USE_TIMEZONE_FRONTEND,
+        self::ARG_USE_ACTIVE_TIMEZONE,
 
     ];
 
@@ -176,8 +158,8 @@ protected const ARG_USE_TIMEZONE_FRONTEND =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
-            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[TimerConst::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
+            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[self::ARG_ULTIMATE_RANGE_END]);
     }
 
     /**
@@ -210,9 +192,9 @@ protected const ARG_USE_TIMEZONE_FRONTEND =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
      */
     protected function validateZone(array $params = []): bool
     {
-        return !(isset($params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]))||
+        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
             TcaUtility::isTimeZoneInList(
-                $params[TimerConst::ARG_EVER_TIME_ZONE_OF_EVENT]
+                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
             );
     }
 
@@ -223,15 +205,15 @@ protected const ARG_USE_TIMEZONE_FRONTEND =TimerConst::ARG_USE_ACTIVE_TIMEZONE;
      */
     protected function validateUltimate(array $params = []): bool
     {
-        $flag = (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]));
+        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
         $flag = $flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_BEGINN]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
                 ));
-        $flag = $flag && (!empty($params[TimerConst::ARG_ULTIMATE_RANGE_END]));
+        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
         return ($flag && (false !== date_create_from_format(
-                    TimerConst::TIMER_FORMAT_DATETIME,
-                    $params[TimerConst::ARG_ULTIMATE_RANGE_END]
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_ULTIMATE_RANGE_END]
                 )));
     }
 

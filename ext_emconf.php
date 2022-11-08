@@ -4,7 +4,7 @@
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porthd <info@mobger.de>
+ *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -35,11 +35,11 @@ $EM_CONF[$_EXTKEY] = [
     'category' => 'frontend',
     'author' => 'Dr. Dieter Porth',
     'author_email' => 'info@mobger.de',
-    'state' => 'beta',
+    'state' => 'experimental',
     'uploadfolder' => 0,
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '11.1.0',
+    'version' => '11.1.2',
     'constraints' => [
         'depends' => [
             'typo3' => '11.5.0-11.5.99',

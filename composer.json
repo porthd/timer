@@ -38,10 +38,6 @@
             "Porthd\\Timer\\Tests\\": "Tests/"
         }
     },
-    "replace": {
-        "Porthd/timer": "self.version",
-        "typo3-ter/webhelp": "self.version"
-    },
     "config": {
         "vendor-dir": ".Build/vendor"
     },
