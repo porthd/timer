@@ -4,6 +4,9 @@ The basis for this documentation is the German variant `de.ReadMe.md`.
 The English version was translated using `google.translate.de`.
 The documentation includes a presentation that I prepared for the TYPO3 Barcamp in Kamp-Lintfort in 2022
 
+##Attention
+8. November 2022: The Timer `RangeListTimer` und `PeriodListTimer` don`t work correctly.
+
 ##Motivation
 TYPO3 provides the fields `starttime` and `endtime` in its standard tables. Pages can be shown and hidden at specific times using the fields. These fields are also taken into account during caching.
 However, there is no way to periodically show and hide pages, content elements and/or images at certain times.
