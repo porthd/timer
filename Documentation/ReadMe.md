@@ -1,165 +1,161 @@
-#Extension Timer
-## Vorbemerkung
-Die Basis für diese Dokumentation ist die deutsche Variante `de.ReadMe.md`.
-Die englische Variante wurde mit Hilfe von `google.translate.de` übersetzt.
-Der Dokumentation ist eine Präsentatin beigefügt, die ich im Jahre 2022 für das TYPO3-Barcamp in Kamp-Lintfort vorbereitet hatte
-
-## ATTENTION
-8. November 2022: The timer `RangeListTimer` and `PeriodListTimer` did not work correctly.
+#extension timer
+## Preliminary remark
+The basis for this documentation is the German variant `de.ReadMe.md`.
+The English version was translated using `google.translate.de`.
+The documentation includes a presentation that I prepared for the TYPO3 Barcamp in Kamp-Lintfort in 2022
 
 ##Motivation
-TYPO3 stellt in seinen Standardtabellen die Felder `starttime` und `endtime` zur Verfügung. Über die Felder können Seiten zu bestimmten Zeiten ein- und ausgeblendet werden. Diese Felder werden auch beim Caching berücksichtigt.
-Es gibt aber keine Möglichkeit, periodisch zu bestimmten Zeiten Seiten, Inhaltselemente und/oder Bilder ein- und auszublenden.
+TYPO3 provides the fields `starttime` and `endtime` in its standard tables. Pages can be shown and hidden at specific times using the fields. These fields are also taken into account during caching.
+However, there is no way to periodically show and hide pages, content elements and/or images at certain times.
 
-###Userstorys
-####Der Interaktive Kneipengutschein.
-Ein Gastwirt möchte seinen Gästen während der Happy-Hour einen Rabatt von 50% einräumen. Diesen erhalten die Kunden als QR-Code auf ihr Handy, wenn sie das über der Theke hängende Tagesmotto und ein Like-Kommentar in das interaktive Formular eingeben.
-Im Content-Element wird das tagesaktuelle Motto automatisch natürlich geprüft.
-####Die jährliche Firmengründungswoche
-Ein Unternehmen feiert seinen Geburtstag mit einem Rückblick auf die Erfolge zum zurückliegenden Jahr. Diese werden im Alltag von den Mitarbeitern eingepflegt. Um die Freischaltung dieser Sonderseite kümmert sich das TYPO3-System.
-Der Veranstaltungskalender
-Eine kleiner Konzertveranstalter möchte gerne periodische Veranstaltungen wie Poetry-Slam, Lesungen oder OffeneBühnen gemischt mit besondere Konzerttermine in einer Liste anbieten.
-####Reaktion-Columne
-Eine Partei möchte aus seiner Startseite ähnliche Inhalte wie seine Konkurrenten deren Startseiten zeigen. Seine Webseite soll automatisch auf die Änderungen bei den Konkurrenten reagieren. Die Artikel sollen noch eine gewissen Zeit wieder verschwinden.
-(Hat ja eigentlich nicht mehr mit Zeit zu tun. Aber das Problem könnte mit Timer gelöst werden…)
-####Vermarktung von virtuellen Konzerten
-Eine Konzertagentur im Dezember 2021 möchte ein virtuelles Konzert in Berlin veranstalten, das Europaweit zu empfangen sein soll. Da die Sommerzeit 2021 endet, rechnet der Veranstalter mit verschiedenen Zeitzonen in Europa. Die Webseite soll für die Nutzer die jeweilige Ortszeit anzeigen.
+###User stories
+####The Interactive Pub Voucher.
+A restaurant owner wants to give his guests a 50% discount during happy hour. Customers receive this as a QR code on their mobile phone when they enter the motto of the day hanging above the counter and a Like comment in the interactive form.
+In the content element, the current motto is automatically checked, of course.
+####The annual company foundation week
+A company celebrates its birthday by looking back at the successes of the past year. These are updated by the employees on a day-to-day basis. The TYPO3 system takes care of the activation of this special page.
+The events calendar
+A small concert organizer would like to offer periodic events such as poetry slams, readings or open stages mixed with special concert dates in a list.
+####Reaction column
+One party would like to show content from its home page that is similar to that of its competitors on their home pages. Its website should automatically react to changes made by its competitors. The articles should disappear again for a certain time.
+(Actually, it has nothing to do with time. But the problem could be solved with a timer...)
+####Marketing of virtual concerts
+A concert agency in December 2021 would like to organize a virtual concert in Berlin, which should be able to be received throughout Europe. Since summer time ends in 2021, the organizer expects different time zones in Europe. The website should display the respective local time for the users.
 
-##Idee
-Eine Grundidee von der Timer-Extension ist, die Aufgabe in zwei Teilaufgaben aufzuteilen: in die Aufgabe des 
-Zeitmanagement und in die Aufgabe zur Steuerung der Startzeit.
-Über einen Task im  Scheduler (Cronjob) kann die Seite regelmäßig aktualisiert werden. 
-Über Viewhelper kann das Einbinden von Informationen innerhalb von Templates gesteuert werden, wobei der 
-Entwickler sich dann auch Gedanken über das Caching des Frontends machen muss.
-Über Dataprozessoren sollen leicht einfache Listen zusammenstellbar sein, die im Frontend ausgebar sind.
-Die Informationen aus den Flexform-Feldern können in den Templates mit Viewhelpern aufbereite werden.
+##Idea
+A basic idea of ​​the timer extension is to split the task into two subtasks: the task of the
+Time management and the start time control task.
+The page can be updated regularly via a task in the scheduler (cron job).
+The integration of information within templates can be controlled via Viewhelper, whereby the
+Developers then also have to think about the caching of the front end.
+It should be easy to compile simple lists via data processors, which can be displayed in the frontend.
+The information from the Flexform fields can be processed in the templates with view helpers.
 
-##Installation der Extension
-Sie können auf einen der  klassischen Wege installieren.
-- manuell
-- mit dem Extensionmanager der Admin-Tools
-- mit dem Composer ``composer require porthd/timer``
+##Installation of the extension
+You can install in one of the classic ways.
+- manually
+- with the extension manager of the admin tools
+- with the composer ``composer require porthd/timer``
 
-Prüfen sie, ob das Datenbankschema aktualisiert wurde.
-Es ist das Typoscript der Extension zu inkludieren. 
-Je nach Nutzungsanspruch ist noch ein Schedulertask zu aktivieren oder im eigenen Typoscript ein Dataprocessor aufzurufen.
+Check if the database schema has been updated.
+The typoscript of the extension is to be included.
+Depending on the usage requirements, a scheduler task must be activated or a data processor called in your own typescript.
 
-##Anwendungsaspekte
-### Periodisch erscheinender Content oder periodisch erscheinende Seiten
-Für periodisch erscheinden Content oder periodisch erscheinden Seite muss ein der Consolen-Task der Extension eingerichtet werden.
-Er wertet out-of-the-box die Elemente aus, für die eine Timer definiert ist und für die das Flag der Scheduler-Auswertung 
-auf aktiv gesetzt wurde.
+##Application Aspects
+### Periodic content or pages
+For content or pages that appear periodically, one of the extension's console tasks must be set up.
+Out-of-the-box, it evaluates the elements for which a timer is defined and for which the scheduler evaluation flag is set
+has been set to active.
 
-### Contentelement `timersimul` als Beispiel
-Das Content-Element `timersimul` zeigt exemplarisch die Anwendung der Viewhelper und der Dataprocessoren. 
-In Produktivumgebungen sollten sie für Editoren ausblenden. Es wird entfernt werden, wenn die Extension den Status `beta` erreicht. 
+### Content element `timersimul` as an example
+The content element `timersimul` shows an example of how the view helpers and data processors are used.
+In production environments, they should be hidden from editors. It will be removed when the extension reaches `beta` status.
 
-### Nutzung der periodischen Timer (Customtimer)
-Die Extension bringt derzeit mehrere periodische Timer mit. 
-Zwei der Timer sind noch nicht vollständig entwickelt. Unter anderem deshalb wurde der Status der Extension auf 
-`experimental` gestellt.
+### Use of the periodic timer (Customtimer)
+The extension currently comes with several periodic timers.
+Two of the timers are not yet fully developed. This is one of the reasons why the status of the extension was changed to
+`experimental`.
 
-#### Customtimer - Allgemeines
-Sie können die Timer bei den Konstanten der Extension freigeben.
+#### Customtimer - General
+You can enable the timers in the constants of the extension.
 
-Eigene Timer müssen sich vom Interface ``Porthd\Timer\CustomTimer\TimerInterface`` ableiten und können
-in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
+Custom timers must derive from the interface ``Porthd\Timer\CustomTimer\TimerInterface`` and be able to
+in ``ext_localconf.php`` to be added to the timer extension as follows:
 ````
             \Porthd\Timer\Utilities\ConfigurationUtility::mergeCustomTimer(
                 [\Vendor\YourNamespaceTimer\YourTimer::class, ]
             );
 ````
+#### CustomTimer - Overview
+* DailyTimer - active times recurring daily for a few minutes
+  (daily from 10:00 a.m. for 120 minutes)
+* DatePeriodTimer - active times recurring periodically for a few minutes relative to a start time. Consider it,
+  that because of the return of the time to the UTC zone during the calculation
+  DST can produce unexpected results for hourly periodicities.
+  (whole day every year for birthdays, every week for 120 minutes until 12:00 from May 13, 1970, ..)
+* DefaultTimer - Default timer/null element
+* EasterRelTimer - active period relative to important, mostly movable Christian holidays
+  (2nd Advent from 12:00 p.m. to 2:00 p.m., Rose Monday from 8:00 p.m. to 6:00 a.m. of the following day)
+* MoonphaseRelTimer - Periods starting relative to a moon phase for a specified time period
+* MoonriseRelTimer - Periods relative to moonrise or moonset for a specified time period
+* PeriodListTimer (unfinished 20221105) reads active period data from a yaml file.
+  Helpful, for example, for holiday lists or artist tour plans
+* RangeListTimer (unfinished 20221105) reads periodic list from yaml files or from table `` and merges
+  merge them into new active areas when they overlap. You can also define a list of prohibited areas,
+  which can reduce such overlaps. (Example: every Tuesday from 12pm to 2pm except during school holidays and public holidays)
+* SunriseRelTimer - periods relative to sunrise and sunset
+* WeekdayInMonthTimer - Periods on specific days of the week within a month starting at specific times with a specific duration
+  (Example: every second Friday of the month in the two hours before 19:00)
+* WeekdaylyTimer - Whole day of a specific weekday or days. (Example: Every Monday or Thursday)
 
-#### CustomTimer - Übersicht
-* DailyTimer - tägliche für einige Minuten wiederkehrende aktive Zeiten  
-  (täglich ab 10:00 für 120 Minuten)
-* DatePeriodTimer - periodisch für einige Minuten wiederkehrende aktive Zeiten relativ zu einem Startzeitpunkt. Bedenken sie,
-  dass wegen der Rückführung der der Zeit auf die UTC-Zone während der Berechnung
-  die Sommerzeit bei Periodizitäten auf Stundenbasis zu unerwarteten Ergebnissen führen kann.
-  (ganzen Tag in jedem Jahr zum Geburtstag, jede Woche für 120 Minuten bis 12:00 ab dem 13.5.1970, ..)
-* DefaultTimer - Defaulttimer/Nullelement
-* EasterRelTimer - aktiver Zeitraum relativ zu wichtigen, meist beweglichen christlichen Feiertagen    
-  (2. Advent von 12:00-14:00, Rosenmontag von 20:00 bis 6:00 des Folgetages)
-* MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen bestimmten Zeitraum
-* MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für einen bestimmten Zeitraum
-* PeriodListTimer (unfertig 20221105) liest daten zu aktiven Perioden aus einer Yaml-Datei ein.
-  Hilfreich zum Beispiel für Ferienlisten oder TZourenpläne von Künstlern
-* RangeListTimer (unfertig 20221105) liest periodische Liste aus Yaml-Dateien oder aus der Tabelle `` ein und mergt
-  sie bei Überlappung zu neuen aktiven Bereichen zusammen. Man kann auch eine Liste mit unerlaubten Bereichen definieren,
-  die solche Überlappungen reduzieren können. (Beispiel: jeden Dienstag von 12-14 Uhr außer in den Schulferien und an Feiertagen)
-* SunriseRelTimer - Perioden relativ zum Sonnenaufgang und Sonnenuntergang
-* WeekdayInMonthTimer - Perioden zu bestimmten Wochentagen innerhalb eines Monats ab bestimmten Uhrzeiten mit bestimmter Dauer
-  (Beispiel: jeden zweiten Freitag im Monat in dem zwei Stunden vor 19:00 )
-* WeekdaylyTimer - Ganzer tag eines bestimmter Wochentags oder bestimmter Wochentage. (Beispiel: Jeden Montag oder Donnerstag)
 
+#### CustomTimer - General parameters for all timers
+Some parameters are the same for all timers. Two parameters deal with the handling of time zones. Two other parameters determine the period in which the timer is valid at all.
+A parameter for controlling the scheduler was omitted. I can't think of a use case where such an exclusion really makes sense.
+If you need something like this, you can program a corresponding timer.
 
-#### CustomTimer - Generelle Parameter bei allen Timern
-Einige Parameter sind bei allen Timern gleich. Zwei Parameter behandeln den Umgang mit Zeitzonen. Zwei weitere Parameter bestimmen den Zeitraum, in welchen der Timer überhaupt gültig ist.
-Auf einen Parameter zur Steuerung des Scheduler wurde verzichtet. Mir ist kein Anwendungsfall eingefallen, wo ein solcher Ausschluss wirklich sinnvoll ist.   
-Wer so etwas braucht, kann gern einen entsprechenden Timer programmieren.
-
-* timeZoneOfEvent - speichert den Namen der zu verwendenden Zeitzone. wenn die Zeitzone des Server mit der Zeitzone des Event nicht übereinstimmt, wird die Server-ezeit auf die Zeitzonenzeit des Events umgerechnet.  
-  *Wertebereich*:   
-  Liste der generierten Zeitzonen. Die Zeitzonenproblematik ist wichtig, weil einige Timer die Zeiten auf UTC umrechen müssen. (Sonnenlauf, ...)    
-  *Anmerkung*:   
-  Aktuell werden alle Zeitzonen generiert. Es besteht die Möglichkeit, die Zeitzonen auf einen generelle Auswahl zu beschränken.
-* useTimeZoneOfFrontend - ja/nein-Parameter. Wenn der Wert gesetzt ist, wird immer die Zeitzone des Servers verwendet.
-* ultimateBeginningTimer - Ultimativer Beginn der Timers  
+* timeZoneOfEvent - stores the name of the time zone to use. if the server time zone does not match the event time zone, the server time will be converted to the event time zone time.
+  *Value range*:
+  List of generated time zones. The time zone issue is important because some timers need to convert times to UTC. (course of the sun, ...)
+  *Annotation*:
+  All time zones are currently being generated. It is possible to limit the time zones to a general selection.
+* useTimeZoneOfFrontend - yes/no parameters. If the value is set, the server's time zone is always used.
+* ultimateBeginningTimer - Ultimate beginning of timers
   *Default*:
-    1. Januar 0001 00:00:00
-* ultimateEndingTimer - Ultimatives Ende des Timers  
+  January 1 0001 00:00:00
+* ultimateEndingTimer - Ultimate end of the timer
   *Default*:
-    31. Dezember 9999 23:59:59
+  December 31, 9999 23:59:59
 
 
 
 #### Customtimer - Developer - Motivation
-Die Timer decken nicht jeden Fall ab. Sie können auch eigene Timerklasse definieren, die das `TimerInterface` implementieren muss. .
-Die binden sie über ihre  `ext_localconf.php` ein. Über eigenen Flexform können sie ihrem Timer eigene 
-Parameter mitgeben. 
+The timers do not cover every case. You can also define your own timer class, which must implement the `TimerInterface`. .
+You integrate them via your `ext_localconf.php`. You can use your own Flexform to set your own timer
+give parameters.
 
 ### Viewhelper
-Es fgibt drei Viewhelper:
-- timer:isActive - funktioniert ähnlich wie `f:if`, wobei geprüft wird, ob ein Zeitpunkt im aktiven Bereich eines periodischen Timers liegt.
-- timer:flexToArray - Wenn man eine Flexform-Definition in einen Array umwandelt, dass enthält der Array viele überflüssige Zwischenebenen. Mit dem Viewhelper lassen sich diese Ebenen entfernen, so dass der resultierenArray des Flexformarrays flacher/einfacher wird. 
-- timer:format.date - funktioniert wie `f:format.date`, wobei es die Ausgabe von Zeiten für eine bestimmte Zeitzone erlaubt.
+There are three view helpers:
+- timer:isActive - works similar to `f:if`, checking if a time is in the active range of a periodic timer.
+- timer:flexToArray - When converting a Flexform definition to an array, the array contains many superfluous intermediate levels. These levels can be removed with the Viewhelper, so that the resulting array of the flexform array becomes flatter/simpler.
+- timer:format.date - works like `f:format.date`, allowing the output of times for a specific time zone.
 
-### Dataprozessoren
-Da die Ergebnisse der Dataprocessoren gecacht werrden, muss sich der User überlebgen, was ein sinnvoller Cachinh´g-zeitraum ist und dies entsprechend definieren. 
+### Data Processors
+Since the results of the data processors are cached, the user must determine what a reasonable caching period is and define this accordingly.
 #### RangeListQueryProcessor
-Der Prozessor erstellt für die Datensätze mit periodischen Timern aus einer Tabelle eine Liste von Terminen. Der Dataprocessor funktioniert ählich wie der `DbQueryProcessor`.
+The processor creates a list of dates for the records with periodic timers from a table. The data processor works similar to the `DbQueryProcessor`.
 ```
 tt_content.timer_timersimul >
 tt_content.timer_timersimul < lib.contentElement
 tt_content.timer_timersimul {
 
-    templateName = Timersimul
+    templateName = timersimul
 
     dataProcessing.10 = Porthd\Timer\DataProcessing\RangeListQueryProcessor
     dataProcessing.10 {
         table = tx_timer_domain_model_event
 
-        # get the date, which are defined on the pages, declared in the fielld `pages`
+        # get the date, which are defined on the pages, declared in the field `pages`
         pidInList.stdWrap.cObject = TEXT
         pidInList.stdWrap.cObject.field = pages
         recursive = 1
 
         # sort in reverse order
-        #            reverse = false
+        # reverse = false
 
-        # name of output-object
+        # name of output object
         as = examplelist
     }
 }
 
 ```
-Siehe auch Beispiel in exemplarischen Contentelemtnt ``timersimul``
+See also example in example Contentelemtnt ``timersimul``
 
 #### SortListQueryProcessor
-Die Tabelle `sys_file_reference` unterstützt nicht die Felder `starttime` und `endtime`.
-Um trotzdem zeitliche variierende Bilder zu erreichen, kann man die per Dataprocessor erhalten Medien in 
-einen nach Periodizität sortierte Liste überführen lassen und umwandeln lassen und im Template entsprechend nutzen.
- 
+The `sys_file_reference` table does not support the `starttime` and `endtime` fields.
+In order to still achieve time-varying images, the media obtained by the data processor can be converted into
+have a list sorted by periodicity transferred and converted and used accordingly in the template.
+
 ```
         dataProcessing {
             ...
@@ -173,15 +169,15 @@ einen nach Periodizität sortierte Liste überführen lassen und umwandeln lasse
             30 = Porthd\Timer\DataProcessing\SortListQueryProcessor
             30 {
                 fieldName = myfiles
-                # lenght of the sorted list. Perhaps with identical images at different positions
-                hartBreak = 25
+                # length of the sorted list. Perhaps with identical images at different positions
+                hard break = 25
                 as = mysortedfiles
             }
             ...
         }
 
 ```
-Beachten sie, dass FLUIDTEMPLATE gecacht wird. Deshalb:
+Note that FLUIDTEMPLATE is cached. That's why:
 ```
     stdWrap {
         cache {

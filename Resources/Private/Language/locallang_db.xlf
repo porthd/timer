@@ -14,7 +14,7 @@
                 <target>Wählen Sie das Timer-Modell aus</target>
             </trans-unit>
             <trans-unit id="tx_timer_general.field.tx_timer_scheduler">
-                <source>allow to modify the start- and endtime of this element with the schduler by a command-line-task (CLI)</source>
+                <source>allow to modify the start- and endtime of this element with the scheduler by a command-line-task (CLI)</source>
                 <target>erlauben, die Start- und Endzeit dieses Elements mit dem Planer über eine Befehlszeilenaufgabe (CLI) zu ändern</target>
             </trans-unit>
             <trans-unit id="tx_timer_general.field.tx_timer_timer">

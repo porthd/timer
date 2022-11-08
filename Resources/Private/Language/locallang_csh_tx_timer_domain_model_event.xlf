@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2020-02-15T09:59:40Z" product-name="timer">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2020-02-15T09:59:40Z" product-name="timer">
 		<header/>
 		<body>
 			<trans-unit id="tx_timer_timer.description">
 				<source>flexform-parameter for selected timer of active periods</source>
+				<target>Flexform-Parameter für ausgewählten Timer aktiver Perioden</target>
 			</trans-unit>
 			<trans-unit id="tx_timer_selector.description">
 				<source>selection of avaiable timer</source>
+				<target>Auswahl verfügbarer Timer</target>
 			</trans-unit>
 			<trans-unit id="title.description">
 				<source>title</source>
+				<target>Titel</target>
 			</trans-unit>
 			<trans-unit id="description.description">
 				<source>informations</source>
+				<target>Informationen</target>
 			</trans-unit>
 			<trans-unit id="teaser_slogan.description">
 				<source>slogan</source>
+				<target>Slogan</target>
 			</trans-unit>
 			<trans-unit id="teaser_infotext.description">
 				<source>shortinfos</source>
+				<target>Kurzinfos</target>
 			</trans-unit>
 			<trans-unit id="flag_test.description">
 				<source>for tests only</source>
+				<target>nur für Tests</target>
 			</trans-unit>
 		</body>
 	</file>
