@@ -4,12 +4,18 @@ services:
     autoconfigure: true
     public: false
 
+  cache.timer_yamllist:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['timer_yamllist']
+
   Porthd\Timer\:
     resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
 
   Porthd\Timer\Command\UpdateTimerCommand:
     tags:
       - name: 'console.command'
         command: 'timer:updateTimerCommand'
         description: 'Update starttime and endtime in various tables, where a timer is defined.'
-        public: true
+

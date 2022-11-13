@@ -28,6 +28,7 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -52,9 +53,9 @@ class EasterRelTimerTest extends TestCase
     {
         $GLOBALS = [];
         $GLOBALS['TYPO3_CONF_VARS'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer']['changeListOfTimezones'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
         $GLOBALS['EXEC_TIME'] = 1609088941; // 12/27/2020 @ 5:09pm (UTC)
     }
 
@@ -149,7 +150,7 @@ class EasterRelTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format('Y-m-d H:i:s', '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -644,7 +645,7 @@ class EasterRelTimerTest extends TestCase
                 'result' => true,
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -664,7 +665,7 @@ class EasterRelTimerTest extends TestCase
                 'result' => false,
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -690,7 +691,7 @@ class EasterRelTimerTest extends TestCase
                     'result' => false,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $testDate . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $dateIndex, // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -710,7 +711,7 @@ class EasterRelTimerTest extends TestCase
                     'result' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $testDate . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $dateIndex, // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -755,7 +756,7 @@ class EasterRelTimerTest extends TestCase
                     'result' => false,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $test['date'] . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $test['date'] . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $test['index'], // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -775,7 +776,7 @@ class EasterRelTimerTest extends TestCase
                     'result' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $test['date'] . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $test['date'] . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $test['index'], // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -805,7 +806,7 @@ class EasterRelTimerTest extends TestCase
                         'result' => $flag,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2050-04-10 12:01:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:01:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'easter', // Variation
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00
@@ -825,7 +826,7 @@ class EasterRelTimerTest extends TestCase
                         'result' => (!$flag),
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2050-04-10 11:59:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 11:59:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'easter', // Variation
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00
@@ -850,13 +851,13 @@ class EasterRelTimerTest extends TestCase
             foreach ([-400000, -2003, 10, 1440, 400000] as $relative) {
                 $diff = $duration + $relative;
                 if ($diff > 0) {
-                    $first = date_create_from_format('Y-m-d H:i:s', '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
                     $first->add(new DateInterval('PT' . $diff . 'M'));
                 } elseif ($diff < 0) {
-                    $first = date_create_from_format('Y-m-d H:i:s', '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
                     $first->sub(new DateInterval('PT' . abs($diff) . 'M'));
                 } else {
-                    $first = date_create_from_format('Y-m-d H:i:s', '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
 
                 }
                 $flagSecond = (($diff < 0) && (abs($diff) > abs($relative))) || (($diff > 0) && (abs($diff) > abs($relative))) || (($diff === 0) && ($relative < $duration));
@@ -892,14 +893,14 @@ class EasterRelTimerTest extends TestCase
             foreach ([-400000, -2003, 10, 1440, 400000] as $relative) {
                 $diff = $duration + $relative;
                 if ($diff > 0) {
-                    $first = date_create_from_format('Y-m-d H:i:s', '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
                     $first->add(new DateInterval('PT' . $diff . 'M'));
 
                 } elseif ($diff < 0) {
-                    $first = date_create_from_format('Y-m-d H:i:s', '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
                     $first->sub(new DateInterval('PT' . abs($diff) . 'M'));
                 } else {
-                    $first = date_create_from_format('Y-m-d H:i:s', '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
 
                 }
                 if ($duration < 0) {
@@ -969,7 +970,7 @@ class EasterRelTimerTest extends TestCase
                         'result' => false,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 11:59:59', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:59:59', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
                             'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -989,7 +990,7 @@ class EasterRelTimerTest extends TestCase
                         'result' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2021-04-05 13:59:59', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-04-05 13:59:59', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'easter', // easter 4.4.21
                             'relMinToSelectedTimerEvent' => 2160, //  Oster Montag 12:00
@@ -1010,7 +1011,7 @@ class EasterRelTimerTest extends TestCase
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach (['0001-01-01 00:00:00', '2020-12-27 11:00:00', '2020-12-27 13:00:00', '2020-12-27 18:00:00', '9999-12-31 23:59:59',] as $beginnTimeString) {
             foreach (['0001-01-01 00:00:00', '2020-12-27 11:00:00', '2020-12-27 13:00:00', '2020-12-27 18:00:00', '9999-12-31 23:59:59',] as $endTimeString) {
-                $check = date_create_from_format('Y-m-d H:i:s', '2021-04-05 11:59:59', new DateTimeZone('Europe/Berlin'));
+                $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-04-05 11:59:59', new DateTimeZone('Europe/Berlin'));
                 $result[] = [
                     'message' => 'The date ' . $check->format('d.m.Y H:i:s') . ' miss the start-interval by one second. ' .
                         'It is independ to the ultimate-parameter. [' . $beginnTimeString . '//' . $endTimeString . ']',
@@ -1248,7 +1249,7 @@ class EasterRelTimerTest extends TestCase
                 'exist' => true,
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1271,7 +1272,7 @@ class EasterRelTimerTest extends TestCase
                 'exist' => true,
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -1323,7 +1324,7 @@ class EasterRelTimerTest extends TestCase
                         'exist' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', $testDate, new DateTimeZone('Europe/Berlin')), // Variation
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate, new DateTimeZone('Europe/Berlin')), // Variation
                         'setting' => [
                             'namedDateMidnight' => $namedDate, // variation
                             'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1347,7 +1348,7 @@ class EasterRelTimerTest extends TestCase
                          'goodfriday' => '2020-04-10',
                      ] as $dateKey=>$dateString
             ) {
-                    $expectEaster = date_create_from_format('Y-m-d H:i:s', $dateString.' 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $expectEaster = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString.' 12:00:00', new DateTimeZone('Europe/Berlin'));
                 if ($duration >0) {
                     $easterStart = clone $expectEaster;
                     $easterEnd = clone $expectEaster;
@@ -1360,10 +1361,10 @@ class EasterRelTimerTest extends TestCase
                 $check = clone$easterStart;
                 $check->sub(new DateInterval('PT1M'));
                 $result[] = [
-                    'message' => 'The nextRange for duration at Time `'.$check->format('Y-m-d H:i:s').'` is okay with the easter-day-Parameter.',
+                    'message' => 'The nextRange for duration at Time `'.$check->format(TimerInterface::TIMER_FORMAT_DATETIME).'` is okay with the easter-day-Parameter.',
                     'expects' => [
-                        'beginning' => $easterStart->format('Y-m-d H:i:s'),
-                        'ending' => $easterEnd->format('Y-m-d H:i:s'),
+                        'beginning' => $easterStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                        'ending' => $easterEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
                         'exist' => true,
                     ],
                     'params' => [
@@ -1390,7 +1391,7 @@ class EasterRelTimerTest extends TestCase
                 foreach (['easter' =>'2020-04-12', 'ascension'=>'2020-05-21','pentecost'=>'2020-05-31',
                              'firstadvent'=>'2020-11-29', 'christmas'=>'2020-12-25', 'rosemonday'=>'2020-02-24',
                              'goodfriday' => '2020-04-10',] as $dateKey => $dateString) {
-                    $expectEaster = date_create_from_format('Y-m-d H:i:s', $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $expectEaster = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
                     if ($relToInMin > 0) {
                         $expectEaster->add(new DateInterval(('PT'.$relToInMin.'M')));
                     } else {
@@ -1409,11 +1410,11 @@ class EasterRelTimerTest extends TestCase
                     $check->add(new DateInterval('PT1M'));
                     $result[] = [
                         'message' => 'The nextRange for duration `' . $duration .
-                            '` at Time `' . $check->format('Y-m-d H:i:s') . '` is okay with the variation of the relative-gap `' .
+                            '` at Time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the variation of the relative-gap `' .
                             $relToInMin . '` and with the date-type-parameter.',
                         'expects' => [
-                            'beginning' => $easterStart->format('Y-m-d H:i:s'),
-                            'ending' => $easterEnd->format('Y-m-d H:i:s'),
+                            'beginning' => $easterStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                            'ending' => $easterEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
                             'exist' => true,
                         ],
                         'params' => [
@@ -1452,7 +1453,7 @@ class EasterRelTimerTest extends TestCase
                      'null' => ['easter' => '1400-04-18', 'ascension' => '1582-05-24', 'pentecost' => '1583-05-19', 'firstadvent' => '1752-11-29', 'christmas' => '1752-12-25', 'rosemonday' => '1752-02-10', 'goodfriday' => '2020-04-10'],
                  ] as $method => $list) {
             foreach ($list as $dateKey => $dateString) {
-                $start = date_create_from_format('Y-m-d H:i:s', $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
+                $start = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
                 $end = clone $start;
                 $end->add(new DateInterval('PT120M'));
                 // below  the estimated start-border
@@ -1460,10 +1461,10 @@ class EasterRelTimerTest extends TestCase
                 $check->sub(new DateInterval('PT1M'));
                 $myItem = [
                     'message' => 'The nextRange for variationof  method `' . print_r($method, true) .
-                        '` at Time `' . $check->format('Y-m-d H:i:s') . '` with definition of date `' . $myMapName[$dateKey] . '` .',
+                        '` at Time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` with definition of date `' . $myMapName[$dateKey] . '` .',
                     'expects' => [
-                        'beginning' => $start->format('Y-m-d H:i:s'),
-                        'ending' => $end->format('Y-m-d H:i:s'),
+                        'beginning' => $start->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                        'ending' => $end->format(TimerInterface::TIMER_FORMAT_DATETIME),
                         'exist' => true,
                     ],
                     'params' => [
@@ -1503,7 +1504,7 @@ class EasterRelTimerTest extends TestCase
                         'exist' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
                             'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1525,7 +1526,7 @@ class EasterRelTimerTest extends TestCase
                         'exist' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
                             'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -1552,7 +1553,7 @@ class EasterRelTimerTest extends TestCase
                     'exist' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => 'christmas', // Christmas
                         'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1574,7 +1575,7 @@ class EasterRelTimerTest extends TestCase
                     'exist' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => 'christmas', // Christmas
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -1609,8 +1610,8 @@ class EasterRelTimerTest extends TestCase
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
             $result = $this->subject->nextActive($value, $setting);
-            $diffBeginObj = $result->getBeginning()->diff(date_create_from_format('Y-m-d H:i:s', $expects['beginning']));
-            $diffEndObj = $result->getEnding()->diff(date_create_from_format('Y-m-d H:i:s', $expects['ending']));
+            $diffBeginObj = $result->getBeginning()->diff(date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $expects['beginning']));
+            $diffEndObj = $result->getEnding()->diff(date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $expects['ending']));
             $diffBegin = (int)$diffBeginObj->format('%i');
             $diffEnd = (int)$diffEndObj->format('%i');
             $flag = (($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['beginning']) ||
@@ -1641,7 +1642,7 @@ class EasterRelTimerTest extends TestCase
                 'exist' => true,
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2022-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1664,7 +1665,7 @@ class EasterRelTimerTest extends TestCase
                 'exist' => true,
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 15:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 15:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -1716,7 +1717,7 @@ class EasterRelTimerTest extends TestCase
                         'exist' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', $testDate, new DateTimeZone('Europe/Berlin')), // Variation
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate, new DateTimeZone('Europe/Berlin')), // Variation
                         'setting' => [
                             'namedDateMidnight' => $namedDate, // variation
                             'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1739,7 +1740,7 @@ class EasterRelTimerTest extends TestCase
             foreach (['easter' => '2020-04-12', 'ascension' => '2020-05-21', 'pentecost' => '2020-05-31',
                          'firstadvent' => '2020-11-29', 'christmas' => '2020-12-25', 'rosemonday' => '2020-02-24',
                          'goodfriday' => '2020-04-10'] as $dateKey => $dateString) {
-                $expectEaster = date_create_from_format('Y-m-d H:i:s', $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
+                $expectEaster = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
                 if ($duration > 0) {
                     $easterStart = clone $expectEaster;
                     $easterEnd = clone $expectEaster;
@@ -1752,10 +1753,10 @@ class EasterRelTimerTest extends TestCase
                 $check = clone $easterStart;
                 $check->sub(new DateInterval('PT1M'));
                 $result[] = [
-                    'message' => 'The prevRange for duration at Time `' . $check->format('Y-m-d H:i:s') . '` is okay with the easter-day-Parameter.',
+                    'message' => 'The prevRange for duration at Time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the easter-day-Parameter.',
                     'expects' => [
-                        'beginning' => $easterStart->format('Y-m-d H:i:s'),
-                        'ending' => $easterEnd->format('Y-m-d H:i:s'),
+                        'beginning' => $easterStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                        'ending' => $easterEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
                         'exist' => true,
                     ],
                     'params' => [
@@ -1782,7 +1783,7 @@ class EasterRelTimerTest extends TestCase
                 foreach (['easter' => '2020-04-12', 'ascension' => '2020-05-21', 'pentecost' => '2020-05-31',
                              'firstadvent' => '2020-11-29', 'christmas' => '2020-12-25', 'rosemonday' => '2020-02-24',
                              'goodfriday' => '2020-04-10'] as $dateKey => $dateString) {
-                    $expectEaster = date_create_from_format('Y-m-d H:i:s', $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $expectEaster = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
                     if ($relToInMin > 0) {
                         $expectEaster->add(new DateInterval(('PT'.$relToInMin.'M')));
                     } else {
@@ -1801,11 +1802,11 @@ class EasterRelTimerTest extends TestCase
                     $check->add(new DateInterval('PT1M'));
                     $result[] = [
                         'message' => 'The prevRange for duration `' . $duration .
-                            '` at Time `' . $check->format('Y-m-d H:i:s') . '` is okay with the variation of the relative-gap `' .
+                            '` at Time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the variation of the relative-gap `' .
                             $relToInMin . '` and with the date-type-parameter.',
                         'expects' => [
-                            'beginning' => $easterStart->format('Y-m-d H:i:s'),
-                            'ending' => $easterEnd->format('Y-m-d H:i:s'),
+                            'beginning' => $easterStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                            'ending' => $easterEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
                             'exist' => true,
                         ],
                         'params' => [
@@ -1853,7 +1854,7 @@ class EasterRelTimerTest extends TestCase
                          'goodfriday' => '2020-04-10'],
                  ] as $method => $list) {
             foreach ($list as $dateKey => $dateString) {
-                $start = date_create_from_format('Y-m-d H:i:s', $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
+                $start = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString . ' 12:00:00', new DateTimeZone('Europe/Berlin'));
                 $end = clone $start;
                 $end->add(new DateInterval('PT120M'));
                 // above the estimated end-border
@@ -1861,10 +1862,10 @@ class EasterRelTimerTest extends TestCase
                 $check->add(new DateInterval('PT1M'));
                 $myItem = [
                     'message' => 'The nextRange for variationof  method `' . print_r($method, true) .
-                        '` at Time `' . $check->format('Y-m-d H:i:s') . '` with definition of date `' . $myMapName[$dateKey] . '` .',
+                        '` at Time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` with definition of date `' . $myMapName[$dateKey] . '` .',
                     'expects' => [
-                        'beginning' => $start->format('Y-m-d H:i:s'),
-                        'ending' => $end->format('Y-m-d H:i:s'),
+                        'beginning' => $start->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                        'ending' => $end->format(TimerInterface::TIMER_FORMAT_DATETIME),
                         'exist' => true,
                     ],
                     'params' => [
@@ -1902,7 +1903,7 @@ class EasterRelTimerTest extends TestCase
                         'exist' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
                             'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1924,7 +1925,7 @@ class EasterRelTimerTest extends TestCase
                         'exist' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 15:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 15:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
                             'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -1951,7 +1952,7 @@ class EasterRelTimerTest extends TestCase
                     'exist' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => 'christmas', // Christmas
                         'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -1973,7 +1974,7 @@ class EasterRelTimerTest extends TestCase
                     'exist' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-25 15:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 15:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => 'christmas', // Christmas
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -2007,8 +2008,8 @@ class EasterRelTimerTest extends TestCase
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
             $result = $this->subject->prevActive($value, $setting);
-            $diffBeginObj = $result->getBeginning()->diff(date_create_from_format('Y-m-d H:i:s', $expects['beginning']));
-            $diffEndObj = $result->getEnding()->diff(date_create_from_format('Y-m-d H:i:s', $expects['ending']));
+            $diffBeginObj = $result->getBeginning()->diff(date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $expects['beginning']));
+            $diffEndObj = $result->getEnding()->diff(date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $expects['ending']));
             $diffBegin = (int)$diffBeginObj->format('%i');
             $diffEnd = (int)$diffEndObj->format('%i');
             $flag = (($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['beginning']) ||
@@ -2030,31 +2031,31 @@ class EasterRelTimerTest extends TestCase
     ////// tested in https://sandbox.onlinephpfunctions.com/
     //// public static function checkDateimeForMissingAddingHoursForSummertime (){ // Testing-problem
     ////    ////        $test = [];
-    ////        $check = date_create_from_format('Y-m-d H:i:s', '2020-04-12 12:00:00', new DateTimeZone('Europe/Berlin'));
+    ////        $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-04-12 12:00:00', new DateTimeZone('Europe/Berlin'));
     ////        for ($i = 0; $i < 30000; $i++) {
     ////            $expectEaster = clone $check;
     ////            $interval = new DateInterval('PT' . $i . 'M');
     ////            $expectEaster->sub($interval);
     ////            $dummy = clone $expectEaster;
     ////            $expectEaster->add($interval);
-    ////            if (!in_array($expectEaster->format('Y-m-d H:i:s'), $test)) {
-    ////                $test[$i] = $expectEaster->format('Y-m-d H:i:s');
-    ////                echo($i . ' near summertime start ' . $expectEaster->format('Y-m-d H:i:s') . '[' . $dummy->format('Y-m-d H:i:s') . ']' . "\n");
+    ////            if (!in_array($expectEaster->format(TimerInterface::TIMER_FORMAT_DATETIME), $test)) {
+    ////                $test[$i] = $expectEaster->format(TimerInterface::TIMER_FORMAT_DATETIME);
+    ////                echo($i . ' near summertime start ' . $expectEaster->format(TimerInterface::TIMER_FORMAT_DATETIME) . '[' . $dummy->format(TimerInterface::TIMER_FORMAT_DATETIME) . ']' . "\n");
     ////            }
     ////        }
     ////        //        0 near summertime start 2020-04-12 12:00:00[2020-04-12 12:00:00]
     ////        //    20701 near summertime start 2020-04-12 13:00:00[2020-03-29 03:59:00]
     ////        //    20761 near summertime start 2020-04-12 11:00:00[2020-03-29 00:59:00]
-    ////        $check = date_create_from_format('Y-m-d H:i:s', '2020-10-25 06:00:00', new DateTimeZone('Europe/Berlin'));
+    ////        $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-10-25 06:00:00', new DateTimeZone('Europe/Berlin'));
     ////        for ($i = 0; $i < 361; $i = $i + 60) {
     ////            $expectEaster = clone $check;
     ////            $interval = new DateInterval('PT' . $i . 'M');
     ////            $expectEaster->sub($interval);
     ////            $dummy = clone $expectEaster;
     ////            $expectEaster->add($interval);
-    ////            $test[$i] = $expectEaster->format('Y-m-d H:i:s');
-    ////            echo($i . ' near summertime end ' . $expectEaster->format('Y-m-d H:i:s') .
-    ////                '[' . $dummy->format('Y-m-d H:i:s') . ' / ' . $dummy->getTimestamp() . ']' .
+    ////            $test[$i] = $expectEaster->format(TimerInterface::TIMER_FORMAT_DATETIME);
+    ////            echo($i . ' near summertime end ' . $expectEaster->format(TimerInterface::TIMER_FORMAT_DATETIME) .
+    ////                '[' . $dummy->format(TimerInterface::TIMER_FORMAT_DATETIME) . ' / ' . $dummy->getTimestamp() . ']' .
     ////                "\n");
     ////        }
     //////      0 near summertime end 2020-10-25 06:00:00[2020-10-25 06:00:00 / 1603602000]

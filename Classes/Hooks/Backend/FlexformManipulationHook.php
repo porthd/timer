@@ -24,6 +24,7 @@ namespace Porthd\Timer\Hooks\Backend;
 use DateTime;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\DateTimeUtility;
 
 /**
@@ -59,7 +60,7 @@ class FlexformManipulationHook
                         // https://stackoverflow.com/questions/32109936/php-datetime-format-does-not-respect-timezones
                         $dateValue = new DateTime($item['default']);
                         if ($dateValue !== false) {
-                            $item['default'] = DateTimeUtility::formatForZone($dateValue, 'Y-m-d H:i:s');
+                            $item['default'] = DateTimeUtility::formatForZone($dateValue, TimerInterface::TIMER_FORMAT_DATETIME);
                         }
                     } catch (Exception $e) {
                         // do nothing

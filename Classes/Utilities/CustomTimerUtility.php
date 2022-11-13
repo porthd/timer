@@ -21,15 +21,12 @@ namespace Porthd\Timer\Utilities;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateInterval;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
+use Porthd\Timer\Interfaces\ValidateYamlInterface;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -135,9 +132,9 @@ class CustomTimerUtility
             );
         } else {
             if (empty($flagActiveTimeZone)) {
-                $context = GeneralUtility::makeInstance(Context::class);
                 // Reading the current data instead of $GLOBALS['EXEC_TIME']
-                $currentZone = $context->getPropertyFromAspect('date', 'timezone');
+                $currentZone = GeneralUtility::makeInstance(Context::class)
+                    ->getPropertyFromAspect('date', 'timezone');
                 $generalTimeZone = LocalizationUtility::translate(
                     'content.timer.periodMessage.general.timeZone.server.1',
                     TimerConst::EXTENSION_NAME,
@@ -300,5 +297,53 @@ class CustomTimerUtility
         }
         return '';
     }
+
+
+    /**
+     * @param string $yamlFilePath
+     * @param YamlFileLoader $yamlFileLoader
+     * @param FrontendInterface|null $cache
+     * @return array
+     */
+    public static function readListFromYamlFile(
+        string $yamlFilePath,
+        ?ValidateYamlInterface $validatorObject = null,
+        ?FrontendInterface $cache = null
+    ): array {
+        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
+        $yamlFilePathNew = $yamlFilePath;
+        if (file_exists($yamlFilePath)) {
+            $yamlFilePathNew = realpath($yamlFilePath);
+        } else {
+            if (GeneralUtility::validPathStr($yamlFilePath)) {
+                $yamlFilePathNew = GeneralUtility::getFileAbsFileName($yamlFilePath);
+            }
+        }
+        if ((!file_exists($yamlFilePathNew)) ||
+            ($yamlFileLoader === null)
+        ) {
+            return [];
+        }
+
+        $cacheIdentifier = md5('start#create.'.filectime($yamlFilePathNew).
+            'modify'.filemtime($yamlFilePathNew).
+            'size'.filesize($yamlFilePathNew).
+            'realpath'.$yamlFilePathNew.'#end');
+        if (($cache === null) ||
+            (($result = $cache->get($cacheIdentifier)) === false)
+        ){
+            $result = $yamlFileLoader->load($yamlFilePathNew);
+            // validate the yaml-structure or throw an exception
+            if ($validatorObject !== null) {
+                $validatorObject->validateYamlOrException($result,$yamlFilePathNew);
+            }
+            // Use cache if a cachings-system is avaiable
+            if ($cache !== null) {
+               $cache->set($cacheIdentifier,$result);
+            }
+        }
+        return $result;
+    }
+
 }
 

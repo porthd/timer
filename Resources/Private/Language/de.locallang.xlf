@@ -40,6 +40,14 @@
 				<source>value</source>
 				<target>Wert</target>
 			</trans-unit>
+			<trans-unit id="content.perioditem.dataprocessed.header.flex.key">
+				<source>attribute name</source>
+				<target>Attributename</target>
+			</trans-unit>
+			<trans-unit id="content.perioditem.dataprocessed.header.flex.value">
+				<source>value</source>
+				<target>Wert</target>
+			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.subtitle.isActive">
 				<source>Viewhelper &lt;timer:isActive&gt;</source>
 				<target>Viewhelper &lt;timer:isActive&gt;</target>

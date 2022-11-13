@@ -32,19 +32,6 @@
                     </config>
                 </TCEforms>
             </yamlPeriodFilePath>
-            <yamlTextField>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlTextField.label
-                    </label>
-                    <config>
-                        <type>text</type>
-                        <cols>24</cols>
-                        <rows>3</rows>
-                        <placeholder>LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlTextField.placeholder</placeholder>
-                    </config>
-                </TCEforms>
-            </yamlTextField>
         </el>
     </ROOT>
 </T3DataStructure>

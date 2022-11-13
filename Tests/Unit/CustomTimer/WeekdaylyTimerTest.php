@@ -28,6 +28,7 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -53,9 +54,9 @@ class WeekdaylyTimerTest extends TestCase
     {
         $GLOBALS = [];
         $GLOBALS['TYPO3_CONF_VARS'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer']['changeListOfTimezones'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
         $GLOBALS['EXEC_TIME'] = 1609088941; // 12/27/2020 @ 5:09pm (UTC)
     }
 
@@ -522,7 +523,7 @@ class WeekdaylyTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format('Y-m-d H:i:s', '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -761,7 +762,7 @@ class WeekdaylyTimerTest extends TestCase
         foreach ([1 => '2021-01-04', 2 => '2021-01-05', 4 => '2021-01-06', 8 => '2021-01-07', 16 => '2021-01-08',
                      32 => '2021-01-09', 64 => '2021-01-10'] as $activeWeekday => $dateString) {
             foreach (['00:00:00' => 'PT1S', '06:00:00' => 'PT6H1S', '12:00:00' => 'PT12H1S', '23:59:59' => 'PT24H',] as $okayTime => $failSub) {
-                $okayDate = date_create_from_format('Y-m-d H:i:s', $dateString . ' ' . $okayTime, new DateTimeZone('Europe/Berlin'));
+                $okayDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString . ' ' . $okayTime, new DateTimeZone('Europe/Berlin'));
                 foreach (['','P7D', 'P2W', 'P10W', 'P1400D'] as $key => $addOkay) {
 
                     if (!empty($addOkay)) {
@@ -842,7 +843,7 @@ class WeekdaylyTimerTest extends TestCase
                     'result' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2021-01-04 12:00:00', new DateTimeZone('Europe/Berlin')), // variated relative to variation with respect to result
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-01-04 12:00:00', new DateTimeZone('Europe/Berlin')), // variated relative to variation with respect to result
                     'setting' => [
                         'activeWeekday' => $i, // // variation
                         // general
@@ -858,7 +859,7 @@ class WeekdaylyTimerTest extends TestCase
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
-                $check = date_create_from_format('Y-m-d H:i:s', '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin'));
+                $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin'));
                 $result[] = [
                     'message' => 'The date with additional Interval  will be NOT active. It is indepent to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
@@ -900,7 +901,7 @@ class WeekdaylyTimerTest extends TestCase
 
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach (['0001-01-01 00:00:00', '2020-12-27 11:00:00', '2020-12-27 13:00:00', '2020-12-27 18:00:00', '9999-12-31 23:59:59',] as $timeString) {
-            $check = date_create_from_format('Y-m-d H:i:s', '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin'));
+            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin'));
             $result[] = [
                 'message' => 'The date with additional Interval  will be NOT active. It is independ to the ultimate-parameter. ',
                 'expects' => [
@@ -986,7 +987,7 @@ class WeekdaylyTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                     // general
@@ -1009,7 +1010,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $testTime, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testTime, new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
@@ -1042,7 +1043,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => $weekday, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
@@ -1065,7 +1066,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $tomorrowDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $tomorrowDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => $weekday, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
@@ -1090,7 +1091,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $yesterday->format('Y-m-d') . ' 12:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $yesterday->format('Y-m-d') . ' 12:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => $weekday, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
@@ -1118,7 +1119,7 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                             // general
@@ -1139,7 +1140,7 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-26 15:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-26 15:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                             // general
@@ -1165,7 +1166,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
@@ -1186,7 +1187,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-26 11:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
@@ -1245,7 +1246,7 @@ class WeekdaylyTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                     // general
@@ -1268,7 +1269,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $testTime, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testTime, new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                         // general
@@ -1301,7 +1302,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => $weekday, // Variation in combination with Date
                         // general
@@ -1324,7 +1325,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $yesterdayDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $yesterdayDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => $weekday, // Variation in combination with Date
                         // general
@@ -1349,7 +1350,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $tomorrow->format('Y-m-d') . ' 12:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $tomorrow->format('Y-m-d') . ' 12:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => $weekday, // Variation in combination with Date
                         // general
@@ -1377,7 +1378,7 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                             // general
@@ -1398,7 +1399,7 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-28 15:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-28 15:00:00', new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                             // general
@@ -1424,7 +1425,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                         // general
@@ -1445,7 +1446,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-28 11:00:00', new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                         // general

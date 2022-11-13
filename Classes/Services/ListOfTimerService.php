@@ -26,10 +26,11 @@ use DateTime;
 use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\DefaultTimer;
-use Porthd\Timer\CustomTimer\TimerInterface;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\TcaUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -53,12 +54,12 @@ class ListOfTimerService implements SingletonInterface
      * @param string|array $orderList
      * @return array|string[]
      */
-    public function mergeSelectorItems($orderList = DefaultTimer::TIMER_NAME)
+    public function mergeSelectorItems($orderList = DefaultTimer::TIMER_NAME): array
     {
-        if ( (!is_array($this->list))) {
+        if ((!is_array($this->list))) {
             return DefaultTimer::TIMER_SELECTOR_DEFAULT;
         }
-        if(is_array($orderList)){
+        if (is_array($orderList)) {
             $orderListRaw = array_shift($orderList);
             $arrayList = $this->buildArrayByInterfaceFunctions(
                 'getSelectorItem',
@@ -79,7 +80,7 @@ class ListOfTimerService implements SingletonInterface
      * @param array $params
      * @return string
      */
-    public function getTimeZoneOfEvent(string $selector, string $activeZoneName, array $params = [] ): string
+    public function getTimeZoneOfEvent(string $selector, string $activeZoneName, array $params = []): string
     {
         return $this->list[$selector]->getTimeZoneOfEvent($activeZoneName, $params);
     }
@@ -93,7 +94,7 @@ class ListOfTimerService implements SingletonInterface
         if ((!is_array($this->list))) {
             return DefaultTimer::TIMER_FLEXFORM_ITEM;
         }
-        if( is_array($orderList)) {
+        if (is_array($orderList)) {
             $orderListRaw = array_unshift($orderList);
             $result = array_values($this->buildArrayByInterfaceFunctions(
                 'getFlexformItem',
@@ -108,29 +109,39 @@ class ListOfTimerService implements SingletonInterface
     }
 
     /**
-     * validate the parameter of the timer
+     * validate the parameter of the timer and check, if the selector defined an installed timer-object
      *
      * @param string $selector
      * @param array $params
      * @return bool
      */
-    public function validate(string $selector, $params = [])
+    public function validate(string $selector, $params = []): bool
     {
         if ((!is_array($this->list)) ||
-            (!isset($this->list[$selector]))
+            (!$this->validateSelector($selector))
         ) {
             return false;
         }
         return $this->list[$selector]->validate($params);
     }
 
+
+    /**
+     * @param string $selectorName
+     * @return bool
+     */
+    public function validateSelector(string $selectorName): bool
+    {
+        return !empty($this->list[$selectorName]);
+    }
+
     /**
      * @param $selector
      * @param DateTime $checkDate
      * @param array $params
-     * @return false
+     * @return bool
      */
-    public function isAllowedInRange($selector, DateTime $checkDate, $params = [])
+    public function isAllowedInRange($selector, DateTime $checkDate, $params = []): bool
     {
         if ((!is_array($this->list)) ||
             (!isset($this->list[$selector]))
@@ -142,7 +153,7 @@ class ListOfTimerService implements SingletonInterface
     }
 
     /**
-     * validate the parameter of the timer
+     *  check, if the range is active in the range defined by the selector
      *
      * @param string $selector
      * @param DateTime $checkDate contains the time-zone of the current User or the timezone of the CLI-Process
@@ -156,18 +167,18 @@ class ListOfTimerService implements SingletonInterface
         ) {
             return false;
         }
-        $activeZoneName= $checkDate->getTimezone()->getName();
+        $activeZoneName = $checkDate->getTimezone()->getName();
         $list = TcaUtility::listBaseZoneItems();
-        if (!in_array($activeZoneName, $list))  {
+        if (!in_array($activeZoneName, $list)) {
             throw new TimerException(
                 'There is an unknown/unallowed timeZone-definition `' . $activeZoneName .
-                '`. Check the spelling (upper&lower cases). Check the parameters of the timer `'.$selector.'`.' ,
+                '`. Check the spelling (upper&lower cases). Check the parameters of the timer `' . $selector . '`.',
                 123456797
             );
         }
-        $eventTimeZoneName = $this->getTimeZoneOfEvent($selector,  $activeZoneName,$params);
-        $dateLikeEventZone = new DateTime('@'.$checkDate->getTimestamp(), new DateTimeZone( 'UTC'));
-        $dateLikeEventZone->setTimezone( new DateTimeZone( $eventTimeZoneName));
+        $eventTimeZoneName = $this->getTimeZoneOfEvent($selector, $activeZoneName, $params);
+        $dateLikeEventZone = new DateTime('@' . $checkDate->getTimestamp(), new DateTimeZone('UTC'));
+        $dateLikeEventZone->setTimezone(new DateTimeZone($eventTimeZoneName));
         return $this->list[$selector]->isActive($dateLikeEventZone, $params);
     }
 
@@ -183,22 +194,23 @@ class ListOfTimerService implements SingletonInterface
         if ((!is_array($this->list)) ||
             (!isset($this->list[$selector]))
         ) {
-            $failAll = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $failAll = new TimerStartStopRange();
             $failAll->failAllActive($checkDate);
             return $failAll;
         }
-        $activeZoneName= $checkDate->getTimezone()->getName();
+        // @todo construct the fullrange for the lastactive result
+        $activeZoneName = $checkDate->getTimezone()->getName();
         $list = TcaUtility::listBaseZoneItems();
-        if (!in_array($activeZoneName, $list))  {
+        if (!in_array($activeZoneName, $list)) {
             throw new TimerException(
                 'There is an unknown/unallowed timeZone-definition `' . $activeZoneName .
-                '` for the method `'.__FUNCTION__.'`. Check the spelling (upper&lower cases). Check the parameters of the timer `'.$selector.'`.' ,
+                '` for the method `' . __FUNCTION__ . '`. Check the spelling (upper&lower cases). Check the parameters of the timer `' . $selector . '`.',
                 123456797
             );
         }
-        $eventTimeZoneName = $this->getTimeZoneOfEvent($selector,  $activeZoneName,$params);
-        $dateLikeEventZone = new DateTime('@'.$checkDate->getTimestamp(), new DateTimeZone( 'UTC'));
-        $dateLikeEventZone->setTimezone( new DateTimeZone( $eventTimeZoneName));
+        $eventTimeZoneName = $this->getTimeZoneOfEvent($selector, $activeZoneName, $params);
+        $dateLikeEventZone = new DateTime('@' . $checkDate->getTimestamp(), new DateTimeZone('UTC'));
+        $dateLikeEventZone->setTimezone(new DateTimeZone($eventTimeZoneName));
         return $this->list[$selector]->getLastIsActiveRangeResult($dateLikeEventZone, $params);
     }
 
@@ -250,7 +262,7 @@ class ListOfTimerService implements SingletonInterface
             (!isset($this->list[$selector]))
         ) {
             /** @var TimerStartStopRange $timerStartStop */
-            $timerStartStop = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $timerStartStop = new TimerStartStopRange();
             $timerStartStop->setZero();
             return $timerStartStop;
         }
@@ -260,41 +272,59 @@ class ListOfTimerService implements SingletonInterface
     /**
      * @throws TimerException
      */
-    private function generateList()
+    private function generateList(): void
     {
         if (!is_array($this->list)) {
             $this->list = [];
+            if (empty(TcaUtility::$timerConfig)) {
+                TcaUtility::$timerConfig = GeneralUtility::makeInstance(
+                    ExtensionConfiguration::class
+                )->get(TimerConst::EXTENSION_NAME);
+            }
+            $configTimers = TcaUtility::$timerConfig;
+
             // Call post-processing function for constructor:
-            if ((!empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER])) &&
-                (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER])) &&
-                (count($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER]) > 0)
+            if ((!empty($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER])) &&
+                (is_array($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER])) &&
+                (count($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER]) > 0)
             ) {
-                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER] as $className) {
+                foreach ($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER] as $className) {
                     $classInterface = class_implements($className);
                     if (in_array(TimerInterface::class, $classInterface)) {
                         /** @var TimerInterface $classObject */
                         $classObject = GeneralUtility::makeInstance($className);
                         $this->list[$classObject::selfName()] = $classObject;
+                    } else {
+                        throw new TimerException(
+                            'The class did not implement the TimerInterface for the included timeractions. Something in the configuration went wrong. Check you ext_localconf.php.',
+                            1668083631
+                        );
                     }
                 }
-                if ((!empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_EXCLUDE])) &&
-                    (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_EXCLUDE])) &&
-                    (count($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_EXCLUDE]) > 0)
+                if ((!empty($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE])) &&
+                    (is_array($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE])) &&
+                    (count($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE]) > 0)
                 ) {
-                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TimerConst::EXTENSION_NAME][TimerConst::GLOBALS_SUBKEY_EXCLUDE] as $className) {
-                        if (method_exists($className, 'selfName')) {
+                    foreach ($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE] as $className) {
+                        $classInterface = class_implements($className);
+                        if (in_array(TimerInterface::class, $classInterface)) {
                             /** @var TimerInterface $classObject */
                             $classObject = GeneralUtility::makeInstance($className);
                             if (isset($this->list[$classObject::selfName()])) {
                                 unset($this->list[$classObject::selfName()]);
                             }
+                        } else {
+                            throw new TimerException(
+                                'The class did not implement the TimerInterface for the excluded timer-actions. Something in the configuration went wrong. Check you ext_localconf.php.',
+                                1668082741
+                            );
                         }
                     }
                 }
             } else {
                 throw new TimerException(
                     'There is NO timer-class defined. Something in the configuration went wrong. Check you ext_localconf.php.',
-                    123456897
+                    1668081531
                 );
 
             }
@@ -306,8 +336,10 @@ class ListOfTimerService implements SingletonInterface
      * @param string|array $orderList
      * @return array
      */
-    protected function buildArrayByInterfaceFunctions(string $interfaceMethod, $orderList = TimerConst::EXTENSION_NAME): array
-    {
+    protected function buildArrayByInterfaceFunctions(
+        string $interfaceMethod,
+        $orderList = TimerConst::EXTENSION_NAME
+    ): array {
         if (is_array($orderList)) {
             $orderListRaw = array_shift($orderList);
             $preSorted = array_filter(
@@ -347,4 +379,5 @@ class ListOfTimerService implements SingletonInterface
         }
         return $arrayList;
     }
+
 }

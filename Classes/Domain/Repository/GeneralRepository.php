@@ -39,9 +39,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class GeneralRepository implements TimerRepositoryInterface
 {
 
-    public const SIGNAL_MODIFY_GENERIC_REQUEST = 'modifyGenericRequest';
     public const GENERAL_ROW_IDENTIFIER = 'uid';
     public const GENERAL_PARENT_IDENTIFIER = 'pid';
+
 
     /**
      * @param $tableName
@@ -77,8 +77,7 @@ class GeneralRepository implements TimerRepositoryInterface
         DateTime $refTime,
         $pidList = [],
         $whereInfos = []
-    )
-    {
+    ) {
 //        $signalSlotDispatcher = GeneralUtility::makeInstance(ObjectManager::class)->get(Dispatcher::class);
 
         /** @var QueryBuilder $queryBuilder */
@@ -90,7 +89,7 @@ class GeneralRepository implements TimerRepositoryInterface
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
             ->add(GeneralUtility::makeInstance(HiddenRestriction::class));
         $contraints = [
-            $queryBuilder->expr()->neq(TimerConst::TIMER_FIELD_SCHEDULER,0),
+            $queryBuilder->expr()->neq(TimerConst::TIMER_FIELD_SCHEDULER, 0),
             $queryBuilder->expr()->neq(TimerConst::TIMER_FIELD_FLEX_ACTIVE,
                 '""'
             ),

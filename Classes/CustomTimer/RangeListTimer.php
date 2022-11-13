@@ -24,13 +24,13 @@ namespace Porthd\Timer\CustomTimer;
 
 use DateInterval;
 use DateTime;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Domain\Model\Listing;
-use Porthd\Timer\Domain\Repository\GeneralRepository;
 use Porthd\Timer\Domain\Repository\ListingRepository;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
+use Porthd\Timer\Interfaces\ValidateYamlInterface;
 use Porthd\Timer\Services\ListOfTimerService;
 use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
@@ -38,16 +38,15 @@ use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
-use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
-use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 
-class RangeListTimer implements TimerInterface, LoggerAwareInterface
+class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYamlInterface
 {
 
     use LoggerAwareTrait;
@@ -67,33 +66,23 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
      */
     protected $lastIsActiveParams = [];
 
-    /**
-     * @var YamlFileLoader
-     */
-    protected $yamlFileLoader;
-
-//    /**
-//     * @param YamlFileLoader $yamlFileLoader
-//     */
-//    public function injectYamlFileLoader(YamlFileLoader $yamlFileLoader)
-//    {
-//        $this->yamlFileLoader = $yamlFileLoader;
-//    }
 
     /**
      * @var ListingRepository
      */
     protected $listingRepository;
-//    public function injectListingRepository(ListingRepository $listingRepository)
-//    {
-//        $this->listingRepository = $listingRepository;
-//    }
 
-//    public function __construct()
-//    {
-////        $this->listingRepository =  GeneralUtility::makeInstance(ListingRepository::class);
-//        $this->yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
-//    }
+    /**
+     * @var FrontendInterface|null
+     */
+    private $cache;
+
+    public function __construct() {
+        $this->listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
+        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
+        $this->cache = $cacheManager->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
+    }
+
 
     public const TIMER_NAME = 'txTimerRangeList';
     protected const ARG_YAML_ACTIVE_FILE_PATH = 'yamlActiveFilePath';
@@ -101,16 +90,13 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
 
     protected const ARG_DATABASE_ACTIVE_RANGE_LIST = 'databaseActiveRangeList';
     protected const ARG_DATABASE_FORBIDDEN_RANGE_LIST = 'databaseForbiddenRangeList';
-    protected const YAML_LIST_KEY = 'rangelist';
+    protected const YAML_MAIN_LIST_KEY = 'rangelist';
     protected const YAML_LIST_ITEM_SELECTOR = 'selector';
     protected const YAML_LIST_ITEM_TITLE = 'title';
     protected const YAML_LIST_ITEM_DESCRIPTION = 'description';
     protected const YAML_LIST_ITEM_PARAMS = 'params';
-    protected const YAML_LIST_ITEM_RANGE = 'range';
 
     protected const MAX_TIME_LIMIT_MERGE_COUNT = 4; // count of loops to check for overlapping ranges
-    protected const MAX_TIME_LIMIT_ACTIVE_COUNT = 10; // count of loops to check for overlapping active ranges
-    protected const MAX_TIME_LIMIT_FORBIDDEN_COUNT = 10; // // count of loops to check for overlapping forbidden ranges
 
     protected const MARK_OF_EXT_FOLDER_IN_FILEPATH = 'EXT:';
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
@@ -184,8 +170,73 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
-            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
+            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+    }
+
+    /**
+     *
+     * The method test, if the parameter in the yaml for the periodlist are okay
+     * remark: This method must not be tested, if the sub-methods are valid.
+     *
+     * The method will implicitly called in `readRangeListFromYamlFile(array $params, $key [=self::ARG_YAML_FORBIDDEN_FILE_PATH, self::ARG_YAML_ACTIVE_FILE_PATH]): array`
+     *
+     * @param array $yamlArray
+     * @param string $pathOfYamlFile
+     * @throws TimerException
+     */
+    public function validateYamlOrException(array $yamlConfig, $pathOfYamlFile): void
+    {
+        if ((!isset($yamlArray[self::YAML_MAIN_LIST_KEY])) ||
+            (!is_array($yamlArray[self::YAML_MAIN_LIST_KEY]))
+        ) {
+            throw new TimerException(
+                'The yaml-file has not the correct syntax. It must contain the attribute ' .
+                self::YAML_MAIN_LIST_KEY . ' at the starting level. Other attributes will be ignored at the starting-level. ' .
+                'Check the structure of your YAML-file `' . $pathOfYamlFile . '` for your `periodListTimer`.',
+                1668234195
+            );
+        }
+
+        $flag = true;
+        $timerList  = GeneralUtility::makeInstance(ListOfTimerService::class);
+        foreach ($yamlArray[self::YAML_MAIN_LIST_KEY] as $item) {
+            // required fields
+            $flag = $flag && isset($item[self::YAML_LIST_ITEM_SELECTOR]) &&
+                $timerList->validateSelector($item[self::YAML_LIST_ITEM_SELECTOR]);
+            if (!$flag) {
+                throw new TimerException(
+                    'The selector for the timer`' . $item[self::YAML_LIST_ITEM_SELECTOR] ?? 'NULL' . '` is not defined or instantiated.' .
+                    'Check the timer-definitions in your YAML-file `' . $pathOfYamlFile . '`.',
+                    1668247251
+                );
+            };
+            $flag = $flag && ((!isset($item[self::YAML_LIST_ITEM_TITLE])) ||
+                    (!empty($item[self::YAML_LIST_ITEM_TITLE])));
+            $flag = $flag && ((!isset($item[self::YAML_LIST_ITEM_DESCRIPTION])) ||
+                    (!empty($item[self::YAML_LIST_ITEM_DESCRIPTION])));
+            $flag = $flag && (!is_array($item[self::YAML_LIST_ITEM_PARAMS]));
+            if (!$flag) {
+                throw new TimerException(
+                    'The optional attributes `' . self::YAML_LIST_ITEM_TITLE . '`, `' . self::YAML_LIST_ITEM_DESCRIPTION .
+                    '` and `' . self::YAML_LIST_ITEM_PARAMS . '`  should be missing or should not be empty in your yaml-file `' .
+                    $pathOfYamlFile . '`. ' . 'Check the items in your YAML-file espacially the following one: ' .
+                    print_r($item, true),
+                    1668247500
+                );
+            };
+            $flag = $flag && $timerList->validate($item[self::YAML_LIST_ITEM_SELECTOR],
+                    $item[self::YAML_LIST_ITEM_PARAMS]
+                );
+            if (!$flag) {
+                throw new TimerException(
+                    'The parameter block is not valid for the timer `' . $item[self::YAML_LIST_ITEM_SELECTOR] . '`.' .
+                    'Check the items in your YAML-file `' . $pathOfYamlFile . '` espacially the following one: ' .
+                    print_r($item, true),
+                    1668247500
+                );
+            };
+        }
     }
 
     /**
@@ -353,35 +404,34 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-            $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return false;
         }
 
         $flag = false;
 
-        $yamlActiveConfig = $this->readActiveListFromYamlFile($params);
-        $yamlActiveConfig = (empty($yamlActiveConfig[self::YAML_LIST_KEY]) ? [] : $yamlActiveConfig[self::YAML_LIST_KEY]);
-        $databaseActiveConfig = $this->readActiveListFromDatabase($params);
+        $yamlActiveConfig = $this->readRangeListFromYamlFile($params, self::ARG_YAML_ACTIVE_FILE_PATH);
+        $databaseActiveConfig = $this->readRangeListFromDatabase($params, self::ARG_DATABASE_ACTIVE_RANGE_LIST);
         $activeTimer = array_merge($yamlActiveConfig, $databaseActiveConfig);
         if (empty($activeTimer)) {
-            $this->logger->warning('Your path for the file ' . $yamlActiveConfig[self::YAML_LIST_KEY]
+            $this->logger->warning('Your path for the file ' . $yamlActiveConfig[self::YAML_MAIN_LIST_KEY]
                 . 'in `' . self::ARG_YAML_ACTIVE_FILE_PATH . '` is missing or empty and '
                 . 'the entries for [' . $params[self::ARG_DATABASE_ACTIVE_RANGE_LIST] . '] in `' . self::ARG_DATABASE_ACTIVE_RANGE_LIST . '` are empty too. Please check '
                 . 'your configuration. [1600865701].'
             );
             return $flag;
         }
-        /** @var ListOfTimerService $timerList */
-        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
+        $timerList  = GeneralUtility::makeInstance(ListOfTimerService::class);
+
         foreach ($activeTimer as $singleActiveTimer) {
             if (
                 (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
                 ($timerList->validate($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
                     $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]))
             ) {
-                // log only the missing of an allowed-timerdcefinition
+                // log only the missing of an allowed definition of timer
                 $this->logger->critical('The needed values `' . print_r($singleActiveTimer[self::YAML_LIST_ITEM_PARAMS],
                         true) .
                     '` for the active-timer `' . $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR] . '` seems to be not set or undefined. ' .
@@ -402,6 +452,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
                         $dateLikeEventZone,
                         $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
                     );
+                    $this->expandRangeAroundActive($activeRange, $activeTimer, $timerList);
                     $flag = true;
                     $this->setIsActiveResult($activeRange->getBeginning(), $activeRange->getEnding(), $flag,
                         $dateLikeEventZone,
@@ -412,9 +463,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         }
         if ($flag) {
             // test the restriction for active-cases
-            $yamlForbiddenConfig = $this->readForbiddenListFromYamlFile($params);
-            $yamlForbiddenConfig = $yamlForbiddenConfig[self::YAML_LIST_KEY] ?? [];
-            $databaseForbiddenConfig = $this->readForbiddenListFromDatabase($params);
+            $yamlForbiddenConfig = $this->readRangeListFromYamlFile($params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
+            $databaseForbiddenConfig = $this->readRangeListFromDatabase($params,
+                self::ARG_DATABASE_FORBIDDEN_RANGE_LIST);
             $forbiddenTimer = array_merge($yamlForbiddenConfig, $databaseForbiddenConfig);
             if (!empty($forbiddenTimer)) {
                 foreach ($forbiddenTimer as $singleForbiddenTimer) {
@@ -439,14 +490,12 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
                             $dateLikeEventZone,
                             $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS])
                         ) {
-                            $forbiddenRange = $timerList->getLastIsActiveRangeResult(
-                                $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                                $dateLikeEventZone,
-                                $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]
-                            );
                             $flag = false;
-                            $this->setIsActiveResult($forbiddenRange->getBeginning(), $forbiddenRange->getEnding(),
-                                $flag, $dateLikeEventZone,
+                            $activeRange->failAllActive($dateLikeEventZone);
+                            $this->setIsActiveResult($activeRange->getBeginning(),
+                                $activeRange->getEnding(),
+                                $flag,
+                                $dateLikeEventZone,
                                 $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]);
                             break;
                         }
@@ -480,31 +529,31 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
      */
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
-        $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
-        $yamlFileActiveTimerList = $this->readActiveListFromYamlFile($params);
-        $databaseActiveTimerList = $this->readActiveListFromDatabase($params);
-        $activeTimerList = array_merge(($yamlFileActiveTimerList[self::YAML_LIST_KEY] ?? []), $databaseActiveTimerList);
-        $refDateTime = clone $dateLikeEventZone;
-        /** @var ListOfTimerService $timerList */
         $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
-        $yamlForbiddenTimerList = $this->readForbiddenListFromYamlFile($params);
-        $databaseForbiddenTimerList = $this->readForbiddenListFromDatabase($params);
-        $forbiddenTimerList = array_merge(($yamlForbiddenTimerList[self::YAML_LIST_KEY] ?? []),
-            $databaseForbiddenTimerList);
+        $yamlFileActiveTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_ACTIVE_FILE_PATH);
+
+        $databaseActiveTimerList = $this->readRangeListFromDatabase($params, self::ARG_DATABASE_ACTIVE_RANGE_LIST);
+
+        $activeTimerList = array_merge($yamlFileActiveTimerList, $databaseActiveTimerList);
+        $refDateTime = clone $dateLikeEventZone;
+        $yamlForbiddenTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
+        $databaseForbiddenTimerList = $this->readRangeListFromDatabase($params,
+            self::ARG_DATABASE_FORBIDDEN_RANGE_LIST);
+
+        $forbiddenTimerList = array_merge($yamlForbiddenTimerList, $databaseForbiddenTimerList);
         // Range-calculate-algorithm
         if (!empty($forbiddenTimerList)) {
             // merge active ranges defined by timers together and reduce the by merged forbidden ranges defined by timers
             $result = $this->getActivePartialRangeWithLowestBeginRefDate(
                 $activeTimerList,
                 $forbiddenTimerList,
-                $timerList,
-                $refDateTime
+                $refDateTime,
+                $timerList
             );
         } else {
             // merge only list of active timer together
             $result = $this->getActiveRangeWithLowestBeginRefDate(
                 $activeTimerList,
-                $timerList,
                 $refDateTime
             );
         }
@@ -529,8 +578,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
-        $yamlFileActiveTimerList = $this->readActiveListFromYamlFile($params);
-        $databaseActiveTimerList = $this->readActiveListFromDatabase($params);
+        $yamlFileActiveTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_ACTIVE_FILE_PATH);
+        $databaseActiveTimerList = $this->readRangeListFromDatabase($params, self::ARG_DATABASE_ACTIVE_RANGE_LIST);
+
         $activeTimerList = array_merge($yamlFileActiveTimerList, $databaseActiveTimerList);
         // Generate List of next Ranges Detect Lower-Part
         // Generate find nearest Nextrange with biggest range
@@ -538,8 +588,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         //
         $refDateTime = clone $dateLikeEventZone;
         while ($loopLimiter > 0) {
-            /** @var ListOfTimerService $timerList */
-            $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
             /**
              * Range-detect-algorithm
              *
@@ -551,17 +599,17 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
              * 3.b. if the lower Limit is part of the forbidden range, than expand the upper-range of the forbidden range in a loop repeated for four times (use getInRange, to detect the current range)
              */
             $activeResult = $this->getActiveRangeWithHighestEndRefDate(
-                $activeTimerList[self::YAML_LIST_KEY],
-                $timerList,
+                $activeTimerList[self::YAML_MAIN_LIST_KEY],
                 $refDateTime
             );
-            $yamlForbiddenTimerList = $this->readForbiddenListFromYamlFile($params);
-            $databaseForbiddenTimerList = $this->readForbiddenListFromDatabase($params);
+            $yamlForbiddenTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
+            $databaseForbiddenTimerList = $this->readRangeListFromDatabase($params,
+                self::ARG_DATABASE_FORBIDDEN_RANGE_LIST);
+
             $forbiddenTimerList = array_merge($yamlForbiddenTimerList, $databaseForbiddenTimerList);
-            if (!empty($forbiddenTimerList[self::YAML_LIST_KEY])) {
+            if (!empty($forbiddenTimerList[self::YAML_MAIN_LIST_KEY])) {
                 [$result, $changed] = $this->reduceActiveRangeByForbiddenRangesWithHighestEnd(
-                    $forbiddenTimerList[self::YAML_LIST_KEY],
-                    $timerList,
+                    $forbiddenTimerList[self::YAML_MAIN_LIST_KEY],
                     $activeResult
                 );
             } else {
@@ -587,85 +635,17 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
     }
 
 
-    /**
-     * @param array $activeTimerList
-     * @param ListOfTimerService $timerList
-     * @param DateTime $dateLikeEventZone
-     * @return array // [TimerStartStopRange, bool]
-     */
-    protected function reduceActiveRangeByForbiddenRangesWithLowestStart(
-        array $forbiddenTimerList,
-        ListOfTimerService $timerList,
-        TimerStartStopRange $currentActiveRange
-    ) {
-        $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
-        $startRange = $currentActiveRange->getBeginning();
-        $stopRange = $currentActiveRange->getEnding();
-        $result = clone $currentActiveRange;
-        $changed = false;
-        while ($loopLimiter > 0) {
-            foreach ($forbiddenTimerList as $singleActiveTimer) {
-                $flagNoRangeChangeByForbidden = true;
-                if (
-                    (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                    ($timerList->validate($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]))
-                ) {
-                    // log only the missing of an allowed-timerdcefinition
-                    $this->logger->critical('The needed values `' . print_r($singleActiveTimer[self::YAML_LIST_ITEM_PARAMS],
-                            true) .
-                        '` for the active-timer `' . $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR] . '` seems to be not set or undefined. ' .
-                        'Please check your definition in your active yaml-file. [1600865701]'
-                    );
-                } else {
-                    $this->logWarningIfSelfCalling('forbidden-next', $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $forbiddenTimerList, []
-                    );
-                    /** TimerStartStopRange $checkResult  */
-                    /** bool $changed  */
-                    [$checkResult, $changed] = $this->getInRangeNearLowerLimit($singleActiveTimer,
-                        $timerList,
-                        $startRange,
-                        $stopRange
-                    );
-
-                    if ($changed) {
-                        $flagNoRangeChangeByForbidden = false;
-                        if ($checkResult->hasResultExist()) {
-                            if ($checkResult->getBeginning() > $startRange) {
-                                $startRange = clone $checkResult->getBeginning();
-                                $result->setBeginning($checkResult->getBeginning());
-                            }
-                            if ($checkResult->getEnding() < $stopRange) {
-                                $stopRange = clone $checkResult->getEnding();
-                                $result->setEnding($checkResult->getEnding());
-                            }
-                        } else {
-                            $result->failOnlyNextActive($startRange);
-                            return [$result, $changed];
-                        }
-                    }
-                }
-            }
-            if ($flagNoRangeChangeByForbidden) {
-                break 1;  // there were no changes by any entry in the $forbiddenTimerList, there is no need for another loop
-            }
-            $loopLimiter--;
-        }
-        return [$result, $changed];
-    }
 
     /**
      * @param array $activeTimerList
-     * @param ListOfTimerService $timerList
      * @param DateTime $dateLikeEventZone
      * @return array // [TimerStartStopRange, bool]
      */
     protected function reduceActiveRangeByForbiddenRangesWithHighestEnd(
         array $forbiddenTimerList,
-        ListOfTimerService $timerList,
         TimerStartStopRange $currentActiveRange
     ) {
+        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
         $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
         $startRange = $currentActiveRange->getBeginning();
         $stopRange = $currentActiveRange->getEnding();
@@ -692,9 +672,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
                     /** TimerStartStopRange $checkResult  */
                     /** bool $changed  */
                     [$checkResult, $changed] = $this->getInRangeNearHigherLimit($singleActiveTimer,
-                        $timerList,
                         $startRange,
-                        $stopRange
+                        $stopRange,
+                        $timerList
                     );
 
                     if ($changed) {
@@ -725,19 +705,19 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
 
     /**
      * @param array $activeTimerList
-     * @param ListOfTimerService $timerList
      * @param DateTime $dateLikeEventZone
      * @return TimerStartStopRange
      */
     protected function getActiveRangeWithLowestBeginRefDate(
         array $activeTimerList,
-        ListOfTimerService $timerList,
         DateTime $dateLikeEventZone
     ): TimerStartStopRange {
         $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
         $flagFirstResult = true;
         $flagChange = false;
         $refRange = clone $dateLikeEventZone;
+        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
+
         while ($loopLimiter > 0) {
             foreach ($activeTimerList as $singleActiveTimer) {
                 if (
@@ -802,20 +782,19 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
 
     /**
      * @param array $activeTimerList
-     * @param ListOfTimerService $timerList
      * @param DateTime $dateLikeEventZone
      * @return TimerStartStopRange
      */
     protected function getActiveRangeWithIncludeStartingRange(
         array $activeTimerList,
-        ListOfTimerService $timerList,
         TimerStartStopRange $dateRage
     ): TimerStartStopRange {
         $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
         $result = null;
         $flagFirstResult = true;
         $flagChange = false;
-        $refRange = clone $dateLikeEventZone;
+        $refRange = clone $dateRage;
+        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
         while ($loopLimiter > 0) {
             foreach ($activeTimerList as $singleActiveTimer) {
                 if (
@@ -881,7 +860,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
     /**
      * @param array $activeTimerList
      * @param array $forbiddenTimerList
-     * @param ListOfTimerService $timerList
      * @param DateTime $dateLikeEventZone
      * @param int $recursionCount
      * @return TimerStartStopRange
@@ -890,9 +868,10 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
     protected function getActivePartialRangeWithLowestBeginRefDate(
         array $activeTimerList,
         array $forbiddenTimerList,
-        ListOfTimerService $timerList,
         DateTime $dateLikeEventZone,
+        ListOfTimerService $timerList,
         $recursionCount = self::MAX_TIME_LIMIT_MERGE_COUNT
+
     ): TimerStartStopRange {
         if ($recursionCount < 0) {
             $failRange = new TimerStartStopRange();
@@ -908,19 +887,18 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         /* @var bool $flagIsInActive */
         [$flagIsInActive, $firstActiveCurrentRange] = $this->isRefdateInActiveRange(
             $activeTimerList,
-            $timerList,
-            $refDate
+            $refDate,
+            $timerList
         );
 
         if ($flagIsInActive) {
             [$flagIsInForbidden, $firstForbiddenRange] = $this->isRefdateInActiveRange(
                 $forbiddenTimerList,
-                $timerList,
-                $refDate
+                $refDate,
+                $timerList
             );
             if (!$flagIsInForbidden) {
                 $firstForbiddenRange = $this->getActiveRangeWithLowestBeginRefDate($forbiddenTimerList,
-                    $timerList,
                     $dateLikeEventZone
                 );
             }
@@ -951,13 +929,11 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
 
     /**
      * @param array $activeTimerList
-     * @param ListOfTimerService $timerList
      * @param DateTime $dateLikeEventZone
      * @return TimerStartStopRange
      */
     protected function getActiveRangeWithHighestEndRefDate(
         array $activeTimerList,
-        ListOfTimerService $timerList,
         DateTime $dateLikeEventZone
     ): TimerStartStopRange {
         $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
@@ -965,6 +941,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         $flagFirstResult = true;
         $flagChange = false;
         $refRange = clone $dateLikeEventZone;
+        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
+
         while ($loopLimiter > 0) {
             foreach ($activeTimerList as $singleActiveTimer) {
                 if (
@@ -1023,57 +1001,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
     }
 
 
-    /**
-     *
-     * Die
-     * @param DateTime $startRange
-     * @param DateTime $endRange
-     * @param array $params
-     * @param bool $highFirst
-     * @return array // [TimerStartStopRange, bool]
-     */
-    protected function getInRangeNearLowerLimit(
-        array $singleActiveTimer,
-        ListOfTimerService $timerList,
-        DateTime $startRange,
-        DateTime $endRange
-    ) {
-        $starting = clone $startRange;
-        $ending = clone $endRange;
-        $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
-        $result->setResultExist(true);
-        $result->setBeginning($starting);
-        $result->setEnding($ending);
-        $changed = false;
-        if ($timerList->isActive($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-            $starting,
-            $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) {
-            $checkResult = $timerList->getLastIsActiveRangeResult($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                $starting,
-                $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-            );
-            $changed = true;
-            // isActive => ($checkResult->getBeginning()<=$starting)
-            if ($checkResult->getEnding() < $endRange) {
-                $result->setBeginning($checkResult->getEnding());
-            } else {
-                $result->setResultExist(false);
-            }
-            return [$result, $changed];
-        }
-
-        /** @var TimerStartStopRange $checkResult */
-        $checkResult = $timerList->nextActive($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-            $starting,
-            $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]);
-        if (($checkResult->hasResultExist()) &&
-            ($checkResult->getBeginning() < $endRange)
-        ) {
-            $result->setEnding($checkResult->getBeginning());
-            $changed = true;
-        }
-        return [$result, $changed];
-    }
 
     /**
      *
@@ -1085,9 +1012,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
      */
     protected function getInRangeNearHigherLimit(
         array $singleActiveTimer,
-        ListOfTimerService $timerList,
         DateTime $startRange,
-        DateTime $endRange
+        DateTime $endRange,
+        ListOfTimerService $timerList
     ) {
         $starting = clone $startRange;
         $ending = clone $endRange;
@@ -1130,78 +1057,34 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         return [$result, $changed];
     }
 
-    /**
-     * @param array $params
-     * @return array
-     * @throws TimerException
-     */
-    protected function readActiveListFromYamlFile(array $params): array
-    {
-        if (!isset($params[self::ARG_YAML_ACTIVE_FILE_PATH])) {
-            return [];
-        }
-        return $this->readListFromYamlFile($params[self::ARG_YAML_ACTIVE_FILE_PATH]);
-    }
+
 
     /**
      * @param array $params
+     * @param string $key
      * @return array
      * @throws TimerException
      */
-    protected function readForbiddenListFromYamlFile(array $params): array
+    protected function readRangeListFromYamlFile(array $params, string $key): array
     {
-        if (!isset($params[self::ARG_YAML_FORBIDDEN_FILE_PATH])) {
+        if (empty($params[$key])) {
             return [];
         }
-        return $this->readListFromYamlFile($params[self::ARG_YAML_FORBIDDEN_FILE_PATH]);
-    }
-
-    /**
-     * @param string $yamlFilePath
-     * @return array
-     * @throws TimerException
-     */
-    protected function readListFromYamlFile(string $yamlFilePath): array
-    {
-        $yamlFilePathNew = $yamlFilePath;
-        if (file_exists($yamlFilePath)) {
-            $yamlFilePathNew = realpath($yamlFilePath);
-        } else {
-            if (GeneralUtility::validPathStr($yamlFilePath)) {
-                $yamlFilePathNew = GeneralUtility::getFileAbsFileName($yamlFilePath);
-            }
-        }
-        if (!file_exists($yamlFilePath)) {
-            return [];
-        }
-        /** @var YamlFileLoader $yamlFileLoader */
-        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
-
-        $yamlConfig = $yamlFileLoader->load($yamlFilePathNew);
-        if (!is_array($yamlConfig[self::YAML_LIST_KEY])) {
+        // $this must the method validateYamlOrException
+        $result = CustomTimerUtility::readListFromYamlFile(
+            $params[$key],
+            $this,
+            $this->cache
+        );
+        if (!is_array($result[self::YAML_MAIN_LIST_KEY])) {
             throw new TimerException(
-                'The key `' . self::YAML_LIST_KEY . '` does not exist in your active yaml-file (`' .
-                $yamlFilePath . '`). ' .
+                'The key `' . self::YAML_MAIN_LIST_KEY . '` does not exist in your active yaml-file (`' .
+                $params[$key] . '`). ' .
                 'Please check your configuration.',
                 1600865701
             );
         }
-        return $yamlConfig;
-    }
-
-
-    /**
-     * @param array $params
-     * @return array
-     * @throws TimerException
-     */
-    protected function readActiveListFromDatabase(array $params): array
-    {
-
-        if (!isset($params[self::ARG_DATABASE_ACTIVE_RANGE_LIST])) {
-            return [];
-        }
-        return $this->readListFromDatabase($params[self::ARG_DATABASE_ACTIVE_RANGE_LIST]);
+        return $result[self::YAML_MAIN_LIST_KEY];
     }
 
     /**
@@ -1209,12 +1092,13 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
      * @return array
      * @throws TimerException
      */
-    protected function readForbiddenListFromDatabase(array $params): array
+    protected function readRangeListFromDatabase(array $params, $key = self::ARG_DATABASE_ACTIVE_RANGE_LIST): array
     {
-        if (empty($params[self::ARG_DATABASE_FORBIDDEN_RANGE_LIST])) {
+
+        if (!isset($params[$key])) {
             return [];
         }
-        return $this->readListFromDatabase($params[self::ARG_DATABASE_FORBIDDEN_RANGE_LIST]);
+        return $this->readListFromDatabase($params[$key]);
     }
 
     /**
@@ -1227,8 +1111,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         if (empty(trim($commaListOfUids))) {
             return [];
         }
-        $listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
-        $rawResult = $listingRepository->findByCommaList($commaListOfUids);
+        $rawResult = $this->listingRepository->findByCommaList($commaListOfUids);
         if (empty($rawResult)) {
             return [];
         }
@@ -1277,504 +1160,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
 
 
     /**
-     * @param $activeTimerList
-     * @param ListOfTimerService $timerList
-     * @param DateTime $dateLikeEventZone
-     * @param array $listActiveRanges
-     * @return array
-     */
-    protected function generateListWithTimerAndNextRanges(
-        array $activeTimerList,
-        ListOfTimerService $timerList,
-        DateTime $dateLikeEventZone
-    ): array {
-        $listActiveRanges = [];
-        $flagMinNeedSet = true;
-        $lowerActive = null;
-        $upperActive = null;
-        foreach ($activeTimerList as $singleActiveTimer) {
-            if (
-                (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]))
-            ) {
-                // log only the missing of an allowed-timerdcefinition
-                $this->logger->critical('The needed values `' . print_r($singleActiveTimer[self::YAML_LIST_ITEM_PARAMS],
-                        true) .
-                    '` for the active-timer `' . $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR] . '` seems to be not set or undefined. ' .
-                    'Please check your definition in your active yaml-file. [1600865701]'
-                );
-            } else {
-                $this->logWarningIfSelfCalling('active-next', $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $activeTimerList, []
-                );
-
-                /** @var TimerStartStopRange $timerRange */
-                $timerRange = $timerList->nextActive($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $dateLikeEventZone,
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]);
-                if ($timerRange->hasResultExist()) {
-                    $listActiveRanges[] = [
-                        self::YAML_LIST_ITEM_SELECTOR => $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        self::YAML_LIST_ITEM_PARAMS => $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS],
-                        self::YAML_LIST_ITEM_RANGE => $timerRange,
-                    ];
-                    if ($flagMinNeedSet) {
-                        $lowerActive = $timerRange->getBeginning();
-                        $upperActive = $timerRange->getEnding();
-                        $upperActive->add(new DateInterval('PT59S'));
-                        $flagMinNeedSet = false;
-                    } else {
-                        //  getTimestamp because i do't know, if the compasrion of dateTime take respect to different timezones
-                        if ($lowerActive->getTimestamp() > $timerRange->getBeginning()->getTimestamp()) {
-                            $lowerActive = $timerRange->getBeginning();
-                            if (($upperActive->getTimestamp() < $timerRange->getEnding()->getTimestamp()) ||
-                                ($timerRange->getEnding()->getTimestamp() < $lowerActive->getTimestamp())
-                            ) {
-                                $upperActive = $timerRange->getEnding();
-                                if ($upperActive->format('s') == 0) {
-                                    $upperActive->add(new DateInterval('PT59S'));
-                                }
-                            }
-                        } else {
-                            if (($upperActive->getTimestamp() >= $timerRange->getBeginning()->getTimestamp()) &&
-                                ($timerRange->getEnding()->getTimestamp() > $upperActive->getTimestamp())
-                            ) {
-                                $upperActive = $timerRange->getEnding();
-                                if ((int)$upperActive->format('s') == 0) {
-                                    $upperActive->add(new DateInterval('PT59S'));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return [$lowerActive, $upperActive, $listActiveRanges];
-    }
-
-    /**
-     * @param $activeTimerList
-     * @param ListOfTimerService $timerList
-     * @param DateTime $dateLikeEventZone
-     * @param array $listActiveRanges
-     * @return array
-     */
-    protected function generateListWithTimerAndprevRanges(
-        array $activeTimerList,
-        ListOfTimerService $timerList,
-        DateTime $dateLikeEventZone
-    ): array {
-        $listActiveRanges = [];
-        $flagMinNeedSet = true;
-        $lowerActive = null;
-        $upperActive = null;
-        foreach ($activeTimerList as $singleActiveTimer) {
-            if (
-                (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]))
-            ) {
-                // log only the missing of an allowed-timerdcefinition
-                $this->logger->critical('The needed values `' . print_r($singleActiveTimer[self::YAML_LIST_ITEM_PARAMS],
-                        true) .
-                    '` for the active-timer `' . $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR] . '` seems to be not set or undefined. ' .
-                    'Please check your definition in your active yaml-file. [1600865701]'
-                );
-            } else {
-                $this->logWarningIfSelfCalling('active-prev', $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $activeTimerList, []
-                );
-                /** @var TimerStartStopRange $timerRange */
-                $timerRange = $timerList->prevActive($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $dateLikeEventZone,
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]);
-                if ($timerRange->hasResultExist()) {
-                    $listActiveRanges[] = [
-                        self::YAML_LIST_ITEM_SELECTOR => $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        self::YAML_LIST_ITEM_PARAMS => $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS],
-                        self::YAML_LIST_ITEM_RANGE => $timerRange,
-                    ];
-                    if ($flagMinNeedSet) {
-                        $lowerActive = $timerRange->getBeginning();
-                        $upperActive = $timerRange->getEnding();
-                    } else {
-                        if ($upperActive < $timerRange->getEnding()) {
-                            $lowerActive = $timerRange->getBeginning();
-                            $upperActive = $timerRange->getEnding();
-                        } else {
-                            if (($upperActive->getTimestamp() === $timerRange->getEnding()->getTimestamp()) &&
-                                ($lowerActive->getTimestamp() > $timerRange->getBeginning()->getTimestamp())) {
-                                $lowerActive = $timerRange->getBeginning();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return [$lowerActive, $upperActive, $listActiveRanges];
-    }
-
-    /**
-     * @param array $listActiveRangesAndTimer
-     * @param DateTime|null $lowerActive
-     * @param DateTime|null $upperActive
-     * @param DateTime $dateLikeEventZone
-     * @param ListOfTimerService $timerList
-     * @return array
-     */
-    protected function generateNextMergedActiveRange(
-        array $listActiveRangesAndTimer,
-        $lowerActive,
-        $upperActive,
-        DateTime $dateLikeEventZone,
-        ListOfTimerService $timerList
-    ) {
-        $result = new TimerStartStopRange();
-        if ((empty($listActiveRangesAndTimer)) ||
-            ($lowerActive === null) ||
-            ($upperActive === null)
-        ) {
-            $flagActiveChange = false;
-            $result->failOnlyPrevActive($dateLikeEventZone);
-        } else {
-            // detect for given Range of UpperActive an LowerActive the widest active Array
-            $flagActiveChange = true;
-            $changeLimit = self::MAX_TIME_LIMIT_ACTIVE_COUNT;
-            while (($flagActiveChange) && ($changeLimit > 0)) {
-                $flagActiveChange = false;
-                foreach ($listActiveRangesAndTimer as $key => $itemActiveRange) {
-                    if ($itemActiveRange[self::YAML_LIST_ITEM_RANGE]->hasResultExist()) {
-                        if ($itemActiveRange[self::YAML_LIST_ITEM_RANGE]->getBeginning() <= $upperActive) {
-                            $flagActiveChange = true;
-                            if ($itemActiveRange[self::YAML_LIST_ITEM_RANGE]->getEnding() > $upperActive) {
-                                $upperActive = clone $itemActiveRange[self::YAML_LIST_ITEM_RANGE]->getEnding();
-                            }
-                            $listActiveRangesAndTimer[$key][self::YAML_LIST_ITEM_RANGE] =
-                                $timerList->nextActive($itemActiveRange[self::YAML_LIST_ITEM_SELECTOR],
-                                    $upperActive,
-                                    $itemActiveRange[self::YAML_LIST_ITEM_PARAMS]
-                                );
-                        }
-                    }
-                }
-                $changeLimit--;
-            }
-            // result with out use of forbiden
-            $result->setBeginning($lowerActive);
-            $result->setEnding($upperActive);
-            $result->setResultExist(true);
-        }
-        return [$flagActiveChange, $result];
-    }
-
-    /**
-     * @param array $listActiveRangesAndTimer
-     * @param DateTime|null $lowerActive
-     * @param DateTime|null $upperActive
-     * @param DateTime $dateLikeEventZone
-     * @param ListOfTimerService $timerList
-     * @return array
-     */
-    protected function generatePrevMergedActiveRange(
-        array $listActiveRangesAndTimer,
-        $lowerActive,
-        $upperActive,
-        DateTime $dateLikeEventZone,
-        ListOfTimerService $timerList
-    ) {
-        $result = new TimerStartStopRange();
-        if ((empty($listActiveRangesAndTimer)) ||
-            ($lowerActive === null) ||
-            ($upperActive === null)
-        ) {
-            $flagActiveChange = false;
-            $result->failOnlyNextActive($dateLikeEventZone);
-        } else {
-            // detect for given Range of UpperActive an LowerActive the widest active Array
-            $flagActiveChange = true;
-            $changeLimit = self::MAX_TIME_LIMIT_ACTIVE_COUNT;
-            while (($flagActiveChange) && ($changeLimit > 0)) {
-                $flagActiveChange = false;
-                foreach ($listActiveRangesAndTimer as $key => $itemActiveRange) {
-                    if ($itemActiveRange[self::YAML_LIST_ITEM_RANGE]->hasResultExist()) {
-                        if ($itemActiveRange[self::YAML_LIST_ITEM_RANGE]->getEnding() >= $lowerActive) {
-                            $flagActiveChange = true;
-                            if ($itemActiveRange[self::YAML_LIST_ITEM_RANGE]->getBeginning() < $lowerActive) {
-                                $upperActive = clone $itemActiveRange[self::YAML_LIST_ITEM_RANGE]->getEnding();
-                            }
-                            $listActiveRangesAndTimer[$key][self::YAML_LIST_ITEM_RANGE] =
-                                $timerList->prevActive($itemActiveRange[self::YAML_LIST_ITEM_SELECTOR],
-                                    $lowerActive,
-                                    $itemActiveRange[self::YAML_LIST_ITEM_PARAMS]
-                                );
-                        }
-                    }
-                }
-                $changeLimit--;
-            }
-            // result with out use of forbiden
-            $result->setBeginning($lowerActive);
-            $result->setEnding($upperActive);
-            $result->setResultExist(true);
-        }
-        return [$flagActiveChange, $result];
-    }
-
-    /**
-     * @param $yamlForbiddenConfig
-     * @param ListOfTimerService $timerList
-     * @param $relativeToLowerActive
-     * @return array
-     * @throws TimerException
-     */
-    protected function generateForbiddenListWithNextRangesAndTimer(
-        $forbiddenTimerList,
-        ListOfTimerService $timerList,
-        $relativeToLowerActive
-    ): array {
-        $listForbiddenRanges = [];
-        $flagMinNeedSet = true;
-        $lowerForbidden = null;
-        $upperForbidden = null;
-        foreach ($forbiddenTimerList as $singleForbiddenTimer) {
-            if (
-                (!isset($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR], $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]))
-            ) {
-                // log only the missing of an allowed-timerdcefinition
-                $this->logger->critical('The needed values `' . print_r($singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS],
-                        true) .
-                    '` for the active-timer `' . $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR] . '` seems to be not set or undefined. ' .
-                    'Please check your definition in your active yaml-file. [1600865701]'
-                );
-            } else {
-                $this->logWarningIfSelfCalling('forbidden-next', $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $forbiddenTimerList, []
-                );
-
-                if ($timerList->isActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $relativeToLowerActive,
-                    $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS])
-                ) {
-                    $nextHelp = $timerList->nextActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $relativeToLowerActive,
-                        $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]);
-                    $timerRange = $timerList->prevActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $nextHelp->getBeginning(),
-                        $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]);
-                } else {
-                    /** @var TimerStartStopRange $timerRange */
-                    $timerRange = $timerList->nextActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $relativeToLowerActive,
-                        $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]);
-                }
-                if ($timerRange->hasResultExist()) {
-                    $listForbiddenRanges[] = [
-                        self::YAML_LIST_ITEM_SELECTOR => $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        self::YAML_LIST_ITEM_PARAMS => $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS],
-                        self::YAML_LIST_ITEM_RANGE => $timerRange,
-                    ];
-                    if ($flagMinNeedSet) {
-                        $lowerForbidden = $timerRange->getBeginning();
-                        $upperForbidden = $timerRange->getEnding();
-                        $flagMinNeedSet = false;
-                    } else {
-                        if (($upperForbidden < $timerRange->getEnding()) &&
-                            ($timerRange->getBeginning() <= $upperForbidden)) {
-                            $upperForbidden = $timerRange->getEnding();
-                        }
-                        if (($timerRange->getBeginning() < $lowerForbidden) &&
-                            ($lowerForbidden <= $timerRange->getEnding())
-                        ) {
-                            $lowerForbidden = $timerRange->getBeginning();
-                        }
-                        if (($timerRange->getEnding() < $lowerForbidden) &&
-                            ($relativeToLowerActive < $timerRange->getEnding())
-                        ) {
-                            // perhaps an is-active-Part
-                            $lowerForbidden = $timerRange->getBeginning();
-                            $upperForbidden = $timerRange->getEnding();
-                        }
-
-                    }
-                }
-            }
-        }
-        return [$listForbiddenRanges, $lowerForbidden, $upperForbidden];
-    }
-
-    /**
-     * @param $yamlForbiddenConfig
-     * @param ListOfTimerService $timerList
-     * @param $relativeToLowerActive
-     * @return array
-     * @throws TimerException
-     */
-    protected function generateForbiddenListWithprevRangesAndTimer(
-        $forbiddenTimerList,
-        ListOfTimerService $timerList,
-        $relativeToUpperActive
-    ): array {
-        $listForbiddenRanges = [];
-        $flagMinNeedSet = true;
-        $lowerForbidden = null;
-        $upperForbidden = null;
-        foreach ($forbiddenTimerList as $singleForbiddenTimer) {
-            if (
-                (!isset($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR], $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]))
-            ) {
-                // log only the missing of an allowed-timerdcefinition
-                $this->logger->critical('The needed values `' . print_r($singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS],
-                        true) .
-                    '` for the active-timer `' . $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR] . '` seems to be not set or undefined. ' .
-                    'Please check your definition in your active yaml-file. [1600865701]'
-                );
-            } else {
-                $this->logWarningIfSelfCalling('forbidden-prev', $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $forbiddenTimerList, []
-                );
-
-                if ($timerList->isActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $relativeToUpperActive,
-                    $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS])
-                ) {
-                    $nextHelp = $timerList->prevActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $relativeToUpperActive,
-                        $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]);
-                    $timerRange = $timerList->nextActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $nextHelp->getEnding(),
-                        $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]);
-                } else {
-                    /** @var TimerStartStopRange $timerRange */
-                    $timerRange = $timerList->prevActive($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $relativeToUpperActive,
-                        $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]);
-                }
-                if ($timerRange->hasResultExist()) {
-                    $listForbiddenRanges[] = [
-                        self::YAML_LIST_ITEM_SELECTOR => $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        self::YAML_LIST_ITEM_PARAMS => $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS],
-                        self::YAML_LIST_ITEM_RANGE => $timerRange,
-                    ];
-                    if ($flagMinNeedSet) {
-                        $lowerForbidden = $timerRange->getBeginning();
-                        $upperForbidden = $timerRange->getEnding();
-                        $flagMinNeedSet = false;
-                    } else {
-                        if (($upperForbidden < $timerRange->getEnding()) &&
-                            ($timerRange->getBeginning() <= $lowerForbidden)) {
-                            $upperForbidden = $timerRange->getEnding();
-                        }
-                        if (($timerRange->getEnding() < $upperForbidden) &&
-                            ($upperForbidden <= $timerRange->getBeginning())
-                        ) {
-                            $lowerForbidden = $timerRange->getBeginning();
-                        }
-                        if (($timerRange->getBeginning() > $upperForbidden) &&
-                            ($relativeToUpperActive < $timerRange->getBeginning())
-                        ) {
-                            // perhaps an is-active-Part
-                            $lowerForbidden = $timerRange->getBeginning();
-                            $upperForbidden = $timerRange->getEnding();
-                        }
-
-                    }
-                }
-            }
-        }
-        return [$listForbiddenRanges, $lowerForbidden, $upperForbidden];
-    }
-
-    /**
-     * @param $listForbiddenRanges
-     * @param $upperForbidden
-     * @param $lowerForbidden
-     * @param ListOfTimerService $timerList
-     * @param array $listActiveRangesAndTimer
-     * @return array
-     */
-    protected function generateNextMergedForbiddenRange(
-        $listForbiddenRangesAndTimer,
-        $upperForbidden,
-        $lowerForbidden,
-        ListOfTimerService $timerList
-    ): array {
-// detect for given Range of UpperActive an LowerActive the widest active Array
-        $flagForbiddenChange = true;
-        $changeLimit = self::MAX_TIME_LIMIT_FORBIDDEN_COUNT;
-        while (($flagForbiddenChange) && ($changeLimit > 0)) {
-            foreach ($listForbiddenRangesAndTimer as $key => $itemForbiddenRange) {
-                if ($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->hasResultExist()) {
-                    if (($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getBeginning() <= $upperForbidden)) {
-                        $flagForbiddenChange = true;
-                        if ($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getEnding() > $upperForbidden) {
-                            $upperForbidden = clone $itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getEnding();
-                        }
-                        if ($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getBeginning() < $lowerForbidden) {
-                            $lowerForbidden = clone $itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getBeginning();
-                        }
-                        $listForbiddenRangesAndTimer[$key][self::YAML_LIST_ITEM_RANGE] =
-                            $timerList->nextActive($itemForbiddenRange[self::YAML_LIST_ITEM_SELECTOR],
-                                $upperForbidden,
-                                $itemForbiddenRange[self::YAML_LIST_ITEM_PARAMS]
-                            );
-                    }
-                }
-            }
-            $changeLimit--;
-        }
-        return [$flagForbiddenChange, $upperForbidden, $lowerForbidden];
-    }
-
-
-    /**
-     * @param $listForbiddenRanges
-     * @param $upperForbidden
-     * @param $lowerForbidden
-     * @param ListOfTimerService $timerList
-     * @param array $listActiveRangesAndTimer
-     * @return array
-     */
-    protected function generatePrevMergedForbiddenRange(
-        $listForbiddenRangesAndTimer,
-        $upperForbidden,
-        $lowerForbidden,
-        ListOfTimerService $timerList
-    ): array {
-// detect for given Range of UpperActive an LowerActive the widest active Array
-        $flagForbiddenChange = true;
-        $changeLimit = self::MAX_TIME_LIMIT_FORBIDDEN_COUNT;
-        while (($flagForbiddenChange) && ($changeLimit > 0)) {
-            $flagForbiddenChange = false;
-            foreach ($listForbiddenRangesAndTimer as $key => $itemForbiddenRange) {
-                if ($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->hasResultExist()) {
-                    if (($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getEnding() >= $lowerForbidden)) {
-                        $flagForbiddenChange = true;
-                        if ($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getEnding() > $upperForbidden) {
-                            $upperForbidden = clone $itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getEnding();
-                        }
-                        if ($itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getBeginning() < $lowerForbidden) {
-                            $lowerForbidden = clone $itemForbiddenRange[self::YAML_LIST_ITEM_RANGE]->getBeginning();
-                        }
-                        $listForbiddenRangesAndTimer[$key][self::YAML_LIST_ITEM_RANGE] =
-                            $timerList->prevActive($itemForbiddenRange[self::YAML_LIST_ITEM_SELECTOR],
-                                $lowerForbidden,
-                                $itemForbiddenRange[self::YAML_LIST_ITEM_PARAMS]
-                            );
-                    }
-                }
-            }
-            $changeLimit--;
-        }
-        return [$flagForbiddenChange, $upperForbidden, $lowerForbidden];
-    }
-
-    /**
      * @param $lowerActive
      * @param $upperActive
      * @param array $params
@@ -1790,37 +1175,11 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         $this->logger->log(
             LogLevel::CRITICAL,
             'The fully active nextrange for the timer `' . self::selfName() . '` with the current parameter ' .
-            'seem not to end. It need more than ' . self::MAX_TIME_LIMIT_ACTIVE_COUNT .
+            'seem not to end. It need more than ' . self::MAX_TIME_LIMIT_MERGE_COUNT .
             ' cycles to get a full range. A failed result is used instead of the estimated result.',
             [
                 'Lower' => json_encode($lowerActive),
                 'upper' => json_encode($upperActive),
-                'params' => json_encode($params),
-            ]
-        );
-    }
-
-    /**
-     * @param $lowerForbidden
-     * @param $upperForbidden
-     * @param array $params
-     */
-    protected function logErrorForForbiddenRange(
-        $lowerForbidden,
-        $upperForbidden,
-        array $params
-    ): void {
-        /** @var $logger Logger */
-        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
-
-        $this->logger->log(
-            LogLevel::CRITICAL,
-            'The fully forbidden nextrange for the timer `' . self::selfName() . '` with the current parameter ' .
-            'seem not to end. It need more than ' . self::MAX_TIME_LIMIT_FORBIDDEN_COUNT .
-            ' cycles to get a full range. A failed result is used instead of the estimated result.',
-            [
-                'Lower' => json_encode($lowerForbidden),
-                'upper' => json_encode($upperForbidden),
                 'params' => json_encode($params),
             ]
         );
@@ -1840,7 +1199,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
     ): void {
         if ($singleTimer === self::selfName()) {
             $this->logger->warning('Your current ' . $typeOfWarning . ' timer may cause an infinite loop. [1627276901]' .
-                print_r($yamlOrAllTimerList, true), print_r($databaseTimerList, true)
+                print_r($yamlOrAllTimerList, true) . print_r($databaseTimerList, true)
             );
 
         }
@@ -1910,15 +1269,14 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
 
     /**
      * @param array $activeTimerList
-     * @param ListOfTimerService $timerList
      * @param DateTime $refRange
      * @return array
      * @throws TimerException
      */
     protected function isRefdateInActiveRange(
         array $activeTimerList,
-        ListOfTimerService $timerList,
-        DateTime $refRange
+        DateTime $refRange,
+        ListOfTimerService $timerList
     ): array {
         $flagIsInActive = false;
         foreach ($activeTimerList as $singleActiveTimer) {
@@ -1955,7 +1313,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
      * @param DateTime $startTestDate
      * @param array $activeTimerList
      * @param array $forbiddenTimerList
-     * @param ListOfTimerService $timerList
      * @param int $recursionCount
      * @return TimerStartStopRange
      * @throws TimerException
@@ -1967,18 +1324,17 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
         ListOfTimerService $timerList,
         int $recursionCount
     ): TimerStartStopRange {
+
         $limiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
         while ($limiter > 0) {
             $refDate = $startTestDate;
             $refDate->add(new DateInterval('PT1S'));
             $result = $this->getActiveRangeWithLowestBeginRefDate($activeTimerList,
-                $timerList,
                 $refDate
             );
             $forbiddenStart = clone $result->getBeginning();
             $forbiddenStart->sub(new DateInterval('PT1S'));
             $forbiddenRange = $this->getActiveRangeWithLowestBeginRefDate($forbiddenTimerList,
-                $timerList,
                 $forbiddenStart
             );
             if ($forbiddenRange->getBeginning() <= $result->getBeginning()) {
@@ -1988,8 +1344,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
                     $result = $this->getActivePartialRangeWithLowestBeginRefDate(
                         $activeTimerList,
                         $forbiddenTimerList,
-                        $timerList,
                         $newRef,
+                        $timerList,
                         ($recursionCount--)
                     );
                 } else {
@@ -2006,6 +1362,57 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface
             $limiter--;
         }
         return $result;
+    }
+
+    /**
+     * @param TimerStartStopRange $activeRange
+     * @param array $activeTimer
+     * @param ListOfTimerService $timerList
+     * @throws TimerException
+     */
+    protected function expandRangeAroundActive(
+        TimerStartStopRange $activeRange,
+        array $activeTimer,
+        ListOfTimerService $timerList
+    ): void {
+        $limiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
+        while ($limiter > 0) {
+            $flagChange = false;
+            $checkBeginn = $activeRange->getBeginning();
+            $checkEnd = $activeRange->getEnding();
+            foreach ($activeTimer as $checkActiveTimer) {
+                if ($timerList->isActive($checkActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
+                    $checkBeginn,
+                    $checkActiveTimer[self::YAML_LIST_ITEM_PARAMS])
+                ) {
+                    $checkRange = $timerList->getLastIsActiveRangeResult(
+                        $checkActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
+                        $checkBeginn,
+                        $checkActiveTimer[self::YAML_LIST_ITEM_PARAMS]
+                    );
+                    $checkBeginn = $checkRange->getBeginning();
+                    $activeRange->setBeginning($checkBeginn);
+                    $flagChange = true;
+                }
+                if ($timerList->isActive($checkActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
+                    $checkEnd,
+                    $checkActiveTimer[self::YAML_LIST_ITEM_PARAMS])
+                ) {
+                    $checkRange = $timerList->getLastIsActiveRangeResult(
+                        $checkActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
+                        $checkEnd,
+                        $checkActiveTimer[self::YAML_LIST_ITEM_PARAMS]
+                    );
+                    $checkEnd = $checkRange->getBeginning();
+                    $activeRange->setBeginning($checkEnd);
+                    $flagChange = true;
+                }
+            }
+            if (!$flagChange) {
+                break;
+            }
+            $limiter--;
+        }
     }
 
 }

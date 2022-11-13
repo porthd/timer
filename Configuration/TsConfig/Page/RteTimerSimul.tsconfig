@@ -1,1 +1,2 @@
 RTE.config.tt_content.bodytext.types.timer_timersimul.preset = timer_timersimul
+RTE.config.tt_content.bodytext.types.timer_periodlist.preset = timer_timersimul

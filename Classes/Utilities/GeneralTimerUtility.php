@@ -21,8 +21,7 @@ namespace Porthd\Timer\Utilities;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\TimerInterface;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Exception\TimerException;
 
 

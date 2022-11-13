@@ -27,6 +27,7 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
+use Porthd\Timer\Interfaces\TimerInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class WeekdayInMonthTimerTest extends TestCase
@@ -49,9 +50,9 @@ class WeekdayInMonthTimerTest extends TestCase
     {
         $GLOBALS = [];
         $GLOBALS['TYPO3_CONF_VARS'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer']['changeListOfTimezones'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
         $GLOBALS['EXEC_TIME'] = 1609088941; // 12/27/2020 @ 5:09pm (UTC)
     }
 
@@ -146,7 +147,7 @@ class WeekdayInMonthTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format('Y-m-d H:i:s', '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -748,7 +749,7 @@ class WeekdayInMonthTimerTest extends TestCase
                     'result' => $flagResult,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $dateString,
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
                         new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'nthWeekdayInMonth' => '3',
@@ -785,7 +786,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $nthDay => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -796,7 +797,7 @@ class WeekdayInMonthTimerTest extends TestCase
             foreach ([[$dateOkayStart, true], [$dateOkayEnd, true], [$dateFailStart, false], [$dateFailEnd, false],]
                      as $helper) {
                 $result[] = [
-                    'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                         (($helper[1]) ? 'is' : 'is not ') . ' active in the range of two hours, which is allowed for the date with the following attributes: ' .
                         'The date is the ' . abs($nthDay) . 'nth weekday in the month. ' . (($nthDay < 0) ? '' : ' The order or Nth beginn at the end of the month. ') .
                         'The date is part of friday, saturday oder sunday. ' .
@@ -850,7 +851,7 @@ class WeekdayInMonthTimerTest extends TestCase
                      ]
                      as $activeDay => $dateStringOkayStart
             ) {
-                $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
                     new DateTimeZone('Europe/Berlin'));
                 if ($addWeek > 0) {
                     $currentDate = clone $dateOkayStart;
@@ -869,7 +870,7 @@ class WeekdayInMonthTimerTest extends TestCase
                 foreach ([[$dateOkayStart, true], [$dateOkayEnd, true], [$dateFailStart, false], [$dateFailEnd, false],]
                          as $helper) {
                     $result[] = [
-                        'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                        'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                             (($helper[1]) ? 'is' : 'is not ') . '  active in the range of two hours, ' .
                             'which is allowed for the date with the following attributes: ' .
                             'The date is the ' . ($addWeek + 1) . 'nth weekday in the month. ' .
@@ -934,7 +935,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeMonth => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -945,7 +946,7 @@ class WeekdayInMonthTimerTest extends TestCase
             foreach ([[$dateOkayStart, true], [$dateOkayEnd, true], [$dateFailStart, false], [$dateFailEnd, false],]
                      as $helper) {
                 $result[] = [
-                    'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                         (($helper[1]) ? 'is' : 'is not ') . '  active in the range of two hours, ' .
                         'which is allowed for the date with the following attributes: ' .
                         'The date is the first saturday in the month `' . $mapActiveToMonth[$activeMonth] . '`. ' .
@@ -989,7 +990,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeStartTimeInSoconds => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1000,7 +1001,7 @@ class WeekdayInMonthTimerTest extends TestCase
             foreach ([[$dateOkayEnd, true], [$dateOkayStart, true], [$dateFailStart, false], [$dateFailEnd, false],]
                      as $helper) {
                 $result[] = [
-                    'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                         (($helper[1]) ? 'is' : 'is not ') . '  active in the range of two hours, ' .
                         'which is allowed for the date with the following attributes: ' .
                         'The date is the first saturday in the january of 2022. ' .
@@ -1086,7 +1087,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $dateString => $expection
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateString,
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1148,7 +1149,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $nthDay => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart[0],
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart[0],
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1161,7 +1162,7 @@ class WeekdayInMonthTimerTest extends TestCase
                          ]
                      as $helper) {
                 $result[] = [
-                    'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                         (($helper[1]) ? 'is' : 'is not ') . ' active in the range of two hours, which is allowed for the date with the following attributes: ' .
                         'The date is the ' . abs($nthDay) . 'nth weekday in the month. ' . (($nthDay < 0) ? '' : ' The order or Nth beginn at the end of the month. ') .
                         'The date is part of friday, saturday oder sunday. ' .
@@ -1215,7 +1216,7 @@ class WeekdayInMonthTimerTest extends TestCase
                      ]
                      as $activeDay => $dateStringOkayStart
             ) {
-                $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
                     new DateTimeZone('Europe/Berlin'));
                 if ($addWeek > 0) {
                     $currentDate = clone $dateOkayStart;
@@ -1243,7 +1244,7 @@ class WeekdayInMonthTimerTest extends TestCase
                          ]
                          as $helper) {
                     $result[] = [
-                        'message' => 'The next range for the date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                        'message' => 'The next range for the date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                             ' is `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`.' .
                             'The startdate is the ' . ($addWeek + 2) . 'nth weekday in the month. ' .
                             'The startdate is part of ' . $mapActiveDayWeekday[$activeDay] . '. ',
@@ -1307,7 +1308,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeMonth => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1347,7 +1348,7 @@ class WeekdayInMonthTimerTest extends TestCase
                      ]
                      as $helper) {
                 $result[] = [
-                    'message' => 'The rext date-time relative to `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                    'message' => 'The rext date-time relative to `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                         'will be the range in the following year `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`, ' .
                         'which is allowed for the date with the following attributes: ' .
                         'The date is the first saturday in the month `' . $mapActiveToMonth[$activeMonth] . '`. ' .
@@ -1391,7 +1392,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeStartTimeInSoconds => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1408,9 +1409,9 @@ class WeekdayInMonthTimerTest extends TestCase
                          ]
                      as $helper) {
                 $result[] = [
-                    'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
-                        'will lead to the next 120 minutes-range (`'.$nextRangeStart->format('Y-m-d H:i:s').
-                        '`,`'.$nextRangeEnd->format('Y-m-d H:i:s').'`), ' .
+                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
+                        'will lead to the next 120 minutes-range (`'.$nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME).
+                        '`,`'.$nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME).'`), ' .
                         'which is allowed for every day in the month beginning at `'.$activeStartTimeInSoconds.
                         '`(seconds from midnight). ',
                     'expects' => [
@@ -1493,7 +1494,7 @@ class WeekdayInMonthTimerTest extends TestCase
 //                 ]
 //                 as $dateString => $expection
 //        ) {
-//            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateString,
+//            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
 //                new DateTimeZone('Europe/Berlin'));
 //            $dateOkayEnd = clone $dateOkayStart;
 //            $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1556,7 +1557,7 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $nthDay => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart[0],
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart[0],
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1569,7 +1570,7 @@ class WeekdayInMonthTimerTest extends TestCase
                          ]
                      as $helper) {
                 $result[] = [
-                    'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
                         (($helper[1]) ? 'is' : 'is not ') . ' active in the range of two hours, which is allowed for the date with the following attributes: ' .
                         'The date is the ' . abs($nthDay) . 'nth weekday in the month. ' . (($nthDay < 0) ? '' : ' The order or Nth beginn at the end of the month. ') .
                         'The date is part of friday, saturday oder sunday. ' .
@@ -1623,7 +1624,7 @@ class WeekdayInMonthTimerTest extends TestCase
 //                     ]
 //                     as $activeDay => $dateStringOkayStart
 //            ) {
-//                $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+//                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
 //                    new DateTimeZone('Europe/Berlin'));
 //                if ($addWeek > 0) {
 //                    $currentDate = clone $dateOkayStart;
@@ -1651,7 +1652,7 @@ class WeekdayInMonthTimerTest extends TestCase
 //                         ]
 //                         as $helper) {
 //                    $result[] = [
-//                        'message' => 'The next range for the date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+//                        'message' => 'The next range for the date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
 //                            ' is `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`.' .
 //                            'The startdate is the ' . ($addWeek + 2) . 'nth weekday in the month. ' .
 //                            'The startdate is part of ' . $mapActiveDayWeekday[$activeDay] . '. ',
@@ -1715,7 +1716,7 @@ class WeekdayInMonthTimerTest extends TestCase
 //                 ]
 //                 as $activeMonth => $dateStringOkayStart
 //        ) {
-//            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+//            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
 //                new DateTimeZone('Europe/Berlin'));
 //            $dateOkayEnd = clone $dateOkayStart;
 //            $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1755,7 +1756,7 @@ class WeekdayInMonthTimerTest extends TestCase
 //                     ]
 //                     as $helper) {
 //                $result[] = [
-//                    'message' => 'The rext date-time relative to `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
+//                    'message' => 'The rext date-time relative to `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
 //                        'will be the range in the following year `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`, ' .
 //                        'which is allowed for the date with the following attributes: ' .
 //                        'The date is the first saturday in the month `' . $mapActiveToMonth[$activeMonth] . '`. ' .
@@ -1799,7 +1800,7 @@ class WeekdayInMonthTimerTest extends TestCase
 //                 ]
 //                 as $activeStartTimeInSoconds => $dateStringOkayStart
 //        ) {
-//            $dateOkayStart = date_create_from_format('Y-m-d H:i:s', $dateStringOkayStart,
+//            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
 //                new DateTimeZone('Europe/Berlin'));
 //            $dateOkayEnd = clone $dateOkayStart;
 //            $dateOkayEnd->add(new DateInterval('PT120M'));
@@ -1816,9 +1817,9 @@ class WeekdayInMonthTimerTest extends TestCase
 //                         ]
 //                     as $helper) {
 //                $result[] = [
-//                    'message' => 'The date-time `' . $helper[0]->format('Y-m-d H:i:s') . '`(Europe/Berlin) ' .
-//                        'will lead to the next 120 minutes-range (`'.$nextRangeStart->format('Y-m-d H:i:s').
-//                        '`,`'.$nextRangeEnd->format('Y-m-d H:i:s').'`), ' .
+//                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
+//                        'will lead to the next 120 minutes-range (`'.$nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME).
+//                        '`,`'.$nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME).'`), ' .
 //                        'which is allowed for every day in the month beginning at `'.$activeStartTimeInSoconds.
 //                        '`(seconds from midnight). ',
 //                    'expects' => [

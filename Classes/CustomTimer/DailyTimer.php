@@ -29,6 +29,7 @@ use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
@@ -155,7 +156,7 @@ class DailyTimer implements TimerInterface
      */
     protected function validateZone(array $params = []): bool
     {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
+        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT])) ||
             TcaUtility::isTimeZoneInList(
                 $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
             );
@@ -270,8 +271,8 @@ class DailyTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
-            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
+            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
     }
 
     /**
@@ -286,7 +287,7 @@ class DailyTimer implements TimerInterface
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-            $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
             return $result;
@@ -384,7 +385,7 @@ class DailyTimer implements TimerInterface
         $testTag = clone $dateBelowNextActive;
 
         /** @var TimerStartStopRange $nextRange */
-        $nextRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
+        $nextRange = new TimerStartStopRange();
         $count = 0;
         do {
             $dateBorder = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
@@ -447,7 +448,7 @@ class DailyTimer implements TimerInterface
         $testTag = clone $dateAbovePrevActive;
 
         /** @var TimerStartStopRange $nextRange */
-        $prevRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
+        $prevRange = new TimerStartStopRange();
         $count = 0;
         do {
             $dateBorder = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
@@ -521,7 +522,7 @@ class DailyTimer implements TimerInterface
         $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
-            $this->lastIsActiveResult = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $this->lastIsActiveResult = new TimerStartStopRange();
         }
         $this->lastIsActiveResult->setBeginning($dateStart);
         $this->lastIsActiveResult->setEnding($dateStop);
@@ -538,7 +539,7 @@ class DailyTimer implements TimerInterface
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
-            $this->lastIsActiveResult = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $this->lastIsActiveResult = new TimerStartStopRange();
             $this->lastIsActiveTimestamp = $dateLikeEventZone->getTimestamp() + 1; // trigger isActive() in the next step
         }
         if ((is_null($this->lastIsActiveTimestamp)) ||

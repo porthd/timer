@@ -46,6 +46,8 @@ call_user_func(
         // Add backend preview hook
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['timer_timersimul'] =
             Porthd\Timer\Hooks\PageLayoutViewDrawItem::class;
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['timer_periodlist'] =
+            Porthd\Timer\Hooks\PageLayoutViewDrawItem::class;
 
         $modelList = ['tx_timer_domain_model_listing','tt_content','pages','sys_file_reference'];
         $timerList = ['daily','dateperiod','default','easterrel','moonphaserel','moonriserel','periodlist','rangelist',

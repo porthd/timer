@@ -27,12 +27,13 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
+use Porthd\Timer\Interfaces\TimerInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class DefaultTimerTest extends TestCase
 {
     protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_USE_ACTIVE_TIMEZONE = TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
     protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
     protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'default';
@@ -49,9 +50,9 @@ class DefaultTimerTest extends TestCase
     {
         $GLOBALS = [];
         $GLOBALS['TYPO3_CONF_VARS'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer']['changeListOfTimezones'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
         $GLOBALS['EXEC_TIME'] = 1609088941; // 12/27/2020 @ 5:09pm (UTC)
     }
 
@@ -131,7 +132,8 @@ class DefaultTimerTest extends TestCase
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result['default'];
         if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
-            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . substr($filePath, strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
+            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . substr($filePath,
+                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
@@ -161,7 +163,7 @@ class DefaultTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format('Y-m-d H:i:s', '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -284,7 +286,7 @@ class DefaultTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -297,7 +299,7 @@ class DefaultTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -312,7 +314,7 @@ class DefaultTimerTest extends TestCase
                 [
                     'params' => [
                         TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -326,7 +328,7 @@ class DefaultTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -339,7 +341,7 @@ class DefaultTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -419,7 +421,8 @@ class DefaultTimerTest extends TestCase
 
             $this->assertTrue(
                 ($flag),
-                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r($expects, true)
+                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r($expects,
+                    true)
             );
         }
     }
@@ -442,7 +445,8 @@ class DefaultTimerTest extends TestCase
 
             $this->assertTrue(
                 ($flag),
-                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r($expects, true)
+                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r($expects,
+                    true)
             );
         }
     }

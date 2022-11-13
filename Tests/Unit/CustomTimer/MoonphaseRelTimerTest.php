@@ -27,7 +27,7 @@ use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\MoonphaseRelTimer;
-use Porthd\Timer\CustomTimer\TimerInterface;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -52,9 +52,9 @@ class MoonphaseRelTimerTest extends TestCase
     {
         $GLOBALS = [];
         $GLOBALS['TYPO3_CONF_VARS'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer']['changeListOfTimezones'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
         $GLOBALS['EXEC_TIME'] = 1609088941; // 12/27/2020 @ 5:09pm (UTC)
     }
 
@@ -150,7 +150,7 @@ class MoonphaseRelTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format('Y-m-d H:i:s', '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -827,7 +827,7 @@ class MoonphaseRelTimerTest extends TestCase
                     'result' => $flagResult,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $dateString,
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
                         new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'moonPhase' => 'full_moon',
@@ -850,7 +850,7 @@ class MoonphaseRelTimerTest extends TestCase
                     'result' => false,
                 ],
                 'params' => [
-                    'value' => date_create_from_format('Y-m-d H:i:s', $dateString,
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
                         new DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'moonPhase' => 'full_moon',
@@ -901,7 +901,7 @@ class MoonphaseRelTimerTest extends TestCase
                         'result' => $flagResult,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', $dateString,
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
                             new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'moonPhase' => 'full_moon',
@@ -967,7 +967,7 @@ class MoonphaseRelTimerTest extends TestCase
                         'result' => $flagResult,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', $dateString,
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
                             new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'moonPhase' => 'full_moon',
@@ -1028,7 +1028,7 @@ class MoonphaseRelTimerTest extends TestCase
                         'result' => $flagResult,
                     ],
                     'params' => [
-                        'value' => date_create_from_format('Y-m-d H:i:s', $dateString,
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
                             new DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'moonPhase' => $typeOfMoon,
@@ -1094,7 +1094,7 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2022-06-16 13:51:00',
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-06-16 13:51:00',
                     new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'moonPhase' => 'full_moon',
@@ -1118,7 +1118,7 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2022-06-16 13:53:00',
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-06-16 13:53:00',
                     new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'moonPhase' => 'full_moon',
@@ -1201,7 +1201,7 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2022-07-15 22:38:00',
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-15 22:38:00',
                     new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'moonPhase' => 'full_moon',
@@ -1225,7 +1225,7 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2022-07-15 22:41:00',
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-15 22:41:00',
                     new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'moonPhase' => 'full_moon',
@@ -1249,7 +1249,7 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2022-07-15 23:41:00',
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-15 23:41:00',
                     new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'moonPhase' => 'full_moon',
@@ -1273,7 +1273,7 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format('Y-m-d H:i:s', '2022-07-16 00:41:00',
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-16 00:41:00',
                     new DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'moonPhase' => 'full_moon',

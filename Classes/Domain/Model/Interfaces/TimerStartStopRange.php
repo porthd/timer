@@ -38,7 +38,7 @@ use DateTime;
 /**
  * TimerStartStopRange contains getter and setter für data-exchanges in this extension `timer`
  */
-class TimerStartStopRange
+final class TimerStartStopRange
 {
 
     /**

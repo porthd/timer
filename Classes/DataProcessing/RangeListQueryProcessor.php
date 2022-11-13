@@ -24,7 +24,7 @@ namespace Porthd\Timer\DataProcessing;
 use DateTime;
 use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\TimerInterface;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\ListOfEventsService;

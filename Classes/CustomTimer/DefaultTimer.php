@@ -28,6 +28,7 @@ use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -152,7 +153,7 @@ class DefaultTimer implements TimerInterface
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-            $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
             return $result;
@@ -184,7 +185,7 @@ class DefaultTimer implements TimerInterface
     {
 
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-            $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $result = new TimerStartStopRange();
             $result->failOnlyNextActive($dateLikeEventZone);
             return $result;
         }
@@ -202,7 +203,7 @@ class DefaultTimer implements TimerInterface
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-            $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $result = new TimerStartStopRange();
             $result->failOnlyNextActive($dateLikeEventZone);
             return $result;
         }
@@ -217,7 +218,7 @@ class DefaultTimer implements TimerInterface
     protected function everytimeActive(DateTime $dateLikeEventZone): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
-        $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
+        $result = new TimerStartStopRange();
         $result->reMilleniumActive($dateLikeEventZone);
         return $result;
     }
@@ -236,7 +237,7 @@ class DefaultTimer implements TimerInterface
         $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
-            $this->lastIsActiveResult = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $this->lastIsActiveResult = new TimerStartStopRange();
         }
         $this->lastIsActiveResult->setBeginning($dateStart);
         $this->lastIsActiveResult->setEnding($dateStop);
@@ -253,7 +254,7 @@ class DefaultTimer implements TimerInterface
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
-            $this->lastIsActiveResult = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $this->lastIsActiveResult = new TimerStartStopRange();
             $this->lastIsActiveTimestamp = $dateLikeEventZone->getTimestamp() + 1; // trigger isActive() in the next step
         }
         if ((is_null($this->lastIsActiveTimestamp)) ||

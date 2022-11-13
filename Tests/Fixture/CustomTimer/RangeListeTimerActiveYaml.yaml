@@ -12,7 +12,7 @@ rangelist:
       ultimateEndingTimer: '9999-12-31 23:59:59'
       activeWeekday: '127'
   -
-    :title: 'Wendesday to Sunday from 02:00 to 07:00'
+    title: 'Wendesday to Sunday from 02:00 to 07:00'
     description: '- Testkonfiguration -'
     selector: txTimerDaily
     params:

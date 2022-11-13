@@ -1,5 +1,6 @@
 #tt_content.timer_timersimul = FLUIDTEMPLATE
-lib.fluidContent {
+lib.timersimul.fluidContent < lib.fluidContent
+lib.timersimul.fluidContent {
     templateRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_timersimul.view.templateRootPath}
     }
@@ -10,7 +11,8 @@ lib.fluidContent {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_timersimul.view.layoutRootPath}
     }
 }
-lib.contentElement {
+lib.timersimul.contentElement < lib.contentElement
+lib.timersimul.contentElement {
     templateRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.contentElement} = {$contentElement.tx_timer_timersimul.view.templateRootPath}
     }

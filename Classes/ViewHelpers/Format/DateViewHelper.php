@@ -49,10 +49,13 @@ class DateViewHelper extends AbstractViewHelper
      */
     public function initializeArguments()
     {
-        $this->registerArgument('date', 'mixed', 'Either an object implementing DateTimeInterface or a string that is accepted by DateTime constructor');
+        $this->registerArgument('date', 'mixed',
+            'Either an object implementing DateTimeInterface or a string that is accepted by DateTime constructor');
         $this->registerArgument('format', 'string', 'Format String which is taken to format the Date/Time', false, '');
-        $this->registerArgument('base', 'mixed', 'A base time (an object implementing DateTimeInterface or a string) used if $date is a relative date specification. Defaults to current time.');
-        $this->registerArgument('timezone', 'string', 'Define an individual timezone for the output of the date. Defaults is the currently used timezone defind by `date_default_timezone_get()`.');
+        $this->registerArgument('base', 'mixed',
+            'A base time (an object implementing DateTimeInterface or a string) used if $date is a relative date specification. Defaults to current time.');
+        $this->registerArgument('timezone', 'string',
+            'Define an individual timezone for the output of the date. Defaults is the currently used timezone defind by `date_default_timezone_get()`.');
     }
 
     /**
@@ -63,14 +66,18 @@ class DateViewHelper extends AbstractViewHelper
      * @return string
      * @throws Exception
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ) {
         $format = $arguments['format'] ?? '';
-        $timezone = (empty($arguments['timezone'])?
-            date_default_timezone_get():
+        $timezone = (empty($arguments['timezone']) ?
+            date_default_timezone_get() :
             $arguments['timezone']
         );
-        $base = $arguments['base'] ?? GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp');
+        $base = $arguments['base'] ?? GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date',
+                'timestamp');
         if (is_string($base)) {
             $base = trim($base);
         }
@@ -99,8 +106,9 @@ class DateViewHelper extends AbstractViewHelper
                 $date = new \DateTime('@' . $dateTimestamp);
                 $date->setTimezone(new \DateTimeZone($timezone));
             } catch (\Exception $exception) {
-                throw new Exception('"' . print_r($date,true) . '" could not be parsed by \DateTime '.
-                    'constructor or the timezone `'.print_r($timezone,true) .'` is wrong/unallowed: ' . $exception->getMessage(), 1241722579);
+                throw new Exception('"' . print_r($date, true) . '" could not be parsed by \DateTime ' .
+                    'constructor or the timezone `' . print_r($timezone,
+                        true) . '` is wrong/unallowed: ' . $exception->getMessage(), 1241722579);
             }
         }
 

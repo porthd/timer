@@ -93,8 +93,10 @@ class DateTimeUtility
         $offset = new DateInterval('PT' . abs($seconds) . 'S');
         if ($seconds > 0) {
             $clone->sub($offset);
-        } else if ($seconds < 0) {
-            $clone->add($offset);
+        } else {
+            if ($seconds < 0) {
+                $clone->add($offset);
+            }
         }
         $result = $clone->format($format);
         if ($result === false) { // I don't know, how to produces this Exception The reason is safetyness.
@@ -140,8 +142,10 @@ class DateTimeUtility
      * @return int timegag in seconds (positive an negative)
      * @throws TimerException
      */
-    public static function getTimezoneOffset(string $eventTimeZone = 'Europe/Berlin', string $frontendTimeZone = 'Europe/Berlin'): int
-    {
+    public static function getTimezoneOffset(
+        string $eventTimeZone = 'Europe/Berlin',
+        string $frontendTimeZone = 'Europe/Berlin'
+    ): int {
         if ((empty($frontendTimeZone)) || ($frontendTimeZone === $eventTimeZone)) {
             return 0;
         }
@@ -153,7 +157,8 @@ class DateTimeUtility
                 1601975594
             );
         }
-        $eventTime = new DateTime(DateTimeUtility::BASE_TEST_DATE, $eventTimeZoneObj); // php does not calculate the GMT timestimp
+        $eventTime = new DateTime(DateTimeUtility::BASE_TEST_DATE,
+            $eventTimeZoneObj); // php does not calculate the GMT timestimp
         $frontendTime = new DateTime(DateTimeUtility::BASE_TEST_DATE, $frontendTimeZoneObj);
         return ($eventTimeZoneObj->getOffset($eventTime) - $frontendTimeZoneObj->getOffset($frontendTime));
     }
@@ -164,7 +169,7 @@ class DateTimeUtility
      */
     public static function getCurrentTime()
     {
-        return $GLOBALS['EXEC_TIME']?:time();
+        return $GLOBALS['EXEC_TIME'] ?: time();
     }
 
     /**
@@ -175,7 +180,7 @@ class DateTimeUtility
      * @return int
      * @throws TimerException
      */
-    public static function diffPeriod(DateTime $destDateTime, DateTime $startTime, $periodLength, $periodUnit):int
+    public static function diffPeriod(DateTime $destDateTime, DateTime $startTime, $periodLength, $periodUnit): int
     {
         $calcDateTime = clone $destDateTime;
         $differenz = $calcDateTime->diff($startTime);
@@ -198,7 +203,7 @@ class DateTimeUtility
                 break;
             case self::KEY_UNIT_WEEK :
                 $rawCount = floor(
-                    ($differenz->days ?: 0) / abs(7*$periodLength)
+                    ($differenz->days ?: 0) / abs(7 * $periodLength)
                 );
                 break;
             case self::KEY_UNIT_MONTH :
@@ -225,28 +230,30 @@ class DateTimeUtility
         } else {
             $toZeroCountPeriod = $rawCount;
         }
-        return (int) $toZeroCountPeriod;
+        return (int)$toZeroCountPeriod;
     }
 
     /**
      * @return DateTime|false
      * @throws AspectNotFoundException
      */
-    public static function getCurrentExecTime() {
-        $context = GeneralUtility::makeInstance(Context::class);
+    public static function getCurrentExecTime()
+    {
         /** @var DateTimeImmutable $execTime */
-        $execTimeIso = $context->getPropertyFromAspect('date', 'iso');
+        $execTimeIso = GeneralUtility::makeInstance(Context::class)
+            ->getPropertyFromAspect('date', 'iso');
         // Reading the current data instead of $GLOBALS['EXEC_TIME']
-        return DateTime::createFromFormat(DATE_ISO8601,$execTimeIso);
+        return DateTime::createFromFormat(DATE_ATOM, $execTimeIso);
     }
 
     /**
      * @return string|null
      * @throws AspectNotFoundException
      */
-    public static function getCurrentTimeZone() {
-        $context = GeneralUtility::makeInstance(Context::class);
-        return $context->getPropertyFromAspect('date', 'timezone');
+    public static function getCurrentTimeZone()
+    {
+        return GeneralUtility::makeInstance(Context::class)
+            ->getPropertyFromAspect('date', 'timezone');
 
     }
 

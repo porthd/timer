@@ -14,7 +14,7 @@ use Porthd\Timer\CustomTimer\WeekdayInMonthTimer;
 use Porthd\Timer\CustomTimer\WeekdaylyTimer;
 use Porthd\Timer\Hooks\Backend\FlexformManipulationHook;
 use Porthd\Timer\Hooks\Backend\StartEndTimerManipulationHook;
-use Porthd\Timer\Hooks\DoNothingHook;
+
 use Porthd\Timer\Hooks\FlexFormParsingHook;
 use Porthd\Timer\Utilities\ConfigurationUtility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -62,6 +62,7 @@ call_user_func(
         foreach ([
                      'tx_timer-timer' => 'EXT:timer/Resources/Public/Icons/icon_timer.svg',
                      'tx_timer_timersimul' => 'EXT:timer/Resources/Public/Icons/Content/timersimul.svg',
+                     'tx_timer_periodlist' => 'EXT:timer/Resources/Public/Icons/Content/periodlist.svg',
                  ] as $name => $path
         ) {
             $iconRegistry->registerIcon(
@@ -77,21 +78,13 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
             StartEndTimerManipulationHook::class;
 
-        // This variable must be an arry, because other extension may although add some part
-        if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][TimerConst::EXTENSION_NAME]['hook-change-default-timezone'])) {
-            $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][TimerConst::EXTENSION_NAME]['hook-change-default-timezone'] = [];
-        }
-        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][TimerConst::EXTENSION_NAME]['hook-change-default-timezone'][] =
-            DoNothingHook::class;
-
         // Parts of code, which can by the extension-constants be controlled
-        $timerConfig = GeneralUtility::makeInstance(
-            ExtensionConfiguration::class
-        )->get(TimerConst::EXTENSION_NAME);
+        $timerConfig = GeneralUtility::makeInstance(ExtensionConfiguration::class)
+            ->get(TimerConst::EXTENSION_NAME);
 
 
         if (!empty($timerConfig['flagTestContent'])) {
-            //automaticly integrated typoScript
+            //automatically integrated typoScript for content-element `timersimul`
             ExtensionManagementUtility::addTypoScriptConstants(
                 "@import 'EXT:timer/Configuration/TypoScript/constants.typoscript' "
             );
@@ -104,7 +97,7 @@ call_user_func(
         // disallow usage of timer from the extension via the configuration
         if (!empty($timerConfig['useInternalTimer'])) {
             $addTimerFlags = (int)$timerConfig['useInternalTimer'];
-            $listOfTimerClasses =         [
+            $listOfTimerClasses = [
                 DailyTimer::class, // => 1
                 DatePeriodTimer::class, // => 2
                 DefaultTimer::class, // => 4
@@ -118,7 +111,11 @@ call_user_func(
                 WeekdaylyTimer::class,
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
+            // Add cache for periodListTimer, ...  => use the default-settings for the cache
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['timer_yamllist'] ??= [];
+
             $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_timersimul'] = 'EXT:timer/Configuration/RTE/TimerTimersimul.yaml';
+            $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_periodlist'] = 'EXT:timer/Configuration/RTE/TimerPeriodlist.yaml';
             ExtensionManagementUtility::addPageTSConfig(
                 "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentElementWizard.tsconfig'" .
                 "\n" .
@@ -128,5 +125,8 @@ call_user_func(
             );
 
         }
+
+
+
     }
 );

@@ -29,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Domain\Repository\ListingRepository;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\ConfigurationUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
@@ -59,17 +60,17 @@ class PeriodListTimerTest extends TestCase
     {
         $GLOBALS = [];
         $GLOBALS['TYPO3_CONF_VARS'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer']['changeListOfTimezones'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
         $listOfTimerClasses = [
             DailyTimer::class, // => 1
             DatePeriodTimer::class, // => 2
             DefaultTimer::class, // => 4
             EasterRelTimer::class,
-            HourlyTimer::class,
             MoonphaseRelTimer::class,
             MoonriseRelTimer::class,
+            PeriodListTimer::class,
             RangeListTimer::class,
             SunriseRelTimer::class,
             WeekdayInMonthTimer::class,
@@ -92,7 +93,7 @@ class PeriodListTimerTest extends TestCase
         $this->simulatePartOfGlobalsTypo3Array();
         /** @var ListingRepository $listingRepository */
         $yamlFileLoader = new YamlFileLoader();
-        $this->subject = new PeriodListTimer( $yamlFileLoader);
+        $this->subject = new PeriodListTimer( null, $yamlFileLoader);
         $projectPath = '/var/www/html';
         Environment::initialize(new ApplicationContext('Testing'),
             false,
@@ -284,7 +285,7 @@ class PeriodListTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format('Y-m-d H:i:s', '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -692,7 +693,7 @@ class PeriodListTimerTest extends TestCase
             ],
             'params' => [
                 'testValue' => '2022-12-26 05:59:59',
-                'testValueObj' => date_create_from_format('Y-m-d H:i:s', '2022-12-26 05:59:59',
+                'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-12-26 05:59:59',
                     new DateTimeZone('Europe/Berlin')),
                 'required' => [
                     'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -779,7 +780,7 @@ class PeriodListTimerTest extends TestCase
                 'params' => [
                     'testValue' => $params['testDateTime'],
                     'testValueObj' => date_create_from_format(
-                        'Y-m-d H:i:s',
+                        TimerInterface::TIMER_FORMAT_DATETIME,
                         $params['testDateTime'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
@@ -803,7 +804,7 @@ class PeriodListTimerTest extends TestCase
                 'params' => [
                     'testValue' => $params['testDateTime'],
                     'testValueObj' => date_create_from_format(
-                        'Y-m-d H:i:s',
+                        TimerInterface::TIMER_FORMAT_DATETIME,
                         $params['testDateTime'],
                         new DateTimeZone('Europe/Berlin')
                     ),
@@ -976,7 +977,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -998,7 +999,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1175,7 +1176,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1199,7 +1200,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',

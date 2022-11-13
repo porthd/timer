@@ -26,13 +26,14 @@ use DateTime;
 use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 
 class TimerUtilitiesTest extends TestCase
 {
 
     public function dataProviderformatForZoneGivenDateTimeObjectAndTimeZone()
     {
-        $outputFormat = 'Y-m-d H:i:s';
+        $outputFormat = TimerInterface::TIMER_FORMAT_DATETIME;
         $dateString = '2010-07-05T00:00:05';
         $timezones = [
             'Europe/Amsterdam',

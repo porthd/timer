@@ -22,8 +22,10 @@ namespace Porthd\Timer\Utilities;
  ***************************************************************/
 
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\TimerInterface;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Exception\TimerException;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationUtility
 {
@@ -31,7 +33,7 @@ class ConfigurationUtility
 
     /**
      * Add your timer-classes to the list by using the unique index-name of your timer.
-     * Your timer-class must implement interface Porthd\Timer\CustomTimer\TimerInterface
+     * Your timer-class must implement interface Porthd\Timer\Interfaces\TimerInterface
      * used in `ext_localconf.php`
      *
      * example for input:
@@ -43,14 +45,18 @@ class ConfigurationUtility
      */
     public static function mergeCustomTimer(array $listOfTimerClasses)
     {
+
+        if (empty(TcaUtility::$timerConfig)) {
+            TcaUtility::$timerConfig = GeneralUtility::makeInstance(
+                ExtensionConfiguration::class
+            )->get(TimerConst::EXTENSION_NAME);
+        }
+
         // add hooks for the datadigger to the configuration
         foreach ($listOfTimerClasses as $key => $className) {
             self::expandNestedArray(
-                $GLOBALS,
+                TcaUtility::$timerConfig,
                 [
-                    'TYPO3_CONF_VARS',
-                    'EXTCONF',
-                    TimerConst::EXTENSION_NAME,
                     TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER,
                     $key,
                 ],
@@ -58,6 +64,9 @@ class ConfigurationUtility
                 true
             );
         }
+        GeneralUtility::makeInstance(
+            ExtensionConfiguration::class
+        )->set(TimerConst::EXTENSION_NAME, TcaUtility::$timerConfig);
     }
 
     /**
@@ -132,7 +141,7 @@ class ConfigurationUtility
             } else {
                 if ($throwException === true) {
                     throw new TimerException(
-                        'The class `'.$classString. '` did not implements the interface ``.', 1601245879);
+                        'The class `' . $classString . '` did not implements the interface ``.', 1601245879);
 
                 }
             }

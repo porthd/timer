@@ -92,10 +92,6 @@
                 <target>Informationen</target>
             </trans-unit>
 
-            <trans-unit id="backend.contentElement.event.title">
-                <source>Timer for simple events</source>
-                <target>Timer für einfache Ereignisse</target>
-            </trans-unit>
             <trans-unit id="extension.configuration.template.flag.useTestContent">
                 <source>Flag for TestContent: Only if the value is 1,true or TRUE, you can activate the predefined content-elements of this extension for your tests.</source>
                 <target>Flag for TestContent: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.</target>
@@ -121,13 +117,17 @@
                 <source>Remark an active delay-time after as special date repeating in flexible ways</source>
                 <target>Bemerken Sie eine aktive Verzögerungszeit danach als Sonderdatum, das sich flexibel wiederholen lässt</target>
             </trans-unit>
-            <trans-unit id="tx_timer.tca.general.div.timerParams.lable">
+            <trans-unit id="tx_timer.tca.general.div.timerParams.label">
                 <source>Periods</source>
                 <target>Perioden</target>
             </trans-unit>
             <trans-unit id="tx_timer.tca.element.name.timerTimersimul">
                 <source>timer-test</source>
                 <target>Timer-Test</target>
+            </trans-unit>
+            <trans-unit id="tx_timer.tca.element.name.timerPeriodlist">
+                <source>simple list of dates</source>
+                <target>Einfache Liste mit Terminen</target>
             </trans-unit>
             <trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libFLuidContent">
                 <source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
@@ -136,6 +136,14 @@
             <trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libContentElement">
                 <source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.contentElment`</source>
                 <target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElment`</target>
+            </trans-unit>
+            <trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libFLuidContent">
+                <source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
+                <target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.fluidContent`</target>
+            </trans-unit>
+            <trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libContentElement">
+                <source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the typoscript `lib.contentElment`</source>
+                <target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElment`</target>
             </trans-unit>
             <trans-unit id="newContentElement.tx_timer_timersimul.pages.forList">
                 <source>list of page-id for pages, which contains events used by the example content-element `tx_timer_timersimul`</source>

@@ -56,7 +56,7 @@ ExtensionManagementUtility::addTCAcolumns('pages', $tmp_timer_columns);
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.lable,' .
+    '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.label,' .
     'tx_timer_scheduler, tx_timer_selector, tx_timer_timer, ',
     '1'
 );

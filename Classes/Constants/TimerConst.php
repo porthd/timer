@@ -48,9 +48,11 @@ class TimerConst
      *used in
      * - ListOfTimerService
      * - ConfigurationUtility
+     * - TcaUtility
      */
     public const GLOBALS_SUBKEY_CUSTOMTIMER = 'customTimer';
     public const GLOBALS_SUBKEY_EXCLUDE = 'removeTimer';
+    public const HOOK_CHANGE_LIST_OF_TIMEZONES = 'changeListOfTimezones'; // modify the list of uesed timezone-codes with your own hook-Method
 
 
     /** needed parameter in flexform of timer **/
@@ -97,6 +99,7 @@ class TimerConst
     public const ARGUMENT_MAX_COUNT = 'maxCount';
     public const SAVE_LIMIT_MAX_EVENTS = 500;
     public const ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE = 'userRangeCompare';
+    public const CACHE_IDENT_TIMER_YAMLLIST = 'timer_yamllist';
 
-    
+
 }

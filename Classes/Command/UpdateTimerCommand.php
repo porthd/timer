@@ -25,7 +25,6 @@ use DateTime;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Domain\Repository\GeneralRepository;
 use Porthd\Timer\Domain\Repository\TimerRepositoryInterface;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\ListOfTimerService;
@@ -42,7 +41,7 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Log\LogDataTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use function Wikimedia\Parsoid\Wt2Html\TT\array_flatten;
+
 
 /**
  * Class UpdateTimesByTimerCommand
@@ -82,29 +81,42 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     public const YAML_SUBWHERE_COMPARE = 'compare';
 
     protected $currentPidList = [];
-    /** @var ?DataHandler $dataHandler */
-    private ?DataHandler $dataHandler = null;
 
+    /** @var DataHandler $dataHandler */
+    private DataHandler $dataHandler;
+
+    /** @var ListOfTimerService $timerService */
+    private ListOfTimerService $timerService;
+
+    /** @var YamlFileLoader $yamlLoader */
+    private YamlFileLoader $yamlLoader;
+
+    /** @var PageTreeRepository $pageTreeRepository */
+    private PageTreeRepository $pageTreeRepository;
 
     /**
+     * @param ListOfTimerService $listOfTimerService
      * @param DataHandler $dataHandler
      */
-    public function __construct()
-    {
+    public function __construct(
+        ListOfTimerService $listOfTimerService,
+        DataHandler $dataHandler,
+        YamlFileLoader $yamlLoader,
+        PageTreeRepository $pageTreeRepository
+    ) {
         parent::__construct();
-    }
-
-
-    public function injectDataHandler(DataHandler $dataHandler)
-    {
+        $this->timerService = $listOfTimerService;
         $this->dataHandler = $dataHandler;
-        $this->dataHandler->setLogger($this->logger);
+        $this->yamlLoader = $yamlLoader;
+        $this->pageTreeRepository = $pageTreeRepository;
+
     }
 
     /**
      * define the required argument `yamlfile`, which contains the list of updatable models (tt_content, ...)
      */
-    public function configure()
+    public
+    function configure()
     {
         $this->setDescription(LocalizationUtility::translate(
             'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:task.timer.updateTimesByTimer.title',
@@ -131,15 +143,17 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      * @param OutputInterface $output
      * @return bool|int|void
      */
-    public function execute(InputInterface $input, OutputInterface $output)
-    {
+    public
+    function execute(
+        InputInterface $input,
+        OutputInterface $output
+    ) {
         try {
+            $this->dataHandler->setLogger($this->logger);
 
             $yamlFilePath = $this->getMyArgument($input);
             $flags = YamlFileLoader::PROCESS_PLACEHOLDERS | YamlFileLoader::PROCESS_IMPORTS;
-            /** @var YamlFileLoader $yamlLoader */
-            $yamlLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
-            $yamlConfig = $yamlLoader->load($yamlFilePath, $flags);
+            $yamlConfig = $this->yamlLoader->load($yamlFilePath, $flags);
             // @todo Throw an error-message, if there was an table not successful (no changes)
             $flagSuccessTable = $this->updateTables($yamlConfig);
             $flagSuccessGeneral = array_reduce($flagSuccessTable, function ($carry, $item) {
@@ -157,7 +171,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             return self::SUCCESS;
         }
 
-        foreach ($flagSuccessTable??[] as $key => $flag) {
+        foreach ($flagSuccessTable ?? [] as $key => $flag) {
             if (!empty($flag)) {
                 $message = LocalizationUtility::translate(
                     self::LANG_PATH . 'task.timer.warning.yamlNotAllUpdated.3',
@@ -183,8 +197,9 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      * @param InputInterface $input
      * @return string
      */
-    protected function getMyArgument(InputInterface $input): string
-    {
+    protected function getMyArgument(
+        InputInterface $input
+    ): string {
         if (empty($input->hasArgument(self::ARGUMENT_YAML_TABLE_LIST))) {
             throw new TimerException(
                 LocalizationUtility::translate(
@@ -203,16 +218,14 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      * @return array
      */
 
-    protected function allowedPids($pidList)
-    {
-        // PageTreeRepository is marked as intern // I try this problem
-        /** @var PageTreeRepository $myPageRepository */
-        $myPageRepository = GeneralUtility::makeInstance(PageTreeRepository::class);
+    protected function allowedPids(
+        $pidList
+    ) {
         $result = [];
         foreach ($pidList as $pid) {
-            $myTree = $myPageRepository->getTree($pid);
+            $myTree = $this->pageTreeRepository->getTree($pid);
             array_walk_recursive($myTree, function ($value, $key) use (&$result) {
-                if (($key === 'pid')||($key === 'uid')) {
+                if (($key === 'pid') || ($key === 'uid')) {
                     $result[(int)$value] = (int)$value;
                 }
             }, $result);
@@ -225,8 +238,9 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      * @return array
      * @throws TimerException
      */
-    protected function updateTables(array $yamlConfig)
-    {
+    protected function updateTables(
+        array $yamlConfig
+    ) {
         $flagSuccess = [];
         $refDateTime = new DateTime('now');
         foreach ($yamlConfig[self::YAML_MAINGROUP_TABLELIST] as $key => $tableConfig) {
@@ -251,8 +265,11 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      * @param array $listPids
      * @return int
      */
-    protected function updateTable(array $yamlTableConfig, DateTime $refDateTime, $listPids = [])
-    {
+    protected function updateTable(
+        array $yamlTableConfig,
+        DateTime $refDateTime,
+        $listPids = []
+    ): int {
         if (!class_exists($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY]) ||
             (!in_array(
                 TimerRepositoryInterface::class,
@@ -269,11 +286,10 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
 
 
         /** @var TimerRepositoryInterface $repository */
-        $repository = new $yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY];
+        $repository = GeneralUtility::makeInstance($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY]);
         if (!$repository->tableExists($yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE])) {
             return self::FAILURE;
         }
-//        $signalSlotDispatcher = GeneralUtility::makeInstance(ObjectManager::class)->get(Dispatcher::class);
 
         $listOfFields = TimerConst::TIMER_NEEDED_FIELDS;
         $whereInfos = $yamlTableConfig[self::YAML_SUBGROUP_WHERE] ?? [];
@@ -300,26 +316,22 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                 'The need fields [`' . implode('`, `', TimerConst::TIMER_NEEDED_FIELDS) .
                 '`] are not defined in the row `' . print_r($listOfRows[$firstKey],
                     true) . '`. The table of the query was `' . $yamlTableConfig .
-                '`. The mistake is unexpected. Perhaps your slot for the signal `' . GeneralRepository::SIGNAL_MODIFY_GENERIC_REQUEST .
-                '` is wrongly defined.' .
+                '`. The mistake is unexpected. ' .
                 1602319674
             );
         }
 
         $count = 0;
-        /** @var ListOfTimerService $timerList */
-        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
 
         foreach ($listOfRows as $timerUpRow) {
             $xmlParam = GeneralUtility::xml2array($timerUpRow[TimerConst::TIMER_FIELD_FLEX_ACTIVE]);
             $normParams = TcaUtility::flexformArrayFlatten($xmlParam);
-//            $normParams = array_merge(...$normParams);
-            if ($timerList->validate(
-                    $timerUpRow[TimerConst::TIMER_FIELD_SELECT],
+            if ($this->timerService->validate(
+                $timerUpRow[TimerConst::TIMER_FIELD_SELECT],
                 $normParams
-                )) {
+            )) {
                 /** @var TimerStartStopRange $timerRange */
-                $timerRange = $timerList->nextActive(
+                $timerRange = $this->timerService->nextActive(
                     $timerUpRow[TimerConst::TIMER_FIELD_SELECT],
                     $refDateTime,
                     $normParams
@@ -330,12 +342,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                 ];
                 $data[$yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE]][$timerUpRow[TimerConst::TIMER_FIELD_UID]] = $dataChanges;
 
-//                // custom changes one more fields of the model
-//                [$data, $yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE],] = $signalSlotDispatcher->dispatch(
-//                    __CLASS__,
-//                    self::SIGNAL_MODIFY_DATA_BEFORE_DATAHANDLER,
-//                    [$data, $yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE],]
-//                );
+                // @todo Install Event for custom changes before update
 
                 $this->dataHandler->start($data, []);
                 $this->dataHandler->process_datamap();
@@ -366,15 +373,14 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      * some validation
      *
      * @param $tableConfig
-     * @throws TimerException
-     */
-    /**
-     * @param $tableConfig
      * @param $tableKey
+     * @return bool result is an exception or true
      * @throws TimerException
      */
-    protected function validateYamlDefinition($tableConfig, $tableKey)
-    {
+    protected function validateYamlDefinition(
+        $tableConfig,
+        $tableKey
+    ): bool {
         if (!isset($tableConfig[self::YAML_SUBGROUP_TEXT_TABLE])) {
             throw new TimerException(
                 'The table is not defined in your ' . $tableKey . 'th definition. Please check your yaml-file.',
@@ -440,5 +446,6 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             }
 
         }
+        return true;
     }
 }

@@ -24,58 +24,58 @@
 #periodlist:
 #  -
 #    title: 'Winterferien Bremen'
-#    configuration:
-#      description: '- free to fill -'
+#    data:
+#      description: '- free to fill and free to add new attributes -'
 #    start: '2022-01-31 00:00:00'
 #    stop: '2022-02-01 23:59:59'
 #    zone: 'Europe/Berlin'
 periodlist:
   -
     title: 'Winterferien Bremen'
-    configuration:
-      description: '- free to fill -'
+    data:
+      description: '- free to fill and free to add new attributes -'
     start: '2022-01-31 00:00:00'
     stop: '2022-02-01 23:59:59'
     zone: 'Europe/Berlin'
   -
     title: 'Osterferien Bremen'
-    configuration:
-      description: '- free to fill -'
+    data:
+      description: '- free to fill and free to add new attributes -'
     start: '2022-04-04 00:00:00'
     stop: '2022-04-19 23:59:59'
     zone: 'Europe/Berlin'
   -
     title: 'Pfingstferien Bremen (I)'
-    configuration:
-      description: '- free to fill -'
+    data:
+      description: '- free to fill and free to add new attributes -'
     start: '2022-05-27 00:00:00'
     stop: '2022-05-27 23:59:59'
     zone: 'Europe/Berlin'
   -
     title: 'Pfingstferien Bremen (II)'
-    configuration:
-      description: '- free to fill -'
+    data:
+      description: '- free to fill and free to add new attributes -'
     start: '2022-06-07 00:00:00'
     stop: '2022-06-07 23:59:59'
     zone: 'Europe/Berlin'
   -
     title: 'Sommerferien Bremen'
-    configuration:
-      description: '- free to fill -'
+    data:
+      description: '- free to fill and free to add new attributes -'
     start: '2022-07-14 00:00:00'
     stop: '2022-08-24 23:59:59'
     zone: 'Europe/Berlin'
   -
     title: 'Herbstferien Bremen'
-    configuration:
-      description: '- free to fill -'
+    data:
+      description: '- free to fill and free to add new attributes -'
     start: '2022-10-17 00:00:00'
     stop: '2022-10-29 23:59:59'
     zone: 'Europe/Berlin'
   -
     title: 'Weihnachtsferien Bremen'
-    configuration:
-      description: '- free to fill -'
+    data:
+      description: '- free to fill and free to add new attributes -'
     start: '2022-12-23 00:00:00'
     stop: '2023-01-06 23:59:59'
     zone: 'Europe/Berlin'

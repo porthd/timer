@@ -80,7 +80,7 @@ ExtensionManagementUtility::addTCAcolumns('sys_file_reference', $tmp_timer_colum
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'sys_file_reference',
-    '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.lable,' .
+    '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.label,' .
     'tx_timer_scheduler, tx_timer_selector, tx_timer_timer,starttime,endtime,'
 );
 $GLOBALS['TCA']['sys_file_reference']['interface']['showRecordFieldList'] .= ', tx_timer_timer,tx_timer_selector,starttime,endtime,';

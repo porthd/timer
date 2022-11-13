@@ -30,6 +30,7 @@ use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\StrangerCode\MoonOfDay\MoonRiseSet;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
@@ -148,8 +149,8 @@ class MoonriseRelTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format('Y-m-d H:i:s')) &&
-            ($dateLikeEventZone->format('Y-m-d H:i:s') <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
+            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
     }
 
     /**
@@ -320,7 +321,7 @@ class MoonriseRelTimer implements TimerInterface
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-            $result = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
             return $result;
@@ -434,7 +435,7 @@ class MoonriseRelTimer implements TimerInterface
             $lowerDateTime->setTimezone($dateLikeEventZone->getTimezone());
             $upperDateTime = new DateTime('@' . $upper);
             $upperDateTime->setTimezone($dateLikeEventZone->getTimezone());
-            $timerRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $timerRange = new TimerStartStopRange();
             if (($this->isAllowedInRange($lowerDateTime, $params)) &&
                 ($this->isAllowedInRange($upperDateTime, $params))
             ) {
@@ -516,7 +517,7 @@ class MoonriseRelTimer implements TimerInterface
             $lowerDateTime->setTimezone($dateLikeEventZone->getTimezone());
             $upperDateTime = new DateTime('@' . $upper);
             $upperDateTime->setTimezone($dateLikeEventZone->getTimezone());
-            $timerRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $timerRange = new TimerStartStopRange();
             if (($this->isAllowedInRange($lowerDateTime, $params)) &&
                 ($this->isAllowedInRange($upperDateTime, $params))
             ) {
@@ -561,7 +562,7 @@ class MoonriseRelTimer implements TimerInterface
 //        }
 //        if ($timerRange === null) {
 //            /** @var TimerStartStopRange $result */
-//            $timerRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
+//            $timerRange = new TimerStartStopRange();
 //            $timerRange->failOnlyNextActive($dateLikeEventZone);
 //        }
 //        return $timerRange;
@@ -681,7 +682,7 @@ class MoonriseRelTimer implements TimerInterface
             $lowerDateTime->setTimezone($dateLikeEventZone->getTimezone());
             $upperDateTime = new DateTime('@' . $upper);
             $upperDateTime->setTimezone($dateLikeEventZone->getTimezone());
-            $timerRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $timerRange = new TimerStartStopRange();
             $timerRange->setBeginning($lowerDateTime);
             $timerRange->setEnding($upperDateTime);
             $timerRange->setResultExist($flagActive);
@@ -768,7 +769,7 @@ class MoonriseRelTimer implements TimerInterface
             $lowerDateTime->setTimezone($dateLikeEventZone->getTimezone());
             $upperDateTime = new DateTime('@' . $upper);
             $upperDateTime->setTimezone($dateLikeEventZone->getTimezone());
-            $timerRange = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $timerRange = new TimerStartStopRange();
             $timerRange->setBeginning($lowerDateTime);
             $timerRange->setEnding($upperDateTime);
             $timerRange->setResultExist($flagActive);
@@ -790,7 +791,7 @@ class MoonriseRelTimer implements TimerInterface
         $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
-            $this->lastIsActiveResult = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $this->lastIsActiveResult = new TimerStartStopRange();
         }
         $this->lastIsActiveResult->setBeginning($dateStart);
         $this->lastIsActiveResult->setEnding($dateStop);
@@ -807,7 +808,7 @@ class MoonriseRelTimer implements TimerInterface
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
-            $this->lastIsActiveResult = GeneralUtility::makeInstance(TimerStartStopRange::class);
+            $this->lastIsActiveResult = new TimerStartStopRange();
             $this->lastIsActiveTimestamp = $dateLikeEventZone->getTimestamp() + 1; // trigger isActive() in the next step
         }
         if ((is_null($this->lastIsActiveTimestamp)) ||

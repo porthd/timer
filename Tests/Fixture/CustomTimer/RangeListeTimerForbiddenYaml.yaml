@@ -21,7 +21,7 @@ rangelist:
       ultimateBeginningTimer: '0001-01-01 00:00:00'
       ultimateEndingTimer: '9999-12-31 23:59:59'
       # 4 = christmas
-      namedDateMidnight: 4
+      namedDateMidnight: 'christmas'
       relMinToSelectedTimerEvent: 0
       calendarUse: 0
       durationMinutes: 2880

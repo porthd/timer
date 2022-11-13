@@ -26,6 +26,7 @@ use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Services\ListOfEventsService;
 use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\TcaUtility;

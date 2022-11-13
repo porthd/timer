@@ -3,7 +3,7 @@
 #    *
 #    *  Copyright notice
 #    *
-#    *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
+#    *  (c) 2022 Dr. Dieter Porth <info@mobger.de>
 #    *
 #    *  All rights reserved
 #    *
@@ -21,10 +21,18 @@
 #
 #
 # example YAML-structure
+# The fields `start` and `stop` are required.
+#  The must contain an date in the format `<year>-<month>-<date> <hour>:<minute>:<second>`.
+#  The year must have fourdigits. The otherparts must have two digits.
+# The attributes `title`, `data` and `zone` are optional .
+#  If `title` set, it must be not empty.
+#  If the `zone` is set, it must be an allowed timezone.
+#  if `data` is set, it should not be empty.
+#
 #periodlist:
 #  -
 #    title: 'Winterferien Bremen'
-#    configuration:
+#    data:
 #      description: '- free to fill -'
 #    start: '2022-01-31 00:00:00'
 #    stop: '2022-02-01 23:59:59'

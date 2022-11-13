@@ -29,6 +29,8 @@ use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Domain\Repository\ListingRepository;
+use Porthd\Timer\Interfaces\TimerInterface;
+use Porthd\Timer\Services\ListOfTimerService;
 use Porthd\Timer\Utilities\ConfigurationUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
@@ -42,7 +44,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class RangeListTimerTest extends TestCase
 {
     protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_USE_ACTIVE_TIMEZONE = TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
     protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
     protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerRangeList';
@@ -59,9 +61,28 @@ class RangeListTimerTest extends TestCase
     {
         $GLOBALS = [];
         $GLOBALS['TYPO3_CONF_VARS'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer'] = [];
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['timer']['changeListOfTimezones'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
+        $testToProjectPath = getenv('TYPO3_TEST_TEST_TO_PROJECT_PATH') ?: '../../../../../';
+        $projectPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . '');
+        $publicPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . 'web/');
+        $varPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . 'var/');
+        $configPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . 'config/');
+        $currentScript = __DIR__;
+        $os = 'WINDOWS';
+
+        Environment::initialize(
+            new ApplicationContext('Testing'),
+            false,
+            true,
+            $projectPath,
+            $publicPath,
+            $varPath,
+            $configPath,
+            $currentScript,
+            $os
+        );
         $listOfTimerClasses = [
             DailyTimer::class, // => 1
             DatePeriodTimer::class, // => 2
@@ -69,6 +90,7 @@ class RangeListTimerTest extends TestCase
             EasterRelTimer::class,
             MoonphaseRelTimer::class,
             MoonriseRelTimer::class,
+            PeriodListTimer::class,
             RangeListTimer::class,
             SunriseRelTimer::class,
             WeekdayInMonthTimer::class,
@@ -92,7 +114,8 @@ class RangeListTimerTest extends TestCase
         /** @var ListingRepository $listingRepository */
         $listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
         $yamlFileLoader = new YamlFileLoader();
-        $this->subject = new RangeListTimer($listingRepository, $yamlFileLoader);
+        $timerList = new ListOfTimerService();
+        $this->subject = GeneralUtility::makeInstance( RangeListTimer::class,...[null,$listingRepository,$yamlFileLoader,$timerList]);
         $projectPath = '/var/www/html';
         Environment::initialize(new ApplicationContext('Testing'),
             false,
@@ -161,7 +184,7 @@ class RangeListTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format('Y-m-d H:i:s', '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -465,7 +488,12 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         // check for optional
-        foreach (['sunPosition', 'durationMinutes', 'latitude', 'longitude'] as $myUnset) {
+        foreach ([
+                     'yamlActiveFilePath',
+                     'yamlForbiddenFilePath',
+                     'databaseActiveRangeList',
+                     'databaseForbiddenRangeList',
+                 ] as $myUnset) {
             $item = [
                 'message' => 'The test does not fails, because only one parameter `' . $myUnset . '` is missing.The list is already defined.',
                 'expects' => [
@@ -558,12 +586,9 @@ class RangeListTimerTest extends TestCase
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-            $testPath = realpath(__DIR__ . '/../../../');
-            $listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
-            $yamlFileLoader = new YamlFileLoader();
+            $testPath = realpath(__DIR__ . '/../../../../');
 
             $TestIncludeFinder = $this->getMockBuilder(RangeListTimer::class)
-                ->setConstructorArgs([$listingRepository, $yamlFileLoader])
                 ->onlyMethods(['getExtentionPathByEnviroment', 'getPublicPathByEnviroment'])->getMock();
 
             $TestIncludeFinder
@@ -589,18 +614,18 @@ class RangeListTimerTest extends TestCase
 
         $result = [];
         /* test allowed minimal structure */
-//        $result[] = [
-//            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
-//            [
-//                'result' => 'Kauderwelsch/Murz',
-//            ],
-//            [
-//                'params' => [
-//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-//                ],
-//                'active' => 'Lauder/Furz',
-//            ],
-//        ];
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
         $result[] = [
             'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
@@ -621,7 +646,7 @@ class RangeListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -634,7 +659,7 @@ class RangeListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -649,7 +674,7 @@ class RangeListTimerTest extends TestCase
                 [
                     'params' => [
                         TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -663,7 +688,7 @@ class RangeListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -676,7 +701,7 @@ class RangeListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -727,7 +752,7 @@ class RangeListTimerTest extends TestCase
             ],
             'params' => [
                 'testValue' => '2022-12-26 05:59:59',
-                'testValueObj' => date_create_from_format('Y-m-d H:i:s', '2022-12-26 05:59:59',
+                'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-12-26 05:59:59',
                     new DateTimeZone('Europe/Berlin')),
                 'required' => [
                     'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -819,7 +844,7 @@ class RangeListTimerTest extends TestCase
                 'params' => [
                     'testValue' => $params['testDateTime'],
                     'testValueObj' => date_create_from_format(
-                        'Y-m-d H:i:s',
+                        TimerInterface::TIMER_FORMAT_DATETIME,
                         $params['testDateTime'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
@@ -838,37 +863,37 @@ class RangeListTimerTest extends TestCase
                     'general' => $general,
                 ],
             ];
-            $result[] = [
-                'message' => 'The testValue `' . $params['testDateTime'] . '` defines ' .
-                    ($params['hiddenActive'] ? ' an active time' : ' an INACTIVE time') . ' for the ONLY ACTIVE combination.' .
-                    ($params['active'] ? '' : ' The testvalue is not part of an active interval.') .
-                    ((($params['hiddenActive'] === false) && ($params['active'] === true)) ? ' The testvalue is at least part of one hidden timeslot and included by an timeslot for active parts.' : ''),
-                'expects' => [
-                    'result' => $params['active'],
-                ],
-                'params' => [
-                    'testValue' => $params['testDateTime'],
-                    'testValueObj' => date_create_from_format(
-                        'Y-m-d H:i:s',
-                        $params['testDateTime'],
-                        new DateTimeZone('Europe/Berlin')
-                    ),
-                    'required' => [
-                        'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                        // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
-                        'yamlForbiddenFilePath' => '',
-                        // no forbidden-definitions
-                        'databaseActiveRangeList' => '',
-                        // At least one must contain numbers and a comaseparated List of numbers or can be empty, if 'yamlActiveFilePath' is filled
-                        'databaseForbiddenRangeList' => '',
-                        // At least one must contain numbers and a comaseparated List of numbers or can be empty
-                    ],
-                    'optional' => [
-
-                    ],
-                    'general' => $general,
-                ],
-            ];
+//            $result[] = [
+//                'message' => 'The testValue `' . $params['testDateTime'] . '` defines ' .
+//                    ($params['hiddenActive'] ? ' an active time' : ' an INACTIVE time') . ' for the ONLY ACTIVE combination.' .
+//                    ($params['active'] ? '' : ' The testvalue is not part of an active interval.') .
+//                    ((($params['hiddenActive'] === false) && ($params['active'] === true)) ? ' The testvalue is at least part of one hidden timeslot and included by an timeslot for active parts.' : ''),
+//                'expects' => [
+//                    'result' => $params['active'],
+//                ],
+//                'params' => [
+//                    'testValue' => $params['testDateTime'],
+//                    'testValueObj' => date_create_from_format(
+//                        TimerInterface::TIMER_FORMAT_DATETIME,
+//                        $params['testDateTime'],
+//                        new DateTimeZone('Europe/Berlin')
+//                    ),
+//                    'required' => [
+//                        'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
+//                        // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
+//                        'yamlForbiddenFilePath' => '',
+//                        // no forbidden-definitions
+//                        'databaseActiveRangeList' => '',
+//                        // At least one must contain numbers and a comaseparated List of numbers or can be empty, if 'yamlActiveFilePath' is filled
+//                        'databaseForbiddenRangeList' => '',
+//                        // At least one must contain numbers and a comaseparated List of numbers or can be empty
+//                    ],
+//                    'optional' => [
+//
+//                    ],
+//                    'general' => $general,
+//                ],
+//            ];
 
         }
         return $result;
@@ -1017,7 +1042,7 @@ class RangeListTimerTest extends TestCase
         ];
         $addWith = '. The timerange is build by active and forbidden parts';
         $addOnly = '. The timerange is only build by active parts';
-        foreach($itemList as $item) {
+        foreach ($itemList as $item) {
             $result[] = [
                 'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] . $addOnly . ' in the nextActive-Test.',
                 'expects' => [
@@ -1029,7 +1054,7 @@ class RangeListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1057,7 +1082,7 @@ class RangeListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1226,7 +1251,7 @@ class RangeListTimerTest extends TestCase
             'endOnlyActive' => '2022-12-24 12:00:00',
             'endWithForbidden' => '2022-12-24 12:00:00',
         ];
-        foreach($itemList as $item) {
+        foreach ($itemList as $item) {
             $result[] = [
                 'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] .
                     '. The timerange is only build by active parts' .
@@ -1240,7 +1265,7 @@ class RangeListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1270,7 +1295,7 @@ class RangeListTimerTest extends TestCase
                 ],
                 'params' => [
                     'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format('Y-m-d H:i:s', $item['testValue'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
                         new DateTimeZone('Europe/Berlin')),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
