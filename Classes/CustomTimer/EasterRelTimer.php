@@ -26,19 +26,14 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
-use Porthd\Timer\Utilities\TcaUtility;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class EasterRelTimer implements TimerInterface
 {
+    use GeneralTimerTrait;
+
     public const TIMER_NAME = 'txTimerEasterRel';
 
 
@@ -54,6 +49,18 @@ class EasterRelTimer implements TimerInterface
     protected const ARG_NAMED_DATE_ROSE_MONDAY = 'rosemonday';
     protected const ARG_NAMED_DATE_GOOD_FRIDAY = 'goodfriday';
     protected const ARG_NAMED_DATE_TOWL_DAY = 'towlday';
+    protected const ARG_NAMED_DATE_LIST = [
+        self::ARG_NAMED_DATE_EASTER,
+        self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST,
+        self::ARG_NAMED_DATE_PENTECOST,
+        self::ARG_NAMED_DATE_FIRST_ADVENT,
+        self::ARG_NAMED_DATE_CHRISTMAS,
+        self::ARG_NAMED_DATE_ROSE_MONDAY,
+        self::ARG_NAMED_DATE_GOOD_FRIDAY,
+        self::ARG_NAMED_DATE_TOWL_DAY,
+
+    ];
+
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
     protected const ARG_REQ_REL_TO_MIN = -475200;
     protected const ARG_REQ_REL_TO_MAX = 475200;
@@ -68,14 +75,17 @@ class EasterRelTimer implements TimerInterface
     ];
 
     protected const ARG_REQ_LIST = [
-        self::ARG_NAMED_DATE_MIDNIGHT,
-        self::ARG_REQ_DURATION_MINUTES,
         self::ARG_ULTIMATE_RANGE_BEGINN,
         self::ARG_ULTIMATE_RANGE_END,
-    ];
-    protected const ARG_OPT_LIST = [
         self::ARG_USE_ACTIVE_TIMEZONE,
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
+        self::ARG_NAMED_DATE_MIDNIGHT,
+        self::ARG_REQ_DURATION_MINUTES,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+    ];
+    protected const ARG_OPT_LIST = [
         self::ARG_CALENDAR_USE,
         self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT,
     ];
@@ -142,7 +152,7 @@ class EasterRelTimer implements TimerInterface
 
 
     /**
-     * tested special 20201230
+     * tested special 20221115
      * tested general 20201230
      *
      * The method test, if the parameter are valid or not
@@ -154,6 +164,7 @@ class EasterRelTimer implements TimerInterface
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
         $flag = $flag && ($countRequired === count(self::ARG_REQ_LIST));
@@ -164,39 +175,6 @@ class EasterRelTimer implements TimerInterface
         $countOptions = $this->validateOptional($params);
         return $flag && ($countOptions >= 0) &&
             ($countOptions <= count(self::ARG_OPT_LIST));
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
     }
 
     /**
@@ -238,10 +216,8 @@ class EasterRelTimer implements TimerInterface
      */
     protected function validateNamedDateMidnight(array $params = []): bool
     {
-        $number = $params[self::ARG_NAMED_DATE_MIDNIGHT] ?: self::ARG_NAMED_DATE_MIDNIGHT_DEFAULT;
-        $value = (int)$number;
-        return is_numeric($number) && (($value - $number) === 0) &&
-            ($value >= self::ARG_MIN_NAMED_DATE_MIDNIGHT) && ($value <= self::ARG_MAX_NAMED_DATE_MIDNIGHT);
+        $key = $params[self::ARG_NAMED_DATE_MIDNIGHT] ?: self::ARG_NAMED_DATE_MIDNIGHT_DEFAULT;
+        return in_array($key, self::ARG_NAMED_DATE_LIST, true);
     }
 
     /**
@@ -313,7 +289,7 @@ class EasterRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->hasResultExist();
         }
 
         $testRanges = $this->calcDefinedRangesByStartDateTime($dateLikeEventZone, $params);

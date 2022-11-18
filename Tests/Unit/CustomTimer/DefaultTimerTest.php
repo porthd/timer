@@ -109,7 +109,7 @@ class DefaultTimerTest extends TestCase
             'The first item must be an string.');
         $this->assertEquals($result[1],
             self::NAME_TIMER,
-            'The first item must be an string.');
+            'The second term must the name of the timer.');
     }
 
     /**
@@ -121,19 +121,25 @@ class DefaultTimerTest extends TestCase
         $result = $this->subject->getFlexformItem();
         $this->assertIsArray($result,
             'The result must be an array.');
-        $this->assertEquals(1,
+        $this->assertEquals(2,
             count($result),
-            'The array  must contain one Item.');
+            'The array  must contain two Item, to handle teh case `default` and the case ``(empty).');
         $this->assertEquals(array_keys($result),
-            ['default'],
-            'The key must in this special case `default`.');
+            ['default',''],
+            'The key must in this special case `default` and the case ``(empty) .');
         $this->assertIsString($result['default'],
             'The value must be type of string.');
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result['default'];
-        if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
-            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . substr($filePath,
+        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
+                substr($filePath,
+                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
+        } else if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
+                substr($filePath,
                     strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
+            $this->assertTrue((false),'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }

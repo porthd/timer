@@ -22,25 +22,18 @@ namespace Porthd\Timer\CustomTimer;
  ***************************************************************/
 
 
-use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\StrangerCode\MoonPhase\Solaris\MoonPhase;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
-use Porthd\Timer\Utilities\TcaUtility;
-use SebastianBergmann\Timer\Timer;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class MoonphaseRelTimer implements TimerInterface
 {
+    use GeneralTimerTrait;
+
     public const TIMER_NAME = 'txTimerMoonphaseRel';
     protected const ARG_MOON_PHASE = 'moonPhase';
     protected const AVG_SECONDS_MOON_PHASE = 2551443;
@@ -62,16 +55,16 @@ class MoonphaseRelTimer implements TimerInterface
     ];
 
     protected const ARG_REQ_LIST = [
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
         self::ARG_MOON_PHASE,
         self::ARG_REL_MIN_TO_EVENT,
         self::ARG_REQ_DURATION_MINUTES,
-        self::ARG_ULTIMATE_RANGE_BEGINN,
-        self::ARG_ULTIMATE_RANGE_END,
     ];
-    protected const ARG_OPT_LIST = [
-        self::ARG_USE_ACTIVE_TIMEZONE,
-        self::ARG_EVER_TIME_ZONE_OF_EVENT,
-    ];
+    protected const ARG_OPT_LIST = [];
 
     /**
      * @var TimerStartStopRange|null
@@ -146,7 +139,7 @@ class MoonphaseRelTimer implements TimerInterface
     }
 
     /**
-     * tested general 20210116
+     * tested general 20221115
      * tested special 20210117
      *
      * The method test, if the parameter are valid or not
@@ -158,6 +151,7 @@ class MoonphaseRelTimer implements TimerInterface
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
         $flag = $flag && ($countRequired === count(self::ARG_REQ_LIST));
@@ -167,38 +161,6 @@ class MoonphaseRelTimer implements TimerInterface
         $countOptions = $this->validateOptional($params);
         return $flag && ($countOptions >= 0) &&
             ($countOptions <= count(self::ARG_OPT_LIST));
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
     }
 
     /**
@@ -301,7 +263,7 @@ class MoonphaseRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->hasResultExist();
         }
 
         $utcDateTime = new DateTime('@' .

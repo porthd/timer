@@ -45,9 +45,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  * The table must contain the flex-field `tx_timer_timer` and the string-field `tx_timer_selector`.
  *
  *
- * tt_content.timer_timersimul.20 = FLUIDTEMPLATE
- * tt_content.timer_timersimul.20 {
- *
  *     dataProcessing.10 = Porthd\Timer\DataProcessing\RangeListQueryProcessor
  *     dataProcessing.10 {
  *         # if no of the follwoing parameter ist set, the list contains 10 events at least
@@ -93,7 +90,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *         as = myevents
  *
  *     }
- * }
  *
  */
 class RangeListQueryProcessor implements DataProcessorInterface
@@ -103,9 +99,6 @@ class RangeListQueryProcessor implements DataProcessorInterface
      */
     protected $contentDataProcessor;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->contentDataProcessor = GeneralUtility::makeInstance(ContentDataProcessor::class);
@@ -191,7 +184,7 @@ class RangeListQueryProcessor implements DataProcessorInterface
         $timeZone = ((isset($arguments[TimerConst::ARGUMENT_ACTIVEZONE])) ?: date_default_timezone_get());
         if (!TcaUtility::isTimeZoneInList($timeZone)) {
             throw new TimerException(
-                'The given timezone `' . $timeZone . '` is unkopnw. Check the spelling and upper-/lower-case.',
+                'The given timezone `' . $timeZone . '` is unknown. Check the spelling and upper-/lower-case.',
                 1248729524
             );
         }

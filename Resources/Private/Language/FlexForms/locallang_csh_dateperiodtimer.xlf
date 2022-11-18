@@ -1,126 +1,76 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="en" datatype="plaintext" original="messages" date="2020-12-12T02:13:03Z" product-name="timer">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2022-11-17T12:45:03Z" product-name="timer">
 		<header/>
 		<body>
+			<trans-unit id="startTimeSeconds.title">
+				<source>reference time</source>
+				<target>Bezugszeit</target>
+			</trans-unit>
 			<trans-unit id="startTimeSeconds.alttitle">
 				<source>reference time</source>
+				<target>Bezugszeit</target>
 			</trans-unit>
 			<trans-unit id="startTimeSeconds.description">
 				<source>The reference-time defines border of the active time at each weekday.</source>
+				<target>Die Referenzzeit definiert die Grenze der aktiven Zeit an jedem Wochentag.</target>
 			</trans-unit>
 			<trans-unit id="startTimeSeconds.details">
-				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-					&lt;br&gt;You can although define it from the end.&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-				</source>
+				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br /&gt;&lt;br /&gt;&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br /&gt;&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br /&gt;&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br /&gt;&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br /&gt;&lt;br /&gt;You can although define it from the end.&lt;br /&gt;&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br /&gt;&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br /&gt;&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br /&gt;</source>
+				<target>Sie möchten ein Inhaltselement von 12:00 bis 14:00 an jedem Wochentag außer Samstag und Sonntag anzeigen. &lt;br /&gt;&lt;br /&gt;&lt;strong&gt;Wie definieren Sie es?&lt;/strong&gt;&lt;br /&gt;&lt;em&gt;Bezugszeit&lt;/em&gt;: 12:00&lt;br /&gt;&lt;em&gt;aktive Minuten&lt;/em&gt;: 120&lt;br /&gt;&lt;em&gt;Wochentage&lt;/em&gt;: wählen Sie Mo, Di, Mi, Do, Fr &lt;br /&gt;&lt;br /&gt;Sie können es aber am Ende definieren.&lt;br /&gt;&lt;em&gt;Referenz -Zeit&lt;/em&gt;: 14:00&lt;br /&gt;&lt;em&gt;aktive Minuten&lt;/em&gt;: -120&lt;br /&gt;&lt;em&gt;Wochentage&lt;/em&gt;: Mo, Di, Mi, Do, Fr auswählen &lt;br /&gt;</target>
 			</trans-unit>
 
+			<trans-unit id="durationMinutes.title">
+				<source>range of time</source>
+				<target>Zeitdauer</target>
+			</trans-unit>
 			<trans-unit id="durationMinutes.alttitle">
 				<source>active minutes</source>
+				<target>aktive Minuten</target>
 			</trans-unit>
 			<trans-unit id="durationMinutes.description">
-				<source>descr durationMinutes.</source>
+				<source>Span of active time in minutes</source>
+				<target>Zeitspanne für aktive Zeit in Minuten</target>
 			</trans-unit>
 			<trans-unit id="durationMinutes.details">
-				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-					&lt;br&gt;You can although define it from the end.&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-				</source>
+				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br /&gt;&lt;br /&gt;&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br /&gt;&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br /&gt;&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br /&gt;&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br /&gt;&lt;br /&gt;You can although define it from the end.&lt;br /&gt;&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br /&gt;&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br /&gt;&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br /&gt;</source>
+				<target>Sie möchten ein Inhaltselement von 12:00 bis 14:00 an jedem Wochentag außer Samstag und Sonntag anzeigen. &lt;br /&gt;&lt;br /&gt;&lt;strong&gt;Wie definieren Sie es?&lt;/strong&gt;&lt;br /&gt;&lt;em&gt;Bezugszeit&lt;/em&gt;: 12:00&lt;br /&gt;&lt;em&gt;aktive Minuten&lt;/em&gt;: 120&lt;br /&gt;&lt;em&gt;Wochentage&lt;/em&gt;: wählen Sie Mo, Di, Mi, Do, Fr &lt;br /&gt;&lt;br /&gt;Sie können es aber am Ende definieren.&lt;br /&gt;&lt;em&gt;Referenz -Zeit&lt;/em&gt;: 14:00&lt;br /&gt;&lt;em&gt;aktive Minuten&lt;/em&gt;: -120&lt;br /&gt;&lt;em&gt;Wochentage&lt;/em&gt;: Mo, Di, Mi, Do, Fr auswählen &lt;br /&gt;</target>
 			</trans-unit>
 
-			<trans-unit id="activeWeekday.alttitle">
-				<source>allowed weekdays</source>
+			<trans-unit id="periodLength.title">
+				<source>period length</source>
+				<target>Periodenlänge</target>
 			</trans-unit>
-			<trans-unit id="activeWeekday.description">
-				<source>You have to select at least one weekday.</source>
+			<trans-unit id="periodLength.alttitle">
+				<source>period length</source>
+				<target>Periodenlänge</target>
 			</trans-unit>
-			<trans-unit id="activeWeekday.details">
-				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-					&lt;br&gt;You can although define it from the end.&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-				</source>
+			<trans-unit id="periodLength.description">
+				<source>value of the length of the period.</source>
+				<target>Wert der Länge der Periode</target>
+			</trans-unit>
+			<trans-unit id="periodLength.details">
+				<source>The length of the period is defined in two parameters. The first defines the numerical length of the period. The second define the unit for the numerical value. </source>
+				<target>Die Länge der Periode wird durch zwei Parameter definiert. Die erste Parameter definiert die numerische Länge des Zeitraums. Die Zweite definiert die Einheit, die dem Zahlenwert zuzuordnen ist.</target>
 			</trans-unit>
 
-			<trans-unit id="timeZoneOfEvent.alttitle">
-				<source>Timezone</source>
+			<trans-unit id="periodUnit.title">
+				<source>period unit</source>
+				<target>Periodeneinheit</target>
 			</trans-unit>
-			<trans-unit id="timeZoneOfEvent.description">
-				<source>Define a timezone</source>
+			<trans-unit id="periodUnit.alttitle">
+				<source>period unit</source>
+				<target>Einheit für die Periodenlänge</target>
 			</trans-unit>
-			<trans-unit id="timeZoneOfEvent.details">
-				<source>&lt;strong&gt;Concert&lt;/strong&gt;&lt;br&gt; A music-band plan an internet-concert in Berlin. The beginning is 20.00 local time.
-					You have to define the timezone and set the toggle `useTimeZoneOfFrontend` to `fixed/active'.&lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;backgroundimige&lt;/strong&gt;&lt;br&gt; each morning at 9:00 your website should to change the backgroundimage to induce happy morning-feelings.
-					The effekt should happen in every timezone wolrdwide.
-					You set the toggle `useTimeZoneOfFrontend` to `relative/not-active'.
-					TYPO3 ignores the  definition in the field `timeZoneOfEvent` and use the timezone of the frontend.&lt;br&gt;&lt;br&gt;
-				</source>
+			<trans-unit id="periodUnit.description">
+				<source>unit for the length of the period.</source>
+				<target>Einheit der Länge der Periode</target>
 			</trans-unit>
-
-			<trans-unit id="useTimeZoneOfFrontend.alttitle">
-				<source>fixed timezone</source>
-			</trans-unit>
-			<trans-unit id="useTimeZoneOfFrontend.description">
-				<source>Select the timezone, which TYPO3 use for this timer.</source>
-			</trans-unit>
-			<trans-unit id="useTimeZoneOfFrontend.details">
-				<source>&lt;strong&gt;Concert&lt;/strong&gt;&lt;br&gt; A music-band plan an internet-concert in Berlin. The beginning is 20.00 local time.
-					You have to define the timezone and set the toggle `useTimeZoneOfFrontend` to `fixed/active'.&lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;backgroundimige&lt;/strong&gt;&lt;br&gt; each morning at 9:00 your website should to change the backgroundimage to induce happy morning-feelings.
-					The effekt should happen in every timezone wolrdwide.
-					You set the toggle `useTimeZoneOfFrontend` to `relative/not-active'.
-					TYPO3 ignores the  definition in the field `timeZoneOfEvent` and use the timezone of the frontend.&lt;br&gt;&lt;br&gt;
-				</source>
+			<trans-unit id="periodUnit.details">
+				<source>The length of the period is defined in two parameters. The first defines the numerical length of the period. The second define the unit for the numerical value. </source>
+				<target>Die Länge der Periode wird durch zwei Parameter definiert. Die erste Parameter definiert die numerische Länge des Zeitraums. Die Zweite definiert die Einheit, die dem Zahlenwert zuzuordnen ist.</target>
 			</trans-unit>
 
-			<trans-unit id="ultimateBeginningTimer.alttitle">
-				<source>Ultimative Startdate</source>
-			</trans-unit>
-			<trans-unit id="ultimateBeginningTimer.description">
-				<source>No active period before this ultimate startdate.</source>
-			</trans-unit>
-			<trans-unit id="ultimateBeginningTimer.details">
-				<source>
-					&lt;strong&gt;Example&lt;/strong&gt;&lt;br&gt;
-					You define the ultimate start for `2020-01-01 00:00:00` and the ultimate end for `2020-12-31 25:59:59`.
-					The timer is used for your  content-element only in the year 2020.
-					Your content-element will be hidden all the time in 2019 and in 2021 or later.
-				</source>
-			</trans-unit>
-
-			<trans-unit id="ultimateEndingTimer.alttitle">
-				<source>Ultimative Stopdate</source>
-			</trans-unit>
-			<trans-unit id="ultimateEndingTimer.description">
-				<source>No active period after this ultimate stopdate.</source>
-			</trans-unit>
-			<trans-unit id="ultimateEndingTimer.details">
-				<source>
-					&lt;strong&gt;Example&lt;/strong&gt;&lt;br&gt;
-					You define the ultimate start for `2020-01-01 00:00:00` and the ultimate end for `2020-12-31 25:59:59`.
-					The timer is used for your  content-element only in the year 2020.
-					Your content-element will be hidden all the time in 2019 and in 2021 or later.
-				</source>
-			</trans-unit>
 
 		</body>
 	</file>

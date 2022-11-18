@@ -25,17 +25,16 @@ namespace Porthd\Timer\CustomTimer;
 use DateInterval;
 use DateTime;
 use Exception;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
-use Porthd\Timer\Utilities\TcaUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class WeekdayInMonthTimer implements TimerInterface
 {
+
+    use GeneralTimerTrait;
+
     public const TIMER_NAME = 'txTimerWeekdayInMonth';
     protected const ARG_REQ_START_TIME = 'startTimeSeconds';
     protected const ARG_REQ_START_TIME_MIN = 0;
@@ -60,17 +59,20 @@ class WeekdayInMonthTimer implements TimerInterface
     ];
 
     protected const ARG_REQ_LIST = [
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
         self::ARG_REQ_START_TIME,
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_NTH_WEEKDAY_IN_MONTH,
         self::ARG_ACTIVE_WEEKDAY,
-        self::ARG_ULTIMATE_RANGE_BEGINN,
-        self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
     ];
     protected const ARG_OPT_LIST = [
         self::ARG_START_COUNT_AT_END,
         self::ARG_ACTIVE_MONTH,
-        self::ARG_USE_ACTIVE_TIMEZONE,
     ];
 
     /**
@@ -147,8 +149,8 @@ class WeekdayInMonthTimer implements TimerInterface
     }
 
     /**
-     * tested general 20210116
-     * tested special
+     * tested general 20221115
+     * tested special 20221115
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
@@ -159,6 +161,7 @@ class WeekdayInMonthTimer implements TimerInterface
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
         $flag = $flag && ($countRequired === count(self::ARG_REQ_LIST));
@@ -231,38 +234,6 @@ class WeekdayInMonthTimer implements TimerInterface
      * @param array $params
      * @return bool
      */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
     public function validateArguments(array $params = []): int
     {
         $flag = 0;
@@ -323,7 +294,7 @@ class WeekdayInMonthTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->hasResultExist();
         }
 
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];

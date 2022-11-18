@@ -1,0 +1,25 @@
+#tt_content.timer_periodlist = FLUIDTEMPLATE
+lib.periodlist.fluidContent < lib.fluidContent
+lib.periodlist.fluidContent {
+    templateRootPaths {
+        {$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+    }
+    partialRootPaths {
+        {$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+    }
+    layoutRootPaths {
+        {$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+    }
+}
+lib.periodlist.contentElement < lib.contentElement
+lib.periodlist.contentElement {
+    templateRootPaths {
+        {$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+    }
+    partialRootPaths {
+        {$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+    }
+    layoutRootPaths {
+        {$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+    }
+}

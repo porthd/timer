@@ -387,6 +387,26 @@
 			</trans-unit>
 
 			<!-- txTimerPeriodList -->
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFilePath">
+				<source>path to the file with list of timers in yaml-format</source>
+				<target>Pfad zur Datei mit der Lister der Termine im YAML-Format</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarJsFilePath">
+				<source>Path to the javascript that can be used to display a list of dates in the form of a calendar (optional)</source>
+				<target>Pfad zum Javascript, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.customCalendarJsFilePath">
+				<source>Path to the custom javascript that can be used to display a list of dates in the form of a calendar (optional)</source>
+				<target>Pfad zum benutzerdefinierten Javascript, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarCssFilePath">
+				<source>Path to the stylesheets that can be used to display a list of dates in the form of a calendar (optional)</source>
+				<target>Pfad zum CSS/Stylesheets, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.customCalendarCssFilePath">
+				<source>Path to the additional customized stylesheets that can be used to display a list of dates in the form of a calendar (optional)</source>
+				<target>Pfad zum zusätzlichen benutzerdefinierten CSS/Stylesheets, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
+			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerPeriodList.sheet.title">
 				<source>list of single timegaps from Yaml-files (not working yet)</source>
 				<target>Liste mit Einzelbereichen aus Yaml-Dateien (not working yet)</target>

@@ -124,6 +124,11 @@ call_user_func(
                 "@import 'EXT:timer/Configuration/TsConfig/Page/RteTimerSimul.tsconfig'"
             );
 
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST ] ??= [];
+            if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'])) {
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class;
+            }
+
         }
 
 

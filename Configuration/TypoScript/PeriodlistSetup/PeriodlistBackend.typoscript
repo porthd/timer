@@ -1,0 +1,15 @@
+module.tx_timer.view{
+    templateRootPaths {
+        0 = EXT:timer/Resources/Private/Backend/Templates/Content/
+        10 = {$contentElement.tx_timer_periodlist.backendView.templateRootPath}
+    }
+    partialRootPaths{
+        0 = EXT:timer/Resources/Private/Backend/Partials/Content/
+        10 = {$contentElement.tx_timer_periodlist.backendView.partialRootPath}
+    }
+    layoutRootPaths{
+        0 = EXT:timer/Resources/Private/Backend/Layouts/
+        10 = {$contentElement.tx_timer_periodlist.backendView.layoutRootPath}
+    }
+
+}

@@ -32,6 +32,59 @@
                     </config>
                 </TCEforms>
             </yamlPeriodFilePath>
+            <calendarJsFilePath>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarJsFilePath
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>20</size>
+                        <eval>trim</eval>
+                        <default>EXT:timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js</default>
+                    </config>
+                </TCEforms>
+            </calendarJsFilePath>
+            <customCalendarJsFilePath>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.customCalendarJsFilePath
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>20</size>
+                        <eval>trim</eval>
+                        <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.js</default>
+                    </config>
+
+                </TCEforms>
+            </customCalendarJsFilePath>
+            <calendarCssFilePath>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarCssFilePath
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>20</size>
+                        <eval>trim</eval>
+                        <default>EXT:timer/Resources/Public/Javascript/caleandar-master/css/theme1.css</default>
+                    </config>
+                </TCEforms>
+            </calendarCssFilePath>
+            <customCalendarCssFilePath>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.customCalendarCssFilePath
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>20</size>
+                        <eval>trim</eval>
+                        <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.css</default>
+                    </config>
+                </TCEforms>
+            </customCalendarCssFilePath>
         </el>
     </ROOT>
 </T3DataStructure>

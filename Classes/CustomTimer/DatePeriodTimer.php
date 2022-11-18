@@ -26,19 +26,16 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
-use Porthd\Timer\Utilities\TcaUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class DatePeriodTimer implements TimerInterface
 {
+    use GeneralTimerTrait;
+
     protected const TIMER_NAME = 'txTimerDatePeriod';
     protected const ARG_REQ_START_TIME = 'startTimeSeconds';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
@@ -49,16 +46,17 @@ class DatePeriodTimer implements TimerInterface
     protected const KEY_PREFIX_DATE = 'D';
 
     protected const ARG_REQ_LIST = [
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
         self::ARG_REQ_START_TIME,
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_REQ_PERIOD_LENGTH,
         self::ARG_REQ_PERIOD_UNIT,
-        self::ARG_ULTIMATE_RANGE_BEGINN,
-        self::ARG_ULTIMATE_RANGE_END,
     ];
-    protected const ARG_OPT_LIST = [
-        self::ARG_EVER_TIME_ZONE_OF_EVENT,
-    ];
+    protected const ARG_OPT_LIST = [];
 
     /**
      * @var TimerStartStopRange|null
@@ -126,7 +124,7 @@ class DatePeriodTimer implements TimerInterface
 
 
     /**
-     * tested special 20201228
+     * tested special 20221115
      * tested general 20201228
      *
      * The method test, if the parameter are valid or not
@@ -139,6 +137,7 @@ class DatePeriodTimer implements TimerInterface
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
         $flag = $flag && ($countRequired === count(self::ARG_REQ_LIST));  // internal Check against change or requirement-definitions
@@ -149,39 +148,6 @@ class DatePeriodTimer implements TimerInterface
         $flag = $flag && $this->validateDurationMinutes($params);
         $flag = $flag && $this->validatePeriodLength($params);
         return $flag && $this->validatePeriodUnit($params);
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT])) ||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
     }
 
     /**
@@ -292,7 +258,7 @@ class DatePeriodTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->hasResultExist();
         }
 
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
@@ -667,7 +633,6 @@ class DatePeriodTimer implements TimerInterface
                     1609180114
 
                 );
-                break;
         }
 
         [$testStart, $testStop] = $this->getRangeWithIncludeProbility($startLimit, $stopLimit, ($factor * $length),

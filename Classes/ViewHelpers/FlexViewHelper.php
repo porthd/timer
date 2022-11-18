@@ -30,6 +30,25 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
+/**
+ * example for Usage of the viewhelper `flex`
+ * If the  attribute `flattenkeys` is missing, the default is the list `data,general,timer,sDEF,lDEF,vDEF`.
+ *    The values `timer` and `general` of the previous list are names of sheets in my flexform-definitions for my customTimers.
+ *
+ *      <timer:flex flexstring="{data.tx_timer_timer}"
+ *                  as="timerflex"
+ *                  flattenkeys="data,general,timer,sDEF,lDEF,vDEF"
+ *      >
+ *          <f:for each="{timerflex}" as="value" key="key">
+ *              <tr>
+ *                  <td>{key}</td>
+ *                  <td>{value}</td>
+ *              </tr>
+ *          </f:for>
+ *      </timer:flex>
+
+ */
+
 class FlexViewHelper extends AbstractViewHelper
 {
 
@@ -44,6 +63,7 @@ class FlexViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
+    //   the attributes `timer` and `general` are used as sheet-names in my customTimer-flexforms
     protected const DEFAULT_FLATTEN_KEYS = 'data,general,timer,sDEF,lDEF,vDEF';
 
     /**
@@ -103,8 +123,17 @@ class FlexViewHelper extends AbstractViewHelper
         $flagError = (((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) ?
             'The string could not decode as xml/flexform. ' :
             '');
-        $listFlatKeys = explode(',', $stringFlatKeys);
-        $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
+        $listFlatKeys = array_filter(
+            array_map(
+                'trim',
+                explode(',', $stringFlatKeys)
+            )
+        );
+        if (empty($listFlatKeys)) {
+            $singleElement= $singleElementRaw;
+        } else {
+            $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
+        }
 
         if (!empty($flagError)) {
             throw new TimerException(

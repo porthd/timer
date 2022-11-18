@@ -48,7 +48,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYamlInterface
 {
-
+    use GeneralTimerTrait;
     use LoggerAwareTrait;
 
     /**
@@ -77,7 +77,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     private $cache;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
         $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         $this->cache = $cacheManager->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
@@ -107,6 +108,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     protected const ARG_REQ_LIST = [
         self::ARG_ULTIMATE_RANGE_BEGINN,
         self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
     ];
     protected const ARG_OPT_LIST = [
         self::ARG_YAML_ACTIVE_FILE_PATH,
@@ -128,7 +131,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
 
 
     /**
-     * tested 20210116
+     * tested 20221114
      * @return array
      */
     public static function getSelectorItem(): array
@@ -199,7 +202,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         }
 
         $flag = true;
-        $timerList  = GeneralUtility::makeInstance(ListOfTimerService::class);
+        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
         foreach ($yamlArray[self::YAML_MAIN_LIST_KEY] as $item) {
             // required fields
             $flag = $flag && isset($item[self::YAML_LIST_ITEM_SELECTOR]) &&
@@ -240,7 +243,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     }
 
     /**
-     * tested general 20210116
+     * tested general 20221115
      * tested special 20220803
      *
      * The method test, if the parameter are valid or not
@@ -252,6 +255,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateCountArguments($params);
         $flag = ($flag && ($countRequired === count(self::ARG_REQ_LIST)));
@@ -261,38 +265,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         return $flag && ($countOptions >= 0) &&
             ($countOptions <= count(self::ARG_OPT_LIST));
 
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT])) ||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
     }
 
     /**
@@ -423,7 +395,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             );
             return $flag;
         }
-        $timerList  = GeneralUtility::makeInstance(ListOfTimerService::class);
+        $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
 
         foreach ($activeTimer as $singleActiveTimer) {
             if (
@@ -633,7 +605,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         return $result;
 
     }
-
 
 
     /**
@@ -1001,7 +972,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     }
 
 
-
     /**
      *
      * @param DateTime $startRange
@@ -1056,7 +1026,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         }
         return [$result, $changed];
     }
-
 
 
     /**

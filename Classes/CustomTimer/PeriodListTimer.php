@@ -35,7 +35,6 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -48,10 +47,9 @@ class PeriodListTimer implements TimerInterface, LoggerAwareInterface, ValidateY
 
     use LoggerAwareTrait;
 
-    protected const YAML_LIST_ITEM_SELECTOR = 'selector';
-    protected const YAML_LIST_ITEM_PARAMS = 'params';
+    use GeneralTimerTrait;
 
-    protected const MAX_TIME_LIMIT_ACTIVE_COUNT = 10; // count of loops to check for overlapping active ranges
+    protected const YAML_LIST_ITEM_SELECTOR = 'selector';
 
     protected const EXAMPLE_STRUCTUR_YAML = <<<EXAMPLE
 periodlist:
@@ -98,11 +96,13 @@ INFOSYNTAX;
     protected const ARG_REQ_LIST = [
         self::ARG_ULTIMATE_RANGE_BEGINN,
         self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
         self::ARG_YAML_PERIOD_FILE_PATH,
-    ];
-    protected const ARG_OPT_LIST = [
         self::ARG_USE_ACTIVE_TIMEZONE,
     ];
+    protected const ARG_OPT_LIST = [];
 
     /**
      * @var TimerStartStopRange|null
@@ -123,27 +123,11 @@ INFOSYNTAX;
      * @var YamlFileLoader
      */
     protected $yamlFileLoader;
-//
-//    /**
-//     * @param YamlFileLoader $yamlFileLoader
-//     */
-//    public function injectYamlFileLoader(YamlFileLoader $yamlFileLoader)
-//    {
-//        $this->yamlFileLoader = $yamlFileLoader;
-//    }
 
     /**
      * @var FrontendInterface|null
      */
     private $cache;
-//
-//    /**
-//     * @param FrontendInterface|null $cache
-//     */
-//    public function injectCache(?FrontendInterface $cache)
-//    {
-//        $this->cache = $cache;
-//    }
 
     public function __construct()
     {
@@ -156,8 +140,6 @@ INFOSYNTAX;
 
     /**
      * tested 20221007
-     * +
-     *
      *
      * @return string
      */
@@ -168,7 +150,8 @@ INFOSYNTAX;
 
 
     /**
-     * tested
+     * tested 20221114
+     *
      * @return array
      */
     public static function getSelectorItem(): array
@@ -192,7 +175,7 @@ INFOSYNTAX;
     }
 
     /**
-     * tested 20221009
+     * tested 20221114
      *
      * @return array
      */
@@ -215,8 +198,8 @@ INFOSYNTAX;
     }
 
     /**
-     * tested general 20221009
-     * tested special 20221011
+     * tested general 20221115
+     * tested special
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
@@ -227,6 +210,7 @@ INFOSYNTAX;
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateCountArguments($params);
         $flag = ($flag && ($countRequired === count(self::ARG_REQ_LIST)));
@@ -287,7 +271,9 @@ INFOSYNTAX;
                 throw new TimerException(
                     'The item in yaml-file `' . $pathOfYamlFile . '` for your `periodListTimer` has not the correct timezone.' .
                     'Check the items in your YAML-file and the definitions of your timezones. The following items caused the exception: ' .
-                    print_r($item, true) . "\n\n==============\n\n<br>allowed timezones:<br>\n~~~~~~~~~~~~~~\n<br>" . implode(',', $timeZone),
+                    print_r($item,
+                        true) . "\n\n==============\n\n<br>allowed timezones:<br>\n~~~~~~~~~~~~~~\n<br>" . implode(',',
+                        $timeZone),
                     1668236285
                 );
             }
@@ -305,39 +291,6 @@ INFOSYNTAX;
             }
 
         }
-    }
-
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT])) ||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
     }
 
     /**

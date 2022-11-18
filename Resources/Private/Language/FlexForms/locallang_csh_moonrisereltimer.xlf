@@ -1,125 +1,91 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="en" datatype="plaintext" original="messages" date="2020-12-12T02:13:03Z" product-name="timer">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2022-11-17T12:45:03Z" product-name="timer">
 		<header/>
 		<body>
-			<trans-unit id="startTimeSeconds.alttitle">
-				<source>reference time</source>
+			<trans-unit id="moonStatus.title">
+				<source>moonrise or moonset</source>
+				<target>Mondaufgang oder -untergang</target>
 			</trans-unit>
-			<trans-unit id="startTimeSeconds.description">
-				<source>The reference-time defines border of the active time at each weekday.</source>
+			<trans-unit id="moonStatus.alttitle">
+				<source>moonrise or moonset</source>
+				<target>Mondaufgang oder -untergang</target>
 			</trans-unit>
-			<trans-unit id="startTimeSeconds.details">
-				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-					&lt;br&gt;You can although define it from the end.&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-				</source>
+			<trans-unit id="moonStatus.description">
+				<source>You can select one of the following states of the moon: ascending halfmoon, fullmoon, descending halfmoon, newmoon.</source>
+				<target>Wählen sie eine der Mondphase: zunehmender Haldmond, Vollmond, abnehmender Halbmond oder Neumond.</target>
+			</trans-unit>
+			<trans-unit id="moonStatus.details">
+				<source>It calculate the date and time of the moonrise or of the moonset seen at a specific location on the world. An example: Hold on two hours after the moonrise for three hours in Bremen. The parameter `moonStatus` would have the value `moonrise`.</source>
+				<target>Es wird jeweils der Tag für den Mondaufgang oder für den Monduntergang berechnet. Die Bezugszeit wird immer bezogen auf den angegebenen Standort berechnet. Ein Beispiel wäre folgendes: Immer zwei Stunden nach dem Monaufgang für drei Stunden in Bremen. Der Parameter `moonStatus` wäre in diesem Fall `Mondaufgang/moonrise`.</target>
 			</trans-unit>
 
+			<trans-unit id="relMinToSelectedTimerEvent.title">
+				<source>time span relaitve to the reference time</source>
+				<target>Abstand zum Bezugszeitpunkt in Minuten</target>
+			</trans-unit>
+			<trans-unit id="relMinToSelectedTimerEvent.alttitle">
+				<source>time span relaitve to the reference time</source>
+				<target>Abstand zum Bezugszeitpunkt in Minuten</target>
+			</trans-unit>
+			<trans-unit id="relMinToSelectedTimerEvent.description">
+				<source>In order to define a correct start time, the distance to the start of the reference day is calculated in minutes. As a reminder, an hour is 60 minutes and a day is 1440 minutes. Negative values are also possible. The value must not exceed 444444 minutes.</source>
+				<target>Um einen korrekten Startzeitpunkt zu definieren, wird der Abstand zum Start des Bezugstages in Minuten berechnet. Zur Erinnerung: Eine Stunde dauert 60 Minuten und ein Tag entsprechend 1440 Minuten. Es sind auch negative Werte möglich. Der Werte darf 444444 Minuten nicht überschreiten.</target>
+			</trans-unit>
+			<trans-unit id="relMinToSelectedTimerEvent.details">
+				<source>It calculate the date and time of the moonrise or of the moonset seen at a specific location on the world. An example: Hold on two hours after the moonrise for three hours in Bremen. The parameter `relMinToSelectedTimerEvent` would have the value 120 (two hours = 2 * 60 minutes).</source>
+				<target>Es wird jeweils der Tag für den Mondaufgang oder für den Monduntergang berechnet. Die Bezugszeit wird immer bezogen auf den angegebenen Standort berechnet. Ein Beispiel wäre folgendes: Immer zwei Stunden nach dem Monaufgang für drei Stunden in Bremen. Der Parameter `relMinToSelectedTimerEvent` wäre in diesem Fall 120 (2 Stunden = 2 * 60 Minuten).</target>
+			</trans-unit>
+
+			<trans-unit id="durationMinutes.title">
+				<source>duration</source>
+				<target>Zeitdauer</target>
+			</trans-unit>
 			<trans-unit id="durationMinutes.alttitle">
-				<source>active minutes</source>
+				<source>active time span in minutes</source>
+				<target>aktive Zeitspanne in Minuten</target>
 			</trans-unit>
 			<trans-unit id="durationMinutes.description">
-				<source>descr durationMinutes.</source>
+				<source>The active time span is given in minutes. Negative values, i.e. values reaching into the past, are also permitted. An hour is 60 minutes and a day is 1440 minutes. Negative values are also possible. The value must not exceed 444444 minutes.</source>
+				<target>Die aktive Zeitspannen wird in Minuten angegeben. Es sind auch negative, also in die Vergangenheit reichenden Werte zulässig. Eine Stunde dauert 60 Minuten und ein Tag entsprechend 1440 Minuten. Es sind auch negative Werte möglich. Der Werte darf 444444 Minuten nicht überschreiten.</target>
 			</trans-unit>
 			<trans-unit id="durationMinutes.details">
-				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-					&lt;br&gt;You can although define it from the end.&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-				</source>
+				<source>It calculate the date and time of the moonrise or of the moonset seen at a specific location on the world. An example: Hold on two hours after the moonrise for three hours in Bremen. The parameter `durationMinutes` would have the value 180 (three hours = 3 * 60 minutes).</source>
+				<target>Es wird jeweils der Tag für den Mondaufgang oder für den Monduntergang berechnet. Die Bezugszeit wird immer bezogen auf den angegebenen Standort berechnet. Ein Beispiel wäre folgendes: Immer zwei Stunden nach dem Monaufgang für drei Stunden in Bremen. Der Parameter `durationMinutes` wäre in diesem Fall 180 (3 Stunden = 3 * 60 Minuten).</target>
 			</trans-unit>
 
-			<trans-unit id="activeWeekday.alttitle">
-				<source>allowed weekdays</source>
+			<trans-unit id="latitude.title">
+				<source>latitude</source>
+				<target>Breitengard</target>
 			</trans-unit>
-			<trans-unit id="activeWeekday.description">
-				<source>You have to select at least one weekday.</source>
+			<trans-unit id="latitude.alttitle">
+				<source>latitude (numeric value)</source>
+				<target>Breitengrad (in numerischer Darstellung)</target>
 			</trans-unit>
-			<trans-unit id="activeWeekday.details">
-				<source>You want to show a content-element from 12:00 to 14:00 every weekday except Saturday and sunday. &lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;How define you it?&lt;/strong&gt;&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 12:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: 120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-					&lt;br&gt;You can although define it from the end.&lt;br&gt;
-					&lt;em&gt;reference-time&lt;/em&gt;: 14:00&lt;br&gt;
-					&lt;em&gt;active minutes&lt;/em&gt;: -120&lt;br&gt;
-					&lt;em&gt;weekdays&lt;/em&gt;: select Mo, Tu, We, Th, Fr &lt;br&gt;
-				</source>
+			<trans-unit id="latitude.description">
+				<source>The latitude will be used in a numerical way, which is the current standard for positioning in the the web. The values could hab a range from -90 to 90.</source>
+				<target>Der Breitengrad wird numerisch angegeben, wie es im Internet bei Positionsangaben üblich ist. Es sind Werte zwischen -90 und 90 erlaubt.</target>
+			</trans-unit>
+			<trans-unit id="latitude.details">
+				<source>It calculate the date and time of the moonrise or of the moonset seen at a specific location on the world. An example: Hold on two hours after the moonrise for three hours in Bremen. The parameter `durationMinutes` would have the value 180 (three hours = 3 * 60 minutes).</source>
+				<target>Es wird jeweils der Tag für den Mondaufgang oder für den Monduntergang berechnet. Die Bezugszeit wird immer bezogen auf den angegebenen Standort berechnet. Ein Beispiel wäre folgendes: Immer zwei Stunden nach dem Monaufgang für drei Stunden in Bremen. Der Parameter `durationMinutes` wäre in diesem Fall 180 (3 Stunden = 3 * 60 Minuten).</target>
 			</trans-unit>
 
-			<trans-unit id="timeZoneOfEvent.alttitle">
-				<source>Timezone</source>
+			<trans-unit id="longitude.title">
+				<source>longitude</source>
+				<target>´Längengrad</target>
 			</trans-unit>
-			<trans-unit id="timeZoneOfEvent.description">
-				<source>Define a timezone</source>
+			<trans-unit id="longitude.alttitle">
+				<source>longitude (numeric value)</source>
+				<target>Langengrad (in numerischer Darstellung)</target>
 			</trans-unit>
-			<trans-unit id="timeZoneOfEvent.details">
-				<source>&lt;strong&gt;Concert&lt;/strong&gt;&lt;br&gt; A music-band plan an internet-concert in Berlin. The beginning is 20.00 local time.
-					You have to define the timezone and set the toggle `useTimeZoneOfFrontend` to `fixed/active'.&lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;backgroundimige&lt;/strong&gt;&lt;br&gt; each morning at 9:00 your website should to change the backgroundimage to induce happy morning-feelings.
-					The effekt should happen in every timezone wolrdwide.
-					You set the toggle `useTimeZoneOfFrontend` to `relative/not-active'.
-					TYPO3 ignores the  definition in the field `timeZoneOfEvent` and use the timezone of the frontend.&lt;br&gt;&lt;br&gt;
-				</source>
+			<trans-unit id="longitude.description">
+				<source>The longitude will be used in a numerical way, which is the current standard for positioning in the the web. The values could hab a range from -180 to 180.</source>
+				<target>Die Längengrad wird numerisch angegeben, wie es im Internet bei Positionsangaben üblich ist. Es sind Werte zwischen -180 und 180 erlaubt.</target>
 			</trans-unit>
-
-			<trans-unit id="useTimeZoneOfFrontend.alttitle">
-				<source>fixed timezone</source>
-			</trans-unit>
-			<trans-unit id="useTimeZoneOfFrontend.description">
-				<source>Select the timezone, which TYPO3 use for this timer.</source>
-			</trans-unit>
-			<trans-unit id="useTimeZoneOfFrontend.details">
-				<source>&lt;strong&gt;Concert&lt;/strong&gt;&lt;br&gt; A music-band plan an internet-concert in Berlin. The beginning is 20.00 local time.
-					You have to define the timezone and set the toggle `useTimeZoneOfFrontend` to `fixed/active'.&lt;br&gt;&lt;br&gt;
-					&lt;strong&gt;backgroundimige&lt;/strong&gt;&lt;br&gt; each morning at 9:00 your website should to change the backgroundimage to induce happy morning-feelings.
-					The effekt should happen in every timezone wolrdwide.
-					You set the toggle `useTimeZoneOfFrontend` to `relative/not-active'.
-					TYPO3 ignores the  definition in the field `timeZoneOfEvent` and use the timezone of the frontend.&lt;br&gt;&lt;br&gt;
-				</source>
-			</trans-unit>
-
-			<trans-unit id="ultimateBeginningTimer.alttitle">
-				<source>Ultimative Startdate</source>
-			</trans-unit>
-			<trans-unit id="ultimateBeginningTimer.description">
-				<source>No active period before this ultimate startdate.</source>
-			</trans-unit>
-			<trans-unit id="ultimateBeginningTimer.details">
-				<source>
-					&lt;strong&gt;Example&lt;/strong&gt;&lt;br&gt;
-					You define the ultimate start for `2020-01-01 00:00:00` and the ultimate end for `2020-12-31 25:59:59`.
-					The timer is used for your  content-element only in the year 2020.
-					Your content-element will be hidden all the time in 2019 and in 2021 or later.
-				</source>
-			</trans-unit>
-
-			<trans-unit id="ultimateEndingTimer.alttitle">
-				<source>Ultimative Stopdate</source>
-			</trans-unit>
-			<trans-unit id="ultimateEndingTimer.description">
-				<source>No active period after this ultimate stopdate.</source>
-			</trans-unit>
-			<trans-unit id="ultimateEndingTimer.details">
-				<source>
-					&lt;strong&gt;Example&lt;/strong&gt;&lt;br&gt;
-					You define the ultimate start for `2020-01-01 00:00:00` and the ultimate end for `2020-12-31 25:59:59`.
-					The timer is used for your  content-element only in the year 2020.
-					Your content-element will be hidden all the time in 2019 and in 2021 or later.
-				</source>
+			<trans-unit id="longitude.details">
+				<source>It calculate the date and time of the moonrise or of the moonset seen at a specific location on the world. An example: Hold on two hours after the moonrise for three hours in Bremen. The parameter `longitude` would have the default-value (8.8077700).</source>
+				<target>Es wird jeweils der Tag für den Mondaufgang oder für den Monduntergang berechnet. Die Bezugszeit wird immer bezogen auf den angegebenen Standort berechnet. Ein Beispiel wäre folgendes: Immer zwei Stunden nach dem Monaufgang für drei Stunden in Bremen. Der Parameter `Längengrad/longitude` wäre in diesem Fall der Defaultwert (8.8077700).</target>
 			</trans-unit>
 
 		</body>

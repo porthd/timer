@@ -63,6 +63,7 @@ class PeriodListTimerTest extends TestCase
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer']['changeListOfTimezones'] = [];
+
         $listOfTimerClasses = [
             DailyTimer::class, // => 1
             DatePeriodTimer::class, // => 2
@@ -87,18 +88,52 @@ class PeriodListTimerTest extends TestCase
         unset($GLOBALS);
     }
 
+    protected function initializeEnvoiroment(): void
+    {
+        $testToProjectPath = getenv('TYPO3_TEST_TEST_TO_PROJECT_PATH') ?: '../../../../../';
+        $projectPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . '');
+        $publicPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . 'web/');
+        $varPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . 'var/');
+        $configPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . $testToProjectPath . 'config/');
+        $currentScript = __DIR__;
+        $os = 'WINDOWS';
+
+        Environment::initialize(
+            new ApplicationContext('Testing'),
+            false,
+            true,
+            $projectPath,
+            $publicPath,
+            $varPath,
+            $configPath,
+            $currentScript,
+            $os
+        );
+    }
+
+
+    protected function initializeCachingConfiguration(): void
+    {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
+        if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'])) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class;
+        }
+        $myCacheInstance = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+        $myCacheInstance->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
+        $this->initializeEnvoiroment();
+        $this->initializeCachingConfiguration();
+//        $myCacheInstance->flushCaches(); // flush caches to create them
+//        $myCacheInstance->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
         $this->simulatePartOfGlobalsTypo3Array();
         /** @var ListingRepository $listingRepository */
         $yamlFileLoader = new YamlFileLoader();
         $this->subject = new PeriodListTimer( null, $yamlFileLoader);
-        $projectPath = '/var/www/html';
-        Environment::initialize(new ApplicationContext('Testing'),
-            false,
-            true, $projectPath, $projectPath . '/web', $projectPath . '/var', $projectPath . '/config',
-            $projectPath . '/typo3', 'win');
+
         ExtensionManagementUtility::setPackageManager(new PackageManager(new DependencyOrderingService()));
     }
 
@@ -128,23 +163,46 @@ class PeriodListTimerTest extends TestCase
     }
 
 
+    /**
+     * @test
+     */
+    public function getSelectorItem()
+    {
+        $result = $this->subject->getSelectorItem();
+        $this->assertIsArray($result,
+            'The result must be an array.'
+        );
+        $this->assertGreaterThan(1,
+            count($result),
+            'The array  must contain at least two items.'
+        );
+        $this->assertIsString($result[0],
+            'The first item must be an string.'
+        );
+        $this->assertEquals($result[1],
+            self::NAME_TIMER,
+            'The second term must the name of the timer.'
+        );
+    }
+
+
     public function dataProviderGetTimeZoneOfEvent()
     {
 
         $result = [];
         /* test allowed minimal structure */
-//        $result[] = [
-//            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
-//            [
-//                'result' => 'Kauderwelsch/Murz',
-//            ],
-//            [
-//                'params' => [
-//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-//                ],
-//                'active' => 'Lauder/Furz',
-//            ],
-//        ];
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
         $result[] = [
             'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
@@ -173,12 +231,25 @@ class PeriodListTimerTest extends TestCase
         $result[] = [
             'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
             [
-                'result' => 'Lauder/Furz',
+                'result' => 'Kauderwelsch/Murz',
             ],
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            [
+                'result' => 'Lauder/Furz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -268,9 +339,15 @@ class PeriodListTimerTest extends TestCase
             'The value must be type of string.');
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
-        if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
-            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . substr($filePath,
+        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
+                substr($filePath,
+                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
+        } else if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
+                substr($filePath,
                     strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
+            $this->assertTrue((false),'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
@@ -399,22 +476,18 @@ class PeriodListTimerTest extends TestCase
     public function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
-            'yamlPeriodFilePath' => '', // empty file path
-            'yamlTextField' => 'something text not empty',
+            'yamlPeriodFilePath' => 'EXT:timer/Tests/Fixture/CustomTimer/PeriodListTimer.yaml', // valid file path
         ];
         $result = [];
         // variation of obsolete parameter
         $list = [
-            'useTimeZoneOfFrontend' => true,
-            'timeZoneOfEvent' => true,
+            'useTimeZoneOfFrontend' => false,
+            'timeZoneOfEvent' => false,
             'ultimateBeginningTimer' => false,
             'ultimateEndingTimer' => false,
         ];
         foreach ($list as $unsetParam => $expects
         ) {
-            if (empty($expects)) {
-                continue;
-            }
 
             $item = [
                 'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
@@ -435,16 +508,21 @@ class PeriodListTimerTest extends TestCase
             $result[] = $item;
         }
         // Variation for useTimeZoneOfFrontend
-        foreach ([null, false, new Datetime(), 'hallo', ''] as $value) {
+        foreach ([
+            [null, false], [false,true],['false',true], [new Datetime(), false],
+                     ['hallo',false],
+                     ['0',true],[0.0,true],["0.0",false],
+                     ['true',true],['1',true],[1,true],
+                     [1.0,true],['1.0',false],] as $value) {
             $result[] = [
-                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is optional and will not tested for type.',
+                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
-                    'result' => true,
+                    'result' => $value[1],
                 ],
                 [
                     'rest' => $rest,
                     'general' => [
-                        'useTimeZoneOfFrontend' => $value,
+                        'useTimeZoneOfFrontend' => $value[0],
                         'timeZoneOfEvent' => 'Europe/Berlin',
                         'ultimateBeginningTimer' => '0001-01-01 00:00:00',
                         'ultimateEndingTimer' => '9999-12-31 23:59:59',
@@ -452,7 +530,7 @@ class PeriodListTimerTest extends TestCase
                 ],
             ];
         }
-//        // Variation for useTimeZoneOfFrontend
+        // Variation for useTimeZoneOfFrontend
         foreach ([
                      'UTC' => true,
                      '' => false,
@@ -468,6 +546,7 @@ class PeriodListTimerTest extends TestCase
                 [
                     'rest' => $rest,
                     'general' => [
+                        'useTimeZoneOfFrontend' => 1,
                         'timeZoneOfEvent' => $zoneVal,
                         'ultimateBeginningTimer' => '0001-01-01 00:00:00',
                         'ultimateEndingTimer' => '9999-12-31 23:59:59',
@@ -492,6 +571,7 @@ class PeriodListTimerTest extends TestCase
                 [
                     'rest' => $rest,
                     'general' => [
+                        'useTimeZoneOfFrontend' => 1,
                         'timeZoneOfEvent' => 'Europe/Berlin',
                         'ultimateBeginningTimer' => $timeVal,
                         'ultimateEndingTimer' => '9999-12-31 23:59:59',
@@ -515,13 +595,13 @@ class PeriodListTimerTest extends TestCase
                 [
                     'rest' => $rest,
                     'general' => [
+                        'useTimeZoneOfFrontend' => 1,
                         'timeZoneOfEvent' => 'Europe/Berlin',
                         'ultimateBeginningTimer' => '0001-01-01 00:00:00',
                         'ultimateEndingTimer' => $timeVal,
                     ],
                 ],
             ];
-
         }
         return $result;
     }

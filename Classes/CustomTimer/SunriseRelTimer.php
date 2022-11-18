@@ -26,19 +26,16 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
-use Porthd\Timer\Utilities\TcaUtility;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class SunriseRelTimer implements TimerInterface
 {
+
+    use GeneralTimerTrait;
+
     public const TIMER_NAME = 'txTimerSunriseRel';
     protected const ARG_DURATION_NATURAL = 'durationNatural';
     protected const ARG_SUN_POSITION = 'sunPosition';
@@ -79,6 +76,9 @@ class SunriseRelTimer implements TimerInterface
     protected const ARG_REQ_LIST = [
         self::ARG_ULTIMATE_RANGE_BEGINN,
         self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
         self::ARG_SUN_POSITION,
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_LATITUDE,
@@ -164,7 +164,7 @@ class SunriseRelTimer implements TimerInterface
     }
 
     /**
-     * tested general 20210116
+     * tested general 20221115
      * tested special 20210117
      *
      * The method test, if the parameter are valid or not
@@ -176,6 +176,7 @@ class SunriseRelTimer implements TimerInterface
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
         $flag = $flag && $this->validateSunPosition($params);
@@ -231,8 +232,8 @@ class SunriseRelTimer implements TimerInterface
      */
     protected function validateDurationNatural(array $params = []): bool
     {
-        $value = (isset($params[self::ARG_FLAG_DURATION_NATURAL]) ?
-            $params[self::ARG_FLAG_DURATION_NATURAL] :
+        $value = (isset($params[self::ARG_DURATION_NATURAL]) ?
+            $params[self::ARG_DURATION_NATURAL] :
             'fail'
         );
         return in_array((string)$value, array_merge(self::LIST_SUN_POSITION, self::LIST_DURATION_NATURAL_ADD));
@@ -274,38 +275,6 @@ class SunriseRelTimer implements TimerInterface
     {
         $number = (float)($params[self::ARG_LONGITUDE] ?: self::DEFAULT_LATITUDE);
         return is_float($number) && ($number >= self::ARG_LONGITUDE_MIN) && ($number <= self::ARG_LONGITUDE_MAX);
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
     }
 
     /**
@@ -356,7 +325,7 @@ class SunriseRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->hasResultExist();
         }
 
         $tStamp = $dateLikeEventZone->getTimestamp();

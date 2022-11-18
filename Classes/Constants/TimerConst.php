@@ -41,6 +41,7 @@ class TimerConst
     public const EXTENSION_NAME = 'timer'; // used on many other places too
 
     public const MARK_OF_EXT_FOLDER_IN_FILEPATH = 'EXT:';  // There no constant defined in the TYPO3 core for it
+    public const MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH = 'FILE:EXT:';  // There no constant defined in the TYPO3 core for it
 
     /**
      * Usage in Ext_localconf for registration of custion timer

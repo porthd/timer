@@ -26,22 +26,14 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
     function () {
-
-        ExtensionManagementUtility::addLLrefForTCAdescr(
-            'tx_timer_domain_model_event',
-            'EXT:timer/Resources/Private/Language/locallang_csh_tx_timer_domain_model_event.xlf'
-        );
         ExtensionManagementUtility::allowTableOnStandardPages(
             'tx_timer_domain_model_event'
         );
 
-        ExtensionManagementUtility::addLLrefForTCAdescr(
-            'tx_timer_domain_model_listing',
-            'EXT:timer/Resources/Private/Language/locallang_csh_tx_timer_domain_model_listing.xlf'
-        );
         ExtensionManagementUtility::allowTableOnStandardPages(
             'tx_timer_domain_model_listing'
         );
+
 
         // Add backend preview hook
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['timer_timersimul'] =
@@ -49,20 +41,43 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['timer_periodlist'] =
             Porthd\Timer\Hooks\PageLayoutViewDrawItem::class;
 
-        $modelList = ['tx_timer_domain_model_listing','tt_content','pages','sys_file_reference'];
-        $timerList = ['daily','dateperiod','default','easterrel','moonphaserel','moonriserel','periodlist','rangelist',
-            'sunriserel','weekdayinmonth','weekdayly',];
-        foreach($modelList as $model) {
-            foreach($timerList as $fieldValue) {
-                ExtensionManagementUtility::addLLrefForTCAdescr(
-                    $model . '.tx_timer_timer.txTimer'.ucfirst($fieldValue),
-                    'EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_generaltimer.xlf');
-                $filepath = 'EXT'.':'.'timer/Resources/Private/Language/FlexForms/locallang_csh_'.
-                    $fieldValue.'timer.xlf';
-                ExtensionManagementUtility::addLLrefForTCAdescr(
-                    $model . '.tx_timer_timer.txTimer'.ucfirst($fieldValue),
-                    $filepath);
-            }
+        $modelList = [
+            'tx_timer_domain_model_event',
+            'tx_timer_domain_model_listing',
+            'tt_content',
+            'pages',
+            'sys_file_reference',
+        ];
+//        $timerList = [
+//            'daily',
+//            'dateperiod',
+//            'default',
+//            'easterrel',
+//            'moonphaserel',
+//            'moonriserel',
+//            'periodlist',
+//            'rangelist',
+//            'sunriserel',
+//            'weekdayinmonth',
+//            'weekdayly',
+//        ];
+        foreach ($modelList as $model) {
+            $filepath = 'EXT' . ':' . 'timer/Resources/Private/Language/locallang_csh_' . $model . '.xlf';
+            ExtensionManagementUtility::addLLrefForTCAdescr(
+                $model,
+                $filepath
+            );
+            // this won't work
+//            foreach ($timerList as $fieldValue) {
+//                ExtensionManagementUtility::addLLrefForTCAdescr(
+//                    $model . '.tx_timer_timer.txTimer' . ucfirst($fieldValue) . '.tx_timer_selector',
+//                    'EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_generaltimer.xlf');
+//                $filepath = 'EXT' . ':' . 'timer/Resources/Private/Language/FlexForms/locallang_csh_' .
+//                    $fieldValue . 'timer.xlf';
+//                ExtensionManagementUtility::addLLrefForTCAdescr(
+//                    $model . '.tx_timer_timer.txTimer' . ucfirst($fieldValue) . '.tx_timer_selector',
+//                    $filepath);
+//            }
         }
 
     }

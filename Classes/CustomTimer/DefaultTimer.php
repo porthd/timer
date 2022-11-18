@@ -24,12 +24,8 @@ namespace Porthd\Timer\CustomTimer;
 
 use DateInterval;
 use DateTime;
-use Exception;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -99,7 +95,7 @@ class DefaultTimer implements TimerInterface
     }
 
     /**
-     * tested 20201230
+     * tested 20221114
      *     *
      * @return array
      */
@@ -107,7 +103,6 @@ class DefaultTimer implements TimerInterface
     {
         return self::TIMER_FLEXFORM_ITEM;
     }
-
 
     /**
      * tested 20201230
@@ -121,7 +116,6 @@ class DefaultTimer implements TimerInterface
     {
         return true;
     }
-
 
     /**
      * tested 20201226
@@ -156,7 +150,7 @@ class DefaultTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->hasResultExist();
         }
 
         return $this->isAllowedInRange($dateLikeEventZone, $params);

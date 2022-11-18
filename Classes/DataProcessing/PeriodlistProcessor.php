@@ -1,0 +1,282 @@
+<?php
+
+namespace Porthd\Timer\DataProcessing;
+
+/***************************************************************
+ *
+ *  Copyright notice
+ *
+ *  (c) 2022 Dr. Dieter Porth <info@mobger.de>
+ *
+ *  All rights reserved
+ *
+ *  This script is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+use Porthd\Timer\CustomTimer\PeriodListTimer;
+use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
+use Porthd\Timer\Utilities\CustomTimerUtility;
+use Porthd\Timer\Utilities\TcaUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
+
+/**
+ * Fetch records from the database, using the default .select syntax from TypoScript.
+ *
+ * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
+ *
+ * Example TypoScript configuration:
+ *
+ * The table must contain the flex-field `tx_timer_timer` and the string-field `tx_timer_selector`.
+ *
+ *
+ *     dataProcessing.10 = Porthd\Timer\DataProcessing\PeriodListDataProcessor
+ *     dataProcessing.10 {
+ *          # regular if syntax
+ *          #if.isTrue.field = record
+ *
+ *          limit {
+ *          lower = TEXT
+ *              lower {
+ *                  data = date:U
+ *                  strftime = %Y-%m-%d %H:%M:%S
+ *              }
+ *
+ *              #upper = TEXT
+ *              #upper {
+ *              #    data = date:U
+ *              #    strftime = %Y-%m-%d %H:%M:%S#
+ *              #}
+ *          }
+ *
+ *          dateToString {
+ *              startJson {
+ *                  # use the format-parameter defined in https://www.php.net/manual/en/datetime.format.php
+ *                  # escaping of named parameters with the backslash in example \T
+ *                  format = Y-m-d\TH:i:s
+ *                  # allowed are only `diffDaysDatetime`, `startDatetime` und `endDatetime`,because these are automatically created datetime-Object for the list
+ *                  #   These fields are datetime-object and they are generated from the estimated fields `start`and `stop` by this dataprocessor
+ *                  source = startDatetime
+ *              }
+ *              endJson {
+ *                  format = Y-m-d\TH:i:s
+ *                  source = stopDatetime
+ *              }
+ *          }
+ *
+ *          maxCount = 10
+ *          # output variable with the resulting list
+ *          # default-value is `periodlist`
+ *          as = periodlist
+ *
+ *          ## default is `flagStart = 1`,  => that the upper and lower limit use the attribute `start` as reference for the list
+ *          ## default is `flagStart = 0`,  => that the upper and lower limit use the attribute `stop` as reference for the list
+ *          #flagStart = false
+ *
+ *     }
+ *
+ */
+class PeriodlistProcessor implements DataProcessorInterface
+{
+    //    required Attributes
+
+    // optional Attribute perhaps with main defaults
+    protected const ATTR_IF_DOT = 'if.';
+    protected const ATTR_FLEX_FIELD = 'field';
+    protected const DEFAULT_FLEX_FIELD = 'tx_timer_timer';
+    protected const ATTR_FLEX_SELECTORFIELD = 'selectorfield';
+    protected const DEFAULT_SELECTOR_FIELD = 'tx_timer_selector';
+    protected const ATTR_LIMIT_DOT_LIST = 'limit.';
+    protected const ATTR_LIMIT_DOT_LOWER = 'lower';
+    protected const ATTR_LIMIT_DOT_UPPER = 'upper';
+    protected const ATTR_FLAG_START = 'flagStart';
+    protected const ATTR_MAX_COUNT = 'maxCount';
+    protected const ATTR_TIME_ZONE_DEFAULT = 'defaultZone';
+    protected const ATTR_RESULT_VARIABLE_NAME = 'as';
+    protected const ADDITIONAL_POST_KEY_FOR_START_DATETIME = 'startDatetime';
+    protected const ADDITIONAL_POST_KEY_FOR_STOP_DATETIME = 'stopDatetime';
+    protected const ADDITIONAL_POST_KEY_FOR_DIFF_DAYS = 'diffDaysDatetime';
+    protected const ADDITIONAL_POST_KEY_LIST = [
+        self::ADDITIONAL_POST_KEY_FOR_START_DATETIME,
+        self::ADDITIONAL_POST_KEY_FOR_STOP_DATETIME,
+        self::ADDITIONAL_POST_KEY_FOR_DIFF_DAYS,
+    ];
+
+
+    protected const OUTPUT_KEY_DATA = 'data';
+    protected const DEFAULT_MAX_COUNT = '25';
+    protected const DEFAULT_TIME_ZONE = 'Europe/Berlin';
+    protected const DEFAULT_RESULT_VARIABLE_NAME = 'periodlist';
+
+
+    /**
+     * Fetches records from the database as an array
+     *
+     * @param ContentObjectRenderer $cObj The data of the content element or page
+     * @param array &$contentObjectConfiguration The configuration of Content Object
+     * @param array $processorConfiguration The configuration of this processor
+     * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
+     *
+     * @return array the processed data as key/value store
+     */
+    public function process(
+        ContentObjectRenderer $cObj,
+        array $contentObjectConfiguration,
+        array $processorConfiguration,
+        array $processedData
+    ) {
+        if (isset($processorConfiguration[self::ATTR_FLEX_FIELD])) {
+            $flexFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_FIELD, $processorConfiguration, false);
+        } else {
+            $flexFieldName = self::DEFAULT_FLEX_FIELD;
+        }
+        if (isset($processorConfiguration[self::ATTR_FLEX_SELECTORFIELD])) {
+            $selectorFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_SELECTORFIELD, $processorConfiguration, false);
+        } else {
+            $selectorFieldName = self::DEFAULT_SELECTOR_FIELD;
+        }
+        if ((isset($processorConfiguration[self::ATTR_IF_DOT]) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
+            (!isset($processedData[self::OUTPUT_KEY_DATA][$selectorFieldName])) ||
+            (empty($processedData[self::OUTPUT_KEY_DATA][$flexFieldName])) ||
+            (trim($processedData[self::OUTPUT_KEY_DATA][$selectorFieldName]) !== PeriodListTimer::TIMER_NAME)
+        ) {
+            return $processedData;
+        }
+
+        // detect the current list in the yaml-file
+        $periodListTimer = GeneralUtility::makeInstance(PeriodListTimer::class);
+        $flexFormParameterString = $processedData[self::OUTPUT_KEY_DATA][$flexFieldName];
+        $flexFormParamRawList = GeneralUtility::xml2array($flexFormParameterString);
+        $paramList = TcaUtility::flexformArrayFlatten($flexFormParamRawList);
+        if (!isset($paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH])) {
+            return $processedData;
+        }
+        $yamlFile = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH];
+        $rawResult = CustomTimerUtility::readListFromYamlFile($yamlFile, $periodListTimer);
+        $rawResult = $rawResult[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST] ?? [];
+
+        // detect the other parameters
+        $upper = null;
+        $lower = null;
+        if (isset($processorConfiguration[self::ATTR_LIMIT_DOT_LIST])) {
+            $lowerDateString = $cObj->stdWrapValue(self::ATTR_LIMIT_DOT_LOWER,
+                $processorConfiguration[self::ATTR_LIMIT_DOT_LIST], null);
+            $lower = (($lowerDateString !== null) ?
+                date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $lowerDateString) :
+                null
+            );
+            $upperDateString = $cObj->stdWrapValue(self::ATTR_LIMIT_DOT_UPPER,
+                $processorConfiguration[self::ATTR_LIMIT_DOT_LIST], null);
+            $upper = (($lowerDateString !== null) ?
+                date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $upperDateString) :
+                null
+            );
+
+        }
+        $flagStart = true;
+        if (isset($processorConfiguration[self::ATTR_FLAG_START])) {
+            $flagValue = $cObj->stdWrapValue(self::ATTR_FLAG_START, $processorConfiguration, true);
+            $flagValue = is_string($flagValue) ? trim(strtolower($flagValue)) : $flagValue;
+            $flagStart = (in_array($flagValue, [0, '', '0', false, null, 'false', 0.0, []], true) ?
+                false :
+                true);
+        }
+        // The variable to be used within the result
+        $maxCount = (int)$cObj->stdWrapValue(self::ATTR_MAX_COUNT, $processorConfiguration, self::DEFAULT_MAX_COUNT);
+        $defaultZone = (int)$cObj->stdWrapValue(self::ATTR_TIME_ZONE_DEFAULT, $processorConfiguration,
+            self::DEFAULT_TIME_ZONE);
+        $targetVariableName = $cObj->stdWrapValue(self::ATTR_RESULT_VARIABLE_NAME, $processorConfiguration,
+            self::DEFAULT_RESULT_VARIABLE_NAME);
+
+        // sortiere $rawResult
+        $referenceKey = (($flagStart) ?
+            PeriodListTimer::YAML_ITEMS_KEY_START :
+            PeriodListTimer::YAML_ITEMS_KEY_STOP
+        );
+        usort($rawResult, function ($item1, $item2) use ($referenceKey) {
+            return $item1[$referenceKey] <=> $item2[$referenceKey];
+        });
+
+        $result = [];
+
+        foreach ($rawResult as $item) {
+            if ($maxCount <= 0) {
+                break;
+            }
+            if (($lower === null) ||
+                ($lowerDateString < $item[$referenceKey])
+            ) {
+                if (($upper !== null) &&
+                    ($upperDateString > $item[$referenceKey])
+                ) {
+                    break;
+                }
+                $item[self::ADDITIONAL_POST_KEY_FOR_START_DATETIME] = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $item[PeriodListTimer::YAML_ITEMS_KEY_START]
+                );
+                $item[self::ADDITIONAL_POST_KEY_FOR_STOP_DATETIME] = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $item[PeriodListTimer::YAML_ITEMS_KEY_STOP]
+                );
+                $item[self::ADDITIONAL_POST_KEY_FOR_DIFF_DAYS] = ceil(
+                    abs(
+                        $item[self::ADDITIONAL_POST_KEY_FOR_START_DATETIME]->getTimestamp() -
+                        $item[self::ADDITIONAL_POST_KEY_FOR_STOP_DATETIME]->getTimestamp()
+                    ) / 86400
+                );
+                $result[] = $item;
+                $maxCount--;
+
+            }
+        }
+
+        foreach (($processorConfiguration['dateToString.'] ?? []) as $newFieldKeyDot => $params) {
+            $refField = $params['source'];
+            if (!in_array($refField, self::ADDITIONAL_POST_KEY_LIST, true)) {
+                throw new TimerException(
+                    'The source-field has defined `' . $refField . '`. Only allowed are the parameter ' .
+                    implode(' and ', self::ADDITIONAL_POST_KEY_LIST) . '.' .
+                    ' Check your typoscript-definition.',
+                    1668761336
+                );
+            }
+            $newFieldKey = trim($newFieldKeyDot, '.');
+            $format = $params['format'];
+            foreach ($result as $key => $item) {
+                if (isset($result[$key][$newFieldKey])) {
+                    throw new TimerException(
+                        'The action `' . 'dateToString.' . '` want to write to the existing field `' . $newFieldKey .
+                        '` in your dataprocessor `' . self::class . '`. Check your typoscript-definition.',
+                        1668758652
+                    );
+                }
+                $result[$key][$newFieldKey] = $item[$refField]->format($format);
+                if ($result[$key][$newFieldKey] === false) {
+                    throw new TimerException(
+                        'The format `' . print_r($format, true) . '` caused an error in your ' .
+                        'dataprocessor `' . self::class . '`. Check your typoscript-definition.',
+                        1668761698
+                    );
+
+                }
+            }
+        }
+        $processedData[$targetVariableName] = $result;
+        // allow the call of a Dataprocessor in a dataprocessor
+        return $processedData;
+
+
+    }
+
+}

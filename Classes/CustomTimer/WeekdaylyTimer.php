@@ -34,12 +34,17 @@ use Porthd\Timer\Utilities\TcaUtility;
 class WeekdaylyTimer implements TimerInterface
 {
 
+    use GeneralTimerTrait;
+
     protected const TIMER_NAME = 'txTimerWeekdayly';
     protected const ARG_REQ_ACTIVE_WEEKDAY = 'activeWeekday';
     protected const ARG_REQ_LIST = [
-        self::ARG_REQ_ACTIVE_WEEKDAY,
         self::ARG_ULTIMATE_RANGE_BEGINN,
         self::ARG_ULTIMATE_RANGE_END,
+        self::ARG_USE_ACTIVE_TIMEZONE,
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
+        self::ARG_REQ_ACTIVE_WEEKDAY,
     ];
     protected const ARG_OPT_LIST = [
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
@@ -110,7 +115,7 @@ class WeekdaylyTimer implements TimerInterface
 
 
     /**
-     * tested special 20210102
+     * tested special 20221115
      * tested general 20210102
      *
      * The method test, if the parameter are valid or not
@@ -122,6 +127,7 @@ class WeekdaylyTimer implements TimerInterface
     {
         $flag = true;
         $flag = $flag && $this->validateZone($params);
+        $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateActiveWeekday($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
@@ -152,38 +158,6 @@ class WeekdaylyTimer implements TimerInterface
             }
         }
         return $flag;
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateZone(array $params = []): bool
-    {
-        return !(isset($params[self::ARG_EVER_TIME_ZONE_OF_EVENT]))||
-            TcaUtility::isTimeZoneInList(
-                $params[self::ARG_EVER_TIME_ZONE_OF_EVENT]
-            );
-    }
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
-     */
-    protected function validateUltimate(array $params = []): bool
-    {
-        $flag = (!empty($params[self::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = $flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_BEGINN]
-                ));
-        $flag = $flag && (!empty($params[self::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_ULTIMATE_RANGE_END]
-                )));
     }
 
     /**
@@ -246,7 +220,7 @@ class WeekdaylyTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->hasResultExist();
         }
 
         $bitsOfWeekdays = $this->getParameterActiveWeekday($params);

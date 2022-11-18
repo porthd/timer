@@ -80,8 +80,19 @@ Timer `periodlisttimer` eine gültige yaml-Datei mit einer Terminliste hinterleg
 Im Attribute `data` können verschiedenen Daten hinterlegt werden, so daß über ein passendes Partial oder Template strukturiert 
 Sonderinformationen wie Eintrittspreis, Vorverkaufspreise oder Ähnliches per Datei mit übergeben werden können.
 Dieses Form eignet sich gut, wenn es darum geht, automatisiert Daten über das Format einer YAML-Datei aus anderen Quellen 
-entgegen zu nehmen. Dies erspart das Einpflegen der Daten im Backend.    
+entgegen zu nehmen. Dies erspart das Einpflegen der Daten im Backend.
 
+Das Flexform wurde um zwei Pfad-Felder für JavaScript und für Stylesheets erweitert.
+Auf diesem Weg ist es möglich, die Termine auch in Kalender-Form darzustellen. Die Default-Einstellungen sind so gesetzt, 
+dass die Schulferien für Niedersachsen und Bremen aus dem Jahr 2022 in einem Kalender dargestellt werden.
+
+Damit die Daten eingelesen werden könne wurde drei Dataprocessoren definiert.
+Der `FlexToArrayProcessor` erlaubt es, Flexform-Felder auszulesen und in einfache Array umzuwandeln. 
+Auf diesem Weg kann man dynamisch die JavaAScript- und Stylesheet-Dateien vom Inhaltselement laden lassen.
+Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei 
+definiert ist. Neben den eigentlichen Feldern generiert der Dataprocessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
+Der dritte Dataporcessor `MappingProcessor` ist nötig, um die Termindaten als JSON-String an das Fluid-Template zu übergeben. 
+So können die Daten leicht über ein HTML-Attribute dem Calendar-Framework zur Verfügung gestellt werden.
 
 ### Contentelement `timersimul` als Beispiel
 
@@ -211,7 +222,7 @@ tt_content.timer_timersimul {
 
 ```
 
-Siehe auch Beispiel in exemplarischen Contentelemtnt ``timersimul``
+Siehe auch Beispiel in exemplarischen Contentelement ``timersimul``
 
 #### SortListQueryProcessor
 
@@ -251,4 +262,145 @@ Beachten sie, dass FLUIDTEMPLATE gecacht wird. Deshalb:
             lifetime = 3600
         }
     }
+```
+####FlexToArrayProcessor
+Der `FlexToArrayProcessor` ermöglicht das Lesen von `Flex`-Feldern und wandelt sie in einfache Arrays um.
+Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das Inhaltselement `periodlist` nachgeladen werden.
+
+```
+        30 = Porthd\Timer\DataProcessing\FlexToArrayProcessor
+        30 {
+            # reguläre if-Syntax, um die Anwendung des Dataprocessor zu verhindern
+            #if.isTrue.field = record
+
+            # Feld, dass den Flexform-Array enthält
+            # Standard ist `tx_timer_timer`
+            field = tx_timer_timer
+
+            # Feld mit Selektor für Flexform-Array
+            # Standard bei fehlender Definition ist 'tx_timer_selector'
+            # selectorField = tx_timer_selector
+
+            # Eine Definition von Flattenkeys überschreibt die Standarddefinition.
+            #    Die Attribute `timer` und `general` werden als Blattnamen in meinen customTimer-flexforms verwendet
+            #    Die folgende Definition ist die Standard-Vorgabe bei fehlender Definition: `data,general,timer,sDEF,lDEF,vDEF`
+            flattenkeys = data,general,timer,sDEF,lDEF,vDEF
+
+            # Ausgabevariable mit der resultierenden Liste als Array
+            as = flexlist
+
+```
+
+####MappingProcessor
+Der Dataporcessor `MappingProcessor` erlaubt das Mappen von Arrays in neue Arrays oder in einen JSON-String.
+So können die Daten leicht HTML-Attribute dem JavaScript zur Verfügung gestellt werden.
+Der Dataprecessor kennt einfache generische Funktionen, um zum Beispiel Events eindeutige IDs zuzuordnen.
+Weiter erlaubt er das Mappen von Feldinhalten und das Anlegen von neuen Feldern mit konstanten Daten.
+
+```
+
+        20 = Porthd\Timer\DataProcessing\MappingProcessor
+        20 {
+
+            # reguläre if-Syntax
+            #if.isTrue.field = record
+
+            # Name des Feldes mit einem Array, das von einem früheren Datenprozessor generiert wurde
+            inputfield = periodlist
+            
+            # Jedes Feld muss Teil der Periodenliste sein
+            # Jeder Eintrag muss formal sein
+            generic {
+                # Definieren Sie einen Index, z. B. `event1holiday` im Feld `id`
+                'id' {
+                    pretext = event
+                    posttext = holiday
+                    Typ = index
+                }
+                # Definiere eine Konstante, z. B. `cal1` im Feld `calendarId`
+                calendarID {
+                    pretext = cal1
+                    posttext =
+                    Typ = constant
+                }
+            }
+
+            mapping {
+                # sourceFieldName in Periodenliste (siehe Eingabefeld) => targetFieldName
+                # Bei der Zuordnung wird zwischen Groß- und Kleinschreibung unterschieden.
+                title = Titel
+                startJson = date
+                diffDaysDatetime = days
+            }
+
+            # Ausgabeformat hat die Werte `array`,`json`
+            # Wenn das Ausgabeformat unbekannt ist, ist json der Standardwert
+            outputFormat = json
+
+            # Ausgabevariable mit der resultierenden Liste
+            # Standardwert ist `periodlist`
+            asString = periodListJson
+
+        }
+
+```
+
+####PeriodlistProcessor
+Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei
+definiert ist. Neben den eigentlichen Feldern generiert der Dataprocessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
+
+```
+        10 = Porthd\Timer\DataProcessing\PeriodlistProcessor
+        10 {
+
+            # reguläre if-Syntax
+            #if.isTrue.field = record
+
+            # Zeitliche begrenzung der Auswahl von Daten
+            #limit {
+            #    # unterer Zeitpunkt; stdWrap wird unterstützt
+            #    lower = TEXT
+            #    lower {
+            #        data = date:U
+            #        strftime = %Y-%m-%d %H:%M:%S
+            #
+            #    }
+            #    ## obere Zeitgrenze; stdWrap wird unterstützt
+            #    #upper = TEXT
+            #    #upper {
+            #    #    data = date:U
+            #    #    strftime = %Y-%m-%d %H:%M:%S#
+            #    #}
+            #}
+
+            # hart verdrateter Hilfsmechanismus, um die Datenfelder mit dem Start- bzw. Endzeitpunkt in ein gewünschtes Format zu umzuwandeln und in einem zusätzlichen Feld zu speichern 
+            dateToString {
+                # startJson is the targetfieldName in the following dataprocessor mappingProcessor
+                startJson {
+                    # use the format-parameter defined in https://www.php.net/manual/en/datetime.format.php
+                    # escaping of named parameters with the backslash in example \T
+                    format = Y-m-d
+                    # allowed are only `diffDaysDatetime`, `startDatetime` und `endDatetime`,because these are automatically created datetime-Object for the list
+                    #   These fields are datetime-object and they are generated from the estimated fields `start`and `stop` by this dataprocessor
+                    source = startDatetime
+                }
+           #     endJson {
+           #         format = Y-m-d
+           #         source = stopDatetime
+           #     }
+            }
+
+            # Beschränkung der Liste auf eine maximale Anzahl von Elementen 
+            # Wenn nichts angegeben wird, wird die Liste auf 25 Element beschränkt
+             maxCount = 100
+
+            # NAme der Ausgabevariablen, die an das Fluid-Template übergeben wird.
+            # Wenn nicht angegeben wird, ist der Standardwert `periodlist`.
+            as = periodlist
+
+            ## Bei `flagStart = 1` oder `flagStart = true`  wird für den Vergleich von Ober- und untergrenze das Feld `start`  aus der Referenzliste verwendet. Dies ist der Standardzustand.
+            ## Bei `flagStart = 0` oder `flagStart = false`,  wird für den Vergleich von Ober- und untergrenze das Feld `stop`  aus der Referenzliste verwendet.
+            #flagStart = false
+        }
+
 ```

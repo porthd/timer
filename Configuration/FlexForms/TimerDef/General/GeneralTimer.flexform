@@ -9,6 +9,9 @@
             <sheetTitle>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.sheet.title
             </sheetTitle>
+            <sheetShortDescr>
+                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.sheet.shortDescr
+            </sheetShortDescr>
             <sheetDescription>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.sheet.description
             </sheetDescription>
