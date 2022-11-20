@@ -41,6 +41,7 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['timer_periodlist'] =
             Porthd\Timer\Hooks\PageLayoutViewDrawItem::class;
 
+        // add cshfiles for main table/model
         $modelList = [
             'tx_timer_domain_model_event',
             'tx_timer_domain_model_listing',
@@ -48,36 +49,12 @@ call_user_func(
             'pages',
             'sys_file_reference',
         ];
-//        $timerList = [
-//            'daily',
-//            'dateperiod',
-//            'default',
-//            'easterrel',
-//            'moonphaserel',
-//            'moonriserel',
-//            'periodlist',
-//            'rangelist',
-//            'sunriserel',
-//            'weekdayinmonth',
-//            'weekdayly',
-//        ];
         foreach ($modelList as $model) {
             $filepath = 'EXT' . ':' . 'timer/Resources/Private/Language/locallang_csh_' . $model . '.xlf';
             ExtensionManagementUtility::addLLrefForTCAdescr(
                 $model,
                 $filepath
             );
-            // this won't work
-//            foreach ($timerList as $fieldValue) {
-//                ExtensionManagementUtility::addLLrefForTCAdescr(
-//                    $model . '.tx_timer_timer.txTimer' . ucfirst($fieldValue) . '.tx_timer_selector',
-//                    'EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_generaltimer.xlf');
-//                $filepath = 'EXT' . ':' . 'timer/Resources/Private/Language/FlexForms/locallang_csh_' .
-//                    $fieldValue . 'timer.xlf';
-//                ExtensionManagementUtility::addLLrefForTCAdescr(
-//                    $model . '.tx_timer_timer.txTimer' . ucfirst($fieldValue) . '.tx_timer_selector',
-//                    $filepath);
-//            }
         }
 
     }

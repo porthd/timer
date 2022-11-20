@@ -15,7 +15,6 @@
             <sheetDescription>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerSunriseRel.sheet.description
             </sheetDescription>
-            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_sunrisereltimer.xlf</cshFile>
         </TCEforms>
         <type>array</type>
         <el>

@@ -15,7 +15,6 @@
             <sheetDescription>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.sheet.description
             </sheetDescription>
-            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_weekdayinmonthtimer.xlf</cshFile>
         </TCEforms>
         <type>array</type>
         <el>
@@ -149,6 +148,7 @@
                     </label>
                     <config>
                         <type>input</type>
+                        <renderType>inputDateTime</renderType>
                         <size>24</size>
                         <eval>time</eval>
                         <default>43200</default>

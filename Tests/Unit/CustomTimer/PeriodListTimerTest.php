@@ -35,6 +35,7 @@ use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Package\FailsafePackageManager;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Service\DependencyOrderingService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -43,7 +44,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class PeriodListTimerTest extends TestCase
 {
     protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_USE_ACTIVE_TIMEZONE = TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
     protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
     protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerPeriodList';
@@ -132,7 +133,7 @@ class PeriodListTimerTest extends TestCase
         $this->simulatePartOfGlobalsTypo3Array();
         /** @var ListingRepository $listingRepository */
         $yamlFileLoader = new YamlFileLoader();
-        $this->subject = new PeriodListTimer( null, $yamlFileLoader);
+        $this->subject = new PeriodListTimer(null, $yamlFileLoader);
 
         ExtensionManagementUtility::setPackageManager(new PackageManager(new DependencyOrderingService()));
     }
@@ -223,7 +224,7 @@ class PeriodListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -236,7 +237,7 @@ class PeriodListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -249,7 +250,7 @@ class PeriodListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -264,7 +265,7 @@ class PeriodListTimerTest extends TestCase
                 [
                     'params' => [
                         TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -278,7 +279,7 @@ class PeriodListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -291,7 +292,7 @@ class PeriodListTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -343,13 +344,16 @@ class PeriodListTimerTest extends TestCase
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr($filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
-        } else if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
-            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-            $this->assertTrue((false),'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
-            $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
+            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+                $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
+                    substr($filePath,
+                        strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
+                $this->assertTrue((false),
+                    'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. ');
+            } else {
+                $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
+            }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
         $this->assertTrue($flag,
@@ -362,7 +366,8 @@ class PeriodListTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00',
+            new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -476,7 +481,13 @@ class PeriodListTimerTest extends TestCase
     public function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
-            'yamlPeriodFilePath' => 'EXT:timer/Tests/Fixture/CustomTimer/PeriodListTimer.yaml', // valid file path
+            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+        ];
+        $optional = [
+            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
+            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
+            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
+            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
         ];
         $result = [];
         // variation of obsolete parameter
@@ -496,6 +507,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 'params' => [
                     'rest' => $rest,
+                    'optional' => $optional,
                     'general' => [
                         'useTimeZoneOfFrontend' => 0,
                         'timeZoneOfEvent' => 'Europe/Berlin',
@@ -509,11 +521,20 @@ class PeriodListTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-            [null, false], [false,true],['false',true], [new Datetime(), false],
-                     ['hallo',false],
-                     ['0',true],[0.0,true],["0.0",false],
-                     ['true',true],['1',true],[1,true],
-                     [1.0,true],['1.0',false],] as $value) {
+                     [null, false],
+                     [false, true],
+                     ['false', true],
+                     [new Datetime(), false],
+                     ['hallo', false],
+                     ['0', true],
+                     [0.0, true],
+                     ["0.0", false],
+                     ['true', true],
+                     ['1', true],
+                     [1, true],
+                     [1.0, true],
+                     ['1.0', false],
+                 ] as $value) {
             $result[] = [
                 'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
@@ -521,6 +542,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 [
                     'rest' => $rest,
+                    'optional' => $optional,
                     'general' => [
                         'useTimeZoneOfFrontend' => $value[0],
                         'timeZoneOfEvent' => 'Europe/Berlin',
@@ -542,6 +564,7 @@ class PeriodListTimerTest extends TestCase
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
+                    'optional' => $optional,
                 ],
                 [
                     'rest' => $rest,
@@ -570,6 +593,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 [
                     'rest' => $rest,
+                    'optional' => $optional,
                     'general' => [
                         'useTimeZoneOfFrontend' => 1,
                         'timeZoneOfEvent' => 'Europe/Berlin',
@@ -594,6 +618,7 @@ class PeriodListTimerTest extends TestCase
                 ],
                 [
                     'rest' => $rest,
+                    'optional' => $optional,
                     'general' => [
                         'useTimeZoneOfFrontend' => 1,
                         'timeZoneOfEvent' => 'Europe/Berlin',
@@ -617,7 +642,7 @@ class PeriodListTimerTest extends TestCase
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
 
-            $paramTest = array_merge($params['rest'], $params['general']);
+            $paramTest = array_merge($params['rest'], $params['optional'], $params['general']);
             $this->assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
@@ -638,6 +663,15 @@ class PeriodListTimerTest extends TestCase
             'ultimateBeginningTimer' => '0001-01-01 00:00:00',
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
+        $rest = [
+            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+        ];
+        $optional = [
+            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
+            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
+            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
+            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+        ];
 
         $result = [];
         /* test allowed minimal structure */
@@ -647,73 +681,27 @@ class PeriodListTimerTest extends TestCase
                 'result' => true,
             ],
             'params' => [
-                'required' => [
-                    'yamlPeriodFilePath' => 'EXT:timer/Tests/Fixture/CustomTimer/PeriodListTimer.yaml',
-                    // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
-                    'yamlTextField' => '',
-                ],
-                'optional' => [
-
-                ],
+                'required' => $rest,
+                'optional' => $optional,
                 'general' => $general,
             ],
         ];
         // check for optional
-        foreach (['yamlPeriodFilePath', 'yamlTextField',] as $myUnset) {
+        foreach ($optional as $myUnset) {
             $item = [
                 'message' => 'The test does not fails, because only one parameter `' . $myUnset . '` is missing.The list is already defined.',
                 'expects' => [
                     'result' => true,
                 ],
                 'params' => [
-                    'required' => [
-                        'yamlPeriodFilePath' => 'EXT:timer/Tests/Fixture/CustomTimer/PeriodListTimer.yaml',
-                        'yamlTextField' => 'something text not empty',
-                    ],
-                    'optional' => [
-
-                    ],
+                    'required' => $rest,
+                    'optional' => $optional,
                     'general' => $general,
                 ],
             ];
             unset($item['params']['required'][$myUnset]);
             $result[] = $item;
         }
-        $result[] = [
-            'message' => 'The test with no information about periodlist is not correct.',
-            'expects' => [
-                'result' => false,
-            ],
-            'params' => [
-                'required' => [
-                    'yamlPeriodFilePath' => '',
-                    // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
-                    'yamlTextField' => '',
-                ],
-                'optional' => [
-
-                ],
-                'general' => $general,
-            ],
-        ];
-        $result[] = [
-            'message' => 'The test with missing informations about periodlist is not correct.',
-            'expects' => [
-                'result' => false,
-            ],
-            'params' => [
-                'required' => [
-                    'yamlPeriodFilePath' => '',
-                    // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
-                    'yamlTextField' => '',
-                ],
-                'optional' => [
-
-                ],
-                'general' => $general,
-            ],
-        ];
-
         return $result;
     }
 
@@ -732,7 +720,7 @@ class PeriodListTimerTest extends TestCase
             $yamlFileLoader = new YamlFileLoader();
 
             $TestIncludeFinder = $this->getMockBuilder(PeriodListTimer::class)
-                ->setConstructorArgs([ $yamlFileLoader])
+                ->setConstructorArgs([$yamlFileLoader])
                 ->onlyMethods(['getExtentionPathByEnviroment', 'getPublicPathByEnviroment'])->getMock();
 
             $TestIncludeFinder
@@ -763,141 +751,73 @@ class PeriodListTimerTest extends TestCase
             'ultimateBeginningTimer' => '0001-01-01 00:00:00',
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
+        $rest = [
+            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+        ];
+        $optional = [
+            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
+            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
+            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
+            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+        ];
+
+//                -
+//                title: 'Sommerferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-07-14 00:00:00'
+//            stop: '2022-08-24 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Herbstferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-10-17 00:00:00'
+//            stop: '2022-10-29 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Weihnachtsferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-12-23 00:00:00'
+//            stop: '2023-01-06 23:59:59'
+//            zone: 'Europe/Berlin'
 
         $result = [];
         /* test allowed random (minimal) structure */
-        $result[] = [
-            'message' => 'The testValue `2022-12-26 05:59:59` defines  an INACTIVE time. The testvalue is not part of an active interval.',
-            'expects' => [
-                'result' => false,
-            ],
-            'params' => [
-                'testValue' => '2022-12-26 05:59:59',
-                'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-12-26 05:59:59',
-                    new DateTimeZone('Europe/Berlin')),
-                'required' => [
-                    'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                    'yamlTextField' => 'someYamlText',
-                ],
-                'optional' => [
-
-                ],
-                'general' => $general,
-            ],
-        ];
         /**
          * Konfiguraton
          * ohne Vorbidden
          * weihnachten 2022 25 Sonntag 26. Montag
          * Aktiv            hidden
-         * Mo: 06:00-12:00  + 00:00-24:00 Chr. 2022
-         * Di. 06:00-12:00  03:00 07:00
-         * Mi  02:00-12:00  03:00 07:00
-         * Do  02:00-12:00  03:00 07:00
-         * Fr. 02:00-12:00  03:00 07:00
-         * Sa. 02:00-12:00  03:00 07:00
-         * So. 02:00-12:00  03:00 07:00 + 00:00-24:00 Chr. 2022
-         *
-         * Testdaten            Act/Hid OnlyActive
-         * - 26.12.2022 05:59:59    nein    nein
-         * - 26.12.2022 06:00:59    nein    ja
-         * - 26.12.2022 12:00:59   nein    nein
-         * - 26.12.2022 12:01:59   nein    nein
-         * - 19.12.2022 05:59:59    nein    nein
-         * - 19.12.2022 06:00:59    ja      ja
-         * - 19.12.2022 07:00:59    ja      ja
-         * - 19.12.2022 12:00:59   ja      ja
-         * - 19.12.2022 12:01:59   nein    nein
-         * - 25.12.2022 01:59:59   nein    nein
-         * - 25.12.2022 02:00:59   nein    ja
-         * - 25.12.2022 12:00:59   nein    ja
-         * - 25.12.2022 12:01:59   nein    nein
-         * - 18.12.2022 01:59:59   nein    nein
-         * - 18.12.2022 02:00:59   ja      ja
-         * - 18.12.2022 03:00:59   nein    ja
-         * - 18.12.2022 07:00:59   nein    ja
-         * - 18.12.2022 07:01:59   ja      ja
-         * - 18.12.2022 12:00:59   ja      ja
-         * - 18.12.2022 12:01:59   nein    nein
          */
         foreach ([
-                     ['testDateTime' => '2022-12-26 05:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-26 06:00:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-26 11:59:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-26 12:00:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-26 12:01:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-19 05:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-19 06:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 06:00:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 07:00:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 11:59:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 12:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 12:00:01', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-25 01:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-25 02:00:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-25 12:00:00', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-25 12:00:01', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-18 01:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-18 02:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 03:00:00', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 06:59:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:00:00', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:00:01', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:00:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:01:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 12:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 12:00:01', 'hiddenActive' => false, 'active' => false,],
+                     ['date' => '2022-08-24 00:00:00', 'expects' => true],
+                     ['date' => '2022-08-24 23:59:59', 'expects' => true],
+                     ['date' => '2022-08-25 00:00:00', 'expects' => false],
+                     ['date' => '2022-10-16 23:59:59', 'expects' => false],
+                     ['date' => '2022-10-17 00:00:00', 'expects' => true],
+                     ['date' => '2022-10-29 23:59:59', 'expects' => true],
+                     ['date' => '2022-10-30 00:00:00', 'expects' => false],
                  ] as $params
         ) {
             $result[] = [
-                'message' => 'The testValue `' . $params['testDateTime'] . '` defines' .
-                    ($params['hiddenActive'] ? ' an active time' : ' an INACTIVE time') . ' for the active-hidden-combination.' .
-                    ($params['active'] ? '' : ' The testvalue is not part of an active interval.') .
-                    ((($params['hiddenActive'] === false) && ($params['active'] === true)) ? ' The testvalue is at least part of one hidden timeslot and included by an timeslot for active parts.' : ''),
+                'message' => 'The testValue `' . $params['date'] . '` defines an ' .
+                    ($params['expects'] ? 'ACTIVE' : 'INACTIVE') . ' time. The testvalue is ' .
+                    ($params['expects'] ? '' : 'not ') . 'part of an active interval.',
                 'expects' => [
-                    'result' => $params['hiddenActive'],
+                    'result' => $params['expects'],
                 ],
                 'params' => [
-                    'testValue' => $params['testDateTime'],
-                    'testValueObj' => date_create_from_format(
-                        TimerInterface::TIMER_FORMAT_DATETIME,
-                        $params['testDateTime'],
+                    'testValue' => $params['date'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
+                        $params['date'],
                         new DateTimeZone('Europe/Berlin')),
-                    'required' => [
-//                        'yamlPeriodFilePath' => 'EXT:timer/Tests/Fixture/CustomTimer/PeriodListTimer.yaml', // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
-                        'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/PeriodListTimer.yaml',
-                    ],
-                    'optional' => [
-
-                    ],
                     'general' => $general,
+                    'required' => $rest,
+                    'optional' => $optional,
                 ],
             ];
-            $result[] = [
-                'message' => 'The testValue `' . $params['testDateTime'] . '` defines ' .
-                    ($params['hiddenActive'] ? ' an active time' : ' an INACTIVE time') . ' for the ONLY ACTIVE combination.' .
-                    ($params['active'] ? '' : ' The testvalue is not part of an active interval.') .
-                    ((($params['hiddenActive'] === false) && ($params['active'] === true)) ? ' The testvalue is at least part of one hidden timeslot and included by an timeslot for active parts.' : ''),
-                'expects' => [
-                    'result' => $params['active'],
-                ],
-                'params' => [
-                    'testValue' => $params['testDateTime'],
-                    'testValueObj' => date_create_from_format(
-                        TimerInterface::TIMER_FORMAT_DATETIME,
-                        $params['testDateTime'],
-                        new DateTimeZone('Europe/Berlin')
-                    ),
-                    'required' => [
-                        'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                    ],
-                    'optional' => [
-
-                    ],
-                    'general' => $general,
-                ],
-            ];
-
         }
         return $result;
     }
@@ -912,7 +832,12 @@ class PeriodListTimerTest extends TestCase
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
+            $coreCache = \TYPO3\CMS\Core\Core\Bootstrap::createCache('core', false);
+            $packageCache = \TYPO3\CMS\Core\Core\Bootstrap::createPackageCache($coreCache);
+            $packageManager = \TYPO3\CMS\Core\Core\Bootstrap::createPackageManager(
+                 FailsafePackageManager::class,
+                $packageCache
+            );
             $configParams = array_merge($params['required'], $params['optional'], $params['general']);
             $value = clone $params['testValueObj'];
             $this->assertEquals(
@@ -939,155 +864,75 @@ class PeriodListTimerTest extends TestCase
             'ultimateBeginningTimer' => '0001-01-01 00:00:00',
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
-        $prefixPath = '/var/www/html/web/typo3conf/ext/timer/Tests/Unit/CustomTimer';
-        /**
-         * Konfiguraton
-         * ohne Vorbidden
-         * weihnachten 2022 25 Sonntag 26. Montag
-         * Aktiv            hidden
-         * Mo: 06:00-12:00  + 00:00-24:00 Chr. 2022
-         * Di. 06:00-12:00  03:00 07:00
-         * Mi  02:00-12:00  03:00 07:00
-         * Do  02:00-12:00  03:00 07:00
-         * Fr. 02:00-12:00  03:00 07:00
-         * Sa. 02:00-12:00  03:00 07:00
-         * So. 02:00-12:00  03:00 07:00 + 00:00-24:00 Chr. 2022
-         *
-         * Testdaten            Act/Hid OnlyActive
-         * - 26.12.2022 05:59:59    nein    nein
-         * - 26.12.2022 06:00:59    nein    ja
-         * - 26.12.2022 12:00:59   nein    nein
-         * - 26.12.2022 12:01:59   nein    nein
-         * - 19.12.2022 05:59:59    nein    nein
-         * - 19.12.2022 06:00:59    ja      ja
-         * - 19.12.2022 07:00:59    ja      ja
-         * - 19.12.2022 12:00:59   ja      ja
-         * - 19.12.2022 12:01:59   nein    nein
-         * - 25.12.2022 01:59:59   nein    nein
-         * - 25.12.2022 02:00:59   nein    ja
-         * - 25.12.2022 12:00:59   nein    ja
-         * - 25.12.2022 12:01:59   nein    nein
-         * - 18.12.2022 01:59:59   nein    nein
-         * - 18.12.2022 02:00:59   ja      ja
-         * - 18.12.2022 03:00:59   nein    ja
-         * - 18.12.2022 07:00:59   nein    ja
-         * - 18.12.2022 07:01:59   ja      ja
-         * - 18.12.2022 12:00:59   ja      ja
-         * - 18.12.2022 12:01:59   nein    nein
-         */
+        $rest = [
+            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+        ];
+        $optional = [
+            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
+            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
+            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
+            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+        ];
 
         $result = [];
-        /* test allowed random (minimal) structure */
-        $itemList = [];
-        $itemList[] = [
-            'testValue' => '2022-12-26 05:59:59',
-            'msg' => 'not part of an active range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-26 06:00:00',
-            'beginWithForbidden' => '2022-12-27 07:00:00',
-            'endOnlyActive' => '2022-12-26 12:00:00',
-            'endWithForbidden' => '2022-12-27 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-19 05:59:59',
-            'msg' => 'not part of an active range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-19 06:00:00',
-            'beginWithForbidden' => '2022-12-19 06:00:00',
-            'endOnlyActive' => '2022-12-19 12:00:00',
-            'endWithForbidden' => '2022-12-19 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-19 06:00:00',
-            'msg' => 'part of an active range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-20 06:00:00',
-            'beginWithForbidden' => '2022-12-20 07:00:00',
-            'endOnlyActive' => '2022-12-20 12:00:00',
-            'endWithForbidden' => '2022-12-20 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-26 06:00:00',
-            'msg' => 'unsolved: part of an active and concurrent forbidden range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-27 06:00:00',
-            'beginWithForbidden' => '2022-12-27 07:00:00',
-            'endOnlyActive' => '2022-12-27 12:00:00',
-            'endWithForbidden' => '2022-12-27 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-25 12:00:01',
-            'msg' => 'not part of an active range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-26 06:00:00',
-            'beginWithForbidden' => '2022-12-27 07:00:00',
-            'endOnlyActive' => '2022-12-26 12:00:00',
-            'endWithForbidden' => '2022-12-27 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-18 12:00:01',
-            'msg' => 'not part of an active range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-19 06:00:00',
-            'beginWithForbidden' => '2022-12-19 06:00:00',
-            'endOnlyActive' => '2022-12-19 12:00:00',
-            'endWithForbidden' => '2022-12-19 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-19 12:00:00',
-            'msg' => 'part of an active range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-20 06:00:00',
-            'beginWithForbidden' => '2022-12-20 07:00:00',
-            'endOnlyActive' => '2022-12-20 12:00:00',
-            'endWithForbidden' => '2022-12-20 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-25 12:00:00',
-            'msg' => 'unsolved: part of an active and concurrent forbidden range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-26 06:00:00',
-            'beginWithForbidden' => '2022-12-27 07:00:00',
-            'endOnlyActive' => '2022-12-26 12:00:00',
-            'endWithForbidden' => '2022-12-27 12:00:00',
-        ];
-        $addWith = '. The timerange is build by active and forbidden parts';
-        $addOnly = '. The timerange is only build by active parts';
-        foreach($itemList as $item) {
+        //                -
+//                title: 'Sommerferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-07-14 00:00:00'
+//            stop: '2022-08-24 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Herbstferien Nidersachsen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-10-17 00:00:00'
+//            stop: '2022-10-28 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Herbstferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-10-17 00:00:00'
+//            stop: '2022-10-29 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Weihnachtsferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-12-23 00:00:00'
+//            stop: '2023-01-06 23:59:59'
+//            zone: 'Europe/Berlin'
+
+        foreach ([
+                     ['date' => '2022-07-13 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
+                     ['date' => '2022-07-14 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
+                     ['date' => '2022-07-15 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
+                     ['date' => '2022-08-24 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
+                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
+                     ['date' => '2022-10-16 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
+                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
+                     ['date' => '2022-10-17 00:01:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
+                     ['date' => '2022-10-18 00:00:01', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
+                 ] as $item
+        ) {
+
             $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] . $addOnly . ' in the nextActive-Test.',
+                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`'.$item['begin'].'`, `'.$item['end'].'`].',
                 'expects' => [
                     'result' => [
-                        'beginning' => $item['beginOnlyActive'],
-                        'ending' => $item['endOnlyActive'],
+                        'beginning' => $item['begin'],
+                        'ending' => $item['end'],
                         'exist' => true,
                     ],
                 ],
                 'params' => [
-                    'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
+                    'testValue' => $item['date'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['date'],
                         new DateTimeZone('Europe/Berlin')),
-                    'required' => [
-                        'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                    ],
-                    'optional' => [
-
-                    ],
                     'general' => $general,
-                ],
-            ];
-            $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] . $addWith . ' in the nextActive-Test.',
-                'expects' => [
-                    'result' => [
-                        'beginning' => $item['beginWithForbidden'],
-                        'ending' => $item['endWithForbidden'],
-                        'exist' => true,
-                    ],
-                ],
-                'params' => [
-                    'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
-                        new DateTimeZone('Europe/Berlin')),
-                    'required' => [
-                        'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                    ],
-                    'optional' => [
-
-                    ],
-                    'general' => $general,
+                    'required' => $rest,
+                    'optional' => $optional,
                 ],
             ];
 
@@ -1130,165 +975,74 @@ class PeriodListTimerTest extends TestCase
             'ultimateBeginningTimer' => '0001-01-01 00:00:00',
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
-        $prefixPath = '/var/www/html/web/typo3conf/ext/timer/Tests/Unit/CustomTimer';
-        /**
-         * Konfiguraton
-         * ohne Vorbidden
-         * weihnachten 2022 25 Sonntag 26. Montag
-         * Aktiv            hidden
-         * Mo: 06:00-12:00  + 00:00-24:00 Chr. 2022
-         * Di. 06:00-12:00  03:00 07:00
-         * Mi  02:00-12:00  03:00 07:00
-         * Do  02:00-12:00  03:00 07:00
-         * Fr. 02:00-12:00  03:00 07:00
-         * Sa. 02:00-12:00  03:00 07:00
-         * So. 02:00-12:00  03:00 07:00 + 00:00-24:00 Chr. 2022
-         *
-         * Testdaten            Act/Hid OnlyActive
-         * - 26.12.2022 05:59:59    nein    nein
-         * - 26.12.2022 06:00:59    nein    ja
-         * - 26.12.2022 12:00:59   nein    nein
-         * - 26.12.2022 12:01:59   nein    nein
-         * - 19.12.2022 05:59:59    nein    nein
-         * - 19.12.2022 06:00:59    ja      ja
-         * - 19.12.2022 07:00:59    ja      ja
-         * - 19.12.2022 12:00:59   ja      ja
-         * - 19.12.2022 12:01:59   nein    nein
-         * - 25.12.2022 01:59:59   nein    nein
-         * - 25.12.2022 02:00:59   nein    ja
-         * - 25.12.2022 12:00:59   nein    ja
-         * - 25.12.2022 12:01:59   nein    nein
-         * - 18.12.2022 01:59:59   nein    nein
-         * - 18.12.2022 02:00:59   ja      ja
-         * - 18.12.2022 03:00:59   nein    ja
-         * - 18.12.2022 07:00:59   nein    ja
-         * - 18.12.2022 07:01:59   ja      ja
-         * - 18.12.2022 12:00:59   ja      ja
-         * - 18.12.2022 12:01:59   nein    nein
-         */
+        $rest = [
+            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+        ];
+        $optional = [
+            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
+            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
+            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
+            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+        ];
 
         $result = [];
-        /* test allowed random (minimal) structure */
-        $itemList = [];
-        $itemList[] = [
-            'testValue' => '2022-12-26 05:59:59',
-            'msg' => 'not part of an active range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-25 02:00:00',
-            'beginWithForbidden' => '2022-12-24 07:00:00',
-            'endOnlyActive' => '2022-12-25 12:00:00',
-            'endWithForbidden' => '2022-12-24 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-19 05:59:59',
-            'msg' => 'not part of an active range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-18 02:00:00',
-            'beginWithForbidden' => '2022-12-18 07:00:00',
-            'endOnlyActive' => '2022-12-18 12:00:00',
-            'endWithForbidden' => '2022-12-18 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-19 06:00:00',
-            'msg' => 'part of an active range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-18 02:00:00',
-            'beginWithForbidden' => '2022-12-18 07:00:00',
-            'endOnlyActive' => '2022-12-18 12:00:00',
-            'endWithForbidden' => '2022-12-18 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-26 06:00:00',
-            'msg' => 'unsolved: part of an active and concurrent forbidden range of times and tested near beginning-border',
-            'beginOnlyActive' => '2022-12-25 02:00:00',
-            'beginWithForbidden' => '2022-12-24 07:00:00',
-            'endOnlyActive' => '2022-12-25 12:00:00',
-            'endWithForbidden' => '2022-12-24 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-25 12:01:00',
-            'msg' => 'not part of an active range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-25 02:00:00',
-            'beginWithForbidden' => '2022-12-24 07:00:00',
-            'endOnlyActive' => '2022-12-25 12:00:00',
-            'endWithForbidden' => '2022-12-24 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-18 12:00:01',
-            'msg' => 'not part of an active range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-18 02:00:00',
-            'beginWithForbidden' => '2022-12-18 07:00:00',
-            'endOnlyActive' => '2022-12-18 12:00:00',
-            'endWithForbidden' => '2022-12-18 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-19 12:00:00',
-            'msg' => 'part of an active range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-18 02:00:00',
-            'beginWithForbidden' => '2022-12-18 07:00:00',
-            'endOnlyActive' => '2022-12-18 12:00:00',
-            'endWithForbidden' => '2022-12-18 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-25 12:00:00',
-            'msg' => 'unsolved: part of an active and concurrent forbidden range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-25 02:00:00',
-            'beginWithForbidden' => '2022-12-24 07:00:00',
-            'endOnlyActive' => '2022-12-25 07:00:00',
-            'endWithForbidden' => '2022-12-24 12:00:00',
-        ];
-        $itemList[] = [
-            'testValue' => '2022-12-25 07:00:00',
-            'msg' => 'unsolved: part of an active and concurrent forbidden range of times and tested near ending-border',
-            'beginOnlyActive' => '2022-12-24 02:00:00',
-            'beginWithForbidden' => '2022-12-24 07:00:00',
-            'endOnlyActive' => '2022-12-24 12:00:00',
-            'endWithForbidden' => '2022-12-24 12:00:00',
-        ];
-        foreach($itemList as $item) {
+        //                -
+//                title: 'Sommerferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-07-14 00:00:00'
+//            stop: '2022-08-24 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Herbstferien Nidersachsen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-10-17 00:00:00'
+//            stop: '2022-10-28 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Herbstferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-10-17 00:00:00'
+//            stop: '2022-10-29 23:59:59'
+//            zone: 'Europe/Berlin'
+//            -
+//            title: 'Weihnachtsferien Bremen'
+//            data:
+//              description: '- free to fill and free to add new attributes -'
+//            start: '2022-12-23 00:00:00'
+//            stop: '2023-01-06 23:59:59'
+//            zone: 'Europe/Berlin'
+
+        foreach ([
+                     ['date' => '2023-01-07 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
+                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-29 23:59:59' , 'msg' => 'Order of holidays in bremen and in niedersachen cause an race-condition-conflict, first fit first serve'],
+                     ['date' => '2022-10-29 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59', 'msg' => 'Order of holidays in bremen and in niedersachen cause an race-condition-conflict, first fit first serve'],
+                     ['date' => '2022-10-28 23:59:59', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
+                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
+                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
+                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-29 23:59:59', 'msg' => 'Order of holidays in bremen and in niedersachen cause an race-condition-conflict, first fit first serve' ],
+                 ] as $item
+        ) {
+
             $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] .
-                    '. The timerange is only build by active parts' .
-                    ' in the prevActive-Test.',
+                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`'.$item['begin'].'`, `'.$item['end'].'`].'
+                . ' '. (empty($item['msg'])?'':$item['msg']),
                 'expects' => [
                     'result' => [
-                        'beginning' => $item['beginOnlyActive'],
-                        'ending' => $item['endOnlyActive'],
+                        'beginning' => $item['begin'],
+                        'ending' => $item['end'],
                         'exist' => true,
                     ],
                 ],
                 'params' => [
-                    'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
+                    'testValue' => $item['date'],
+                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['date'],
                         new DateTimeZone('Europe/Berlin')),
-                    'required' => [
-                        'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                    ],
-                    'optional' => [
-
-                    ],
                     'general' => $general,
-                ],
-            ];
-            $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] .
-                    '. The timerange is build by active and forbidden parts' .
-                    ' in the prevActive-Test.',
-                'expects' => [
-                    'result' => [
-                        'beginning' => $item['beginWithForbidden'],
-                        'ending' => $item['endWithForbidden'],
-                        'exist' => true,
-                    ],
-                ],
-                'params' => [
-                    'testValue' => $item['testValue'],
-                    'testValueObj' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $item['testValue'],
-                        new DateTimeZone('Europe/Berlin')),
-                    'required' => [
-                        'yamlPeriodFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                    ],
-                    'optional' => [
-
-                    ],
-                    'general' => $general,
+                    'required' => $rest,
+                    'optional' => $optional,
                 ],
             ];
 

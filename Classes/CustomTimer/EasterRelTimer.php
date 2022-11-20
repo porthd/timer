@@ -289,7 +289,7 @@ class EasterRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result->hasResultExist();
+            return $result;
         }
 
         $testRanges = $this->calcDefinedRangesByStartDateTime($dateLikeEventZone, $params);

@@ -258,7 +258,7 @@ class DatePeriodTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result->hasResultExist();
+            return $result;
         }
 
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
@@ -633,6 +633,7 @@ class DatePeriodTimer implements TimerInterface
                     1609180114
 
                 );
+                break;
         }
 
         [$testStart, $testStop] = $this->getRangeWithIncludeProbility($startLimit, $stopLimit, ($factor * $length),

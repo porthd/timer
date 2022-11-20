@@ -23,6 +23,7 @@ namespace Porthd\Timer\CustomTimer;
 
 
 use DateTime;
+use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
@@ -84,6 +85,10 @@ INFOSYNTAX;
 
 
     public const ARG_YAML_PERIOD_FILE_PATH = 'yamlPeriodFilePath';
+    public const ARG_PATH_CALENDAR_JS_FILE_PATH = 'calendarJsFilePath';
+    public const ARG_PATH_CUSTOM_CALENDAR_JS_FILE_PATH = 'customCalendarJsFilePath';
+    public const ARG_PATH_CALENDAR_CSS_FILE_PATH = 'calendarCssFilePath';
+    public const ARG_PATH_CUSTOM_CALENDAR_CSS_FILE_PATH = 'customCalendarCssFilePath';
 
     protected const MAX_TIME_LIMIT_MERGE_COUNT = 4; // count of loops to check for overlapping ranges
 
@@ -100,9 +105,13 @@ INFOSYNTAX;
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
 
         self::ARG_YAML_PERIOD_FILE_PATH,
-        self::ARG_USE_ACTIVE_TIMEZONE,
     ];
-    protected const ARG_OPT_LIST = [];
+    protected const ARG_OPT_LIST = [
+        self::ARG_PATH_CALENDAR_JS_FILE_PATH,
+        self::ARG_PATH_CUSTOM_CALENDAR_JS_FILE_PATH,
+        self::ARG_PATH_CALENDAR_CSS_FILE_PATH,
+        self::ARG_PATH_CUSTOM_CALENDAR_CSS_FILE_PATH,
+    ];
 
     /**
      * @var TimerStartStopRange|null
@@ -199,7 +208,7 @@ INFOSYNTAX;
 
     /**
      * tested general 20221115
-     * tested special
+     * tested special 20221120
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
@@ -357,7 +366,7 @@ INFOSYNTAX;
     }
 
     /**
-     * tested
+     * tested 20221120
      *
      * check, if the timer ist for this time active
      *
@@ -374,14 +383,24 @@ INFOSYNTAX;
             return $result->getResultExist();
         }
         $flag = false;
+        $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
         // the method will validate the yaml-file with a internal callback-method, so that the upload of the yaml-file
         //     fails with an exception, if the syntax of the yaml is somehow wrong.
         $listOfSeparatedDates = $this->readPeriodListFromYamlFile($params);
+        $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
-            $start = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
-                $singleDate[self::YAML_ITEMS_KEY_START]);
+            if ($flagTimeZoneByFrontend) {
+                $timeZone = new DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
+            }
+            $start = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $singleDate[self::YAML_ITEMS_KEY_START],
+                $timeZone
+            );
             $stop = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
-                $singleDate[self::YAML_ITEMS_KEY_STOP]);
+                $singleDate[self::YAML_ITEMS_KEY_STOP],
+                $timeZone
+            );
             if (($start <= $dateLikeEventZone) &&
                 ($stop >= $dateLikeEventZone)
             ) {
@@ -411,7 +430,7 @@ INFOSYNTAX;
     /**
      * find the next free range depending on the defined list
      *
-     * tested
+     * tested 20221120
      *
      * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array $params
@@ -429,9 +448,16 @@ INFOSYNTAX;
         $listOfSeparatedDates = $this->readPeriodListFromYamlFile($params);
         $oldStart = null;
         $flag = true;
+        $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
+        $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
+            if ($flagTimeZoneByFrontend) {
+                $timeZone = new DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
+            }
             $start = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
-                $singleDate[self::YAML_ITEMS_KEY_START]);
+                $singleDate[self::YAML_ITEMS_KEY_START],
+                $timeZone
+            );
 
             if (($start > $dateLikeEventZone) &&
                 (
@@ -439,8 +465,11 @@ INFOSYNTAX;
                     ($oldStart > $start)
                 )
             ) {
-                $stop = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
-                    $singleDate[self::YAML_ITEMS_KEY_STOP]);
+                $stop = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $singleDate[self::YAML_ITEMS_KEY_STOP],
+                    $timeZone
+                );
                 $flag = false;
                 $oldStart = clone $start;
                 $result->setEnding($stop);
@@ -454,7 +483,7 @@ INFOSYNTAX;
     /**
      * find the next free range depending on the defined list
      *
-     * tested
+     * tested 20221120
      *
      * @param DateTime $dateLikeEventZone
      * @param array $params
@@ -472,17 +501,28 @@ INFOSYNTAX;
         $listOfSeparatedDates = $this->readPeriodListFromYamlFile($params);
         $oldStop = null;
         $flag = true;
+        $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
+        $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
-            $stop = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
-                $singleDate[self::YAML_ITEMS_KEY_STOP]);
+            if ($flagTimeZoneByFrontend) {
+                $timeZone = new DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
+            }
+            $stop = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $singleDate[self::YAML_ITEMS_KEY_STOP],
+                $timeZone
+            );
             if (($stop < $dateLikeEventZone) &&
                 (
                     $flag ||
                     ($oldStop < $stop)
                 )
             ) {
-                $start = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
-                    $singleDate[self::YAML_ITEMS_KEY_START]);
+                $start = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $singleDate[self::YAML_ITEMS_KEY_START],
+                    $timeZone
+                );
                 $flag = false;
                 $oldStop = clone $stop;
                 $result->setEnding($stop);
@@ -507,7 +547,6 @@ INFOSYNTAX;
         // $this must allow the usage of the method `validateYamlOrException`
         $result = CustomTimerUtility::readListFromYamlFile(
             $params[self::ARG_YAML_PERIOD_FILE_PATH],
-            $this->yamlFileLoader,
             $this,
             $this->cache
         );

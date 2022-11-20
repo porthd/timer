@@ -15,7 +15,6 @@
             <sheetDescription>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDaily.sheet.description
             </sheetDescription>
-            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_dailytimer.xlf</cshFile>
         </TCEforms>
         <type>array</type>
         <el>
@@ -26,6 +25,7 @@
                     </label>
                     <config>
                         <type>input</type>
+                        <renderType>inputDateTime</renderType>
                         <size>24</size>
                         <eval>time,required</eval>
                         <default>43200</default>

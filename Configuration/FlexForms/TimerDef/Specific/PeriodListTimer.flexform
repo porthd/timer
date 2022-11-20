@@ -15,7 +15,6 @@
             <sheetDescription>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerPeriodList.sheet.description
             </sheetDescription>
-            <cshFile>LLL:EXT:timer/Resources/Private/Language/FlexForms/locallang_csh_periodlisttimer.xlf</cshFile>
         </TCEforms>
         <type>array</type>
         <el>
@@ -28,7 +27,7 @@
                         <type>input</type>
                         <size>20</size>
                         <eval>trim</eval>
-                        <default>EXT:timer/Configuration/Yaml/Example_PeriodListTimer.yaml</default>
+                        <default>EXT:timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml</default>
                     </config>
                 </TCEforms>
             </yamlPeriodFilePath>

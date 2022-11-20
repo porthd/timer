@@ -232,8 +232,8 @@ class SunriseRelTimer implements TimerInterface
      */
     protected function validateDurationNatural(array $params = []): bool
     {
-        $value = (isset($params[self::ARG_DURATION_NATURAL]) ?
-            $params[self::ARG_DURATION_NATURAL] :
+        $value = (isset($params[self::ARG_FLAG_DURATION_NATURAL]) ?
+            $params[self::ARG_FLAG_DURATION_NATURAL] :
             'fail'
         );
         return in_array((string)$value, array_merge(self::LIST_SUN_POSITION, self::LIST_DURATION_NATURAL_ADD));
@@ -325,7 +325,7 @@ class SunriseRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result->hasResultExist();
+            return $result;
         }
 
         $tStamp = $dateLikeEventZone->getTimestamp();

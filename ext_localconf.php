@@ -111,8 +111,6 @@ call_user_func(
                 WeekdaylyTimer::class,
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
-            // Add cache for periodListTimer, ...  => use the default-settings for the cache
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['timer_yamllist'] ??= [];
 
             $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_timersimul'] = 'EXT:timer/Configuration/RTE/TimerTimersimul.yaml';
             $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_periodlist'] = 'EXT:timer/Configuration/RTE/TimerPeriodlist.yaml';

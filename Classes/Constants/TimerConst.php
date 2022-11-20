@@ -100,6 +100,7 @@ class TimerConst
     public const ARGUMENT_MAX_COUNT = 'maxCount';
     public const SAVE_LIMIT_MAX_EVENTS = 500;
     public const ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE = 'userRangeCompare';
+
     public const CACHE_IDENT_TIMER_YAMLLIST = 'timer_yamllist';
 
 

@@ -263,7 +263,7 @@ class MoonphaseRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result->hasResultExist();
+            return $result;
         }
 
         $utcDateTime = new DateTime('@' .

@@ -1,0 +1,34 @@
+#
+#  /***************************************************************
+#    *
+#    *  Copyright notice
+#    *
+#    *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
+#    *
+#    *  All rights reserved
+#    *
+#    *  This script is free software; you can redistribute it and/or modify
+#    *  it under the terms of the GNU General Public License as published by
+#    *  the Free Software Foundation; either version 3 of the License, or
+#    *  (at your option) any later version.
+#    *
+#    *  The GNU General Public License can be found at
+#    *  http://www.gnu.org/copyleft/gpl.html.
+#    *
+#    *  This copyright notice MUST APPEAR in all copies of the script!
+#    ***************************************************************/
+#
+#
+#
+# example YAML-structure
+#periodlist:
+#  -
+#    title: 'Winterferien Bremen'
+#    data:
+#      description: '- free to fill and free to add new attributes -'
+#    start: '2022-01-31 00:00:00'
+#    stop: '2022-02-01 23:59:59'
+#    zone: 'Europe/Berlin'
+imports:
+  - { resource: "Example_PeriodListTimerBremen.yaml" }
+  - { resource: "Example_PeriodListTimerNiedersachsen.yaml" }
