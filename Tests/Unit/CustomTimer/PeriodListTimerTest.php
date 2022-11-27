@@ -230,7 +230,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -243,7 +243,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            'message' => 'The timezone of the active frontend will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -481,13 +481,14 @@ class PeriodListTimerTest extends TestCase
     public function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
-            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'),strlen('var/www/html/',)),
+            'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
-            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
-            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
-            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'),strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'),strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'),strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'),strlen('var/www/html/',)),
         ];
         $result = [];
         // variation of obsolete parameter
@@ -564,10 +565,10 @@ class PeriodListTimerTest extends TestCase
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
-                    'optional' => $optional,
                 ],
                 [
                     'rest' => $rest,
+                    'optional' => $optional,
                     'general' => [
                         'useTimeZoneOfFrontend' => 1,
                         'timeZoneOfEvent' => $zoneVal,
@@ -664,13 +665,14 @@ class PeriodListTimerTest extends TestCase
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
         $rest = [
-            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'),strlen('var/www/html/',)),
+            'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
-            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
-            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
-            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'),strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'),strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'),strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'),strlen('var/www/html/',)),
         ];
 
         $result = [];
@@ -743,22 +745,22 @@ class PeriodListTimerTest extends TestCase
 
     public function dataProviderIsActive()
     {
-        /** the function of TYPO3 `getFileAbsFileName` don't allow files outside the webpath */
-        $prefixPath = '/var/www/html/web/typo3conf/ext/timer/Tests/Unit/CustomTimer';
         $general = [
             'useTimeZoneOfFrontend' => 0,
             'timeZoneOfEvent' => 'Europe/Berlin',
             'ultimateBeginningTimer' => '0001-01-01 00:00:00',
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
+        // pathes relative to rootpage
         $rest = [
             'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
-            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
-            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
-            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'),strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'),strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'),strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'),strlen('var/www/html/',)),
         ];
 
 //                -
@@ -866,12 +868,13 @@ class PeriodListTimerTest extends TestCase
         ];
         $rest = [
             'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
-            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
-            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
-            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'),strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'),strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'),strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'),strlen('var/www/html/',)),
         ];
 
         $result = [];
@@ -977,12 +980,13 @@ class PeriodListTimerTest extends TestCase
         ];
         $rest = [
             'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js',
-            'customCalendarJsFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js',
-            'calendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css',
-            'customCalendarCssFilePath' => __DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css',
+            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'),strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'),strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'),strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'),strlen('var/www/html/',)),
         ];
 
         $result = [];

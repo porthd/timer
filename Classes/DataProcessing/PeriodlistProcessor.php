@@ -21,11 +21,14 @@ namespace Porthd\Timer\DataProcessing;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\PeriodListTimer;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
+use Psr\Log\LoggerAwareTrait;
+use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -88,12 +91,14 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 class PeriodlistProcessor implements DataProcessorInterface
 {
+    use LoggerAwareTrait;
+
     //    required Attributes
 
     // optional Attribute perhaps with main defaults
     protected const ATTR_IF_DOT = 'if.';
     protected const ATTR_FLEX_FIELD = 'field';
-    protected const DEFAULT_FLEX_FIELD = 'tx_timer_timer';
+    protected const DEFAULT_FLEX_FIELD = TimerConst::TIMER_FIELD_FLEX_ACTIVE;
     protected const ATTR_FLEX_SELECTORFIELD = 'selectorfield';
     protected const DEFAULT_SELECTOR_FIELD = 'tx_timer_selector';
     protected const ATTR_LIMIT_DOT_LIST = 'limit.';
@@ -155,16 +160,32 @@ class PeriodlistProcessor implements DataProcessorInterface
 
         // detect the current list in the yaml-file
         $periodListTimer = GeneralUtility::makeInstance(PeriodListTimer::class);
+        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
         $flexFormParameterString = $processedData[self::OUTPUT_KEY_DATA][$flexFieldName];
         $flexFormParamRawList = GeneralUtility::xml2array($flexFormParameterString);
         $paramList = TcaUtility::flexformArrayFlatten($flexFormParamRawList);
+
         if (!isset($paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH])) {
             return $processedData;
         }
+        // Make FAL in timer usable by defining the corresponding table and uid
+        $paramList[TimerConst::TIMER_RELATION_TABLE] = 'tt_content';
+        $paramList[TimerConst::TIMER_RELATION_UID] = (int)$processedData['data']['uid'];
         $yamlFile = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH];
-        $rawResult = CustomTimerUtility::readListFromYamlFile($yamlFile, $periodListTimer);
-        $rawResult = $rawResult[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST] ?? [];
+        $rawResultFile = CustomTimerUtility::readListFromYamlFile($yamlFile,$yamlFileLoader, $periodListTimer, $this->logger);
+        $rawResultFile = $rawResultFile[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST] ?? [];
+        $yamlFal = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FAL_INFO];
+        $rawResultFalList = CustomTimerUtility::readListFromYamlFilesInFal(
+            $yamlFal,
+            $paramList[TimerConst::TIMER_RELATION_TABLE],
+            $paramList[TimerConst::TIMER_RELATION_UID],
+            $yamlFileLoader,
+            $periodListTimer,
+            $this->logger
+        );
+        $rawResultFal = array_column($rawResultFalList, PeriodListTimer::YAML_MAIN_KEY_PERIODLIST);
 
+        $rawResult = array_merge($rawResultFile, ...$rawResultFal);
         // detect the other parameters
         $upper = null;
         $lower = null;

@@ -1,6 +1,7 @@
 <?php
 defined('TYPO3_MODE') || die();
 
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -22,7 +23,7 @@ $tmp_timer_columns = [
             'default' => true,
         ],
     ],
-    'tx_timer_timer' => [
+    TimerConst::TIMER_FIELD_FLEX_ACTIVE => [
         'exclude' => true,
         'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_timer',
         'l10n_mode' => 'prefixLangTitle',

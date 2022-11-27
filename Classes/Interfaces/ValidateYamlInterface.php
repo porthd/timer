@@ -31,10 +31,10 @@ interface ValidateYamlInterface
      * The method checks, if a flatten array the ending should lower than the date in DateLikeEventZone, if it is possible
      *
      * @param array $yamlConfig
-     * @param $pathOfYamlFile
+     * @param string $infoAboutYamlFile
      * @throws TimerException
      *
      */
-    public function validateYamlOrException(array $yamlConfig, $pathOfYamlFile): void;
+    public function validateYamlOrException(array $yamlConfig, string $infoAboutYamlFile): void;
 
 }

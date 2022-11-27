@@ -40,6 +40,7 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
@@ -77,11 +78,17 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     private $cache;
 
+    /**
+     * @var YamlFileLoader
+     */
+    private $yamlFileLoader;
+
     public function __construct()
     {
         $this->listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
         $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         $this->cache = $cacheManager->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
+        $this->yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
     }
 
 
@@ -379,12 +386,12 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return false;
+            return $result->getResultExist();
         }
 
         $flag = false;
 
-        $yamlActiveConfig = $this->readRangeListFromYamlFile($params, self::ARG_YAML_ACTIVE_FILE_PATH);
+        $yamlActiveConfig = $this->readRangeListFromYamlFile($this->yamlFileLoader, $params, self::ARG_YAML_ACTIVE_FILE_PATH);
         $databaseActiveConfig = $this->readRangeListFromDatabase($params, self::ARG_DATABASE_ACTIVE_RANGE_LIST);
         $activeTimer = array_merge($yamlActiveConfig, $databaseActiveConfig);
         if (empty($activeTimer)) {
@@ -435,7 +442,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         }
         if ($flag) {
             // test the restriction for active-cases
-            $yamlForbiddenConfig = $this->readRangeListFromYamlFile($params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
+            $yamlForbiddenConfig = $this->readRangeListFromYamlFile($this->yamlFileLoader, $params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
             $databaseForbiddenConfig = $this->readRangeListFromDatabase($params,
                 self::ARG_DATABASE_FORBIDDEN_RANGE_LIST);
             $forbiddenTimer = array_merge($yamlForbiddenConfig, $databaseForbiddenConfig);
@@ -502,13 +509,13 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
-        $yamlFileActiveTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_ACTIVE_FILE_PATH);
+        $yamlFileActiveTimerList = $this->readRangeListFromYamlFile($this->yamlFileLoader, $params, self::ARG_YAML_ACTIVE_FILE_PATH);
 
         $databaseActiveTimerList = $this->readRangeListFromDatabase($params, self::ARG_DATABASE_ACTIVE_RANGE_LIST);
 
         $activeTimerList = array_merge($yamlFileActiveTimerList, $databaseActiveTimerList);
         $refDateTime = clone $dateLikeEventZone;
-        $yamlForbiddenTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
+        $yamlForbiddenTimerList = $this->readRangeListFromYamlFile($this->yamlFileLoader, $params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
         $databaseForbiddenTimerList = $this->readRangeListFromDatabase($params,
             self::ARG_DATABASE_FORBIDDEN_RANGE_LIST);
 
@@ -550,7 +557,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
-        $yamlFileActiveTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_ACTIVE_FILE_PATH);
+        $yamlFileActiveTimerList = $this->readRangeListFromYamlFile($this->yamlFileLoader, $params, self::ARG_YAML_ACTIVE_FILE_PATH);
         $databaseActiveTimerList = $this->readRangeListFromDatabase($params, self::ARG_DATABASE_ACTIVE_RANGE_LIST);
 
         $activeTimerList = array_merge($yamlFileActiveTimerList, $databaseActiveTimerList);
@@ -574,7 +581,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
                 $activeTimerList[self::YAML_MAIN_LIST_KEY],
                 $refDateTime
             );
-            $yamlForbiddenTimerList = $this->readRangeListFromYamlFile($params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
+            $yamlForbiddenTimerList = $this->readRangeListFromYamlFile($this->yamlFileLoader, $params, self::ARG_YAML_FORBIDDEN_FILE_PATH);
             $databaseForbiddenTimerList = $this->readRangeListFromDatabase($params,
                 self::ARG_DATABASE_FORBIDDEN_RANGE_LIST);
 
@@ -1029,19 +1036,27 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
 
 
     /**
+     * @param YamlFileLoader $yamlFileLoader
      * @param array $params
      * @param string $key
      * @return array
      * @throws TimerException
      */
-    protected function readRangeListFromYamlFile(array $params, string $key): array
+    protected function readRangeListFromYamlFile(
+        YamlFileLoader $yamlFileLoader,
+        array $params,
+        string $key
+    ): array
     {
+        //        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
+
         if (empty($params[$key])) {
             return [];
         }
         // $this must the method `validateYamlOrException`
         $result = CustomTimerUtility::readListFromYamlFile(
             $params[$key],
+            $yamlFileLoader,
             $this,
             $this->cache
         );
@@ -1093,7 +1108,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
                     $rawFlexformString = $item->getTxTimerTimer();
                 } else {
                     if (is_array($item)) {
-                        $rawFlexformString = $item['tx_timer_timer'];
+                        $rawFlexformString = $item[TimerConst::TIMER_FIELD_FLEX_ACTIVE];
                     } else {
                         throw new TimerException(
                             'The item is wether an object nor an array. Something went seriously wrong.',

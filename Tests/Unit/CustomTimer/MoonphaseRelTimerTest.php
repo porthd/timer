@@ -622,18 +622,18 @@ class MoonphaseRelTimerTest extends TestCase
 
         $result = [];
         /* test allowed minimal structure */
-//        $result[] = [
-//            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
-//            [
-//                'result' => 'Kauderwelsch/Murz',
-//            ],
-//            [
-//                'params' => [
-//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-//                ],
-//                'active' => 'Lauder/Furz',
-//            ],
-//        ];
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
         $result[] = [
             'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
@@ -660,14 +660,27 @@ class MoonphaseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is `0`. The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The timezone of the active will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
                 ],
                 'active' => 'Lauder/Furz',
             ],

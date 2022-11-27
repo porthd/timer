@@ -326,6 +326,10 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         foreach ($listOfRows as $timerUpRow) {
             $xmlParam = GeneralUtility::xml2array($timerUpRow[TimerConst::TIMER_FIELD_FLEX_ACTIVE]);
             $normParams = TcaUtility::flexformArrayFlatten($xmlParam);
+            // include informations abour the relations for FAL-files in Flexform-Array for each timer
+            $normParams[TimerConst::TIMER_RELATION_TABLE] = $yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE];
+            $normParams[TimerConst::TIMER_RELATION_UID] = $timerUpRow[TimerConst::TIMER_FIELD_UID];
+
             if ($this->timerService->validate(
                 $timerUpRow[TimerConst::TIMER_FIELD_SELECT],
                 $normParams

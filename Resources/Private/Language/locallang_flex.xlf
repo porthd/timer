@@ -93,7 +93,7 @@
 				<source>Example: From 1/23/2015 12:35 p.m. [startTimeSeconds] for 120 minutes [durationMinutes] every 5 [periodLength] days [periodUnit]</source>
 				<target>Beispiel: Ab dem 23.1.2015 12:35 [startTimeSeconds] für 120 Minuten [durationMinutes] alle 5 [periodLength] Tage [periodUnit]</target>
 			</trans-unit>
-			<trans-unit id="flexform.timer.txTimerDatePeriod.field.startTimeSeconds">
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.startDateTime">
 				<source>start of period</source>
 				<target>Beginn der Periode</target>
 			</trans-unit>
@@ -387,11 +387,27 @@
 			</trans-unit>
 
 			<!-- txTimerPeriodList -->
-			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFilePath">
-				<source>path to the file with list of timers in yaml-format</source>
-				<target>Pfad zur Datei mit der Lister der Termine im YAML-Format</target>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFilePath.label">
+				<source>local path or link to the file with list of timers in yaml-format</source>
+				<target>Lokaler Pfad oder Link zur Datei mit der Lister der Termine im YAML-Format</target>
 			</trans-unit>
-			<trans-unit id="flexform.timer.periodListTimer.field.calendarJsFilePath">
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFilePath.description">
+				<source>The local path can be defined relatively or it is defined in the TYPO3-specific EXT: notation. A link must begin with `http://` or `https://`. If the server is protected by a password, then the username and password must be stored in the same way as in the following example: `MyUsername:MyPassword:http://my-link.de/MyPeriodList.yaml`. (The yaml import command does not work for a link to a yaml file.)</source>
+				<target>Der lokale Pfad kann relativ definiert sein oder er wird in der TYPO3-spezifischen EXT:-Notation definiert. Ein Link muss mit `http://` oder `https://` beginnen. Wenn der Server durch ein Passwort geschützt ist, dann sind Usernamen und Passwort in analoger Form wie im folgenden Beispiel zu hinterlegen: `MeinUsername:MeinPasswort:http://mein-link.de/MeinePeriodList.yaml`. (Bei einem Link zu einer Yaml-Datei funktioniert der Yaml-Import-Befehl nicht.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFalRelation.label">
+				<source>files with lists of dates in yaml format (FAL)</source>
+				<target>Dateien mit der Listen der Termine im YAML-Format (FAL)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFalRelation.description">
+				<source>The Yaml files can be uploaded to the TYPO3 backend in the regular way and linked here. If several files are uploaded, the lists are combined. There is no (!!!) check for overlapping or duplication of appointments.</source>
+				<target>Die Yaml-Dateien können ganz regulärer Weise im TYPO3-Backend hochgeladen werden und hier verlinkt werden. Werden mehrere Dateien hochgeladen, so werden die Listen zusammengefasst. Eine Kontrolle auf Überschneidungen oder Doppelungen bei den Terminen findet nicht(!!!) statt.</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarJsFilePath.label">
+				<source>javascript path to calendar-framework</source>
+				<target>Javascript-Pfad zum Kalender-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarJsFilePath.description">
 				<source>Path to the javascript framework that can be used to display a list of dates in the form of a calendar (optional)</source>
 				<target>Pfad zum Javascript-Framework, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
 			</trans-unit>
@@ -399,13 +415,17 @@
 				<source>Path to the custom javascript that can be used to display a list of dates in the form of a calendar (optional)</source>
 				<target>Pfad zum benutzerdefinierten Javascript, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
 			</trans-unit>
-			<trans-unit id="flexform.timer.periodListTimer.field.calendarCssFilePath">
-				<source>Path to the stylesheets that can be used to display a list of dates in the form of a calendar (optional)</source>
-				<target>Pfad zum CSS/Stylesheets, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarCssFilePath.label">
+				<source>Path to CSS of the calendar-framework</source>
+				<target>Pfad zum CSS/Stylesheets des Kalenderdarstellung-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarCssFilePath.description">
+				<source>Many JavaScript frameworks for the calendar display of appointment lists come with their own CSS file, which can be integrated here by specifying the path - if necessary also in the `EXT:` notation.</source>
+				<target>Viele JavaScript-Frameworks zur Kalender-Darstellung von Terminlisten bringen eine eigene CSS-Datei mit, die gegebenenfalls hier über die Angabe des Pfade - ggfls auch in der `EXT:`-Notation - eingebunden werden kann. </target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.periodListTimer.field.customCalendarCssFilePath">
-				<source>Path to the additional customized stylesheets that can be used to display a list of dates in the form of a calendar (optional)</source>
-				<target>Pfad zum zusätzlichen benutzerdefinierten CSS/Stylesheets, mit dem eine Datumsliste in Form eines Kalenders dargestellt werden kann (optional)</target>
+				<source>Path to the css-file with additional customized stylesheets</source>
+				<target>Pfad zur CSS-Datei mit zusätzlichen benutzerdefinierten Stylesheets</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerPeriodList.sheet.title">
 				<source>list of single timegaps from Yaml-files (not working yet)</source>

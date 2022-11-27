@@ -1,5 +1,6 @@
 <?php
 
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -22,7 +23,7 @@ $tmp_timer_columns = [
             'default' => false,
         ],
     ],
-    'tx_timer_timer' => [
+    TimerConst::TIMER_FIELD_FLEX_ACTIVE => [
         'exclude' => true,
         'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_timer',
         'config' => [
@@ -83,7 +84,6 @@ ExtensionManagementUtility::addToAllTCAtypes(
     '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.label,' .
     'tx_timer_scheduler, tx_timer_selector, tx_timer_timer,starttime,endtime,'
 );
-$GLOBALS['TCA']['sys_file_reference']['interface']['showRecordFieldList'] .= ', tx_timer_timer,tx_timer_selector,starttime,endtime,';
 
 
 $GLOBALS['TCA']['sys_file_reference']['palettes']['imageoverlayPalette']['showitem'] .= ',--linebreak--,tx_timer_timer,tx_timer_selector,--linebreak--,starttime,endtime,';

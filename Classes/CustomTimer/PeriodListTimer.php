@@ -85,6 +85,7 @@ INFOSYNTAX;
 
 
     public const ARG_YAML_PERIOD_FILE_PATH = 'yamlPeriodFilePath';
+    public const ARG_YAML_PERIOD_FAL_INFO = 'yamlPeriodFalRelation';
     public const ARG_PATH_CALENDAR_JS_FILE_PATH = 'calendarJsFilePath';
     public const ARG_PATH_CUSTOM_CALENDAR_JS_FILE_PATH = 'customCalendarJsFilePath';
     public const ARG_PATH_CALENDAR_CSS_FILE_PATH = 'calendarCssFilePath';
@@ -98,19 +99,22 @@ INFOSYNTAX;
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/PeriodListTimer.flexform',
     ];
 
+    protected const ARG_OPT_LIST = [
+        self::ARG_PATH_CALENDAR_JS_FILE_PATH,
+        self::ARG_PATH_CUSTOM_CALENDAR_JS_FILE_PATH,
+        self::ARG_PATH_CALENDAR_CSS_FILE_PATH,
+        self::ARG_PATH_CUSTOM_CALENDAR_CSS_FILE_PATH,
+
+        self::ARG_YAML_PERIOD_FILE_PATH,
+        self::ARG_YAML_PERIOD_FAL_INFO,
+
+    ];
     protected const ARG_REQ_LIST = [
         self::ARG_ULTIMATE_RANGE_BEGINN,
         self::ARG_ULTIMATE_RANGE_END,
         self::ARG_USE_ACTIVE_TIMEZONE,
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
 
-        self::ARG_YAML_PERIOD_FILE_PATH,
-    ];
-    protected const ARG_OPT_LIST = [
-        self::ARG_PATH_CALENDAR_JS_FILE_PATH,
-        self::ARG_PATH_CUSTOM_CALENDAR_JS_FILE_PATH,
-        self::ARG_PATH_CALENDAR_CSS_FILE_PATH,
-        self::ARG_PATH_CUSTOM_CALENDAR_CSS_FILE_PATH,
     ];
 
     /**
@@ -237,17 +241,17 @@ INFOSYNTAX;
      * The method will implicitly called in `readPeriodListFromYamlFile(array $params): array`
      *
      * @param array $yamlArray
-     * @param string $pathOfYamlFile
+     * @param string $infoAboutYamlFile
      * @throws TimerException
      */
-    public function validateYamlOrException(array $yamlArray, $pathOfYamlFile): void
+    public function validateYamlOrException(array $yamlArray, $infoAboutYamlFile): void
     {
         $flag = true;
         if (!isset($yamlArray[self::YAML_MAIN_KEY_PERIODLIST])) {
             throw new TimerException(
                 'The yaml-file has not the correct syntax. It must contain the attribute ' .
                 self::YAML_MAIN_KEY_PERIODLIST . ' at the starting level. Other attributes will be ignored at the starting-level. ' .
-                'Check the structure of your YAML-file `' . $pathOfYamlFile . '` for your `periodListTimer`.',
+                'Check the structure of your YAML-file `' . $infoAboutYamlFile . '` for your `periodListTimer`.',
                 1668234195
             );
         };
@@ -266,7 +270,7 @@ INFOSYNTAX;
                     (!empty($item[self::YAML_ITEMS_KEY_DATA])));
             if (!$flag) {
                 throw new TimerException(
-                    'The item in yaml-file `' . $pathOfYamlFile . '` for your `periodListTimer` has not the correct syntax.' .
+                    'The item in yaml-file `' . $infoAboutYamlFile . '` for your `periodListTimer` has not the correct syntax.' .
                     'Check the items in your YAML-file. The following items caused the exception: ' .
                     print_r($item, true) . "\n\n==============\n" . self::INFO_STRUCTUR_YAML .
                     "\n\n==============\n\nexample:\n--------------\n" . self::EXAMPLE_STRUCTUR_YAML .
@@ -278,7 +282,7 @@ INFOSYNTAX;
                     (in_array($item[self::YAML_ITEMS_KEY_ZONE], $timeZone)));
             if (!$flag) {
                 throw new TimerException(
-                    'The item in yaml-file `' . $pathOfYamlFile . '` for your `periodListTimer` has not the correct timezone.' .
+                    'The item in yaml-file `' . $infoAboutYamlFile . '` for your `periodListTimer` has not the correct timezone.' .
                     'Check the items in your YAML-file and the definitions of your timezones. The following items caused the exception: ' .
                     print_r($item,
                         true) . "\n\n==============\n\n<br>allowed timezones:<br>\n~~~~~~~~~~~~~~\n<br>" . implode(',',
@@ -291,7 +295,7 @@ INFOSYNTAX;
                 throw new TimerException(
                     'The starttime `' . $start->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is ' .
                     'greater than the stoptime `' . $stop->format(TimerInterface::TIMER_FORMAT_DATETIME) .
-                    '`  in your yaml-file `' . $pathOfYamlFile . '`. This is not correct. ' .
+                    '`  in your yaml-file `' . $infoAboutYamlFile . '`. This is not correct. ' .
                     'Check the items in your YAML-file. The following items caused the exception: ' .
                     print_r($item, true),
                     1668236285
@@ -539,19 +543,35 @@ INFOSYNTAX;
      * @return array
      * @throws TimerException
      */
+
     protected function readPeriodListFromYamlFile(array $params): array
     {
-        if (!isset($params[self::ARG_YAML_PERIOD_FILE_PATH])) {
+        if( (!isset($params[self::ARG_YAML_PERIOD_FILE_PATH])) &&
+            ($params[self::ARG_YAML_PERIOD_FAL_INFO] <1)
+        ){
             return [];
         }
         // $this must allow the usage of the method `validateYamlOrException`
-        $result = CustomTimerUtility::readListFromYamlFile(
+        $fileResult = CustomTimerUtility::readListFromYamlFile(
             $params[self::ARG_YAML_PERIOD_FILE_PATH],
+            $this->yamlFileLoader,
             $this,
+            $this->logger,
             $this->cache
         );
-        return $result[self::YAML_MAIN_KEY_PERIODLIST] ?? [];
+        $fileResult = $fileResult[self::YAML_MAIN_KEY_PERIODLIST] ?? [];
+        $falRawResult = CustomTimerUtility::readListFromYamlFilesInFal(
+            $params[self::ARG_YAML_PERIOD_FAL_INFO],
+            ($params[TimerConst::TIMER_RELATION_TABLE]??''),
+        ($params[TimerConst::TIMER_RELATION_UID]??''),
+        $this->yamlFileLoader,
+            $this,
+            $this->logger,
+            $this->cache
+        );
+        $rawResultFal = array_column($falRawResult, PeriodListTimer::YAML_MAIN_KEY_PERIODLIST);
 
+        return array_merge($fileResult, ...$rawResultFal);
     }
 
     /**

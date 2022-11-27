@@ -21,24 +21,108 @@
             <yamlPeriodFilePath>
                 <TCEforms>
                     <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlPeriodFilePath
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlPeriodFilePath.label
                     </label>
+                    <description>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlPeriodFilePath.description
+                    </description>
                     <config>
                         <type>input</type>
-                        <size>20</size>
+                        <size>30</size>
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml</default>
                     </config>
                 </TCEforms>
             </yamlPeriodFilePath>
+            <yamlPeriodFalRelation>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlPeriodFalRelation.label
+                    </label>
+                    <description>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlPeriodFalRelation.description
+                    </description>
+                    <config>
+                        <type>inline</type>
+                        <maxitems>10</maxitems>
+                        <foreign_table>sys_file_reference</foreign_table>
+                        <foreign_table_field>tablenames</foreign_table_field>
+                        <foreign_label>uid_local</foreign_label>
+                        <foreign_sortby>sorting_foreign</foreign_sortby>
+                        <foreign_field>uid_foreign</foreign_field>
+                        <foreign_selector>uid_local</foreign_selector>
+                        <foreign_selector_fieldTcaOverride>
+                            <config>
+                                <appearance>
+                                    <elementBrowserType>file</elementBrowserType>
+                                    <elementBrowserAllowed>yaml,yml</elementBrowserAllowed>
+                                </appearance>
+                            </config>
+                        </foreign_selector_fieldTcaOverride>
+                        <foreign_types type="array">
+                            <numIndex index="0">
+                                <showitem>--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,--palette--;;filePalette</showitem>
+                            </numIndex>
+                            <numIndex index="2">
+                                <showitem>--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,--palette--;;filePalette</showitem>
+                            </numIndex>
+                        </foreign_types>
+                        <foreign_match_fields>
+                            <fieldname>tx_timer_timer</fieldname> <!-- CAUTION!! Replace "fal" with the variable name of this field! -->
+                        </foreign_match_fields>
+                        <appearance type="array">
+                            <newRecordLinkAddTitle>1</newRecordLinkAddTitle>
+                            <headerThumbnail>
+                                <field>uid_local</field>
+                                <height>64</height>
+                                <width>64</width>
+                            </headerThumbnail>
+                            <enabledControls>
+                                <info>1</info>
+                                <new>0</new>
+                                <dragdrop>0</dragdrop>
+                                <sort>1</sort>
+                                <hide>0</hide>
+                                <delete>1</delete>
+                                <localize>1</localize>
+                            </enabledControls>
+                            <createNewRelationLinkTitle>LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference</createNewRelationLinkTitle>
+                        </appearance>
+                        <behaviour>
+                            <localizationMode>select</localizationMode>
+                            <localizeChildrenAtParentLocalization>1</localizeChildrenAtParentLocalization>
+                        </behaviour>
+                        <overrideChildTca>
+                            <columns type="array">
+                                <uid_local type="array">
+                                    <config type="array">
+                                        <appearance type="array">
+                                            <elementBrowserType>file</elementBrowserType>
+                                            <elementBrowserAllowed>yaml,yml</elementBrowserAllowed>
+                                        </appearance>
+                                    </config>
+                                </uid_local>
+                            </columns>
+                            <types type="array">
+                                <numIndex index="2">
+                                    <showitem>--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,--palette--;;filePalette</showitem>
+                                </numIndex>
+                            </types>
+                        </overrideChildTca>
+                    </config>
+                </TCEforms>
+            </yamlPeriodFalRelation>
             <calendarJsFilePath>
                 <TCEforms>
                     <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarJsFilePath
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarJsFilePath.label
                     </label>
+                    <description>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarJsFilePath.description
+                    </description>>
                     <config>
                         <type>input</type>
-                        <size>20</size>
+                        <size>30</size>
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js</default>
                     </config>
@@ -51,7 +135,7 @@
                     </label>
                     <config>
                         <type>input</type>
-                        <size>20</size>
+                        <size>30</size>
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.js</default>
                     </config>
@@ -61,11 +145,14 @@
             <calendarCssFilePath>
                 <TCEforms>
                     <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarCssFilePath
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarCssFilePath.label
+                    </label>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarCssFilePath.description
                     </label>
                     <config>
                         <type>input</type>
-                        <size>20</size>
+                        <size>30</size>
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Javascript/caleandar-master/css/theme1.css</default>
                     </config>
@@ -78,7 +165,7 @@
                     </label>
                     <config>
                         <type>input</type>
-                        <size>20</size>
+                        <size>30</size>
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.css</default>
                     </config>

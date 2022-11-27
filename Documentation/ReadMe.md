@@ -77,18 +77,35 @@ The content element `timersimul` shows an example of how the view helpers and da
 environments, they should be hidden from editors. It will be removed when the extension reaches `beta` status.
 
 ### Content element `periodlist` for simple appointment lists
-
 The content element `periodlist` has a similar structure to the content element `textmedia`.
 It also allows the output of simple appointment lists, provided for the preset
 Timer `periodlisttimer` a valid yaml file with a list of appointments is stored.
+#### Remarks
+##### _Note 1_
+In order to enable the most flexible integration of appointment lists, there are two input fields `yamlPeriodFilePath` and `yamlPeriodFalRelation`.
+The field `yamlPeriodFilePath` has more the integrator in mind and allows four variants,
+to specify the location of the YAML file:
+1. Absolute path specification if necessary. also with relative path
+2. Path specification with the prefix `EXT:`
+3. Simple URL starting with `http://` or with `https://`
+4. URL with server password in the format `username:password:url`, where the actual url starts with url starting with `http://` or with `https://`. The YAML instruction `import` is not supported for the URL information.
+
+The `yamlPeriodFalRelation` field has more of the editor in mind and allows the integration of the YAML file via the TYPO3 backend.
+Here the editor also has the option of including several files, which the timer treats as one large list.
+
+##### _Note 2_
 Various data can be stored in the `data` attribute so that it is structured using a suitable partial or template
 Special information such as admission price, advance sales prices or similar can be transferred via file.
 This form works well when it comes to automating data about the format of a YAML file from other sources
 to accept. This saves entering the data in the backend.
 
+#### representation in a calendar
+
 Two path fields for JavaScript and for style sheets were added to the Flexform.
 In this way it is possible to display the appointments in calendar form. The default settings are set so
 that the school holidays for Lower Saxony and Bremen from the year 2022 are shown in a calendar.
+
+#### dataprocessors for this timer
 
 Three data processors were defined so that the data could be read.
 The `FlexToArrayProcessor` allows reading Flexform fields and converting them into simple arrays.

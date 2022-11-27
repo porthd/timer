@@ -1,5 +1,6 @@
 <?php
 
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
 
 defined('TYPO3_MODE') || die();
@@ -29,10 +30,8 @@ return [
         ],
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, ' .
-            'title, description,' .
-            'tx_timer_scheduler, tx_timer_timer, tx_timer_selector,' .
-            'teaser_slogan, teaser_infotext, ',
+        'maxDBListItems' => 50,
+        'maxSingleDBListItems' => 200
     ],
     'types' => [
         '1' => ['showitem' => '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_domain_model_event.tab.single,' .
@@ -176,7 +175,7 @@ return [
                 ],
             ],
         ],
-        'tx_timer_timer' => [
+        TimerConst::TIMER_FIELD_FLEX_ACTIVE => [
             'exclude' => true,
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_timer',
             'config' => [

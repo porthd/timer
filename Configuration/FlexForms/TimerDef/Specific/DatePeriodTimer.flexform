@@ -18,10 +18,10 @@
         </TCEforms>
         <type>array</type>
         <el>
-            <startTimeSeconds>
+            <startDateTime>
                 <TCEforms>
                     <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.field.startTimeSeconds
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.field.startDateTime
                     </label>
                     <config>
                         <type>input</type>
@@ -33,7 +33,7 @@
                         <default>1970-01-01 23:01:00</default>
                     </config>
                 </TCEforms>
-            </startTimeSeconds>
+            </startDateTime>
             <durationMinutes>
                 <TCEforms>
                     <label>

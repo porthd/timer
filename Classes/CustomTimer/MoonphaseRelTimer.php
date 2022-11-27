@@ -263,7 +263,7 @@ class MoonphaseRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->getResultExist();
         }
 
         $utcDateTime = new DateTime('@' .
@@ -406,16 +406,16 @@ class MoonphaseRelTimer implements TimerInterface
             // check previous moon-cycle
             $refStamp = $moonPhaseTStamp - self::AVG_SECONDS_MOON_PHASE;
         }
-        if ((isset($lowerMooning, $upperMooning)) &&
-            ($lowerMooning < $upperMooning) &&
+        if ((isset($lowerLimit, $upperLimit)) &&
+            ($lowerLimit < $upperLimit) &&
             ($rangeSec !== 0)
         ) {
 
-            if (($this->isAllowedInRange($lowerMooning, $params)) &&
-                ($this->isAllowedInRange($upperMooning, $params))
+            if (($this->isAllowedInRange($lowerLimit, $params)) &&
+                ($this->isAllowedInRange($upperLimit, $params))
             ) {
-                $result->setBeginning($lowerMooning);
-                $result->setEnding($upperMooning);
+                $result->setBeginning($lowerLimit);
+                $result->setEnding($upperLimit);
                 $result->setResultExist(true);
             } else {
                 $result->failOnlyNextActive($dateLikeEventZone);

@@ -76,7 +76,7 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 class FlexToArrayProcessor implements DataProcessorInterface
 {
     protected const ATTR_FLEX_FIELD = 'field';
-    protected const DEFAULT_FLEX_FIELD = 'tx_timer_timer';
+    protected const DEFAULT_FLEX_FIELD = TimerConst::TIMER_FIELD_FLEX_ACTIVE;
     protected const ATTR_SELECTOR_FIELD = 'selectorfield';
     protected const DEFAULT_SELECTOR_FIELD = 'tx_timer_selector';
     protected const ATTR_IF_DOT = 'if.';

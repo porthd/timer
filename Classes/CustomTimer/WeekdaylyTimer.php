@@ -220,7 +220,7 @@ class WeekdaylyTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->getResultExist();
         }
 
         $bitsOfWeekdays = $this->getParameterActiveWeekday($params);

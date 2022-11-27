@@ -29,7 +29,7 @@ call_user_func(function () {
                 'default' => true,
             ],
         ],
-        'tx_timer_timer' => [
+        TimerConst::TIMER_FIELD_FLEX_ACTIVE => [
             'exclude' => true,
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_timer',
             'config' => [
@@ -126,7 +126,8 @@ call_user_func(function () {
 //                        'readOnly' => 1,
 //                    ],
 //                ],
-//                'tx_timer_timer' => [
+//                // = 'tx_timer_timer'
+//                TimerConst::TIMER_FIELD_FLEX_ACTIVE => [
 //                    'config' => [
 //                        'default' => 'txTimerPeriodList',
 //                        'readOnly' => 1,

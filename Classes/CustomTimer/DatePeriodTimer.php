@@ -37,7 +37,7 @@ class DatePeriodTimer implements TimerInterface
     use GeneralTimerTrait;
 
     protected const TIMER_NAME = 'txTimerDatePeriod';
-    protected const ARG_REQ_START_TIME = 'startTimeSeconds';
+    protected const ARG_REQ_START_TIME = 'startDateTime';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
     protected const ARG_REQ_PERIOD_LENGTH = 'periodLength';
     protected const ARG_REQ_PERIOD_UNIT = 'periodUnit';
@@ -258,7 +258,7 @@ class DatePeriodTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->getResultExist();
         }
 
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
@@ -272,9 +272,10 @@ class DatePeriodTimer implements TimerInterface
         //        );
 
         $startTime = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
-            $timeString
+            $timeString,
+            $dateLikeEventZone->getTimezone()
         );
-        $startTime->setTimezone($dateLikeEventZone->getTimezone());
+
 
         if ($delayMin >= 0) {
             $stopLimit = clone $startTime;

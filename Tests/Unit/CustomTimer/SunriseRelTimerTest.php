@@ -783,6 +783,142 @@ class SunriseRelTimerTest extends TestCase
         }
     }
 
+
+    public function dataProviderGetTimeZoneOfEvent()
+    {
+
+        $result = [];
+        /* test allowed minimal structure */
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            [
+                'result' => 'Lauder/Furz',
+            ],
+            [
+                'params' => [
+
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The timezone of the Active will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
+            [
+                'result' => 'Lauder/Furz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
+            $result[] = [
+                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                    print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
+                [
+                    'result' => 'Lauder/Furz',
+                ],
+                [
+                    'params' => [
+                        TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                    ],
+                    'active' => 'Lauder/Furz',
+                ],
+            ];
+        }
+        $result[] = [
+            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            [
+                'result' => 'Lauder/Furz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            [
+                'result' => 'Lauder/Furz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        return $result;
+    }
+
+    /**
+     * @dataProvider dataProviderGetTimeZoneOfEvent
+     * @test
+     */
+    public function getTimeZoneOfEvent($message, $expects, $params)
+    {
+        if (!isset($expects) && empty($expects)) {
+            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+        } else {
+
+            $myParams = $params['params'];
+            $activeZone = $params['active'];
+            $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
+
+            $this->assertEquals(
+                $expects['result'],
+                $result,
+                $message
+            );
+        }
+    }
+
     public function dataProviderIsActive()
     {
         /**
@@ -820,7 +956,7 @@ class SunriseRelTimerTest extends TestCase
         ];
 
         $result = [];
-//        'pos' => sunrise, sunset, transit, civil_twilight_begin, civil_twilight_end, nautical_twilight_begin, nautical_twilight_end, astronomical_twilight_begin, astronomical_twilight_end
+// //        'pos' => sunrise, sunset, transit, civil_twilight_begin, civil_twilight_end, nautical_twilight_begin, nautical_twilight_end, astronomical_twilight_begin, astronomical_twilight_end
 //        foreach ([
 //
 //                     [
@@ -830,8 +966,8 @@ class SunriseRelTimerTest extends TestCase
 //                         'active' => true,
 //                     ],
 //                     [
-//                         'start' => '2022-07-30 21:33:00',
-//                         'time' => '2022-07-30 21:33:00',
+//                         'start' => '2022-07-30 21:35:00',
+//                         'time' => '2022-07-30 21:35:00',
 //                         'pos' => 'sunset',
 //                         'active' => true,
 //                     ],
@@ -877,7 +1013,7 @@ class SunriseRelTimerTest extends TestCase
 //                         'pos' => 'astronomical_twilight_end',
 //                         'active' => true,
 //                     ],
-//
+
 //                     [
 //                         'start' => '2022-07-30 07:51:00',
 //                         'time' => '2022-07-30 07:51:00',
@@ -885,8 +1021,14 @@ class SunriseRelTimerTest extends TestCase
 //                         'active' => false,
 //                     ],
 //                     [
-//                         'start' => '2022-07-30 23:35:00',
-//                         'time' => '2022-07-30 23:35:00',
+//                         'start' => '2022-07-30 23:36:00',
+//                         'time' => '2022-07-30 23:36:00',
+//                         'pos' => 'sunset',
+//                         'active' => true,
+//                     ],
+//                     [
+//                         'start' => '2022-07-30 23:37:00',
+//                         'time' => '2022-07-30 23:37:00',
 //                         'pos' => 'sunset',
 //                         'active' => false,
 //                     ],
@@ -934,8 +1076,8 @@ class SunriseRelTimerTest extends TestCase
 //                     ],
 //
 //                     [
-//                         'start' => '2022-07-30 07:50:00',
-//                         'time' => '2022-07-30 07:50:00',
+//                         'start' => '2022-07-30 07:47:00',
+//                         'time' => '2022-07-30 07:47:00',
 //                         'pos' => 'sunrise',
 //                         'active' => true,
 //                     ],
@@ -989,8 +1131,8 @@ class SunriseRelTimerTest extends TestCase
 //                     ],
 //
 //                     [
-//                         'start' => '2022-07-30 05:48:00',
-//                         'time' => '2022-07-30 05:48:00',
+//                         'start' => '2022-07-30 07:49:00',
+//                         'time' => '2022-07-30 07:49:00',
 //                         'pos' => 'sunrise',
 //                         'active' => false,
 //                     ],
@@ -1098,14 +1240,14 @@ class SunriseRelTimerTest extends TestCase
                              'active' => true,
                              'order' => 3,
                          ],
-            ['start' => '2022-07-30 21:23:00', 'time' => '2022-07-30 21:23:00', 'pos' => 'sunset', 'active' => true, 'order' => 5,],
-            ['start' => '2022-07-30 13:31:00', 'time' => '2022-07-30 13:31:00', 'pos' => 'transit', 'active' => true, 'order' => 4,],
-            ['start' => '2022-07-30 04:55:00', 'time' => '2022-07-30 04:55:00', 'pos' => 'civil_twilight_begin', 'active' => true, 'order' => 2,],
-            ['start' => '2022-07-30 22:06:00', 'time' => '2022-07-30 22:06:00', 'pos' => 'civil_twilight_end', 'active' => true, 'order' => 6,],
-            ['start' => '2022-07-30 03:55:00', 'time' => '2022-07-30 03:55:00', 'pos' => 'nautical_twilight_begin', 'active' => true, 'order' => 1,],
-            ['start' => '2022-07-30 23:07:00', 'time' => '2022-07-30 23:07:00', 'pos' => 'nautical_twilight_end', 'active' => true, 'order' => 7,],
-            ['start' => '2022-07-30 02:09:00', 'time' => '2022-07-30 02:09:00', 'pos' => 'astronomical_twilight_begin', 'active' => true, 'order' => 0,],
-            ['start' => '2022-07-31 00:52:00', 'time' => '2022-07-31 00:52:00', 'pos' => 'astronomical_twilight_end', 'active' => true, 'order' => 8,],
+                         ['start' => '2022-07-30 21:23:00', 'time' => '2022-07-30 21:23:00', 'pos' => 'sunset', 'active' => true, 'order' => 5,],
+                         ['start' => '2022-07-30 13:31:00', 'time' => '2022-07-30 13:31:00', 'pos' => 'transit', 'active' => true, 'order' => 4,],
+                         ['start' => '2022-07-30 04:55:00', 'time' => '2022-07-30 04:55:00', 'pos' => 'civil_twilight_begin', 'active' => true, 'order' => 2,],
+                         ['start' => '2022-07-30 22:06:00', 'time' => '2022-07-30 22:06:00', 'pos' => 'civil_twilight_end', 'active' => true, 'order' => 6,],
+                         ['start' => '2022-07-30 03:55:00', 'time' => '2022-07-30 03:55:00', 'pos' => 'nautical_twilight_begin', 'active' => true, 'order' => 1,],
+                         ['start' => '2022-07-30 23:07:00', 'time' => '2022-07-30 23:07:00', 'pos' => 'nautical_twilight_end', 'active' => true, 'order' => 7,],
+                         ['start' => '2022-07-30 02:09:00', 'time' => '2022-07-30 02:09:00', 'pos' => 'astronomical_twilight_begin', 'active' => true, 'order' => 0,],
+                         ['start' => '2022-07-31 00:52:00', 'time' => '2022-07-31 00:52:00', 'pos' => 'astronomical_twilight_end', 'active' => true, 'order' => 8,],
                      ] as $param
             ) {
                 $result[] = [
@@ -1158,128 +1300,6 @@ class SunriseRelTimerTest extends TestCase
             }
         }
         return $result;
-    }
-
-    public function dataProviderGetTimeZoneOfEvent()
-    {
-
-        $result = [];
-        /* test allowed minimal structure */
-//        $result[] = [
-//            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
-//            [
-//                'result' => 'Kauderwelsch/Murz',
-//            ],
-//            [
-//                'params' => [
-//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-//                ],
-//                'active' => 'Lauder/Furz',
-//            ],
-//        ];
-        $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
-            [
-                'result' => 'Lauder/Furz',
-            ],
-            [
-                'params' => [
-
-                ],
-                'active' => 'Lauder/Furz',
-            ],
-        ];
-        $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
-            [
-                'result' => 'Kauderwelsch/Murz',
-            ],
-            [
-                'params' => [
-                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
-                ],
-                'active' => 'Lauder/Furz',
-            ],
-        ];
-        $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
-            [
-                'result' => 'Lauder/Furz',
-            ],
-            [
-                'params' => [
-                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
-                ],
-                'active' => 'Lauder/Furz',
-            ],
-        ];
-        foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
-            $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
-                    print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
-                [
-                    'result' => 'Lauder/Furz',
-                ],
-                [
-                    'params' => [
-                        TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
-                    ],
-                    'active' => 'Lauder/Furz',
-                ],
-            ];
-        }
-        $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
-            [
-                'result' => 'Lauder/Furz',
-            ],
-            [
-                'params' => [
-                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
-                ],
-                'active' => 'Lauder/Furz',
-            ],
-        ];
-        $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
-            [
-                'result' => 'Lauder/Furz',
-            ],
-            [
-                'params' => [
-                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
-                ],
-                'active' => 'Lauder/Furz',
-            ],
-        ];
-        return $result;
-    }
-
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
-    public function getTimeZoneOfEvent($message, $expects, $params)
-    {
-        if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
-        } else {
-
-            $myParams = $params['params'];
-            $activeZone = $params['active'];
-            $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
-
-            $this->assertEquals(
-                $expects['result'],
-                $result,
-                $message
-            );
-        }
     }
 
     /**

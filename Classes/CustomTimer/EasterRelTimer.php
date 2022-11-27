@@ -289,7 +289,7 @@ class EasterRelTimer implements TimerInterface
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result;
+            return $result->getResultExist();
         }
 
         $testRanges = $this->calcDefinedRangesByStartDateTime($dateLikeEventZone, $params);
@@ -360,15 +360,16 @@ class EasterRelTimer implements TimerInterface
             } else {
                 $checkday->sub($relInterval);
             }
-            if ($dateLikeEventZone < $checkday) {
-                if ($durationMin > 0) {
+            if ($durationMin >= 0) {
+                if ($dateLikeEventZone <= $checkday) {
                     $flagRebuild = true;
                     break;
-                } else {
-                    if ($dateLikeEventZone < ($checkday->sub($durInterval))) {
-                        $flagRebuild = true;
-                        break;
-                    }
+                }
+            } else {
+                $checkday->sub($durInterval);
+                if ($dateLikeEventZone <= $checkday) {
+                    $flagRebuild = true;
+                    break;
                 }
             }
             $testDay->add($yearInterval);

@@ -25,7 +25,7 @@ rangelist:
     title: 'every year: christmas 25.12. - fullday active'
     description: '- free to fill -'
     params:
-      startTimeSeconds: '1970-12-25 00:00:00'
+      startDateTime: '1970-12-25 00:00:00'
       durationMinutes: 1440
       periodLength: 1
       periodUnit: 'DY'

@@ -36,7 +36,7 @@ class DatePeriodTimerTest extends TestCase
 {
     protected const NAME_TIMER = 'txTimerDatePeriod';
     protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_USE_ACTIVE_TIMEZONE = TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
     protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
     protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
 
@@ -133,13 +133,16 @@ class DatePeriodTimerTest extends TestCase
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr($filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
-        } else if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
-            $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-            $this->assertTrue((false),'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
-            $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
+            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+                $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
+                    substr($filePath,
+                        strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
+                $this->assertTrue((false),
+                    'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. ');
+            } else {
+                $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
+            }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
         $this->assertTrue($flag,
@@ -171,7 +174,7 @@ class DatePeriodTimerTest extends TestCase
             ],
             [
                 'required' => [
-                    'startTimeSeconds' => '2020-12-28 13:12:59',
+                    'startDateTime' => '2020-12-28 13:12:59',
                     'durationMinutes' => 120,
                     'periodLength' => 10,
                     'periodUnit' => 'DM',
@@ -186,15 +189,20 @@ class DatePeriodTimerTest extends TestCase
             ],
         ];
         // Variation of starttime
-        foreach ([1609152276 => false, '2020-12-28 13:12:59' => true, '28.12.2020 13:12:59' => false, '' => false] as $dateTimeDef => $myRes) {
+        foreach ([
+                     1609152276 => false,
+                     '2020-12-28 13:12:59' => true,
+                     '28.12.2020 13:12:59' => false,
+                     '' => false,
+                 ] as $dateTimeDef => $myRes) {
             $result[] = [
-                'message' => 'The variation of startTimeSeconds `' . $dateTimeDef . '` ' . ($myRes ? ' will be okay.' : 'will fail.'),
+                'message' => 'The variation of startDateTime `' . $dateTimeDef . '` ' . ($myRes ? ' will be okay.' : 'will fail.'),
                 [
                     'result' => $myRes,
                 ],
                 [
                     'required' => [
-                        'startTimeSeconds' => $dateTimeDef, // Variation
+                        'startDateTime' => $dateTimeDef, // Variation
                         'durationMinutes' => 120,
                         'periodLength' => 10,
                         'periodUnit' => 'DM',
@@ -211,7 +219,17 @@ class DatePeriodTimerTest extends TestCase
         }
         // Variation of durationMinutes
         //floats counld not be key  of arrays in PHP
-        foreach ([1000000000 => true, 120 => true, '100.1' => false, '-0.1' => false, 0 => false, 0.9999999 => false, '112' => true, '112.2' => false, -120 => true] as $variant => $myRes) {
+        foreach ([
+                     1000000000 => true,
+                     120 => true,
+                     '100.1' => false,
+                     '-0.1' => false,
+                     0 => false,
+                     0.9999999 => false,
+                     '112' => true,
+                     '112.2' => false,
+                     -120 => true,
+                 ] as $variant => $myRes) {
             $result[] = [
                 'message' => 'The variation of durationTime `' . $variant . '` ' . ($myRes ? ' will be okay.' : 'will fail.'),
                 [
@@ -219,7 +237,7 @@ class DatePeriodTimerTest extends TestCase
                 ],
                 [
                     'required' => [
-                        'startTimeSeconds' => '2020-12-28 13:12:59',
+                        'startDateTime' => '2020-12-28 13:12:59',
                         'durationMinutes' => $variant,
                         'periodLength' => 10,
                         'periodUnit' => 'DM',
@@ -235,7 +253,15 @@ class DatePeriodTimerTest extends TestCase
             ];
         }
         // Variation of periodLength
-        foreach ([-100 => false, -0.1 => false, 0 => false, 0.9999999 => false, '1' => true, '2.2' => true, 120 => true] as $variant => $myRes) {
+        foreach ([
+                     -100 => false,
+                     -0.1 => false,
+                     0 => false,
+                     0.9999999 => false,
+                     '1' => true,
+                     '2.2' => true,
+                     120 => true,
+                 ] as $variant => $myRes) {
             $result[] = [
                 'message' => 'The variation of periodLength `' . $variant . '` ' . ($myRes ? ' will be okay.' : 'will fail.'),
                 [
@@ -243,7 +269,7 @@ class DatePeriodTimerTest extends TestCase
                 ],
                 [
                     'required' => [
-                        'startTimeSeconds' => '2020-12-28 13:12:59',
+                        'startDateTime' => '2020-12-28 13:12:59',
                         'durationMinutes' => 120,
                         'periodLength' => $variant,
                         'periodUnit' => 'DM',
@@ -259,9 +285,21 @@ class DatePeriodTimerTest extends TestCase
             ];
         }
         // Variation of periodUnit
-        foreach (['M' => false, '' => false, 2 => false, 'TS' => false,
-                     'tm' => true, 'tM' => true, 'Tm' => true, 'TM' => true, 'TH' => true, 'DD' => true,
-                     'DW' => true, 'DM' => true, 'DY' => true,] as $variant => $myRes
+        foreach ([
+                     'M' => false,
+                     '' => false,
+                     2 => false,
+                     'TS' => false,
+                     'tm' => true,
+                     'tM' => true,
+                     'Tm' => true,
+                     'TM' => true,
+                     'TH' => true,
+                     'DD' => true,
+                     'DW' => true,
+                     'DM' => true,
+                     'DY' => true,
+                 ] as $variant => $myRes
         ) {
             $result[] = [
                 'message' => 'The variation of periodUnit `' . $variant . '` ' . ($myRes ? ' will be okay.' : 'will fail. ') .
@@ -272,7 +310,7 @@ class DatePeriodTimerTest extends TestCase
                 ],
                 [
                     'required' => [
-                        'startTimeSeconds' => '2020-12-28 13:12:59',
+                        'startDateTime' => '2020-12-28 13:12:59',
                         'durationMinutes' => 120,
                         'periodLength' => 1,
                         'periodUnit' => $variant,
@@ -289,7 +327,7 @@ class DatePeriodTimerTest extends TestCase
         }
 
         // variation of requiered parmeters
-        foreach (['startTimeSeconds', 'durationMinutes', 'periodLength', 'periodUnit',] as $item) {
+        foreach (['startDateTime', 'durationMinutes', 'periodLength', 'periodUnit',] as $item) {
             $undefined = [
                 'message' => 'The test is incorrect, because `' . $item . '` in the needed arguments is missing.',
                 [
@@ -297,7 +335,7 @@ class DatePeriodTimerTest extends TestCase
                 ],
                 [
                     'required' => [
-                        'startTimeSeconds' => '2020-12-28 13:12:59',
+                        'startDateTime' => '2020-12-28 13:12:59',
                         'durationMinutes' => 120,
                         'periodLength' => 10,
                         'periodUnit' => 'DM',
@@ -321,7 +359,7 @@ class DatePeriodTimerTest extends TestCase
                     ],
                     [
                         'required' => [
-                            'startTimeSeconds' => '2020-12-28 13:12:59',
+                            'startDateTime' => '2020-12-28 13:12:59',
                             'durationMinutes' => 120,
                             'periodLength' => 10,
                             'periodUnit' => 'DM',
@@ -346,7 +384,7 @@ class DatePeriodTimerTest extends TestCase
             ],
             [
                 'required' => [
-                    'startTimeSeconds' => '2020-12-28 13:12:59',
+                    'startDateTime' => '2020-12-28 13:12:59',
                     'durationMinutes' => 120,
                     'periodLength' => 10,
                     'periodUnit' => 'DM',
@@ -391,7 +429,7 @@ class DatePeriodTimerTest extends TestCase
     public function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
-            'startTimeSeconds' => '2020-12-28 13:12:59',
+            'startDateTime' => '2020-12-28 13:12:59',
             'durationMinutes' => 120,
             'periodLength' => 12,
             'periodUnit' => 'TM',
@@ -427,11 +465,20 @@ class DatePeriodTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false], [false,true],['false',true], [new Datetime(), false],
-                     ['hallo',false],
-                     ['0',true],[0.0,true],["0.0",false],
-                     ['true',true],['1',true],[1,true],
-                     [1.0,true],['1.0',false],] as $value) {
+                     [null, false],
+                     [false, true],
+                     ['false', true],
+                     [new Datetime(), false],
+                     ['hallo', false],
+                     ['0', true],
+                     [0.0, true],
+                     ["0.0", false],
+                     ['true', true],
+                     ['1', true],
+                     [1, true],
+                     [1.0, true],
+                     ['1.0', false],
+                 ] as $value) {
             $result[] = [
                 'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
@@ -547,7 +594,8 @@ class DatePeriodTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00',
+            new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -661,10 +709,22 @@ class DatePeriodTimerTest extends TestCase
 
         // 1. Test with variation of Time and positive durationminutes
         // + 5. Test the Day-Overlay for the active period
-        foreach (['PT1M' => false, 'PT1H' => true, 'PT2H' => true, 'PT3H' => true, 'PT3H1S' => false, 'P7DT2H' => true, 'P14DT2H' => true, 'P8WT2H' => true, 'P8WT3H1S' => false,] as $diff => $expects) {
+        foreach ([
+                     'PT1M' => false,
+                     'PT1H' => true,
+                     'PT2H' => true,
+                     'PT3H' => true,
+                     'PT3H1S' => false,
+                     'P7DT2H' => true,
+                     'P14DT2H' => true,
+                     'P8WT2H' => true,
+                     'P8WT3H1S' => false,
+                 ] as $diff => $expects) {
 
 
-            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-20 11:00:00', new DateTimeZone('Europe/Berlin'));
+            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-20 11:00:00',
+                new DateTimeZone('Europe/Berlin')
+            );
             $check->add(new DateInterval($diff));
             $result[] = [
                 'message' => 'The date with the add `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.') .
@@ -675,7 +735,7 @@ class DatePeriodTimerTest extends TestCase
                 'params' => [
                     'value' => clone $check,
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 12:00:00',
+                        'startDateTime' => '2020-12-27 12:00:00',
                         'durationMinutes' => 120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -690,10 +750,21 @@ class DatePeriodTimerTest extends TestCase
         }
 
         // 2. Test with variation of Time and negative durationminutes
-        foreach (['PT1M' => false, 'PT1H' => true, 'PT2H' => true, 'PT3H' => true, 'PT3H1S' => false, 'P7DT2H' => true, 'P14DT2H' => true, 'P8WT2H' => true, 'P8WT3H1S' => false,] as $diff => $expects) {
+        foreach ([
+                     'PT1M' => false,
+                     'PT1H' => true,
+                     'PT2H' => true,
+                     'PT3H' => true,
+                     'PT3H1S' => false,
+                     'P7DT2H' => true,
+                     'P14DT2H' => true,
+                     'P8WT2H' => true,
+                     'P8WT3H1S' => false,
+                 ] as $diff => $expects) {
 //        foreach (['P7DT2H' => true, 'P14DT2H' => true, 'P8WT2H' => true, 'P8WT3H1S' => false,] as $diff => $expects)  {
 
-            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin'));
+            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                new DateTimeZone('Europe/Berlin'));
             $check->add(new DateInterval($diff));
             $result[] = [
                 'message' => 'The date with minus-duration-time  `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.'),
@@ -703,7 +774,7 @@ class DatePeriodTimerTest extends TestCase
                 'params' => [
                     'value' => $check,
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
+                        'startDateTime' => '2020-12-27 14:00:00',
                         'durationMinutes' => -120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -719,16 +790,24 @@ class DatePeriodTimerTest extends TestCase
 
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
-            foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
+            foreach ([
+                         'UTC',
+                         'Europe/Berlin',
+                         'Australia/Eucla',
+                         'America/Detroit',
+                         'Pacific/Fiji',
+                         'Indian/Chagos',
+                     ] as $timezoneName) {
                 $result[] = [
                     'message' => 'The date with additional Interval  will be NOT active. It is indepent to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => false,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 14:00:00',
+                            'startDateTime' => '2020-12-27 14:00:00',
                             'durationMinutes' => -120,
                             'periodLength' => 1,
                             'periodUnit' => 'DW',
@@ -746,9 +825,10 @@ class DatePeriodTimerTest extends TestCase
                         'result' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 12:00:00',
+                            'startDateTime' => '2020-12-27 12:00:00',
                             'durationMinutes' => 120,
                             'periodLength' => 1,
                             'periodUnit' => 'DW',
@@ -765,50 +845,61 @@ class DatePeriodTimerTest extends TestCase
         }
 
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
-        foreach (['0001-01-01 00:00:00', '2020-12-27 11:00:00', '2020-12-27 13:00:00', '2020-12-27 18:00:00', '9999-12-31 23:59:59',] as $timeString) {
-            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin'));
-            $result[] = [
-                'message' => 'The date with additional Interval  will be NOT active. It is independ to the ultimate-parameter. ',
-                'expects' => [
-                    'result' => false,
-                ],
-                'params' => [
-                    'value' => clone $check,
-                    'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
-                        'durationMinutes' => -120,
-                        'periodLength' => 1,
-                        'periodUnit' => 'DW',
-                        // general
-                        'useTimeZoneOfFrontend' => false, // Variation
-                        'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
-                        'ultimateBeginningTimer' => '2020-12-27 13:00:00',
-                        'ultimateEndingTimer' => $timeString,
+        foreach ([
+                     '0001-01-01 00:00:00',
+                     '2020-12-27 11:00:00',
+                     '2020-12-27 13:00:00',
+                     '2020-12-27 18:00:00',
+                     '9999-12-31 23:59:59',
+                 ] as $timeString) {
+            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                new DateTimeZone('Europe/Berlin'));
+            if ($timeString >= '2020-12-27 14:00:00') {
+                $result[] = [
+                    'message' => 'The date with additional Interval  will be NOT active. It is independ to the ultimate-parameter. ',
+                    'expects' => [
+                        'result' => false,
                     ],
-                ],
-            ];
-            $check->add(new DateInterval('PT2H'));
-            $result[] = [
-                'message' => 'The date with additional Interval  will be active. It is independ to the ultimate-parameter. ',
-                'expects' => [
-                    'result' => true,
-                ],
-                'params' => [
-                    'value' => clone $check,
-                    'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
-                        'durationMinutes' => -120,
-                        'periodLength' => 1,
-                        'periodUnit' => 'DW',
-                        // general
-                        'useTimeZoneOfFrontend' => false,
-                        'timeZoneOfEvent' => 'Europe/Berlin', // dynamic see below
-                        'ultimateBeginningTimer' => $timeString,
-                        'ultimateEndingTimer' => '2020-12-27 13:00:00',
+                    'params' => [
+                        'value' => clone $check,
+                        'setting' => [
+                            'startDateTime' => '2020-12-27 14:00:00',
+                            'durationMinutes' => -120,
+                            'periodLength' => 1,
+                            'periodUnit' => 'DW',
+                            // general
+                            'useTimeZoneOfFrontend' => false, // Variation
+                            'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
+                            'ultimateBeginningTimer' => '2020-12-27 10:00:00',
+                            'ultimateEndingTimer' => $timeString,
+                        ],
                     ],
-                ],
-            ];
+                ];
+            }
+            if ($timeString <= '2020-12-27 11:00:00') {
+                $check->add(new DateInterval('PT2H'));
+                $result[] = [
+                    'message' => 'The date with additional Interval  will be active. It is independ to the ultimate-parameter. ',
+                    'expects' => [
+                        'result' => true,
+                    ],
+                    'params' => [
+                        'value' => clone $check,
+                        'setting' => [
+                            'startDateTime' => '2020-12-27 14:00:00',
+                            'durationMinutes' => -120,
+                            'periodLength' => 1,
+                            'periodUnit' => 'DW',
+                            // general
+                            'useTimeZoneOfFrontend' => false,
+                            'timeZoneOfEvent' => 'Europe/Berlin', // dynamic see below
+                            'ultimateBeginningTimer' => $timeString,
+                            'ultimateEndingTimer' => '2020-12-27 15:00:00',
+                        ],
+                    ],
+                ];
 
+            }
         }
         return $result;
     }
@@ -819,18 +910,18 @@ class DatePeriodTimerTest extends TestCase
 
         $result = [];
         /* test allowed minimal structure */
-//        $result[] = [
-//            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
-//            [
-//                'result' => 'Kauderwelsch/Murz',
-//            ],
-//            [
-//                'params' => [
-//                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-//                ],
-//                'active' => 'Lauder/Furz',
-//            ],
-//        ];
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
         $result[] = [
             'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
@@ -851,7 +942,20 @@ class DatePeriodTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
+                ],
+                'active' => 'Lauder/Furz',
+            ],
+        ];
+        $result[] = [
+            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            [
+                'result' => 'Kauderwelsch/Murz',
+            ],
+            [
+                'params' => [
+                    TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -864,7 +968,7 @@ class DatePeriodTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -879,7 +983,7 @@ class DatePeriodTimerTest extends TestCase
                 [
                     'params' => [
                         TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -893,7 +997,7 @@ class DatePeriodTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -906,7 +1010,7 @@ class DatePeriodTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -980,9 +1084,10 @@ class DatePeriodTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                    new DateTimeZone('Europe/Berlin')),
                 'setting' => [
-                    'startTimeSeconds' => '2020-12-27 14:00:00',
+                    'startDateTime' => '2020-12-27 14:00:00',
                     'durationMinutes' => -120,
                     'periodLength' => 1,
                     'periodUnit' => 'DW',
@@ -1004,9 +1109,10 @@ class DatePeriodTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00',
+                    new DateTimeZone('Europe/Berlin')),
                 'setting' => [
-                    'startTimeSeconds' => '2020-12-31 23:00:00',
+                    'startDateTime' => '2020-12-31 23:00:00',
                     'durationMinutes' => 120,
                     'periodLength' => 1,
                     'periodUnit' => 'DW',
@@ -1019,10 +1125,14 @@ class DatePeriodTimerTest extends TestCase
             ],
         ];
         // Variation for different Date and Intervalls in futre and past
-        foreach (['2020-12-27 11:00:00' => '2020-12-27', '2020-12-27 12:00:00' => '2021-01-03',
-                     '2020-02-23 12:00:00' => '2020-03-01', '2021-02-21 12:00:00' => '2021-02-28',] as $testDate => $nextRange) {
+        foreach ([
+                     '2020-12-27 11:00:00' => '2020-12-27',
+                     '2020-12-27 12:00:00' => '2021-01-03',
+                     '2020-02-23 12:00:00' => '2020-03-01',
+                     '2021-02-21 12:00:00' => '2021-02-28',
+                 ] as $testDate => $nextRange) {
             $result[] = [
-                'message' => 'The nextRange is correctly detected for the Startdate `'.$testDate.'`. ',
+                'message' => 'The nextRange is correctly detected for the Startdate `' . $testDate . '`. ',
                 'expects' => [
                     'result' => [
                         'beginning' => $nextRange . ' 12:00:00',
@@ -1031,9 +1141,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate,
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
+                        'startDateTime' => '2020-12-27 14:00:00',
                         'durationMinutes' => -120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -1049,10 +1160,16 @@ class DatePeriodTimerTest extends TestCase
         // the period must be longer than the active period
         // Variation of Unit
         // Remarkt for TM:the next valid stop-range relativly to the testtime 13:00 will beginn at 15:10 - not 14:10. There is no warning for overlapping.  The periodlength should be greater than the durationminutes.
-        foreach (['TH' => '2020-12-28 00:00:00', 'DD' => '2021-01-06 14:00:00', 'DW' => '2021-03-07 14:00:00',
-                     'DM' => '2021-10-27 14:00:00','DY' => '2030-12-27 14:00:00',] as $testUnit => $startRange
+        foreach ([
+                     'TH' => '2020-12-28 00:00:00',
+                     'DD' => '2021-01-06 14:00:00',
+                     'DW' => '2021-03-07 14:00:00',
+                     'DM' => '2021-10-27 14:00:00',
+                     'DY' => '2030-12-27 14:00:00',
+                 ] as $testUnit => $startRange
         ) {
-            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange, new DateTimeZone('Europe/Berlin'));
+            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange,
+                new DateTimeZone('Europe/Berlin'));
             $beginning = clone $ending;
             $beginning->sub(new DateInterval('PT120M'));
             $result[] = [
@@ -1065,9 +1182,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
+                        'startDateTime' => '2020-12-27 14:00:00',
                         'durationMinutes' => -120,
                         'periodLength' => 10,
                         'periodUnit' => $testUnit,
@@ -1084,9 +1202,13 @@ class DatePeriodTimerTest extends TestCase
         // the period must be longer than the active period
         // Variation of Unit
         // Remarkt for TM:the next valid stop-range relativly to the testtime 13:00 will beginn at 15:10 - not 14:10. There is no warning for overlapping.  The periodlength should be greater than the durationminutes.
-        foreach (['TM' => '2020-12-27 13:15:00', 'tm' => '2020-12-27 13:15:00', 'tM' => '2020-12-27 13:15:00',
-                     ] as $testUnit => $startRange) {
-            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange, new DateTimeZone('Europe/Berlin'));
+        foreach ([
+                     'TM' => '2020-12-27 13:15:00',
+                     'tm' => '2020-12-27 13:15:00',
+                     'tM' => '2020-12-27 13:15:00',
+                 ] as $testUnit => $startRange) {
+            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange,
+                new DateTimeZone('Europe/Berlin'));
             $beginning = clone $ending;
             $beginning->sub(new DateInterval('PT10M'));
             $result[] = [
@@ -1099,9 +1221,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 12:55:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 12:55:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 13:00:00',
+                        'startDateTime' => '2020-12-27 13:00:00',
                         'durationMinutes' => -10,
                         'periodLength' => 15,
                         'periodUnit' => $testUnit,
@@ -1117,8 +1240,9 @@ class DatePeriodTimerTest extends TestCase
         // the period must be longer than the active period
         // Variation Remarkt for TM:the next valid stop-range relativly to the testtime 13:00 will beginn at 15:10 - not 14:10. There is no warning for overlapping.  The periodlength should be greater than the durationminutes.
         foreach ([3, 5, 12, 13] as $length) {
-            foreach ([ 'DD' => 'P1D', 'DW' => 'P1W', 'DM' => 'P1M', 'DY' => 'P1Y',] as $testUnit => $step) {
-                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
+            foreach (['DD' => 'P1D', 'DW' => 'P1W', 'DM' => 'P1M', 'DY' => 'P1Y',] as $testUnit => $step) {
+                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                    new DateTimeZone('Europe/Berlin'));
                 for ($i = 0; $i < $length; $i++) {
                     $beginning->add(new DateInterval($step));
                 }
@@ -1134,9 +1258,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 13:00:00',
+                            'startDateTime' => '2020-12-27 13:00:00',
                             'durationMinutes' => 120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,
@@ -1158,9 +1283,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 15:00:00',
+                            'startDateTime' => '2020-12-27 15:00:00',
                             'durationMinutes' => -120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,
@@ -1176,9 +1302,10 @@ class DatePeriodTimerTest extends TestCase
         }
         // the period must be longer than the active period
         // Variation Remarkt for TM:the next valid stop-range relativly to the testtime 13:00 will beginn at 15:10 - not 14:10. There is no warning for overlapping.  The periodlength should be greater than the durationminutes.
-        foreach ([150,1440] as $length) {
+        foreach ([150, 1440] as $length) {
             foreach (['TM' => 'PT1M',] as $testUnit => $step) {
-                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
+                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                    new DateTimeZone('Europe/Berlin'));
                 for ($i = 0; $i < $length; $i++) {
                     $beginning->add(new DateInterval($step));
                 }
@@ -1194,9 +1321,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 13:00:00',
+                            'startDateTime' => '2020-12-27 13:00:00',
                             'durationMinutes' => 120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,
@@ -1218,9 +1346,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 15:00:00',
+                            'startDateTime' => '2020-12-27 15:00:00',
                             'durationMinutes' => -120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,
@@ -1235,7 +1364,11 @@ class DatePeriodTimerTest extends TestCase
             }
         }
         // 22100 min = 15 Tage 8 h 20 min
-        foreach ([120 => '2020-12-27 15:00:00', 22100 => '2021-01-11 21:20:00', 144000 => '2021-04-06 13:00:00'] as $duration => $endingString) {
+        foreach ([
+                     120 => '2020-12-27 15:00:00',
+                     22100 => '2021-01-11 21:20:00',
+                     144000 => '2021-04-06 13:00:00',
+                 ] as $duration => $endingString) {
             // $step = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
             // $step->add(new DateInterval('PT'.$duration.'M'));
             $result[] = [
@@ -1249,9 +1382,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 13:00:00',
+                        'startDateTime' => '2020-12-27 13:00:00',
                         'durationMinutes' => $duration,
                         'periodLength' => 1,
                         'periodUnit' => 'DY',
@@ -1265,10 +1399,14 @@ class DatePeriodTimerTest extends TestCase
             ];
         }
         // Variation odf the starttime
-        foreach (['1735-12-27 22:00:00' => '2019-12-27 22:00:00', '2135-12-27 22:00:00' => '2019-12-27 22:00:00'] as $startTime => $nextBegin) {
+        foreach ([
+                     '1735-12-27 22:00:00' => '2019-12-27 22:00:00',
+                     '2135-12-27 22:00:00' => '2019-12-27 22:00:00',
+                 ] as $startTime => $nextBegin) {
             // $step = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
             // $step->add(new DateInterval('PT'.$duration.'M'));
-            $nextEnd = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $nextBegin, new DateTimeZone('Europe/Berlin'));
+            $nextEnd = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $nextBegin,
+                new DateTimeZone('Europe/Berlin'));
 
             $reversEnd = clone $nextEnd;
             $nextEnd->add(new DateInterval('PT240M'));
@@ -1284,9 +1422,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => $startTime,
+                        'startDateTime' => $startTime,
                         'durationMinutes' => 240,
                         'periodLength' => 12,
                         'periodUnit' => 'DM',  // 12 Monate = 1 jahr
@@ -1309,9 +1448,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => $startTime,
+                        'startDateTime' => $startTime,
                         'durationMinutes' => -240,
                         'periodLength' => 1,
                         'periodUnit' => 'DY',
@@ -1328,7 +1468,14 @@ class DatePeriodTimerTest extends TestCase
 
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
-            foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
+            foreach ([
+                         'UTC',
+                         'Europe/Berlin',
+                         'Australia/Eucla',
+                         'America/Detroit',
+                         'Pacific/Fiji',
+                         'Indian/Chagos',
+                     ] as $timezoneName) {
                 $result[] = [
                     'message' => 'The nextRange is correctly detected. It is indepent to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
@@ -1339,9 +1486,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 14:00:00',
+                            'startDateTime' => '2020-12-27 14:00:00',
                             'durationMinutes' => -120,
                             'periodLength' => 1,
                             'periodUnit' => 'DW',
@@ -1363,9 +1511,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 12:00:00',
+                            'startDateTime' => '2020-12-27 12:00:00',
                             'durationMinutes' => 120,
                             'periodLength' => 1,
                             'periodUnit' => 'DW',
@@ -1381,7 +1530,13 @@ class DatePeriodTimerTest extends TestCase
             }
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
-        foreach (['0001-01-01 00:00:00', '2020-12-27 11:00:00', '2020-12-27 13:00:00', '2020-12-27 18:00:00', '9999-12-31 23:59:59',] as $timeString) {
+        foreach ([
+                     '0001-01-01 00:00:00',
+                     '2020-12-27 11:00:00',
+                     '2020-12-27 13:00:00',
+                     '2020-12-27 18:00:00',
+                     '9999-12-31 23:59:59',
+                 ] as $timeString) {
             $result[] = [
                 'message' => 'The nextRange is correctly detected. It is independ to the ultimate-parameter. ',
                 'expects' => [
@@ -1392,9 +1547,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
+                        'startDateTime' => '2020-12-27 14:00:00',
                         'durationMinutes' => -120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -1416,9 +1572,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 12:00:00',
+                        'startDateTime' => '2020-12-27 12:00:00',
                         'durationMinutes' => 120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -1473,9 +1630,10 @@ class DatePeriodTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00',
+                    new DateTimeZone('Europe/Berlin')),
                 'setting' => [
-                    'startTimeSeconds' => '2020-12-27 14:00:00',
+                    'startDateTime' => '2020-12-27 14:00:00',
                     'durationMinutes' => -120,
                     'periodLength' => 1,
                     'periodUnit' => 'DW',
@@ -1497,9 +1655,10 @@ class DatePeriodTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-01-05 02:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-01-05 02:00:00',
+                    new DateTimeZone('Europe/Berlin')),
                 'setting' => [
-                    'startTimeSeconds' => '2020-12-31 23:00:00',
+                    'startDateTime' => '2020-12-31 23:00:00',
                     'durationMinutes' => 120,
                     'periodLength' => 1,
                     'periodUnit' => 'DW',
@@ -1513,8 +1672,12 @@ class DatePeriodTimerTest extends TestCase
         ];
 
         // Variation for different Date and Intervalls in futre and past
-        foreach (['2020-12-27 15:00:00' => '2020-12-27', '2020-12-27 12:00:00' => '2020-12-20',
-                     '2020-02-23 12:00:00' => '2020-02-16', '2021-02-21 12:00:00' => '2021-02-14',] as $testDate => $prevRange) {
+        foreach ([
+                     '2020-12-27 15:00:00' => '2020-12-27',
+                     '2020-12-27 12:00:00' => '2020-12-20',
+                     '2020-02-23 12:00:00' => '2020-02-16',
+                     '2021-02-21 12:00:00' => '2021-02-14',
+                 ] as $testDate => $prevRange) {
             $result[] = [
                 'message' => 'The prevRange is correctly detected for the Startdate `' . $testDate . '`. ',
                 'expects' => [
@@ -1525,9 +1688,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate, new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate,
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
+                        'startDateTime' => '2020-12-27 14:00:00',
                         'durationMinutes' => -120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -1544,10 +1708,16 @@ class DatePeriodTimerTest extends TestCase
         // the period must be longer than the active period
         //         Variation of Unit
         //         Remarkt for TM:the next valid stop-range relativly to the testtime 13:00 will beginn at 15:10 - not 14:10. There is no warning for overlapping.  The periodlength should be greater than the durationminutes.
-        foreach ([   'TH' => '2020-12-27 04:00:00', 'DD' => '2020-12-17 14:00:00', 'DW' => '2020-10-18 14:00:00',
-                     'DM' => '2020-02-27 14:00:00', 'DY' => '2010-12-27 14:00:00',] as $testUnit => $startRange
+        foreach ([
+                     'TH' => '2020-12-27 04:00:00',
+                     'DD' => '2020-12-17 14:00:00',
+                     'DW' => '2020-10-18 14:00:00',
+                     'DM' => '2020-02-27 14:00:00',
+                     'DY' => '2010-12-27 14:00:00',
+                 ] as $testUnit => $startRange
         ) {
-            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange, new DateTimeZone('Europe/Berlin'));
+            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange,
+                new DateTimeZone('Europe/Berlin'));
             $beginning = clone $ending;
             $beginning->sub(new DateInterval('PT120M'));
             $result[] = [
@@ -1560,9 +1730,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
+                        'startDateTime' => '2020-12-27 14:00:00',
                         'durationMinutes' => -120,
                         'periodLength' => 10,
                         'periodUnit' => $testUnit,
@@ -1578,10 +1749,14 @@ class DatePeriodTimerTest extends TestCase
 
         // the period must be longer than the active period
         // resolve upper and lower-case for units
-        foreach (['TM' => '2020-12-27 12:45:00', 'tm' => '2020-12-27 12:45:00',
-                     'tM' => '2020-12-27 12:45:00',] as $testUnit => $startRange
+        foreach ([
+                     'TM' => '2020-12-27 12:45:00',
+                     'tm' => '2020-12-27 12:45:00',
+                     'tM' => '2020-12-27 12:45:00',
+                 ] as $testUnit => $startRange
         ) {
-            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange, new DateTimeZone('Europe/Berlin'));
+            $ending = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $startRange,
+                new DateTimeZone('Europe/Berlin'));
             $beginning = clone $ending;
             $beginning->sub(new DateInterval('PT10M'));
             $result[] = [
@@ -1594,9 +1769,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 13:00:00',
+                        'startDateTime' => '2020-12-27 13:00:00',
                         'durationMinutes' => -10,
                         'periodLength' => 15,
                         'periodUnit' => $testUnit,
@@ -1612,10 +1788,14 @@ class DatePeriodTimerTest extends TestCase
 
 
         // Variation odf the starttime
-        foreach (['1735-12-27 22:00:00' => '2019-12-27 22:00:00', '2135-12-27 22:00:00' => '2019-12-27 22:00:00'] as $startTime => $nextBegin) {
+        foreach ([
+                     '1735-12-27 22:00:00' => '2019-12-27 22:00:00',
+                     '2135-12-27 22:00:00' => '2019-12-27 22:00:00',
+                 ] as $startTime => $nextBegin) {
             // $step = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
             // $step->add(new DateInterval('PT'.$duration.'M'));
-            $nextEnd = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $nextBegin, new DateTimeZone('Europe/Berlin'));
+            $nextEnd = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $nextBegin,
+                new DateTimeZone('Europe/Berlin'));
 
             $reversEnd = clone $nextEnd;
             $nextEnd->add(new DateInterval('PT240M'));
@@ -1631,9 +1811,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-28 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-28 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => $startTime,
+                        'startDateTime' => $startTime,
                         'durationMinutes' => 240,
                         'periodLength' => 12,
                         'periodUnit' => 'DM',  // 12 Monate = 1 jahr
@@ -1656,9 +1837,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-28 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-28 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => $startTime,
+                        'startDateTime' => $startTime,
                         'durationMinutes' => -240,
                         'periodLength' => 1,
                         'periodUnit' => 'DY',
@@ -1673,7 +1855,14 @@ class DatePeriodTimerTest extends TestCase
         }
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
-            foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
+            foreach ([
+                         'UTC',
+                         'Europe/Berlin',
+                         'Australia/Eucla',
+                         'America/Detroit',
+                         'Pacific/Fiji',
+                         'Indian/Chagos',
+                     ] as $timezoneName) {
                 $result[] = [
                     'message' => 'The nextRange is correctly detected. It is indepent to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
@@ -1684,9 +1873,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 14:00:00',
+                            'startDateTime' => '2020-12-27 14:00:00',
                             'durationMinutes' => -120,
                             'periodLength' => 1,
                             'periodUnit' => 'DW',
@@ -1708,9 +1898,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 12:00:00',
+                            'startDateTime' => '2020-12-27 12:00:00',
                             'durationMinutes' => 120,
                             'periodLength' => 1,
                             'periodUnit' => 'DW',
@@ -1726,7 +1917,13 @@ class DatePeriodTimerTest extends TestCase
             }
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
-        foreach (['0001-01-01 00:00:00', '2020-12-27 11:00:00', '2020-12-27 13:00:00', '2020-12-27 18:00:00', '9999-12-31 23:59:59',] as $timeString) {
+        foreach ([
+                     '0001-01-01 00:00:00',
+                     '2020-12-27 11:00:00',
+                     '2020-12-27 13:00:00',
+                     '2020-12-27 18:00:00',
+                     '9999-12-31 23:59:59',
+                 ] as $timeString) {
             $result[] = [
                 'message' => 'The nextRange is correctly detected. It is independ to the ultimate-parameter. ',
                 'expects' => [
@@ -1737,9 +1934,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 14:00:00',
+                        'startDateTime' => '2020-12-27 14:00:00',
                         'durationMinutes' => -120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -1761,9 +1959,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 15:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 12:00:00',
+                        'startDateTime' => '2020-12-27 12:00:00',
                         'durationMinutes' => 120,
                         'periodLength' => 1,
                         'periodUnit' => 'DW',
@@ -1779,7 +1978,11 @@ class DatePeriodTimerTest extends TestCase
         }
 
         // 22100 min = 15 Tage 8 h 20 min
-        foreach ([120 => '2018-12-27 15:00:00', 22100 => '2019-01-11 21:20:00', 144000 => '2019-04-06 13:00:00'] as $duration => $endingString) {
+        foreach ([
+                     120 => '2018-12-27 15:00:00',
+                     22100 => '2019-01-11 21:20:00',
+                     144000 => '2019-04-06 13:00:00',
+                 ] as $duration => $endingString) {
             // $step = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
             // $step->add(new DateInterval('PT'.$duration.'M'));
             $result[] = [
@@ -1793,9 +1996,10 @@ class DatePeriodTimerTest extends TestCase
                     ],
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2019-12-27 13:00:00',
+                        new DateTimeZone('Europe/Berlin')),
                     'setting' => [
-                        'startTimeSeconds' => '2020-12-27 13:00:00',
+                        'startDateTime' => '2020-12-27 13:00:00',
                         'durationMinutes' => $duration,
                         'periodLength' => 1,
                         'periodUnit' => 'DY',
@@ -1812,9 +2016,16 @@ class DatePeriodTimerTest extends TestCase
         // the period must be longer than the active period
         // Variation Remarkt for TM:the next valid stop-range relativly to the testtime 13:00 will beginn at 15:10 - not 14:10. There is no warning for overlapping.  The periodlength should be greater than the durationminutes.
         // There is no check against overlapping
-        foreach ([3, 5, 12, 13,150] as $length) {
-            foreach (['TH' => 'PT1H', 'DD' => 'P1D', 'DW' => 'P1W', 'DM' => 'P1M', 'DY' => 'P1Y',] as $testUnit => $step) {
-                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
+        foreach ([3, 5, 12, 13, 150] as $length) {
+            foreach ([
+                         'TH' => 'PT1H',
+                         'DD' => 'P1D',
+                         'DW' => 'P1W',
+                         'DM' => 'P1M',
+                         'DY' => 'P1Y',
+                     ] as $testUnit => $step) {
+                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                    new DateTimeZone('Europe/Berlin'));
                 for ($i = 0; $i < $length; $i++) {
                     $beginning->sub(new DateInterval($step));
                 }
@@ -1822,7 +2033,7 @@ class DatePeriodTimerTest extends TestCase
                 $ending->add(new DateInterval('PT120M'));
                 $result[] = [
                     'message' => 'The prevRange is correctly detected for the testUnit `' . $testUnit .
-                        '`. (Variation of length `'.$length.'` and unit `'.$testUnit.'`) ',
+                        '`. (Variation of length `' . $length . '` and unit `' . $testUnit . '`) ',
                     'expects' => [
                         'result' => [
                             'beginning' => $beginning->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1831,9 +2042,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 13:00:00',
+                            'startDateTime' => '2020-12-27 13:00:00',
                             'durationMinutes' => 120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,
@@ -1847,7 +2059,7 @@ class DatePeriodTimerTest extends TestCase
                 ];
                 $result[] = [
                     'message' => 'The prevRange is correctly detected for the testUnit `' . $testUnit .
-                        '`. (Variation of length `'.$length.'` and unit `'.$testUnit.'`) ',
+                        '`. (Variation of length `' . $length . '` and unit `' . $testUnit . '`) ',
                     'expects' => [
                         'result' => [
                             'beginning' => $beginning->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1856,9 +2068,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 15:00:00',
+                            'startDateTime' => '2020-12-27 15:00:00',
                             'durationMinutes' => -120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,
@@ -1877,8 +2090,9 @@ class DatePeriodTimerTest extends TestCase
         // Variation Remarkt for TM:the next valid stop-range relativly to the testtime 13:00 will beginn at 15:10 - not 14:10. There is no warning for overlapping.  The periodlength should be greater than the durationminutes.
         // There is no check against overlapping
         foreach ([150, 1440] as $length) {
-            foreach (['TM' => 'PT1M', ] as $testUnit => $step) {
-                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin'));
+            foreach (['TM' => 'PT1M',] as $testUnit => $step) {
+                $beginning = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                    new DateTimeZone('Europe/Berlin'));
                 for ($i = 0; $i < $length; $i++) {
                     $beginning->sub(new DateInterval($step));
                 }
@@ -1886,7 +2100,7 @@ class DatePeriodTimerTest extends TestCase
                 $ending->add(new DateInterval('PT120M'));
                 $result[] = [
                     'message' => 'The prevRange is correctly detected for the testUnit `' . $testUnit .
-                        '`. (Variation of length `'.$length.'` and unit `'.$testUnit.'`) ',
+                        '`. (Variation of length `' . $length . '` and unit `' . $testUnit . '`) ',
                     'expects' => [
                         'result' => [
                             'beginning' => $beginning->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1895,9 +2109,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 13:00:00',
+                            'startDateTime' => '2020-12-27 13:00:00',
                             'durationMinutes' => 120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,
@@ -1911,7 +2126,7 @@ class DatePeriodTimerTest extends TestCase
                 ];
                 $result[] = [
                     'message' => 'The prevRange is correctly detected for the testUnit `' . $testUnit .
-                        '`. (Variation of length `'.$length.'` and unit `'.$testUnit.'`) ',
+                        '`. (Variation of length `' . $length . '` and unit `' . $testUnit . '`) ',
                     'expects' => [
                         'result' => [
                             'beginning' => $beginning->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1920,9 +2135,10 @@ class DatePeriodTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 13:00:00',
+                            new DateTimeZone('Europe/Berlin')),
                         'setting' => [
-                            'startTimeSeconds' => '2020-12-27 15:00:00',
+                            'startDateTime' => '2020-12-27 15:00:00',
                             'durationMinutes' => -120,
                             'periodLength' => $length,
                             'periodUnit' => $testUnit,

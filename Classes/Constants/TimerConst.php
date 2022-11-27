@@ -78,6 +78,8 @@ class TimerConst
     public const TIMER_FIELD_PID = 'pid';
     public const TIMER_FIELD_ENDTIME = 'endtime';
     public const TIMER_FIELD_STARTTIME = 'starttime';
+    public const TIMER_RELATION_TABLE = 'relation_table';
+    public const TIMER_RELATION_UID = 'relation_uid';
     public const TIMER_NEEDED_FIELDS = [
         self::TIMER_FIELD_FLEX_ACTIVE,
         self::TIMER_FIELD_SELECT,

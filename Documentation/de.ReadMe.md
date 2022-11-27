@@ -76,16 +76,33 @@ der Scheduler-Auswertung auf aktiv gesetzt wurde.
 
 Das Content-Element `periodlist` ist ähnlich aufgebaut wie das Content-Element `textmedia`. 
 Es erlaubt zusätzlich die Ausgabe von einfachen Terminlisten, sofern für den voreingestellten 
-Timer `periodlisttimer` eine gültige yaml-Datei mit einer Terminliste hinterlegt wird. 
-Im Attribute `data` können verschiedenen Daten hinterlegt werden, so daß über ein passendes Partial oder Template strukturiert 
+Timer `periodlisttimer` eine gültige yaml-Datei mit einer Terminliste hinterlegt wird.
+#### Anmerkungen
+##### _Anmerkung 1_
+Um einen möglichst flexible Einbindung von Terminlisten zu ermöglichen, gibt es die zwei Eingabefelder `yamlPeriodFilePath` und `yamlPeriodFalRelation`.
+Das Feld `yamlPeriodFilePath` hat eher den Integrator im Blick und erlaubt  vier Varianten,
+um den Ort der YAML-Datei zu spezifizieren:
+1. absolute Pfadangabe ggfls. auch mit relativem Pfad
+2. Pfadangabe mit dem Prefix `EXT:`
+3. einfache URL beginnend mit `http://` oder mit `https://`
+4. URL mit Serverpasswort im Format `Nutzername:Passwort:Url`, wobei die eigentliche URL mit URL beginnend mit `http://` oder mit `https://` beginnt. Bei den URL-Angaben wird nicht die YAML-Anweisung `import` unterstützt.
+
+Das Feld `yamlPeriodFalRelation` hat eher den Redaktuer im Blick und erlaubt die Einbindung der YAML-Datei über das TYPO3 Backend. 
+Hier hat der Redakteur auch die Möglichkeit, mehrere Dateien einzubinden, die vom Timer wie eine große Liste behandelt werden.
+
+##### _Anmerkung 2_
+Im Attribut `data` können verschiedenen Daten hinterlegt werden, so daß über ein passendes Partial oder Template strukturiert 
 Sonderinformationen wie Eintrittspreis, Vorverkaufspreise oder Ähnliches per Datei mit übergeben werden können.
 Dieses Form eignet sich gut, wenn es darum geht, automatisiert Daten über das Format einer YAML-Datei aus anderen Quellen 
 entgegen zu nehmen. Dies erspart das Einpflegen der Daten im Backend.
+
+#### Darstellung der Termine im Kalender
 
 Das Flexform wurde um zwei Pfad-Felder für JavaScript und für Stylesheets erweitert.
 Auf diesem Weg ist es möglich, die Termine auch in Kalender-Form darzustellen. Die Default-Einstellungen sind so gesetzt, 
 dass die Schulferien für Niedersachsen und Bremen aus dem Jahr 2022 in einem Kalender dargestellt werden.
 
+#### Dataprozessoren für diesen Timer
 Damit die Daten eingelesen werden könne wurde drei Dataprocessoren definiert.
 Der `FlexToArrayProcessor` erlaubt es, Flexform-Felder auszulesen und in einfache Array umzuwandeln. 
 Auf diesem Weg kann man dynamisch die JavaAScript- und Stylesheet-Dateien vom Inhaltselement laden lassen.

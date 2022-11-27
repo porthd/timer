@@ -22,13 +22,20 @@ namespace Porthd\Timer\Utilities;
  ***************************************************************/
 
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Interfaces\ValidateYamlInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 
 /**
  * The concept of the DateTime-Object in Frameworks is horrible. You can selectect bewtween a PHP
@@ -301,46 +308,181 @@ class CustomTimerUtility
 
     /**
      * @param string $yamlFilePath
-     * @param YamlFileLoader $yamlFileLoader
+     * @param ValidateYamlInterface|null $validatorObject
+     * @param LoggerInterface|null $logger
      * @param FrontendInterface|null $cache
      * @return array
+     * @throws TimerException
      */
     public static function readListFromYamlFile(
         string $yamlFilePath,
+        YamlFileLoader $yamlFileLoader,
         ?ValidateYamlInterface $validatorObject = null,
+        ?LoggerInterface $logger = null,
         ?FrontendInterface $cache = null
     ): array {
-        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
-        $yamlFilePathNew = $yamlFilePath;
-        if (file_exists($yamlFilePath)) {
-            $yamlFilePathNew = realpath($yamlFilePath);
-        } else {
-            if (GeneralUtility::validPathStr($yamlFilePath)) {
-                $yamlFilePathNew = GeneralUtility::getFileAbsFileName($yamlFilePath);
-            }
-        }
-        if ((!file_exists($yamlFilePathNew)) ||
-            ($yamlFileLoader === null)
-        ) {
+        // The test wont work
+//        $cacheIdentifier = md5('start#download.' . $yamlFilePath . '#end');
+//
+//        if ($cache === null) {
+            return self::readListFromYamlFileFromPathOrUrl( $yamlFilePath, $yamlFileLoader, $validatorObject, $logger);
+//        }
+//        if (($result = $cache->get($cacheIdentifier)) === false) {
+//            $result = self::readListFromYamlFileFromPathOrUrl( $yamlFilePath, $yamlFileLoader,$validatorObject, $logger);
+//            $cache->set($cacheIdentifier, $result,['pages']);
+//        }
+//        return $result;
+    }
+
+    /**
+     * @param $yamlFalParam
+     * @param YamlFileLoader $yamlFileLoader
+     * @param ValidateYamlInterface|null $validatorObject
+     * @param LoggerInterface|null $logger
+     * @param FrontendInterface|null $cache
+     * @return array
+     */
+    public static function readListFromYamlFilesInFal(
+        $yamlFalParam,
+        $relationTable,
+        $relationUid,
+        YamlFileLoader $yamlFileLoader,
+        ?ValidateYamlInterface $validatorObject = null,
+        ?LoggerInterface $logger = null,
+        ?FrontendInterface $cache = null
+    ): array {
+// @todo caching
+        if ($yamlFalParam < 1) {
             return [];
         }
+            $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
+            $fileObjects = $fileRepository->findByRelation($relationTable,
+                TimerConst::TIMER_FIELD_FLEX_ACTIVE,
+                $relationUid);
+            $rawResult = [];
 
-        $cacheIdentifier = md5('start#create.'.filectime($yamlFilePathNew).
-            'modify'.filemtime($yamlFilePathNew).
-            'size'.filesize($yamlFilePathNew).
-            'realpath'.$yamlFilePathNew.'#end');
-        if (($cache === null) ||
-            (($result = $cache->get($cacheIdentifier)) === false)
-        ){
+            /** @var FileReference $fileObject */
+            foreach ($fileObjects as $fileObject) {
+                $filePathInStorage = $fileObject->getProperty('identifier');
+                $pathStorage = $fileObject->getStorage()->getConfiguration()['basePath'];
+                $filePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR .
+                    trim($pathStorage, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR .
+                    trim($filePathInStorage, DIRECTORY_SEPARATOR);
+                if (file_exists($filePath)) {
+
+                    $rawResult[] = $yamlFileLoader->load($filePath);
+                }
+            }
+        return $rawResult;
+    }
+
+    /**
+     * @param string $yamlFilePath
+     * @param ValidateYamlInterface|null $validatorObject
+     * @param LoggerInterface|null $logger
+     * @return array
+     * @throws TimerException
+     */
+    protected static function readListFromYamlFileFromPathOrUrl(
+        string $yamlFilePath,
+        YamlFileLoader $yamlFileLoader,
+        ?ValidateYamlInterface $validatorObject,
+        ?LoggerInterface $logger
+    ): array {
+
+//        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
+        if (file_exists($yamlFilePath)) {
+            $yamlFilePathNew = realpath($yamlFilePath);
+            if ((!file_exists($yamlFilePathNew)) ||
+                ($yamlFileLoader === null)
+            ) {
+                return [];
+            }
             $result = $yamlFileLoader->load($yamlFilePathNew);
-            // validate the yaml-structure or throw an exception
-            if ($validatorObject !== null) {
-                $validatorObject->validateYamlOrException($result,$yamlFilePathNew);
+
+        } else {
+            if (GeneralUtility::validPathStr($yamlFilePath)) { // Dont Allow relative poathes or pathes with '//' or '\\'
+                $yamlFilePathNew = GeneralUtility::getFileAbsFileName($yamlFilePath);
+                if ((!file_exists($yamlFilePathNew)) ||
+                    ($yamlFileLoader === null)
+                ) {
+                    return [];
+                }
+                $result = $yamlFileLoader->load($yamlFilePathNew);
+
+            } elseif (preg_match('@^http[s]://@i',$yamlFilePath) === 1) { // open accessible url
+                $yamlFileData = file_get_contents($yamlFilePath);
+                if ($yamlFileData === false) {
+                    if ($logger !== null) {
+                        $logger->warning(
+                            'The file `' . $yamlFilePath . '` could not be found. Perhaps the server is down.' .
+                            'Check your yaml-definition or the existence of the file on the foreign server.',
+                            [$yamlFilePath, 'open accessible url']
+                        );
+                    }
+                    return [];
+                }
+                $result = Yaml::parse($yamlFileData);
+
+            } elseif (preg_match('@^(.+):(.+):http[s]://@i',$yamlFilePath) === 1) { // url secured by server password
+                $splitList = array_filter(
+                    array_map('trim',
+                        explode(':', $yamlFilePath, 3)
+                    )
+                );
+                if ((count($splitList) !== 3) ||
+                    (empty($splitList[0])) ||
+                    (empty($splitList[1])) ||
+                    (strpos($splitList[2], 'https://') === 0) ||
+                    (strpos($yamlFilePath, 'http://') === 0)
+                ) {
+                    throw new TimerException(
+                        'The parameter `' . $yamlFilePath . '` is not correctly defined. ' .
+                        'If you want to get a yaml-file from a password-protected server, you must use the structure ' .
+                        '`<username>:<password>:<url>`. There is no colon allowed in the username and in the password. ' .
+                        'The `<username>` and the `<password>` must not empty. There is no colon allowed in the ' .
+                        'username and in the password. The `<url>` must begin with `http://` or `https://`. ' .
+                        'Check your yaml-definition or the values for the password on the foreign server.',
+                        1669453312
+                    );
+
+                }
+                $context = stream_context_create([
+                    'http' => [
+                        'header' => 'Authorization: Basic ' . base64_encode("$splitList[0]:$splitList[1]"),
+                    ],
+                ]);
+                $yamlFileData = file_get_contents($splitList[2], false, $context);
+                if ($yamlFileData === false) {
+                    if ($logger !== null) {
+                        $logger->warning(
+                            'The file `' . $yamlFilePath . '` did not exist. ' .
+                            'Check your yaml-definition or the existence of the server or the existence of the file ' .
+                            'on the foreign server.',
+                            [$yamlFilePath, 'by server-password secured url']
+                        );
+                    }
+                    return [];
+                }
+                $result = Yaml::parse($yamlFileData);
+            } else {
+                throw new TimerException(
+                    'Your parameter `' . $yamlFilePath . '` could not resolved. ' .
+                    'Allowed are one of the following file-allocation-types. You can firstly define an existing path on the ' .
+                    'server, which may contain relativ definitions. You can secondly use the TYPO3-filepath-definition ' .
+                    'containing the prefix `EXT:`. You can thirdly use a simple URL beginning with `http://` or `https://`, if ' .
+                    'the file is not secured by an serverpassword. You can forth use a string with the three parameter ' .
+                    'with the structure `<username>:<password>:<url>`. Then `<username>` and `<password>` can not ' .
+                    'contain a colon and the `<url>` mus beginn with `http://`or `https://`. ' .
+                    'Check your yaml-definition .',
+                    1669453491
+                );
+
             }
-            // Use cache if a cachings-system is avaiable
-            if ($cache !== null) {
-               $cache->set($cacheIdentifier,$result);
-            }
+        }
+        // validate the yaml-structure or throw an exception
+        if ($validatorObject !== null) {
+            $validatorObject->validateYamlOrException($result, $yamlFilePathNew);
         }
         return $result;
     }
