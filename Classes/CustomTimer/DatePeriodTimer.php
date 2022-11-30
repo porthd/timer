@@ -38,6 +38,7 @@ class DatePeriodTimer implements TimerInterface
 
     protected const TIMER_NAME = 'txTimerDatePeriod';
     protected const ARG_REQ_START_TIME = 'startDateTime';
+    protected const ARG_REQ_OLDSTART_TIME = 'startTimeSeconds';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
     protected const ARG_REQ_PERIOD_LENGTH = 'periodLength';
     protected const ARG_REQ_PERIOD_UNIT = 'periodUnit';
@@ -50,13 +51,15 @@ class DatePeriodTimer implements TimerInterface
         self::ARG_ULTIMATE_RANGE_END,
         self::ARG_USE_ACTIVE_TIMEZONE,
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
-
-        self::ARG_REQ_START_TIME,
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_REQ_PERIOD_LENGTH,
         self::ARG_REQ_PERIOD_UNIT,
     ];
-    protected const ARG_OPT_LIST = [];
+    protected const ARG_REQ_CHANGE_LIST = [
+        self::ARG_REQ_OLDSTART_TIME => self::ARG_REQ_START_TIME,
+    ];
+    protected const ARG_OPT_LIST = [
+    ];
 
     /**
      * @var TimerStartStopRange|null
@@ -139,6 +142,7 @@ class DatePeriodTimer implements TimerInterface
         $flag = $flag && $this->validateZone($params);
         $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
+        $flag = $flag && $this->validateChangeArguments($params);
         $countRequired = $this->validateArguments($params);
         $flag = $flag && ($countRequired === count(self::ARG_REQ_LIST));  // internal Check against change or requirement-definitions
         $countOptions = $this->validateOptional($params);
@@ -165,6 +169,20 @@ class DatePeriodTimer implements TimerInterface
         }
         return $flag;
     }
+    /**
+     * This method are introduced for easy build of unittests
+     * @param array $params
+     * @return bool
+     */
+    public function validateChangeArguments(array $params = []): int
+    {
+        if (((isset($params[self::ARG_REQ_OLDSTART_TIME ])) && (!isset($params[self::ARG_REQ_START_TIME]))) ||
+            ((!isset($params[self::ARG_REQ_OLDSTART_TIME ])) && (isset($params[self::ARG_REQ_START_TIME])))
+        ) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * This method are introduced for easy build of unittests
@@ -174,7 +192,9 @@ class DatePeriodTimer implements TimerInterface
     protected function validateStartTime(array $params = []): bool
     {
         return (
-            DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME, $params[self::ARG_REQ_START_TIME]) !== false
+            DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+                (empty($params[self::ARG_REQ_START_TIME])?$params[self::ARG_REQ_OLDSTART_TIME]:$params[self::ARG_REQ_START_TIME])
+            ) !== false
         );
     }
 
@@ -239,8 +259,8 @@ class DatePeriodTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(self::TIMER_FORMAT_DATETIME)) &&
+            ($dateLikeEventZone->format(self::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
     }
 
     /**
@@ -263,7 +283,7 @@ class DatePeriodTimer implements TimerInterface
 
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
 
-        $timeString = $params[self::ARG_REQ_START_TIME];
+        $timeString = empty($params[self::ARG_REQ_START_TIME])?$params[self::ARG_REQ_OLDSTART_TIME]:$params[self::ARG_REQ_START_TIME];
         // if you use this, the UTC-timestamp will be one hour less relativ to the time below, if I had interpreted the results correctly???
         // The calculation of the summertime in de DateTime-Object is mysteriously to me! I don`t get it.
         //        $startTime = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
@@ -429,8 +449,8 @@ class DatePeriodTimer implements TimerInterface
     {
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
 
-        $timeString = $params[self::ARG_REQ_START_TIME];
-        $startTime = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+        $timeString = empty($params[self::ARG_REQ_START_TIME])?$params[self::ARG_REQ_OLDSTART_TIME]:$params[self::ARG_REQ_START_TIME];
+        $startTime = DateTime::createFromFormat('Y-m-d H:i:s',
             $timeString,
             $timeZone
         );

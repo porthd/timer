@@ -403,6 +403,10 @@
 				<source>The Yaml files can be uploaded to the TYPO3 backend in the regular way and linked here. If several files are uploaded, the lists are combined. There is no (!!!) check for overlapping or duplication of appointments.</source>
 				<target>Die Yaml-Dateien können ganz regulärer Weise im TYPO3-Backend hochgeladen werden und hier verlinkt werden. Werden mehrere Dateien hochgeladen, so werden die Listen zusammengefasst. Eine Kontrolle auf Überschneidungen oder Doppelungen bei den Terminen findet nicht(!!!) statt.</target>
 			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFalRelation.bottomAdd">
+				<source>add yaml-file</source>
+				<target>Lade YAML-Datei</target>
+			</trans-unit>
 			<trans-unit id="flexform.timer.periodListTimer.field.calendarJsFilePath.label">
 				<source>javascript path to calendar-framework</source>
 				<target>Javascript-Pfad zum Kalender-Framework</target>

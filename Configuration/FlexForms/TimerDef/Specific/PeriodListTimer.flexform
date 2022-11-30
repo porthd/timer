@@ -86,7 +86,9 @@
                                 <delete>1</delete>
                                 <localize>1</localize>
                             </enabledControls>
-                            <createNewRelationLinkTitle>LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference</createNewRelationLinkTitle>
+                            <createNewRelationLinkTitle>
+                                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.yamlPeriodFalRelation.bottomAdd
+                            </createNewRelationLinkTitle>
                         </appearance>
                         <behaviour>
                             <localizationMode>select</localizationMode>
