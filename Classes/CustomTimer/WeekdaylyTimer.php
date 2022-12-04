@@ -28,7 +28,6 @@ use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
-use Porthd\Timer\Utilities\TcaUtility;
 
 
 class WeekdaylyTimer implements TimerInterface
@@ -276,13 +275,8 @@ class WeekdaylyTimer implements TimerInterface
         $nextRange->setBeginning($testDate);
         $testDate->setTime(23, 59, 59, 999);  // the last microsecond of the day is not active
         $nextRange->setEnding($testDate);
-        if ((!$this->isAllowedInRange($nextRange->getBeginning(), $params)) ||
-            (!$this->isAllowedInRange($nextRange->getEnding(), $params))
-        ) {
-            $nextRange->failOnlyNextActive($dateBelowNextActive);
-        }
 
-        return $nextRange;
+        return $this->validateUltimateRangeForNextRange($nextRange, $params, $dateBelowNextActive);
     }
 
     /**
@@ -310,18 +304,13 @@ class WeekdaylyTimer implements TimerInterface
         } while (($bitsOfWeekdays & $weekDayNumber) !== $weekDayNumber);
         $testDate->setTime(0, 0);
 
-        /** @var TimerStartStopRange $nextRange */
+        /** @var TimerStartStopRange $prevRange */
         $prevRange = new TimerStartStopRange();
         $prevRange->setBeginning($testDate);
         $testDate->setTime(23, 59, 59, 999);
         $prevRange->setEnding($testDate);
 
-        if ((!$this->isAllowedInRange($prevRange->getBeginning(), $params)) ||
-            (!$this->isAllowedInRange($prevRange->getEnding(), $params))
-        ) {
-            $prevRange->failOnlyNextActive($dateAbovePrevActive);
-        }
-        return $prevRange;
+        return $this->validateUltimateRangeForPrevRange($prevRange, $params, $dateAbovePrevActive);
     }
 
 
@@ -383,5 +372,143 @@ class WeekdaylyTimer implements TimerInterface
         }
         return clone $this->lastIsActiveResult;
     }
+//
+//    /**
+//     * @param TimerStartStopRange $prevRange
+//     * @param array $params
+//     * @param DateTime $dateAbovePrevActive
+//     * @return TimerStartStopRange
+//     * @throws TimerException
+//     */
+//    protected function validateUltimateRangeForPrevRange(
+//        TimerStartStopRange $prevRange,
+//        array $params,
+//        DateTime $dateAbovePrevActive
+//    ): TimerStartStopRange {
+//        if ((!$this->isAllowedInRange($prevRange->getBeginning(), $params)) ||
+//            (!$this->isAllowedInRange($prevRange->getEnding(), $params))
+//        ) {
+//            // fail-cases [n = prev, u = ultimate]
+//            // 0. ub < ue <= pb < pe  => prev allowed beginning at (ue + 1second)
+//            // 1. ub <= pb <= ue < pe => preview allowed at pb
+//            // 2. pb < ub < ue < pe => special condition of 2.a or 2.b
+//            // 2.a pb < ub < ue <= pe
+//            // 2.b pb <= ub < ue < pe
+//            // 3. pb < ub =< pe <= ue  => no more prev allowed
+//            // 4. pb < pe <= ub < ue
+//            $prevEndingFormat = $prevRange->getEnding()->format(self::TIMER_FORMAT_DATETIME);
+//            $prevBeginningFormat = $prevRange->getBeginning()->format(self::TIMER_FORMAT_DATETIME);
+//            if (
+//                ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) || // case 4
+//                (
+//                    (($prevBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+//                        ($prevEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
+//                    ) ||
+//                    (($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+//                        ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_END])
+//                    )
+//                ) || // case 2.a, 2.b, 2
+//                (
+//                    ($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+//                    ($prevEndingFormat <= $params[self::ARG_ULTIMATE_RANGE_END]) &&
+//                    ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN])
+//                ) // case 3
+//            ) {
+//                $prevRange->failOnlyNextActive($dateAbovePrevActive);
+//            } else {
+//                if (
+//                    ($prevBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_END]) // case 1
+//                ) { // case 0
+//                    $testBegin = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+//                        $params[self::ARG_ULTIMATE_RANGE_END]);
+//                    $testBegin->add(new DateInterval('PT1S'));
+//                    $prevRange = $this->prevActive($testBegin, $params);
+//                } else {
+//                    if (
+//                        ($prevEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END]) &&
+//                        ($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_END]) &&
+//                        ($prevBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN])
+//                    ) { // case 1
+//                        $testPrevRange = $this->prevActive($prevRange->getBeginning(), $params);
+//                        if (!$testPrevRange->hasResultExist()) { // correct the recursive result
+//                            $prevRange->failOnlyPrevActive($dateAbovePrevActive);
+//                        }
+//
+//                    } else { // case something forgotten ?
+//                        $prevRange->failOnlyNextActive($dateAbovePrevActive);
+//                    }
+//                }
+//            }
+//        }
+//        return $prevRange;
+//    }
+//    /**
+//     * @param TimerStartStopRange $nextRange
+//     * @param array $params
+//     * @param DateTime $dateBelowNextActive
+//     * @return TimerStartStopRange
+//     * @throws TimerException
+//     */
+//    protected function validateUltimateRangeForNextRange(
+//        TimerStartStopRange $nextRange,
+//        array $params,
+//        DateTime $dateBelowNextActive
+//    ): TimerStartStopRange {
+//        if ((!$this->isAllowedInRange($nextRange->getBeginning(), $params)) ||
+//            (!$this->isAllowedInRange($nextRange->getEnding(), $params))
+//        ) {
+//            // fail-cases [n = next, u = ultimate]
+//            // 0. ub < ue <= nb < ne
+//            // 1. ub <= nb <= ue < ne => no more next allowed
+//            // 2. nb < ub < ue < ne => special condition of 2.a or 2.b
+//            // 2.a nb < ub < ue <= ne
+//            // 2.b nb <= ub < ue < ne
+//            // 3. nb < ub =< ne < ue  => start
+//            // 4. nb < ne <= ub < ue  => next allowed beginning at (ub - 1second)
+//            $nextEndingFormat = $nextRange->getEnding()->format(self::TIMER_FORMAT_DATETIME);
+//            $nextBeginningFormat = $nextRange->getBeginning()->format(self::TIMER_FORMAT_DATETIME);
+//            if (
+//                ($nextBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_END]) || // case 0
+//                (
+//                    (($nextBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+//                        ($nextEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
+//                    ) ||
+//                    (($nextBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+//                        ($nextEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_END])
+//                    )
+//                ) || // case 2.a, 2.b, 2
+//                (
+//                    ($nextBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+//                    ($nextBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_END]) &&
+//                    ($nextEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
+//                ) // case 1
+//            ) {
+//                $nextRange->failOnlyPrevActive($dateBelowNextActive);
+//            } else {
+//                if (
+//                    ($nextEndingFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) // case 1
+//                ) { // case 4
+//                    $testBegin = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+//                        $params[self::ARG_ULTIMATE_RANGE_BEGINN]);
+//                    $testBegin->sub(new DateInterval('PT1S'));
+//                    $nextRange = $this->nextActive($testBegin, $params);
+//                } else {
+//                    if (
+//                        ($nextBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+//                        ($nextEndingFormat < $params[self::ARG_ULTIMATE_RANGE_END]) &&
+//                        ($nextEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN])
+//                    ) { // case 3
+//                        $testNextRange = $this->nextActive($nextRange->getEnding(), $params);
+//                        if (!$testNextRange->hasResultExist()) { // correct the recursive result
+//                            $nextRange->failOnlyPrevActive($dateBelowNextActive);
+//                        }
+//                    } else { // case something forgotten ?
+//                        $nextRange->failOnlyPrevActive($dateBelowNextActive);
+//                    }
+//                }
+//            }
+//        }
+//        return $nextRange;
+//    }
 
 }

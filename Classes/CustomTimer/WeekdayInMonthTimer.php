@@ -324,7 +324,7 @@ class WeekdayInMonthTimer implements TimerInterface
                 (2 ** $rangeStartRelativeToDate->format('w')) & $allowedWeekdays
             );
             if ($reverseNthDay) {
-                $numberOfDay = ($rangeStartRelativeToDate->format('t') - $rangeStartRelativeToDate->format('j') + 1);
+                $numberOfDay = ((int)$rangeStartRelativeToDate->format('t') - (int)$rangeStartRelativeToDate->format('j') + 1);
             } else {
                 $numberOfDay = ($rangeStartRelativeToDate->format('j'));
             }
@@ -347,7 +347,7 @@ class WeekdayInMonthTimer implements TimerInterface
                         (2 ** $rangeStartBefore->format('w')) & $allowedWeekdays
                     );
                     if ($reverseNthDay) {
-                        $otherNumberOfDay = ($rangeStartBefore->format('t') - $rangeStartBefore->format('j') + 1);
+                        $otherNumberOfDay = ((int)$rangeStartBefore->format('t') - (int)$rangeStartBefore->format('j') + 1);
                     } else {
                         $otherNumberOfDay = ($rangeStartBefore->format('j'));
                     }
@@ -483,6 +483,7 @@ class WeekdayInMonthTimer implements TimerInterface
             $lower->sub(new DateInterval('PT' . $durationMinutes . 'M'));
         }
         $maxCountDown = self::MAX_COUNT_NEXT_PREV_CALCS;
+        $flagChange = false;
         while ($maxCountDown > 0) {
             $flagCheckMonth = (
                 (2 ** ($checkDate->format('n') - 1)) & $allowedMonths
@@ -509,6 +510,7 @@ class WeekdayInMonthTimer implements TimerInterface
             $flagActive = $flagActive && $flagNumerberOfDayInMonth;
             // build last range used. if no valid range exist, then use the next range relative to the current
             if ($flagActive) {
+                $flagChange = true;
                 break;
             }
             if (!$flagCheckMonth) {
@@ -533,24 +535,22 @@ class WeekdayInMonthTimer implements TimerInterface
         }
         if ($maxCountDown <= 0) {
             throw new TimerException(
-                'The algorithm made 200 hundered calcolations and could not find a solution for the next range in your' .
-                ' timerproblem of WeekdayInMonthTimer. The testday was `' . $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`' .
+                'The algorithm for `nextActive` made ' . self::MAX_COUNT_NEXT_PREV_CALCS . ' calculations and ' .
+                'could not find a solution for the next range in your' .
+                ' timerproblem of WeekdayInMonthTimer. The testday was `' .
+                $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`' .
                 'The parameter were:' . print_r($params, true),
                 1665152348
             );
         }
 
-        $result = new TimerStartStopRange();
-        if (($this->isAllowedInRange($lower, $params)) &&
-            ($this->isAllowedInRange($upper, $params))
-        ) {
+        if ($flagChange) {
             $result->setBeginning($lower);
             $result->setEnding($upper);
             $result->setResultExist(true);
-        } else {
-            $result->failOnlyNextActive($dateLikeEventZone);
         }
-        return $result;
+
+        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -589,6 +589,7 @@ class WeekdayInMonthTimer implements TimerInterface
             $lower->sub(new DateInterval('PT' . $durationMinutes . 'M'));
         }
         $maxCountDown = self::MAX_COUNT_NEXT_PREV_CALCS;
+        $flagChange = false;
         while ($maxCountDown > 0) {
             $flagCheckMonth = (
                 (2 ** ($checkDate->format('n') - 1)) & $allowedMonths
@@ -615,6 +616,7 @@ class WeekdayInMonthTimer implements TimerInterface
             $flagActive = $flagActive && $flagNumerberOfDayInMonth;
             // build last range used. if no valid range exist, then use the next range relative to the current
             if ($flagActive) {
+                $flagChange = true;
                 break;
             }
             if (!$flagCheckMonth) {
@@ -639,24 +641,21 @@ class WeekdayInMonthTimer implements TimerInterface
         }
         if ($maxCountDown <= 0) {
             throw new TimerException(
-                'The algorithm made 200 hundered calcolations and could not find a solution for the previous range in your' .
-                ' timerproblem of WeekdayInMonthTimer. The testday was `' . $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`' .
+                'The algorithm for `prevActive` made ' . self::MAX_COUNT_NEXT_PREV_CALCS . ' calculations and ' .
+                'could not find a solution for the previous range in your' .
+                ' timerproblem of WeekdayInMonthTimer. The testday was `' .
+                $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`' .
                 'The parameter were:' . print_r($params, true),
                 1665152348
             );
         }
 
-        $result = new TimerStartStopRange();
-        if (($this->isAllowedInRange($lower, $params)) &&
-            ($this->isAllowedInRange($upper, $params))
-        ) {
+        if ($flagChange) {
             $result->setBeginning($lower);
             $result->setEnding($upper);
             $result->setResultExist(true);
-        } else {
-            $result->failOnlyNextActive($dateLikeEventZone);
         }
-        return $result;
+        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
     /**

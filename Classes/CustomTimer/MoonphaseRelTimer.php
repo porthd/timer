@@ -262,7 +262,13 @@ class MoonphaseRelTimer implements TimerInterface
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
             $result->failAllActive($dateLikeEventZone);
-            $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
+            $this->setIsActiveResult(
+                $result->getBeginning()->getTimestamp(),
+                $result->getEnding()->getTimestamp(),
+                false,
+                $dateLikeEventZone,
+                $params
+            );
             return $result->getResultExist();
         }
 
@@ -352,18 +358,13 @@ class MoonphaseRelTimer implements TimerInterface
                     $dateLikeEventZone
                 );
             }
-            if (($this->isAllowedInRange($lowerLimit, $params)) &&
-                ($this->isAllowedInRange($upperLimit, $params))
-            ) {
-                $result->setBeginning($lowerLimit);
-                $result->setEnding($upperLimit);
-                $result->setResultExist(true);
-            } else {
-                $result->failOnlyNextActive($dateLikeEventZone);
-            }
-        } else {
-            $result->failOnlyNextActive($dateLikeEventZone);
+            $result->setBeginning($lowerLimit);
+            $result->setEnding($upperLimit);
+            $result->setResultExist(true);
+            return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
         }
+
+        $result->failOnlyNextActive($dateLikeEventZone);
         return $result;
     }
 
@@ -382,7 +383,6 @@ class MoonphaseRelTimer implements TimerInterface
         $rangeSec = (int)$params[self::ARG_REQ_DURATION_MINUTES] * 60;
         $moonPhase = $params[self::ARG_MOON_PHASE];
         $origRefStamp = $dateLikeEventZone->getTimestamp() - $relSeconds; // recalulate the current date back to the mooning-timestamps
-//        $refStamp = $origRefStamp - self::AVG_SECONDS_MOON_PHASE; // recalulate the current date back to the mooning-timestamps
         $refStamp = $origRefStamp; // recalulate the current date back to the mooning-timestamps
 
         $result = new TimerStartStopRange();
@@ -411,18 +411,13 @@ class MoonphaseRelTimer implements TimerInterface
             ($rangeSec !== 0)
         ) {
 
-            if (($this->isAllowedInRange($lowerLimit, $params)) &&
-                ($this->isAllowedInRange($upperLimit, $params))
-            ) {
-                $result->setBeginning($lowerLimit);
-                $result->setEnding($upperLimit);
-                $result->setResultExist(true);
-            } else {
-                $result->failOnlyNextActive($dateLikeEventZone);
-            }
-        } else {
-            $result->failOnlyNextActive($dateLikeEventZone);
+            $result->setBeginning($lowerLimit);
+            $result->setEnding($upperLimit);
+            $result->setResultExist(true);
+            return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
         }
+
+        $result->failOnlyNextActive($dateLikeEventZone);
         return $result;
     }
 

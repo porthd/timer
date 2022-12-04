@@ -542,7 +542,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             $result->failOnlyNextActive($dateLikeEventZone);
         }
 
-        return $result;
+        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -609,8 +609,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         ) {
             $result->failOnlyNextActive($dateLikeEventZone);
         }
-        return $result;
 
+        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
 

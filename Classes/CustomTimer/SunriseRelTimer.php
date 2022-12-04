@@ -330,12 +330,6 @@ class SunriseRelTimer implements TimerInterface
 
         $tStamp = $dateLikeEventZone->getTimestamp();
         [$latitude, $longitude] = $this->defineLongitudeLatitudeByParams($params, $dateLikeEventZone->getOffset());
-        if (($sun2InfoList = date_sun_info($tStamp + 86400 + 86400, $latitude, $longitude)) === false) {
-            return false;
-        }
-        if (($sun1InfoList = date_sun_info($tStamp + 86400, $latitude, $longitude)) === false) {
-            return false;
-        }
         if (($sunInfoList = date_sun_info($tStamp, $latitude, $longitude)) === false) {
             return false;
         }
@@ -351,8 +345,6 @@ class SunriseRelTimer implements TimerInterface
             $dateLikeEventZone,
             $sunInfoList
         );
-        $hallo = $dateLikeEventZone < $lowerLimit;
-        $hallo2= $upperLimit < $dateLikeEventZone;
         if ($dateLikeEventZone < $lowerLimit) {
             // test the previous day = subtract 86400 seconds
             $tStamp -= 86400;
@@ -459,12 +451,8 @@ class SunriseRelTimer implements TimerInterface
                 $result->failOnlyPrevActive($noDate);
             }
         }
-        if ((!$this->isAllowedInRange($result->getBeginning(), $params)) ||
-            (!$this->isAllowedInRange($result->getEnding(), $params))
-        ) {
-            $result->failOnlyNextActive($dateLikeEventZone);
-        }
-        return $result;
+
+        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -541,12 +529,7 @@ class SunriseRelTimer implements TimerInterface
             }
         }
 
-        if ((!$this->isAllowedInRange($result->getBeginning(), $params)) ||
-            (!$this->isAllowedInRange($result->getEnding(), $params))
-        ) {
-            $result->failOnlyNextActive($dateLikeEventZone);
-        }
-        return $result;
+        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
     /**

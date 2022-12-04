@@ -393,14 +393,7 @@ class DailyTimer implements TimerInterface
             )
         );
 
-        if (($this->isAllowedInRange($nextRange->getBeginning(), $params)) &&
-            ($this->isAllowedInRange($nextRange->getEnding(), $params))
-        ) {
-            return $nextRange;
-        }
-        $nextRange->failOnlyNextActive($dateBelowNextActive);
-        return $nextRange;
-
+        return $this->validateUltimateRangeForNextRange($nextRange, $params, $dateBelowNextActive);
     }
 
     /**
@@ -456,12 +449,7 @@ class DailyTimer implements TimerInterface
             )
         );
 
-        if ((!$this->isAllowedInRange($prevRange->getBeginning(), $params)) ||
-            (!$this->isAllowedInRange($prevRange->getEnding(), $params))
-        ) {
-            $prevRange->failOnlyNextActive($dateAbovePrevActive);
-        }
-        return $prevRange;
+        return $this->validateUltimateRangeForPrevRange($prevRange, $params, $dateAbovePrevActive);
     }
 
     /**

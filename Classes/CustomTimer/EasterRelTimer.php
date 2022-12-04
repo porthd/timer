@@ -380,12 +380,8 @@ class EasterRelTimer implements TimerInterface
             $result->setEnding($checkday);
             $result->setResultExist(true);
         }
-        if ((!$this->isAllowedInRange($result->getBeginning(), $params)) ||
-            (!$this->isAllowedInRange($result->getEnding(), $params))
-        ) {
-            $result->failOnlyNextActive($dateLikeEventZone);
-        }
-        return $result;
+
+        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -423,31 +419,25 @@ class EasterRelTimer implements TimerInterface
                 $checkday->sub($relInterval);
             }
             if ($checkday < $dateLikeEventZone) {
-                if ($durationMin < 0) { // $checkday mark the end of the range
+                if ($durationMin < 0) {
                     $flagRebuild = true;
                     break;
-                } else {
-                    if (($checkday->add($durInterval)) < $dateLikeEventZone) {
-                        $flagRebuild = true;  // $checkday mark the end of the range
-                        break;
-                    }
+                }
+                $checkday->add($durInterval);
+                if ($checkday < $dateLikeEventZone) { // $checkday mark now the end of the range
+                    $flagRebuild = true;
+                    break;
                 }
             }
             $testDay->sub($yearInterval);
         }
         if ($flagRebuild === true) {
-            $result->setEnding($checkday);
+            $result->setEnding($checkday);  // datetime object will be cloned in internal variable
             $checkday->sub($durInterval);
             $result->setBeginning($checkday);
             $result->setResultExist(true);
         }
-
-        if ((!$this->isAllowedInRange($result->getBeginning(), $params)) ||
-            (!$this->isAllowedInRange($result->getEnding(), $params))
-        ) {
-            $result->failOnlyNextActive($dateLikeEventZone);
-        }
-        return $result;
+        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
     /**

@@ -1508,88 +1508,89 @@ class WeekdayInMonthTimerTest extends TestCase
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
         $result = [];
-//        // s-imple-test
-//        foreach ([
-//                     '2022-07-01 14:00:00' => ['beginning' => '2022-06-05 14:00:00', 'ending' => '2022-06-05 16:00:00'],
-//                     '2022-07-02 14:00:00' => ['beginning' => '2022-07-01 14:00:00', 'ending' => '2022-07-01 16:00:00'],
-//                     '2022-07-03 14:00:00' => ['beginning' => '2022-07-02 14:00:00', 'ending' => '2022-07-02 16:00:00'],
-//                     // 1. fr
-//                 ]
-//                 as $dateString => $expection
-//        ) {
-//            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-//                new DateTimeZone('Europe/Berlin'));
-//            $dateOkayEnd = clone $dateOkayStart;
-//            $dateOkayEnd->add(new DateInterval('PT120M'));
-//            $dateAfterNewEnding = clone $dateOkayEnd;
-//            $dateAfterNewEnding->sub(new DateInterval('P1D'));
-//            $dateAfterNewEnding->add(new DateInterval('PT1M'));
-//            foreach ([
-//                         [$dateOkayStart, true],
-//                         [$dateOkayEnd, true],
-//                         [$dateAfterNewEnding, true],
-//                     ]
-//                     as $helper) {
-//
-//                $result[] = [
-//                    'message' => 'The nearest previous date-time relative to `' . $dateString . '`(Europe/Berlin) ' .
-//                        'is active in the range of two hours and starts at `' . $expection['beginning'] . '`. '.
-//                       'The allowed day must be a first,Friday, Satrurday or Sunday in june, july or august.',
-//                    'expects' => [
-//                        'result' => [
-//                            'beginning' => $expection['beginning'],
-//                            'ending' => $expection['ending'],
-//                            'exist' => $helper[1],
-//                        ],
-//                    ],
-//                    'params' => [
-//                        'value' => $helper[0],
-//                        'setting' => [
-//                            'nthWeekdayInMonth' => '1',
-//                            // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
-//                            'activeWeekday' => '97',
-//                            // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
-//                            'startCountAtEnd' => false,
-//                            // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
-//                            'startTimeSeconds' => 50400,
-//                            // 14:00 = 43200+7200 // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
-//                            'activeMonth' => (32+64+128), // july and august
-//                            // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
-//                            'durationMinutes' => '120',
-//                            // Minutes!!!!
-//                        ],
-//                        'general' => $general,
-//
-//                    ],
-//                ];
-//
-//            }
-//        }
+        // s-imple-test
+        foreach ([
+                     '2022-07-01 14:00:00' => ['beginning' => '2022-06-05 14:00:00', 'ending' => '2022-06-05 16:00:00'],
+                     '2022-07-02 14:00:00' => ['beginning' => '2022-07-01 14:00:00', 'ending' => '2022-07-01 16:00:00'],
+                     '2022-07-03 14:00:00' => ['beginning' => '2022-07-02 14:00:00', 'ending' => '2022-07-02 16:00:00'],
+                     // 1. fr
+                 ]
+                 as $dateString => $expection
+        ) {
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
+                new DateTimeZone('Europe/Berlin'));
+            $dateOkayEnd = clone $dateOkayStart;
+            $dateOkayEnd->add(new DateInterval('PT120M'));
+            $dateAfterNewEnding = clone $dateOkayEnd;
+            $dateAfterNewEnding->sub(new DateInterval('P1D'));
+            $dateAfterNewEnding->add(new DateInterval('PT1M'));
+            foreach ([
+                         [$dateOkayStart, true],
+                         [$dateOkayEnd, true],
+                         [$dateAfterNewEnding, true],
+                     ]
+                     as $helper) {
+
+                $result[] = [
+                    'message' => 'The nearest previous date-time relative to `' . $dateString . '`(Europe/Berlin) ' .
+                        'is active in the range of two hours and starts at `' . $expection['beginning'] . '`. '.
+                       'The allowed day must be a first,Friday, Satrurday or Sunday in june, july or august.',
+                    'expects' => [
+                        'result' => [
+                            'beginning' => $expection['beginning'],
+                            'ending' => $expection['ending'],
+                            'exist' => $helper[1],
+                        ],
+                    ],
+                    'params' => [
+                        'value' => $helper[0],
+                        'setting' => [
+                            'nthWeekdayInMonth' => '1',
+                            // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
+                            'activeWeekday' => '97',
+                            // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
+                            'startCountAtEnd' => false,
+                            // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
+                            'startTimeSeconds' => 50400,
+                            // 14:00 = 43200+7200 // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
+                            'activeMonth' => (32+64+128), // july and august
+                            // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
+                            'durationMinutes' => '120',
+                            // Minutes!!!!
+                        ],
+                        'general' => $general,
+
+                    ],
+                ];
+
+            }
+        }
         // variation of weekday in Month and order of it
         foreach ([
-                     1 => ['2022-10-01 14:00:00',0], // 1. th
-                     2 => ['2022-10-08 14:00:00',1], // 2. th
-                     4 => ['2022-10-15 14:00:00',1], // 3. th
-                     8 => ['2022-10-22 14:00:00',1], // 4. th
-                     16 => ['2022-10-29 14:00:00',1], // 5. th
-                     -1 => ['2022-10-29 14:00:00',8], // 1. th - startCountAtEnd=true
-                     -2 => ['2022-10-22 14:00:00',8], // 2. th - startCountAtEnd=true
-                     -4 => ['2022-10-15 14:00:00',8], // 3. th - startCountAtEnd=true
-                     -8 => ['2022-10-08 14:00:00',0], // 4. th - startCountAtEnd=true
-//                     -16 => ['2022-10-01 14:00:00',0], // 5. th - startCountAtEnd=true // not simple to define for the next date in November
+                     1 => ['2022-10-01 16:00:00',16], // 1. th
+                     2 => ['2022-10-07 16:00:00',16], // 2. th
+                     4 => ['2022-10-14 16:00:00',16], // 3. th
+                     8 => ['2022-10-21 16:00:00',16], // 4. th
+//                     16 => ['2022-11-05 16:00:00',0], // 5. th
+                     16 => ['2022-12-30 16:00:00',0], // 5. th // the november has no 5Th friday, the next month is september
+                     -1 => ['2022-10-28 16:00:00',0], // 1. th - startCountAtEnd=true
+                     -2 => ['2022-10-21 16:00:00',1], // 2. th - startCountAtEnd=true
+                     -4 => ['2022-10-14 16:00:00',3], // 3. th - startCountAtEnd=true
+                     -8 => ['2022-10-07 16:00:00',7], // 4. th - startCountAtEnd=true
+//                     -16 => ['2022-12-02 16:00:00',15], // 5. th - startCountAtEnd=true // not simple to define for the next date in November
                  ]
                  as $nthDay => $dateStringOkayStart
         ) {
             $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart[0],
                 new DateTimeZone('Europe/Berlin'));
             $dateOkayEnd = clone $dateOkayStart;
-            $dateOkayEnd->add(new DateInterval('PT120M'));
+            $dateOkayEnd->sub(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
-            $dateFailEnd->add(new DateInterval('PT1M'));
+            $dateFailEnd->sub(new DateInterval('PT1M'));
             foreach ([
-                [$dateOkayStart, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist'=>true,],],
-                         [$dateOkayEnd, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist'=>true,],],
-                         [$dateFailEnd, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist'=>true,],],
+                [$dateOkayStart, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist'=>true,],],
+                         [$dateOkayEnd, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist'=>true,],],
+                         [$dateFailEnd, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist'=>true,],],
                          ]
                      as $helper) {
                 $result[] = [
@@ -1606,7 +1607,7 @@ class WeekdayInMonthTimerTest extends TestCase
                         'setting' => [
                             'nthWeekdayInMonth' => abs($nthDay)+$dateStringOkayStart[1],
                             // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
-                            'activeWeekday' => '64',
+                            'activeWeekday' => '32', // 64 = saturday
                             // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
                             'startCountAtEnd' => ($nthDay < 0),
                             // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
@@ -1624,256 +1625,261 @@ class WeekdayInMonthTimerTest extends TestCase
                 ];
             }
         }
-//        // variation of Month
-//        $mapActiveDayWeekday = [
-//            1 => 'sunday',
-//            2 => 'monday',
-//            4 => 'tuesday',
-//            8 => 'wendesday',
-//            16 => 'thursday',
-//            32 => 'friday',
-//            64 => 'saturday',
-//
-//        ];
-//        foreach ([0, 1, 2] as $addWeek) { // 3, 4 won't work for the automatic logic
-//            foreach ([
-//                         1 => '2022-05-01 21:00:00', // So.
-//                         2 => '2022-05-02 21:00:00', // Mo
-//                         4 => '2022-05-03 21:00:00', // Tu
-//                         8 => '2022-05-04 21:00:00', // We
-//                         16 => '2022-05-05 21:00:00', // th
-//                         32 => '2022-05-06 21:00:00', // fr
-//                         64 => '2022-05-07 21:00:00', // sa
-//                     ]
-//                     as $activeDay => $dateStringOkayStart
-//            ) {
-//                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-//                    new DateTimeZone('Europe/Berlin'));
-//                if ($addWeek > 0) {
-//                    $currentDate = clone $dateOkayStart;
-//                    $currentDate->add(new DateInterval('P' . (7 * $addWeek) . 'D'));
-//                    if ($currentDate->format('m') !== $dateOkayStart->format('m')) {
-//                        continue;
-//                    }
-//                    $dateOkayStart = $currentDate;
-//                }
-//                $dateOkayEnd = clone $dateOkayStart;
-//                $dateOkayEnd->add(new DateInterval('PT120M'));
-//                $dateFailEnd = clone $dateOkayEnd;
-//                $dateFailEnd->add(new DateInterval('PT1M'));
-//                $dateFailStart = clone $dateOkayStart;
-//                $dateFailStart->sub(new DateInterval('PT1M'));
-//                $startCalc = clone $dateOkayStart;
-//                $startCalc->add(new DateInterval('P7D'));
-//                $endCalc = clone $dateOkayEnd;
-//                $endCalc->add(new DateInterval('P7D'));
-//                foreach ([
-//                             [$dateOkayStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                             [$dateOkayEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-////                             [$dateFailStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                             [$dateFailEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                         ]
-//                         as $helper) {
-//                    $result[] = [
-//                        'message' => 'The next range for the date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
-//                            ' is `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`.' .
-//                            'The startdate is the ' . ($addWeek + 2) . 'nth weekday in the month. ' .
-//                            'The startdate is part of ' . $mapActiveDayWeekday[$activeDay] . '. ',
-//                        'expects' => [
-//                            'result' => $helper[1],
-//                        ],
-//                        'params' => [
-//                            'value' => $helper[0],
-//                            'setting' => [
-//                                'nthWeekdayInMonth' => (2 ** $addWeek) + (2 ** ($addWeek + 1)),
-//                                // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
-//                                'activeWeekday' => $activeDay,
-//                                // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
-//                                'startCountAtEnd' => false,
-//                                // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
-//                                'startTimeSeconds' => 75600,
-//                                // = 86400-10800 = 21:00,
-//                                // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
-//                                'activeMonth' => '2047',
-//                                // every month allowed
-//                                // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
-//                                'durationMinutes' => '120',
-//                                // Minutes!!!!
-//                            ],
-//                            'general' => $general,
-//
-//                        ],
-//                    ];
-//                }
-//            }
-//        }
-//
-//        // variation of Month
-//        $mapActiveToMonth = [
-//            1 => 'january',
-//            2 => 'february',
-//            4 => 'march',
-//            8 => 'april',
-//            16 => 'may',
-//            32 => 'june',
-//            64 => 'july',
-//            128 => 'august',
-//            256 => 'september',
-//            512 => 'october',
-//            1024 => 'november',
-//            2048 => 'december',
-//        ];
-//        foreach ([
-//                     1 => '2022-01-01 21:00:00',
-//                     2 => '2022-02-05 21:00:00',
-//                     4 => '2022-03-05 21:00:00',
-//                     8 => '2022-04-02 21:00:00',
-//                     16 => '2022-05-07 21:00:00',
-//                     32 => '2022-06-04 21:00:00',
-//                     64 => '2022-07-02 21:00:00',
-//                     128 => '2022-08-06 21:00:00',
-//                     256 => '2022-09-03 21:00:00',
-//                     512 => '2022-10-01 21:00:00',
-//                     1024 => '2022-11-05 21:00:00',
-//                     2048 => '2022-12-03 21:00:00',
-//                 ]
-//                 as $activeMonth => $dateStringOkayStart
-//        ) {
-//            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-//                new DateTimeZone('Europe/Berlin'));
-//            $dateOkayEnd = clone $dateOkayStart;
-//            $dateOkayEnd->add(new DateInterval('PT120M'));
-//            $dateFailEnd = clone $dateOkayEnd;
-//            $dateFailEnd->add(new DateInterval('PT1M'));
-//            $nextYearStart = clone $dateOkayStart;
-//            $nextYearStart->add(new DateInterval('P1Y'));
-//            if ($dateOkayStart->format('d') > 1) {
-//                $nextYearStart->sub(new DateInterval('P1D'));
-//            } else {
-//                $nextYearStart->add(new DateInterval('P6D'));
-//            }
-//            $nextYearEnd = clone $nextYearStart;
-//            $nextYearEnd->add(new DateInterval('PT120M'));
-//            foreach ([
-//                         [$dateOkayStart,
-//                            [
-//                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
-//                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
-//                                 'exist' => true,
-//                             ],
-//                         ],
-//                         [$dateOkayEnd,
-//                             [
-//                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
-//                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
-//                                 'exist' => true,
-//                             ],
-//                         ],
-//                         [$dateFailEnd,
-//                             [
-//                                 'beginning' => $nextYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
-//                                 'ending' => $nextYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
-//                                 'exist' => true,
-//                             ],
-//                         ],
-//                     ]
-//                     as $helper) {
-//                $result[] = [
-//                    'message' => 'The rext date-time relative to `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
-//                        'will be the range in the following year `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`, ' .
-//                        'which is allowed for the date with the following attributes: ' .
-//                        'The date is the first saturday in the month `' . $mapActiveToMonth[$activeMonth] . '`. ' .
-//                        'The date has a range of two hours.',
-//                    'expects' => [
-//                        'result' => $helper[1],
-//                    ],
-//                    'params' => [
-//                        'value' => $helper[0],
-//                        'setting' => [
-//                            'nthWeekdayInMonth' => 1,
-//                            // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
-//                            'activeWeekday' => 64,
-//                            // 64 = saturday
-//                            // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
-//                            'startCountAtEnd' => false,
-//                            // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
-//                            'startTimeSeconds' => 75600,
-//                            // = 86400-10800 = 21:00,
-//                            // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
-//                            'activeMonth' => $activeMonth,
-//                            // every month allowed
-//                            // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
-//                            'durationMinutes' => '120',
-//                            // Minutes!!!!
-//                        ],
-//                        'general' => $general,
-//
-//                    ],
-//                ];
-//            }
-//        }
-//        // variation of start
-//        foreach ([
-//                     0 => '2022-01-01 00:00:00',
-//                     3600 => '2022-01-01 01:00:00',
-//                     7200 => '2022-01-01 02:00:00',
-//                     79200 => '2022-01-01 22:00:00',
-//                     82800 => '2022-01-01 23:00:00',
-//                     86340 => '2022-01-01 23:59:00',
-//                 ]
-//                 as $activeStartTimeInSoconds => $dateStringOkayStart
-//        ) {
-//            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-//                new DateTimeZone('Europe/Berlin'));
-//            $dateOkayEnd = clone $dateOkayStart;
-//            $dateOkayEnd->add(new DateInterval('PT120M'));
-//            $dateFailEnd = clone $dateOkayEnd;
-//            $dateFailEnd->add(new DateInterval('PT1M'));
-//            $nextRangeStart = clone $dateOkayStart;
-//            $nextRangeStart->add(new DateInterval('P1D'));
-//            $nextRangeEnd = clone $dateOkayEnd;
-//            $nextRangeEnd->add(new DateInterval('P1D'));
-//            foreach ([
-//                [$dateOkayEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                         [$dateOkayStart,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                         [$dateFailEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
-//                         ]
-//                     as $helper) {
-//                $result[] = [
-//                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
-//                        'will lead to the next 120 minutes-range (`'.$nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME).
-//                        '`,`'.$nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME).'`), ' .
-//                        'which is allowed for every day in the month beginning at `'.$activeStartTimeInSoconds.
-//                        '`(seconds from midnight). ',
-//                    'expects' => [
-//                        'result' => $helper[1],
-//                    ],
-//                    'params' => [
-//                        'value' => $helper[0],
-//                        'setting' => [
-//                            'nthWeekdayInMonth' => 31,
-//                            // 1.1.2022
-//                            // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
-//                            'activeWeekday' => 127,
-//                            // 64 = saturday
-//                            // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
-//                            'startCountAtEnd' => false,
-//                            // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
-//                            'startTimeSeconds' => $activeStartTimeInSoconds,
-//                            // = 86400-10800 = 21:00,
-//                            // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
-//                            'activeMonth' => 2047,
-//                            // every month allowed
-//                            // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
-//                            'durationMinutes' => '120',
-//                            // Minutes!!!!
-//                        ],
-//                        'general' => $general,
-//
-//                    ],
-//                ];
-//            }
-//        }
+        // variation of weekday
+        $mapActiveDayWeekday = [
+            1 => 'sunday',
+            2 => 'monday',
+            4 => 'tuesday',
+            8 => 'wednesday',
+            16 => 'thursday',
+            32 => 'friday',
+            64 => 'saturday',
+
+        ];
+        foreach ([
+            0,
+                     1,
+                     2] as $subWeek) { // 3, 4 won't work for the automatic logic
+            foreach ([
+                         1 => '2022-05-22 23:00:00', // So.
+                         2 => '2022-05-23 23:00:00', // Mo
+                         4 => '2022-05-24 23:00:00', // Tu
+                         8 => '2022-05-25 23:00:00', // We
+                         16 => '2022-05-26 23:00:00', // th
+                         32 => '2022-05-27 23:00:00', // fr
+                         64 => '2022-05-28 23:00:00', // sa
+                     ]
+                     as $activeDay => $dateStringOkayStart
+            ) {
+                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
+                    new DateTimeZone('Europe/Berlin'));
+                if ($subWeek > 0) {
+                    $currentDate = clone $dateOkayStart;
+                    $currentDate->sub(new DateInterval('P' . (7 * $subWeek) . 'D'));
+                    if ($currentDate->format('m') !== $dateOkayStart->format('m')) {
+                        continue;
+                    }
+                    $dateOkayStart = $currentDate;
+                }
+                $dateOkayEnd = clone $dateOkayStart;
+                $dateOkayEnd->sub(new DateInterval('PT120M'));
+                $dateFailEnd = clone $dateOkayEnd;
+                $dateFailEnd->sub(new DateInterval('PT1M'));
+                $dateFailStart = clone $dateOkayStart;
+                $dateFailStart->sub(new DateInterval('PT1M'));
+                $startCalc = clone $dateOkayEnd;  // change order, because startingis defined by the upper border
+                $startCalc->sub(new DateInterval('P7D'));
+                $endCalc = clone $dateOkayStart;
+                $endCalc->sub(new DateInterval('P7D'));
+                foreach ([
+                             [$dateOkayStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                             [$dateOkayEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+//                             [$dateFailStart, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                             [$dateFailEnd, ['beginning' => $startCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $endCalc->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                         ]
+                         as $helper) {
+                    $result[] = [
+                        'message' => 'The prev range for the date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
+                            ' is `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`.' .
+                            'The startdate is the ' . ($subWeek + 2) . 'nth weekday in the month. ' .
+                            'The startdate is part of ' . $mapActiveDayWeekday[$activeDay] . '. ',
+                        'expects' => [
+                            'result' => $helper[1],
+                        ],
+                        'params' => [
+                            'value' => $helper[0],
+                            'setting' => [
+                                'nthWeekdayInMonth' => (2 ** (3-$subWeek)) + (2 ** (3-$subWeek - 1)),
+                                // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
+                                'activeWeekday' => $activeDay,
+                                // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
+                                'startCountAtEnd' => false,
+                                // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
+                                'startTimeSeconds' => 75600,
+                                // = 86400-10800 = 21:00,
+                                // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
+                                'activeMonth' => 4095,
+                                // every month allowed
+                                // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
+                                'durationMinutes' => '120',
+                                // Minutes!!!!
+                            ],
+                            'general' => $general,
+
+                        ],
+                    ];
+                }
+            }
+        }
+
+
+        // variation of Month
+        $mapActiveToMonth = [
+            1 => 'january',
+            2 => 'february',
+            4 => 'march',
+            8 => 'april',
+            16 => 'may',
+            32 => 'june',
+            64 => 'july',
+            128 => 'august',
+            256 => 'september',
+            512 => 'october',
+            1024 => 'november',
+            2048 => 'december',
+        ];
+        foreach ([
+                     1 => '2022-01-01 21:00:00',
+                     2 => '2022-02-05 21:00:00',
+                     4 => '2022-03-05 21:00:00',
+                     8 => '2022-04-02 21:00:00',
+                     16 => '2022-05-07 21:00:00',
+                     32 => '2022-06-04 21:00:00',
+                     64 => '2022-07-02 21:00:00',
+                     128 => '2022-08-06 21:00:00',
+                     256 => '2022-09-03 21:00:00',
+                     512 => '2022-10-01 21:00:00',
+                     1024 => '2022-11-05 21:00:00',
+                     2048 => '2022-12-03 21:00:00',
+                 ]
+                 as $activeMonth => $dateStringOkayStart
+        ) {
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin'));
+            $dateOkayEnd = clone $dateOkayStart;
+            $dateOkayEnd->add(new DateInterval('PT120M'));
+            $dateFailEnd = clone $dateOkayStart;
+            $dateFailEnd->sub(new DateInterval('PT1M'));
+            $prevYearStart = clone $dateOkayStart;
+            //            calculate the date for the 1 saturday in the month a year before
+            $prevYearStart->sub(new DateInterval('P1Y'));
+            if ($dateOkayStart->format('d') <7) {
+                $prevYearStart->add(new DateInterval('P1D'));
+            } else {
+                $prevYearStart->sub(new DateInterval('P6D'));
+            }
+            $prevYearEnd = clone $prevYearStart;
+            $prevYearEnd->add(new DateInterval('PT120M'));
+            foreach ([
+                         [$dateOkayStart,
+                            [
+                                 'beginning' => $prevYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'ending' => $prevYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'exist' => true,
+                             ],
+                         ],
+                         [$dateOkayEnd,
+                             [
+                                 'beginning' => $prevYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'ending' => $prevYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'exist' => true,
+                             ],
+                         ],
+                         [$dateFailEnd,
+                             [
+                                 'beginning' => $prevYearStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'ending' => $prevYearEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
+                                 'exist' => true,
+                             ],
+                         ],
+                     ]
+                     as $helper) {
+                $result[] = [
+                    'message' => 'The rext date-time relative to `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
+                        'will be the range in the following year `' . $helper[1]['beginning'] . '` to `' . $helper[1]['ending'] . '`, ' .
+                        'which is allowed for the date with the following attributes: ' .
+                        'The date is the first saturday in the month `' . $mapActiveToMonth[$activeMonth] . '`. ' .
+                        'The date has a range of two hours.',
+                    'expects' => [
+                        'result' => $helper[1],
+                    ],
+                    'params' => [
+                        'value' => $helper[0],
+                        'setting' => [
+                            'nthWeekdayInMonth' => 1,
+                            // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
+                            'activeWeekday' => 64,
+                            // 64 = saturday
+                            // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
+                            'startCountAtEnd' => false,
+                            // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
+                            'startTimeSeconds' => 75600,
+                            // = 86400-10800 = 21:00,
+                            // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
+                            'activeMonth' => $activeMonth,
+                            // every month allowed
+                            // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
+                            'durationMinutes' => '120',
+                            // Minutes!!!!
+                        ],
+                        'general' => $general,
+
+                    ],
+                ];
+            }
+        }
+        // variation of starttime
+        foreach ([
+                     0 => '2022-01-01 00:00:00',
+                     3600 => '2022-01-01 01:00:00',
+                     7200 => '2022-01-01 02:00:00',
+                     79200 => '2022-01-01 22:00:00',
+                     82800 => '2022-01-01 23:00:00',
+                     86340 => '2022-01-01 23:59:00',
+                 ]
+                 as $activeStartTimeInSoconds => $dateStringOkayStart
+        ) {
+            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin'));
+            $dateOkayEnd = clone $dateOkayStart;
+            $dateOkayEnd->add(new DateInterval('PT120M'));
+            $dateFailEnd = clone $dateOkayStart;
+            $dateFailEnd->sub(new DateInterval('PT1M'));
+            $nextRangeStart = clone $dateOkayStart;
+            $nextRangeStart->sub(new DateInterval('P1D'));
+            $nextRangeEnd = clone $dateOkayEnd;
+            $nextRangeEnd->sub(new DateInterval('P1D'));
+            foreach ([
+                [$dateOkayEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                         [$dateOkayStart,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                         [$dateFailEnd,  ['beginning' => $nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'ending' => $nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME) , 'exist' => true,]],
+                         ]
+                     as $helper) {
+                $result[] = [
+                    'message' => 'The date-time `' . $helper[0]->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`(Europe/Berlin) ' .
+                        'will lead to the next 120 minutes-range (`'.$nextRangeStart->format(TimerInterface::TIMER_FORMAT_DATETIME).
+                        '`,`'.$nextRangeEnd->format(TimerInterface::TIMER_FORMAT_DATETIME).'`), ' .
+                        'which is allowed for every day in the month beginning at `'.$activeStartTimeInSoconds.
+                        '`(seconds from midnight). ',
+                    'expects' => [
+                        'result' => $helper[1],
+                    ],
+                    'params' => [
+                        'value' => $helper[0],
+                        'setting' => [
+                            'nthWeekdayInMonth' => 31,
+                            // 1.1.2022
+                            // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
+                            'activeWeekday' => 127,
+                            // 64 = saturday
+                            // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
+                            'startCountAtEnd' => false,
+                            // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
+                            'startTimeSeconds' => $activeStartTimeInSoconds,
+                            // = 86400-10800 = 21:00,
+                            // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
+                            'activeMonth' => 4095,
+                            // every month allowed
+                            // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
+                            'durationMinutes' => '120',
+                            // Minutes!!!!
+                        ],
+                        'general' => $general,
+
+                    ],
+                ];
+            }
+        }
 
         return $result;
     }

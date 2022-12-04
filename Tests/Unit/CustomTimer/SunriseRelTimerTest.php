@@ -956,265 +956,265 @@ class SunriseRelTimerTest extends TestCase
         ];
 
         $result = [];
-// //        'pos' => sunrise, sunset, transit, civil_twilight_begin, civil_twilight_end, nautical_twilight_begin, nautical_twilight_end, astronomical_twilight_begin, astronomical_twilight_end
-//        foreach ([
-//
-//                     [
-//                         'start' => '2022-07-30 05:49:00',
-//                         'time' => '2022-07-30 05:49:00',
-//                         'pos' => 'sunrise',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 21:35:00',
-//                         'time' => '2022-07-30 21:35:00',
-//                         'pos' => 'sunset',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 13:41:00',
-//                         'time' => '2022-07-30 13:41:00',
-//                         'pos' => 'transit',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 05:05:00',
-//                         'time' => '2022-07-30 05:05:00',
-//                         'pos' => 'civil_twilight_begin',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 22:16:00',
-//                         'time' => '2022-07-30 22:16:00',
-//                         'pos' => 'civil_twilight_end',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 04:05:00',
-//                         'time' => '2022-07-30 04:05:00',
-//                         'pos' => 'nautical_twilight_begin',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 23:17:00',
-//                         'time' => '2022-07-30 23:17:00',
-//                         'pos' => 'nautical_twilight_end',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 02:19:00',
-//                         'time' => '2022-07-30 02:19:00',
-//                         'pos' => 'astronomical_twilight_begin',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 01:02:00',
-//                         'time' => '2022-07-31 01:02:00',
-//                         'pos' => 'astronomical_twilight_end',
-//                         'active' => true,
-//                     ],
+ //        'pos' => sunrise, sunset, transit, civil_twilight_begin, civil_twilight_end, nautical_twilight_begin, nautical_twilight_end, astronomical_twilight_begin, astronomical_twilight_end
+        foreach ([
 
-//                     [
-//                         'start' => '2022-07-30 07:51:00',
-//                         'time' => '2022-07-30 07:51:00',
-//                         'pos' => 'sunrise',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 23:36:00',
-//                         'time' => '2022-07-30 23:36:00',
-//                         'pos' => 'sunset',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 23:37:00',
-//                         'time' => '2022-07-30 23:37:00',
-//                         'pos' => 'sunset',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 15:43:00',
-//                         'time' => '2022-07-30 15:43:00',
-//                         'pos' => 'transit',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 07:07:00',
-//                         'time' => '2022-07-30 07:07:00',
-//                         'pos' => 'civil_twilight_begin',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 00:18:00',
-//                         'time' => '2022-07-31 00:18:00',
-//                         'pos' => 'civil_twilight_end',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 06:07:00',
-//                         'time' => '2022-07-30 06:07:00',
-//                         'pos' => 'nautical_twilight_begin',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 01:19:00',
-//                         'time' => '2022-07-31 01:19:00',
-//                         'pos' => 'nautical_twilight_end',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 04:21:00',
-//                         'time' => '2022-07-30 04:21:00',
-//                         'pos' => 'astronomical_twilight_begin',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 03:07:00',
-//                         'time' => '2022-07-31 03:07:00',
-//                         'pos' => 'astronomical_twilight_end',
-//                         'active' => false,
-//                     ],
-//
-//                     [
-//                         'start' => '2022-07-30 07:47:00',
-//                         'time' => '2022-07-30 07:47:00',
-//                         'pos' => 'sunrise',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 23:34:00',
-//                         'time' => '2022-07-30 23:34:00',
-//                         'pos' => 'sunset',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 15:42:00',
-//                         'time' => '2022-07-30 15:42:00',
-//                         'pos' => 'transit',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 07:06:00',
-//                         'time' => '2022-07-30 07:06:00',
-//                         'pos' => 'civil_twilight_begin',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 00:17:00',
-//                         'time' => '2022-07-31 00:17:00',
-//                         'pos' => 'civil_twilight_end',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 06:06:00',
-//                         'time' => '2022-07-30 06:06:00',
-//                         'pos' => 'nautical_twilight_begin',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 01:18:00',
-//                         'time' => '2022-07-31 01:18:00',
-//                         'pos' => 'nautical_twilight_end',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 04:20:00',
-//                         'time' => '2022-07-30 04:20:00',
-//                         'pos' => 'astronomical_twilight_begin',
-//                         'active' => true,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 03:05:00',
-//                         'time' => '2022-07-31 03:05:00',
-//                         'pos' => 'astronomical_twilight_end',
-//                         'active' => true,
-//                     ],
-//
-//                     [
-//                         'start' => '2022-07-30 07:49:00',
-//                         'time' => '2022-07-30 07:49:00',
-//                         'pos' => 'sunrise',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 21:32:00',
-//                         'time' => '2022-07-30 21:32:00',
-//                         'pos' => 'sunset',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 13:40:00',
-//                         'time' => '2022-07-30 13:40:00',
-//                         'pos' => 'transit',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 05:04:00',
-//                         'time' => '2022-07-30 05:04:00',
-//                         'pos' => 'civil_twilight_begin',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 22:15:00',
-//                         'time' => '2022-07-30 22:15:00',
-//                         'pos' => 'civil_twilight_end',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 04:04:00',
-//                         'time' => '2022-07-30 04:04:00',
-//                         'pos' => 'nautical_twilight_begin',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 23:16:00',
-//                         'time' => '2022-07-30 23:16:00',
-//                         'pos' => 'nautical_twilight_end',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-30 02:18:00',
-//                         'time' => '2022-07-30 02:18:00',
-//                         'pos' => 'astronomical_twilight_begin',
-//                         'active' => false,
-//                     ],
-//                     [
-//                         'start' => '2022-07-31 01:01:00',
-//                         'time' => '2022-07-31 01:01:00',
-//                         'pos' => 'astronomical_twilight_end',
-//                         'active' => false,
-//                     ],
-//
-//
-//                 ] as $param) {
-//            $result[] = [
-//                'message' => 'The estimates date of sunposition `' . $param['pos'] . ' is `' .
-//                    ($param['pos'] ? 'ACTIVE' : 'NOT active') . '` at time `' . $param['time'] . '`.',
-//                'expects' => [
-//                    'result' => $param['active'],
-//                ],
-//                'params' => [
-//                    'testvalue' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $param['start'],
-//                        new DateTimeZone('Europe/Berlin')),
-//                    'required' => [
-//                        'sunPosition' => $param['pos'],
-//                        'relMinToSelectedTimerEvent' => '10',
-//                        'durationMinutes' => '120',
-//                        'durationNatural' => 'defined',
-//                        'latitude' => $latitude, // latitude Bremen 	53.0792962
-//                        'longitude' => $longitude, // Variation
-//                    ],
-//                    'optional' => [
-//
-//                    ],
-//                    'general' => $general,
-//                ],
-//            ];
-//        }
+                     [
+                         'start' => '2022-07-30 05:49:00',
+                         'time' => '2022-07-30 05:49:00',
+                         'pos' => 'sunrise',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 21:35:00',
+                         'time' => '2022-07-30 21:35:00',
+                         'pos' => 'sunset',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 13:41:00',
+                         'time' => '2022-07-30 13:41:00',
+                         'pos' => 'transit',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 05:05:00',
+                         'time' => '2022-07-30 05:05:00',
+                         'pos' => 'civil_twilight_begin',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 22:16:00',
+                         'time' => '2022-07-30 22:16:00',
+                         'pos' => 'civil_twilight_end',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 04:05:00',
+                         'time' => '2022-07-30 04:05:00',
+                         'pos' => 'nautical_twilight_begin',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 23:17:00',
+                         'time' => '2022-07-30 23:17:00',
+                         'pos' => 'nautical_twilight_end',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 02:19:00',
+                         'time' => '2022-07-30 02:19:00',
+                         'pos' => 'astronomical_twilight_begin',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-31 01:02:00',
+                         'time' => '2022-07-31 01:02:00',
+                         'pos' => 'astronomical_twilight_end',
+                         'active' => true,
+                     ],
+
+                     [
+                         'start' => '2022-07-30 07:51:00',
+                         'time' => '2022-07-30 07:51:00',
+                         'pos' => 'sunrise',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 23:36:00',
+                         'time' => '2022-07-30 23:36:00',
+                         'pos' => 'sunset',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 23:37:00',
+                         'time' => '2022-07-30 23:37:00',
+                         'pos' => 'sunset',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 15:43:00',
+                         'time' => '2022-07-30 15:43:00',
+                         'pos' => 'transit',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 07:07:00',
+                         'time' => '2022-07-30 07:07:00',
+                         'pos' => 'civil_twilight_begin',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-31 00:18:00',
+                         'time' => '2022-07-31 00:18:00',
+                         'pos' => 'civil_twilight_end',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 06:07:00',
+                         'time' => '2022-07-30 06:07:00',
+                         'pos' => 'nautical_twilight_begin',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-31 01:19:00',
+                         'time' => '2022-07-31 01:19:00',
+                         'pos' => 'nautical_twilight_end',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 04:21:00',
+                         'time' => '2022-07-30 04:21:00',
+                         'pos' => 'astronomical_twilight_begin',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-31 03:07:00',
+                         'time' => '2022-07-31 03:07:00',
+                         'pos' => 'astronomical_twilight_end',
+                         'active' => false,
+                     ],
+
+                     [
+                         'start' => '2022-07-30 07:47:00',
+                         'time' => '2022-07-30 07:47:00',
+                         'pos' => 'sunrise',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 23:34:00',
+                         'time' => '2022-07-30 23:34:00',
+                         'pos' => 'sunset',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 15:42:00',
+                         'time' => '2022-07-30 15:42:00',
+                         'pos' => 'transit',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 07:06:00',
+                         'time' => '2022-07-30 07:06:00',
+                         'pos' => 'civil_twilight_begin',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-31 00:17:00',
+                         'time' => '2022-07-31 00:17:00',
+                         'pos' => 'civil_twilight_end',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 06:06:00',
+                         'time' => '2022-07-30 06:06:00',
+                         'pos' => 'nautical_twilight_begin',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-31 01:18:00',
+                         'time' => '2022-07-31 01:18:00',
+                         'pos' => 'nautical_twilight_end',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-30 04:20:00',
+                         'time' => '2022-07-30 04:20:00',
+                         'pos' => 'astronomical_twilight_begin',
+                         'active' => true,
+                     ],
+                     [
+                         'start' => '2022-07-31 03:05:00',
+                         'time' => '2022-07-31 03:05:00',
+                         'pos' => 'astronomical_twilight_end',
+                         'active' => true,
+                     ],
+
+                     [
+                         'start' => '2022-07-30 07:49:00',
+                         'time' => '2022-07-30 07:49:00',
+                         'pos' => 'sunrise',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 21:32:00',
+                         'time' => '2022-07-30 21:32:00',
+                         'pos' => 'sunset',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 13:40:00',
+                         'time' => '2022-07-30 13:40:00',
+                         'pos' => 'transit',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 05:04:00',
+                         'time' => '2022-07-30 05:04:00',
+                         'pos' => 'civil_twilight_begin',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 22:15:00',
+                         'time' => '2022-07-30 22:15:00',
+                         'pos' => 'civil_twilight_end',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 04:04:00',
+                         'time' => '2022-07-30 04:04:00',
+                         'pos' => 'nautical_twilight_begin',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 23:16:00',
+                         'time' => '2022-07-30 23:16:00',
+                         'pos' => 'nautical_twilight_end',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-30 02:18:00',
+                         'time' => '2022-07-30 02:18:00',
+                         'pos' => 'astronomical_twilight_begin',
+                         'active' => false,
+                     ],
+                     [
+                         'start' => '2022-07-31 01:01:00',
+                         'time' => '2022-07-31 01:01:00',
+                         'pos' => 'astronomical_twilight_end',
+                         'active' => false,
+                     ],
+
+
+                 ] as $param) {
+            $result[] = [
+                'message' => 'The estimates date of sunposition `' . $param['pos'] . ' is `' .
+                    ($param['pos'] ? 'ACTIVE' : 'NOT active') . '` at time `' . $param['time'] . '`.',
+                'expects' => [
+                    'result' => $param['active'],
+                ],
+                'params' => [
+                    'testvalue' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $param['start'],
+                        new DateTimeZone('Europe/Berlin')),
+                    'required' => [
+                        'sunPosition' => $param['pos'],
+                        'relMinToSelectedTimerEvent' => '10',
+                        'durationMinutes' => '120',
+                        'durationNatural' => 'defined',
+                        'latitude' => $latitude, // latitude Bremen 	53.0792962
+                        'longitude' => $longitude, // Variation
+                    ],
+                    'optional' => [
+
+                    ],
+                    'general' => $general,
+                ],
+            ];
+        }
 
         foreach ([
-                     'sunrise' => [ 'start' => '2022-07-30 05:39:00', 'order' => 3, 'startNext' => '2022-07-31 05:40:00'],
-                     'sunset' => [ 'start' => '2022-07-30 21:23:00', 'order' => 5, 'startNext' => '2022-07-31 21:21:00'],
+                     'sunrise' => [ 'start' => '2022-07-30 05:37:00', 'order' => 3, 'startNext' => '2022-07-31 05:40:00'],
+                     'sunset' => [ 'start' => '2022-07-30 21:25:00', 'order' => 5, 'startNext' => '2022-07-31 21:23:00'],
                      'transit' => [ 'start' => '2022-07-30 13:31:00', 'order' => 4, 'startNext' => '2022-07-31 13:31:00'],
                      'civil_twilight_begin' => [ 'start' => '2022-07-30 04:55:00', 'order' => 2, 'startNext' => '2022-07-31 04:57:00'],
                      'civil_twilight_end' => [ 'start' => '2022-07-30 22:06:00', 'order' => 6, 'startNext' => '2022-07-31 22:04:00'],
@@ -1225,22 +1225,22 @@ class SunriseRelTimerTest extends TestCase
                  ] as $startPos => $startTime
         ) {
             foreach ([
-                         [
-                             'start' => '2022-07-30 02:00:00',
-                             'time' => '2022-07-30 21:33:00',
-                             'pos' => 'defined',
-                             'active' => false,
-                             'order' => 10000,
-                         ],
+//                         [
+//                             'start' => '2022-07-30 02:00:00',
+//                             'time' => '2022-07-30 21:33:00',
+//                             'pos' => 'defined',
+//                             'active' => false,
+//                             'order' => 10000,
+//                         ],
 
                          [
-                             'start' => '2022-07-30 05:39:00',
-                             'time' => '2022-07-30 05:39:00',
+                             'start' => '2022-07-30 05:37:00',
+                             'time' => '2022-07-30 05:37:00',
                              'pos' => 'sunrise',
                              'active' => true,
                              'order' => 3,
                          ],
-                         ['start' => '2022-07-30 21:23:00', 'time' => '2022-07-30 21:23:00', 'pos' => 'sunset', 'active' => true, 'order' => 5,],
+                         ['start' => '2022-07-30 21:25:00', 'time' => '2022-07-30 21:25:00', 'pos' => 'sunset', 'active' => true, 'order' => 5,],
                          ['start' => '2022-07-30 13:31:00', 'time' => '2022-07-30 13:31:00', 'pos' => 'transit', 'active' => true, 'order' => 4,],
                          ['start' => '2022-07-30 04:55:00', 'time' => '2022-07-30 04:55:00', 'pos' => 'civil_twilight_begin', 'active' => true, 'order' => 2,],
                          ['start' => '2022-07-30 22:06:00', 'time' => '2022-07-30 22:06:00', 'pos' => 'civil_twilight_end', 'active' => true, 'order' => 6,],
@@ -1250,29 +1250,29 @@ class SunriseRelTimerTest extends TestCase
                          ['start' => '2022-07-31 00:52:00', 'time' => '2022-07-31 00:52:00', 'pos' => 'astronomical_twilight_end', 'active' => true, 'order' => 8,],
                      ] as $param
             ) {
-                $result[] = [
-                    'message' => 'The estimates natural timegap from `' . $startPos . '` to `' . $param['pos'] . '` is `' .
-                        ($param['pos'] ? 'ACTIVE' : 'NOT active') . '` at time `' . $param['time'] . '`.',
-                    'expects' => [
-                        'result' => $param['active'],
-                    ],
-                    'params' => [
-                        'testvalue' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $param['start'],
-                            new DateTimeZone('Europe/Berlin')),
-                        'required' => [
-                            'sunPosition' => $startPos,
-                            'relMinToSelectedTimerEvent' => '0',  // will be ignored
-                            'durationMinutes' => '0', // will be ignored
-                            'durationNatural' => $param['pos'],
-                            'latitude' => $latitude, // latitude Bremen 	53.0792962
-                            'longitude' => $longitude, // Variation
-                        ],
-                        'optional' => [
-
-                        ],
-                        'general' => $general,
-                    ],
-                ];
+//                $result[] = [
+//                    'message' => 'The estimates natural timegap from `' . $startPos . '` to `' . $param['pos'] . '` is `' .
+//                        ($param['pos'] ? 'ACTIVE' : 'NOT active') . '` at time `' . $param['time'] . '`.',
+//                    'expects' => [
+//                        'result' => $param['active'],
+//                    ],
+//                    'params' => [
+//                        'testvalue' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $param['start'],
+//                            new DateTimeZone('Europe/Berlin')),
+//                        'required' => [
+//                            'sunPosition' => $startPos,
+//                            'relMinToSelectedTimerEvent' => '0',  // will be ignored
+//                            'durationMinutes' => '0', // will be ignored
+//                            'durationNatural' => $param['pos'],
+//                            'latitude' => $latitude, // latitude Bremen 	53.0792962
+//                            'longitude' => $longitude, // Variation
+//                        ],
+//                        'optional' => [
+//
+//                        ],
+//                        'general' => $general,
+//                    ],
+//                ];
                 $result[] = [
                     'message' => 'The estimates natural timegap from `' . $startPos . '` to `' . $param['pos'] .
                         '` is `ACTIVE` at time `' . $startTime['start'] . '`.',

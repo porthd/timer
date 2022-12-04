@@ -352,6 +352,7 @@ class MoonriseRelTimer implements TimerInterface
             $longitude
         );
         $rangeMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
+
         if ((!in_array($params[self::ARG_MOON_STATUS], self::LIST_MOON_STATUS)) ||
             (!isset($moonInfoList[$params[self::ARG_MOON_STATUS]], $moonInfoList[('flag' . ucfirst($params[self::ARG_MOON_STATUS]))])) ||
             ($rangeMin === 0)
@@ -364,6 +365,8 @@ class MoonriseRelTimer implements TimerInterface
                 1607249332
             );
         }
+
+        $timerRange = new TimerStartStopRange();
         if ($moonInfoList[('flag' . ucfirst($params[self::ARG_MOON_STATUS]))] !== false) {
             [$lower, $upper] = $this->defineRangesFromMoonDates(
                 $moonInfoList[$params[self::ARG_MOON_STATUS]],
@@ -399,18 +402,15 @@ class MoonriseRelTimer implements TimerInterface
             $lowerDateTime->setTimezone($dateLikeEventZone->getTimezone());
             $upperDateTime = new DateTime('@' . $upper);
             $upperDateTime->setTimezone($dateLikeEventZone->getTimezone());
-            $timerRange = new TimerStartStopRange();
-            if (($this->isAllowedInRange($lowerDateTime, $params)) &&
-                ($this->isAllowedInRange($upperDateTime, $params))
-            ) {
-                $timerRange->setBeginning($lowerDateTime);
-                $timerRange->setEnding($upperDateTime);
-                $timerRange->setResultExist($flagActive);
-            } else {
-                $timerRange->failOnlyNextActive($dateLikeEventZone);
-            }
+
+            $timerRange->setBeginning($lowerDateTime);
+            $timerRange->setEnding($upperDateTime);
+            $timerRange->setResultExist($flagActive);
+
+            return $this->validateUltimateRangeForNextRange($timerRange, $params, $dateLikeEventZone);
         }
 
+        $timerRange->failOnlyNextActive($dateLikeEventZone);
         return $timerRange;
     }
 
@@ -446,6 +446,7 @@ class MoonriseRelTimer implements TimerInterface
                 1607249332
             );
         }
+        $timerRange = new TimerStartStopRange();
         if ($moonInfoList[('flag' . ucfirst($params[self::ARG_MOON_STATUS]))] !== false) {
             [$lower, $upper] = $this->defineRangesFromMoonDates(
                 $moonInfoList[$params[self::ARG_MOON_STATUS]],
@@ -481,55 +482,15 @@ class MoonriseRelTimer implements TimerInterface
             $lowerDateTime->setTimezone($dateLikeEventZone->getTimezone());
             $upperDateTime = new DateTime('@' . $upper);
             $upperDateTime->setTimezone($dateLikeEventZone->getTimezone());
-            $timerRange = new TimerStartStopRange();
-            if (($this->isAllowedInRange($lowerDateTime, $params)) &&
-                ($this->isAllowedInRange($upperDateTime, $params))
-            ) {
                 $timerRange->setBeginning($lowerDateTime);
                 $timerRange->setEnding($upperDateTime);
                 $timerRange->setResultExist($flagActive);
-            } else {
-                $timerRange->failOnlyNextActive($dateLikeEventZone);
-            }
+
+            return $this->validateUltimateRangeForPrevRange($timerRange, $params, $dateLikeEventZone);
         }
 
+        $timerRange->failOnlyNextActive($dateLikeEventZone);
         return $timerRange;
-
-//        // with respect to parameter, ther should be Results at least three days in the past
-//        $utcDateTime = new DateTime('@' . $dateLikeEventZone->getTimestamp());
-//        $utcDateTime->add(new DateInterval('P3D'));
-//        [$latitude, $longitude] = $this->defineLongitudeLatitudeByParams($params, $dateLikeEventZone->getOffset());
-//        [$moonInfoList, $timerRange] = $this->defineRangeRelToMoonStatus($utcDateTime, $latitude, $longitude,
-//            $params);
-//
-//        $count = 0; // Save
-//        $flag = (($timerRange !== null) &&
-//            ($timerRange->getEnding() < $dateLikeEventZone)
-//        );
-//        while (($count < 10) &&
-//            (!$flag) &&
-//            (
-//                ($timerRange === null) ||
-//                ($moonInfoList[('flag' . ucfirst($params[self::ARG_MOON_STATUS]))] === false) ||
-//                ($timerRange->getEnding() > $dateLikeEventZone)
-//            )
-//        ) {
-//            $utcDateTime->sub(new DateInterval('P1D'));
-//            [$moonInfoList, $timerRange] = $this->defineRangeRelToMoonStatus($utcDateTime, $latitude, $longitude,
-//                $params);
-//
-//            $flag = (($timerRange !== null) &&
-//                ($timerRange->getBeginning() <= $dateLikeEventZone) &&
-//                ($dateLikeEventZone <= $timerRange->getEnding())
-//            );
-//            $count++;
-//        }
-//        if ($timerRange === null) {
-//            /** @var TimerStartStopRange $result */
-//            $timerRange = new TimerStartStopRange();
-//            $timerRange->failOnlyNextActive($dateLikeEventZone);
-//        }
-//        return $timerRange;
     }
 
 

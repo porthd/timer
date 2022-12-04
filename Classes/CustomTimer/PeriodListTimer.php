@@ -481,7 +481,7 @@ INFOSYNTAX;
                 $result->setResultExist(true);
             }
         }
-        return $result;
+        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -535,7 +535,8 @@ INFOSYNTAX;
                 $result->setResultExist(true);
             }
         }
-        return $result;
+
+        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -546,9 +547,9 @@ INFOSYNTAX;
 
     protected function readPeriodListFromYamlFile(array $params): array
     {
-        if( (!isset($params[self::ARG_YAML_PERIOD_FILE_PATH])) &&
-            ($params[self::ARG_YAML_PERIOD_FAL_INFO] <1)
-        ){
+        if ((!isset($params[self::ARG_YAML_PERIOD_FILE_PATH])) &&
+            ($params[self::ARG_YAML_PERIOD_FAL_INFO] < 1)
+        ) {
             return [];
         }
         // $this must allow the usage of the method `validateYamlOrException`
@@ -562,9 +563,9 @@ INFOSYNTAX;
         $fileResult = $fileResult[self::YAML_MAIN_KEY_PERIODLIST] ?? [];
         $falRawResult = CustomTimerUtility::readListFromYamlFilesInFal(
             $params[self::ARG_YAML_PERIOD_FAL_INFO],
-            ($params[TimerConst::TIMER_RELATION_TABLE]??''),
-        ($params[TimerConst::TIMER_RELATION_UID]??''),
-        $this->yamlFileLoader,
+            ($params[TimerConst::TIMER_RELATION_TABLE] ?? ''),
+            ($params[TimerConst::TIMER_RELATION_UID] ?? ''),
+            $this->yamlFileLoader,
             $this,
             $this->logger,
             $this->cache
