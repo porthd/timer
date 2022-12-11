@@ -55,7 +55,7 @@ class DateViewHelper extends AbstractViewHelper
         $this->registerArgument('base', 'mixed',
             'A base time (an object implementing DateTimeInterface or a string) used if $date is a relative date specification. Defaults to current time.');
         $this->registerArgument('timezone', 'string',
-            'Define an individual timezone for the output of the date. Defaults is the currently used timezone defind by `date_default_timezone_get()`.');
+            'Define an individual timezone for the output of the date. Defaults is the currently used timezone defined by `date_default_timezone_get()`.');
     }
 
     /**

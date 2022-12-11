@@ -37,8 +37,8 @@
 				<target>Zusammengeführte Liste von Timern in yaml (nicht korrekt arbeitend 20221105)</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerSunriseRel.select.name">
-				<source>period around some sunpositions every day (not fully tested 2022-12-04)</source>
-				<target>Zeitraum um einige Sonnenstände jeden Tag (nicht voll getestet 2022-12-02)</target>
+				<source>period around some sunpositions every day</source>
+				<target>Zeitraum um einige Sonnenstände jeden Tag</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerWeekdayInMonth.select.name">
 				<source>Active areas filtered by weekday(s), month position(s) and month(s)</source>

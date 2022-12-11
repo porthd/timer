@@ -131,7 +131,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:task.timer.updateTimesByTimer.yamltablelist',
                 TimerConst::EXTENSION_NAME
             ),
-            'EXT:timer/Resources/Public/Yaml/UpdateTimeByTimer.yaml'
+            'EXT:timer/Configuration/Yaml/UpdateTimeByTimer.yaml'
         );
     }
 

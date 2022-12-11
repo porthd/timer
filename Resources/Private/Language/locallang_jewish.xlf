@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<!-- I use target in this default-language-file, because englisch is not my native language. TYPO3 won`t use this target-definition. -->
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z" product-name="timer">
+		<header/>
+		<body>
+			<trans-unit id="viewhelper.jewishMonth.">
+				<source> </source>
+				<target> </target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Tishri">
+				<source>Tishri</source>
+				<target>Tishri</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Heshvan">
+				<source>Heshvan</source>
+				<target>Heshvan</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Kislev">
+				<source>Kislev</source>
+				<target>Kislev</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Tevet">
+				<source>Tevet</source>
+				<target>Tevet</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Shevat">
+				<source>Shevat</source>
+				<target>Shevat</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Adar_I">
+				<source>Adar I</source>
+				<target>Adar I</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Adar_II">
+				<source>Adar II</source>
+				<target>Adar II</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Nisan">
+				<source>Nisan</source>
+				<target>Nisan</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Iyar">
+				<source>Iyar</source>
+				<target>Iyar</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Sivan">
+				<source>Sivan</source>
+				<target>Sivan</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Tammuz">
+				<source>Tammuz</source>
+				<target>Tammuz</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Av">
+				<source>Av</source>
+				<target>Av</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Elul">
+				<source>Elul</source>
+				<target>Elul</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.Adar">
+				<source>Adar</source>
+				<target>Adar</target>
+			</trans-unit>
+
+			<trans-unit id="viewhelper.jewishMonth.0.day">
+				<source>sun</source>
+				<target>So</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.1.day">
+				<source>mon</source>
+				<target>Mo</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.2.day">
+				<source>tue</source>
+				<target>Di</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.3.day">
+				<source>wed</source>
+				<target>Mi</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.4.day">
+				<source>thu</source>
+				<target>Do</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.5.day">
+				<source>fri</source>
+				<target>Fr</target>
+			</trans-unit>
+			<trans-unit id="viewhelper.jewishMonth.6.day">
+				<source>sat</source>
+				<target>Sa</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
+

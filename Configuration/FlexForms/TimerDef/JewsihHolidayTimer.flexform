@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+    <meta type="array">
+        <langChildren>0</langChildren>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <timer>FILE:EXT:timer/Configuration/FlexForms/TimerDef/Specific/JewsihHolidayTimer.flexform</timer>
+        <general>FILE:EXT:timer/Configuration/FlexForms/TimerDef/General/GeneralTimer.flexform</general>
+    </sheets>
+</T3DataStructure>

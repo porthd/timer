@@ -58,9 +58,8 @@ class TimerConst
 
     /** needed parameter in flexform of timer **/
     /**
-     * used for default timezoen definition
+     * used for default timezone definition
      * used in
-     * - DoNothingHook
      * - TcaUtility
      */
     public const DEFAULT_TIME_ZONE = 'UTC';
