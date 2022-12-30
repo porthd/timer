@@ -443,6 +443,10 @@
 				<source>good friday (*)</source>
 				<target>Karfreitag (*)</target>
 			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.stupidday">
+				<source>world day of stupidity (16. apr.)</source>
+				<target>Welttag der Dummheit (16. Apr.)</target>
+			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.easter">
 				<source>easter (*)</source>
 				<target>Ostern (*)</target>
