@@ -55,11 +55,12 @@ class DatePeriodTimer implements TimerInterface
         self::ARG_REQ_PERIOD_LENGTH,
         self::ARG_REQ_PERIOD_UNIT,
     ];
-    protected const ARG_REQ_CHANGE_LIST = [
-        self::ARG_REQ_OLDSTART_TIME => self::ARG_REQ_START_TIME,
-    ];
     protected const ARG_OPT_LIST = [
     ];
+
+    protected const ARG_REQ_DURMIN_MIN = -444444;
+    protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
+    protected const ARG_REQ_DURMIN_MAX = 444444;
 
     /**
      * @var TimerStartStopRange|null
@@ -72,7 +73,7 @@ class DatePeriodTimer implements TimerInterface
     protected $lastIsActiveTimestamp;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $lastIsActiveParams = [];
 
@@ -90,7 +91,7 @@ class DatePeriodTimer implements TimerInterface
     /**
      * tested 20201228
      *
-     * @return array
+     * @return array<mixed>
      *
      */
     public static function getSelectorItem(): array
@@ -105,7 +106,7 @@ class DatePeriodTimer implements TimerInterface
      * tested 20221009
      *
      * @param string $activeZoneName
-     * @param array $params
+     * @param array<mixed> $params
      * @return string
      */
     public function getTimeZoneOfEvent($activeZoneName, array $params = []): string
@@ -116,7 +117,7 @@ class DatePeriodTimer implements TimerInterface
     /**
      * tested 20201228
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getFlexformItem(): array
     {
@@ -133,13 +134,12 @@ class DatePeriodTimer implements TimerInterface
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
      *
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function validate(array $params = []): bool
     {
-        $flag = true;
-        $flag = $flag && $this->validateZone($params);
+        $flag = $this->validateZone($params);
         $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $flag = $flag && $this->validateChangeArguments($params);
@@ -156,26 +156,20 @@ class DatePeriodTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     public function validateArguments(array $params = []): int
     {
-        $flag = 0;
-        foreach (self::ARG_REQ_LIST as $key) {
-            if (isset($params[$key])) {
-                $flag++;
-            }
-        }
-        return $flag;
+        return $this->countParamsInList(self::ARG_REQ_LIST, $params);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
-    public function validateChangeArguments(array $params = []): int
+    public function validateChangeArguments(array $params = []): bool
     {
         return (
             ((isset($params[self::ARG_REQ_OLDSTART_TIME])) && (!isset($params[self::ARG_REQ_START_TIME]))) ||
@@ -185,8 +179,8 @@ class DatePeriodTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateStartTime(array $params = []): bool
     {
@@ -194,35 +188,41 @@ class DatePeriodTimer implements TimerInterface
             if (empty($params[self::ARG_REQ_OLDSTART_TIME])) {
                 return false;
             }
-            return ((DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_REQ_OLDSTART_TIME])
-                ) !== false
+            return ((
+                DateTime::createFromFormat(
+                    self::TIMER_FORMAT_DATETIME,
+                    $params[self::ARG_REQ_OLDSTART_TIME]
+                )
+            ) !== false
             );
         }
         return (DateTime::createFromFormat(
-                self::TIMER_FORMAT_DATETIME,
-                $params[self::ARG_REQ_START_TIME]) !== false
+            self::TIMER_FORMAT_DATETIME,
+            $params[self::ARG_REQ_START_TIME]
+        ) !== false
         );
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
-        $value = (isset($params[self::ARG_REQ_DURATION_MINUTES]) ?
-            $params[self::ARG_REQ_DURATION_MINUTES] :
-            0
+        $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
+        $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        return (
+            ($number - $floatNumber == 0) &&
+            ($number >= self::ARG_REQ_DURMIN_MIN) &&
+            ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
+            ($number <= self::ARG_REQ_DURMIN_MAX)
         );
-        $number = (int)$value;
-        return is_int($number) && ($number !== 0) && (($number - $value) === 0);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validatePeriodLength(array $params = []): bool
@@ -233,7 +233,7 @@ class DatePeriodTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validatePeriodUnit(array $params = []): bool
@@ -243,25 +243,19 @@ class DatePeriodTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     protected function validateOptional(array $params = []): int
     {
-        $count = 0;
-        foreach (self::ARG_OPT_LIST as $key) {
-            if (isset($params[$key])) {
-                $count++;
-            }
-        }
-        return $count;
+        return $this->countParamsInList(self::ARG_OPT_LIST, $params);
     }
 
     /**
      * tested 20201228
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
@@ -276,7 +270,7 @@ class DatePeriodTimer implements TimerInterface
      * check, if the timer is for this time active
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
@@ -298,7 +292,8 @@ class DatePeriodTimer implements TimerInterface
         //            $dateLikeEventZone->getTimezone()
         //        );
 
-        $startTime = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+        $startTime = DateTime::createFromFormat(
+            self::TIMER_FORMAT_DATETIME,
             $timeString,
             $dateLikeEventZone->getTimezone()
         );
@@ -309,7 +304,6 @@ class DatePeriodTimer implements TimerInterface
             $startLimit = clone $stopLimit;
             $stopLimit->add(new DateInterval('PT' . abs($delayMin) . 'M'));
             $flag = $this->detectPeriodForBorder($startLimit, $stopLimit, $params, $dateLikeEventZone);
-
         } else {
             $startLimit = clone $startTime;
             $stopLimit = clone $startLimit;
@@ -318,33 +312,45 @@ class DatePeriodTimer implements TimerInterface
         }
 
         return $flag;
-
     }
 
     /**
      * tested 20201230
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
-        [$delayMin, $startTime, $unitValue, $unitPrefix, $unit] = $this->getParameterFromFlexParams($params,
-            $dateLikeEventZone->getTimezone());
+        [$delayMin, $startTime, $unitValue, $unitPrefix, $unit] = $this->getParameterFromFlexParams(
+            $params,
+            $dateLikeEventZone->getTimezone()
+        );
         if ($unitValue > 0) {
-            return $this->nextFittingPeriodRange($startTime, $unitPrefix, $unitValue, $unit, $delayMin,
-                $dateLikeEventZone);
+            return $this->nextFittingPeriodRange(
+                $startTime,
+                $unitPrefix,
+                $unitValue,
+                $unit,
+                $delayMin,
+                $dateLikeEventZone
+            );
         }
         // event happens only once
-        $result = $this->nextFittingPeriodRange($startTime, $unitPrefix, $unitValue, $unit, $delayMin,
-            $dateLikeEventZone);
+        $result = $this->nextFittingPeriodRange(
+            $startTime,
+            $unitPrefix,
+            $unitValue,
+            $unit,
+            $delayMin,
+            $dateLikeEventZone
+        );
         if ($result->getBeginning() < $dateLikeEventZone) {
             $result->setResultExist(false);
         }
 
         return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
-
     }
 
 
@@ -361,16 +367,20 @@ class DatePeriodTimer implements TimerInterface
     protected function nextFittingPeriodRange(
         $startTime,
         $unitPrefix,
-        $unitValue,
+        int $unitValue,
         $unit,
         $delayMin,
         DateTime $dateLikeEventZone
     ): TimerStartStopRange {
         $flag = false;
-        $timeUnitCode = (($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
+        $timeUnitCode = (string)(($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
         if ($unitValue > 0) {
-            $periodsBelow = DateTimeUtility::diffPeriod($startTime, $dateLikeEventZone, $unitValue,
-                    $timeUnitCode) - 2;  // I think, `-1` should although work.
+            $periodsBelow = DateTimeUtility::diffPeriod(
+                $startTime,
+                $dateLikeEventZone,
+                $unitValue,
+                $timeUnitCode
+            ) - 2;  // I think, `-1` should although work.
         } else {
             $periodsBelow = 0; // event hapens only once
         }
@@ -417,20 +427,34 @@ class DatePeriodTimer implements TimerInterface
      * tested 20201230
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
-        [$delayMin, $startTime, $unitValue, $unitPrefix, $unit] = $this->getParameterFromFlexParams($params,
-            $dateLikeEventZone->getTimezone());
+        [$delayMin, $startTime, $unitValue, $unitPrefix, $unit] = $this->getParameterFromFlexParams(
+            $params,
+            $dateLikeEventZone->getTimezone()
+        );
         if ($unitValue > 0) {
-            return $this->prevFittingPeriodRange($startTime, $unitPrefix, $unitValue, $unit, $delayMin,
-                $dateLikeEventZone);
+            return $this->prevFittingPeriodRange(
+                $startTime,
+                $unitPrefix,
+                $unitValue,
+                $unit,
+                $delayMin,
+                $dateLikeEventZone
+            );
         }
         // event happens only once
-        $result = $this->prevFittingPeriodRange($startTime, $unitPrefix, $unitValue, $unit, $delayMin,
-            $dateLikeEventZone);
+        $result = $this->prevFittingPeriodRange(
+            $startTime,
+            $unitPrefix,
+            $unitValue,
+            $unit,
+            $delayMin,
+            $dateLikeEventZone
+        );
         if ($result->getEnding() > $dateLikeEventZone) {
             $result->setResultExist(false);
         }
@@ -439,16 +463,17 @@ class DatePeriodTimer implements TimerInterface
     }
 
     /**
-     * @param array $params
+     * @param array<mixed> $params
      * @param DateTimeZone $timeZone
-     * @return array
+     * @return array<mixed>
      */
     protected function getParameterFromFlexParams(array $params, DateTimeZone $timeZone): array
     {
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
 
         $timeString = empty($params[self::ARG_REQ_START_TIME]) ? $params[self::ARG_REQ_OLDSTART_TIME] : $params[self::ARG_REQ_START_TIME];
-        $startTime = DateTime::createFromFormat('Y-m-d H:i:s',
+        $startTime = DateTime::createFromFormat(
+            'Y-m-d H:i:s',
             $timeString,
             $timeZone
         );
@@ -476,16 +501,20 @@ class DatePeriodTimer implements TimerInterface
     protected function prevFittingPeriodRange(
         $startTime,
         $unitPrefix,
-        $unitValue,
+        int $unitValue,
         $unit,
         $delayMin,
         DateTime $dateLikeEventZone
     ): TimerStartStopRange {
         $flag = false;
-        $timeUnitCode = (($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
+        $timeUnitCode = (string)(($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
         if ($unitValue > 0) {
-            $periodsAfter = DateTimeUtility::diffPeriod($startTime, $dateLikeEventZone, $unitValue,
-                    $timeUnitCode) + 3;  // I think, `-1` should although work.
+            $periodsAfter = DateTimeUtility::diffPeriod(
+                $startTime,
+                $dateLikeEventZone,
+                $unitValue,
+                $timeUnitCode
+            ) + 3;  // I think, `-1` should although work.
         } else {
             $periodsAfter = 0; // event hapens only once
         }
@@ -596,10 +625,9 @@ class DatePeriodTimer implements TimerInterface
 
 
     /**
-     * @param bool $useStartLimitToCalc
      * @param DateTime $startLimit
      * @param DateTime $stopLimit
-     * @param array $params
+     * @param array<mixed> $params
      * @param DateTime $dateLikeEventZone
      * @return bool
      */
@@ -650,12 +678,16 @@ class DatePeriodTimer implements TimerInterface
                     'The periodUnit `' . $unit . '` for the timer txDatePeriod is not defined. ' .
                     'Allowed are only [TM, TH, DD, DW, DM, DY]',
                     1609180114
-
                 );
         }
 
-        [$testStart, $testStop] = $this->getRangeWithIncludeProbility($startLimit, $stopLimit, ($factor * $length),
-            $prefix, $unit);
+        [$testStart, $testStop] = $this->getRangeWithIncludeProbility(
+            $startLimit,
+            $stopLimit,
+            ((int)($factor * $length)),
+            $prefix,
+            $unit
+        );
         $flag = ($testStart <= $dateLikeEventZone) && ($dateLikeEventZone <= $testStop);
         $this->setIsActiveResult($testStart, $testStop, $flag, $dateLikeEventZone, $params);
         return $this->lastIsActiveResult->getResultExist();
@@ -665,10 +697,10 @@ class DatePeriodTimer implements TimerInterface
      * tested:
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -676,7 +708,7 @@ class DatePeriodTimer implements TimerInterface
     /**
      * @param DateTime $startLimit
      * @param DateTime $stopLimit
-     * @param string $pLength
+     * @param int $pLength
      * @param string $prefix
      * @param string $unit
      * @return DateTime[]
@@ -685,18 +717,16 @@ class DatePeriodTimer implements TimerInterface
     protected function getRangeWithIncludeProbility(
         DateTime $startLimit,
         DateTime $stopLimit,
-        $pLength,
+        int $pLength,
         string $prefix,
         string $unit
     ): array {
         $testStart = clone $startLimit;
         $testStop = clone $stopLimit;
         if ($pLength > 0) {
-
             $testStart->add(new DateInterval('P' . $prefix . $pLength . $unit));
             $testStop->add(new DateInterval('P' . $prefix . $pLength . $unit));
         } else {
-
             $testStart->sub(new DateInterval('P' . $prefix . abs($pLength) . $unit));
             $testStop->sub(new DateInterval('P' . $prefix . abs($pLength) . $unit));
         }
@@ -705,17 +735,19 @@ class DatePeriodTimer implements TimerInterface
 
 
     /**
-     * @param $dateStart
-     * @param $dateStop
+     * @param DateTime $dateStart
+     * @param DateTime $dateStop
      * @param bool $flag
      * @param DateTime $dateLikeEventZone
+     * @param array<mixed> $params
+     * @return void
      */
     protected function setIsActiveResult(
-        $dateStart,
-        $dateStop,
+        DateTime $dateStart,
+        DateTime $dateStop,
         bool $flag,
         DateTime $dateLikeEventZone,
-        $params = []
+        array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
@@ -729,7 +761,7 @@ class DatePeriodTimer implements TimerInterface
 
     /**
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
@@ -746,5 +778,4 @@ class DatePeriodTimer implements TimerInterface
         }
         return clone $this->lastIsActiveResult;
     }
-
 }

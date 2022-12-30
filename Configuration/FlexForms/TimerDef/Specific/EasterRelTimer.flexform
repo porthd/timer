@@ -37,41 +37,59 @@
                             </numIndex>
                             <numIndex index="1" type="array">
                                 <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.labourday
+                                </numIndex>
+                                <numIndex index="1">labourday</numIndex>
+                            </numIndex>
+                            <numIndex index="2" type="array">
+                                <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.ascensionOfChrist
                                 </numIndex>
                                 <numIndex index="1">ascension</numIndex>
                             </numIndex>
-                            <numIndex index="2" type="array">
+                            <numIndex index="3" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.pentecost
                                 </numIndex>
                                 <numIndex index="1">pentecost</numIndex>
                             </numIndex>
-                            <numIndex index="2" type="array">
+                            <numIndex index="4" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.towlday
                                 </numIndex>
                                 <numIndex index="1">towlday</numIndex>
                             </numIndex>
-                            <numIndex index="3" type="array">
+                            <numIndex index="5" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.firstAdvent
                                 </numIndex>
                                 <numIndex index="1">firstadvent</numIndex>
                             </numIndex>
-                            <numIndex index="4" type="array">
+                            <numIndex index="6" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.christmas
                                 </numIndex>
                                 <numIndex index="1">christmas</numIndex>
                             </numIndex>
-                            <numIndex index="5" type="array">
+                            <numIndex index="7" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.silvester
+                                </numIndex>
+                                <numIndex index="1">silvester</numIndex>
+                            </numIndex>
+                            <numIndex index="8" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.newyear
+                                </numIndex>
+                                <numIndex index="1">newyear</numIndex>
+                            </numIndex>
+                            <numIndex index="9" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.roseMonday
                                 </numIndex>
                                 <numIndex index="1">rosemonday</numIndex>
                             </numIndex>
-                            <numIndex index="6" type="array">
+                            <numIndex index="10" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.select.namedDate.goodFriday
                                 </numIndex>

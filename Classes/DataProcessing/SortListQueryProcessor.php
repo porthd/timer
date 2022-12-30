@@ -88,14 +88,18 @@ class SortListQueryProcessor implements DataProcessorInterface
      * Fetches records from the database as an array
      *
      * @param ContentObjectRenderer $cObj The data of the content element or page
-     * @param array $contentObjectConfiguration The configuration of Content Object
-     * @param array $processorConfiguration The configuration of this processor
-     * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
+     * @param array<mixed> $contentObjectConfiguration The configuration of Content Object
+     * @param array<mixed> $processorConfiguration The configuration of this processor
+     * @param array<mixed> $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
      *
-     * @return array the processed data as key/value store
+     * @return array<mixed> the processed data as key/value store
      */
-    public function process(ContentObjectRenderer $cObj, array $contentObjectConfiguration, array $processorConfiguration, array $processedData)
-    {
+    public function process(
+        ContentObjectRenderer $cObj,
+        array $contentObjectConfiguration,
+        array $processorConfiguration,
+        array $processedData
+    ): array {
         if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
@@ -115,11 +119,13 @@ class SortListQueryProcessor implements DataProcessorInterface
         $timerEventZone = self::validateInternArguments($processorConfiguration);
         /** @var LoopLimiter $loopLimiter */
         $loopLimiter = ListOfEventsService::getListRestrictions($processorConfiguration, $timerEventZone);
-        $flagReverse = ((isset($processorConfiguration[TimerConst::ARGUMENT_REVERSE])) ?
+        $flagReverse = (
+            (isset($processorConfiguration[TimerConst::ARGUMENT_REVERSE])) ?
             (in_array($processorConfiguration[TimerConst::ARGUMENT_REVERSE], [1, true, 'true', 'TRUE', '1'])) :
             false
         );
-        $maxCount = (((isset($processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT] > 0)) ?
+        $maxCount = (
+            ((isset($processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT] > 0)) ?
             ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT]) :
             TimerConst::SAVE_LIMIT_MAX_EVENTS
         );
@@ -143,7 +149,7 @@ class SortListQueryProcessor implements DataProcessorInterface
     }
 
     /**
-     * @param array $arguments
+     * @param array<mixed> $arguments
      * @return DateTime
      * @throws TimerException
      */
@@ -157,15 +163,18 @@ class SortListQueryProcessor implements DataProcessorInterface
             );
         }
         if (isset($arguments[TimerConst::ARGUMENT_DATETIME_START])) {
-            $timeFormat = ((isset($arguments[TimerConst::ARGUMENT_DATETIME_FORMAT])) ?
+            $timeFormat = (
+                (isset($arguments[TimerConst::ARGUMENT_DATETIME_FORMAT])) ?
                 $arguments[TimerConst::ARGUMENT_DATETIME_FORMAT] :
                 TimerInterface::TIMER_FORMAT_DATETIME
             );
             if (
-                ($frontendDateTime = DateTime::createFromFormat(
-                    $timeFormat,
-                    $arguments[TimerConst::ARGUMENT_DATETIME_START],
-                    new DateTimeZone($timeZone))
+                (
+                    $frontendDateTime = DateTime::createFromFormat(
+                        $timeFormat,
+                        $arguments[TimerConst::ARGUMENT_DATETIME_START],
+                        new DateTimeZone($timeZone)
+                    )
                 ) === false
             ) {
                 throw new TimerException(
@@ -177,10 +186,8 @@ class SortListQueryProcessor implements DataProcessorInterface
         } else {
             $utcTime = DateTimeUtility::getCurrentTime();
             $frontendDateTime = new DateTime('@' . $utcTime);
-            $frontendDateTime->setTimezone( new DateTimeZone($timeZone));
+            $frontendDateTime->setTimezone(new DateTimeZone($timeZone));
         }
         return $frontendDateTime;
-
     }
-
 }

@@ -25,7 +25,7 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 
 call_user_func(
-    function () {
+    static function () {
         ExtensionManagementUtility::allowTableOnStandardPages(
             'tx_timer_domain_model_event'
         );
@@ -56,6 +56,5 @@ call_user_func(
                 $filepath
             );
         }
-
     }
 );

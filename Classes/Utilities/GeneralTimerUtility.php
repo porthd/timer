@@ -24,15 +24,12 @@ namespace Porthd\Timer\Utilities;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Exception\TimerException;
 
-
 class GeneralTimerUtility
 {
-
     /**
-     * tested
      *
      * @param string $activeZoneName
-     * @param array $params
+     * @param array<mixed> $params
      * @return string
      */
     public static function getTimeZoneOfEvent(string $activeZoneName, array $params = []): string
@@ -46,7 +43,11 @@ class GeneralTimerUtility
             (is_numeric($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) &&
             (($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT] - (int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]) === 0)
         ) {
-            $paramTimeZoneName = timezone_name_from_abbr("", ((int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]), 0);
+            $paramTimeZoneName = timezone_name_from_abbr(
+                "",
+                ((int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]),
+                0
+            );
         } else {
             if (!empty($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) {
                 $paramTimeZoneName = $params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT];
@@ -61,12 +62,10 @@ class GeneralTimerUtility
                 '`. Check the Definition in the current flexform or in the definitions for the RangeListTimer.',
                 134456897
             );
-
         }
         return ((isset($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) && (is_string($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) ?
             $paramTimeZoneName :
             $activeZoneName
         );
     }
-
 }

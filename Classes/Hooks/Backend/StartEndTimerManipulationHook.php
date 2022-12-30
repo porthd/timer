@@ -41,22 +41,22 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class StartEndTimerManipulationHook
 {
-
     /**
      * after saving the changs for the defintion of the periods reset start and endtime to zero
      *
      * @param string $status not used
      * @param string $table not used
      * @param mixed $id used for remarkable identifier of
-     * @param array $fieldArray contains the change field in the save array
+     * @param array<mixed> $fieldArray contains the change field in the save array
      * @param object $selfDatamapper not used
+     * @return void
      */
-    public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $selfDatamapper)
+    public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $selfDatamapper): void
     {
         if ((
-                (isset($fieldArray[TimerConst::TIMER_FIELD_SELECT])) ||
-                (isset($fieldArray[TimerConst::TIMER_FIELD_FLEX_ACTIVE]))
-            ) 
+            (isset($fieldArray[TimerConst::TIMER_FIELD_SELECT])) ||
+            (isset($fieldArray[TimerConst::TIMER_FIELD_FLEX_ACTIVE]))
+        )
         ) {
             // Reset the values of starttiem and endtime
             // Dont change them here, This is job of the scheduler
@@ -83,5 +83,4 @@ class StartEndTimerManipulationHook
             $myFlashService->addMessage($message);
         }
     }
-
 }

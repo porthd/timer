@@ -128,11 +128,11 @@ class PeriodlistProcessor implements DataProcessorInterface
      * Fetches records from the database as an array
      *
      * @param ContentObjectRenderer $cObj The data of the content element or page
-     * @param array &$contentObjectConfiguration The configuration of Content Object
-     * @param array $processorConfiguration The configuration of this processor
-     * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
+     * @param array<mixed> &$contentObjectConfiguration The configuration of Content Object
+     * @param array<mixed> $processorConfiguration The configuration of this processor
+     * @param array<mixed> $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
      *
-     * @return array the processed data as key/value store
+     * @return array<mixed> the processed data as key/value store
      */
     public function process(
         ContentObjectRenderer $cObj,
@@ -172,7 +172,7 @@ class PeriodlistProcessor implements DataProcessorInterface
         $paramList[TimerConst::TIMER_RELATION_TABLE] = 'tt_content';
         $paramList[TimerConst::TIMER_RELATION_UID] = (int)$processedData['data']['uid'];
         $yamlFile = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH];
-        $rawResultFile = CustomTimerUtility::readListFromYamlFile($yamlFile,$yamlFileLoader, $periodListTimer, $this->logger);
+        $rawResultFile = CustomTimerUtility::readListFromYamlFileFromPathOrUrl($yamlFile, $yamlFileLoader, $periodListTimer, $this->logger);
         $rawResultFile = $rawResultFile[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST] ?? [];
         $yamlFal = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FAL_INFO];
         $rawResultFalList = CustomTimerUtility::readListFromYamlFilesInFal(
@@ -180,7 +180,6 @@ class PeriodlistProcessor implements DataProcessorInterface
             $paramList[TimerConst::TIMER_RELATION_TABLE],
             $paramList[TimerConst::TIMER_RELATION_UID],
             $yamlFileLoader,
-            $periodListTimer,
             $this->logger
         );
         $rawResultFal = array_column($rawResultFalList, PeriodListTimer::YAML_MAIN_KEY_PERIODLIST);
@@ -189,20 +188,29 @@ class PeriodlistProcessor implements DataProcessorInterface
         // detect the other parameters
         $upper = null;
         $lower = null;
+        $lowerDateString = null;
+        $upperDateString = null;
         if (isset($processorConfiguration[self::ATTR_LIMIT_DOT_LIST])) {
-            $lowerDateString = $cObj->stdWrapValue(self::ATTR_LIMIT_DOT_LOWER,
-                $processorConfiguration[self::ATTR_LIMIT_DOT_LIST], null);
-            $lower = (($lowerDateString !== null) ?
+            $lowerDateString = $cObj->stdWrapValue(
+                self::ATTR_LIMIT_DOT_LOWER,
+                $processorConfiguration[self::ATTR_LIMIT_DOT_LIST],
+                null
+            );
+            $lower = (
+                ($lowerDateString !== null) ?
                 date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $lowerDateString) :
                 null
             );
-            $upperDateString = $cObj->stdWrapValue(self::ATTR_LIMIT_DOT_UPPER,
-                $processorConfiguration[self::ATTR_LIMIT_DOT_LIST], null);
-            $upper = (($lowerDateString !== null) ?
+            $upperDateString = $cObj->stdWrapValue(
+                self::ATTR_LIMIT_DOT_UPPER,
+                $processorConfiguration[self::ATTR_LIMIT_DOT_LIST],
+                null
+            );
+            $upper = (
+                ($lowerDateString !== null) ?
                 date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $upperDateString) :
                 null
             );
-
         }
         $flagStart = true;
         if (isset($processorConfiguration[self::ATTR_FLAG_START])) {
@@ -214,13 +222,20 @@ class PeriodlistProcessor implements DataProcessorInterface
         }
         // The variable to be used within the result
         $maxCount = (int)$cObj->stdWrapValue(self::ATTR_MAX_COUNT, $processorConfiguration, self::DEFAULT_MAX_COUNT);
-        $defaultZone = (int)$cObj->stdWrapValue(self::ATTR_TIME_ZONE_DEFAULT, $processorConfiguration,
-            self::DEFAULT_TIME_ZONE);
-        $targetVariableName = $cObj->stdWrapValue(self::ATTR_RESULT_VARIABLE_NAME, $processorConfiguration,
-            self::DEFAULT_RESULT_VARIABLE_NAME);
+        $defaultZone = (int)$cObj->stdWrapValue(
+            self::ATTR_TIME_ZONE_DEFAULT,
+            $processorConfiguration,
+            self::DEFAULT_TIME_ZONE
+        );
+        $targetVariableName = $cObj->stdWrapValue(
+            self::ATTR_RESULT_VARIABLE_NAME,
+            $processorConfiguration,
+            self::DEFAULT_RESULT_VARIABLE_NAME
+        );
 
         // sortiere $rawResult
-        $referenceKey = (($flagStart) ?
+        $referenceKey = (
+            ($flagStart) ?
             PeriodListTimer::YAML_ITEMS_KEY_START :
             PeriodListTimer::YAML_ITEMS_KEY_STOP
         );
@@ -235,9 +250,13 @@ class PeriodlistProcessor implements DataProcessorInterface
                 break;
             }
             if (($lower === null) ||
+                (
+                    ($lowerDateString !== null) &&
                 ($lowerDateString < $item[$referenceKey])
+                )
             ) {
                 if (($upper !== null) &&
+                    ($upperDateString !== null) &&
                     ($upperDateString > $item[$referenceKey])
                 ) {
                     break;
@@ -258,7 +277,6 @@ class PeriodlistProcessor implements DataProcessorInterface
                 );
                 $result[] = $item;
                 $maxCount--;
-
             }
         }
 
@@ -289,15 +307,11 @@ class PeriodlistProcessor implements DataProcessorInterface
                         'dataprocessor `' . self::class . '`. Check your typoscript-definition.',
                         1668761698
                     );
-
                 }
             }
         }
         $processedData[$targetVariableName] = $result;
         // allow the call of a Dataprocessor in a dataprocessor
         return $processedData;
-
-
     }
-
 }

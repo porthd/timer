@@ -88,9 +88,11 @@ class WeekdayInMonthTimerTest extends TestCase
      */
     public function selfName()
     {
-        $this->assertEquals(self::NAME_TIMER,
+        $this->assertEquals(
+            self::NAME_TIMER,
             $this->subject::selfName(),
-            'The name musst be defined.');
+            'The name musst be defined.'
+        );
     }
 
 
@@ -100,16 +102,24 @@ class WeekdayInMonthTimerTest extends TestCase
     public function getSelectorItem()
     {
         $result = $this->subject->getSelectorItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertGreaterThan(1,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertGreaterThan(
+            1,
             count($result),
-            'The array  must contain at least two items.');
-        $this->assertIsString($result[0],
-            'The first item must be an string.');
-        $this->assertEquals($result[1],
+            'The array  must contain at least two items.'
+        );
+        $this->assertIsString(
+            $result[0],
+            'The first item must be an string.'
+        );
+        $this->assertEquals(
+            $result[1],
             self::NAME_TIMER,
-            'The second term must the name of the timer.');
+            'The second term must the name of the timer.'
+        );
     }
 
     /**
@@ -118,37 +128,53 @@ class WeekdayInMonthTimerTest extends TestCase
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertEquals(1,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertEquals(
+            1,
             count($result),
-            'The array  must contain one Item.');
-        $this->assertEquals(array_keys($result),
+            'The array  must contain one Item.'
+        );
+        $this->assertEquals(
+            array_keys($result),
             [self::NAME_TIMER],
-            'The key must the name of the timer.');
-        $this->assertIsString($result[self::NAME_TIMER],
-            'The value must be type of string.');
+            'The key must the name of the timer.'
+        );
+        $this->assertIsString(
+            $result[self::NAME_TIMER],
+            'The value must be type of string.'
+        );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
         if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
-        } else if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+                substr(
+                    $filePath,
+                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
+                );
+        } elseif (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-            $this->assertTrue((false),'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
+                substr(
+                    $filePath,
+                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
+                );
+            $this->assertTrue((false), 'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue($flag,
-            'The file with the flexform content exist.');
+        $this->assertTrue(
+            $flag,
+            'The file with the flexform content exist.'
+        );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue((!(!$flexArray)),
-            'The filecontent is valid xml.');
+        $this->assertTrue(
+            (!(!$flexArray)),
+            'The filecontent is valid xml.'
+        );
     }
 
     public function dataProvider_isAllowedInRange()
@@ -245,11 +271,9 @@ class WeekdayInMonthTimerTest extends TestCase
      */
     public function isAllowedInRange($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
             $this->assertEquals(
@@ -257,7 +281,6 @@ class WeekdayInMonthTimerTest extends TestCase
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
             );
-
         }
     }
 
@@ -284,7 +307,6 @@ class WeekdayInMonthTimerTest extends TestCase
         ];
         foreach ($list as $unsetParam => $expects
         ) {
-
             $item = [
                 'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
@@ -349,7 +371,6 @@ class WeekdayInMonthTimerTest extends TestCase
                     ],
                 ],
             ];
-
         }
         // Variation for ultimateBeginningTimer
         foreach ([
@@ -408,18 +429,15 @@ class WeekdayInMonthTimerTest extends TestCase
      */
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $paramTest = array_merge($params['rest'], $params['general']);
             $this->assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
-
         }
     }
 
@@ -557,7 +575,6 @@ class WeekdayInMonthTimerTest extends TestCase
                     'general' => $general,
                 ],
             ];
-
         }
 
 
@@ -570,25 +587,21 @@ class WeekdayInMonthTimerTest extends TestCase
      */
     public function validateSpeciallByVariationArgumentsInParam($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $paramTest = array_merge($params['required'], $params['optional'], $params['general']);
             $this->assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
-
         }
     }
 
 
     public function dataProviderGetTimeZoneOfEvent()
     {
-
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
@@ -708,7 +721,6 @@ class WeekdayInMonthTimerTest extends TestCase
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
@@ -772,8 +784,11 @@ class WeekdayInMonthTimerTest extends TestCase
                     'result' => $flagResult,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                        new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $dateString,
+                        new DateTimeZone('Europe/Berlin')
+                    ),
                     'setting' => [
                         'nthWeekdayInMonth' => '3',
                         // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
@@ -792,7 +807,6 @@ class WeekdayInMonthTimerTest extends TestCase
 
                 ],
             ];
-
         }
         // variation of weekday in Month and order of it
         foreach ([
@@ -809,8 +823,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $nthDay => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
@@ -874,8 +891,11 @@ class WeekdayInMonthTimerTest extends TestCase
                      ]
                      as $activeDay => $dateStringOkayStart
             ) {
-                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                    new DateTimeZone('Europe/Berlin'));
+                $dateOkayStart = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $dateStringOkayStart,
+                    new DateTimeZone('Europe/Berlin')
+                );
                 if ($addWeek > 0) {
                     $currentDate = clone $dateOkayStart;
                     $currentDate->add(new DateInterval('P' . (7 * $addWeek) . 'D'));
@@ -958,8 +978,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeMonth => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
@@ -1013,8 +1036,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeStartTimeInSoconds => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
@@ -1068,11 +1094,9 @@ class WeekdayInMonthTimerTest extends TestCase
      */
     public function isActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = array_merge($params['setting'], $params['general']);
 
             $value = clone $params['value'];
@@ -1086,14 +1110,12 @@ class WeekdayInMonthTimerTest extends TestCase
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
-
         }
     }
 
 
     public function dataProviderNextActive()
     {
-
         $general = [
             'useTimeZoneOfFrontend' => 0,
             'timeZoneOfEvent' => 'Europe/Berlin',
@@ -1110,8 +1132,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $dateString => $expection
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateString,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateBeforeNewStart = clone $dateOkayStart;
@@ -1123,7 +1148,6 @@ class WeekdayInMonthTimerTest extends TestCase
                          [$dateBeforeNewStart, true],
                      ]
                      as $helper) {
-
                 $result[] = [
                     'message' => 'The next  date-time relative to `' . $dateString . '`(Europe/Berlin) ' .
                         ' is active in the range of two hours and starts at `' . $expection['beginning'] . '`.',
@@ -1154,7 +1178,6 @@ class WeekdayInMonthTimerTest extends TestCase
 
                     ],
                 ];
-
             }
         }
         // variation of weekday in Month and order of it
@@ -1172,8 +1195,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $nthDay => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart[0],
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart[0],
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
@@ -1239,8 +1265,11 @@ class WeekdayInMonthTimerTest extends TestCase
                      ]
                      as $activeDay => $dateStringOkayStart
             ) {
-                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                    new DateTimeZone('Europe/Berlin'));
+                $dateOkayStart = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $dateStringOkayStart,
+                    new DateTimeZone('Europe/Berlin')
+                );
                 if ($addWeek > 0) {
                     $currentDate = clone $dateOkayStart;
                     $currentDate->add(new DateInterval('P' . (7 * $addWeek) . 'D'));
@@ -1331,8 +1360,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeMonth => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
@@ -1415,8 +1447,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeStartTimeInSoconds => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
@@ -1476,11 +1511,9 @@ class WeekdayInMonthTimerTest extends TestCase
      */
     public function nextActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = array_merge($params['setting'], $params['general']);
 
             $value = clone $params['value'];
@@ -1494,13 +1527,11 @@ class WeekdayInMonthTimerTest extends TestCase
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
-
         }
     }
 
     public function dataProviderPrevActive()
     {
-
         $general = [
             'useTimeZoneOfFrontend' => 0,
             'timeZoneOfEvent' => 'Europe/Berlin',
@@ -1517,8 +1548,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $dateString => $expection
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateString,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateAfterNewEnding = clone $dateOkayEnd;
@@ -1530,7 +1564,6 @@ class WeekdayInMonthTimerTest extends TestCase
                          [$dateAfterNewEnding, true],
                      ]
                      as $helper) {
-
                 $result[] = [
                     'message' => 'The nearest previous date-time relative to `' . $dateString . '`(Europe/Berlin) ' .
                         'is active in the range of two hours and starts at `' . $expection['beginning'] . '`. '.
@@ -1562,7 +1595,6 @@ class WeekdayInMonthTimerTest extends TestCase
 
                     ],
                 ];
-
             }
         }
         // variation of weekday in Month and order of it
@@ -1581,8 +1613,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $nthDay => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart[0],
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart[0],
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->sub(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayEnd;
@@ -1651,8 +1686,11 @@ class WeekdayInMonthTimerTest extends TestCase
                      ]
                      as $activeDay => $dateStringOkayStart
             ) {
-                $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                    new DateTimeZone('Europe/Berlin'));
+                $dateOkayStart = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $dateStringOkayStart,
+                    new DateTimeZone('Europe/Berlin')
+                );
                 if ($subWeek > 0) {
                     $currentDate = clone $dateOkayStart;
                     $currentDate->sub(new DateInterval('P' . (7 * $subWeek) . 'D'));
@@ -1744,8 +1782,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeMonth => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayStart;
@@ -1829,8 +1870,11 @@ class WeekdayInMonthTimerTest extends TestCase
                  ]
                  as $activeStartTimeInSoconds => $dateStringOkayStart
         ) {
-            $dateOkayStart = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateStringOkayStart,
-                new DateTimeZone('Europe/Berlin'));
+            $dateOkayStart = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $dateStringOkayStart,
+                new DateTimeZone('Europe/Berlin')
+            );
             $dateOkayEnd = clone $dateOkayStart;
             $dateOkayEnd->add(new DateInterval('PT120M'));
             $dateFailEnd = clone $dateOkayStart;
@@ -1890,11 +1934,9 @@ class WeekdayInMonthTimerTest extends TestCase
      */
     public function prevActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = array_merge($params['setting'], $params['general']);
 
             $value = clone $params['value'];
@@ -1908,8 +1950,6 @@ class WeekdayInMonthTimerTest extends TestCase
                 ($flag),
                 'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
-
         }
     }
-
 }

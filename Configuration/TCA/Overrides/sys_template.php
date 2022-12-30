@@ -20,4 +20,3 @@ ExtensionManagementUtility::addStaticFile(
     'Configuration/TypoScript/Periodlist',
     'Timer (content-element `timersimul` as example for usages of `PeriodlistTimer` to generate a list from datas in a file)'
 );
-

@@ -34,7 +34,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class LoopLimiter
 {
-
     /**
      * flagMaxType
      *
@@ -80,7 +79,8 @@ class LoopLimiter
      */
     public function __construct(DateTime $date = null)
     {
-        $this->maxLate = (($date !== null) ?
+        $this->maxLate = (
+            ($date !== null) ?
             $date :
             new DateTime('@' . self::getCurrentTStamp())
         );
@@ -182,5 +182,4 @@ class LoopLimiter
     {
         $this->userCompareFunction = $userCompareFunction;
     }
-
 }

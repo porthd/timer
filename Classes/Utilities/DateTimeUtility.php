@@ -24,6 +24,7 @@ namespace Porthd\Timer\Utilities;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
@@ -98,14 +99,7 @@ class DateTimeUtility
                 $clone->add($offset);
             }
         }
-        $result = $clone->format($format);
-        if ($result === false) { // I don't know, how to produces this Exception The reason is safetyness.
-            throw new TimerException(
-                'Check your format-definition. The transformation of datetime has failed. I don`t know why? :-)',
-                1602053502
-            );
-        }
-        return $result;
+        return $clone->format($format);
     }
 
 
@@ -151,14 +145,10 @@ class DateTimeUtility
         }
         $eventTimeZoneObj = new DateTimeZone($eventTimeZone);
         $frontendTimeZoneObj = new DateTimeZone($frontendTimeZone);
-        if (($eventTimeZoneObj === false) || ($frontendTimeZoneObj === false)) {
-            throw new TimerException('One of the timeszones [`' . $eventTimeZone . '`,`' . $frontendTimeZone .
-                '`] could not resolved. Please chech the parameter for your viewhelper.',
-                1601975594
-            );
-        }
-        $eventTime = new DateTime(DateTimeUtility::BASE_TEST_DATE,
-            $eventTimeZoneObj); // php does not calculate the GMT timestimp
+        $eventTime = new DateTime(
+            DateTimeUtility::BASE_TEST_DATE,
+            $eventTimeZoneObj
+        ); // php does not calculate the GMT timestimp
         $frontendTime = new DateTime(DateTimeUtility::BASE_TEST_DATE, $frontendTimeZoneObj);
         return ($eventTimeZoneObj->getOffset($eventTime) - $frontendTimeZoneObj->getOffset($frontendTime));
     }
@@ -175,49 +165,50 @@ class DateTimeUtility
     /**
      * @param DateTime $destDateTime
      * @param DateTime $startTime
-     * @param $periodLength
-     * @param $periodUnit
+     * @param int $periodLength
+     * @param string $periodUnit
      * @return int
      * @throws TimerException
      */
-    public static function diffPeriod(DateTime $destDateTime, DateTime $startTime, $periodLength, $periodUnit): int
+    public static function diffPeriod(DateTime $destDateTime, DateTime $startTime, int $periodLength, string $periodUnit): int
     {
         $calcDateTime = clone $destDateTime;
         $differenz = $calcDateTime->diff($startTime);
         switch ($periodUnit) {
-            case self::KEY_UNIT_MINUTE :
+            case self::KEY_UNIT_MINUTE:
                 $rawCount = floor(
                     (($differenz->days ?: 0) * 1440 + (($differenz->h ?: 0) * 60) + ($differenz->i ?: 0)) / abs($periodLength)
                 );
                 break;
-            case self::KEY_UNIT_HOUR :
+            case self::KEY_UNIT_HOUR:
                 $rawCount = floor(
                     (($differenz->days ?: 0) * 24 + $differenz->h) / abs($periodLength)
                 );
                 break;
-            case self::KEY_UNIT_DAY :
+            case self::KEY_UNIT_DAY:
                 $rawCount = floor(
                     ($differenz->days ?: 0) / abs($periodLength)
                 );
 
                 break;
-            case self::KEY_UNIT_WEEK :
+            case self::KEY_UNIT_WEEK:
                 $rawCount = floor(
                     ($differenz->days ?: 0) / abs(7 * $periodLength)
                 );
                 break;
-            case self::KEY_UNIT_MONTH :
+            case self::KEY_UNIT_MONTH:
                 $rawCount = floor(
                     (($differenz->m ?: 0) + ($differenz->y ?: 0) * 12) / abs($periodLength)
                 );
                 break;
-            case self::KEY_UNIT_YEAR :
+            case self::KEY_UNIT_YEAR:
                 $rawCount = floor(
                     ($differenz->y ?: 0) / abs($periodLength)
                 );
                 break;
-            default :
-                throw new TimerException('The period-Unit is not defined by this extension `' .
+            default:
+                throw new TimerException(
+                    'The period-Unit is not defined by this extension `' .
                     TimerConst::EXTENSION_NAME . '`.' . ' Check your spelling and the definitions in the flexforms. ' .
                     'Allowed are `' . self::KEY_UNIT_MINUTE . '`,`' . self::KEY_UNIT_HOUR . '`,`' .
                     self::KEY_UNIT_DAY . '`,`' . self::KEY_UNIT_MONTH . '` and `' .
@@ -239,23 +230,9 @@ class DateTimeUtility
      */
     public static function getCurrentExecTime()
     {
-        /** @var DateTimeImmutable $execTime */
         $execTimeIso = GeneralUtility::makeInstance(Context::class)
             ->getPropertyFromAspect('date', 'iso');
         // Reading the current data instead of $GLOBALS['EXEC_TIME']
         return DateTime::createFromFormat(DATE_ATOM, $execTimeIso);
     }
-
-    /**
-     * @return string|null
-     * @throws AspectNotFoundException
-     */
-    public static function getCurrentTimeZone()
-    {
-        return GeneralUtility::makeInstance(Context::class)
-            ->getPropertyFromAspect('date', 'timezone');
-
-    }
-
 }
-

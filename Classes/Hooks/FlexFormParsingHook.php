@@ -24,15 +24,13 @@ namespace Porthd\Timer\Hooks;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
 
-
 class FlexFormParsingHook
 {
-
     /**
-     * @param $identifierArray
-     * @return mixed|string
+     * @param array<mixed> $identifierArray
+     * @return array<mixed>|string
      */
-    public function parseDataStructureByIdentifierPreProcess(&$identifierArray)
+    public function parseDataStructureByIdentifierPreProcess(array &$identifierArray)
     {
         $result = '';
         if (($identifierArray['fieldName'] === TimerConst::TIMER_FIELD_FLEX_ACTIVE) && ($identifierArray['type'] === 'tca')) {
@@ -46,5 +44,4 @@ class FlexFormParsingHook
         }
         return $result;
     }
-
 }

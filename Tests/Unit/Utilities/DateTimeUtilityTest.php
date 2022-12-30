@@ -28,9 +28,8 @@ use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 
-class TimerUtilitiesTest extends TestCase
+class DateTimeUtilityTest extends TestCase
 {
-
     public function dataProviderformatForZoneGivenDateTimeObjectAndTimeZone()
     {
         $outputFormat = TimerInterface::TIMER_FORMAT_DATETIME;
@@ -71,7 +70,6 @@ class TimerUtilitiesTest extends TestCase
             ];
         }
         return $result;
-
     }
 
     /**
@@ -82,11 +80,9 @@ class TimerUtilitiesTest extends TestCase
      */
     public function formatForZoneGivenDateTimeObjectAndTimeZone($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             // The DateTime does not calculate. It only makes an entry of both parameter. If you did not define a zone, php choose the zone of his system.
             // In PHP for typo3 is/should be the default timezone 'UTC'.
             $testDateTime = new DateTime($params['dateTimeString'], new DateTimeZone($params['zone']));
@@ -100,7 +96,6 @@ class TimerUtilitiesTest extends TestCase
                 $testDateTime->add(new DateInterval('PT' . abs($offsetToUtc) . 'S'));
             } else {
                 $testDateTime->sub(new DateInterval('PT' . abs($offsetToUtc) . 'S'));
-
             }
 
             $resultDateTimeString = DateTimeUtility::formatForZone($testDateTime, $params['format']);
@@ -115,20 +110,5 @@ class TimerUtilitiesTest extends TestCase
                 'Equal to UTC-String? (' . $message . ')'
             );
         }
-
     }
-
-
-    /**
-     * @test
-     * @throws TimerException
-     */
-    public function formatForZoneThrowExpceptionIfFormatDefined()
-    {
-        $this->expectException(TimerException::class);
-        $now = new DateTime('now');
-        $notFilledResult = DateTimeUtility::formatForZone($now, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZäöüÄÖÜß');
-
-    }
-
 }

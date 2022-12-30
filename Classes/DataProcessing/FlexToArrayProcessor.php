@@ -100,11 +100,11 @@ class FlexToArrayProcessor implements DataProcessorInterface
      * Fetches records from the database as an array
      *
      * @param ContentObjectRenderer $cObj The data of the content element or page
-     * @param array $contentObjectConfiguration The configuration of Content Object
-     * @param array $processorConfiguration The configuration of this processor
-     * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
+     * @param array<mixed> $contentObjectConfiguration The configuration of Content Object
+     * @param array<mixed> $processorConfiguration The configuration of this processor
+     * @param array<mixed> $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
      *
-     * @return array the processed data as key/value store
+     * @return array<mixed> the processed data as key/value store
      */
     public function process(
         ContentObjectRenderer $cObj,
@@ -128,11 +128,14 @@ class FlexToArrayProcessor implements DataProcessorInterface
         ) {
             return $processedData;
         }
-        $result = [];
+        $singleElement = null;
         if (!empty($processedData[self::OUTPUT_ARG_DATA][$flexFieldName])) {
             $flexString = $processedData[self::OUTPUT_ARG_DATA][$flexFieldName];
-            $stringFlatKeys = $cObj->stdWrapValue(self::ATTR_FLATTENKEYS, $processorConfiguration,
-                self::DEFAULT_FLATTENKEYS);
+            $stringFlatKeys = $cObj->stdWrapValue(
+                self::ATTR_FLATTENKEYS,
+                $processorConfiguration,
+                self::DEFAULT_FLATTENKEYS
+            );
             $singleElementRaw = GeneralUtility::xml2array($flexString);
             if ((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) {
                 throw new TimerException(
@@ -140,7 +143,6 @@ class FlexToArrayProcessor implements DataProcessorInterface
                     ' Check the reason for the incorrect flexform-string: `' . $flexString . '`',
                     1668690059
                 );
-
             }
             $listFlatKeys = array_filter(
                 array_map(
@@ -153,15 +155,16 @@ class FlexToArrayProcessor implements DataProcessorInterface
             } else {
                 $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
             }
-
         }
 
-        $targetVariableName = $cObj->stdWrapValue(self::ATTR_RESULT_VARIABLE_NAME, $processorConfiguration,
-            self::DEFAULT_RESULT_VARIABLE_NAME);
+        $targetVariableName = $cObj->stdWrapValue(
+            self::ATTR_RESULT_VARIABLE_NAME,
+            $processorConfiguration,
+            self::DEFAULT_RESULT_VARIABLE_NAME
+        );
 
         $processedData[$targetVariableName] = $singleElement;
 
         return $processedData;
     }
-
 }

@@ -77,7 +77,7 @@ interface TimerInterface
      * The method decide, wether the date is fixed to a special timezone or to the timezone of the frontend
      *
      * @param string $activeZoneName Name of the active timezone
-     * @param array $params A simplified array with the direct parameters (originally derived from  Felxform)
+     * @param array<mixed> $params A simplified array with the direct parameters (originally derived from  Felxform)
      * @return string
      */
     public function getTimeZoneOfEvent($activeZoneName, array $params = []): string;
@@ -86,14 +86,14 @@ interface TimerInterface
      * This method define an entry into an assoative-array for the timer-Identifier with the structure
      * ['identifier','<flexform or path to flexform-file>'].
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getFlexformItem(): array;
 
     /**
      * The method test, if the parameter are valid or not
      *
-     * @param array $params A simplified array with the direct parameters
+     * @param array<mixed> $params A simplified array with the direct parameters
      * @return bool
      */
     public function validate(array $params = []): bool;
@@ -105,7 +105,7 @@ interface TimerInterface
      * If a timer only allows endless period, he will return forever a true.
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
-     * @param array $params The flexform-string converted to an array
+     * @param array<mixed> $params The flexform-string converted to an array
      * @return bool
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool;
@@ -119,7 +119,7 @@ interface TimerInterface
      * Remark 3: IsActive should store the last Range
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas by method getTimeZoneOfEvent
-     * @param array $params The flexform-string converted to an array
+     * @param array<mixed> $params The flexform-string converted to an array
      * @return bool
      */
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool;
@@ -133,7 +133,12 @@ interface TimerInterface
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas by method getTimeZoneOfEvent
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange;
+    /**
+     * @param DateTime $dateLikeEventZone
+     * @param array<mixed> $params
+     * @return TimerStartStopRange
+     */
+    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange;
 
     /**
      *   the beginning should greater than the date in DateLikeEventZone, if it is possible
@@ -145,7 +150,7 @@ interface TimerInterface
      *           This is done by the method `isAllowedInRange`.
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas by method getTimeZoneOfEvent
-     * @param array $params The flexform-string converted to an array
+     * @param array<mixed> $params The flexform-string converted to an array
      * @return TimerStartStopRange
      */
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange;
@@ -160,9 +165,8 @@ interface TimerInterface
      *           This is done by the method `isAllowedInRange`.
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas by method getTimeZoneOfEvent
-     * @param array $params The flexform-string converted to an array
+     * @param array<mixed> $params The flexform-string converted to an array
      * @return TimerStartStopRange
      */
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange;
-
 }

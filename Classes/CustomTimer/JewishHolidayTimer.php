@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
+ *  (c) 2022 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -26,52 +26,32 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Porthd\Timer\Constants\JewishHolidayConst;
+use Porthd\Timer\Constants\JewishHolidayConstTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
+use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
+use Porthd\Timer\Utilities\JewishDateUtility;
 
-class JewishHolidayTimer implements TimerInterface
+class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
 {
     use GeneralTimerTrait;
 
+
     public const TIMER_NAME = 'txTimerJewishHoliday';
-
-
-    protected const ARG_NAMED_DATE_MIDNIGHT = 'namedDateMidnight';
-    protected const ARG_NAMED_DATE_MIDNIGHT_DEFAULT = self::ARG_NAMED_DATE_EASTER;
-    protected const ARG_MIN_NAMED_DATE_MIDNIGHT = 0;
-    protected const ARG_MAX_NAMED_DATE_MIDNIGHT = 6;
-    protected const ARG_NAMED_DATE_EASTER = 'easter';
-    protected const ARG_NAMED_DATE_ASCENSION_OF_CHRIST = 'ascension';
-    protected const ARG_NAMED_DATE_PENTECOST = 'pentecost';
-    protected const ARG_NAMED_DATE_FIRST_ADVENT = 'firstadvent';
-    protected const ARG_NAMED_DATE_CHRISTMAS = 'christmas';
-    protected const ARG_NAMED_DATE_ROSE_MONDAY = 'rosemonday';
-    protected const ARG_NAMED_DATE_GOOD_FRIDAY = 'goodfriday';
-    protected const ARG_NAMED_DATE_TOWL_DAY = 'towlday';
-    protected const ARG_NAMED_DATE_LIST = [
-        self::ARG_NAMED_DATE_EASTER,
-        self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST,
-        self::ARG_NAMED_DATE_PENTECOST,
-        self::ARG_NAMED_DATE_FIRST_ADVENT,
-        self::ARG_NAMED_DATE_CHRISTMAS,
-        self::ARG_NAMED_DATE_ROSE_MONDAY,
-        self::ARG_NAMED_DATE_GOOD_FRIDAY,
-        self::ARG_NAMED_DATE_TOWL_DAY,
-
-    ];
 
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
     protected const ARG_REQ_REL_TO_MIN = -475200;
     protected const ARG_REQ_REL_TO_MAX = 475200;
-    protected const ARG_CALENDAR_USE = 'calendarUse';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_DURMIN_MIN = -475200;
-    protected const ARG_DURMIN_MAX = 475200;
+    protected const ARG_REQ_DURMIN_MIN = -475200;
+    protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
+    protected const ARG_REQ_DURMIN_MAX = 475200;
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     public const TIMER_FLEXFORM_ITEM = [
-        self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/EasterRelTimer.flexform',
+        self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/JewsihHolidayTimer.flexform',
     ];
 
     protected const ARG_REQ_LIST = [
@@ -82,13 +62,11 @@ class JewishHolidayTimer implements TimerInterface
 
         self::ARG_NAMED_DATE_MIDNIGHT,
         self::ARG_REQ_DURATION_MINUTES,
-        self::ARG_USE_ACTIVE_TIMEZONE,
-        self::ARG_EVER_TIME_ZONE_OF_EVENT,
     ];
     protected const ARG_OPT_LIST = [
-        self::ARG_CALENDAR_USE,
         self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT,
     ];
+
 
     /**
      * @var TimerStartStopRange|null
@@ -98,15 +76,15 @@ class JewishHolidayTimer implements TimerInterface
     /**
      * @var int|null
      */
-    protected $lastIsActiveTimestamp;
+    protected $lastIsActiveTimestamp = null;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $lastIsActiveParams = [];
 
     /**
-     * tested 20201230
+     * tested 20221229
      *
      * @return string
      */
@@ -116,23 +94,23 @@ class JewishHolidayTimer implements TimerInterface
     }
 
     /**
-     * tested 20201230
+     * tested 20221229
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerEasterRel.select.name',
+            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerJewishHoliday.select.name',
             self::TIMER_NAME,
         ];
     }
 
     /**
-     * tested 20221009
+     * tested 20221229
      *
      * @param string $activeZoneName
-     * @param array $params
+     * @param array<mixed> $params
      * @return string
      */
     public function getTimeZoneOfEvent($activeZoneName, array $params = []): string
@@ -141,9 +119,9 @@ class JewishHolidayTimer implements TimerInterface
     }
 
     /**
-     * tested 20201230
+     * tested 20221229
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getFlexformItem(): array
     {
@@ -152,25 +130,23 @@ class JewishHolidayTimer implements TimerInterface
 
 
     /**
-     * tested special 20221115
-     * tested general 20201230
+     * tested special
+     * tested general 20221229
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function validate(array $params = []): bool
     {
-        $flag = true;
-        $flag = $flag && $this->validateZone($params);
+        $flag = $this->validateZone($params);
         $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
         $flag = $flag && ($countRequired === count(self::ARG_REQ_LIST));
         $flag = $flag && $this->validateDurationMinutes($params);
         $flag = $flag && $this->validateNamedDateMidnight($params);
-        $flag = $flag && $this->validateCalendarUse($params);
         $flag = $flag && $this->validateRelMinToSelectedTimerEvent($params);
         $countOptions = $this->validateOptional($params);
         return $flag && ($countOptions >= 0) &&
@@ -179,40 +155,35 @@ class JewishHolidayTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     public function validateArguments(array $params = []): int
     {
-        $flag = 0;
-        foreach (self::ARG_REQ_LIST as $key) {
-            if (isset($params[$key])) {
-                $flag++;
-            }
-        }
-        return $flag;
+        return $this->countParamsInList(self::ARG_REQ_LIST, $params);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
-        $value = (isset($params[self::ARG_REQ_DURATION_MINUTES]) ?
-            $params[self::ARG_REQ_DURATION_MINUTES] :
-            0
+        $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
+        $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        return (
+            ($number - $floatNumber == 0) &&
+            ($number >= self::ARG_REQ_DURMIN_MIN) &&
+            ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
+            ($number <= self::ARG_REQ_DURMIN_MAX)
         );
-        $number = (int)$value;
-        return is_int($number) && ($number !== 0) && (($number - $value) === 0) &&
-            ($number >= self::ARG_DURMIN_MIN) && ($number <= self::ARG_DURMIN_MAX);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateNamedDateMidnight(array $params = []): bool
     {
@@ -220,52 +191,38 @@ class JewishHolidayTimer implements TimerInterface
         return in_array($key, self::ARG_NAMED_DATE_LIST, true);
     }
 
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
-     */
-    protected function validateCalendarUse(array $params = []): bool
-    {
-        $number = ((!empty($params[self::ARG_CALENDAR_USE])) ? $params[self::ARG_CALENDAR_USE] : 0);
-        $value = (int)$number;
-        return (is_numeric($number) && (($value - $number) === 0) && in_array($value, [0, 1, 2, 3]));
-    }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateRelMinToSelectedTimerEvent(array $params = []): bool
     {
         $number = (int)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0; // what will happen with float
-        $value = $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0;
-        return is_int($number) && (($number - $value) === 0) &&
-            ($number >= self::ARG_REQ_REL_TO_MIN) && ($number <= self::ARG_REQ_REL_TO_MAX);
+        $floatNumber = (float)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0;
+        return (
+            ($number - $floatNumber == 0) &&
+            ($number >= self::ARG_REQ_REL_TO_MIN) &&
+            ($number <= self::ARG_REQ_REL_TO_MAX)
+        );
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     protected function validateOptional(array $params = []): int
     {
-        $count = 0;
-        foreach (self::ARG_OPT_LIST as $key) {
-            if (isset($params[$key])) {
-                $count++;
-            }
-        }
-        return $count;
+        return $this->countParamsInList(self::ARG_OPT_LIST, $params);
     }
 
     /**
-     * tested 20201226
+     * tested 20221229
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
@@ -275,12 +232,12 @@ class JewishHolidayTimer implements TimerInterface
     }
 
     /**
-     * tested 20220910
+     * tested
      *
      * check, if the timer ist for this time active
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
@@ -299,14 +256,20 @@ class JewishHolidayTimer implements TimerInterface
         $start->sub(new DateInterval('PT30S'));
         $stop = clone $dateLikeEventZone;
         $stop->add(new DateInterval('PT30S'));
-        foreach ([2, 1, 0, -1, -2,] as $index) {
-            if (($testRanges[$index]['begin'] <= $dateLikeEventZone) &&
-                ($dateLikeEventZone <= $testRanges[$index]['end'])
-            ) {
-                $flag = true;
-                $start = clone $testRanges[$index]['begin'];
-                $stop = clone $testRanges[$index]['end'];
-                break;
+        $flagFirst = true;
+        foreach ($testRanges as $testrange) {
+            if ($testrange['begin'] <= $dateLikeEventZone) {
+                if ($flagFirst) {
+                    $flagFirst = false;
+                    $start = clone $testrange['begin'];
+                    $stop = clone $testrange['end'];
+                }
+                if (($dateLikeEventZone <= $testrange['end'])) {
+                    $flag = true;
+                    $start = clone $testrange['begin'];
+                    $stop = clone $testrange['end'];
+                    break;
+                }
             }
         }
         $this->setIsActiveResult($start, $stop, $flag, $dateLikeEventZone, $params);
@@ -314,402 +277,160 @@ class JewishHolidayTimer implements TimerInterface
     }
 
     /**
-     * tested:
+     * tested
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
 
     /**
-     * tested 20210110
+     * tested
      *
      * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
-        /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
-        $result->failOnlyNextActive($dateLikeEventZone);
-
-
-        $relToDateMin = (int)(isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
-            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
-            0
-        );
-        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
-        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $method = $this->detectCalendar($params);
-        $testDay = clone $dateLikeEventZone;
-        $yearInterval = new DateInterval(('P1Y'));
-        $testDay->sub($yearInterval);
-        $testDay->sub($yearInterval);
-        $testDay->sub($yearInterval);
-        $flagRebuild = false;
-        for ($i = 0; $i < 7; $i++) {
-            $checkday = $this->detectDefinedDayInYearNew($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $method);
-            if ($relToDateMin >= 0) {
-                $checkday->add($relInterval);
-            } else {
-                $checkday->sub($relInterval);
-            }
-            if ($durationMin >= 0) {
-                if ($dateLikeEventZone <= $checkday) {
-                    $flagRebuild = true;
-                    break;
-                }
-            } else {
-                $checkday->sub($durInterval);
-                if ($dateLikeEventZone <= $checkday) {
-                    $flagRebuild = true;
-                    break;
-                }
-            }
-            $testDay->add($yearInterval);
+        $result->failAllActive($dateLikeEventZone);
+        if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
+            return $result;
         }
-        if ($flagRebuild === true) {
-            $result->setBeginning($checkday);
-            $checkday->add($durInterval);
-            $result->setEnding($checkday);
-            $result->setResultExist(true);
+
+
+        $start = 3;
+        $refDate = clone $dateLikeEventZone;
+        // loop for the constructed, that the range is not enough?
+        while ($start > 0) {
+            $testRanges = $this->calcDefinedRangesByStartDateTime($refDate, $params);
+            if(empty($testRanges)) {
+                throw new TimerException(
+                    'Unexpected Error: The $testRanges in the method `'.__CLASS__.'nextActive` are empty. '.
+                    'Please make a screenshot and inform the webmaster.',
+                    1672424857
+                );
+            }
+            foreach ($testRanges as $testrange) {
+                if ($testrange['begin'] > $dateLikeEventZone) {
+                    $result->setBeginning($testrange['begin']);
+                    $result->setEnding($testrange['end']);
+                    $result->setResultExist(true);
+                    break 2;
+                }
+            }
+            $start--;
+            $refDate = clone $testRanges[array_key_last($testRanges)]['end'];
         }
 
         return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
-     * tested 20210110
+     * tested
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
-        /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
-        $result->failOnlyNextActive($dateLikeEventZone);
+        $result->failAllActive($dateLikeEventZone);
+        if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
+            return $result;
+        }
 
-        $relToDateMin = (int)(isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
-            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
-            0
-        );
-        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
-        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $method = $this->detectCalendar($params);
-        $testDay = clone $dateLikeEventZone;
-        $yearInterval = new DateInterval(('P1Y'));
-        $testDay->add($yearInterval);
-        $testDay->add($yearInterval);
-        $testDay->add($yearInterval);
-        $flagRebuild = false;
-        for ($i = 0; $i < 7; $i++) {
-            $checkday = $this->detectDefinedDayInYearNew($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $method);
-            if ($relToDateMin >= 0) {
-                $checkday->add($relInterval);
-            } else {
-                $checkday->sub($relInterval);
+
+        $start = 3;
+        $refDate = clone $dateLikeEventZone;
+        // loop for the constructed, that the range is not enough?
+        while ($start > 0) {
+            $testRanges = array_reverse(
+                $this->calcDefinedRangesByStartDateTime($refDate, $params)
+            );
+            if(empty($testRanges)) {
+                throw new TimerException(
+                    'Unexpected Error: The $testRanges in the method `'.__CLASS__.'prevActive` are empty. '.
+                    'Please make a screenshot and inform the webmaster.',
+                    1672424973
+                );
             }
-            if ($checkday < $dateLikeEventZone) {
-                if ($durationMin < 0) {
-                    $flagRebuild = true;
-                    break;
-                }
-                $checkday->add($durInterval);
-                if ($checkday < $dateLikeEventZone) { // $checkday mark now the end of the range
-                    $flagRebuild = true;
-                    break;
+            foreach ($testRanges as $testrange) {
+                if ($testrange['end'] < $dateLikeEventZone) {
+                    $result->setBeginning($testrange['begin']);
+                    $result->setEnding($testrange['end']);
+                    $result->setResultExist(true);
+                    break 2;
                 }
             }
-            $testDay->sub($yearInterval);
+            $start--;
+            $refDate = clone $testRanges[array_key_first($testRanges)]['begin'];
         }
-        if ($flagRebuild === true) {
-            $result->setEnding($checkday);  // datetime object will be cloned in internal variable
-            $checkday->sub($durInterval);
-            $result->setBeginning($checkday);
-            $result->setResultExist(true);
-        }
-        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
-    }
 
-    /**
-     * @param array $params
-     * @return int|mixed
-     */
-    protected function detectCalendar($params = [])
-    {
-        $calendar = (int)((isset($params[self::ARG_CALENDAR_USE])) ?
-            ($params[self::ARG_CALENDAR_USE]) :
-            0
-        );
-        switch ($calendar) {
-            case 1:
-                $result = ((defined(CAL_EASTER_ROMAN)) ? CAL_EASTER_ROMAN : $params[self::ARG_CALENDAR_USE]);
-                break;
-            case 2:
-                $result = ((defined(CAL_EASTER_ALWAYS_GREGORIAN)) ? CAL_EASTER_ALWAYS_GREGORIAN : $params[self::ARG_CALENDAR_USE]);
-                break;
-            case 3:
-                $result = ((defined(CAL_EASTER_ALWAYS_JULIAN)) ? CAL_EASTER_ALWAYS_JULIAN : $params[self::ARG_CALENDAR_USE]);
-                break;
-            default :
-                $result = ((defined(CAL_EASTER_DEFAULT)) ? CAL_EASTER_DEFAULT : 0);
-                break;
-        }
-        return $result;
+        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
      * @param DateTime $dateLikeEventZone
-     * @param array $params
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function detectDefinedDayInYear(DateTime $testDateTime, $params = []): DateTime
-    {
-
-        $method = $this->detectCalendar($params);
-        $result = $this->getEasterDatetime(
-            $testDateTime->getTimezone(),
-            (int)$testDateTime->format('Y'),
-            $method
-        );
-        switch ($params[self::ARG_NAMED_DATE_MIDNIGHT]) {
-            case self::ARG_NAMED_DATE_GOOD_FRIDAY:
-                $result->sub(new DateInterval('P2D'));
-                break;
-            case self::ARG_NAMED_DATE_EASTER:
-//                $result = $easter;
-                break;
-            case self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST:
-                $result->add(new DateInterval('P39D'));
-                break;
-            case self::ARG_NAMED_DATE_PENTECOST:
-                $result->add(new DateInterval('P49D'));
-                break;
-            case self::ARG_NAMED_DATE_FIRST_ADVENT:
-                switch ($method) {
-                    case 0:
-                        if (((int)$testDateTime->format('Y')) > 1752) {
-                            $result = $this->getGreogorianFirstAdvent($testDateTime);
-                        } else {
-                            $result = $this->getJulianFirstAdvent($testDateTime);
-                        }
-                        break;
-                    case 1:
-                        if (((int)$testDateTime->format('Y')) > 1582) {
-                            $result = $this->getGreogorianFirstAdvent($testDateTime);
-                        } else {
-                            $result = $this->getJulianFirstAdvent($testDateTime);
-                        }
-                        break;
-                    case 2:
-                        $result = $this->getJulianFirstAdvent($testDateTime);
-                        break;
-                    case 3:
-                        $result = $this->getJulianFirstAdvent($testDateTime);
-                        break;
-                    default :
-                        $result = $this->getJulianFirstAdvent($testDateTime);
-                        break;
-                }
-                break;
-            case self::ARG_NAMED_DATE_CHRISTMAS:
-                $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-                break;
-            case self::ARG_NAMED_DATE_TOWL_DAY:
-                $result = new DateTime($testDateTime->format('Y') . '-05-25 00:00:00', $testDateTime->getTimezone());
-                break;
-            case self::ARG_NAMED_DATE_ROSE_MONDAY:
-                $result->sub(new DateInterval('P48D'));
-                break;
-            default :
-//                $result = $easter;
-                break;
-
-        }
-        return $result;
-    }
-
-    /**
-     * @param DateTime $dateLikeEventZone
-     * @param int $method
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function detectDefinedDayInYearNew(DateTime $testDateTime, $dateId, $method): DateTime
-    {
-        $result = $this->getEasterDatetime(
-            $testDateTime->getTimezone(),
-            (int)$testDateTime->format('Y'),
-            $method
-        );
-        switch ($dateId) {
-            case self::ARG_NAMED_DATE_GOOD_FRIDAY:
-                $result->sub(new DateInterval('P2D'));
-                break;
-            case self::ARG_NAMED_DATE_EASTER:
-//                $result = $easter;
-                break;
-            case self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST:
-                $result->add(new DateInterval('P39D'));
-                break;
-            case self::ARG_NAMED_DATE_PENTECOST:
-                $result->add(new DateInterval('P49D'));
-                break;
-            case self::ARG_NAMED_DATE_FIRST_ADVENT:
-                $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-                $diff = (((int)$result->format('w') === 0) ? 7 : $result->format('w')) + 21;
-                $result->sub(new DateInterval('P' . $diff . 'D'));
-                break;
-            case self::ARG_NAMED_DATE_TOWL_DAY:
-                $result = new DateTime($testDateTime->format('Y') . '-05-25 00:00:00', $testDateTime->getTimezone());
-                break;
-            case self::ARG_NAMED_DATE_CHRISTMAS:
-                $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-                break;
-            case self::ARG_NAMED_DATE_ROSE_MONDAY:
-                $result->sub(new DateInterval('P48D'));
-                break;
-            default :
-//                $result = $easter;
-                break;
-
-        }
-        return $result;
-    }
-
-
-    /**
-     * @param DateTimeZone $timezone
-     * @param int|string $year
-     * @param string|int $method
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function getEasterDatetime(DateTimeZone $timezone, $year, $method): DateTime
-    {
-        $base = new DateTime("$year-03-21 00:00:00", $timezone);
-        $days = easter_days($year, $method);
-
-        return $base->add(new DateInterval('P' . $days . 'D'));
-    }
-
-    /**
-     * @param DateTime $dateLikeEventZone
-     * @param array $params
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function calcDefinedStartDateTime(DateTime $dateLikeEventZone, array $params): DateTime
-    {
-        $definedDay = $this->detectDefinedDayInYear($dateLikeEventZone, $params);
-        $minStart = (int)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT];
-        if ($minStart > 0) {
-            $definedDay->add(new DateInterval('PT' . $minStart . 'M'));
-        } else {
-            $definedDay->sub(new DateInterval('PT' . abs($minStart) . 'M'));
-        }
-        return $definedDay;
-    }
-
-    /**
-     * @param DateTime $dateLikeEventZone
-     * @param array $params
-     * @return array
+     * @param array<mixed> $params
+     * @return array<mixed>
      * @throws Exception
      */
     protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
     {
-
-        $relToDateMin = (int)(isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
+        $relToDateMin = (int)(
+            isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
         $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
         $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $method = $this->detectCalendar($params);
-        $testDay = clone $dateLikeEventZone;
-        $yearInterval = new DateInterval(('P1Y'));
-        $testDay->sub($yearInterval);
-        $testDay->sub($yearInterval);
+        $startDateRanges = JewishDateUtility::getJewishHolidayByName(
+            $params[self::ARG_NAMED_DATE_MIDNIGHT],
+            $dateLikeEventZone
+        );
         $ranges = [];
-        foreach ([-2, -1, 0, 1, 2] as $index) {
-            $checkday = $this->detectDefinedDayInYearNew($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $method);
+        foreach ($startDateRanges as $index => $startDateRange) {
             if ($relToDateMin >= 0) {
-                $checkday->add($relInterval);
+                $startDateRange->add($relInterval);
             } else {
-                $checkday->sub($relInterval);
+                $startDateRange->sub($relInterval);
             }
             if ($durationMin > 0) {
-                $ranges[$index]['begin'] = clone $checkday;
-                $checkday->add($durInterval);
-                $ranges[$index]['end'] = clone $checkday;
+                $ranges[$index]['begin'] = clone $startDateRange;
+                $startDateRange->add($durInterval);
+                $ranges[$index]['end'] = clone $startDateRange;
             } else {
-                $ranges[$index]['end'] = clone $checkday;
-                $checkday->sub($durInterval);
-                $ranges[$index]['begin'] = clone $checkday;
+                $ranges[$index]['end'] = clone $startDateRange;
+                $startDateRange->sub($durInterval);
+                $ranges[$index]['begin'] = clone $startDateRange;
             }
-            $testDay->add($yearInterval);
         }
 
         return $ranges;
     }
 
     /**
-     * @param DateTime $testDateTime
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function getGreogorianFirstAdvent(DateTime $testDateTime): DateTime
-    {
-        $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-        $weekday = (int)$result->format('w');
-        $weekday = ((empty($weekday)) ? 7 : $weekday);
-        $diff = $weekday + 21;
-        $result->sub(new DateInterval('P' . $diff . 'D'));
-        return $result;
-
-    }
-
-    /**
-     * @param DateTime $testDateTime
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function getJulianFirstAdvent(DateTime $testDateTime): DateTime
-    {
-        $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-        $julianDate = gregoriantojd(12, 25, $testDateTime->format('Y'));
-        $weekday = jddayofweek($julianDate);
-        $weekday = ((empty($weekday)) ? 7 : $weekday);
-        $diff = $weekday + 21;
-        $result->sub(new DateInterval('P' . $diff . 'D'));
-        return $result;
-    }
-
-
-    /**
-     * @param $dateStart
-     * @param $dateStop
+     * @param DateTime $dateStart
+     * @param DateTime $dateStop
      * @param bool $flag
      * @param DateTime $dateLikeEventZone
+     * @param array<mixed> $params
+     * @return void
      */
     protected function setIsActiveResult(
-        $dateStart,
-        $dateStop,
+        DateTime $dateStart,
+        DateTime $dateStop,
         bool $flag,
         DateTime $dateLikeEventZone,
-        $params = []
+        array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
@@ -723,7 +444,7 @@ class JewishHolidayTimer implements TimerInterface
 
     /**
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
@@ -740,5 +461,4 @@ class JewishHolidayTimer implements TimerInterface
         }
         return clone $this->lastIsActiveResult;
     }
-
 }

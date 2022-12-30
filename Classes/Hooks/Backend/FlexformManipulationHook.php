@@ -35,10 +35,9 @@ use Porthd\Timer\Utilities\DateTimeUtility;
  */
 class FlexformManipulationHook
 {
-
     /**
-     * @param array $dataStructure
-     * @return array
+     * @param array<mixed> $dataStructure
+     * @return array<mixed>
      */
     protected function recursiveDefaultAnalytic(array $dataStructure)
     {
@@ -73,9 +72,9 @@ class FlexformManipulationHook
     }
 
     /**
-     * @param array $dataStructure
-     * @param array $identifier
-     * @return array
+     * @param array<mixed> $dataStructure
+     * @param array<mixed> $identifier
+     * @return array<mixed>
      */
     public function parseDataStructureByIdentifierPostProcess(array $dataStructure, array $identifier): array
     {

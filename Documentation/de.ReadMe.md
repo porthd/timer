@@ -8,7 +8,9 @@ TYPO3-Barcamp in Kamp-Lintfort vorbereitet hatte
 
 ## ACHTUNG
 
-8. November 2022: Die Timer `RangeListTimer` und `PeriodListTimer` funktionieren bisher nicht wie gewünscht.
+- ~~8 November 2022: Die Timer `RangeListTimer` und `PeriodListTimer` funktionieren bisher nicht wie gewünscht.~~
+- 27 Dezember 2022: Die Timer `RangeListTimer` und `PeriodListTimer` sollten jetzt funktionieren. Es sind entsprechende Tests definiert worden.
+
 
 ## Motivation
 
@@ -18,7 +20,7 @@ aber keine Möglichkeit, periodisch zu bestimmten Zeiten Seiten, Inhaltselemente
 
 ### Userstorys
 
-#### Der Interaktive Kneipengutschein.
+#### Der interaktive Kneipengutschein.
 
 Ein Gastwirt möchte seinen Gästen während der Happy-Hour einen Rabatt von 50% einräumen. Diesen erhalten die Kunden als
 QR-Code auf ihr Handy, wenn sie das über der Theke hängende Tagesmotto und ein Like-Kommentar in das interaktive
@@ -58,11 +60,11 @@ Flexform-Feldern können in den Templates mit Viewhelpern aufbereite werden.
 Sie können auf einen der klassischen Wege installieren.
 
 - manuell
-- mit dem Extensionmanager der Admin-Tools
+- mit dem Extensionmanager bei den TYPO3 Admin-Tools
 - mit dem Composer ``composer require porthd/timer``
 
 Prüfen sie, ob das Datenbankschema aktualisiert wurde. Es ist das Typoscript der Extension zu inkludieren. Je nach
-Nutzungsanspruch ist noch ein Schedulertask zu aktivieren oder im eigenen Typoscript ein Dataprocessor aufzurufen.
+Nutzungsanspruch ist noch ein Schedulertask zu aktivieren oder im eigenen Typoscript ein Datenprozessor aufzurufen.
 
 ## Anwendungsaspekte
 
@@ -74,8 +76,8 @@ der Scheduler-Auswertung auf aktiv gesetzt wurde.
 
 ### Contentelement `periodlist` für einfache Terminlisten
 
-Das Content-Element `periodlist` ist ähnlich aufgebaut wie das Content-Element `textmedia`. 
-Es erlaubt zusätzlich die Ausgabe von einfachen Terminlisten, sofern für den voreingestellten 
+Das Content-Element `periodlist` ist ähnlich aufgebaut wie das Content-Element `textmedia`.
+Es erlaubt zusätzlich die Ausgabe von einfachen Terminlisten, sofern für den voreingestellten
 Timer `periodlisttimer` eine gültige yaml-Datei mit einer Terminliste hinterlegt wird.
 #### Anmerkungen
 ##### _Anmerkung 1_
@@ -87,33 +89,33 @@ um den Ort der YAML-Datei zu spezifizieren:
 3. einfache URL beginnend mit `http://` oder mit `https://`
 4. URL mit Serverpasswort im Format `Nutzername:Passwort:Url`, wobei die eigentliche URL mit URL beginnend mit `http://` oder mit `https://` beginnt. Bei den URL-Angaben wird nicht die YAML-Anweisung `import` unterstützt.
 
-Das Feld `yamlPeriodFalRelation` hat eher den Redaktuer im Blick und erlaubt die Einbindung der YAML-Datei über das TYPO3 Backend. 
+Das Feld `yamlPeriodFalRelation` hat eher den Redaktuer im Blick und erlaubt die Einbindung der YAML-Datei über das TYPO3 Backend.
 Hier hat der Redakteur auch die Möglichkeit, mehrere Dateien einzubinden, die vom Timer wie eine große Liste behandelt werden.
 
 ##### _Anmerkung 2_
-Im Attribut `data` können verschiedenen Daten hinterlegt werden, so daß über ein passendes Partial oder Template strukturiert 
+Im Attribut `data` können verschiedenen Daten hinterlegt werden, so daß über ein passendes Partial oder Template strukturiert
 Sonderinformationen wie Eintrittspreis, Vorverkaufspreise oder Ähnliches per Datei mit übergeben werden können.
-Dieses Form eignet sich gut, wenn es darum geht, automatisiert Daten über das Format einer YAML-Datei aus anderen Quellen 
-entgegen zu nehmen. Dies erspart das Einpflegen der Daten im Backend.
+Diese Form eignet sich gut, wenn es darum geht, automatisiert Daten über das Format einer YAML-Datei aus anderen Quellen
+entgegenzunehmen. Dies erspart das Einpflegen der Daten im Backend.
 
 #### Darstellung der Termine im Kalender
 
-Das Flexform wurde um zwei Pfad-Felder für JavaScript und für Stylesheets erweitert.
-Auf diesem Weg ist es möglich, die Termine auch in Kalender-Form darzustellen. Die Default-Einstellungen sind so gesetzt, 
+Die Flexform-Definition wurde um zwei Pfad-Felder für JavaScript und für Stylesheets erweitert.
+Auf diesem Weg ist es möglich, die Termine auch in Kalender-Form darzustellen. Die Default-Einstellungen sind so gesetzt,
 dass die Schulferien für Niedersachsen und Bremen aus dem Jahr 2022 in einem Kalender dargestellt werden.
 
 #### Dataprozessoren für diesen Timer
-Damit die Daten eingelesen werden könne wurde drei Dataprocessoren definiert.
-Der `FlexToArrayProcessor` erlaubt es, Flexform-Felder auszulesen und in einfache Array umzuwandeln. 
+Damit die Daten eingelesen werden können, wurden drei Datenprozessoren definiert.
+Der `FlexToArrayProcessor` erlaubt es, Flexform-Felder auszulesen und in einfache Array umzuwandeln.
 Auf diesem Weg kann man dynamisch die JavaAScript- und Stylesheet-Dateien vom Inhaltselement laden lassen.
-Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei 
-definiert ist. Neben den eigentlichen Feldern generiert der Dataprocessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
-Der dritte Dataporcessor `MappingProcessor` ist nötig, um die Termindaten als JSON-String an das Fluid-Template zu übergeben. 
-So können die Daten leicht über ein HTML-Attribute dem Calendar-Framework zur Verfügung gestellt werden.
+Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei
+definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
+Der dritte Datenprozessor `MappingProcessor` ist nötig, um die Termindaten als JSON-String an das Fluid-Template zu übergeben.
+So können die Daten leicht über ein HTML-Attribut dem Calendar-Framework zur Verfügung gestellt werden.
 
 ### Contentelement `timersimul` als Beispiel
 
-Das Content-Element `timersimul` zeigt exemplarisch die Anwendung der Viewhelper und der Dataprocessoren. In
+Das Content-Element `timersimul` zeigt exemplarisch die Anwendung der Viewhelper und der Datenprozessoren. In
 Produktivumgebungen sollten sie für Editoren ausblenden. Es wird entfernt werden, wenn die Extension den Status `beta`
 erreicht.
 
@@ -138,50 +140,55 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
 
 #### CustomTimer - Übersicht
 
-* DailyTimer - tägliche für einige Minuten wiederkehrende aktive Zeiten  
+
+* DailyTimer - Tägliche für einige Minuten wiederkehrende aktive Zeiten
   (täglich ab 10:00 für 120 Minuten)
-* DatePeriodTimer - periodisch für einige Minuten wiederkehrende aktive Zeiten relativ zu einem Startzeitpunkt. Bedenken
-  sie, dass wegen der Rückführung der der Zeit auf die UTC-Zone während der Berechnung die Sommerzeit bei Periodizitäten
+* DatePeriodTimer - Periodisch für einige Minuten wiederkehrende aktive Zeiten relativ zu einem Startzeitpunkt. Bedenken
+  sie, dass wegen der Rückführung der Zeit auf die UTC-Zone während der Berechnung die Sommerzeit bei Periodizitäten
   auf Stundenbasis zu unerwarteten Ergebnissen führen kann.
   (ganzen Tag in jedem Jahr zum Geburtstag, jede Woche für 120 Minuten bis 12:00 ab dem 13.5.1970, ..)
 * DefaultTimer - Defaulttimer/Nullelement
-* EasterRelTimer - aktiver Zeitraum relativ zu wichtigen, meist beweglichen christlichen Feiertagen    
+* EasterRelTimer - Bestimmt den aktiven Zeitraum relativ zu wichtigen deutschen Feiertagen (Neujahr, Silvester, Welt-Handtuch-Tag, Tag-der-Dummheit) und den meist beweglichen wichtigen christlichen Feiertagen (erster Advent, Weihnachten, Rosenmontag, Karfreitag, Ostern, Himmelfahrt, Pfingsten)
   (2. Advent von 12:00-14:00, Rosenmontag von 20:00 bis 6:00 des Folgetages)
+* JewishHolidayTimer (in Progress 2022-12-28) - Perioden startend relativ zu einem der jüdischen Feiertage bezogen auf den jüdischen Kalender
+  (IMHO: Ich war lange am Überlegen, ob ich diesen Timer hinzufüge, weil ich Teile des Judentums für moralisch problematisch halte. Es ist bei orthodoxen Juden gelebte und gelobte Praxis (https://www.zentralratderjuden.de/fileadmin/user_upload/pdfs/Wichtige_Dokumente/ZdJ_tb2019_web.pdf Seite 21), dass der Penis ihrer männlichen Nachkommen aus religiösen Gründen beschnitten wird. Ich frage mich, welchen Wert hat eine Religion hat, die ihr Stolz darauf aufbaut, dass sie schwache hilflose Babies vergewaltigen kann, indem sie dessen Penisvorhaut unter dessen Schreien für den Gott opfern. Was unterscheidet dieser Religionswahn vom auserwählten Volk in seiner grundsätzlichen Denkweise von dem Arierwahn, dem manche Perverse heute noch anhängen? Aus humaniastischer Sicht endet für mich die Erziehungsfreiheit der Eltern zu dem Zeitpunkt, wenn sie für ihren eigenen religiösen Glauben ihren Kindern Gewalt antun wollen. Jedes Baby hat das Recht, seine eigene Religion bzw. seinen eigenen Glauben frei zu wählen. Die Eltern dürfen und sollen durch Reden und durch ihr eigenes Leben als Vorbild auf die Entscheidungsfindung durch das Kind einwirken; denn niemand kennt sicher die einzig wahre Wahrheit. Ich denke: Jede Vergewaltigung aus religiösen Gründen ist eine perverse Straftat - sei es bei den Katholiken oder bei den Juden oder bei irgendwelchen sonstigen Sekten. Dr. Dieter Porth)
+  **!!!Achtung: ich kann nicht für die Korrektheit der jüdischen Feiertage garantieren, da ich mich damit überhaupt nicht auskenne. Bitte vor Gebrauch unbeddingt auf Korrektheit prüfen und gegebenenfalls selbst einen besseren Timer schreiben.**
+  _Beim Testen merkte ich, dass das berechnete Datum für Yom Kippur nicht berücksichtigte, dass der Feiertag nach dem Sonnenuntergang des Vortages beginnt. Für eine Korrektur fehlte mir an dieser Stelle die Lust. So wichtig ist der jüdische Kalender für mich nun auch wieder nicht. Aus dem gleichen Grund wurden die Tests nur exemplarisch am Beispiel vom Yom Kippur durchgeführt._
 * MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen bestimmten Zeitraum
 * MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für einen bestimmten Zeitraum
-* PeriodListTimer (unfertig 20221105) liest daten zu aktiven Perioden aus einer Yaml-Datei ein. Hilfreich zum Beispiel
-  für Ferienlisten oder TZourenpläne von Künstlern
-* RangeListTimer (unfertig 20221105) liest periodische Liste aus Yaml-Dateien oder aus der Tabelle `` ein und mergt sie
+* PeriodListTimer - Liest Daten zu aktiven Perioden aus einer Yaml-Datei ein. Hilfreich zum Beispiel
+  für Ferienlisten oder Tourenpläne von Künstlern
+* RangeListTimer - Liest periodische Liste aus Yaml-Dateien oder aus der Tabelle `` ein und mergt sie
   bei Überlappung zu neuen aktiven Bereichen zusammen. Man kann auch eine Liste mit unerlaubten Bereichen definieren,
-  die solche Überlappungen reduzieren können. (Beispiel: jeden Dienstag von 12-14 Uhr außer in den Schulferien und an
-  Feiertagen)
+  die solche Überlappungen reduzieren können. (Beispiel: jeden Dienstag und Donnerstag von 12-14 Uhr [aktive Timer] außer in den Schulferien und an
+  Feiertagen [forbidden timer])
 * SunriseRelTimer - Perioden relativ zum Sonnenaufgang und Sonnenuntergang
 * WeekdayInMonthTimer - Perioden zu bestimmten Wochentagen innerhalb eines Monats ab bestimmten Uhrzeiten mit bestimmter
   Dauer
   (Beispiel: jeden zweiten Freitag im Monat in dem zwei Stunden vor 19:00 )
-* WeekdaylyTimer - Ganzer tag eines bestimmter Wochentags oder bestimmter Wochentage. (Beispiel: Jeden Montag oder
+* WeekdaylyTimer - Wöchentliche Wiederholung an einem bestimmtem Wochentag oder zu bestimmten Wochentagen. (Beispiel: Jeden Montag oder
   Donnerstag)
 
 #### CustomTimer - Generelle Parameter bei allen Timern
 
 Einige Parameter sind bei allen Timern gleich. Zwei Parameter behandeln den Umgang mit Zeitzonen. Zwei weitere Parameter
 bestimmen den Zeitraum, in welchen der Timer überhaupt gültig ist. Auf einen Parameter zur Steuerung des Scheduler wurde
-verzichtet. Mir ist kein Anwendungsfall eingefallen, wo ein solcher Ausschluss wirklich sinnvoll ist.   
+verzichtet. Mir ist kein Anwendungsfall eingefallen, wo ein solcher Ausschluss wirklich sinnvoll ist.
 Wer so etwas braucht, kann gern einen entsprechenden Timer programmieren.
 
 * timeZoneOfEvent - speichert den Namen der zu verwendenden Zeitzone. wenn die Zeitzone des Server mit der Zeitzone des
-  Event nicht übereinstimmt, wird die Server-ezeit auf die Zeitzonenzeit des Events umgerechnet.  
-  *Wertebereich*:   
+  Event nicht übereinstimmt, wird die Server-ezeit auf die Zeitzonenzeit des Events umgerechnet.
+  *Wertebereich*:
   Liste der generierten Zeitzonen. Die Zeitzonenproblematik ist wichtig, weil einige Timer die Zeiten auf UTC umrechen
-  müssen. (Sonnenlauf, ...)    
-  *Anmerkung*:   
+  müssen. (Sonnenlauf, ...)
+  *Anmerkung*:
   Aktuell werden alle Zeitzonen generiert. Es besteht die Möglichkeit, die Zeitzonen auf einen generelle Auswahl zu
   beschränken.
 * useTimeZoneOfFrontend - ja/nein-Parameter. Wenn der Wert gesetzt ist, wird immer die Zeitzone des Servers verwendet.
-* ultimateBeginningTimer - Ultimativer Beginn der Timers  
+* ultimateBeginningTimer - Ultimativer Beginn der Timers
   *Default*:
     1. Januar 0001 00:00:00
-* ultimateEndingTimer - Ultimatives Ende des Timers  
+* ultimateEndingTimer - Ultimatives Ende des Timers
   *Default*:
     31. Dezember 9999 23:59:59
 
@@ -193,25 +200,27 @@ eigene Parameter mitgeben.
 
 ### Viewhelper
 
-Es fgibt drei Viewhelper:
+Es gibt vier Viewhelper:
 
 - timer:isActive - funktioniert ähnlich wie `f:if`, wobei geprüft wird, ob ein Zeitpunkt im aktiven Bereich eines
   periodischen Timers liegt.
 - timer:flexToArray - Wenn man eine Flexform-Definition in einen Array umwandelt, dass enthält der Array viele
   überflüssige Zwischenebenen. Mit dem Viewhelper lassen sich diese Ebenen entfernen, so dass der resultierenArray des
   Flexformarrays flacher/einfacher wird.
-- timer:format.date - funktioniert wie `f:format.date`, wobei es die Ausgabe von Zeiten für eine bestimmte Zeitzone
+- timer:format.date - funktioniert wie `f:format.date`, wobei es zusätzlich die Ausgabe von Zeiten für eine bestimmte Zeitzone
   erlaubt.
+- timer:format.jewishDate - funktioniert ähnlich `f:format.date`, wobei es die Ausgabe von Zeiten für eine bestimmte Zeitzone
+  erlaubt und wobei die Datumsangaben in den jüdischen Kalender transformiert werden.
 
 ### Dataprozessoren
 
-Da die Ergebnisse der Dataprocessoren gecacht werrden, muss sich der User überlebgen, was ein sinnvoller
-Cachinh´g-zeitraum ist und dies entsprechend definieren.
+Da die Ergebnisse der Datenprozessoren gecacht werden, muss sich der User überlegen, was ein sinnvoller
+Caching-Zeitraum ist und dies entsprechend definieren.
 
 #### RangeListQueryProcessor
 
 Der Prozessor erstellt für die Datensätze mit periodischen Timern aus einer Tabelle eine Liste von Terminen. Der
-Dataprocessor funktioniert ählich wie der `DbQueryProcessor`.
+Datenprozessor funktioniert ähnlich wie der `DbQueryProcessor`.
 
 ```
 tt_content.timer_timersimul >
@@ -244,7 +253,7 @@ Siehe auch Beispiel in exemplarischen Contentelement ``timersimul``
 #### SortListQueryProcessor
 
 Die Tabelle `sys_file_reference` unterstützt nicht die Felder `starttime` und `endtime`. Um trotzdem zeitliche
-variierende Bilder zu erreichen, kann man die per Dataprocessor erhalten Medien in einen nach Periodizität sortierte
+variierende Bilder zu erreichen, kann man die per Datenprozessor erhalten Medien in einen nach Periodizität sortierte
 Liste überführen lassen und umwandeln lassen und im Template entsprechend nutzen.
 
 ```
@@ -287,7 +296,7 @@ Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das In
 ```
         30 = Porthd\Timer\DataProcessing\FlexToArrayProcessor
         30 {
-            # reguläre if-Syntax, um die Anwendung des Dataprocessor zu verhindern
+            # reguläre if-Syntax, um die Anwendung des Datenprozessor zu verhindern
             #if.isTrue.field = record
 
             # Feld, dass den Flexform-Array enthält
@@ -309,7 +318,7 @@ Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das In
 ```
 
 ####MappingProcessor
-Der Dataporcessor `MappingProcessor` erlaubt das Mappen von Arrays in neue Arrays oder in einen JSON-String.
+Der Dataporcessor `MappingProcessor` erlaubt das Mappen/Abbilden von Arrays in neue Arrays oder in einen JSON-String.
 So können die Daten leicht HTML-Attribute dem JavaScript zur Verfügung gestellt werden.
 Der Dataprecessor kennt einfache generische Funktionen, um zum Beispiel Events eindeutige IDs zuzuordnen.
 Weiter erlaubt er das Mappen von Feldinhalten und das Anlegen von neuen Feldern mit konstanten Daten.
@@ -324,7 +333,7 @@ Weiter erlaubt er das Mappen von Feldinhalten und das Anlegen von neuen Feldern 
 
             # Name des Feldes mit einem Array, das von einem früheren Datenprozessor generiert wurde
             inputfield = periodlist
-            
+
             # Jedes Feld muss Teil der Periodenliste sein
             # Jeder Eintrag muss formal sein
             generic {
@@ -364,7 +373,7 @@ Weiter erlaubt er das Mappen von Feldinhalten und das Anlegen von neuen Feldern 
 
 ####PeriodlistProcessor
 Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei
-definiert ist. Neben den eigentlichen Feldern generiert der Dataprocessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
+definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
 
 ```
         10 = Porthd\Timer\DataProcessing\PeriodlistProcessor
@@ -390,15 +399,15 @@ definiert ist. Neben den eigentlichen Feldern generiert der Dataprocessor für d
             #    #}
             #}
 
-            # hart verdrateter Hilfsmechanismus, um die Datenfelder mit dem Start- bzw. Endzeitpunkt in ein gewünschtes Format zu umzuwandeln und in einem zusätzlichen Feld zu speichern 
+            # hart verdrateter Hilfsmechanismus, um die Datenfelder mit dem Start- bzw. Endzeitpunkt in ein gewünschtes Format zu umzuwandeln und in einem zusätzlichen Feld zu speichern
             dateToString {
-                # startJson is the targetfieldName in the following dataprocessor mappingProcessor
+                # startJson is the targetfieldName in the following datenprozessor mappingProcessor
                 startJson {
                     # use the format-parameter defined in https://www.php.net/manual/en/datetime.format.php
                     # escaping of named parameters with the backslash in example \T
                     format = Y-m-d
                     # allowed are only `diffDaysDatetime`, `startDatetime` und `endDatetime`,because these are automatically created datetime-Object for the list
-                    #   These fields are datetime-object and they are generated from the estimated fields `start`and `stop` by this dataprocessor
+                    #   These fields are datetime-object and they are generated from the estimated fields `start`and `stop` by this datenprozessor
                     source = startDatetime
                 }
            #     endJson {
@@ -407,7 +416,7 @@ definiert ist. Neben den eigentlichen Feldern generiert der Dataprocessor für d
            #     }
             }
 
-            # Beschränkung der Liste auf eine maximale Anzahl von Elementen 
+            # Beschränkung der Liste auf eine maximale Anzahl von Elementen
             # Wenn nichts angegeben wird, wird die Liste auf 25 Element beschränkt
              maxCount = 100
 

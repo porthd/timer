@@ -119,7 +119,7 @@
             <f:translate key="content.timersimul.viewhelper.prolog.isActive"
                          extensionName="timer"
             /><br />
-            <timer:isActive     flexlist="{data.tx_timer_timer}"
+            <timer:isActive     flexformstring="{data.tx_timer_timer}"
                                 selector="{data.tx_timer_selector}"
                                 timestamp="1600000000"
             >
@@ -178,7 +178,28 @@
                 </timer:isActive>
             </timer:flex>
         </div>
+        <div>
+        <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatJewishDate"
+                         extensionName="timer"
+        /></h4>
 
+        Ref.  <timer:format.date format="d.m.Y - H:i:s">1600000000</timer:format.date> <br />
+        &nbsp;&nbsp;&nbsp;    <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.unixtimestamp"
+                                                                                                    extensionName="timer"
+        /><br />
+        <br />
+            <ul>
+            <li>1.  <timer:format.jewishDate>1600000000</timer:format.jewishDate></li>
+            <li>2. <timer:format.jewishDate format="H:i">1600000000</timer:format.jewishDate></li>
+            <li>3. <timer:format.jewishDate format="H:i e" timezone="UTC">1600000000</timer:format.jewishDate></li>
+            <li>4. <timer:format.jewishDate format="H:i e" timezone="Asia/Bangkok">1600000000</timer:format.jewishDate></li>
+        <li>5. <timer:format.jewishDate format="Y" base="1600000000">-1 year</timer:format.jewishDate> (Ref. - 1 Year)</li>
+        <li>6. <timer:format.jewishDate format="d.m.Y - H:i:s" base="1600000000">+1 week 2 days 4 hours 2 seconds</timer:format.jewishDate>  (Ref. +1 week 2 days 4 hours 2 seconds)</li>
+            <li>7. <timer:format.jewishDate format="%d. %B %Y">1600000000</timer:format.jewishDate> <br /><f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime"/></li>
+        <li>8. {timer:format.jewishDate(date: '@1600000000')}</li>
+        <li>9. {timer:format.jewishDate(format:'Y M d',date: '@1600000000')}</li>
+            </ul>
+        </div>
     </section>
 </f:section>
 

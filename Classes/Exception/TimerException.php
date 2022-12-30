@@ -1,8 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Exception;
-
 
 use Exception;
 
@@ -30,5 +30,4 @@ use Exception;
  */
 class TimerException extends Exception
 {
-
 }

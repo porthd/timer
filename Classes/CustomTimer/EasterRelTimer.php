@@ -49,6 +49,10 @@ class EasterRelTimer implements TimerInterface
     protected const ARG_NAMED_DATE_ROSE_MONDAY = 'rosemonday';
     protected const ARG_NAMED_DATE_GOOD_FRIDAY = 'goodfriday';
     protected const ARG_NAMED_DATE_TOWL_DAY = 'towlday';
+    protected const ARG_NAMED_DATE_STUPID_DAY = 'stupidday';
+    protected const ARG_NAMED_DATE_NEW_YEAR = 'newyear';
+    protected const ARG_NAMED_DATE_SILVESTER = 'silvester';
+    protected const ARG_NAMED_DATE_LABOURDAY = 'labourday';
     protected const ARG_NAMED_DATE_LIST = [
         self::ARG_NAMED_DATE_EASTER,
         self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST,
@@ -58,7 +62,10 @@ class EasterRelTimer implements TimerInterface
         self::ARG_NAMED_DATE_ROSE_MONDAY,
         self::ARG_NAMED_DATE_GOOD_FRIDAY,
         self::ARG_NAMED_DATE_TOWL_DAY,
-
+        self::ARG_NAMED_DATE_STUPID_DAY,
+        self::ARG_NAMED_DATE_NEW_YEAR,
+        self::ARG_NAMED_DATE_SILVESTER,
+        self::ARG_NAMED_DATE_LABOURDAY,
     ];
 
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
@@ -66,8 +73,9 @@ class EasterRelTimer implements TimerInterface
     protected const ARG_REQ_REL_TO_MAX = 475200;
     protected const ARG_CALENDAR_USE = 'calendarUse';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_DURMIN_MIN = -475200;
-    protected const ARG_DURMIN_MAX = 475200;
+    protected const ARG_REQ_DURMIN_MIN = -475200;
+    protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
+    protected const ARG_REQ_DURMIN_MAX = 475200;
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     public const TIMER_FLEXFORM_ITEM = [
@@ -101,7 +109,7 @@ class EasterRelTimer implements TimerInterface
     protected $lastIsActiveTimestamp;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $lastIsActiveParams = [];
 
@@ -118,7 +126,7 @@ class EasterRelTimer implements TimerInterface
     /**
      * tested 20201230
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getSelectorItem(): array
     {
@@ -132,7 +140,7 @@ class EasterRelTimer implements TimerInterface
      * tested 20221009
      *
      * @param string $activeZoneName
-     * @param array $params
+     * @param array<mixed> $params
      * @return string
      */
     public function getTimeZoneOfEvent($activeZoneName, array $params = []): string
@@ -143,7 +151,7 @@ class EasterRelTimer implements TimerInterface
     /**
      * tested 20201230
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getFlexformItem(): array
     {
@@ -157,13 +165,12 @@ class EasterRelTimer implements TimerInterface
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function validate(array $params = []): bool
     {
-        $flag = true;
-        $flag = $flag && $this->validateZone($params);
+        $flag = $this->validateZone($params);
         $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
@@ -179,40 +186,35 @@ class EasterRelTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     public function validateArguments(array $params = []): int
     {
-        $flag = 0;
-        foreach (self::ARG_REQ_LIST as $key) {
-            if (isset($params[$key])) {
-                $flag++;
-            }
-        }
-        return $flag;
+        return $this->countParamsInList(self::ARG_REQ_LIST, $params);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
-        $value = (isset($params[self::ARG_REQ_DURATION_MINUTES]) ?
-            $params[self::ARG_REQ_DURATION_MINUTES] :
-            0
+        $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
+        $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        return (
+            (($number - $floatNumber) == 0) &&
+            ($number >= self::ARG_REQ_DURMIN_MIN) &&
+            ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
+            ($number <= self::ARG_REQ_DURMIN_MAX)
         );
-        $number = (int)$value;
-        return is_int($number) && ($number !== 0) && (($number - $value) === 0) &&
-            ($number >= self::ARG_DURMIN_MIN) && ($number <= self::ARG_DURMIN_MAX);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateNamedDateMidnight(array $params = []): bool
     {
@@ -222,8 +224,8 @@ class EasterRelTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateCalendarUse(array $params = []): bool
     {
@@ -234,38 +236,35 @@ class EasterRelTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateRelMinToSelectedTimerEvent(array $params = []): bool
     {
         $number = (int)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0; // what will happen with float
-        $value = $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0;
-        return is_int($number) && (($number - $value) === 0) &&
-            ($number >= self::ARG_REQ_REL_TO_MIN) && ($number <= self::ARG_REQ_REL_TO_MAX);
+        $floatNumber = (float)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0;
+        return (
+            ($number - $floatNumber == 0) &&
+            ($number >= self::ARG_REQ_REL_TO_MIN) &&
+            ($number <= self::ARG_REQ_REL_TO_MAX)
+        );
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     protected function validateOptional(array $params = []): int
     {
-        $count = 0;
-        foreach (self::ARG_OPT_LIST as $key) {
-            if (isset($params[$key])) {
-                $count++;
-            }
-        }
-        return $count;
+        return $this->countParamsInList(self::ARG_OPT_LIST, $params);
     }
 
     /**
      * tested 20201226
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
@@ -280,7 +279,7 @@ class EasterRelTimer implements TimerInterface
      * check, if the timer ist for this time active
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
@@ -299,14 +298,20 @@ class EasterRelTimer implements TimerInterface
         $start->sub(new DateInterval('PT30S'));
         $stop = clone $dateLikeEventZone;
         $stop->add(new DateInterval('PT30S'));
+        $flagFirst = true;
         foreach ([2, 1, 0, -1, -2,] as $index) {
-            if (($testRanges[$index]['begin'] <= $dateLikeEventZone) &&
-                ($dateLikeEventZone <= $testRanges[$index]['end'])
-            ) {
-                $flag = true;
-                $start = clone $testRanges[$index]['begin'];
-                $stop = clone $testRanges[$index]['end'];
-                break;
+            if ($testRanges[$index]['begin'] <= $dateLikeEventZone) {
+                if ($flagFirst) {
+                    $start = clone $testRanges[$index]['begin'];
+                    $stop = clone $testRanges[$index]['end'];
+                    $flagFirst = false;
+                }
+                if ($dateLikeEventZone <= $testRanges[$index]['end']) {
+                    $flag = true;
+                    $start = clone $testRanges[$index]['begin'];
+                    $stop = clone $testRanges[$index]['end'];
+                    break;
+                }
             }
         }
         $this->setIsActiveResult($start, $stop, $flag, $dateLikeEventZone, $params);
@@ -317,10 +322,10 @@ class EasterRelTimer implements TimerInterface
      * tested:
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -329,7 +334,7 @@ class EasterRelTimer implements TimerInterface
      * tested 20210110
      *
      * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
@@ -339,14 +344,15 @@ class EasterRelTimer implements TimerInterface
         $result->failOnlyNextActive($dateLikeEventZone);
 
 
-        $relToDateMin = (int)(isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
+        $relToDateMin = (int)(
+            isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
         $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
         $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $method = $this->detectCalendar($params);
+        $methodId = $this->detectCalendar($params);
         $testDay = clone $dateLikeEventZone;
         $yearInterval = new DateInterval(('P1Y'));
         $testDay->sub($yearInterval);
@@ -354,7 +360,7 @@ class EasterRelTimer implements TimerInterface
         $testDay->sub($yearInterval);
         $flagRebuild = false;
         for ($i = 0; $i < 7; $i++) {
-            $checkday = $this->detectDefinedDayInYearNew($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $method);
+            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
             if ($relToDateMin >= 0) {
                 $checkday->add($relInterval);
             } else {
@@ -388,7 +394,7 @@ class EasterRelTimer implements TimerInterface
      * tested 20210110
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
@@ -397,14 +403,15 @@ class EasterRelTimer implements TimerInterface
         $result = new TimerStartStopRange();
         $result->failOnlyNextActive($dateLikeEventZone);
 
-        $relToDateMin = (int)(isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
+        $relToDateMin = (int)(
+            isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
         $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
         $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $method = $this->detectCalendar($params);
+        $methodId = $this->detectCalendar($params);
         $testDay = clone $dateLikeEventZone;
         $yearInterval = new DateInterval(('P1Y'));
         $testDay->add($yearInterval);
@@ -412,7 +419,7 @@ class EasterRelTimer implements TimerInterface
         $testDay->add($yearInterval);
         $flagRebuild = false;
         for ($i = 0; $i < 7; $i++) {
-            $checkday = $this->detectDefinedDayInYearNew($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $method);
+            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
             if ($relToDateMin >= 0) {
                 $checkday->add($relInterval);
             } else {
@@ -441,118 +448,54 @@ class EasterRelTimer implements TimerInterface
     }
 
     /**
-     * @param array $params
-     * @return int|mixed
+     * Is this method of integer-mapping removable? Or is it helpful, to use named values for the flexform-parameter in the future
+     *
+     * @param array<mixed> $params
+     * @return int
      */
-    protected function detectCalendar($params = [])
+    protected function detectCalendar($params = []): int
     {
-        $calendar = (int)((isset($params[self::ARG_CALENDAR_USE])) ?
+        $calendar = (
+            (isset($params[self::ARG_CALENDAR_USE])) ?
             ($params[self::ARG_CALENDAR_USE]) :
             0
         );
+        // the following constants are available, because composer required the calendar-extension for php
         switch ($calendar) {
+            case '1':
             case 1:
-                $result = ((defined(CAL_EASTER_ROMAN)) ? CAL_EASTER_ROMAN : $params[self::ARG_CALENDAR_USE]);
+                $result = CAL_EASTER_ROMAN;
                 break;
+            case '2':
             case 2:
-                $result = ((defined(CAL_EASTER_ALWAYS_GREGORIAN)) ? CAL_EASTER_ALWAYS_GREGORIAN : $params[self::ARG_CALENDAR_USE]);
+                $result = CAL_EASTER_ALWAYS_GREGORIAN;
                 break;
+            case '3':
             case 3:
-                $result = ((defined(CAL_EASTER_ALWAYS_JULIAN)) ? CAL_EASTER_ALWAYS_JULIAN : $params[self::ARG_CALENDAR_USE]);
+                $result = CAL_EASTER_ALWAYS_JULIAN;
                 break;
-            default :
-                $result = ((defined(CAL_EASTER_DEFAULT)) ? CAL_EASTER_DEFAULT : 0);
+            default:
+                $result = CAL_EASTER_DEFAULT;
                 break;
         }
         return $result;
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param DateTime $testDateTime
+     * @param string $dateName
+     * @param int $methodId
      * @return DateTime
      * @throws Exception
      */
-    protected function detectDefinedDayInYear(DateTime $testDateTime, $params = []): DateTime
-    {
-
-        $method = $this->detectCalendar($params);
-        $result = $this->getEasterDatetime(
-            $testDateTime->getTimezone(),
-            (int)$testDateTime->format('Y'),
-            $method
-        );
-        switch ($params[self::ARG_NAMED_DATE_MIDNIGHT]) {
-            case self::ARG_NAMED_DATE_GOOD_FRIDAY:
-                $result->sub(new DateInterval('P2D'));
-                break;
-            case self::ARG_NAMED_DATE_EASTER:
-//                $result = $easter;
-                break;
-            case self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST:
-                $result->add(new DateInterval('P39D'));
-                break;
-            case self::ARG_NAMED_DATE_PENTECOST:
-                $result->add(new DateInterval('P49D'));
-                break;
-            case self::ARG_NAMED_DATE_FIRST_ADVENT:
-                switch ($method) {
-                    case 0:
-                        if (((int)$testDateTime->format('Y')) > 1752) {
-                            $result = $this->getGreogorianFirstAdvent($testDateTime);
-                        } else {
-                            $result = $this->getJulianFirstAdvent($testDateTime);
-                        }
-                        break;
-                    case 1:
-                        if (((int)$testDateTime->format('Y')) > 1582) {
-                            $result = $this->getGreogorianFirstAdvent($testDateTime);
-                        } else {
-                            $result = $this->getJulianFirstAdvent($testDateTime);
-                        }
-                        break;
-                    case 2:
-                        $result = $this->getJulianFirstAdvent($testDateTime);
-                        break;
-                    case 3:
-                        $result = $this->getJulianFirstAdvent($testDateTime);
-                        break;
-                    default :
-                        $result = $this->getJulianFirstAdvent($testDateTime);
-                        break;
-                }
-                break;
-            case self::ARG_NAMED_DATE_CHRISTMAS:
-                $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-                break;
-            case self::ARG_NAMED_DATE_TOWL_DAY:
-                $result = new DateTime($testDateTime->format('Y') . '-05-25 00:00:00', $testDateTime->getTimezone());
-                break;
-            case self::ARG_NAMED_DATE_ROSE_MONDAY:
-                $result->sub(new DateInterval('P48D'));
-                break;
-            default :
-//                $result = $easter;
-                break;
-
-        }
-        return $result;
-    }
-
-    /**
-     * @param DateTime $dateLikeEventZone
-     * @param int $method
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function detectDefinedDayInYearNew(DateTime $testDateTime, $dateId, $method): DateTime
+    protected function detectDefinedDayInYear(DateTime $testDateTime, string $dateName, int $methodId): DateTime
     {
         $result = $this->getEasterDatetime(
             $testDateTime->getTimezone(),
             (int)$testDateTime->format('Y'),
-            $method
+            $methodId
         );
-        switch ($dateId) {
+        switch ($dateName) {
             case self::ARG_NAMED_DATE_GOOD_FRIDAY:
                 $result->sub(new DateInterval('P2D'));
                 break;
@@ -570,8 +513,20 @@ class EasterRelTimer implements TimerInterface
                 $diff = (((int)$result->format('w') === 0) ? 7 : $result->format('w')) + 21;
                 $result->sub(new DateInterval('P' . $diff . 'D'));
                 break;
+            case self::ARG_NAMED_DATE_STUPID_DAY:
+                $result = new DateTime($testDateTime->format('Y') . '-04-16 00:00:00', $testDateTime->getTimezone());
+                break;
             case self::ARG_NAMED_DATE_TOWL_DAY:
                 $result = new DateTime($testDateTime->format('Y') . '-05-25 00:00:00', $testDateTime->getTimezone());
+                break;
+            case self::ARG_NAMED_DATE_NEW_YEAR:
+                $result = new DateTime($testDateTime->format('Y') . '-01-01 00:00:00', $testDateTime->getTimezone());
+                break;
+            case self::ARG_NAMED_DATE_SILVESTER:
+                $result = new DateTime($testDateTime->format('Y') . '-12-31 00:00:00', $testDateTime->getTimezone());
+                break;
+            case self::ARG_NAMED_DATE_LABOURDAY:
+                $result = new DateTime($testDateTime->format('Y') . '-05-01 00:00:00', $testDateTime->getTimezone());
                 break;
             case self::ARG_NAMED_DATE_CHRISTMAS:
                 $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
@@ -579,10 +534,9 @@ class EasterRelTimer implements TimerInterface
             case self::ARG_NAMED_DATE_ROSE_MONDAY:
                 $result->sub(new DateInterval('P48D'));
                 break;
-            default :
+            default:
 //                $result = $easter;
                 break;
-
         }
         return $result;
     }
@@ -605,46 +559,28 @@ class EasterRelTimer implements TimerInterface
 
     /**
      * @param DateTime $dateLikeEventZone
-     * @param array $params
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function calcDefinedStartDateTime(DateTime $dateLikeEventZone, array $params): DateTime
-    {
-        $definedDay = $this->detectDefinedDayInYear($dateLikeEventZone, $params);
-        $minStart = (int)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT];
-        if ($minStart > 0) {
-            $definedDay->add(new DateInterval('PT' . $minStart . 'M'));
-        } else {
-            $definedDay->sub(new DateInterval('PT' . abs($minStart) . 'M'));
-        }
-        return $definedDay;
-    }
-
-    /**
-     * @param DateTime $dateLikeEventZone
-     * @param array $params
-     * @return array
+     * @param array<mixed> $params
+     * @return array<mixed>
      * @throws Exception
      */
     protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
     {
-
-        $relToDateMin = (int)(isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
+        $relToDateMin = (int)(
+            isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
         $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
         $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $method = $this->detectCalendar($params);
+        $methodId = $this->detectCalendar($params);
         $testDay = clone $dateLikeEventZone;
         $yearInterval = new DateInterval(('P1Y'));
         $testDay->sub($yearInterval);
         $testDay->sub($yearInterval);
         $ranges = [];
         foreach ([-2, -1, 0, 1, 2] as $index) {
-            $checkday = $this->detectDefinedDayInYearNew($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $method);
+            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
             if ($relToDateMin >= 0) {
                 $checkday->add($relInterval);
             } else {
@@ -666,50 +602,19 @@ class EasterRelTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $testDateTime
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function getGreogorianFirstAdvent(DateTime $testDateTime): DateTime
-    {
-        $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-        $weekday = (int)$result->format('w');
-        $weekday = ((empty($weekday)) ? 7 : $weekday);
-        $diff = $weekday + 21;
-        $result->sub(new DateInterval('P' . $diff . 'D'));
-        return $result;
-
-    }
-
-    /**
-     * @param DateTime $testDateTime
-     * @return DateTime
-     * @throws Exception
-     */
-    protected function getJulianFirstAdvent(DateTime $testDateTime): DateTime
-    {
-        $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
-        $julianDate = gregoriantojd(12, 25, $testDateTime->format('Y'));
-        $weekday = jddayofweek($julianDate);
-        $weekday = ((empty($weekday)) ? 7 : $weekday);
-        $diff = $weekday + 21;
-        $result->sub(new DateInterval('P' . $diff . 'D'));
-        return $result;
-    }
-
-
-    /**
-     * @param $dateStart
-     * @param $dateStop
+     * @param DateTime $dateStart
+     * @param DateTime $dateStop
      * @param bool $flag
      * @param DateTime $dateLikeEventZone
+     * @param array<mixed> $params
+     * @return void
      */
     protected function setIsActiveResult(
-        $dateStart,
-        $dateStop,
+        DateTime $dateStart,
+        DateTime $dateStop,
         bool $flag,
         DateTime $dateLikeEventZone,
-        $params = []
+        array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
@@ -723,7 +628,7 @@ class EasterRelTimer implements TimerInterface
 
     /**
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
@@ -740,5 +645,4 @@ class EasterRelTimer implements TimerInterface
         }
         return clone $this->lastIsActiveResult;
     }
-
 }

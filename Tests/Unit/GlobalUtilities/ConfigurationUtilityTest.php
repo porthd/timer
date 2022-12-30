@@ -27,7 +27,6 @@ use Porthd\Timer\Utilities\ConfigurationUtility;
 
 class ConfigurationUtilityTest extends TestCase
 {
-
     /**
      * the ultimate green test
      * @test
@@ -187,7 +186,6 @@ class ConfigurationUtilityTest extends TestCase
             ],
 
         ];
-
     }
 
     /**
@@ -198,7 +196,6 @@ class ConfigurationUtilityTest extends TestCase
      */
     public function expandNestedArrayGenerateArrayAndReturnBooleanAboutActionSuccess($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
@@ -215,6 +212,5 @@ class ConfigurationUtilityTest extends TestCase
                 $message
             );
         }
-
     }
 }

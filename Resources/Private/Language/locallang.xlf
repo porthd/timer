@@ -68,6 +68,10 @@
 				<source>Date-Viewhelper</source>
 				<target>Date-Viewhelper</target>
 			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.formatJewishDate">
+				<source>Date-Viewhelper for Jewish Date</source>
+				<target>Date-Viewhelper for Jewish-Date</target>
+			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.prolog.formatDate">
 				<source>The viewhelper &lt;timer:format.date&gt; is similiar to the TYPO3-Viehelper &lt;f:format.date&gt;. The onlydifference is the addional attribute `timezone`. You can define the output of time for a define timezone with it.</source>
 				<target>Der Viewhelper &lt;timer:format.date&gt; ist fast identisch mit dem TYPO3-Viehelper &lt;f:format.date&gt; und kennt das zusätzliche Attribut `timezone`. Dies erlaubt die Formatierung der Zeit-Datumsausgabe für eine definierte Zeitzone.</target>
@@ -130,26 +134,6 @@
 			<trans-unit id="content.timer.periodMessage.general.beginEnd.2">
 				<source>The period starts on `%s` at the earliest and ends on `%s` at the latest.</source>
 				<target>Die Periode beginnt frühestens am `%s` und endet spätestens am `%s`.</target>
-			</trans-unit>
-			<trans-unit id="content.timer.periodMessage.general.timeZone.event.1">
-				<source>The time zone of the event [`%s`] applies.</source>
-				<target>Es gilt die Zeitzone des Events [`%s`].</target>
-			</trans-unit>
-			<trans-unit id="content.timer.periodMessage.general.timeZone.server.1">
-				<source>The current time zone of the server [`%s`] always applies.</source>
-				<target>Es gilt immer die aktuelle Zeitzone des Servers [`%s`].</target>
-			</trans-unit>
-			<trans-unit id="content.timer.periodMessage.general.timeZone.surfer0">
-				<source>The current time zone of the surfer always applies.</source>
-				<target>Es gilt immer die aktuelle Zeitzone des Surfers.</target>
-			</trans-unit>
-			<trans-unit id="content.timer.periodMessage.general.period.plus.2">
-				<source>The daily event starts at %s and lasts `%s` minutes.</source>
-				<target>Das Tagesevent beginnt um %s und dauert `%s` Minuten.</target>
-			</trans-unit>
-			<trans-unit id="content.timer.periodMessage.general.period.minus.2">
-				<source>The daily event ends at %s and starts `%s` minutes before.</source>
-				<target>Das Tagesevent endet um %s und startet `%s` Minuten vorher.</target>
 			</trans-unit>
 
 			<trans-unit id="content.timer.periodMessage.general.timeparts.min.many.1">
@@ -328,6 +312,14 @@
 				<target>Die aktive Zeit endet %s vor dem %s (%s) und hat %s gedauert.</target>
 			</trans-unit>
 
+			<trans-unit id="content.timersimul.viewhelper.formatJewishDate.aspect.unixtimestamp">
+				<source>(All subsequent dates, converted to the Jewish calendar, refer to the selected Unix timestamp `1600000000s`. The time specification in the past means the seconds that have passed since January 1st, 1970. On average, one billion seconds corresponds to almost 31.7 years.)</source>
+				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf den jüdischen Kalender, beziehen sich auf den gewählten Unix-Timestamp `1600000000s`. Die in der Vergangenheit liegende Zeitangabe meint die Sekunden, die seit dem 1.1.1970 vergangen sind. Eine Milliarde Sekunden entsprechen im Mittel knapp 31,7 Jahren.)</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime">
+				<source>(In contrast to the TYPO3 view helper `f:format.date`, this view helper `timer:format.jewishDate` does not support the format parameters of the php function `strftime`.)</source>
+				<target>(Im Gegensatz zum TYPO3-Viewhelper `f:format.date` werden von diesem Viewhelper `timer:format.jewishDate` die Format-Parameter der php-Funktion `strftime` nicht unterstützt.)</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

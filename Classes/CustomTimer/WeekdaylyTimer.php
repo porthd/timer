@@ -29,10 +29,8 @@ use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 
-
 class WeekdaylyTimer implements TimerInterface
 {
-
     use GeneralTimerTrait;
 
     protected const TIMER_NAME = 'txTimerWeekdayly';
@@ -61,7 +59,7 @@ class WeekdaylyTimer implements TimerInterface
     protected $lastIsActiveTimestamp;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $lastIsActiveParams = [];
 
@@ -78,7 +76,7 @@ class WeekdaylyTimer implements TimerInterface
     /**
      * tested 20210102
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getSelectorItem(): array
     {
@@ -92,7 +90,7 @@ class WeekdaylyTimer implements TimerInterface
      * tested 20221009
      *
      * @param string $activeZoneName
-     * @param array $params
+     * @param array<mixed> $params
      * @return string
      */
     public function getTimeZoneOfEvent($activeZoneName, array $params = []): string
@@ -103,7 +101,7 @@ class WeekdaylyTimer implements TimerInterface
     /**
      * tested 20210102
      *
-     * @return array
+     * @return array<mixed>
      */
     public static function getFlexformItem(): array
     {
@@ -119,13 +117,12 @@ class WeekdaylyTimer implements TimerInterface
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function validate(array $params = []): bool
     {
-        $flag = true;
-        $flag = $flag && $this->validateZone($params);
+        $flag = $this->validateZone($params);
         $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateActiveWeekday($params);
         $flag = $flag && $this->validateUltimate($params);
@@ -139,7 +136,7 @@ class WeekdaylyTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validateActiveWeekday(array $params = []): bool
@@ -161,41 +158,29 @@ class WeekdaylyTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     public function validateArguments(array $params = []): int
     {
-        $flag = 0;
-        foreach (self::ARG_REQ_LIST as $key) {
-            if (isset($params[$key])) {
-                $flag++;
-            }
-        }
-        return $flag;
+        return $this->countParamsInList(self::ARG_REQ_LIST, $params);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     protected function validateOptional(array $params = []): int
     {
-        $count = 0;
-        foreach (self::ARG_OPT_LIST as $key) {
-            if (isset($params[$key])) {
-                $count++;
-            }
-        }
-        return $count;
+        return $this->countParamsInList(self::ARG_OPT_LIST, $params);
     }
 
     /**
      * tested 20201226
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
@@ -210,7 +195,7 @@ class WeekdaylyTimer implements TimerInterface
      * check, if the timer ist for this time active
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone in paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
@@ -237,10 +222,10 @@ class WeekdaylyTimer implements TimerInterface
      * tested:
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -249,7 +234,7 @@ class WeekdaylyTimer implements TimerInterface
      * tested 20210102
      *
      * @param DateTime $dateBelowNextActive lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function nextActive(DateTime $dateBelowNextActive, $params = []): TimerStartStopRange
@@ -283,7 +268,7 @@ class WeekdaylyTimer implements TimerInterface
      * tested 20210116
      *
      * @param DateTime $dateAbovePrevActive
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function prevActive(DateTime $dateAbovePrevActive, $params = []): TimerStartStopRange
@@ -314,7 +299,11 @@ class WeekdaylyTimer implements TimerInterface
     }
 
 
-    protected function getParameterActiveWeekday($params)
+    /**
+     * @param array<mixed> $params
+     * @return int
+     */
+    protected function getParameterActiveWeekday(array $params)
     {
         $result = 127;
         if ((isset($params[self::ARG_REQ_ACTIVE_WEEKDAY])) &&
@@ -331,17 +320,19 @@ class WeekdaylyTimer implements TimerInterface
     }
 
     /**
-     * @param $dateStart
-     * @param $dateStop
+     * @param DateTime $dateStart
+     * @param DateTime $dateStop
      * @param bool $flag
      * @param DateTime $dateLikeEventZone
+     * @param array<mixed> $params
+     * @return void
      */
     protected function setIsActiveResult(
-        $dateStart,
-        $dateStop,
+        DateTime $dateStart,
+        DateTime $dateStop,
         bool $flag,
         DateTime $dateLikeEventZone,
-        $params = []
+        array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
@@ -355,7 +346,7 @@ class WeekdaylyTimer implements TimerInterface
 
     /**
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
@@ -375,7 +366,7 @@ class WeekdaylyTimer implements TimerInterface
 //
 //    /**
 //     * @param TimerStartStopRange $prevRange
-//     * @param array $params
+//     * @param array<mixed> $params
 //     * @param DateTime $dateAbovePrevActive
 //     * @return TimerStartStopRange
 //     * @throws TimerException
@@ -444,7 +435,7 @@ class WeekdaylyTimer implements TimerInterface
 //    }
 //    /**
 //     * @param TimerStartStopRange $nextRange
-//     * @param array $params
+//     * @param array<mixed> $params
 //     * @param DateTime $dateBelowNextActive
 //     * @return TimerStartStopRange
 //     * @throws TimerException
@@ -510,5 +501,4 @@ class WeekdaylyTimer implements TimerInterface
 //        }
 //        return $nextRange;
 //    }
-
 }

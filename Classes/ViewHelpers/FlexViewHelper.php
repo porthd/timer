@@ -46,12 +46,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  *              </tr>
  *          </f:for>
  *      </timer:flex>
-
  */
-
 class FlexViewHelper extends AbstractViewHelper
 {
-
     use CompileWithRenderStatic;
 
     protected const ATTR_FLEXFORM_STRING = 'flexstring';
@@ -69,31 +66,32 @@ class FlexViewHelper extends AbstractViewHelper
     /**
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument(self::ATTR_FLEXFORM_STRING,
+        $this->registerArgument(
+            self::ATTR_FLEXFORM_STRING,
             'string',
             'The string with the flexform',
             true
         );
-        $this->registerArgument(self::ATTR_RESULT_AS,
+        $this->registerArgument(
+            self::ATTR_RESULT_AS,
             'string',
             'The name of the array variable with the flexform-entries',
             true
         );
-        $this->registerArgument(self::ATTR_FLATTEN_KEYS,
+        $this->registerArgument(
+            self::ATTR_FLATTEN_KEYS,
             'string',
             'Comma-separated list of keys, which are remove to flatten the array-structure. (Remove in the frontend not Flexform-parts)',
             false,
             self::DEFAULT_FLATTEN_KEYS
         );
-
-
     }
 
     /**
-     * @param array $arguments
+     * @param array<mixed> $arguments
      * @param Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      * @return string
@@ -112,12 +110,14 @@ class FlexViewHelper extends AbstractViewHelper
         if (!is_string($arguments[self::ATTR_FLEXFORM_STRING])) {
             throw new TimerException(
                 'FlexViewHelper only supports flex-fields or JSON-String and transform them to arrays. Your argument is not a string.',
-                1601245879);
+                1601245879
+            );
         }
 
-        $stringFlatKeys = ((!empty($arguments[self::ATTR_FLATTEN_KEYS])) ?
-            $arguments[self::ATTR_FLATTEN_KEYS] :
-            self::DEFAULT_FLATTEN_KEYS
+        $stringFlatKeys = (
+            (!empty($arguments[self::ATTR_FLATTEN_KEYS])) ?
+                $arguments[self::ATTR_FLATTEN_KEYS] :
+                self::DEFAULT_FLATTEN_KEYS
         );
         $singleElementRaw = GeneralUtility::xml2array($arguments[self::ATTR_FLEXFORM_STRING]);
         $flagError = (((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) ?
@@ -130,7 +130,7 @@ class FlexViewHelper extends AbstractViewHelper
             )
         );
         if (empty($listFlatKeys)) {
-            $singleElement= $singleElementRaw;
+            $singleElement = $singleElementRaw;
         } else {
             $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
         }
@@ -141,7 +141,6 @@ class FlexViewHelper extends AbstractViewHelper
                 'Is your viewhelper-configuration correct? Check your datas.',
                 1601245979
             );
-
         }
         $templateVariableContainer->add($arguments[self::ATTR_RESULT_AS], $singleElement);
         $output = $renderChildrenClosure();
@@ -149,4 +148,3 @@ class FlexViewHelper extends AbstractViewHelper
         return $output;
     }
 }
-

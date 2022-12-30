@@ -33,53 +33,63 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-
 class TcaUtility
 {
+    /**
+     * selected list of timezone. This list may contain a reduced list of allowed timezones for this extension.
+     * The list should be needed for validation.
+     *
+     * @var array<mixed> $listOfTimezones
+     */
     public static $listOfTimezones = [];
 
-    /** @var ListOfTimerService|null $timerList */
+    /**
+     * @var ListOfTimerService|null $timerList
+     */
     private static ?ListOfTimerService $timerList = null;
-    // General parameter of timerdefinitions
+
+    /**
+     * @var array<mixed> $timerConfig
+     */
     public static $timerConfig = [];
 
+    // predefined list of obsolete XML-tags in flexform, which can be removed in flattened flexform-arrays.
+    // flattened flexform-arrays are easier to handle in the frontend.
     protected const DEFAULT_FLATTEN_KEYS_LIST = ['data', 'general', 'timer', 'sDEF', 'lDEF', 'vDEF',];
 
 
     /**
      * Beginn the list with the null-element
      *
-     * @param string|array $orderList
      * @return array|string[]
      */
-    public static function mergeNameFlexformArray($orderList = DefaultTimer::TIMER_NAME)
+    public static function mergeNameFlexformArray()
     {
         if (self::$timerList === null) {
             self::$timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
         }
-        return self::$timerList->mergeFlexformItems($orderList);
+        return self::$timerList->mergeFlexformItems();
     }
 
     /**
-     * Beginn the list with the null-element
+     * Begin the list with the null-element
      *
-     * @param string|array $orderList
      * @return array|string[]
      */
-    public static function mergeSelectorItems($orderList = DefaultTimer::TIMER_NAME)
+    public static function mergeSelectorItems()
     {
         if (self::$timerList === null) {
             self::$timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
         }
-        return self::$timerList->mergeSelectorItems($orderList);
+        return self::$timerList->mergeSelectorItems();
     }
 
     /**
      * DON`T DELETE!!!!! This function is used in flexform-definitions EXT:Configuration/FlexForms/TimerDef/General/GeneralTimer.flexform
      *
-     * @param array $params TCA-Array
-     * @param mixed $conf not in use
-     * @return array
+     * @param array<mixed> $params TCA-Array
+     * @param mixed $conf not in use, but definde by the structure of the hook
+     * @return array<mixed>
      */
     public static function listBaseZoneItemsFlexform($params, $conf): array
     {
@@ -87,10 +97,12 @@ class TcaUtility
         $count = 0;
         foreach (self::listBaseZoneItems() as $item) {
             $langKey = $item;
-            $key = LocalizationUtility::translate('LLL:EXT:timer/Resources/Private/Language/locallang_zone.xlf:timer.flexform.array.key.timezone.' . $langKey,
+            $key = LocalizationUtility::translate(
+                'LLL:EXT:timer/Resources/Private/Language/locallang_zone.xlf:timer.flexform.array.key.timezone.' . $langKey,
                 TimerConst::EXTENSION_NAME
             );
-            $title = LocalizationUtility::translate('LLL:EXT:timer/Resources/Private/Language/locallang_zone.xlf:timer.flexform.array.detail.timezone.' . $langKey,
+            $title = LocalizationUtility::translate(
+                'LLL:EXT:timer/Resources/Private/Language/locallang_zone.xlf:timer.flexform.array.detail.timezone.' . $langKey,
                 TimerConst::EXTENSION_NAME
             );
             if (!empty($title)) {
@@ -107,7 +119,7 @@ class TcaUtility
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public static function getListOfTimezones(): array
     {
@@ -118,7 +130,7 @@ class TcaUtility
     }
 
     /**
-     * @param array $listOfTimezones
+     * @param array<string> $listOfTimezones
      */
     public static function setListOfTimezones(array $listOfTimezones): void
     {
@@ -130,7 +142,7 @@ class TcaUtility
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public static function resetListOfTimezones(): array
     {
@@ -141,9 +153,10 @@ class TcaUtility
                 ExtensionConfiguration::class
             )->get(TimerConst::EXTENSION_NAME);
             $methodName = TimerConst::HOOK_CHANGE_LIST_OF_TIMEZONES;
-            foreach (($timerConfig[TimerConst::HOOK_CHANGE_LIST_OF_TIMEZONES] ?? []) as $classRef) {
+            foreach ((self::$timerConfig[TimerConst::HOOK_CHANGE_LIST_OF_TIMEZONES] ?? []) as $classRef) {
                 $hookObj = GeneralUtility::makeInstance($classRef);
                 if (method_exists($hookObj, $methodName)) {
+                    // extend or reduce the current list
                     $listOfTimezones = $hookObj->$methodName($listOfTimezones);
                 }
             }
@@ -153,7 +166,7 @@ class TcaUtility
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public static function listBaseZoneItems(): array
     {
@@ -172,8 +185,8 @@ class TcaUtility
 
     /**
      * This method are introduced for easy build of unittests
-     * @param string $key
-     * @param array $params
+     *
+     * @param string $timeZone
      * @return bool
      */
     public static function isTimeZoneInList(string $timeZone = ''): bool
@@ -188,34 +201,15 @@ class TcaUtility
     }
 
     /**
-     * @param $configZone
-     * @return string
-     */
-    protected static function checkTimeZoneName($configZone, $oldZone = TimerConst::DEFAULT_TIME_ZONE): string
-    {
-        try {
-            if (!(new DateTimeZone($configZone))) {
-                $default = $oldZone;
-            } else {
-                $default = $configZone;
-            }
-        } catch (Exception $e) {
-            $default = $oldZone;
-        }
-        return $default;
-    }
-
-    /**
      * remove obsolete layers in array
      * analogous to https://stackoverflow.com/questions/1319903/how-to-flatten-a-multidimensional-array visited 20201109
      *
-     * @param $array
-     * @param string $removeList
+     * @param array<mixed>|string $array
+     * @param array<int,string> $removeList
      * @return array|mixed
      */
     public static function flexformArrayFlatten($array, $removeList = self::DEFAULT_FLATTEN_KEYS_LIST)
     {
-
         if (!is_array($array)) {
             return $array;
         }
@@ -245,6 +239,4 @@ class TcaUtility
         }
         return $result;
     }
-
 }
-

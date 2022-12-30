@@ -14,6 +14,7 @@ use Porthd\Timer\CustomTimer\WeekdayInMonthTimer;
 use Porthd\Timer\CustomTimer\WeekdaylyTimer;
 use Porthd\Timer\Hooks\Backend\FlexformManipulationHook;
 use Porthd\Timer\Hooks\Backend\StartEndTimerManipulationHook;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 
 use Porthd\Timer\Hooks\FlexFormParsingHook;
 use Porthd\Timer\Utilities\ConfigurationUtility;
@@ -47,7 +48,7 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 
 call_user_func(
-    function () {
+    static function () {
         // Hook for dynamically generated flexformsfiles
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][] =
             FlexFormParsingHook::class;
@@ -124,12 +125,8 @@ call_user_func(
 
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST ] ??= [];
             if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'])) {
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class;
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = VariableFrontend::class;
             }
-
         }
-
-
-
     }
 );

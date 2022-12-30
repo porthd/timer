@@ -17,8 +17,12 @@
 				<target> </target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerEasterRel.select.name">
-				<source>Period relativ to Easter and other christian Holydays</source>
+				<source>Period relativ to easter and other christian holydays</source>
 				<target>Zeitraum relativ zu Ostern und anderen christlichen Feiertagen</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerJewishHoliday.select.name">
+				<source>Period relativ to jewish holydays</source>
+				<target>Zeitraum relativ zu jüdischen Feiertagen</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerMoonphaseRel.select.name">
 				<source>Timer relativ to the phase of moon </source>
@@ -33,8 +37,8 @@
 				<target>Terminliste von Zeitspannen in yaml-Datei und Hilfinfos zur Darstellung in Kalenderform</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerRangeList.select.name">
-				<source>merged list of timer in yaml (not correct working 20221105)</source>
-				<target>Zusammengeführte Liste von Timern in yaml (nicht korrekt arbeitend 20221105)</target>
+				<source>merged list of timer in yaml</source>
+				<target>Zusammengeführte Liste von Timern in yaml</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerSunriseRel.select.name">
 				<source>period around some sunpositions every day</source>
@@ -78,6 +82,272 @@
 			<trans-unit id="flexform.timer.txTimerDaily.field.activeWeekday">
 				<source>active weekday</source>
 				<target>aktiver Wochentag</target>
+			</trans-unit>
+
+			<!-- txTimerJewishHoliday -->
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.sheet.title">
+				<source>jedish dates related</source>
+				<target>auf jüdischen Daten bezogen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.sheet.shortDescr">
+				<source>Define an active area relative to important jewdish dates such as Yom Kippur or Pesach</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu wichtigen jüdischen Terminen wie Yom Kippur oder Pesach</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.sheet.description">
+				<source>Example: From the beginning of the Yom Kippur festival [namedDateMidnight], exactly 14400 minutes (10 days) [relMinToSelectedTimerEvent] away, a content element is active for a period of 1440 minutes (= 1 day) [durationMinutes].</source>
+				<target>Beispiel: Vom Beginn des Yom Kippur-Festes [namedDateMidnight], genau 14400 Minuten (10 Tage) [relMinToSelectedTimerEvent] entfernt, ist für die Zeit von 1440 Minuten (= 1 Tag) [durationMinutes] ein Inhaltselement aktiv.</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.field.namedDate.title">
+				<source>selection of named dates like Yom Kippur</source>
+				<target>Auswahl benannter Feiertage wie Yom Kippur</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevRoshHashanah">
+				<source>Erev Rosh Hashanah</source>
+				<target>Erev Rosh Hashanah</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahI">
+				<source>Rosh Hashanah I </source>
+				<target>Rosh Hashanah I </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahII">
+				<source>Rosh Hashanah II </source>
+				<target>Rosh Hashanah II </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TzomGedaliah">
+				<source>Tzom Gedaliah </source>
+				<target>Tzom Gedaliah </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevYomKippur">
+				<source>Erev Yom Kippur </source>
+				<target>Erev Yom Kippur </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomKippur">
+				<source>Yom Kippur </source>
+				<target>Yom Kippur </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevSukkot">
+				<source>Erev Sukkot </source>
+				<target>Erev Sukkot </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotI">
+				<source>Sukkot I </source>
+				<target>Sukkot I </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotII_DiasporOnly">
+				<source>Sukkot II (Diaspora only) </source>
+				<target>Sukkot II (Diaspora only) </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inIsraelInDiaspora">
+				<source>Hol Hamoed Sukkot (in Israel 16./in Diaspora 17.)</source>
+				<target>Hol Hamoed Sukkot (in Israel 16./in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inIsrael">
+				<source>Hol Hamoed Sukkot (in Israel 16.)</source>
+				<target>Hol Hamoed Sukkot (in Israel 16.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inDiaspora">
+				<source>Hol Hamoed Sukkot (in Diaspora 17.)</source>
+				<target>Hol Hamoed Sukkot (in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HoshanaRabbah">
+				<source>Hoshana Rabbah </source>
+				<target>Hoshana Rabbah </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeret_inDiaspora">
+				<source>Shemini Azeret (in Diaspora) </source>
+				<target>Shemini Azeret (in Diaspora) </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeretSimchatTorah_inIsrael">
+				<source>Shemini Azeret/Simchat Torah (in Israel) </source>
+				<target>Shemini Azeret/Simchat Torah (in Israel) </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SimchatTorah_inDiaspora">
+				<source>Simchat Torah (in Diaspora) </source>
+				<target>Simchat Torah (in Diaspora) </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inIsrael">
+				<source>Isru Chag (23 Tishri, in Israel)</source>
+				<target>Isru Chag (23 Tishri, in Israel)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inDiaspora">
+				<source>Isru Chag (24 Tishri, in Diaspora)</source>
+				<target>Isru Chag (24 Tishri, in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahI">
+				<source>Hanukkah I</source>
+				<target>Hanukkah I</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahII">
+				<source>Hanukkah II</source>
+				<target>Hanukkah II</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahIII">
+				<source>Hanukkah III</source>
+				<target>Hanukkah III</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahIV">
+				<source>Hanukkah IV</source>
+				<target>Hanukkah IV</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahV">
+				<source>Hanukkah V</source>
+				<target>Hanukkah V</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVI">
+				<source>Hanukkah VI</source>
+				<target>Hanukkah VI</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVII">
+				<source>Hanukkah VII</source>
+				<target>Hanukkah VII</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVIII">
+				<source>Hanukkah VIII</source>
+				<target>Hanukkah VIII</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTevet">
+				<source>Tzom Tevet</source>
+				<target>Tzom Tevet</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TuBShevat">
+				<source>Tu B'Shevat </source>
+				<target>Tu B'Shevat </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PurimKatan">
+				<source>Purim Katan </source>
+				<target>Purim Katan </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimKatan">
+				<source>Shushan Purim Katan </source>
+				<target>Shushan Purim Katan </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TaAnithEsther">
+				<source>Ta'anith Esther </source>
+				<target>Ta'anith Esther </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.Purim">
+				<source>Purim </source>
+				<target>Purim </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurim">
+				<source>Shushan Purim </source>
+				<target>Shushan Purim </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPost">
+				<source>Shushan Purim (postpone with one day, if the date will meet saturday)</source>
+				<target>Shushan Purim (Verschiebe um einen Tag, wenn er auf Samstag fällt)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPur">
+				<source>Shushan Purim (on saturday too)</source>
+				<target>Shushan Purim (auch am Samstag)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShabbatHagadol">
+				<source>Shabbat Hagadol </source>
+				<target>Shabbat Hagadol </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevPesach">
+				<source>Erev Pesach </source>
+				<target>Erev Pesach </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachI">
+				<source>Pesach I </source>
+				<target>Pesach I </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachII_DiasporOnly">
+				<source>Pesach II (Diaspora only) </source>
+				<target>Pesach II (Diaspora only) </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inIsraelInDiaspora">
+				<source>Hol Hamoed Pesach (in Israel 16./in Diaspora 17.)</source>
+				<target>Hol Hamoed Pesach (in Israel 16./in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inIsrael">
+				<source>Hol Hamoed Pesach (in Israel 16.)</source>
+				<target>Hol Hamoed Pesach (in Israel 16.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inDiaspora">
+				<source>Hol Hamoed Pesach (in Diaspora 17.)</source>
+				<target>Hol Hamoed Pesach (in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVII">
+				<source>Pesach VII </source>
+				<target>Pesach VII </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVIII_DiasporOnly">
+				<source>Pesach VIII (Diaspora only) </source>
+				<target>Pesach VIII (Diaspora only) </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inIsrael">
+				<source>Isru Chag (22 Nisan, in Israel)</source>
+				<target>Isru Chag (22 Nisan, in Israel)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inDiaspora">
+				<source>Isru Chag (23 Nisan, in Diaspora)</source>
+				<target>Isru Chag (23 Nisan, in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomHashoah">
+				<source>Yom Hashoah </source>
+				<target>Yom Hashoah </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomHazikaron">
+				<source>Yom Hazikaron</source>
+				<target>Yom Hazikaron</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomHaAtzmaut">
+				<source>Yom Ha'Atzmaut</source>
+				<target>Yom Ha'Atzmaut</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachSheini">
+				<source>Pesach Sheini</source>
+				<target>Pesach Sheini</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.LagBOmer">
+				<source>Lag B'Omer </source>
+				<target>Lag B'Omer </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomYerushalayim">
+				<source>Yom Yerushalayim </source>
+				<target>Yom Yerushalayim </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevShavuot">
+				<source>Erev Shavuot </source>
+				<target>Erev Shavuot </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShavuotI">
+				<source>Shavuot I </source>
+				<target>Shavuot I </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShavuotII_DiasporOnly">
+				<source>Shavuot II (Diaspora only) </source>
+				<target>Shavuot II (Diaspora only) </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inIsrael">
+				<source>Isru Chag (7 Sivan, in Israel)</source>
+				<target>Isru Chag (7 Sivan, in Israel)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inDiaspora">
+				<source>Isru Chag (8 Sivan, in Diaspora)</source>
+				<target>Isru Chag (8 Sivan, in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTammuz">
+				<source>Tzom Tammuz </source>
+				<target>Tzom Tammuz </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TishaBAv">
+				<source>Tisha B'Av </source>
+				<target>Tisha B'Av </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TuBAv">
+				<source>Tu B'Av </source>
+				<target>Tu B'Av </target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.field.relMinToSelectedTimerEvent">
+				<source>minutes relative to the selected named date</source>
+				<target>Minuten relativ zum ausgewählten benannten Datum</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.field.durationMinutes">
+				<source>active time span relative to startpoint in minutes</source>
+				<target>Aktive Zeitspanne relativ zum Periodenstart in Minuten</target>
 			</trans-unit>
 
 			<!-- txTimerDatePeriod -->
@@ -265,11 +535,11 @@
 			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerGeneral.field.ultimateBeginningTimer">
 				<source>Beginning of the period for calculations of the timer periods</source>
-				<target>Beginn der Zeitraums für Berechnungen der Perioden des Timers</target>
+				<target>Beginn des Zeitraums für Berechnungen der Perioden des Timers</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerGeneral.field.ultimateEndingTimer">
 				<source>Ending of the period for calculations of the timer periods</source>
-				<target>Beginn der Zeitraums für Berechnungen der Perioden des Timers</target>
+				<target>Beginn des Zeitraums für Berechnungen der Perioden des Timers</target>
 			</trans-unit>
 			<!-- helpful stuff txTimerGeneral -->
 			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.monday">
@@ -443,13 +713,13 @@
 				<source>Example: In a file [yamlPeriodFilePath] in YAML format, the list of active time periods is defined by defining a start time, an end time, a title and the time zone. In order to output the list in calendar format, you can use the Java script framework [calendarJsFilePath] and the associated style sheets [calendarCssFilePath] to be defined in the content element `periodList` and add your own JavaScript [customCalendarJsFilePath] and style sheets [customCalendarCssFilePath].</source>
 				<target>Beispiel: In einer Datei [yamlPeriodFilePath] im YAML-Format wird die Liste der aktiven Zeitbereiche definiert, indem man eine Startzeit, eine Endzeit, einen Titem und die Zeitzone definiert. Um die Liste im Kalenderformat auszugeben, kann man im Content-Element `periodList` das zu definierende Javaskript-Framework [calendarJsFilePath] und die dazugehörigen Stylesheets [calendarCssFilePath] nutzen und mit eigenen JavaScript [customCalendarJsFilePath] und Stylesheets [customCalendarCssFilePath] ergänzen.</target>
 			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.recursiveLoopLimit">
+				<source>Max Count of recursion for determination of the overlappings of the ranges</source>
+				<target>Maximale Anzahl von Recursionen bei Bestimmung der Überschneidungen</target>
+			</trans-unit>
 			<trans-unit id="flexform.timer.rangeListTimer.field.yamlPeriodFilePath">
 				<source>yaml-file with list of active periods</source>
 				<target>yaml-Datei mit Liste der aktiven Perioden</target>
-			</trans-unit>
-			<trans-unit id="flexform.timer.rangeListTimer.field.yamlTextField.label">
-				<source>yaml-text-field for list of active periods (no validation-check)</source>
-				<target>yaml-Textfeld mit Liste der aktiven Perioden (keine Validierungsprüfung)</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.rangeListTimer.field.yamlTextField.placeholder">
 				<source># example YAML-structure (remove #)
@@ -482,8 +752,8 @@
 				<target>Verrechne eine Liste mit aktiven Timer-Definitionen mit verbotenen Timer-Definitionen wie zum Beispiel Feiertagen. Die Timerlisten können jeweils in einer Yaml-Datei und/oder in einer Datenbanktabelle definiert werden.</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerRangeList.sheet.description">
-				<source>The active list consists of information in a Yaml file [yamlActiveFilePath] and/or in a list of database references [databaseActiveRangeList]. The resulting ranges are reduced and, if necessary, subdivided by the list of forbidden ranges defined in a Yamle file [yamlForbiddenFilePath] or in a list of database references [databaseForbiddenRangeList].</source>
-				<target>Die aktiven Liste setzt sich zusammen aus Angaben in einer Yaml-Datei [yamlActiveFilePath] und/oder in einer Liste von Datenbankreferenzen [databaseActiveRangeList]. Die daraus resultierenden Bereichen werden verkleinert und gegebenenfalls unterteilt durch die Liste der Verbotenen Bereiche, die in einer Yamle-Datei [yamlForbiddenFilePath] oder in einem List von Datenbankreferenzen [databaseForbiddenRangeList] definiert sind.</target>
+				<source>The active list consists of information in a Yaml file [yamlActiveFilePath] and/or in a list of database references [databaseActiveRangeList]. The resulting ranges are reduced and, if necessary, subdivided by the list of forbidden ranges defined in a Yamle file [yamlForbiddenFilePath] or in a list of database references [databaseForbiddenRangeList]. Example: Every Friday (defined in [yamlActiveFilePath]) except during holidays and public holidays (defined in [yamlForbiddenFilePath]).</source>
+				<target>Die aktiven Liste setzt sich zusammen aus Angaben in einer Yaml-Datei [yamlActiveFilePath] und/oder in einer Liste von Datenbankreferenzen [databaseActiveRangeList]. Die daraus resultierenden Bereichen werden verkleinert und gegebenenfalls unterteilt durch die Liste der verbotenen Bereiche, die in einer Yaml-Datei [yamlForbiddenFilePath] oder in einer Liste von Datenbankreferenzen [databaseForbiddenRangeList] definiert sind. Beispiel: Jeden Freitag (definiert in [yamlActiveFilePath]) außer in den Ferien und an Feriertagen (definiert in [yamlForbiddenFilePath]).</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.rangeListTimer.field.yamlActiveFilePath">
 				<source>file-path of yaml-definitions with list of active periods</source>

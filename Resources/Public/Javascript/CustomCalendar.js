@@ -14,14 +14,13 @@ let events = [
 
 function convertListToDailyEvents(eventList) {
     let result = {};
-    console.log(eventList);
     eventList.forEach((item) => {
         let helpDateString = item.Date;
         let helpDate = helpDateString.split('-');
         let startDate = new Date(helpDate[0], (helpDate[1]-1), helpDate[2]);
         startDate.setDate(startDate.getDate() - 1);
         let key = Math.floor(startDate.getTime() / 86400);
-        for (let i = 1; i < item.days; i++) {
+        for (let i = 0; i < item.days; i++) {
             key = Math.floor(startDate.getTime() / 86400);
             startDate.setDate(startDate.getDate() + 1);
             if (result[key]) {
@@ -31,18 +30,18 @@ function convertListToDailyEvents(eventList) {
                     'Title': item.Title,
                     'Date': new Date(startDate.getTime()),
                     'key' : key,
-                }
+                };
             }
         }
     });
-    console.log(result);
     let resultList =  Object.values(result);
     resultList.sort((a, b) => {
-        if (a.key < b.key) return -1
-        return a.key > b.key ? 1 : 0
+        if (a.key < b.key) {
+          return -1;
+        }
+        return a.key > b.key ? 1 : 0;
 
-    })
-    console.log(resultList);
+    });
     return resultList;
 }
 
@@ -65,13 +64,6 @@ let element = document.getElementById('calendar');
 let eventListJson = element.dataset.events;
 if (eventListJson) {
     let eventlist = JSON.parse(eventListJson);
-
-    console.log('eventListJson');
-    console.log(eventListJson);
-    console.log('eventlist');
-    console.log(eventlist);
     let myEvents = convertListToDailyEvents(eventlist);
-    console.log('myEvents');
-    console.log(myEvents);
     caleandar(element, myEvents, settings);
 }

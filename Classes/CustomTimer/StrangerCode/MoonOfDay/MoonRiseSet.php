@@ -1,6 +1,7 @@
 <?php
 
 namespace Porthd\Timer\CustomTimer\StrangerCode\MoonOfDay;
+
 // https://pastebin.com/TYfssCph visited 20201230
 // rename the namespace for easy wiring with timer-extension for TYPO3
 // change stdClass to Array in function calculateMoonTimes
@@ -33,7 +34,6 @@ namespace Porthd\Timer\CustomTimer\StrangerCode\MoonOfDay;
  */
 class MoonRiseSet
 {
-
     /**
      * Calculates the moon rise/set for a given location and day of year
      *
@@ -42,11 +42,10 @@ class MoonRiseSet
      * @param int $year
      * @param float $lat
      * @param float $lon
-     * @return array
+     * @return array<mixed>
      */
-    public static function calculateMoonTimes(int $month, int $day, int $year, float $lat, float $lon):array
+    public static function calculateMoonTimes(int $month, int $day, int $year, float $lat, float $lon): array
     {
-
         $utrise = $utset = 0;
 
         $timezone = (int)($lon / 15);
@@ -60,12 +59,11 @@ class MoonRiseSet
         $rise = false;
         $set = false;
         $above = false;
-        $hour = 1;
+        $hour = 1.0;
         $ym = self::sinAlt($date, $hour - 1, $lon, $cglat, $sglat) - $sinho;
 
         $above = $ym > 0;
         while ($hour < 25 && (false == $set || false == $rise)) {
-
             $yz = self::sinAlt($date, $hour, $lon, $cglat, $sglat) - $sinho;
             $yp = self::sinAlt($date, $hour + 1, $lon, $cglat, $sglat) - $sinho;
 
@@ -98,7 +96,6 @@ class MoonRiseSet
 
             $ym = $yp;
             $hour += 2.0;
-
         }
         // Convert to unix timestamps and return as an object - former Code :$retVal = new stdClass();
         $retVal = [];
@@ -109,7 +106,6 @@ class MoonRiseSet
         $retVal['flagMoonset'] = $set;
         $retVal['moonset'] = $set ? mktime($utset['hrs'], $utset['min'], 0, $month, $day, $year) : mktime(0, 0, 0, $month, $day + 1, $year);
         return $retVal;
-
     }
 
     /**
@@ -121,10 +117,14 @@ class MoonRiseSet
      *    well, this routine is producing sensible answers
      *
      *  results passed as array [nz, z1, z2, xe, ye]
+     *
+     * @param float $ym
+     * @param float $yz
+     * @param float $yp
+     * @return array<mixed>
      */
-    private static function quad($ym, $yz, $yp)
+    private static function quad(float $ym, float $yz, float $yp)
     {
-
         $nz = $z1 = $z2 = 0;
         $a = 0.5 * ($ym + $yp) - $yz;
         $b = 0.5 * ($yp - $ym);
@@ -142,16 +142,22 @@ class MoonRiseSet
         }
 
         return [$nz, $z1, $z2, $xe, $ye];
-
     }
 
     /**
      *    this rather mickey mouse function takes a lot of
      *  arguments and then returns the sine of the altitude of the moon
      */
+    /**
+     * @param float|int $mjd
+     * @param float|int $hour
+     * @param float|int $glon
+     * @param float|int $cglat
+     * @param float|int $sglat
+     * @return float
+     */
     private static function sinAlt($mjd, $hour, $glon, $cglat, $sglat)
     {
-
         $mjd += $hour / 24;
         $t = ($mjd - 51544.5) / 36525;
         $objpos = self::minimoon($t);
@@ -161,26 +167,33 @@ class MoonRiseSet
         $decRad = deg2rad($dec);
         $tau = 15 * (self::lmst($mjd, $glon) - $ra);
 
-        return $sglat * sin($decRad) + $cglat * cos($decRad) * cos(deg2rad($tau));
-
+        return (float)($sglat * sin($decRad) + $cglat * cos($decRad) * cos(deg2rad($tau)));
     }
 
     /**
      *    returns an angle in degrees in the range 0 to 360
+     *
+     * @param float $x
+     * @return float
      */
     private static function degRange($x)
     {
         $b = $x / 360;
         $a = 360 * ($b - (int)$b);
-        return ($a < 0 ? $a + 360 : $a);
+        return ($a < 0 ? $a + 360.0 : $a);
     }
 
-    private static function lmst($mjd, $glon)
+    /**
+     * @param float $mjd
+     * @param float $glon
+     * @return float
+     */
+    private static function lmst(float $mjd, float $glon)
     {
         $d = $mjd - 51544.5;
         $t = $d / 36525;
         $lst = self::degRange(280.46061839 + 360.98564736629 * $d + 0.000387933 * $t * $t - $t * $t * $t / 38710000);
-        return $lst / 15 + $glon / 15;
+        return $lst / 15.0 + $glon / 15.0;
     }
 
     /**
@@ -188,9 +201,12 @@ class MoonRiseSet
      * claimed good to 5' (angle) in ra and 1' in dec
      * tallies with another approximate method and with ICE for a couple of dates
      */
-    private static function minimoon($t)
+    /**
+     * @param float $t
+     * @return float[]
+     */
+    private static function minimoon(float $t): array
     {
-
         $p2 = 6.283185307;
         $arc = 206264.8062;
         $coseps = 0.91748;
@@ -248,13 +264,15 @@ class MoonRiseSet
         $ra = $ra < 0 ? $ra + 24 : $ra;
 
         return [$dec, $ra];
-
     }
 
     /**
      *    returns the self::fractional part of x as used in self::minimoon and minisun
+     *
+     * @param float $x
+     * @return float
      */
-    private static function frac($x)
+    private static function frac(float $x)
     {
         $x -= (int)$x;
         return $x < 0 ? $x + 1 : $x;
@@ -264,10 +282,14 @@ class MoonRiseSet
      * Takes the day, month, year and hours in the day and returns the
      * modified julian day number defined as mjd = jd - 2400000.5
      * checked OK for Greg era dates - 26th Dec 02
+     *
+     * @param int $month
+     * @param int $day
+     * @param int $year
+     * @return int
      */
-    private static function modifiedJulianDate($month, $day, $year)
+    private static function modifiedJulianDate(int $month, int $day, int $year)
     {
-
         if ($month <= 2) {
             $month += 12;
             $year--;
@@ -283,19 +305,19 @@ class MoonRiseSet
 
         $a = 365 * $year - 679004;
         return $a + $b + (int)(30.6001 * ($month + 1)) + $day;
-
     }
 
     /**
      * Converts an hours decimal to hours and minutes
+     *
+     * @param float $hours
+     * @return int[]
      */
     private static function convertTime($hours)
     {
-
         $hrs = (int)($hours * 60 + 0.5) / 60.0;
         $h = (int)($hrs);
         $m = (int)(60 * ($hrs - $h) + 0.5);
         return ['hrs' => $h, 'min' => $m];
-
     }
 }

@@ -35,37 +35,58 @@ use Porthd\Timer\Utilities\TcaUtility;
  */
 trait GeneralTimerTrait
 {
+    /**
+     * @param array<mixed> $list
+     * @param array<mixed> $params
+     * @return int
+     */
+    protected function countParamsInList(array $list, array $params): int
+    {
+        $count = 0;
+        foreach ($list as $key) {
+            if (isset($params[$key])) {
+                $count++;
+            }
+        }
+        return $count;
+    }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validateUltimate(array $params = []): bool
     {
         $flag = (!empty($params[TimerInterface::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = ($flag && (false !== date_create_from_format(
+        $flag = (
+            $flag && (
+                false !== date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
-                    $params[TimerInterface::ARG_ULTIMATE_RANGE_BEGINN])
+                    $params[TimerInterface::ARG_ULTIMATE_RANGE_BEGINN]
+                )
             )
         );
         $flag = $flag && (!empty($params[TimerInterface::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (false !== date_create_from_format(
-                    TimerInterface::TIMER_FORMAT_DATETIME,
-                    $params[TimerInterface::ARG_ULTIMATE_RANGE_END])
+        return ($flag && (
+            false !== date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                $params[TimerInterface::ARG_ULTIMATE_RANGE_END]
             )
+        )
         );
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validateFlagZone(array $params = []): bool
     {
-        return( (isset($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE])) &&
-            (!is_array($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE]) &&
+        return((isset($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE])) &&
+            (
+                !is_array($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE]) &&
                 !is_object($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE]) &&
                 ($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE] !== null)
             ) &&(in_array(
@@ -78,7 +99,7 @@ trait GeneralTimerTrait
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validateZone(array $params = []): bool
@@ -91,7 +112,7 @@ trait GeneralTimerTrait
 
     /**
      * @param TimerStartStopRange $nextRange
-     * @param array $params
+     * @param array<mixed> $params
      * @param DateTime $dateBelowNextActive
      * @return TimerStartStopRange
      * @throws TimerException
@@ -117,10 +138,12 @@ trait GeneralTimerTrait
             if (
                 ($nextBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_END]) || // case 0
                 (
-                    (($nextBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+                    (
+                        ($nextBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
                         ($nextEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
                     ) ||
-                    (($nextBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+                    (
+                        ($nextBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
                         ($nextEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_END])
                     )
                 ) || // case 2.a, 2.b, 2
@@ -135,8 +158,10 @@ trait GeneralTimerTrait
                 if (
                     ($nextEndingFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) // case 1
                 ) { // case 4
-                    $testBegin = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
-                        $params[self::ARG_ULTIMATE_RANGE_BEGINN]);
+                    $testBegin = DateTime::createFromFormat(
+                        self::TIMER_FORMAT_DATETIME,
+                        $params[self::ARG_ULTIMATE_RANGE_BEGINN]
+                    );
                     $testBegin->sub(new DateInterval('PT1S'));
                     $nextRange = $this->nextActive($testBegin, $params);
                 } else {
@@ -160,7 +185,7 @@ trait GeneralTimerTrait
 
     /**
      * @param TimerStartStopRange $prevRange
-     * @param array $params
+     * @param array<mixed> $params
      * @param DateTime $dateAbovePrevActive
      * @return TimerStartStopRange
      * @throws TimerException
@@ -187,10 +212,12 @@ trait GeneralTimerTrait
             if (
                 ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) || // case 4
                 (
-                    (($prevBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+                    (
+                        ($prevBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
                         ($prevEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
                     ) ||
-                    (($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
+                    (
+                        ($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
                         ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_END])
                     )
                 ) || // case 2.a, 2.b, 2
@@ -205,8 +232,10 @@ trait GeneralTimerTrait
                 if (
                     ($prevBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_END]) // case 1
                 ) { // case 0
-                    $testBegin = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
-                        $params[self::ARG_ULTIMATE_RANGE_END]);
+                    $testBegin = DateTime::createFromFormat(
+                        self::TIMER_FORMAT_DATETIME,
+                        $params[self::ARG_ULTIMATE_RANGE_END]
+                    );
                     $testBegin->add(new DateInterval('PT1S'));
                     // `prevActive` is part of the interface for the timer
                     $prevRange = $this->prevActive($testBegin, $params);
@@ -221,7 +250,6 @@ trait GeneralTimerTrait
                         if (!$testPrevRange->hasResultExist()) { // correct the recursive result
                             $prevRange->failOnlyPrevActive($dateAbovePrevActive);
                         }
-
                     } else { // case something forgotten ?
                         $prevRange->failOnlyNextActive($dateAbovePrevActive);
                     }
@@ -230,5 +258,4 @@ trait GeneralTimerTrait
         }
         return clone $prevRange;
     }
-
 }

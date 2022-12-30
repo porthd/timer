@@ -90,9 +90,11 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function selfName()
     {
-        $this->assertEquals(self::NAME_TIMER,
+        $this->assertEquals(
+            self::NAME_TIMER,
             $this->subject::selfName(),
-            'The name musst be defined.');
+            'The name musst be defined.'
+        );
     }
 
 
@@ -102,16 +104,24 @@ class MoonphaseRelTimerTest extends TestCase
     public function getSelectorItem()
     {
         $result = $this->subject->getSelectorItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertGreaterThan(1,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertGreaterThan(
+            1,
             count($result),
-            'The array  must contain at least two items.');
-        $this->assertIsString($result[0],
-            'The first item must be an string.');
-        $this->assertEquals($result[1],
+            'The array  must contain at least two items.'
+        );
+        $this->assertIsString(
+            $result[0],
+            'The first item must be an string.'
+        );
+        $this->assertEquals(
+            $result[1],
             self::NAME_TIMER,
-            'The second term must the name of the timer.');
+            'The second term must the name of the timer.'
+        );
     }
 
     /**
@@ -120,38 +130,54 @@ class MoonphaseRelTimerTest extends TestCase
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertEquals(1,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertEquals(
+            1,
             count($result),
-            'The array  must contain one Item.');
-        $this->assertEquals(array_keys($result),
+            'The array  must contain one Item.'
+        );
+        $this->assertEquals(
+            array_keys($result),
             [self::NAME_TIMER],
-            'The key must the name of the timer.');
-        $this->assertIsString($result[self::NAME_TIMER],
-            'The value must be type of string.');
+            'The key must the name of the timer.'
+        );
+        $this->assertIsString(
+            $result[self::NAME_TIMER],
+            'The value must be type of string.'
+        );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; // this is the
         // projecktpath
         $filePath = $result[self::NAME_TIMER];
         if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
-        } else if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+                substr(
+                    $filePath,
+                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
+                );
+        } elseif (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-            $this->assertTrue((false),'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
+                substr(
+                    $filePath,
+                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
+                );
+            $this->assertTrue((false), 'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue($flag,
-            'The file with the flexform content does not exist.');
+        $this->assertTrue(
+            $flag,
+            'The file with the flexform content does not exist.'
+        );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue((!(!$flexArray)),
-            'The filecontent is valid xml.');
+        $this->assertTrue(
+            (!(!$flexArray)),
+            'The filecontent is valid xml.'
+        );
     }
 
     public function dataProvider_isAllowedInRange()
@@ -248,11 +274,9 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function isAllowedInRange($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
             $this->assertEquals(
@@ -260,7 +284,6 @@ class MoonphaseRelTimerTest extends TestCase
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
             );
-
         }
     }
 
@@ -284,7 +307,6 @@ class MoonphaseRelTimerTest extends TestCase
         ];
         foreach ($list as $unsetParam => $expects
         ) {
-
             $item = [
                 'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
@@ -349,7 +371,6 @@ class MoonphaseRelTimerTest extends TestCase
                     ],
                 ],
             ];
-
         }
         // Variation for ultimateBeginningTimer
         foreach ([
@@ -408,18 +429,15 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $paramTest = array_merge($params['rest'], $params['general']);
             $this->assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
-
         }
     }
 
@@ -547,7 +565,6 @@ class MoonphaseRelTimerTest extends TestCase
                     'general' => $general,
                 ],
             ];
-
         }
 
         // variation of durationMinutes
@@ -588,7 +605,6 @@ class MoonphaseRelTimerTest extends TestCase
                     'general' => $general,
                 ],
             ];
-
         }
 
 
@@ -601,25 +617,21 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function validateSpeciallByVariationArgumentsInParam($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $paramTest = array_merge($params['required'], $params['optional'], $params['general']);
             $this->assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
-
         }
     }
 
 
     public function dataProviderGetTimeZoneOfEvent()
     {
-
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
@@ -739,7 +751,6 @@ class MoonphaseRelTimerTest extends TestCase
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
@@ -850,8 +861,11 @@ class MoonphaseRelTimerTest extends TestCase
                     'result' => $flagResult,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                        new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $dateString,
+                        new DateTimeZone('Europe/Berlin')
+                    ),
                     'setting' => [
                         'moonPhase' => 'full_moon',
                         'relMinToSelectedTimerEvent' => '2880',  //= 2 day rdelayto the fullmoon
@@ -864,7 +878,6 @@ class MoonphaseRelTimerTest extends TestCase
                     ],
                 ],
             ];
-
         }
         foreach (['2075-12-24 09:50:00', '2075-12-24 09:51:00'] as $dateString) {
             $result[] = [
@@ -873,8 +886,11 @@ class MoonphaseRelTimerTest extends TestCase
                     'result' => false,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                        new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $dateString,
+                        new DateTimeZone('Europe/Berlin')
+                    ),
                     'setting' => [
                         'moonPhase' => 'full_moon',
                         'relMinToSelectedTimerEvent' => '2880',  //= 2 day rdelayto the fullmoon
@@ -924,8 +940,11 @@ class MoonphaseRelTimerTest extends TestCase
                         'result' => $flagResult,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                            new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            $dateString,
+                            new DateTimeZone('Europe/Berlin')
+                        ),
                         'setting' => [
                             'moonPhase' => 'full_moon',
                             'relMinToSelectedTimerEvent' => '2880',  //= 2 day rdelayto the fullmoon
@@ -939,7 +958,6 @@ class MoonphaseRelTimerTest extends TestCase
                     ],
                 ];
             }
-
         }
 
         foreach ([
@@ -990,8 +1008,11 @@ class MoonphaseRelTimerTest extends TestCase
                         'result' => $flagResult,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                            new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            $dateString,
+                            new DateTimeZone('Europe/Berlin')
+                        ),
                         'setting' => [
                             'moonPhase' => 'full_moon',
                             'relMinToSelectedTimerEvent' => $shiftMinute,  //= 2 day rdelayto the fullmoon
@@ -1005,7 +1026,6 @@ class MoonphaseRelTimerTest extends TestCase
                     ],
                 ];
             }
-
         }
 
         /**
@@ -1051,8 +1071,11 @@ class MoonphaseRelTimerTest extends TestCase
                         'result' => $flagResult,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $dateString,
-                            new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            $dateString,
+                            new DateTimeZone('Europe/Berlin')
+                        ),
                         'setting' => [
                             'moonPhase' => $typeOfMoon,
                             'relMinToSelectedTimerEvent' => '0',  //= 2 day rdelayto the fullmoon
@@ -1066,7 +1089,6 @@ class MoonphaseRelTimerTest extends TestCase
                     ],
                 ];
             }
-
         }
         return $result;
     }
@@ -1077,11 +1099,9 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function isActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = array_merge($params['setting']);
             $value = clone $params['value'];
             $this->assertEquals(
@@ -1094,15 +1114,12 @@ class MoonphaseRelTimerTest extends TestCase
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
-
         }
     }
 
 
     public function dataProviderNextActive()
     {
-
-
         $result = [];
 //        '2022-06-16 13:51:00' => false,
 //                     '2022-06-16 13:52:00' => true, // calc:.:  	Tue Jun 14 2022 13:52:37 Europe/berlin
@@ -1117,8 +1134,11 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-06-16 13:51:00',
-                    new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    '2022-06-16 13:51:00',
+                    new DateTimeZone('Europe/Berlin')
+                ),
                 'setting' => [
                     'moonPhase' => 'full_moon',
                     'relMinToSelectedTimerEvent' => '2880',  //= 2 days delay to the fullmoon ('2022-06-14 13:52:00')
@@ -1141,8 +1161,11 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-06-16 13:53:00',
-                    new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    '2022-06-16 13:53:00',
+                    new DateTimeZone('Europe/Berlin')
+                ),
                 'setting' => [
                     'moonPhase' => 'full_moon',
                     'relMinToSelectedTimerEvent' => '2880',  //= 2 day relative to the fullmoon
@@ -1186,11 +1209,9 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function nextActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = $params['setting'];
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
@@ -1202,14 +1223,11 @@ class MoonphaseRelTimerTest extends TestCase
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
-
         }
     }
 
     public function dataProviderPrevActive()
     {
-
-
         $result = [];
 //        '2022-06-16 13:51:00' => false,
 //                     '2022-06-16 13:52:00' => true, // calc:.:  	Tue Jun 14 2022 13:52:37 Europe/berlin
@@ -1224,8 +1242,11 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-15 22:38:00',
-                    new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    '2022-07-15 22:38:00',
+                    new DateTimeZone('Europe/Berlin')
+                ),
                 'setting' => [
                     'moonPhase' => 'full_moon',
                     'relMinToSelectedTimerEvent' => '2880',  //= 2 days delay to the fullmoon ('2022-06-14 13:52:00')
@@ -1248,8 +1269,11 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-15 22:41:00',
-                    new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    '2022-07-15 22:41:00',
+                    new DateTimeZone('Europe/Berlin')
+                ),
                 'setting' => [
                     'moonPhase' => 'full_moon',
                     'relMinToSelectedTimerEvent' => '2880',  //= 2 day rdelayto the fullmoon
@@ -1272,8 +1296,11 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-15 23:41:00',
-                    new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    '2022-07-15 23:41:00',
+                    new DateTimeZone('Europe/Berlin')
+                ),
                 'setting' => [
                     'moonPhase' => 'full_moon',
                     'relMinToSelectedTimerEvent' => '2880',  //= 2 day rdelayto the fullmoon
@@ -1296,8 +1323,11 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-07-16 00:41:00',
-                    new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    '2022-07-16 00:41:00',
+                    new DateTimeZone('Europe/Berlin')
+                ),
                 'setting' => [
                     'moonPhase' => 'full_moon',
                     'relMinToSelectedTimerEvent' => '2880',  //= 2 day rdelayto the fullmoon
@@ -1341,11 +1371,9 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function prevActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = $params['setting'];
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
@@ -1357,8 +1385,6 @@ class MoonphaseRelTimerTest extends TestCase
                 ($flag),
                 'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
-
         }
     }
-
 }

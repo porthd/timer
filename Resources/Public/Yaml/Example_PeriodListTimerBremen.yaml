@@ -70,7 +70,7 @@ periodlist:
     data:
       description: '- free to fill and free to add new attributes -'
     start: '2022-10-17 00:00:00'
-    stop: '2022-10-29 23:59:59'
+    stop: '2022-10-28 23:59:59'
     zone: 'Europe/Berlin'
   -
     title: 'Weihnachtsferien Bremen'

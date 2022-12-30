@@ -31,7 +31,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Event extends AbstractEntity implements TimerModellInterface
 {
-
     /**
      * title
      *
@@ -80,7 +79,7 @@ class Event extends AbstractEntity implements TimerModellInterface
      *
      * @var bool
      */
-    protected $flagTest = '';
+    protected $flagTest = false;
 
     /**
      * Returns the title
@@ -232,5 +231,4 @@ class Event extends AbstractEntity implements TimerModellInterface
     {
         $this->flagTest = $flagTest;
     }
-
 }

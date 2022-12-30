@@ -35,7 +35,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ListOfEventsService
 {
-
     protected const ARGUMENT_START_DATETIME = 'start';
     protected const ARGUMENT_STOP_DATETIME = 'stop';
     protected const SUBKEY_RANGE = 'range';
@@ -47,115 +46,61 @@ class ListOfEventsService
     protected const KEY_EVENT_LIST_TIMER = 'timer';
 
     protected const DEFAULT_MAX_COUNT = 25;
-    /**
-     * @param DateTime $highestEndStopTime
-     * @param TimerStartStopRange $range
-     * @param int $key
-     * @param DateTime $highestEndStartTime
-     * @param int $highestLowKey
-     * @return array
-     */
-    protected static function checkIfRangeLowerGreatest(
-        &$changed,
-        $currentLimitInfos,
-        TimerStartStopRange $range,
-        int $key
-    ): array {
-        if (($currentLimitInfos[self::ARGUMENT_STOP_DATETIME] < $range->getEnding()) ||
-            ($currentLimitInfos[self::ARGUMENT_KEY] === -1)
-        ) {
-            $currentLimitInfos[self::ARGUMENT_STOP_DATETIME] = $range->getEnding();
-            $currentLimitInfos[self::ARGUMENT_START_DATETIME] = $range->getBeginning();
-            $currentLimitInfos[self::ARGUMENT_KEY] = $key;
-            $changed = true;
-        } else {
-            if (($currentLimitInfos[self::ARGUMENT_STOP_DATETIME] == $range->getEnding()) &&
-                ($currentLimitInfos[self::ARGUMENT_START_DATETIME] < $range->getBeginning())
-            ) {
-                // The variable for the ending is already set.
-                $currentLimitInfos[self::ARGUMENT_START_DATETIME] = clone $range->getBeginning();
-                $currentLimitInfos[self::ARGUMENT_KEY] = $key;
-                $changed = true;
-            }
-        }
-        return $currentLimitInfos;
-    }
-
 
     /**
-     * @param $changed
-     * @param array $currentLimitInfos
-     * @param TimerStartStopRange $range
-     * @param int $key
-     * @return array
-     */
-    protected static function checkIfRangeGreaterLowest(
-        &$changed,
-        $currentLimitInfos,
-        TimerStartStopRange $range,
-        int $key
-    ): array {
-        if (($currentLimitInfos[self::ARGUMENT_START_DATETIME] > $range->getBeginning()) ||
-            ($currentLimitInfos[self::ARGUMENT_KEY] === -1)
-        ) {
-            $currentLimitInfos[self::ARGUMENT_START_DATETIME] = clone $range->getBeginning();
-            $currentLimitInfos[self::ARGUMENT_STOP_DATETIME] = clone $range->getEnding();
-            $currentLimitInfos[self::ARGUMENT_KEY] = $key;
-            $changed = true;
-        } else {
-            if (($currentLimitInfos[self::ARGUMENT_START_DATETIME] == $range->getBeginning()) &&
-                ($currentLimitInfos[self::ARGUMENT_STOP_DATETIME] < $range->getEnding())
-            ) {
-                $currentLimitInfos[self::ARGUMENT_STOP_DATETIME] = clone $range->getEnding();
-                $currentLimitInfos[self::ARGUMENT_KEY] = $key;
-                $changed = true;
-            }
-        }
-        return $currentLimitInfos;
-    }
-
-    /**
-     * @param $eventsTimerList
+     * @param array<mixed> $eventsTimerList
      * @param DateTime $timerEventZone
      * @param LoopLimiter $loopLimiter
-     * @param false $flagReverse
+     * @param bool $flagReverse
      * @param int $maxCount
-     * @param DateTime|null $maxLate
-     * @return array
+     * @return array<mixed>
      */
     public static function generateEventsListFromTimerList(
-        $eventsTimerList,
+        array $eventsTimerList,
         DateTime $timerEventZone,
         LoopLimiter $loopLimiter,
-        $flagReverse = false,
+        bool $flagReverse = false,
         int $maxCount = TimerConst::SAVE_LIMIT_MAX_EVENTS
     ): array {
         /** @var ListOfTimerService $timerResolver */
         $timerResolver = GeneralUtility::makeInstance(ListOfTimerService::class);
         if ($flagReverse) {
-            return self::listOfEventsBelowStartTime($timerEventZone, $eventsTimerList, $timerResolver, $loopLimiter,
-                $maxCount);
+            return self::listOfEventsBelowStartTime(
+                $timerEventZone,
+                $eventsTimerList,
+                $timerResolver,
+                $loopLimiter,
+                $maxCount
+            );
         }
-        return self::listOfEventsAboveStartTime($timerEventZone, $eventsTimerList, $timerResolver, $loopLimiter,
-            $maxCount);
+        return self::listOfEventsAboveStartTime(
+            $timerEventZone,
+            $eventsTimerList,
+            $timerResolver,
+            $loopLimiter,
+            $maxCount
+        );
     }
 
     /**
      * @param DateTime $timerEventZone
-     * @param $eventsTimerList
+     * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
-     * @return array
+     * @return array<mixed>
      */
     protected static function timerListBelowStartDate(
         DateTime $timerEventZone,
-        $eventsTimerList,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
         [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         foreach ($eventsTimerList as $key => $item) {
-            [$timerSelectName, $timerFlexParameter] = self::extractSelectorAndTimer($item, $getterSelectName,
-                $getterFlexParameter);
+            [$timerSelectName, $timerFlexParameter] = self::extractSelectorAndTimer(
+                $item,
+                $getterSelectName,
+                $getterFlexParameter
+            );
 
             /** @var TimerStartStopRange $range */
             $range = $timerResolver->prevActive(
@@ -173,12 +118,12 @@ class ListOfEventsService
                 ($range->getBeginning() < $range->getEnding()) &&
                 ($flagAllowed)
             ) {
-
                 $timerItem[self::KEY_EVENT_LIST_TIMER] = $item;
                 $timerItem[self::KEY_EVENT_LIST_RANGE] = clone $range;
                 $timerItem[self::KEY_EVENT_LIST_GAP] = ceil(
                     abs(
-                        ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60)
+                        ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
+                    )
                 );
                 $listOfTimers[$key] = $timerItem;
             }
@@ -188,20 +133,23 @@ class ListOfEventsService
 
     /**
      * @param DateTime $timerEventZone
-     * @param $eventsTimerList
+     * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
-     * @return array
+     * @return array<mixed>
      */
     protected static function timerListAboveStartDate(
         DateTime $timerEventZone,
-        $eventsTimerList,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
         [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         foreach ($eventsTimerList as $key => $item) {
-            [$timerSelectName, $timerFlexParameterList] = self::extractSelectorAndTimer($item, $getterSelectName,
-                $getterFlexParameter);
+            [$timerSelectName, $timerFlexParameterList] = self::extractSelectorAndTimer(
+                $item,
+                $getterSelectName,
+                $getterFlexParameter
+            );
             /** @var TimerStartStopRange $range */
             $range = $timerResolver->nextActive(
                 $timerSelectName,
@@ -223,7 +171,8 @@ class ListOfEventsService
                 $timerItem[self::KEY_EVENT_LIST_RANGE] = clone $range;
                 $timerItem[self::KEY_EVENT_LIST_GAP] = ceil(
                     abs(
-                        ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60)
+                        ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
+                    )
                 );
                 $listOfTimers[$key] = $timerItem;
                 unset($range);
@@ -234,16 +183,15 @@ class ListOfEventsService
 
     /**
      * @param DateTime $timerEventZone
-     * @param $eventsTimerList
+     * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
      * @param int $maxCount
-     * @param DateTime|null $maxLate
-     * @return array
+     * @return array<mixed>
      */
     protected static function listOfEventsBelowStartTime(
         DateTime $timerEventZone,
-        $eventsTimerList,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver,
         LoopLimiter $loopLimiter,
         int $maxCount = TimerConst::SAVE_LIMIT_MAX_EVENTS
@@ -260,9 +208,10 @@ class ListOfEventsService
         $listOfEvents = [];
         if (!empty($listOfTimers)) {
             $count = 0;
-            $userCompareString = ((empty($loopLimiter->getUserCompareFunction())) ?
-                'Porthd\Timer\Services\ListOfEventsService::compareForBelowList' :
-                $loopLimiter->getUserCompareFunction()
+            $userCompareString = (
+                (empty($loopLimiter->getUserCompareFunction())) ?
+                    'Porthd\Timer\Services\ListOfEventsService::compareForBelowList' :
+                    $loopLimiter->getUserCompareFunction()
             );
             while ($count <= $maxCount) {
                 foreach ($listOfTimers as $key => $timerItem) {
@@ -283,7 +232,6 @@ class ListOfEventsService
                                 $limitInfos->base = $limitInfos->ending;
                                 $limitInfos->index = $key;
                             }
-
                         }
                     }
                 }
@@ -309,14 +257,14 @@ class ListOfEventsService
                     $timerFlexParameter
                 );
                 if (($range->hasResultExist()) &&
-                    ($timerResolver->isAllowedInRange(
-                        $timerSelectName,
-                        $range->getBeginning(),
-                        $timerFlexParameter)
+                    (
+                        $timerResolver->isAllowedInRange(
+                            $timerSelectName,
+                            $range->getBeginning(),
+                            $timerFlexParameter
+                        )
                     )
                 ) {
-
-
                     $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_RANGE] = clone $range;
                     $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_GAP] = abs(
                         ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
@@ -331,7 +279,6 @@ class ListOfEventsService
                 }
 
                 self::reinitBelowLimitInfos($limitInfos, $limitInfos->base);
-
             }
         }
         return $listOfEvents;
@@ -339,16 +286,15 @@ class ListOfEventsService
 
     /**
      * @param DateTime $timerEventZone
-     * @param $eventsTimerList
+     * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
      * @param int $maxCount
-     * @param DateTime|null $maxLate
-     * @return array
+     * @return array<mixed>
      */
     protected static function listOfEventsAboveStartTime(
         DateTime $timerEventZone,
-        $eventsTimerList,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver,
         LoopLimiter $loopLimiter,
         int $maxCount = TimerConst::SAVE_LIMIT_MAX_EVENTS
@@ -364,9 +310,10 @@ class ListOfEventsService
         $listOfEvents = [];
         if (!empty($listOfTimers)) {
             $count = 0;
-            $userCompareString = ((empty($loopLimiter->getUserCompareFunction())) ?
-                'Porthd\Timer\Services\ListOfEventsService::compareForAboveList' :
-                $loopLimiter->getUserCompareFunction()
+            $userCompareString = (
+                (empty($loopLimiter->getUserCompareFunction())) ?
+                    'Porthd\Timer\Services\ListOfEventsService::compareForAboveList' :
+                    $loopLimiter->getUserCompareFunction()
             );
             while ($count <= $maxCount) {
                 foreach ($listOfTimers as $key => $timerItem) {
@@ -409,13 +356,14 @@ class ListOfEventsService
                     $timerFlexParameter
                 );
                 if (($range->hasResultExist()) &&
-                    ($timerResolver->isAllowedInRange(
-                        $timerSelectName,
-                        $range->getEnding(),
-                        $timerFlexParameter)
+                    (
+                        $timerResolver->isAllowedInRange(
+                            $timerSelectName,
+                            $range->getEnding(),
+                            $timerFlexParameter
+                        )
                     )
                 ) {
-
                     $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_RANGE] = clone $range;
                     $listOfTimers[$limitInfos->index][self::KEY_EVENT_LIST_GAP] = abs(
                         ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
@@ -430,14 +378,13 @@ class ListOfEventsService
                 }
 
                 self::reinitAboveLimitInfos($limitInfos, $limitInfos->base);
-
             }
         }
         return $listOfEvents;
     }
 
     /**
-     * @param array $arguments
+     * @param array<mixed> $arguments
      * @param DateTime $basicDateTime
      * @param int $defaultMax
      * @return LoopLimiter
@@ -481,11 +428,11 @@ class ListOfEventsService
                 (!method_exists($method[0], $method[1])) ||
                 (!is_callable($method[0] . '::' . $method[1]))
             ) {
-                throw new TimerException('Your method `$name` is not callable. Check the spelling and the syntax. ' .
+                throw new TimerException(
+                    'Your method `$name` is not callable. Check the spelling and the syntax. ' .
                     ' (`namespace\className->staticMethodName`)',
                     1604857630
                 );
-
             }
             $loopLimiter->setUserCompareFunction($method[0] . '::' . $method[1]);
         } else {
@@ -526,27 +473,34 @@ class ListOfEventsService
     /**
      * @param LoopLimiter $loopLimiter
      * @param int $count
-     * @param stdClass $limitInfos
+     * @param DateTime $baseDate
+     * @param bool $flagAbove
      * @return bool
      */
     protected static function limitsAllowOneMoreLoop(
         LoopLimiter $loopLimiter,
         int $count,
         DateTime $baseDate,
-        $flagAbove
+        bool $flagAbove
     ): bool {
         if ($loopLimiter->isFlagMaxType()) {
             return ($count < $loopLimiter->getMaxCount());
-        } else {
-            if ($flagAbove === true) {
-                return ($baseDate <= $loopLimiter->getMaxLate());
-            } else {
-                return ($loopLimiter->getMaxLate() <= $baseDate);
-            }
         }
+        if ($flagAbove === true) {
+            return ($baseDate <= $loopLimiter->getMaxLate());
+        }
+        return ($loopLimiter->getMaxLate() <= $baseDate);
     }
 
     // Call by magic String
+
+    /**
+     * only for internal use, because the stdClass for $limitInfos has some special definitions, which are needed
+     *
+     * @param TimerStartStopRange $range
+     * @param object $limitInfos
+     * @return bool
+     */
     public static function compareForBelowList(TimerStartStopRange $range, $limitInfos)
     {
         return (($range->getEnding() > $limitInfos->ending) ||
@@ -558,7 +512,15 @@ class ListOfEventsService
     }
 
     // Call by magic String
-    public static function compareForAboveList(TimerStartStopRange $range, $limitInfos)
+
+    /**
+     * only for internal use, because the stdClass for $limitInfos has some special definitions, which are needed
+     *
+     * @param TimerStartStopRange $range
+     * @param object $limitInfos
+     * @return bool
+     */
+    public static function compareForAboveList(TimerStartStopRange $range, $limitInfos): bool
     {
         return (($range->getBeginning() < $limitInfos->beginning) ||
             (
@@ -569,10 +531,10 @@ class ListOfEventsService
     }
 
     /**
-     * @param $item
+     * @param mixed $item
      * @param string $getterSelectName
      * @param string $getterFlexParameter
-     * @return array
+     * @return array<mixed>
      */
     protected static function extractSelectorAndTimer(
         $item,
@@ -594,29 +556,32 @@ class ListOfEventsService
         $timerFlexParameter = FlexFormUtility::flexformArrayFlatten(
             GeneralUtility::xml2array($timerFlexParameterString)
         );
-//        $timerFlexParameter = array_merge(...$timerFlexParameter);
         return [$timerSelectName, $timerFlexParameter];
-    }/**
- * @return string[]
- */
-    protected static function generateGetterNamesForTimerFields(): array
-    {
-        $getterSelectName = 'get' . ucfirst(str_replace(' ',
-                    '',
-                    ucwords(
-                        str_replace('_', ' ', TimerConst::TIMER_FIELD_SELECT)
-                    )
-                )
-            );
-        $getterFlexParameter = 'get' . ucfirst(
-                str_replace(' ',
-                    '',
-                    ucwords(
-                        str_replace('_', ' ', TimerConst::TIMER_FIELD_FLEX_ACTIVE)
-                    )
-                )
-            );
-        return [$getterSelectName, $getterFlexParameter];
     }
 
+    /**
+     * @return string[]
+     */
+    protected static function generateGetterNamesForTimerFields(): array
+    {
+        $getterSelectName = 'get' . ucfirst(
+            str_replace(
+                ' ',
+                '',
+                ucwords(
+                    str_replace('_', ' ', TimerConst::TIMER_FIELD_SELECT)
+                )
+            )
+        );
+        $getterFlexParameter = 'get' . ucfirst(
+            str_replace(
+                ' ',
+                '',
+                ucwords(
+                    str_replace('_', ' ', TimerConst::TIMER_FIELD_FLEX_ACTIVE)
+                )
+            )
+        );
+        return [$getterSelectName, $getterFlexParameter];
+    }
 }

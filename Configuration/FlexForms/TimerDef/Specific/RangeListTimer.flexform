@@ -18,6 +18,23 @@
         </TCEforms>
         <type>array</type>
         <el>
+            <recursiveLoopLimit>
+                <TCEforms>
+                    <label>
+                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.recursiveLoopLimit
+                    </label>
+                    <config>
+                        <type>input</type>
+                        <size>20</size>
+                        <eval>int</eval>
+                        <range>
+                            <lower>1</lower>
+                            <upper>25</upper>
+                        </range>
+                        <default>4</default>
+                    </config>
+                </TCEforms>
+            </recursiveLoopLimit>
             <yamlActiveFilePath>
                 <TCEforms>
                     <label>

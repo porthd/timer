@@ -26,11 +26,9 @@ namespace Porthd\Timer\Domain\Repository;
  */
 interface TimerRepositoryInterface
 {
-
     /**
-     * @param $tableName
+     * @param string $tableName
      * @return bool
      */
     public function tableExists($tableName): bool;
-
 }

@@ -94,6 +94,239 @@
 				<target>Sa</target>
 			</trans-unit>
 
+			<trans-unit id="customTimer.holiday.ErevRoshHashanah">
+				<source>Erev Rosh Hashanah</source>
+				<target>Erev Rosh Hashanah</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.RoshHashanahI">
+				<source>Rosh Hashanah I</source>
+				<target>Rosh Hashanah I</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.RoshHashanahII">
+				<source>Rosh Hashanah II</source>
+				<target>Rosh Hashanah II</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.TzomGedaliah">
+				<source>Tzom Gedaliah</source>
+				<target>Tzom Gedaliah</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ErevYomKippur">
+				<source>Erev Yom Kippur</source>
+				<target>Erev Yom Kippur</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.YomKippur">
+				<source>Yom Kippur</source>
+				<target>Yom Kippur</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ErevSukkot">
+				<source>Erev Sukkot</source>
+				<target>Erev Sukkot</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.SukkotI">
+				<source>Sukkot I</source>
+				<target>Sukkot I</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.SukkotII_DiasporOnly">
+				<source>Sukkot II</source>
+				<target>Sukkot II</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HolHamoedSukkot_inIsraelInDiaspora">
+				<source>Hol Hamoed Sukkot</source>
+				<target>Hol Hamoed Sukkot</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HolHamoedSukkot_inIsrael">
+				<source>Hol Hamoed Sukkot (in Israel 16.)</source>
+				<target>Hol Hamoed Sukkot (in Israel 16.)</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HolHamoedSukkot_inDiaspora">
+				<source>Hol Hamoed Sukkot (in Diaspora 17.)</source>
+				<target>Hol Hamoed Sukkot (in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HoshanaRabbah">
+				<source>Hoshana Rabbah</source>
+				<target>Hoshana Rabbah</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.SheminiAzeret_inDiaspora">
+				<source>Shemini Azeret</source>
+				<target>Shemini Azeret</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.SheminiAzeretSimchatTorah_inIsrael">
+				<source>Shemini Azeret/Simchat Torah</source>
+				<target>Shemini Azeret/Simchat Torah</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.SimchatTorah_inDiaspora">
+				<source>Simchat Torah</source>
+				<target>Simchat Torah</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.IsruChagTishri_inIsrael">
+				<source>Isru Chag</source>
+				<target>Isru Chag</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.IsruChagTishri_inDiaspora">
+				<source>Isru Chag</source>
+				<target>Isru Chag</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahI">
+				<source>Hanukkah I</source>
+				<target>Hanukkah I</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahII">
+				<source>Hanukkah II</source>
+				<target>Hanukkah II</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahIII">
+				<source>Hanukkah III</source>
+				<target>Hanukkah III</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahIV">
+				<source>Hanukkah IV</source>
+				<target>Hanukkah IV</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahV">
+				<source>Hanukkah V</source>
+				<target>Hanukkah V</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahVI">
+				<source>Hanukkah VI</source>
+				<target>Hanukkah VI</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahVII">
+				<source>Hanukkah VII</source>
+				<target>Hanukkah VII</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HanukkahVIII">
+				<source>Hanukkah VIII</source>
+				<target>Hanukkah VIII</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.TzomTevet">
+				<source>Tzom Tevet</source>
+				<target>Tzom Tevet</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.TuBShevat">
+				<source>Tu B'Shevat</source>
+				<target>Tu B'Shevat</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.PurimKatan">
+				<source>Purim Katan</source>
+				<target>Purim Katan</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ShushanPurimKatan">
+				<source>Shushan Purim Katan</source>
+				<target>Shushan Purim Katan</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.TaAnithEsther">
+				<source>Ta'anith Esther</source>
+				<target>Ta'anith Esther</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.Purim">
+				<source>Purim</source>
+				<target>Purim</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ShushanPurim">
+				<source>Shushan Purim</source>
+				<target>Shushan Purim</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ShabbatHagadol">
+				<source>Shabbat Hagadol</source>
+				<target>Shabbat Hagadol</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ErevPesach">
+				<source>Erev Pesach</source>
+				<target>Erev Pesach</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.PesachI">
+				<source>Pesach I</source>
+				<target>Pesach I</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.PesachII_DiasporOnly">
+				<source>Pesach II</source>
+				<target>Pesach II</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HolHamoedPesach_inIsraelInDiaspora">
+				<source>Hol Hamoed Pesach</source>
+				<target>Hol Hamoed Pesach</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HolHamoedPesach_inIsrael">
+				<source>Hol Hamoed Pesach</source>
+				<target>Hol Hamoed Pesach</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.HolHamoedPesach_inDiaspora">
+				<source>Hol Hamoed Pesach</source>
+				<target>Hol Hamoed Pesach</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.PesachVII">
+				<source>Pesach VII</source>
+				<target>Pesach VII</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.PesachVIII_DiasporOnly">
+				<source>Pesach VIII</source>
+				<target>Pesach VIII</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.IsruChagNisan_inIsrael">
+				<source>Isru Chag</source>
+				<target>Isru Chag</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.IsruChagNisan_inDiaspora">
+				<source>Isru Chag</source>
+				<target>Isru Chag</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.YomHashoah">
+				<source>Yom Hashoah</source>
+				<target>Yom Hashoah</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.YomHazikaron">
+				<source>Yom Hazikaron</source>
+				<target>Yom Hazikaron</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.YomHaAtzmaut">
+				<source>Yom Ha'Atzmaut</source>
+				<target>Yom Ha'Atzmaut</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.PesachSheini">
+				<source>Pesach Sheini</source>
+				<target>Pesach Sheini</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.LagBOmer">
+				<source>Lag B'Omer</source>
+				<target>Lag B'Omer</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.YomYerushalayim">
+				<source>Yom Yerushalayim</source>
+				<target>Yom Yerushalayim</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ErevShavuot">
+				<source>Erev Shavuot</source>
+				<target>Erev Shavuot</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ShavuotI">
+				<source>Shavuot I</source>
+				<target>Shavuot I</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.ShavuotII_DiasporOnly">
+				<source>Shavuot II</source>
+				<target>Shavuot II</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.IsruChagSivan_inIsrael">
+				<source>Isru Chag</source>
+				<target>Isru Chag</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.IsruChagSivan_inDiaspora">
+				<source>Isru Chag</source>
+				<target>Isru Chag</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.TzomTammuz">
+				<source>Tzom Tammuz</source>
+				<target>Tzom Tammuz</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.TishaBAv">
+				<source>Tisha B'Av</source>
+				<target>Tisha B'Av</target>
+			</trans-unit>
+			<trans-unit id="customTimer.holiday.TuBAv">
+				<source>Tu B'Av</source>
+				<target>Tu B'Av</target>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

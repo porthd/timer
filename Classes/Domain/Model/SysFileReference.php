@@ -29,7 +29,6 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  */
 class SysFileReference extends AbstractEntity implements TimerModellInterface
 {
-
     /**
      * txTimerSelector
      *
@@ -85,5 +84,4 @@ class SysFileReference extends AbstractEntity implements TimerModellInterface
     {
         $this->txTimerTimer = $txTimerTimer;
     }
-
 }

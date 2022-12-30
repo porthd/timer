@@ -66,7 +66,6 @@ use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
  */
 class CustomTimerUtility
 {
-
     protected const DEFAULT_BEGIN_PERIOD = "1753-01-01 00:00:00";  // Because of calandar-relaunch (Julian, modern-counting
     protected const DEFAULT_ENDING_PERIOD = "9999-12-31 23:59:59";
 
@@ -84,7 +83,6 @@ class CustomTimerUtility
                     'content.timer.periodMessage.general.beginEnd.default',
                     TimerConst::EXTENSION_NAME
                 );
-
             } else {
                 $result = LocalizationUtility::translate(
                     'content.timer.periodMessage.general.beginEnd.stop.1',
@@ -93,7 +91,6 @@ class CustomTimerUtility
                         $stopDateTime,
                     ]
                 );
-
             }
         } else {
             if ($stopDateTime === self::DEFAULT_ENDING_PERIOD) {
@@ -104,7 +101,6 @@ class CustomTimerUtility
                         $startDateTime,
                     ]
                 );
-
             } else {
                 $result = LocalizationUtility::translate(
                     'content.timer.periodMessage.general.beginEnd.2',
@@ -115,72 +111,9 @@ class CustomTimerUtility
                     ]
                 );
             }
-
         }
 
         return $result;
-
-    }
-
-    /**
-     * @param $timeZoneOfEvent
-     * @param $flagActiveTimeZone
-     * @return string|null
-     */
-    public static function generateGeneralTimeZone($timeZoneOfEvent, $flagActiveTimeZone)
-    {
-        if (!empty($timeZoneOfEvent)) {
-            $generalTimeZone = LocalizationUtility::translate(
-                'content.timer.periodMessage.general.timeZone.event.1',
-                TimerConst::EXTENSION_NAME,
-                [
-                    $timeZoneOfEvent,
-                ]
-            );
-        } else {
-            if (empty($flagActiveTimeZone)) {
-                // Reading the current data instead of $GLOBALS['EXEC_TIME']
-                $currentZone = GeneralUtility::makeInstance(Context::class)
-                    ->getPropertyFromAspect('date', 'timezone');
-                $generalTimeZone = LocalizationUtility::translate(
-                    'content.timer.periodMessage.general.timeZone.server.1',
-                    TimerConst::EXTENSION_NAME,
-                    [
-                        $currentZone,
-                    ]
-                );
-            } else {
-                $generalTimeZone = LocalizationUtility::translate(
-                    'content.timer.periodMessage.general.timeZone.surfer',
-                    TimerConst::EXTENSION_NAME
-                );
-            }
-        }
-        return $generalTimeZone;
-    }
-
-
-    /**
-     * @param $startSecondsOfDay
-     * @param $durationMin
-     * @return string
-     */
-    public static function generateGeneralStartAndDuration($startSecondsOfDay, $durationMin)
-    {
-        $plusMinus = ($durationMin > 0) ? 'plus' : 'minus';
-        $startTime = (date_create_from_format(
-            'U',
-            $startSecondsOfDay
-        ))->format(TimerConst::TIMER_FORMAT_TIME);
-        $durationMinReadble = self::generateReadbleTimeFromMin((int)$durationMin);
-        return (LocalizationUtility::translate(
-                'content.timer.periodMessage.general.period.' . $plusMinus . '.2',
-                TimerConst::EXTENSION_NAME,
-                [
-                    $startTime,
-                    $durationMinReadble,
-                ]
-            ) ?? '');
     }
 
     /**
@@ -198,28 +131,26 @@ class CustomTimerUtility
         $result['week'] = floor($dayHour / 7);
         $cascade = [];
         foreach (['week' => 'w', 'day' => 'd', 'hour' => 'h', 'min' => 'min'] as $key => $unit) {
-            if ($result[$key] !== 0) {
-                if ($result[$key] > 1) {
-                    $cascade[] = (LocalizationUtility::translate(
-                            'content.timer.periodMessage.general.timeparts.' . $key . '.many.1',
-                            TimerConst::EXTENSION_NAME,
-                            [
-                                $result[$key],
-                            ]
-                        ) ?? $result[$key] . ' ' . $unit);
-                } else {
-                    $cascade[] = (LocalizationUtility::translate(
-                            'content.timer.periodMessage.general.timeparts.' . $key . '.single',
-                            TimerConst::EXTENSION_NAME
-                        ) ?? $result[$key] . ' ' . $unit);
-                }
+            if ($result[$key] > 1) {
+                $cascade[] = (LocalizationUtility::translate(
+                    'content.timer.periodMessage.general.timeparts.' . $key . '.many.1',
+                    TimerConst::EXTENSION_NAME,
+                    [
+                        $result[$key],
+                    ]
+                ) ?? $result[$key] . ' ' . $unit);
+            } elseif ($result[$key] > 0) {
+                $cascade[] = (LocalizationUtility::translate(
+                    'content.timer.periodMessage.general.timeparts.' . $key . '.single',
+                    TimerConst::EXTENSION_NAME
+                ) ?? $result[$key] . ' ' . $unit);
             }
         }
         if (empty($cascade)) {
             return (LocalizationUtility::translate(
-                    'content.timer.periodMessage.general.timeparts.zero',
-                    TimerConst::EXTENSION_NAME
-                ) ?? '0 min');
+                'content.timer.periodMessage.general.timeparts.zero',
+                TimerConst::EXTENSION_NAME
+            ) ?? '0 min');
         }
         if (count($cascade) === 1) {
             return array_pop($cascade);
@@ -228,13 +159,17 @@ class CustomTimerUtility
         $last = array_pop($cascade);
         $rest = implode(', ', $cascade);
         return (LocalizationUtility::translate(
-                'content.timer.periodMessage.general.timeparts.combine.2',
-                TimerConst::EXTENSION_NAME,
-                [$rest, $last]
-            ) ?? $rest . ', ' . $last
+            'content.timer.periodMessage.general.timeparts.combine.2',
+            TimerConst::EXTENSION_NAME,
+            [$rest, $last]
+        ) ?? $rest . ', ' . $last
         );
     }
 
+    /**
+     * @param string|int|null $activeWeekday
+     * @return int
+     */
     public static function getParameterActiveWeekday($activeWeekday)
     {
         $result = 127;
@@ -252,127 +187,51 @@ class CustomTimerUtility
         return $result;
     }
 
-
     /**
-     * @param int $checkMin
-     * @return mixed|string|null
-     */
-    public static function generateGeneralActiveWeekdayList(int $activeWeekday)
-    {
-        if (!empty($activeWeekday)) {
-            $weekdays = [];
-            $bitsOfWeekdays = self::getParameterActiveWeekday($activeWeekday);
-            foreach ([
-                         'mo' => 1,
-                         'tu' => 2,
-                         'we' => 4,
-                         'th' => 8,
-                         'fr' => 16,
-                         'sa' => 32,
-                         'su' => 64,
-                     ] as $dayShortcut => $bit
-            ) {
-                if (($bit & $bitsOfWeekdays) === $bit) {
-                    $weekdays[] = LocalizationUtility::translate(
-                        'content.timer.periodMessage.general.weekday.' . $dayShortcut,
-                        TimerConst::EXTENSION_NAME
-                    );
-                }
-            }
-            $countWeekdays = count($weekdays);
-            if ($countWeekdays === 0) {
-                $result = '';
-            } else {
-                if ($countWeekdays >= 2) {
-                    $last = array_pop($weekdays);
-                    $weekdaysText = implode(', ', $weekdays);
-                    $result = LocalizationUtility::translate(
-                        'content.timer.periodMessage.dailyTimer.weekdayList.more.1',
-                        TimerConst::EXTENSION_NAME,
-                        [$weekdaysText, $last]
-                    );
-                } else {
-                    $result = LocalizationUtility::translate(
-                        'content.timer.periodMessage.dailyTimer.weekdayList.one.1',
-                        TimerConst::EXTENSION_NAME,
-                        [$weekdays[0]]
-                    );
-                }
-            }
-
-            return $result;
-        }
-        return '';
-    }
-
-
-    /**
-     * @param string $yamlFilePath
-     * @param ValidateYamlInterface|null $validatorObject
-     * @param LoggerInterface|null $logger
-     * @param FrontendInterface|null $cache
-     * @return array
-     * @throws TimerException
-     */
-    public static function readListFromYamlFile(
-        string $yamlFilePath,
-        YamlFileLoader $yamlFileLoader,
-        ?ValidateYamlInterface $validatorObject = null,
-        ?LoggerInterface $logger = null,
-        ?FrontendInterface $cache = null
-    ): array {
-        // The test wont work
-//        $cacheIdentifier = md5('start#download.' . $yamlFilePath . '#end');
-//
-//        if ($cache === null) {
-            return self::readListFromYamlFileFromPathOrUrl( $yamlFilePath, $yamlFileLoader, $validatorObject, $logger);
-//        }
-//        if (($result = $cache->get($cacheIdentifier)) === false) {
-//            $result = self::readListFromYamlFileFromPathOrUrl( $yamlFilePath, $yamlFileLoader,$validatorObject, $logger);
-//            $cache->set($cacheIdentifier, $result,['pages']);
-//        }
-//        return $result;
-    }
-
-    /**
-     * @param $yamlFalParam
+     * @param string $yamlFalParam
+     * @param string $relationTable
+     * @param int $relationUid
      * @param YamlFileLoader $yamlFileLoader
-     * @param ValidateYamlInterface|null $validatorObject
-     * @param LoggerInterface|null $logger
-     * @param FrontendInterface|null $cache
-     * @return array
+     * @return array<mixed>
      */
     public static function readListFromYamlFilesInFal(
-        $yamlFalParam,
-        $relationTable,
-        $relationUid,
+        string $yamlFalParam,
+        string $relationTable,
+        int $relationUid,
         YamlFileLoader $yamlFileLoader,
-        ?ValidateYamlInterface $validatorObject = null,
-        ?LoggerInterface $logger = null,
-        ?FrontendInterface $cache = null
+        ?LoggerInterface $logger = null
     ): array {
-// @todo caching
         if ($yamlFalParam < 1) {
             return [];
         }
-            $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
-            $fileObjects = $fileRepository->findByRelation($relationTable,
-                TimerConst::TIMER_FIELD_FLEX_ACTIVE,
-                $relationUid);
-            $rawResult = [];
+        $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
+        $fileObjects = $fileRepository->findByRelation(
+            $relationTable,
+            TimerConst::TIMER_FIELD_FLEX_ACTIVE,
+            $relationUid
+        );
+        $rawResult = [];
 
-            /** @var FileReference $fileObject */
-            foreach ($fileObjects as $fileObject) {
-                $filePathInStorage = $fileObject->getProperty('identifier');
-                $pathStorage = $fileObject->getStorage()->getConfiguration()['basePath'];
-                $filePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR .
-                    trim($pathStorage, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR .
-                    trim($filePathInStorage, DIRECTORY_SEPARATOR);
-                if (file_exists($filePath)) {
-
-                    $rawResult[] = $yamlFileLoader->load($filePath);
+        /** @var FileReference $fileObject */
+        foreach ($fileObjects as $fileObject) {
+            $filePathInStorage = $fileObject->getProperty('identifier');
+            $pathStorage = $fileObject->getStorage()->getConfiguration()['basePath'];
+            $filePath = Environment::getPublicPath() . DIRECTORY_SEPARATOR .
+                trim($pathStorage, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR .
+                trim($filePathInStorage, DIRECTORY_SEPARATOR);
+            if (file_exists($filePath)) {
+                $rawResult[] = $yamlFileLoader->load($filePath);
+            } else {
+                if ($logger !== null) {
+                    $logger->warning(
+                        'The file `' . $filePath . '` did not exist. ' .
+                        'Check your yaml-definition or the existence of the server or the existence of the file ' .
+                        'on the foreign server.',
+                        [print_r($fileObject, true)]
+                    );
                 }
             }
+        }
         return $rawResult;
     }
 
@@ -380,37 +239,30 @@ class CustomTimerUtility
      * @param string $yamlFilePath
      * @param ValidateYamlInterface|null $validatorObject
      * @param LoggerInterface|null $logger
-     * @return array
+     * @return array<mixed>
      * @throws TimerException
      */
-    protected static function readListFromYamlFileFromPathOrUrl(
+    public static function readListFromYamlFileFromPathOrUrl(
         string $yamlFilePath,
         YamlFileLoader $yamlFileLoader,
         ?ValidateYamlInterface $validatorObject,
         ?LoggerInterface $logger
     ): array {
-
 //        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
         if (file_exists($yamlFilePath)) {
             $yamlFilePathNew = realpath($yamlFilePath);
-            if ((!file_exists($yamlFilePathNew)) ||
-                ($yamlFileLoader === null)
-            ) {
+            if (!file_exists($yamlFilePathNew)) {
                 return [];
             }
             $result = $yamlFileLoader->load($yamlFilePathNew);
-
         } else {
             if (GeneralUtility::validPathStr($yamlFilePath)) { // Dont Allow relative poathes or pathes with '//' or '\\'
                 $yamlFilePathNew = GeneralUtility::getFileAbsFileName($yamlFilePath);
-                if ((!file_exists($yamlFilePathNew)) ||
-                    ($yamlFileLoader === null)
-                ) {
+                if (!file_exists($yamlFilePathNew)) {
                     return [];
                 }
                 $result = $yamlFileLoader->load($yamlFilePathNew);
-
-            } elseif (preg_match('@^http[s]://@i',$yamlFilePath) === 1) { // open accessible url
+            } elseif (preg_match('@^http[s]://@i', $yamlFilePath) === 1) { // open accessible url
                 $yamlFileData = file_get_contents($yamlFilePath);
                 if ($yamlFileData === false) {
                     if ($logger !== null) {
@@ -423,10 +275,10 @@ class CustomTimerUtility
                     return [];
                 }
                 $result = Yaml::parse($yamlFileData);
-
-            } elseif (preg_match('@^(.+):(.+):http[s]://@i',$yamlFilePath) === 1) { // url secured by server password
+            } elseif (preg_match('@^(.+):(.+):http[s]://@i', $yamlFilePath) === 1) { // url secured by server password
                 $splitList = array_filter(
-                    array_map('trim',
+                    array_map(
+                        'trim',
                         explode(':', $yamlFilePath, 3)
                     )
                 );
@@ -445,7 +297,6 @@ class CustomTimerUtility
                         'Check your yaml-definition or the values for the password on the foreign server.',
                         1669453312
                     );
-
                 }
                 $context = stream_context_create([
                     'http' => [
@@ -477,15 +328,12 @@ class CustomTimerUtility
                     'Check your yaml-definition .',
                     1669453491
                 );
-
             }
         }
         // validate the yaml-structure or throw an exception
         if ($validatorObject !== null) {
-            $validatorObject->validateYamlOrException($result, $yamlFilePathNew);
+            $validatorObject->validateYamlOrException($result, ($yamlFilePathNew ?? '-- undefined --'));
         }
         return $result;
     }
-
 }
-

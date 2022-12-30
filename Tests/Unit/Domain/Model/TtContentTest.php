@@ -1,4 +1,5 @@
 <?php
+
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
 
 use Porthd\Timer\Domain\Model\TtContent;

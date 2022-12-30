@@ -24,13 +24,13 @@ namespace Porthd\Timer\Utilities;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Exception\TimerException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationUtility
 {
-
-
     /**
      * Add your timer-classes to the list by using the unique index-name of your timer.
      * Your timer-class must implement interface Porthd\Timer\Interfaces\TimerInterface
@@ -39,13 +39,16 @@ class ConfigurationUtility
      * example for input:
      * $listOfCustomTimerClasses[YearlyTimer::timerIndexValue()] = DailyTimer::class;
      *
-     * @param array $listOfTimerClasses
-     * @api
+     * @param array<mixed> $listOfTimerClasses
+     * @return void
+     * @throws TimerException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      *
+     * @api
      */
-    public static function mergeCustomTimer(array $listOfTimerClasses)
+    public static function mergeCustomTimer(array $listOfTimerClasses): void
     {
-
         if (empty(TcaUtility::$timerConfig)) {
             TcaUtility::$timerConfig = GeneralUtility::makeInstance(
                 ExtensionConfiguration::class
@@ -77,11 +80,13 @@ class ConfigurationUtility
      * @testing 20191223
      *
      * @param mixed &$check
-     * @param array $nestList
-     * @param null $leaf
+     * @param array<mixed> $nestList
+     * @param string $leaf
+     * @param bool $flagException
      * @return bool
+     * @throws TimerException
      */
-    public static function expandNestedArray(&$check, array $nestList, $leaf = null, $flagException = false)
+    public static function expandNestedArray(&$check, array $nestList, string $leaf = '', bool $flagException = false)
     {
         $helper = &$check;  // the & is needed to get a point on a array getting by reference
         $flag = true;
@@ -96,7 +101,7 @@ class ConfigurationUtility
                 break;
             }
         }
-        if (($leaf !== null) && ($flag)) {
+        if (($leaf !== '') && ($flag)) {
             if ((is_array($helper)) &&
                 (empty($helper))
             ) {
@@ -122,7 +127,10 @@ class ConfigurationUtility
 
     /**
      * @param int $addTimerFlags
-     * @param string $selfNameFunc
+     * @param array<mixed> $listOfTimerClasses
+     * @param bool $throwException
+     * @return void
+     * @throws TimerException
      */
     public static function addExtLocalconfTimerAdding(
         int $addTimerFlags,
@@ -130,6 +138,7 @@ class ConfigurationUtility
         bool $throwException = true
     ): void {
         $count = 0;
+        $listOfCustomTimerClasses = [];
         foreach ($listOfTimerClasses as $classString) {
             // check interface, throw exception, if something is wrong
             $interfaces = class_implements($classString);
@@ -141,8 +150,9 @@ class ConfigurationUtility
             } else {
                 if ($throwException === true) {
                     throw new TimerException(
-                        'The class `' . $classString . '` did not implements the interface ``.', 1601245879);
-
+                        'The class `' . $classString . '` did not implements the interface ``.',
+                        1601245879
+                    );
                 }
             }
         }
@@ -150,6 +160,4 @@ class ConfigurationUtility
             $listOfCustomTimerClasses
         );
     }
-
 }
-

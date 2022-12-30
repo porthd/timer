@@ -28,7 +28,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-
 /**
  * Class for extension-wide constants
  *
@@ -103,6 +102,4 @@ class TimerConst
     public const ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE = 'userRangeCompare';
 
     public const CACHE_IDENT_TIMER_YAMLLIST = 'timer_yamllist';
-
-
 }

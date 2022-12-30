@@ -43,6 +43,10 @@
                         <type>input</type>
                         <size>10</size>
                         <eval>int,required</eval>
+                        <range>
+                            <lower>-444444</lower>
+                            <upper>444444</upper>
+                        </range>
                         <default>120</default>
                     </config>
                 </TCEforms>

@@ -34,12 +34,11 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 class ListOfTimerService implements SingletonInterface
 {
-
-    // Hold the class instance.F
-    private $list = null;
+    // Hold the class instance of the various timers
+    /** @var array<mixed> */
+    private $list = [];
 
 
     /**
@@ -51,25 +50,25 @@ class ListOfTimerService implements SingletonInterface
     }
 
     /**
-     * @param string|array $orderList
-     * @return array|string[]
+     * @param string $selector
+     * @return mixed
      */
-    public function mergeSelectorItems($orderList = DefaultTimer::TIMER_NAME): array
+    public function selfName(string $selector)
+    {
+        return $this->list[$selector]->selfName();
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function mergeSelectorItems(): array
     {
         if ((!is_array($this->list))) {
             return DefaultTimer::TIMER_SELECTOR_DEFAULT;
         }
-        if (is_array($orderList)) {
-            $orderListRaw = array_shift($orderList);
-            $arrayList = $this->buildArrayByInterfaceFunctions(
-                'getSelectorItem',
-                $orderListRaw);
-        } else {
-            $arrayList = $this->buildArrayByInterfaceFunctions(
-                'getSelectorItem',
-                $orderList);
-        }
-        $result = array_values($arrayList);
+        $result = array_values(
+            $this->buildArrayByInterfaceFunctions('getSelectorItem')
+        );
         array_unshift($result, DefaultTimer::TIMER_SELECTOR_DEFAULT);
         return $result;
     }
@@ -77,7 +76,7 @@ class ListOfTimerService implements SingletonInterface
     /**
      * @param string $selector
      * @param string $activeZoneName
-     * @param array $params
+     * @param array<mixed> $params
      * @return string
      */
     public function getTimeZoneOfEvent(string $selector, string $activeZoneName, array $params = []): string
@@ -86,25 +85,16 @@ class ListOfTimerService implements SingletonInterface
     }
 
     /**
-     * @param string|array $orderList
-     * @return array|string[]
+     * @return array<mixed>
      */
-    public function mergeFlexformItems($orderList = DefaultTimer::TIMER_NAME)
+    public function mergeFlexformItems()
     {
         if ((!is_array($this->list))) {
             return DefaultTimer::TIMER_FLEXFORM_ITEM;
         }
-        if (is_array($orderList)) {
-            $orderListRaw = array_unshift($orderList);
-            $result = array_values($this->buildArrayByInterfaceFunctions(
-                'getFlexformItem',
-                $orderListRaw));
-        } else {
-
-            $result = array_values($this->buildArrayByInterfaceFunctions(
-                'getFlexformItem',
-                $orderList));
-        }
+        $result = array_values(
+            $this->buildArrayByInterfaceFunctions('getFlexformItem')
+        );
         return array_merge(DefaultTimer::TIMER_FLEXFORM_ITEM, ...$result);
     }
 
@@ -112,7 +102,7 @@ class ListOfTimerService implements SingletonInterface
      * validate the parameter of the timer and check, if the selector defined an installed timer-object
      *
      * @param string $selector
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function validate(string $selector, $params = []): bool
@@ -136,12 +126,12 @@ class ListOfTimerService implements SingletonInterface
     }
 
     /**
-     * @param $selector
+     * @param string $selector
      * @param DateTime $checkDate
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange($selector, DateTime $checkDate, $params = []): bool
+    public function isAllowedInRange(string $selector, DateTime $checkDate, array $params = []): bool
     {
         if ((!is_array($this->list)) ||
             (!isset($this->list[$selector]))
@@ -149,7 +139,6 @@ class ListOfTimerService implements SingletonInterface
             return false;
         }
         return $this->list[$selector]->isAllowedInRange($checkDate, $params);
-
     }
 
     /**
@@ -157,14 +146,12 @@ class ListOfTimerService implements SingletonInterface
      *
      * @param string $selector
      * @param DateTime $checkDate contains the time-zone of the current User or the timezone of the CLI-Process
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isActive($selector, DateTime $checkDate, $params = []): bool
     {
-        if ((!is_array($this->list)) ||
-            (!isset($this->list[$selector]))
-        ) {
+        if (!isset($this->list[$selector])) {
             return false;
         }
         $activeZoneName = $checkDate->getTimezone()->getName();
@@ -183,17 +170,18 @@ class ListOfTimerService implements SingletonInterface
     }
 
     /**
-     * tested:
-     *
-     * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param string $selector
+     * @param DateTime $checkDate
+     * @param array<mixed> $params
      * @return TimerStartStopRange
+     * @throws TimerException
      */
-    public function getLastIsActiveRangeResult($selector, DateTime $checkDate, $params = []): TimerStartStopRange
-    {
-        if ((!is_array($this->list)) ||
-            (!isset($this->list[$selector]))
-        ) {
+    public function getLastIsActiveRangeResult(
+        string $selector,
+        DateTime $checkDate,
+        array $params = []
+    ): TimerStartStopRange {
+        if (!isset($this->list[$selector])) {
             $failAll = new TimerStartStopRange();
             $failAll->failAllActive($checkDate);
             return $failAll;
@@ -219,7 +207,7 @@ class ListOfTimerService implements SingletonInterface
      *
      * @param string $selector
      * @param DateTime $eventTimeZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function nextActive($selector, DateTime $eventTimeZone, $params = []): TimerStartStopRange
@@ -232,7 +220,7 @@ class ListOfTimerService implements SingletonInterface
      *
      * @param string $selector
      * @param DateTime $eventTimeZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function prevActive($selector, DateTime $eventTimeZone, $params = []): TimerStartStopRange
@@ -246,7 +234,7 @@ class ListOfTimerService implements SingletonInterface
      * @param string $selector
      * @param string $rangeAction take one of the values: 'prevRange' or'nextRange'
      * @param DateTime $eventTimeZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function rangeActive($selector, $rangeAction, DateTime $eventTimeZone, $params = []): TimerStartStopRange
@@ -258,12 +246,10 @@ class ListOfTimerService implements SingletonInterface
                 123457867
             );
         }
-        if ((!is_array($this->list)) ||
-            (!isset($this->list[$selector]))
-        ) {
+        if (!isset($this->list[$selector])) {
             /** @var TimerStartStopRange $timerStartStop */
             $timerStartStop = new TimerStartStopRange();
-            $timerStartStop->setZero();
+            $timerStartStop->failAllActive($eventTimeZone);
             return $timerStartStop;
         }
         return clone $this->list[$selector]->$rangeAction($eventTimeZone, $params);
@@ -274,7 +260,10 @@ class ListOfTimerService implements SingletonInterface
      */
     private function generateList(): void
     {
-        if (!is_array($this->list)) {
+        if (
+            (!is_array($this->list)) ||
+            (empty($this->list))
+        ) {
             $this->list = [];
             if (empty(TcaUtility::$timerConfig)) {
                 TcaUtility::$timerConfig = GeneralUtility::makeInstance(
@@ -285,8 +274,7 @@ class ListOfTimerService implements SingletonInterface
 
             // Call post-processing function for constructor:
             if ((!empty($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER])) &&
-                (is_array($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER])) &&
-                (count($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER]) > 0)
+                (is_array($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER]))
             ) {
                 foreach ($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER] as $className) {
                     $classInterface = class_implements($className);
@@ -302,8 +290,7 @@ class ListOfTimerService implements SingletonInterface
                     }
                 }
                 if ((!empty($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE])) &&
-                    (is_array($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE])) &&
-                    (count($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE]) > 0)
+                    (is_array($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE]))
                 ) {
                     foreach ($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE] as $className) {
                         $classInterface = class_implements($className);
@@ -326,58 +313,32 @@ class ListOfTimerService implements SingletonInterface
                     'There is NO timer-class defined. Something in the configuration went wrong. Check you ext_localconf.php.',
                     1668081531
                 );
-
             }
         }
     }
 
     /**
      * @param string $interfaceMethod
-     * @param string|array $orderList
-     * @return array
+     * @return array<mixed>
      */
     protected function buildArrayByInterfaceFunctions(
-        string $interfaceMethod,
-        $orderList = TimerConst::EXTENSION_NAME
+        string $interfaceMethod
     ): array {
-        if (is_array($orderList)) {
-            $orderListRaw = array_shift($orderList);
-            $preSorted = array_filter(
-                array_map(
-                    'trim',
-                    explode(',', $orderListRaw)
-                )
-            );
-
-        } else {
-            $preSorted = array_filter(
-                array_map(
-                    'trim',
-                    explode(',', $orderList)
-                )
-            );
-
-        }
         $arrayList = [];
-        if (count($preSorted) > 0) {
-            foreach ($preSorted as $timerIdent) {
-                if (isset($this->list[$timerIdent])) {
-                    /** @var TimerInterface $instance */
-                    $instance = $this->list[$timerIdent];
-                    $arrayList[$timerIdent] = $instance->$interfaceMethod();
-                }
-            }
-        }
+        // Add default-timer
+        /** @var TimerInterface $instance */
+        $instance = $this->list[DefaultTimer::TIMER_NAME];
+        $arrayList[DefaultTimer::TIMER_NAME] = $instance->$interfaceMethod();
+        // add the needed infos from all other timers
         /**
          * @var string $key
          * @var TimerInterface $instance
          */
         foreach ($this->list as $key => $instance) {
-            if (!in_array($key, $preSorted)) {
+            if ($key !== DefaultTimer::TIMER_NAME) {
                 $arrayList[$key] = $instance->$interfaceMethod();
             }
         }
         return $arrayList;
     }
-
 }

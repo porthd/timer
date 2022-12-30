@@ -27,7 +27,6 @@ namespace Porthd\Timer\Domain\Model\Interfaces;
  */
 interface TimerModellInterface
 {
-
     /**
      * Returns the txTimerSelector
      *
@@ -57,5 +56,4 @@ interface TimerModellInterface
      * @return void
      */
     public function setTxTimerTimer($txTimerTimer);
-
 }

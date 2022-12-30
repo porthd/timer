@@ -88,9 +88,11 @@ class DefaultTimerTest extends TestCase
      */
     public function selfName()
     {
-        $this->assertEquals(self::NAME_TIMER,
+        $this->assertEquals(
+            self::NAME_TIMER,
             $this->subject::selfName(),
-            'The name musst be defined.');
+            'The name musst be defined.'
+        );
     }
 
 
@@ -100,16 +102,24 @@ class DefaultTimerTest extends TestCase
     public function getSelectorItem()
     {
         $result = $this->subject->getSelectorItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertGreaterThan(1,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertGreaterThan(
+            1,
             count($result),
-            'The array  must contain at least two items.');
-        $this->assertIsString($result[0],
-            'The first item must be an string.');
-        $this->assertEquals($result[1],
+            'The array  must contain at least two items.'
+        );
+        $this->assertIsString(
+            $result[0],
+            'The first item must be an string.'
+        );
+        $this->assertEquals(
+            $result[1],
             self::NAME_TIMER,
-            'The second term must the name of the timer.');
+            'The second term must the name of the timer.'
+        );
     }
 
     /**
@@ -119,37 +129,53 @@ class DefaultTimerTest extends TestCase
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertEquals(2,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertEquals(
+            2,
             count($result),
-            'The array  must contain two Item, to handle teh case `default` and the case ``(empty).');
-        $this->assertEquals(array_keys($result),
+            'The array  must contain two Item, to handle teh case `default` and the case ``(empty).'
+        );
+        $this->assertEquals(
+            array_keys($result),
             ['default',''],
-            'The key must in this special case `default` and the case ``(empty) .');
-        $this->assertIsString($result['default'],
-            'The value must be type of string.');
+            'The key must in this special case `default` and the case ``(empty) .'
+        );
+        $this->assertIsString(
+            $result['default'],
+            'The value must be type of string.'
+        );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result['default'];
         if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
-        } else if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+                substr(
+                    $filePath,
+                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
+                );
+        } elseif (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-            $this->assertTrue((false),'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
+                substr(
+                    $filePath,
+                    strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
+                );
+            $this->assertTrue((false), 'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue($flag,
-            'The file with the flexform content exist.');
+        $this->assertTrue(
+            $flag,
+            'The file with the flexform content exist.'
+        );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue((!(!$flexArray)),
-            'The filecontent is valid xml.');
+        $this->assertTrue(
+            (!(!$flexArray)),
+            'The filecontent is valid xml.'
+        );
     }
 
 
@@ -160,7 +186,8 @@ class DefaultTimerTest extends TestCase
     {
         $params = [];
         $result = $this->subject->validate($params);
-        $this->assertEquals(true,
+        $this->assertEquals(
+            true,
             $result,
             'This method deliver with each parameter a true.'
         );
@@ -257,7 +284,6 @@ class DefaultTimerTest extends TestCase
 
     public function dataProviderGetTimeZoneOfEvent()
     {
-
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
@@ -377,7 +403,6 @@ class DefaultTimerTest extends TestCase
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
@@ -399,7 +424,8 @@ class DefaultTimerTest extends TestCase
         foreach ([0, 1610000000, 2900000000] as $tstamp) {
             $testTime = new DateTime('@' . $tstamp);
             $result = $this->subject->isAllowedInRange($testTime, $params);
-            $this->assertEquals(true,
+            $this->assertEquals(
+                true,
                 $result,
                 'This method deliver with each parameter a true.'
             );
@@ -415,7 +441,8 @@ class DefaultTimerTest extends TestCase
         foreach ([0, 1610000000, 2900000000] as $tstamp) {
             $testTime = new DateTime('@' . $tstamp);
             $result = $this->subject->isActive($testTime, $params);
-            $this->assertEquals(true,
+            $this->assertEquals(
+                true,
                 $result,
                 'This method deliver with each parameter a true.'
             );
@@ -432,7 +459,7 @@ class DefaultTimerTest extends TestCase
             $testTime = new DateTime('@' . $tstamp);
             $result = $this->subject->nextActive($testTime, $params);
             /** @var TimerStartStopRange $expects */
-            $expects = new TimerStartStopRange;
+            $expects = new TimerStartStopRange();
             $expects->reMilleniumActive($testTime);
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME));
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME));
@@ -440,8 +467,10 @@ class DefaultTimerTest extends TestCase
 
             $this->assertTrue(
                 ($flag),
-                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r($expects,
-                    true)
+                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r(
+                    $expects,
+                    true
+                )
             );
         }
     }
@@ -456,7 +485,7 @@ class DefaultTimerTest extends TestCase
             $testTime = new DateTime('@' . $tstamp);
             $result = $this->subject->prevActive($testTime, $params);
             /** @var TimerStartStopRange $expects */
-            $expects = new TimerStartStopRange;
+            $expects = new TimerStartStopRange();
             $expects->reMilleniumActive($testTime);
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME));
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME));
@@ -464,10 +493,11 @@ class DefaultTimerTest extends TestCase
 
             $this->assertTrue(
                 ($flag),
-                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r($expects,
-                    true)
+                'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r(
+                    $expects,
+                    true
+                )
             );
         }
     }
-
 }

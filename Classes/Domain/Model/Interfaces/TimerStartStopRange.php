@@ -40,7 +40,6 @@ use DateTime;
  */
 final class TimerStartStopRange
 {
-
     /**
      * flag for Result
      *
@@ -118,13 +117,14 @@ final class TimerStartStopRange
     }
 
     /**
-     * @param DateTime $dateAbovePrevActive
+     * @param DateTime $referenceDateForFailActive
+     * @return void
      */
-    public function failAllActive(DateTime $dateAbovePrevActive): void
+    public function failAllActive(DateTime $referenceDateForFailActive): void
     {
-        $this->beginning = clone $dateAbovePrevActive;
+        $this->beginning = clone $referenceDateForFailActive;
         $this->beginning->add(new DateInterval('PT1S'));
-        $this->ending = clone $dateAbovePrevActive;
+        $this->ending = clone $referenceDateForFailActive;
         $this->ending->sub(new DateInterval('PT1S'));
         $this->resultExist = false;
     }
@@ -202,5 +202,4 @@ final class TimerStartStopRange
     {
         $this->resultExist = $resultExist;
     }
-
 }

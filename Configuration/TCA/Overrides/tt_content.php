@@ -10,8 +10,7 @@ defined('TYPO3_MODE') || die();
 
 
 call_user_func(function () {
-
-// Parts of code, which can by the extension-constants be controlled
+    // Parts of code, which can by the extension-constants be controlled
 
     $tmp_timer_columns = [
         'tx_timer_scheduler' => [
@@ -72,7 +71,6 @@ call_user_func(function () {
 
     // define example-content-element
     if (!empty($timerConfig['flagTestContent'])) {
-
         $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['timer_timersimul'] = 'tx_timer_timersimul';
         $tempTypes = [
             'timer_timersimul' => [
@@ -150,6 +148,4 @@ call_user_func(function () {
         'textmedia',
         'after'
     );
-
-
 });

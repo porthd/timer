@@ -31,7 +31,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Listing extends AbstractEntity implements TimerModellInterface
 {
-
     /**
      * title
      *
@@ -143,5 +142,4 @@ class Listing extends AbstractEntity implements TimerModellInterface
     {
         $this->txTimerTimer = $txTimerTimer;
     }
-
 }

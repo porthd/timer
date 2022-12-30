@@ -1,4 +1,5 @@
 <?php
+
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
 
 use PHPUnit\Framework\TestCase;
@@ -31,7 +32,7 @@ class PagesTest extends TestCase
      */
     protected $subject = null;
 
-    protected function setUp():void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->subject = new Pages();
@@ -44,7 +45,7 @@ class PagesTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true),(true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
     }
 
 
@@ -65,7 +66,6 @@ class PagesTest extends TestCase
      */
     public function setTxTimerTimerForStringSetsTxTimerTimer()
     {
-
         $this->subject->setTxTimerTimer('Conceived at T3CON10');
         $result =$this->subject->getTxTimerTimer();
 

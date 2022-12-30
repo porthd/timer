@@ -32,7 +32,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $supportedContentTypes = [
         'timer_timersimul' => 'Timersimul',
@@ -55,9 +55,10 @@ class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
      * @param bool $drawItem
      * @param string $headerContent
      * @param string $itemContent
-     * @param array $row
+     * @param array<mixed> $row
+     * @return void
      */
-    public function preProcess(PageLayoutView &$parentObject, &$drawItem, &$headerContent, &$itemContent, array &$row)
+    public function preProcess(PageLayoutView &$parentObject, &$drawItem, &$headerContent, &$itemContent, array &$row): void
     {
         if (!isset($this->supportedContentTypes[$row['CType']])) {
             return;
@@ -96,10 +97,11 @@ class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
     }
 
     /**
-     * @param array $pageTsConfig
+     * @param array<mixed> $pageTsConfig
      * @param string $contentType
+     * @return void
      */
-    protected function configureView(array $pageTsConfig, $contentType)
+    protected function configureView(array $pageTsConfig, $contentType): void
     {
         if (empty($pageTsConfig['mod.']['web_layout.']['tt_content.']['preview.'])) {
             return;
@@ -128,9 +130,9 @@ class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
     }
 
     /**
-     * @param array $databaseRow
-     * @param array $processedTcaColumns
-     * @return array
+     * @param array<mixed> $databaseRow
+     * @param array<mixed> $processedTcaColumns
+     * @return array<mixed>
      */
     protected function getProcessedData(array $databaseRow, array $processedTcaColumns)
     {
@@ -156,5 +158,4 @@ class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
         }
         return $processedRow;
     }
-
 }

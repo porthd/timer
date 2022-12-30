@@ -120,11 +120,11 @@ class MappingProcessor implements DataProcessorInterface
      * Fetches records from the database as an array
      *
      * @param ContentObjectRenderer $cObj The data of the content element or page
-     * @param array &$contentObjectConfiguration The configuration of Content Object
-     * @param array $processorConfiguration The configuration of this processor
-     * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
+     * @param array<mixed> &$contentObjectConfiguration The configuration of Content Object
+     * @param array<mixed> $processorConfiguration The configuration of this processor
+     * @param array<mixed> $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
      *
-     * @return array the processed data as key/value store
+     * @return array<mixed> the processed data as key/value store
      */
     public function process(
         ContentObjectRenderer $cObj,
@@ -178,7 +178,7 @@ class MappingProcessor implements DataProcessorInterface
                     case self::VAL_GENERIC_TYPE_CONSTANT:
                         $result[$mapKey][$newFieldName] = $pretext . $posttext;
                         break;
-                    default :
+                    default:
                         throw new TimerException(
                             'The given type `' . $type . '` is unknown. for the mapping of `' . $outputFieldName . '`. ' .
                             'Check the typoscript-configuration of your dataprocessor `' . self::class . '`.',
@@ -205,16 +205,16 @@ class MappingProcessor implements DataProcessorInterface
             }
         }
         switch ($outputFormat) {
-            case self::VAL_OUTPUT_FORMAT_JSON :
+            case self::VAL_OUTPUT_FORMAT_JSON:
                 $processedData[$outputFieldName] = json_encode(
                     $result,
                     JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
                 );
                 break;
-            case self::VAL_OUTPUT_FORMAT_ARRAY :
+            case self::VAL_OUTPUT_FORMAT_ARRAY:
                 $processedData[$outputFieldName] = $result;
                 break;
-            default :
+            default:
                 throw new TimerException(
                     'The outputformat `' . $outputFormat . '` is not defined. ' .
                     'Allowed are only one of the case-sensitive list `' . self::VAL_OUTPUT_FORMAT_JSON . ', ' . self::VAL_OUTPUT_FORMAT_ARRAY . '`.' .
@@ -226,5 +226,4 @@ class MappingProcessor implements DataProcessorInterface
         // allow the call of a Dataprocessor in a dataprocessor
         return $processedData;
     }
-
 }

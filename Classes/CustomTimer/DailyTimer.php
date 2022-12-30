@@ -32,13 +32,11 @@ use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
 
-
 /**
  * @package DailyTimer
  */
 class DailyTimer implements TimerInterface
 {
-
     use GeneralTimerTrait;
 
     protected const TIMER_NAME = 'txTimerDaily';
@@ -46,6 +44,7 @@ class DailyTimer implements TimerInterface
     protected const ARG_REQ_START_TIME = 'startTimeSeconds';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
     protected const ARG_REQ_DURMIN_MIN = -1439;
+    protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
     protected const ARG_REQ_DURMIN_MAX = 1439;
     protected const ARG_REQ_LIST = [
         self::ARG_ULTIMATE_RANGE_BEGINN,
@@ -75,7 +74,7 @@ class DailyTimer implements TimerInterface
     protected $lastIsActiveTimestamp;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $lastIsActiveParams = [];
 
@@ -90,7 +89,7 @@ class DailyTimer implements TimerInterface
 
     /**
      * tested 20201016/20201225
-     * @return array
+     * @return array<mixed>
      */
     public static function getSelectorItem(): array
     {
@@ -105,7 +104,7 @@ class DailyTimer implements TimerInterface
      * tested
      *
      * @param string $activeZoneName
-     * @param array $params
+     * @param array<mixed> $params
      * @return string
      */
     public function getTimeZoneOfEvent($activeZoneName, array $params = []): string
@@ -116,7 +115,7 @@ class DailyTimer implements TimerInterface
 
     /**
      * tested 20201016
-     * @return array
+     * @return array<mixed>
      */
     public static function getFlexformItem(): array
     {
@@ -132,13 +131,12 @@ class DailyTimer implements TimerInterface
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function validate(array $params = []): bool
     {
-        $flag = true;
-        $flag = $flag && $this->validateZone($params);
+        $flag = $this->validateZone($params);
         $flag = $flag && $this->validateFlagZone($params);
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateArguments($params);
@@ -153,23 +151,17 @@ class DailyTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     protected function validateArguments(array $params = []): int
     {
-        $flag = 0;
-        foreach (self::ARG_REQ_LIST as $key) {
-            if (isset($params[$key])) {
-                $flag++;
-            }
-        }
-        return $flag;
+        return $this->countParamsInList(self::ARG_REQ_LIST, $params);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validateStartTime(array $params = []): bool
@@ -179,23 +171,24 @@ class DailyTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return int
+     * @param array<mixed> $params
+     * @return bool
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
-        $value = (isset($params[self::ARG_REQ_DURATION_MINUTES]) ?
-            $params[self::ARG_REQ_DURATION_MINUTES] :
-            0
+        $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
+        $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        return (
+            ($number - $floatNumber == 0) &&
+            ($number >= self::ARG_REQ_DURMIN_MIN) &&
+            ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
+            ($number <= self::ARG_REQ_DURMIN_MAX)
         );
-        $number = (int)$value;
-        return is_int($number) && ($number !== 0) && (($number - $value) === 0) &&
-            ($number >= self::ARG_REQ_DURMIN_MIN) && ($number <= self::ARG_REQ_DURMIN_MAX);
     }
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     protected function validateActiveWeekday(array $params = []): bool
@@ -217,25 +210,19 @@ class DailyTimer implements TimerInterface
 
     /**
      * This method are introduced for easy build of unittests
-     * @param array $params
-     * @return bool
+     * @param array<mixed> $params
+     * @return int
      */
     protected function validateOptional(array $params = []): int
     {
-        $count = 0;
-        foreach (self::ARG_OPT_LIST as $key) {
-            if (isset($params[$key])) {
-                $count++;
-            }
-        }
-        return $count;
+        return $this->countParamsInList(self::ARG_OPT_LIST, $params);
     }
 
     /**
      * tested 20201226
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
@@ -250,7 +237,7 @@ class DailyTimer implements TimerInterface
      * check, if the timer it for this time active
      *
      * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone in paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return bool
      */
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
@@ -266,7 +253,8 @@ class DailyTimer implements TimerInterface
             $params[self::ARG_OPT_ACTIVE_WEEKDAY]
         );
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-        $startTimeSeconds = ((empty($params[self::ARG_REQ_START_TIME])) ?
+        $startTimeSeconds = (
+            (empty($params[self::ARG_REQ_START_TIME])) ?
             0 :
             ((int)$params[self::ARG_REQ_START_TIME] % 86400)
         ); // seconds starting at 00:00
@@ -278,7 +266,8 @@ class DailyTimer implements TimerInterface
         if ($startTimerString <= $dateTestString) {
             if ($delayMin >= 0) {
                 $dateStartString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStart = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+                $dateStart = DateTime::createFromFormat(
+                    self::TIMER_FORMAT_DATETIME,
                     $dateStartString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -287,7 +276,8 @@ class DailyTimer implements TimerInterface
                 $weekDayNumber = 2 ** ($dateStart->format('N') - 1); // MO = 1, ... So = 7
             } else {
                 $dateStopString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStop = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+                $dateStop = DateTime::createFromFormat(
+                    self::TIMER_FORMAT_DATETIME,
                     $dateStopString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -302,7 +292,8 @@ class DailyTimer implements TimerInterface
         } else { // remeber $startTimerString is ever greater than $dateTestString
             if ($delayMin >= 0) {
                 $dateStartString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStart = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+                $dateStart = DateTime::createFromFormat(
+                    self::TIMER_FORMAT_DATETIME,
                     $dateStartString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -312,7 +303,8 @@ class DailyTimer implements TimerInterface
                 $weekDayNumber = 2 ** ($dateStart->format('N') - 1); // MO = 1, ... So = 7
             } else {
                 $dateStopString = $dateLikeEventZone->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimerString;
-                $dateStop = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+                $dateStop = DateTime::createFromFormat(
+                    self::TIMER_FORMAT_DATETIME,
                     $dateStopString,
                     $dateLikeEventZone->getTimezone()
                 );
@@ -332,10 +324,10 @@ class DailyTimer implements TimerInterface
      * tested: 20221009
      *
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -344,7 +336,7 @@ class DailyTimer implements TimerInterface
      * tested 20201227
      *
      * @param DateTime $dateBelowNextActive lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function nextActive(DateTime $dateBelowNextActive, $params = []): TimerStartStopRange
@@ -357,7 +349,8 @@ class DailyTimer implements TimerInterface
         $nextRange = new TimerStartStopRange();
         $count = 0;
         do {
-            $dateBorder = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+            $dateBorder = DateTime::createFromFormat(
+                self::TIMER_FORMAT_DATETIME,
                 $testTag->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimeUtc->format(self::TIMER_FORMAT_TIME),
                 $dateBelowNextActive->getTimezone()
             );
@@ -384,7 +377,6 @@ class DailyTimer implements TimerInterface
                     1602358042
                 );
             }
-
         } while (
             !(
                 ($startLimit > $dateBelowNextActive) &&
@@ -400,7 +392,7 @@ class DailyTimer implements TimerInterface
      * tested 20201227
      *
      * @param DateTime $dateAbovePrevActive
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     public function prevActive(DateTime $dateAbovePrevActive, $params = []): TimerStartStopRange
@@ -409,11 +401,12 @@ class DailyTimer implements TimerInterface
 
         $testTag = clone $dateAbovePrevActive;
 
-        /** @var TimerStartStopRange $nextRange */
+        /** @var TimerStartStopRange $prevRange */
         $prevRange = new TimerStartStopRange();
         $count = 0;
         do {
-            $dateBorder = DateTime::createFromFormat(self::TIMER_FORMAT_DATETIME,
+            $dateBorder = DateTime::createFromFormat(
+                self::TIMER_FORMAT_DATETIME,
                 $testTag->format(self::TIMER_FORMAT_DATE) . ' ' . $startTimeUtc->format(self::TIMER_FORMAT_TIME),
                 $dateAbovePrevActive->getTimezone()
             );
@@ -440,7 +433,6 @@ class DailyTimer implements TimerInterface
                     1602358042
                 );
             }
-
         } while (
             !(
                 ($stopLimit < $dateAbovePrevActive) &&
@@ -453,8 +445,8 @@ class DailyTimer implements TimerInterface
     }
 
     /**
-     * @param array $params
-     * @return array
+     * @param array<mixed> $params
+     * @return array<mixed>
      */
     protected function getParameterFromFlexform(array $params): array
     {
@@ -466,17 +458,19 @@ class DailyTimer implements TimerInterface
 
 
     /**
-     * @param $dateStart
-     * @param $dateStop
+     * @param DateTime $dateStart
+     * @param DateTime $dateStop
      * @param bool $flag
      * @param DateTime $dateLikeEventZone
+     * @param array<mixed> $params
+     * @return void
      */
     protected function setIsActiveResult(
-        $dateStart,
-        $dateStop,
+        DateTime $dateStart,
+        DateTime $dateStop,
         bool $flag,
         DateTime $dateLikeEventZone,
-        $params = []
+        array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
@@ -490,7 +484,7 @@ class DailyTimer implements TimerInterface
 
     /**
      * @param DateTime $dateLikeEventZone
-     * @param array $params
+     * @param array<mixed> $params
      * @return TimerStartStopRange
      */
     protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
@@ -507,5 +501,4 @@ class DailyTimer implements TimerInterface
         }
         return (clone $this->lastIsActiveResult);
     }
-
 }

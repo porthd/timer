@@ -92,9 +92,11 @@ class WeekdaylyTimerTest extends TestCase
      */
     public function selfName()
     {
-        $this->assertEquals(self::NAME_TIMER,
+        $this->assertEquals(
+            self::NAME_TIMER,
             $this->subject::selfName(),
-            'The name musst be defined.');
+            'The name musst be defined.'
+        );
     }
 
     /**
@@ -103,16 +105,24 @@ class WeekdaylyTimerTest extends TestCase
     public function getSelectorItem()
     {
         $result = $this->subject->getSelectorItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertGreaterThan(1,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertGreaterThan(
+            1,
             count($result),
-            'The array  must contain at least two items.');
-        $this->assertIsString($result[0],
-            'The first item must be an string.');
-        $this->assertEquals($result[1],
+            'The array  must contain at least two items.'
+        );
+        $this->assertIsString(
+            $result[0],
+            'The first item must be an string.'
+        );
+        $this->assertEquals(
+            $result[1],
             self::NAME_TIMER,
-            'The second term must the name of the timer.');
+            'The second term must the name of the timer.'
+        );
     }
 
     /**
@@ -121,40 +131,58 @@ class WeekdaylyTimerTest extends TestCase
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray($result,
-            'The result must be an array.');
-        $this->assertEquals(1,
+        $this->assertIsArray(
+            $result,
+            'The result must be an array.'
+        );
+        $this->assertEquals(
+            1,
             count($result),
-            'The array  must contain one Item.');
-        $this->assertEquals(array_keys($result),
+            'The array  must contain one Item.'
+        );
+        $this->assertEquals(
+            array_keys($result),
             [self::NAME_TIMER],
-            'The key must the name of the timer.');
-        $this->assertIsString($result[self::NAME_TIMER],
-            'The value must be type of string.');
+            'The key must the name of the timer.'
+        );
+        $this->assertIsString(
+            $result[self::NAME_TIMER],
+            'The value must be type of string.'
+        );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
         if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                substr($filePath,
-                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH));
+                substr(
+                    $filePath,
+                    strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
+                );
         } else {
             if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
                 $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
-                    substr($filePath,
-                        strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-                $this->assertTrue((false),
-                    'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. ');
+                    substr(
+                        $filePath,
+                        strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
+                    );
+                $this->assertTrue(
+                    (false),
+                    'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. '
+                );
             } else {
                 $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
             }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue($flag,
-            'The file with the flexform content exist.');
+        $this->assertTrue(
+            $flag,
+            'The file with the flexform content exist.'
+        );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue((!(!$flexArray)),
-            'The filecontent is valid xml.');
+        $this->assertTrue(
+            (!(!$flexArray)),
+            'The filecontent is valid xml.'
+        );
     }
 
     /**
@@ -272,8 +300,10 @@ class WeekdaylyTimerTest extends TestCase
         foreach ([[12], new DateTime('now')] as $value) {
             $result[] = [
                 'message' => 'The test for `activeWeekday` failed' .
-                    ', because `activeWeekday` must be an integer between 1 and 128 not a `' . print_r($value,
-                        true) . '`.',
+                    ', because `activeWeekday` must be an integer between 1 and 128 not a `' . print_r(
+                        $value,
+                        true
+                    ) . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -397,18 +427,15 @@ class WeekdaylyTimerTest extends TestCase
      */
     public function validateSpecialByVariationArgumentsInParam($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $paramTest = array_merge($params['required'], $params['optional'], $params['general'], $params['obsolete']);
             $this->assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
-
         }
     }
 
@@ -430,7 +457,6 @@ class WeekdaylyTimerTest extends TestCase
         ];
         foreach ($list as $unsetParam => $expects
         ) {
-
             $item = [
                 'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
@@ -504,7 +530,6 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
             ];
-
         }
         // Variation for ultimateBeginningTimer
         foreach ([
@@ -563,26 +588,26 @@ class WeekdaylyTimerTest extends TestCase
      */
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $paramTest = array_merge($params['rest'], $params['general']);
             $this->assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
-
         }
     }
 
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00',
-            new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(
+            TimerInterface::TIMER_FORMAT_DATETIME,
+            '2020-12-31 12:00:00',
+            new DateTimeZone('Europe/Berlin')
+        );
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -674,11 +699,9 @@ class WeekdaylyTimerTest extends TestCase
      */
     public function isAllowedInRange($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
             $this->assertEquals(
@@ -686,14 +709,12 @@ class WeekdaylyTimerTest extends TestCase
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
             );
-
         }
     }
 
 
     public function dataProviderGetTimeZoneOfEvent()
     {
-
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
@@ -813,7 +834,6 @@ class WeekdaylyTimerTest extends TestCase
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
-
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
@@ -846,10 +866,12 @@ class WeekdaylyTimerTest extends TestCase
                          '12:00:00' => 'PT12H1S',
                          '23:59:59' => 'PT24H',
                      ] as $okayTime => $failSub) {
-                $okayDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME,
-                    $dateString . ' ' . $okayTime, new DateTimeZone('Europe/Berlin'));
+                $okayDate = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    $dateString . ' ' . $okayTime,
+                    new DateTimeZone('Europe/Berlin')
+                );
                 foreach (['', 'P7D', 'P2W', 'P10W', 'P1400D'] as $key => $addOkay) {
-
                     if (!empty($addOkay)) {
                         if ($key % 2 === 0) {
                             $okayDate->add(new DateInterval($addOkay));
@@ -928,8 +950,11 @@ class WeekdaylyTimerTest extends TestCase
                     'result' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-01-04 12:00:00',
-                        new DateTimeZone('Europe/Berlin')), // variated relative to variation with respect to result
+                    'value' => date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        '2021-01-04 12:00:00',
+                        new DateTimeZone('Europe/Berlin')
+                    ), // variated relative to variation with respect to result
                     'setting' => [
                         'activeWeekday' => $i, // // variation
                         // general
@@ -940,7 +965,6 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
             ];
-
         }
 
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
@@ -953,10 +977,13 @@ class WeekdaylyTimerTest extends TestCase
                          'Pacific/Fiji',
                          'Indian/Chagos',
                      ] as $timezoneName) {
-                $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
-                    new DateTimeZone('Europe/Berlin'));
+                $check = date_create_from_format(
+                    TimerInterface::TIMER_FORMAT_DATETIME,
+                    '2020-12-27 11:00:00',
+                    new DateTimeZone('Europe/Berlin')
+                );
                 $result[] = [
-                    'message' => 'The date with additional Interval  will be NOT active. It is indepent to the timezone `' . $timezoneName . '`. ',
+                    'message' => 'The date with additional Interval  will be NOT active. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => true,
                     ],
@@ -974,7 +1001,7 @@ class WeekdaylyTimerTest extends TestCase
                 ];
                 $check->add(new DateInterval('PT13H'));
                 $result[] = [
-                    'message' => 'The date with additional Interval  will be active. It is indepent to the timezone `' . $timezoneName . '`.',
+                    'message' => 'The date with additional Interval  will be active. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => false,
                     ],
@@ -990,7 +1017,6 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                 ];
-
             }
         }
 
@@ -1002,8 +1028,11 @@ class WeekdaylyTimerTest extends TestCase
                      '2020-12-27 18:00:00',
                      '9999-12-31 23:59:59',
                  ] as $timeString) {
-            $check = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-27 11:00:00',
-                new DateTimeZone('Europe/Berlin'));
+            $check = date_create_from_format(
+                TimerInterface::TIMER_FORMAT_DATETIME,
+                '2020-12-27 11:00:00',
+                new DateTimeZone('Europe/Berlin')
+            );
             $result[] = [
                 'message' => 'The teststring for ultimate endtime `' . $timeString . '` extend the ultimate range to `2020-12-27 11:00:00` or abowe for an positive result. ',
                 'expects' => [
@@ -1042,7 +1071,6 @@ class WeekdaylyTimerTest extends TestCase
 
             $check->add(new DateInterval('PT13H'));
             if ('2020-12-27 11:00:00' >= $timeString) {
-
                 $result[] = [
                     'message' => 'The date with additional Interval  will be active. It is independ to the ultimate-parameter. ',
                     'expects' => [
@@ -1073,11 +1101,9 @@ class WeekdaylyTimerTest extends TestCase
      */
     public function isActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = array_merge($params['setting']);
             $value = clone $params['value'];
             $this->assertEquals(
@@ -1090,15 +1116,12 @@ class WeekdaylyTimerTest extends TestCase
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
-
         }
     }
 
 
     public function dataProviderNextActive()
     {
-
-
         $result = [];
         // 1. rondomly Test with positiv result
         $result[] = [
@@ -1155,53 +1178,53 @@ class WeekdaylyTimerTest extends TestCase
             $tomorrow = DateTime::createFromFormat('Y-m-d', $testDate);
             $tomorrow->add(new DateInterval('P1D'));
             $tomorrowDate = $tomorrow->format('Y-m-d');
-            foreach(['00:00:00','12:00:00', '23:59:59'] as $time) {
-            $result[] = [
-                'message' => 'The nextRange `'.$nextWeekDate.'` is detected correctly on the same day for the date `' . $testDate . ' '.$time.
-                    '`, because it lies in the future.',
-                'expects' => [
-                    'result' => [
-                        'beginning' => $nextWeekDate . ' 00:00:00',
-                        'ending' => $nextWeekDate . ' 23:59:59',
-                        'exist' => true,
+            foreach (['00:00:00','12:00:00', '23:59:59'] as $time) {
+                $result[] = [
+                    'message' => 'The nextRange `'.$nextWeekDate.'` is detected correctly on the same day for the date `' . $testDate . ' '.$time.
+                        '`, because it lies in the future.',
+                    'expects' => [
+                        'result' => [
+                            'beginning' => $nextWeekDate . ' 00:00:00',
+                            'ending' => $nextWeekDate . ' 23:59:59',
+                            'exist' => true,
+                        ],
                     ],
-                ],
-                'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
-                    'setting' => [
-                        'activeWeekday' => $weekday, // =only sunday and saturday 2020-12-27 is a sunday
+                    'params' => [
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                        'setting' => [
+                            'activeWeekday' => $weekday, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
-                        'useTimeZoneOfFrontend' => 'true', // Variation
-                        'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
-                        'ultimateBeginningTimer' => '0001-01-01 00:00:00',
-                        'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                            'useTimeZoneOfFrontend' => 'true', // Variation
+                            'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
+                            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
+                            'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                        ],
                     ],
-                ],
-            ];
-            $result[] = [
-                'message' => 'The nextRange `'.$nextWeekDate.
-                    '` is detected correctly on the same day for the `tomorrow`-date `' . $tomorrowDate . ' '.$time.
-                    '`, because it lies in the future.',
-                'expects' => [
-                    'result' => [
-                        'beginning' => $nextWeekDate . ' 00:00:00',
-                        'ending' => $nextWeekDate . ' 23:59:59',
-                        'exist' => true,
+                ];
+                $result[] = [
+                    'message' => 'The nextRange `'.$nextWeekDate.
+                        '` is detected correctly on the same day for the `tomorrow`-date `' . $tomorrowDate . ' '.$time.
+                        '`, because it lies in the future.',
+                    'expects' => [
+                        'result' => [
+                            'beginning' => $nextWeekDate . ' 00:00:00',
+                            'ending' => $nextWeekDate . ' 23:59:59',
+                            'exist' => true,
+                        ],
                     ],
-                ],
-                'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $tomorrowDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
-                    'setting' => [
-                        'activeWeekday' => $weekday, // =only sunday and saturday 2020-12-27 is a sunday
+                    'params' => [
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $tomorrowDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                        'setting' => [
+                            'activeWeekday' => $weekday, // =only sunday and saturday 2020-12-27 is a sunday
                         // general
-                        'useTimeZoneOfFrontend' => 'true', // Variation
-                        'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
-                        'ultimateBeginningTimer' => '0001-01-01 00:00:00',
-                        'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                            'useTimeZoneOfFrontend' => 'true', // Variation
+                            'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
+                            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
+                            'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                        ],
                     ],
-                ],
-            ];
-        }
+                ];
+            }
             $yesterday = DateTime::createFromFormat('Y-m-d', $testDate);
             $yesterday->sub(new DateInterval('P1D'));
             $result[] = [
@@ -1226,7 +1249,6 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
             ];
-
         }
 
 
@@ -1234,7 +1256,7 @@ class WeekdaylyTimerTest extends TestCase
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It is indepent to the timezone `' . $timezoneName . '`. ',
+                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 00:00:00',
@@ -1255,7 +1277,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It is indepent to the timezone `' . $timezoneName . '`.',
+                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 00:00:00',
@@ -1275,7 +1297,6 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                 ];
-
             }
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
@@ -1290,7 +1311,7 @@ class WeekdaylyTimerTest extends TestCase
                  ] as $timeString) {
             if (($timeString >= '2020-12-27 13:00:00') &&
                 ($timeString < '2021-01-02 00:00:00') // diasallow next sunday
-            ){  // allow only correctly ordered times
+            ) {  // allow only correctly ordered times
                 $result[] = [
                     'message' => 'The nextRange fails, because the last nextRange is disallowed by the ultimate parameter.  ' .
                         'The begin is `2020-12-27 13:00:00` and the variated end is `' . $timeString . '`. ',
@@ -1302,8 +1323,11 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-26 11:00:00',
-                            new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            '2020-12-26 11:00:00',
+                            new DateTimeZone('Europe/Berlin')
+                        ),
                         'setting' => [
                             'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                             // general
@@ -1327,8 +1351,11 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-26 11:00:00',
-                            new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            '2020-12-26 11:00:00',
+                            new DateTimeZone('Europe/Berlin')
+                        ),
                         'setting' => [
                             'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                             // general
@@ -1340,7 +1367,6 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ];
             }
-
         }
 
         return $result;
@@ -1352,11 +1378,9 @@ class WeekdaylyTimerTest extends TestCase
      */
     public function nextActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = array_merge($params['setting']);
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
@@ -1368,14 +1392,11 @@ class WeekdaylyTimerTest extends TestCase
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
-
         }
     }
 
     public function dataProviderPrevActive()
     {
-
-
         $result = [];
         // 1. rondomly Test with positiv result
         $result[] = [
@@ -1432,53 +1453,53 @@ class WeekdaylyTimerTest extends TestCase
             $yesterday = DateTime::createFromFormat('Y-m-d', $testDate);
             $yesterday->sub(new DateInterval('P1D'));
             $yesterdayDate = $yesterday->format('Y-m-d');
-            foreach(['00:00:00','12:00:00', '23:59:59'] as $time) {
-            $result[] = [
-                'message' => 'The prevRange `'.$prevWeekDate.'` is detected correctly on the same day for the date `' . $testDate . ' '.$time.
-                    '`, because it lies in the future.',
-                'expects' => [
-                    'result' => [
-                        'beginning' => $prevWeekDate . ' 00:00:00',
-                        'ending' => $prevWeekDate . ' 23:59:59',
-                        'exist' => true,
+            foreach (['00:00:00','12:00:00', '23:59:59'] as $time) {
+                $result[] = [
+                    'message' => 'The prevRange `'.$prevWeekDate.'` is detected correctly on the same day for the date `' . $testDate . ' '.$time.
+                        '`, because it lies in the future.',
+                    'expects' => [
+                        'result' => [
+                            'beginning' => $prevWeekDate . ' 00:00:00',
+                            'ending' => $prevWeekDate . ' 23:59:59',
+                            'exist' => true,
+                        ],
                     ],
-                ],
-                'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
-                    'setting' => [
-                        'activeWeekday' => $weekday, // Variation in combination with Date
-                        // general
-                        'useTimeZoneOfFrontend' => 'true',
-                        'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
-                        'ultimateBeginningTimer' => '0001-01-01 00:00:00',
-                        'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                    'params' => [
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                        'setting' => [
+                            'activeWeekday' => $weekday, // Variation in combination with Date
+                            // general
+                            'useTimeZoneOfFrontend' => 'true',
+                            'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
+                            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
+                            'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                        ],
                     ],
-                ],
-            ];
-            $result[] = [
-                'message' => 'The prevRange `'.$prevWeekDate.
-                    '` is detected correctly on the same day for the `tomorrow`-date `' . $yesterdayDate . ' '.$time.
-                    '`, because it lies in the future.',
-                'expects' => [
-                    'result' => [
-                        'beginning' => $prevWeekDate . ' 00:00:00',
-                        'ending' => $prevWeekDate . ' 23:59:59',
-                        'exist' => true,
+                ];
+                $result[] = [
+                    'message' => 'The prevRange `'.$prevWeekDate.
+                        '` is detected correctly on the same day for the `tomorrow`-date `' . $yesterdayDate . ' '.$time.
+                        '`, because it lies in the future.',
+                    'expects' => [
+                        'result' => [
+                            'beginning' => $prevWeekDate . ' 00:00:00',
+                            'ending' => $prevWeekDate . ' 23:59:59',
+                            'exist' => true,
+                        ],
                     ],
-                ],
-                'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $yesterdayDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
-                    'setting' => [
-                        'activeWeekday' => $weekday, // Variation in combination with Date
-                        // general
-                        'useTimeZoneOfFrontend' => 'true',
-                        'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
-                        'ultimateBeginningTimer' => '0001-01-01 00:00:00',
-                        'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                    'params' => [
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $yesterdayDate . ' '.$time, new DateTimeZone('Europe/Berlin')),
+                        'setting' => [
+                            'activeWeekday' => $weekday, // Variation in combination with Date
+                            // general
+                            'useTimeZoneOfFrontend' => 'true',
+                            'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
+                            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
+                            'ultimateEndingTimer' => '9999-12-31 23:59:59',
+                        ],
                     ],
-                ],
-            ];
-        }
+                ];
+            }
             $tomorrow = DateTime::createFromFormat('Y-m-d', $testDate);
             $tomorrow->add(new DateInterval('P1D'));
             $result[] = [
@@ -1503,7 +1524,6 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ],
             ];
-
         }
 
 
@@ -1511,7 +1531,7 @@ class WeekdaylyTimerTest extends TestCase
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It is indepent to the timezone `' . $timezoneName . '`. ',
+                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 00:00:00',
@@ -1532,7 +1552,7 @@ class WeekdaylyTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It is indepent to the timezone `' . $timezoneName . '`.',
+                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 00:00:00',
@@ -1552,7 +1572,6 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                 ];
-
             }
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
@@ -1576,8 +1595,11 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-28 11:00:00',
-                            new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            '2020-12-28 11:00:00',
+                            new DateTimeZone('Europe/Berlin')
+                        ),
                         'setting' => [
                             'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                             // general
@@ -1605,8 +1627,11 @@ class WeekdaylyTimerTest extends TestCase
                         ],
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-28 11:00:00',
-                            new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            '2020-12-28 11:00:00',
+                            new DateTimeZone('Europe/Berlin')
+                        ),
                         'setting' => [
                             'activeWeekday' => 65, // =only sunday and monday 2020-12-27 is a prev sunday
                             // general
@@ -1629,11 +1654,9 @@ class WeekdaylyTimerTest extends TestCase
      */
     public function prevActive($message, $expects, $params)
     {
-
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-
             $setting = array_merge($params['setting']);
             $value = $params['value'];
             /** @var TimerStartStopRange $result */
@@ -1645,8 +1668,6 @@ class WeekdaylyTimerTest extends TestCase
                 ($flag),
                 'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
-
         }
     }
-
 }

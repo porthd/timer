@@ -24,6 +24,7 @@ namespace Porthd\Timer\Domain\Repository;
 use DateTime;
 use Exception;
 use PDO;
+use Doctrine\DBAL\Exception as DbalException;
 use Porthd\Timer\Command\UpdateTimerCommand;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
@@ -38,13 +39,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class GeneralRepository implements TimerRepositoryInterface
 {
-
     public const GENERAL_ROW_IDENTIFIER = 'uid';
     public const GENERAL_PARENT_IDENTIFIER = 'pid';
 
 
     /**
-     * @param $tableName
+     * @param string $tableName
      * @return bool
      */
     public function tableExists($tableName): bool
@@ -64,22 +64,21 @@ class GeneralRepository implements TimerRepositoryInterface
     }
 
     /**
-     * @param array $listOfFields
-     * @param array $tableYamlConfig
+     * @param array<mixed> $listOfFields
+     * @param string $genericTable
      * @param DateTime $refTime
-     * @param array $pidList
-     * @return mixed
-     * @throws TimerException
+     * @param array<mixed> $pidList
+     * @param array<mixed> $whereInfos
+     * @return array<mixed>
+     * @throws DbalException
      */
     public function getTxTimerInfos(
         array $listOfFields,
         string $genericTable,
         DateTime $refTime,
-        $pidList = [],
-        $whereInfos = []
-    ) {
-//        $signalSlotDispatcher = GeneralUtility::makeInstance(ObjectManager::class)->get(Dispatcher::class);
-
+        array $pidList = [],
+        array $whereInfos = []
+    ): array {
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable($genericTable);
@@ -90,18 +89,22 @@ class GeneralRepository implements TimerRepositoryInterface
             ->add(GeneralUtility::makeInstance(HiddenRestriction::class));
         $contraints = [
             $queryBuilder->expr()->neq(TimerConst::TIMER_FIELD_SCHEDULER, 0),
-            $queryBuilder->expr()->neq(TimerConst::TIMER_FIELD_FLEX_ACTIVE,
+            $queryBuilder->expr()->neq(
+                TimerConst::TIMER_FIELD_FLEX_ACTIVE,
                 '""'
             ),
             $queryBuilder->expr()->isNotNull(TimerConst::TIMER_FIELD_FLEX_ACTIVE),
             $queryBuilder->expr()->isNotNull(TimerConst::TIMER_FIELD_SELECT),
-            $queryBuilder->expr()->neq(TimerConst::TIMER_FIELD_SELECT,
+            $queryBuilder->expr()->neq(
+                TimerConst::TIMER_FIELD_SELECT,
                 '""'
             ),
-            $queryBuilder->expr()->lte(TimerConst::TIMER_FIELD_STARTTIME,
+            $queryBuilder->expr()->lte(
+                TimerConst::TIMER_FIELD_STARTTIME,
                 $queryBuilder->createNamedParameter($refTime->getTimestamp(), PDO::PARAM_INT)
             ),
-            $queryBuilder->expr()->lte(TimerConst::TIMER_FIELD_ENDTIME,
+            $queryBuilder->expr()->lte(
+                TimerConst::TIMER_FIELD_ENDTIME,
                 $queryBuilder->createNamedParameter($refTime->getTimestamp(), PDO::PARAM_INT)
             ),
         ];
@@ -113,11 +116,6 @@ class GeneralRepository implements TimerRepositoryInterface
             $contraints[] = $queryBuilder->expr()->in(self::GENERAL_PARENT_IDENTIFIER, $pidList);
         }
 
-//        [$genericTable, $listOfFields, $contraints, $queryBuilder,] = $signalSlotDispatcher->dispatch(
-//            __CLASS__,
-//            self::SIGNAL_MODIFY_GENERIC_REQUEST,
-//            [$genericTable, $listOfFields, $contraints, $queryBuilder,]
-//        );
         $queryBuilder->select(...$listOfFields)
             ->from($genericTable)
             ->where(...$contraints);
@@ -126,11 +124,11 @@ class GeneralRepository implements TimerRepositoryInterface
     }
 
     /**
-     * @param $tableName
-     * @param $listOfFields
-     * @return array
+     * @param string $tableName
+     * @param array<mixed> $listOfFields
+     * @return array<mixed>
      */
-    public static function listAllInTable($tableName, $listOfFields)
+    public static function listAllInTable(string $tableName, array $listOfFields)
     {
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName)
@@ -138,15 +136,14 @@ class GeneralRepository implements TimerRepositoryInterface
         $queryBuilder->select(...$listOfFields)
             ->from($tableName);
         return $queryBuilder->execute()->fetchAllAssociative();
-
     }
 
 
     /**
-     * @param $whereInfos
+     * @param array<mixed> $whereInfos
      * @param QueryBuilder $queryBuilder
      */
-    protected function addWhereConditionsToQueryBuilder($whereInfos, QueryBuilder $queryBuilder): void
+    protected function addWhereConditionsToQueryBuilder(array $whereInfos, QueryBuilder $queryBuilder): void
     {
         foreach ($whereInfos as $condition) {
             $field = $condition[UpdateTimerCommand::YAML_SUBWHERE_FIELD];
