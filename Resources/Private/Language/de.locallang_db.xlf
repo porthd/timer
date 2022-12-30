@@ -105,8 +105,8 @@
                 <target>Default Timezone: Jedes Timer-Event ist für seine eigene Zeitzone definiert. Sie legen hier fest, welche Zeitzone vom Typo3-Backend standardmäßig eingestellt wird. Der Default-Wert bei leeren oder undefinierten Zonen ist `UTC`.</target>
             </trans-unit>
             <trans-unit id="extension.configuration.template.flag.selectInternatTimer">
-                <source>Activate predefined Timer: Summarize the values to activate only the timer you really need. (all = 2047  // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024)</source>
-                <target>Vordefinierten Timer aktivieren: Fassen Sie die Werte zusammen, um nur den wirklich benötigten Timer zu aktivieren. (all = 2047 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024)</target>
+                <source>Activate predefined Timer: Summarize the values to activate only the timer you really need. (all = 2047  // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048)</source>
+                <target>Vordefinierten Timer aktivieren: Fassen Sie die Werte zusammen, um nur den wirklich benötigten Timer zu aktivieren. (all = 2047 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048)</target>
             </trans-unit>
 
             <trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.title">
