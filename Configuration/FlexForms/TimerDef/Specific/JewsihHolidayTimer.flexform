@@ -31,27 +31,27 @@
                         <items type="array">
                             <numIndex index="0" type="array">
                                 <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ErevPesach
+                                </numIndex>
+                                <numIndex index="1">ErevPesach</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ErevRoshHashanah
                                 </numIndex>
                                 <numIndex index="1">ErevRoshHashanah</numIndex>
                             </numIndex>
-                            <numIndex index="1" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahI
-                                </numIndex>
-                                <numIndex index="1">RoshHashanahI</numIndex>
-                            </numIndex>
                             <numIndex index="2" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahII
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ErevShavuot
                                 </numIndex>
-                                <numIndex index="1">RoshHashanahII</numIndex>
+                                <numIndex index="1">ErevShavuot</numIndex>
                             </numIndex>
                             <numIndex index="3" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TzomGedaliah
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ErevSukkot
                                 </numIndex>
-                                <numIndex index="1">TzomGedaliah</numIndex>
+                                <numIndex index="1">ErevSukkot</numIndex>
                             </numIndex>
                             <numIndex index="4" type="array">
                                 <numIndex index="0">
@@ -61,153 +61,153 @@
                             </numIndex>
                             <numIndex index="5" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomKippur
-                                </numIndex>
-                                <numIndex index="1">YomKippur</numIndex>
-                            </numIndex>
-                            <numIndex index="6" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ErevSukkot
-                                </numIndex>
-                                <numIndex index="1">ErevSukkot</numIndex>
-                            </numIndex>
-                            <numIndex index="7" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotI
-                                </numIndex>
-                                <numIndex index="1">SukkotI</numIndex>
-                            </numIndex>
-                            <numIndex index="8" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotII_DiasporOnly
-                                </numIndex>
-                                <numIndex index="1">SukkotII_DiasporOnly</numIndex>
-                            </numIndex>
-                            <numIndex index="9" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inIsrael
-                                </numIndex>
-                                <numIndex index="1">HolHamoedSukkot_inIsrael</numIndex>
-                            </numIndex>
-                            <numIndex index="10" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inDiaspora
-                                </numIndex>
-                                <numIndex index="1">HolHamoedSukkot_inDiaspora</numIndex>
-                            </numIndex>
-                            <numIndex index="11" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HoshanaRabbah
-                                </numIndex>
-                                <numIndex index="1">HoshanaRabbah</numIndex>
-                            </numIndex>
-                            <numIndex index="12" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeret_inDiaspora
-                                </numIndex>
-                                <numIndex index="1">SheminiAzeret_inDiaspora</numIndex>
-                            </numIndex>
-                            <numIndex index="13" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeretSimchatTorah_inIsrael
-                                </numIndex>
-                                <numIndex index="1">SheminiAzeretSimchatTorah_inIsrael</numIndex>
-                            </numIndex>
-                            <numIndex index="14" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SimchatTorah_inDiaspora
-                                </numIndex>
-                                <numIndex index="1">SimchatTorah_inDiaspora</numIndex>
-                            </numIndex>
-                            <numIndex index="15" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inIsrael
-                                </numIndex>
-                                <numIndex index="1">IsruChagTishri_inIsrael</numIndex>
-                            </numIndex>
-                            <numIndex index="16" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inDiaspora
-                                </numIndex>
-                                <numIndex index="1">IsruChagTishri_inDiaspora</numIndex>
-                            </numIndex>
-                            <numIndex index="17" type="array">
-                                <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahI
                                 </numIndex>
                                 <numIndex index="1">HanukkahI</numIndex>
                             </numIndex>
-                            <numIndex index="18" type="array">
+                            <numIndex index="6" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahII
                                 </numIndex>
                                 <numIndex index="1">HanukkahII</numIndex>
                             </numIndex>
-                            <numIndex index="19" type="array">
+                            <numIndex index="7" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahIII
                                 </numIndex>
                                 <numIndex index="1">HanukkahIII</numIndex>
                             </numIndex>
-                            <numIndex index="20" type="array">
+                            <numIndex index="8" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahIV
                                 </numIndex>
                                 <numIndex index="1">HanukkahIV</numIndex>
                             </numIndex>
-                            <numIndex index="21" type="array">
+                            <numIndex index="9" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahV
                                 </numIndex>
                                 <numIndex index="1">HanukkahV</numIndex>
                             </numIndex>
-                            <numIndex index="22" type="array">
+                            <numIndex index="10" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVI
                                 </numIndex>
                                 <numIndex index="1">HanukkahVI</numIndex>
                             </numIndex>
-                            <numIndex index="23" type="array">
+                            <numIndex index="11" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVII
                                 </numIndex>
                                 <numIndex index="1">HanukkahVII</numIndex>
                             </numIndex>
-                            <numIndex index="24" type="array">
+                            <numIndex index="12" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVIII
                                 </numIndex>
                                 <numIndex index="1">HanukkahVIII</numIndex>
                             </numIndex>
+                            <numIndex index="13" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inDiaspora
+                                </numIndex>
+                                <numIndex index="1">HolHamoedPesach_inDiaspora</numIndex>
+                            </numIndex>
+                            <numIndex index="14" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inIsrael
+                                </numIndex>
+                                <numIndex index="1">HolHamoedPesach_inIsrael</numIndex>
+                            </numIndex>
+                            <numIndex index="15" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inIsrael
+                                </numIndex>
+                                <numIndex index="1">HolHamoedSukkot_inIsrael</numIndex>
+                            </numIndex>
+                            <numIndex index="16" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inDiaspora
+                                </numIndex>
+                                <numIndex index="1">HolHamoedSukkot_inDiaspora</numIndex>
+                            </numIndex>
+                            <numIndex index="17" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HoshanaRabbah
+                                </numIndex>
+                                <numIndex index="1">HoshanaRabbah</numIndex>
+                            </numIndex>
+                            <numIndex index="18" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inIsrael
+                                </numIndex>
+                                <numIndex index="1">IsruChagNisan_inIsrael</numIndex>
+                            </numIndex>
+                            <numIndex index="19" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inDiaspora
+                                </numIndex>
+                                <numIndex index="1">IsruChagNisan_inDiaspora</numIndex>
+                            </numIndex>
+                            <numIndex index="20" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inIsrael
+                                </numIndex>
+                                <numIndex index="1">IsruChagSivan_inIsrael</numIndex>
+                            </numIndex>
+                            <numIndex index="21" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inDiaspora
+                                </numIndex>
+                                <numIndex index="1">IsruChagSivan_inDiaspora</numIndex>
+                            </numIndex>
+                            <numIndex index="22" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inIsrael
+                                </numIndex>
+                                <numIndex index="1">IsruChagTishri_inIsrael</numIndex>
+                            </numIndex>
+                            <numIndex index="23" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inDiaspora
+                                </numIndex>
+                                <numIndex index="1">IsruChagTishri_inDiaspora</numIndex>
+                            </numIndex>
+                            <numIndex index="24" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.LagBOmer
+                                </numIndex>
+                                <numIndex index="1">LagBOmer</numIndex>
+                            </numIndex>
                             <numIndex index="25" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTevet
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachI
                                 </numIndex>
-                                <numIndex index="1">TzomTevet</numIndex>
+                                <numIndex index="1">PesachI</numIndex>
                             </numIndex>
                             <numIndex index="26" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TuBShevat
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachII_DiasporOnly
                                 </numIndex>
-                                <numIndex index="1">TuBShevat</numIndex>
+                                <numIndex index="1">PesachII_DiasporOnly</numIndex>
                             </numIndex>
                             <numIndex index="27" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PurimKatan
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVII
                                 </numIndex>
-                                <numIndex index="1">PurimKatan</numIndex>
+                                <numIndex index="1">PesachVII</numIndex>
                             </numIndex>
                             <numIndex index="28" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimKatan
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVIII_DiasporOnly
                                 </numIndex>
-                                <numIndex index="1">ShushanPurimKatan</numIndex>
+                                <numIndex index="1">PesachVIII_DiasporOnly</numIndex>
                             </numIndex>
                             <numIndex index="29" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TaAnithEsther
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachSheini
                                 </numIndex>
-                                <numIndex index="1">TaAnithEsther</numIndex>
+                                <numIndex index="1">PesachSheini</numIndex>
                             </numIndex>
                             <numIndex index="30" type="array">
                                 <numIndex index="0">
@@ -217,159 +217,159 @@
                             </numIndex>
                             <numIndex index="31" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPost
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PurimKatan
                                 </numIndex>
-                                <numIndex index="1">ShushanPurimPost</numIndex>
+                                <numIndex index="1">PurimKatan</numIndex>
                             </numIndex>
                             <numIndex index="32" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPur
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahI
                                 </numIndex>
-                                <numIndex index="1">ShushanPurimPur</numIndex>
+                                <numIndex index="1">RoshHashanahI</numIndex>
                             </numIndex>
                             <numIndex index="33" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahII
+                                </numIndex>
+                                <numIndex index="1">RoshHashanahII</numIndex>
+                            </numIndex>
+                            <numIndex index="34" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShabbatHagadol
                                 </numIndex>
                                 <numIndex index="1">ShabbatHagadol</numIndex>
                             </numIndex>
-                            <numIndex index="34" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ErevPesach
-                                </numIndex>
-                                <numIndex index="1">ErevPesach</numIndex>
-                            </numIndex>
                             <numIndex index="35" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachI
-                                </numIndex>
-                                <numIndex index="1">PesachI</numIndex>
-                            </numIndex>
-                            <numIndex index="36" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachII_DiasporOnly
-                                </numIndex>
-                                <numIndex index="1">PesachII_DiasporOnly</numIndex>
-                            </numIndex>
-                            <numIndex index="37" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inIsrael
-                                </numIndex>
-                                <numIndex index="1">HolHamoedPesach_inIsrael</numIndex>
-                            </numIndex>
-                            <numIndex index="38" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inDiaspora
-                                </numIndex>
-                                <numIndex index="1">HolHamoedPesach_inDiaspora</numIndex>
-                            </numIndex>
-                            <numIndex index="39" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVII
-                                </numIndex>
-                                <numIndex index="1">PesachVII</numIndex>
-                            </numIndex>
-                            <numIndex index="40" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVIII_DiasporOnly
-                                </numIndex>
-                                <numIndex index="1">PesachVIII_DiasporOnly</numIndex>
-                            </numIndex>
-                            <numIndex index="41" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inIsrael
-                                </numIndex>
-                                <numIndex index="1">IsruChagNisan_inIsrael</numIndex>
-                            </numIndex>
-                            <numIndex index="42" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inDiaspora
-                                </numIndex>
-                                <numIndex index="1">IsruChagNisan_inDiaspora</numIndex>
-                            </numIndex>
-                            <numIndex index="43" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomHashoah
-                                </numIndex>
-                                <numIndex index="1">YomHashoah</numIndex>
-                            </numIndex>
-                            <numIndex index="44" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomHazikaron
-                                </numIndex>
-                                <numIndex index="1">YomHazikaron</numIndex>
-                            </numIndex>
-                            <numIndex index="45" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomHaAtzmaut
-                                </numIndex>
-                                <numIndex index="1">YomHaAtzmaut</numIndex>
-                            </numIndex>
-                            <numIndex index="46" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.PesachSheini
-                                </numIndex>
-                                <numIndex index="1">PesachSheini</numIndex>
-                            </numIndex>
-                            <numIndex index="47" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.LagBOmer
-                                </numIndex>
-                                <numIndex index="1">LagBOmer</numIndex>
-                            </numIndex>
-                            <numIndex index="48" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomYerushalayim
-                                </numIndex>
-                                <numIndex index="1">YomYerushalayim</numIndex>
-                            </numIndex>
-                            <numIndex index="49" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ErevShavuot
-                                </numIndex>
-                                <numIndex index="1">ErevShavuot</numIndex>
-                            </numIndex>
-                            <numIndex index="50" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShavuotI
                                 </numIndex>
                                 <numIndex index="1">ShavuotI</numIndex>
                             </numIndex>
-                            <numIndex index="51" type="array">
+                            <numIndex index="36" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShavuotII_DiasporOnly
                                 </numIndex>
                                 <numIndex index="1">ShavuotII_DiasporOnly</numIndex>
                             </numIndex>
-                            <numIndex index="52" type="array">
+                            <numIndex index="37" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inIsrael
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeret_inDiaspora
                                 </numIndex>
-                                <numIndex index="1">IsruChagSivan_inIsrael</numIndex>
+                                <numIndex index="1">SheminiAzeret_inDiaspora</numIndex>
                             </numIndex>
-                            <numIndex index="53" type="array">
+                            <numIndex index="38" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inDiaspora
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeretSimchatTorah_inIsrael
                                 </numIndex>
-                                <numIndex index="1">IsruChagSivan_inDiaspora</numIndex>
+                                <numIndex index="1">SheminiAzeretSimchatTorah_inIsrael</numIndex>
                             </numIndex>
-                            <numIndex index="54" type="array">
+                            <numIndex index="39" type="array">
                                 <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTammuz
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimKatan
                                 </numIndex>
-                                <numIndex index="1">TzomTammuz</numIndex>
+                                <numIndex index="1">ShushanPurimKatan</numIndex>
                             </numIndex>
-                            <numIndex index="55" type="array">
+                            <numIndex index="40" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPost
+                                </numIndex>
+                                <numIndex index="1">ShushanPurimPost</numIndex>
+                            </numIndex>
+                            <numIndex index="41" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPur
+                                </numIndex>
+                                <numIndex index="1">ShushanPurimPur</numIndex>
+                            </numIndex>
+                            <numIndex index="42" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SimchatTorah_inDiaspora
+                                </numIndex>
+                                <numIndex index="1">SimchatTorah_inDiaspora</numIndex>
+                            </numIndex>
+                            <numIndex index="43" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotI
+                                </numIndex>
+                                <numIndex index="1">SukkotI</numIndex>
+                            </numIndex>
+                            <numIndex index="44" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotII_DiasporOnly
+                                </numIndex>
+                                <numIndex index="1">SukkotII_DiasporOnly</numIndex>
+                            </numIndex>
+                            <numIndex index="45" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TaAnithEsther
+                                </numIndex>
+                                <numIndex index="1">TaAnithEsther</numIndex>
+                            </numIndex>
+                            <numIndex index="46" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TishaBAv
                                 </numIndex>
                                 <numIndex index="1">TishaBAv</numIndex>
                             </numIndex>
-                            <numIndex index="56" type="array">
+                            <numIndex index="47" type="array">
                                 <numIndex index="0">
                                     LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TuBAv
                                 </numIndex>
                                 <numIndex index="1">TuBAv</numIndex>
+                            </numIndex>
+                            <numIndex index="48" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TuBShevat
+                                </numIndex>
+                                <numIndex index="1">TuBShevat</numIndex>
+                            </numIndex>
+                            <numIndex index="49" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TzomGedaliah
+                                </numIndex>
+                                <numIndex index="1">TzomGedaliah</numIndex>
+                            </numIndex>
+                            <numIndex index="50" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTammuz
+                                </numIndex>
+                                <numIndex index="1">TzomTammuz</numIndex>
+                            </numIndex>
+                            <numIndex index="51" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTevet
+                                </numIndex>
+                                <numIndex index="1">TzomTevet</numIndex>
+                            </numIndex>
+                            <numIndex index="52" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomHaAtzmaut
+                                </numIndex>
+                                <numIndex index="1">YomHaAtzmaut</numIndex>
+                            </numIndex>
+                            <numIndex index="53" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomHashoah
+                                </numIndex>
+                                <numIndex index="1">YomHashoah</numIndex>
+                            </numIndex>
+                            <numIndex index="54" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomHazikaron
+                                </numIndex>
+                                <numIndex index="1">YomHazikaron</numIndex>
+                            </numIndex>
+                            <numIndex index="55" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomKippur
+                                </numIndex>
+                                <numIndex index="1">YomKippur</numIndex>
+                            </numIndex>
+                            <numIndex index="56" type="array">
+                                <numIndex index="0">
+                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.select.namedDate.YomYerushalayim
+                                </numIndex>
+                                <numIndex index="1">YomYerushalayim</numIndex>
                             </numIndex>
                         </items>
                         <minitems>1</minitems>
