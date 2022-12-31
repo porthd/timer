@@ -8,7 +8,8 @@ Kamp-Lintfort in 2022
 
 ## Attention
 
-8. November 2022: The Timer `RangeListTimer` und `PeriodListTimer` don`t work correctly.
+- ~~8. November 2022: The Timer `RangeListTimer` und `PeriodListTimer` don`t work correctly.~~
+- 27 Dezember 2022: The timer `RangeListTimer` and `PeriodListTimer` show work now. Unittest are defined and aproved the function of that timers.
 
 ## Motivation
 
