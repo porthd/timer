@@ -140,18 +140,18 @@ class PeriodlistProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ) {
-        if (isset($processorConfiguration[self::ATTR_FLEX_FIELD])) {
+        if (array_key_exists(self::ATTR_FLEX_FIELD, $processorConfiguration)) {
             $flexFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_FIELD, $processorConfiguration, false);
         } else {
             $flexFieldName = self::DEFAULT_FLEX_FIELD;
         }
-        if (isset($processorConfiguration[self::ATTR_FLEX_SELECTORFIELD])) {
+        if (array_key_exists(self::ATTR_FLEX_SELECTORFIELD, $processorConfiguration)) {
             $selectorFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_SELECTORFIELD, $processorConfiguration, false);
         } else {
             $selectorFieldName = self::DEFAULT_SELECTOR_FIELD;
         }
-        if ((isset($processorConfiguration[self::ATTR_IF_DOT]) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
-            (!isset($processedData[self::OUTPUT_KEY_DATA][$selectorFieldName])) ||
+        if ((array_key_exists(self::ATTR_IF_DOT, $processorConfiguration) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
+            (!array_key_exists($selectorFieldName, $processedData[self::OUTPUT_KEY_DATA])) ||
             (empty($processedData[self::OUTPUT_KEY_DATA][$flexFieldName])) ||
             (trim($processedData[self::OUTPUT_KEY_DATA][$selectorFieldName]) !== PeriodListTimer::TIMER_NAME)
         ) {
@@ -165,7 +165,7 @@ class PeriodlistProcessor implements DataProcessorInterface
         $flexFormParamRawList = GeneralUtility::xml2array($flexFormParameterString);
         $paramList = TcaUtility::flexformArrayFlatten($flexFormParamRawList);
 
-        if (!isset($paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH])) {
+        if (!array_key_exists(PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH, $paramList)) {
             return $processedData;
         }
         // Make FAL in timer usable by defining the corresponding table and uid
@@ -190,7 +190,7 @@ class PeriodlistProcessor implements DataProcessorInterface
         $lower = null;
         $lowerDateString = null;
         $upperDateString = null;
-        if (isset($processorConfiguration[self::ATTR_LIMIT_DOT_LIST])) {
+        if (array_key_exists(self::ATTR_LIMIT_DOT_LIST, $processorConfiguration)) {
             $lowerDateString = $cObj->stdWrapValue(
                 self::ATTR_LIMIT_DOT_LOWER,
                 $processorConfiguration[self::ATTR_LIMIT_DOT_LIST],
@@ -213,7 +213,7 @@ class PeriodlistProcessor implements DataProcessorInterface
             );
         }
         $flagStart = true;
-        if (isset($processorConfiguration[self::ATTR_FLAG_START])) {
+        if (array_key_exists(self::ATTR_FLAG_START, $processorConfiguration)) {
             $flagValue = $cObj->stdWrapValue(self::ATTR_FLAG_START, $processorConfiguration, true);
             $flagValue = is_string($flagValue) ? trim(strtolower($flagValue)) : $flagValue;
             $flagStart = (in_array($flagValue, [0, '', '0', false, null, 'false', 0.0, []], true) ?
@@ -293,7 +293,7 @@ class PeriodlistProcessor implements DataProcessorInterface
             $newFieldKey = trim($newFieldKeyDot, '.');
             $format = $params['format'];
             foreach ($result as $key => $item) {
-                if (isset($result[$key][$newFieldKey])) {
+                if (array_key_exists($newFieldKey, $result[$key])) {
                     throw new TimerException(
                         'The action `' . 'dateToString.' . '` want to write to the existing field `' . $newFieldKey .
                         '` in your dataprocessor `' . self::class . '`. Check your typoscript-definition.',

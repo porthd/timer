@@ -22,12 +22,10 @@ namespace Porthd\Timer\Domain\Model;
  ***************************************************************/
 
 use Porthd\Timer\Domain\Model\Interfaces\TimerModellInterface;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Timings
+ * getter/setter model for the extended table/model tx_timer_domain_model_listing
  */
 class Listing extends AbstractEntity implements TimerModellInterface
 {

@@ -24,17 +24,6 @@ namespace Porthd\Timer\Domain\Model\Interfaces;
 use DateInterval;
 use DateTime;
 
-/***
- *
- * This file is part of the "Datemodel" Extension for TYPO3 CMS.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- *  (c) 2020
- *
- ***/
-
 /**
  * TimerStartStopRange contains getter and setter für data-exchanges in this extension `timer`
  */

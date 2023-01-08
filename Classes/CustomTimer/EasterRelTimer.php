@@ -201,6 +201,9 @@ class EasterRelTimer implements TimerInterface
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
+        if (!array_key_exists(self::ARG_REQ_DURATION_MINUTES, $params)) {
+            return false;
+        }
         $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
         $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
         return (
@@ -345,7 +348,7 @@ class EasterRelTimer implements TimerInterface
 
 
         $relToDateMin = (int)(
-            isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
+            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
@@ -404,7 +407,7 @@ class EasterRelTimer implements TimerInterface
         $result->failOnlyNextActive($dateLikeEventZone);
 
         $relToDateMin = (int)(
-            isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
+            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
@@ -456,7 +459,7 @@ class EasterRelTimer implements TimerInterface
     protected function detectCalendar($params = []): int
     {
         $calendar = (
-            (isset($params[self::ARG_CALENDAR_USE])) ?
+            (array_key_exists(self::ARG_CALENDAR_USE, $params)) ?
             ($params[self::ARG_CALENDAR_USE]) :
             0
         );
@@ -566,7 +569,7 @@ class EasterRelTimer implements TimerInterface
     protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
     {
         $relToDateMin = (int)(
-            isset($params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT]) ?
+            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );

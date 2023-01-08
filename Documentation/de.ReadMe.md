@@ -217,11 +217,15 @@ Es gibt vier Viewhelper:
 Da die Ergebnisse der Datenprozessoren gecacht werden, muss sich der User überlegen, was ein sinnvoller
 Caching-Zeitraum ist und dies entsprechend definieren.
 
+Grundsätzlich sollte im Sourcecode der jeweiligen DataProcessoren als Kommentar ein Beispiel für die Anwendung desselben zu finden sein.
+Für die Freunde der TypoScript-Programmierung sei gesagt, dass die Parameter über die stdWrap-Methode eingelesen werden. Die rekursive Nutzung von Typoscript zur Dynamisierung der Aufsetzung ist also möglich; auch wenn es hier ausdrücklich nicht empfohlen wird.
+
 #### RangeListQueryProcessor
 
 Der Prozessor erstellt für die Datensätze mit periodischen Timern aus einer Tabelle eine Liste von Terminen. Der
 Datenprozessor funktioniert ähnlich wie der `DbQueryProcessor`.
 
+##### _Beispiel in Typoscript_
 ```
 tt_content.timer_timersimul >
 tt_content.timer_timersimul < lib.contentElement
@@ -250,12 +254,35 @@ tt_content.timer_timersimul {
 
 Siehe auch Beispiel in exemplarischen Contentelement ``timersimul``
 
+##### _Parameter für den Dataprocessor `RangeListQueryProcessor`_
+Wegen der Wiederholung von Perioden kann in der Liste ein Datensatz mehrfach aufgezählt werden. Deshalb sind immer auch ein Start-Zeitpunkt und ein End-Zeitpunkt zu definieren.
+
+| Parameter      | Default                                                                                                                                | Beschreibung
+|----------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------
+|                | **_Datensätze_**                                                                                                                       |
+| if             | true                                                                                                                                   | Wenn der wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
+| table          | tx_timer_domain_model_event                                                                                                            | Diese Tabelle wird verwendet, um nach allen verfügbaren Datensätzen mit Timer-Informationen zu suchen.
+| pidInList      |                                                                                                                                        | Komma-separierte Liste von numerischen IDs für Seiten, die Datensätze für die Bestimmung der Liste mit Timer-Event enthalten können.
+| as             | records                                                                                                                                | Komma-separierte Liste von numerischen IDs für Seiten, die Datensätze für die Bestimmung der Liste mit Timer-Event enthalten können.
+|                | **_Start und Allgemeines_**                                                                                                            |
+| datetimeFormat | Y-m-d H:i:s                                                                                                                            | Definiert das Format, in welchem das Datum angegeben wird. Es gelten die Zeichen, die im PHP definiert sind (siehe [Liste](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
+| datetimeStart  | &lt;jetzt&gt;                                                                                                                          | Definiert den Zeitpunkt, mit welchem die Liste beginnen soll. Bei `reverse = false` ist es der früheste Zeitpunkt, und bei `reverse = true` ist es der späteste Zeitpunkt.
+| timezone       | &lt;definiert im PHP-System&gt;                                                                                                        | Definiert die Timezone, die bei den Datumswerten verwendet werden soll.
+| reverse        | false                                                                                                                                  | Definiert, ob die Liste der aktiven Bereiche absteigend oder aufsteigend sortiert ist. Bei `reverse = true` ist jeweils das Ende der aktiven Bereiche maßgeblich; Beim Defaultfall `reverse = true` ist es entsprechen der Anfang der aktiven Zeit.
+|                | **_Limit der Periode_**                                                                                                                |
+| maxCount       | 25                                                                                                                                     | Begrenzt der Liste über die maximale Anzahl der Listenelemente
+| maxLate        | &lt;sieben Tage relativ zum Startdaum&gt;                                                                                              | Begrenzt die Liste über ein Stop-Datum, dass nie erreicht werden kann.
+| maxGap         | P7D                                                                                                                                    | Begrenzt die Liste, indem aus dem Startzeitpunkt der entsprechende Stopzeitpunkt berechnet wird. Für die Angabe der zeitlichen Differenz ist die PHP-Notation für Zeitintervalle zu verwenden (siehe [Übersicht](https://www.php.net/manual/en/class.dateinterval.php)).
+|                | **_Spezielles_**                                                                                                                       |
+|    userRangeCompare            | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` oder `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Für die Bestimmung der Reihenfolge werden nur die Datumswerte verwendet. Der Nutzer könnte auch andere Sortierungskriterien berücksichtigen. Zum Beispiel könnte man eine Liste haben wollen, die zuerst nach dem Startdatum und bei gleichem Startdatum nach der Dauer der aktiven Bereiche sortiert wäre.
+
 #### SortListQueryProcessor
 
 Die Tabelle `sys_file_reference` unterstützt nicht die Felder `starttime` und `endtime`. Um trotzdem zeitliche
 variierende Bilder zu erreichen, kann man die per Datenprozessor erhalten Medien in einen nach Periodizität sortierte
 Liste überführen lassen und umwandeln lassen und im Template entsprechend nutzen.
 
+##### _Beispiel in TypoScript_
 ```
         dataProcessing {
             ...
@@ -289,7 +316,33 @@ Beachten sie, dass FLUIDTEMPLATE gecacht wird. Deshalb:
         }
     }
 ```
-####FlexToArrayProcessor
+
+##### _Parameter für den Dataprocessor `SortListQueryProcessor`_
+Wegen der Wiederholung von Perioden kann in der Liste ein Datensatz mehrfach aufgezählt werden. Deshalb sind immer auch ein Start-Zeitpunkt und ein End-Zeitpunkt zu definieren.
+
+Im Gegensatz zum `RangeListQueryProcessor` nutzt der `SortListQueryProcessor` Daten, die von einem  vorherigen oder übergeordneten Dataprozessor-Prozeß erzeugt wurden.
+Die Parameter `table` plus `pidInList` entfallen deshalb und der Parameter `fieldName` kommt neu hinzu.
+
+| Parameter        | Default                                                                                                                                | Beschreibung
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------
+|                  | **_Datensätze_**                                                                                                                       |
+| if               | true                                                                                                                                   | Wenn der wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
+| fieldName        | myrecords                                                                                                                              | Diese Tabelle wird verwendet, um nach allen verfügbaren Datensätzen mit Timer-Informationen zu suchen.
+| as               | sortedrecords                                                                                                                          | Name des Objekts, welches die einzelnen Events enthält und ans Fluid-Template übergeben wird. Die Genaue Struktur schaue man sich `&lt;f:debug>{sortedrecords}</f:debug>` an.
+|                  | **_Start und Allgemeines_**                                                                                                            |
+| datetimeFormat   | Y-m-d H:i:s                                                                                                                            | Definiert das Format, in welchem das Datum angegeben wird. Es gelten die Zeichen, die im PHP definiert sind (siehe [Liste](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
+| datetimeStart    | &lt;jetzt&gt;                                                                                                                          | Definiert den Zeitpunkt, mit welchem die Liste beginnen soll. Bei `reverse = false` ist es der früheste Zeitpunkt, und bei `reverse = true` ist es der späteste Zeitpunkt.
+| timezone         | &lt;definiert im PHP-System&gt;                                                                                                        | Definiert die Timezone, die bei den Datumswerten verwendet werden soll.
+| reverse          | false                                                                                                                                  | Definiert, ob die Liste der aktiven Bereiche absteigend oder aufsteigend sortiert ist. Bei `reverse = true` ist jeweils das Ende der aktiven Bereiche maßgeblich; Beim Defaultfall `reverse = true` ist es entsprechen der Anfang der aktiven Zeit.
+|                  | **_Limit der Periode_**                                                                                                                |
+| maxCount         | 25                                                                                                                                     | Begrenzt der Liste über die maximale Anzahl der Listenelemente
+| maxLate          | &lt;sieben Tage relativ zum Startdaum&gt;                                                                                              | Begrenzt die Liste über ein Stop-Datum, dass nie erreicht werden kann.
+| maxGap           | P7D                                                                                                                                    | Begrenzt die Liste, indem aus dem Startzeitpunkt der entsprechende Stopzeitpunkt berechnet wird. Für die Angabe der zeitlichen Differenz ist die PHP-Notation für Zeitintervalle zu verwenden (siehe [Übersicht](https://www.php.net/manual/en/class.dateinterval.php)).
+|                  | **_Spezielles_**                                                                                                                       |
+| userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` oder `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Für die Bestimmung der Reihenfolge werden nur die Datumswerte verwendet. Der Nutzer könnte auch andere Sortierungskriterien berücksichtigen. Zum Beispiel könnte man eine Liste haben wollen, die zuerst nach dem Startdatum und bei gleichem Startdatum nach der Dauer der aktiven Bereiche sortiert wäre.
+
+
+#### FlexToArrayProcessor
 Der `FlexToArrayProcessor` ermöglicht das Lesen von `Flex`-Feldern und wandelt sie in einfache Arrays um.
 Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das Inhaltselement `periodlist` nachgeladen werden.
 
@@ -317,11 +370,11 @@ Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das In
 
 ```
 
-####MappingProcessor
-Der Dataporcessor `MappingProcessor` erlaubt das Mappen/Abbilden von Arrays in neue Arrays oder in einen JSON-String.
+#### MappingProcessor
+Der Datenprozessor `MappingProcessor` erlaubt das Mappen/Abbilden von Arrays in neue Arrays oder in einen JSON-String.
 So können die Daten leicht HTML-Attribute dem JavaScript zur Verfügung gestellt werden.
-Der Dataprecessor kennt einfache generische Funktionen, um zum Beispiel Events eindeutige IDs zuzuordnen.
-Weiter erlaubt er das Mappen von Feldinhalten und das Anlegen von neuen Feldern mit konstanten Daten.
+Der Datenprozessor kennt einfache generische Funktionen, um zum Beispiel Events eindeutige IDs zuzuordnen.
+Weiter erlaubt er das Mappen/Abbilden von Feldinhalten und das Anlegen von neuen Feldern mit konstanten Daten.
 
 ```
 
@@ -371,7 +424,7 @@ Weiter erlaubt er das Mappen von Feldinhalten und das Anlegen von neuen Feldern 
 
 ```
 
-####PeriodlistProcessor
+#### PeriodlistProcessor
 Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei
 definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
 

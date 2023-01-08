@@ -543,7 +543,7 @@
 			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerGeneral.field.ultimateEndingTimer">
 				<source>Ending of the period for calculations of the timer periods</source>
-				<target>Beginn des Zeitraums für Berechnungen der Perioden des Timers</target>
+				<target>Ende des Zeitraums für Berechnungen der Perioden des Timers</target>
 			</trans-unit>
 			<!-- helpful stuff txTimerGeneral -->
 			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.monday">

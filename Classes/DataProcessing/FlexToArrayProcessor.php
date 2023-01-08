@@ -21,17 +21,9 @@ namespace Porthd\Timer\DataProcessing;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateTime;
-use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\PeriodListTimer;
-use Porthd\Timer\Domain\Repository\TimerRepositoryInterface;
-use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
-use Porthd\Timer\Services\ListOfEventsService;
-use Porthd\Timer\Utilities\CustomTimerUtility;
-use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
@@ -112,18 +104,18 @@ class FlexToArrayProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ) {
-        if (isset($processorConfiguration[self::ATTR_FLEX_FIELD])) {
+        if (array_key_exists(self::ATTR_FLEX_FIELD, $processorConfiguration)) {
             $flexFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_FIELD, $processorConfiguration, false);
         } else {
             $flexFieldName = self::DEFAULT_FLEX_FIELD;
         }
-        if (isset($processorConfiguration[self::ATTR_SELECTOR_FIELD])) {
+        if (array_key_exists(self::ATTR_SELECTOR_FIELD, $processorConfiguration)) {
             $selectorFieldName = $cObj->stdWrapValue(self::ATTR_SELECTOR_FIELD, $processorConfiguration, false);
         } else {
             $selectorFieldName = self::DEFAULT_SELECTOR_FIELD;
         }
-        if ((isset($processorConfiguration[self::ATTR_IF_DOT]) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
-            (!isset($processedData[self::OUTPUT_ARG_DATA][$selectorFieldName])) ||
+        if ((array_key_exists(self::ATTR_IF_DOT, $processorConfiguration) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
+            (!array_key_exists(self::OUTPUT_ARG_DATA, $processedData[$selectorFieldName])) ||
             (trim($processedData[self::OUTPUT_ARG_DATA][$selectorFieldName]) !== PeriodListTimer::TIMER_NAME)
         ) {
             return $processedData;

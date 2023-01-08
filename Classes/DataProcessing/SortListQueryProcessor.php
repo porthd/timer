@@ -40,36 +40,62 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
- * Example TypoScript configuration:
+ * Example TypoScript configuration for periodically changing backgroundimages :
  *
- * The table must contain the flex-field `tx_timer_timer` and the string-field `tx_timer_selector`.
+ * lib.dataprocessor.timer.media.pages >
+ * lib.dataprocessor.timer.media.pages  = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+ * lib.dataprocessor.timer.media.pages {
+ *     #    references.fieldName = media
+ *     #    references.table = pages
+ *     references.data = levelmedia: -1, slide
+ *     as = myfiles
+ *     dataProcessing {
+ *         10 = Porthd\Timer\DataProcessing\SortListQueryProcessor
+ *         10 {
+ *             # name of the inputfield with the field, which contains the timerdefinition
+ *             # default: `myrecords`
+ *             fieldName = myfiles
+ *             # name of the outputfiled in the fluid-template
+ *             # default: `sortedrecords`
+ *             as = mysortedfiles
  *
+ *             # The dataprocessor will use the timerdefinition to produce with the nextActive-method a stream of event
+ *             # The stream will be sorted by the starttimes or by the endtime, if reverse is true.
+ *             # the maxcount defines the number of entries. (Be careful. Think about the performance)
+ *             maxCount = 11
+ *             # planed
+ *             # Instead of the `maxcount` it should although be allowed to use the maxdate to define upper/lower limit of your list.
+ *             # The definition of `maxcount` will override this definition.
+ *             # The dateTimeFormat is defined by `datetimeFormat` (see below) or its default
+ *             # maxLate = 2025-01-01 00:00:00
+ *             # Instead of a discret date in `maxLate` you can use a relative timegap, too. Use the parameter `maxGap` for it.
+ *             # The definition of `maxLate` will override this parameter.
+ *             # The dateTimeFormat is defined by `datetimeFormat` (see below) or its default
+ *             # maxGap = P1M
+ *             # List-length-order from high to low: `maxCount` > `maxLate` > `maxGap`
+ *             # If all three are present, the parameter `maxCount`with the value 25 will be used as fallback.
  *
- *     dataProcessing.10 = Porthd\Timer\DataProcessing\RangeListQueryProcessor
- *     dataProcessing.10 {
- *         # regular if syntax
- *         # if.isTrue.field = record
+ *             # reverse = false: The ordering will grow into the future
+ *             # reverse = true: The ordering will grow into the past
+ *             reverse = false
  *
- *         # name of the corroeponding field, which contain al list of timerbased
- *         field = myfiles
+ *             # Define the timezone, which should be used. The Name of the timezone must be valid.
+ *             # Default: it is defined in the AdditionalConfiguration.php or in the LocalConfiguration.php or by the PHP-settings
+ *             # Example:
+ *             # timezone = Europe/Berlin
  *
- *         # The target variable to be handed to the ContentObject again, can
- *         # be used in Fluid e.g. to iterate over the objects. defaults to
- *         # "records" when not defined
- *         # + stdWrap
- *         as = myevents
+ *             # Define the Dateformat for your datetimeStart.
+ *             # Use the notation of the php-function DateTime::createFromFormat(...)
+ *             # Default is `Y-m-d H:i:s` i.e. `2023-01-16 07:05:03`
+ *             # datetimeFormat = Y-m-d H:i:s
  *
- *         # number of resulting objects, which should be given by sorted order default-Value is 25
- *         hartBreak = 11
+ *             # Define the start/end-date for your list in the predefined format.
+ *             # Default: current dateTime
+ *             # datetimeStart = 2023-01-16 07:05:03;
  *
- *         # define the given order - next or prev default is next
- *         # direction previous => 'Reverse equals to true' mean, that all End-limits of event are lower or equal to the datestatLimit in `datetimeStart`
- *         # direction next => 'Reverse equals to false' mean, that all start-limits of events are equal ior greater than the datestatLimit in `datetimeStart`
- *         # reverse = true # default false (direction next)
- *
- *         # `maxLate` define the limit date to stop the list of events. The format is defined by `datetimeFormat` (default: Y-m-d h:i)
- *         # `maxCount` define the number of events limt date to stop the list of events
+ *         }
  *     }
+ * }
  *
  */
 class SortListQueryProcessor implements DataProcessorInterface
@@ -100,41 +126,32 @@ class SortListQueryProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ): array {
-        if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
+        if (array_key_exists('if.', $processorConfiguration) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
 
         // If the field is not given, exit
-        $fieldName = $cObj->stdWrapValue('fieldName', $processorConfiguration, 'myrecords');
+        $fieldName = $cObj->stdWrapValue(TimerConst::ARGUMENT_FIELDNAME, $processorConfiguration, 'myrecords');
         if ((empty($fieldName)) || (empty($processedData[$fieldName]))) {
             return $processedData;
         }
 
         // The variable to be used within the result
-        $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration, 'sortedrecords');
+        $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'sortedrecords');
 
         // get recordlist from former processed datas
         $imageList = $processedData[$fieldName];
 
-        $timerEventZone = self::validateInternArguments($processorConfiguration);
         /** @var LoopLimiter $loopLimiter */
-        $loopLimiter = ListOfEventsService::getListRestrictions($processorConfiguration, $timerEventZone);
-        $flagReverse = (
-            (isset($processorConfiguration[TimerConst::ARGUMENT_REVERSE])) ?
-            (in_array($processorConfiguration[TimerConst::ARGUMENT_REVERSE], [1, true, 'true', 'TRUE', '1'])) :
-            false
-        );
-        $maxCount = (
-            ((isset($processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT] > 0)) ?
-            ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT]) :
-            TimerConst::SAVE_LIMIT_MAX_EVENTS
-        );
+        $loopLimiter = new LoopLimiter();
+        ListOfEventsService::getDatetimeRestrictions($cObj, $processorConfiguration, $loopLimiter);
+        $timerEventZone = self::validateInternArguments($cObj, $processorConfiguration, $loopLimiter->getDatetimeFormat());
+        ListOfEventsService::getListRestrictions($cObj, $processorConfiguration, $loopLimiter, $timerEventZone);
+
         $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
             $imageList,
             $timerEventZone,
-            $loopLimiter,
-            $flagReverse,
-            $maxCount
+            $loopLimiter
         );
 
 
@@ -153,41 +170,47 @@ class SortListQueryProcessor implements DataProcessorInterface
      * @return DateTime
      * @throws TimerException
      */
-    protected static function validateInternArguments(array $arguments): DateTime
-    {
-        $timeZone = ((isset($arguments[TimerConst::ARGUMENT_ACTIVEZONE])) ?: date_default_timezone_get());
+    protected static function validateInternArguments(
+        ContentObjectRenderer $cObj,
+        array $arguments,
+        string $timeFormat = TimerInterface::TIMER_FORMAT_DATETIME
+    ): DateTime {
+        $timeZone = $cObj->stdWrapValue(TimerConst::ARGUMENT_ACTIVEZONE, $arguments, date_default_timezone_get());
         if (!TcaUtility::isTimeZoneInList($timeZone)) {
             throw new TimerException(
                 'The given timezone `' . $timeZone . '` is unknown. Check the spelling and upper-/lower-case.',
                 1248729524
             );
         }
-        if (isset($arguments[TimerConst::ARGUMENT_DATETIME_START])) {
-            $timeFormat = (
-                (isset($arguments[TimerConst::ARGUMENT_DATETIME_FORMAT])) ?
-                $arguments[TimerConst::ARGUMENT_DATETIME_FORMAT] :
-                TimerInterface::TIMER_FORMAT_DATETIME
-            );
+
+        $flagDateStarttime = (
+            array_key_exists(TimerConst::ARGUMENT_DATETIME_START, $arguments) ||
+            (array_key_exists(TimerConst::ARGUMENT_DATETIME_START.'.', $arguments))
+        );
+
+        if ($flagDateStarttime) {
+            $startTimeString = $cObj->stdWrapValue(TimerConst::ARGUMENT_DATETIME_START, $arguments);
             if (
                 (
                     $frontendDateTime = DateTime::createFromFormat(
                         $timeFormat,
-                        $arguments[TimerConst::ARGUMENT_DATETIME_START],
+                        $startTimeString,
                         new DateTimeZone($timeZone)
                     )
                 ) === false
             ) {
                 throw new TimerException(
-                    'The date-string `' . $arguments[TimerConst::ARGUMENT_DATETIME_START] . '`could not converted to a datetime-Object. ' .
-                    'Check especially your date-time `' . $timeFormat . '` and your datetime-zone `' . $timeZone . '`. ',
-                    1248733534
+                    'The date-string `' . $arguments[TimerConst::ARGUMENT_DATETIME_START] . '` could not converted to a datetime-Object. ' .
+                    'Check your format `' . $timeFormat . '` for datetime in the typoscript of the '.
+                    'dataprocessor `SortListQueryProcessor` and your datetime-zone `' . $timeZone . '`. ',
+                    1673162866
                 );
             }
-        } else {
-            $utcTime = DateTimeUtility::getCurrentTime();
-            $frontendDateTime = new DateTime('@' . $utcTime);
-            $frontendDateTime->setTimezone(new DateTimeZone($timeZone));
+            return $frontendDateTime;
         }
+        $utcTime = DateTimeUtility::getCurrentTime();
+        $frontendDateTime = new DateTime('@' . $utcTime);
+        $frontendDateTime->setTimezone(new DateTimeZone($timeZone));
         return $frontendDateTime;
     }
 }

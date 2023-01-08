@@ -51,12 +51,9 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *         # It is similiar defined to the parameter in the viewhelper RangeList
  *         # `maxLate` define the limit date to stop the list of events. The format is defined by `datetimeFormat` (default: Y-m-d h:i)
  *         # `maxCount` define the number of events limt date to stop the list of events
- *         # public const ARGUMENT_MAX_LATE = 'maxLate';
+ *
  *         # regular if syntax
  *         # if.isTrue.field = record
- *
- *         # if the starttime is different from the current time.
- *         # datetimeStart =
  *
  *         # define the list of parameters, which are similiar to the viewhelper RangeList
  *         # the shown values are the optional parameters
@@ -94,6 +91,8 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 class RangeListQueryProcessor implements DataProcessorInterface
 {
+    protected const PARAMETER_TABLE = 'table';
+
     /**
      * @var ContentDataProcessor
      */
@@ -120,48 +119,43 @@ class RangeListQueryProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ): array {
-        if (isset($processorConfiguration['if.']) && !$cObj->checkIf($processorConfiguration['if.'])) {
+        if (array_key_exists('if.', $processorConfiguration) && !$cObj->checkIf($processorConfiguration['if.'])) {
             return $processedData;
         }
 
         // the table to query, if none given, exit
-        $tableName = $cObj->stdWrapValue('table', $processorConfiguration);
+        $tableName = $cObj->stdWrapValue(self::PARAMETER_TABLE, $processorConfiguration);
         if (empty($tableName)) {
             return $processedData;
         }
-        if (isset($processorConfiguration['table.'])) {
-            unset($processorConfiguration['table.']);
+        if (array_key_exists(self::PARAMETER_TABLE . '.', $processorConfiguration)) {
+            unset($processorConfiguration[self::PARAMETER_TABLE . '.']);
         }
-        if (isset($processorConfiguration['table'])) {
-            unset($processorConfiguration['table']);
+        if (array_key_exists(self::PARAMETER_TABLE, $processorConfiguration)) {
+            unset($processorConfiguration[self::PARAMETER_TABLE]);
         }
 
         // The variable to be used within the result
-        $targetVariableName = $cObj->stdWrapValue('as', $processorConfiguration, 'records');
+        $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'records');
 
         // Execute a SQL statement to fetch the records
         $records = $cObj->getRecords($tableName, $processorConfiguration);
 
         $eventsTimerList = $records;
-        $timerEventZone = self::validateInternArguments($processorConfiguration);
         /** @var LoopLimiter $loopLimiter */
-        $loopLimiter = ListOfEventsService::getListRestrictions($processorConfiguration, $timerEventZone);
-        $flagReverse = (
-            (isset($processorConfiguration[TimerConst::ARGUMENT_REVERSE])) ?
-            (in_array($processorConfiguration[TimerConst::ARGUMENT_REVERSE], [1, true, 'true', 'TRUE', '1'])) :
-            false
+        $loopLimiter = new LoopLimiter();
+        ListOfEventsService::getDatetimeRestrictions($cObj, $processorConfiguration, $loopLimiter);
+        $timerEventZone = self::validateInternArguments(
+            $cObj,
+            $processorConfiguration,
+            $loopLimiter->getDatetimeFormat()
         );
-        $maxCount = (
-            ((isset($processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT])) && ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT] > 0)) ?
-            ((int)$processorConfiguration[TimerConst::ARGUMENT_MAX_COUNT]) :
-            TimerConst::SAVE_LIMIT_MAX_EVENTS
-        );
+        ListOfEventsService::getListRestrictions($cObj, $processorConfiguration, $loopLimiter, $timerEventZone);
+
         $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
             $eventsTimerList,
             $timerEventZone,
-            $loopLimiter,
-            $flagReverse,
-            $maxCount
+            $loopLimiter
         );
 
 
@@ -171,7 +165,11 @@ class RangeListQueryProcessor implements DataProcessorInterface
             $recordContentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
             $recordContentObjectRenderer->start($record, $tableName);
             $processedRecordVariables[$key] = ['data' => $record];
-            $processedRecordVariables[$key] = $this->contentDataProcessor->process($recordContentObjectRenderer, $processorConfiguration, $processedRecordVariables[$key]);
+            $processedRecordVariables[$key] = $this->contentDataProcessor->process(
+                $recordContentObjectRenderer,
+                $processorConfiguration,
+                $processedRecordVariables[$key]
+            );
         }
 
         $processedData[$targetVariableName] = $processedRecordVariables;
@@ -180,25 +178,25 @@ class RangeListQueryProcessor implements DataProcessorInterface
     }
 
     /**
+     * @param ContentObjectRenderer $cObj
      * @param array<mixed> $arguments
+     * @param string $timeFormat
      * @return DateTime
      * @throws TimerException
      */
-    protected static function validateInternArguments(array $arguments): DateTime
-    {
-        $timeZone = ((isset($arguments[TimerConst::ARGUMENT_ACTIVEZONE])) ?: date_default_timezone_get());
+    protected static function validateInternArguments(
+        ContentObjectRenderer $cObj,
+        array $arguments,
+        string $timeFormat = TimerInterface::TIMER_FORMAT_DATETIME
+    ): DateTime {
+        $timeZone = ((array_key_exists(TimerConst::ARGUMENT_ACTIVEZONE, $arguments)) ?: date_default_timezone_get());
         if (!TcaUtility::isTimeZoneInList($timeZone)) {
             throw new TimerException(
                 'The given timezone `' . $timeZone . '` is unknown. Check the spelling and upper-/lower-case.',
                 1248729524
             );
         }
-        if (isset($arguments[TimerConst::ARGUMENT_DATETIME_START])) {
-            $timeFormat = (
-                (isset($arguments[TimerConst::ARGUMENT_DATETIME_FORMAT])) ?
-                $arguments[TimerConst::ARGUMENT_DATETIME_FORMAT] :
-                TimerInterface::TIMER_FORMAT_DATETIME
-            );
+        if (array_key_exists(TimerConst::ARGUMENT_DATETIME_START, $arguments)) {
             if (
                 (
                     $frontendDateTime = DateTime::createFromFormat(
@@ -209,9 +207,11 @@ class RangeListQueryProcessor implements DataProcessorInterface
                 ) === false
             ) {
                 throw new TimerException(
-                    'The date-string `' . $arguments[TimerConst::ARGUMENT_DATETIME_START] . '`could not converted to a datetime-Object. ' .
-                    'Check especially your date-time `' . $timeFormat . '` and your datetime-zone `' . $timeZone . '`. ',
-                    1248733534
+                    'The date-string `' . $arguments[TimerConst::ARGUMENT_DATETIME_START] .
+                    '` could not converted to a datetime-Object. ' .
+                    'Check your format `' . $timeFormat . '` for datetime in the typoscript of the ' .
+                    'dataprocessor `RangeListQueryProcessor` and your datetime-zone `' . $timeZone . '`. ',
+                    1673162970
                 );
             }
         } else {
@@ -219,22 +219,6 @@ class RangeListQueryProcessor implements DataProcessorInterface
             $frontendDateTime = new DateTime('@' . $utcTime);
             $frontendDateTime->setTimezone(new DateTimeZone($timeZone));
         }
-        if ((isset($arguments[TimerConst::ARGUMENT_MAX_LATE])) &&
-            (
-                false === DateTime::createFromFormat(
-                    TimerInterface::TIMER_FORMAT_DATETIME,
-                    $arguments[TimerConst::ARGUMENT_MAX_LATE],
-                    new DateTimeZone($timeZone)
-                )
-            )
-        ) {
-            throw new TimerException(
-                'The date-string `' . $arguments[TimerConst::ARGUMENT_MAX_LATE] . '`could not converted to a datetime-Object. ' .
-                'Check especially your format of date-time (should be: `' . TimerInterface::TIMER_FORMAT_DATETIME . '`). ',
-                1648555534
-            );
-        }
-
         return $frontendDateTime;
     }
 }

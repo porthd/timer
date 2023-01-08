@@ -172,8 +172,8 @@ class DatePeriodTimer implements TimerInterface
     public function validateChangeArguments(array $params = []): bool
     {
         return (
-            ((isset($params[self::ARG_REQ_OLDSTART_TIME])) && (!isset($params[self::ARG_REQ_START_TIME]))) ||
-            ((!isset($params[self::ARG_REQ_OLDSTART_TIME])) && (isset($params[self::ARG_REQ_START_TIME])))
+            ((array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (!array_key_exists(self::ARG_REQ_START_TIME, $params))) ||
+            ((!array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (array_key_exists(self::ARG_REQ_START_TIME, $params)))
         );
     }
 
@@ -210,10 +210,17 @@ class DatePeriodTimer implements TimerInterface
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
+        if (!array_key_exists(self::ARG_REQ_DURATION_MINUTES, $params)) {
+            return false;
+        }
         $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
         $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        $flagCheck = ($number - $floatNumber == 0);
+        if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
+            $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
+        }
         return (
-            ($number - $floatNumber == 0) &&
+            ($flagCheck) &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)

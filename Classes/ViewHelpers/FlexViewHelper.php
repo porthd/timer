@@ -103,7 +103,7 @@ class FlexViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ) {
         $templateVariableContainer = $renderingContext->getVariableProvider();
-        if (!isset($arguments[self::ATTR_FLEXFORM_STRING])) {
+        if (!array_key_exists(self::ATTR_FLEXFORM_STRING, $arguments)) {
             return '';
         }
 

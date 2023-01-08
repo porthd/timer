@@ -25,7 +25,7 @@ use Porthd\Timer\Domain\Model\Interfaces\TimerModellInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * SysFileReference
+ * getter/setter model for the extended table/model sys_file_reference
  */
 class SysFileReference extends AbstractEntity implements TimerModellInterface
 {

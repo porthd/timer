@@ -21,11 +21,7 @@ namespace Porthd\Timer\Hooks\Backend;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateTime;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\Utilities\DateTimeUtility;
-use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
@@ -36,13 +32,12 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * see https://github.com/georgringer/news/issues/268 visited 20201006
  *
- * Class FlexformManipulationHook
- * @package Porthd\Timer\Hooks\Backend
+ * @package Porthd\Timer\Hooks\Backend\StartEndTimerManipulationHook
  */
 class StartEndTimerManipulationHook
 {
     /**
-     * after saving the changs for the defintion of the periods reset start and endtime to zero
+     * after saving the changes for the definition of the periods reset time of start and end to zero
      *
      * @param string $status not used
      * @param string $table not used
@@ -54,12 +49,12 @@ class StartEndTimerManipulationHook
     public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $selfDatamapper): void
     {
         if ((
-            (isset($fieldArray[TimerConst::TIMER_FIELD_SELECT])) ||
-            (isset($fieldArray[TimerConst::TIMER_FIELD_FLEX_ACTIVE]))
+            (array_key_exists(TimerConst::TIMER_FIELD_SELECT, $fieldArray)) ||
+            (array_key_exists(TimerConst::TIMER_FIELD_FLEX_ACTIVE, $fieldArray))
         )
         ) {
-            // Reset the values of starttiem and endtime
-            // Dont change them here, This is job of the scheduler
+            // Reset the values of starttime and endtime
+            // Don`t change them here, This is job of the scheduler
             $fieldArray[TimerConst::TIMER_FIELD_STARTTIME] = 0;
             $fieldArray[TimerConst::TIMER_FIELD_ENDTIME] = 0;
             /** @var FlashMessage $message */

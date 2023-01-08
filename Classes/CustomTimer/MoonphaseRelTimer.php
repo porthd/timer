@@ -196,10 +196,17 @@ class MoonphaseRelTimer implements TimerInterface
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
+        if (!array_key_exists(self::ARG_REQ_DURATION_MINUTES, $params)) {
+            return false;
+        }
         $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
         $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        $flagCheck = ($number - $floatNumber == 0);
+        if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
+            $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
+        }
         return (
-            ($number - $floatNumber == 0) &&
+            ($flagCheck) &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
@@ -215,8 +222,8 @@ class MoonphaseRelTimer implements TimerInterface
     {
         $value = (
             isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
-            $params[self::ARG_REL_MIN_TO_EVENT] :
-            0
+                $params[self::ARG_REL_MIN_TO_EVENT] :
+                0
         );
         $number = (int)$value;
         return is_int($number) && (($number - $value) === 0) &&
@@ -329,7 +336,7 @@ class MoonphaseRelTimer implements TimerInterface
         $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
         if ($moonPhaseTStamp === null) {
             throw new TimerException(
-                'The moonphase `'.$moonPhase.'` could not be detected in the method `nextActive`. '.
+                'The moonphase `' . $moonPhase . '` could not be detected in the method `nextActive`. ' .
                 'Check the spelling and your configuration.',
                 1672256623
             );
@@ -394,7 +401,7 @@ class MoonphaseRelTimer implements TimerInterface
             $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
             if ($moonPhaseTStamp === null) {
                 throw new TimerException(
-                    'The moonphase `'.$moonPhase.'` could not be detected in the method `prevActive`. '.
+                    'The moonphase `' . $moonPhase . '` could not be detected in the method `prevActive`. ' .
                     'Check the spelling and your configuration.',
                     1672256624
                 );

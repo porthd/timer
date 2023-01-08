@@ -25,7 +25,7 @@ use Porthd\Timer\Domain\Model\Interfaces\TimerModellInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * TtContent
+ * getter/setter model for the extended table/model tt_content
  */
 class TtContent extends AbstractEntity implements TimerModellInterface
 {

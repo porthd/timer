@@ -17,8 +17,8 @@
 				<target>Showcase Viewhelper</target>
 			</trans-unit>
 			<trans-unit id="content.timersimul.events.title.default">
-				<source>Showcase Eventlist</source>
-				<target>Showcase-Eventliste</target>
+				<source>Showcase Eventlist as test for the RangeListQueryDataprocessor</source>
+				<target>Showcase-Eventliste zum Test vom RangeListQueryDataprocessor</target>
 			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.main.default">
 				<source>The extension includes three view helpers to optimize templating with Fluid and the Timer extension. The first view helper is &gt;timer:flex&lt;. TYPO3 has included the flex field since version 9.5. The Viewhelper allows converting a flexform string into a simple array, flattening superfluous levels in the array structure. The second view helper is &gt;timer:isActive&lt;. With this view helper you can check in the template whether data records provided with timer information should be displayed or not. Such an approach is inefficient in most cases. It is therefore recommended that you use the scheduler to generate the correct start and stop times for your element. In this way, unnecessary ballast can be kept away from the rendering of the frontend even when generating the data sets in a cacheable manner. The third view helper is &gt;timer:format.date&lt;. It extends the TYPO3 Fluid Viewhelper &gt;f:format.date&lt; with the `timezone` attribute, thus allowing the output of date displays for other than the default timezone.</source>

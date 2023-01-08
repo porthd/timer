@@ -248,7 +248,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         foreach ($yamlConfig[self::YAML_MAINGROUP_TABLELIST] as $key => $tableConfig) {
             $this->validateYamlDefinition($tableConfig, $key);
             $listPids = [];
-            if (isset($tableConfig[self::YAML_SUBGROUP_LIST_ROOTLINE])) {
+            if (array_key_exists(self::YAML_SUBGROUP_LIST_ROOTLINE, $tableConfig)) {
                 $listPids = $this->allowedPids($tableConfig[self::YAML_SUBGROUP_LIST_ROOTLINE]);
             }
             $flagSuccess[$key] = $this->updateTable($tableConfig, $refDateTime, $listPids);
@@ -319,12 +319,12 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             return self::FAILURE;
         }
         $firstKey = array_key_first($listOfRows);
-        if ((!isset($listOfRows[$firstKey][TimerConst::TIMER_FIELD_SELECT])) ||
-            (!isset($listOfRows[$firstKey][TimerConst::TIMER_FIELD_FLEX_ACTIVE])) ||
-            (!isset($listOfRows[$firstKey][TimerConst::TIMER_FIELD_UID])) ||
-            (!isset($listOfRows[$firstKey][TimerConst::TIMER_FIELD_PID])) ||
-            (!isset($listOfRows[$firstKey][TimerConst::TIMER_FIELD_STARTTIME])) ||
-            (!isset($listOfRows[$firstKey][TimerConst::TIMER_FIELD_ENDTIME]))
+        if ((!array_key_exists(TimerConst::TIMER_FIELD_SELECT, $listOfRows[$firstKey])) ||
+            (!array_key_exists(TimerConst::TIMER_FIELD_FLEX_ACTIVE, $listOfRows[$firstKey])) ||
+            (!array_key_exists(TimerConst::TIMER_FIELD_UID, $listOfRows[$firstKey])) ||
+            (!array_key_exists(TimerConst::TIMER_FIELD_PID, $listOfRows[$firstKey])) ||
+            (!array_key_exists(TimerConst::TIMER_FIELD_STARTTIME, $listOfRows[$firstKey])) ||
+            (!array_key_exists(TimerConst::TIMER_FIELD_ENDTIME, $listOfRows[$firstKey]))
         ) {
             $arrayString = implode('`, `', TimerConst::TIMER_NEEDED_FIELDS);
             throw new TimerException(
@@ -376,7 +376,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                     'update starttime and endtime by timer-definition'
                 );
             } else {
-                if (!isset($this->dataHandler->errorLog[$yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE]])) {
+                if (!array_key_exists($yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE], $this->dataHandler->errorLog)) {
                     $this->dataHandler->errorLog[$yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE]] = [];
                 }
 
@@ -402,13 +402,13 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         array $tableConfig,
         string $tableKey
     ): bool {
-        if (!isset($tableConfig[self::YAML_SUBGROUP_TEXT_TABLE])) {
+        if (!array_key_exists(self::YAML_SUBGROUP_TEXT_TABLE, $tableConfig)) {
             throw new TimerException(
                 'The table is not defined in your ' . $tableKey . 'th definition. Please check your yaml-file.',
                 1602228674
             );
         }
-        if ((!isset($tableConfig[self::YAML_SUBGROUP_REPOSITORY])) ||
+        if ((!array_key_exists(self::YAML_SUBGROUP_REPOSITORY, $tableConfig)) ||
             (!is_string($tableConfig[self::YAML_SUBGROUP_REPOSITORY]))) {
             throw new TimerException(
                 'The yaml-file must contain the namespace of the used repository in your ' . $tableKey .
@@ -431,7 +431,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             }
         }
 
-        if (!isset($tableConfig[self::YAML_SUBGROUP_LIST_ROOTLINE])) {
+        if (!array_key_exists(self::YAML_SUBGROUP_LIST_ROOTLINE, $tableConfig)) {
             throw new TimerException(
                 'The pid-list of the rootline must be a string, an array  or an integer in your ' . $tableKey .
                 'th definition. Please check your yaml-file.',
@@ -447,7 +447,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         }
 
 
-        if (isset($tableConfig[self::YAML_SUBGROUP_WHERE])) {
+        if (array_key_exists(self::YAML_SUBGROUP_WHERE, $tableConfig)) {
             if (!is_array($tableConfig[self::YAML_SUBGROUP_WHERE])) {
                 throw new TimerException(
                     'The where-part in the yaml-file must contain an array of fields in your ' . $tableKey .

@@ -566,7 +566,7 @@ class JewishHolidayTimerTest extends TestCase
                 ],
             ];
         }
-        //        Variation of unknown `namedDateMidnight`
+        //                Variation of unknown `namedDateMidnight`
         foreach ([
                      null,
                      7,
@@ -584,7 +584,8 @@ class JewishHolidayTimerTest extends TestCase
                  ] as $dateIdentifier) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `namedDateMidnight` is NOT correct by using the number `' . $dateIdentifier . '`.',
+                'message' => 'The variation of the `namedDateMidnight` is NOT correct by using the number `' .
+                    print_r($dateIdentifier, true) . '`.',
                 'expects' => [
                     'result' => false,
                 ],

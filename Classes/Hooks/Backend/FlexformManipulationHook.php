@@ -30,8 +30,7 @@ use Porthd\Timer\Utilities\DateTimeUtility;
 /**
  * see https://github.com/georgringer/news/issues/268 visited 20201006
  *
- * Class FlexformManipulationHook
- * @package Porthd\Timer\Hooks\Backend
+ * @package Porthd\Timer\Hooks\Backend\FlexformManipulationHook
  */
 class FlexformManipulationHook
 {
@@ -53,7 +52,10 @@ class FlexformManipulationHook
                     $result[$key] = $item;
                 }
             } else {
-                if ((isset($item['renderType'])) && ($item['renderType'] === 'inputDateTime') && isset($item['default'])) {
+                if ((array_key_exists('renderType', $item)) &&
+                    ($item['renderType'] === 'inputDateTime') &&
+                    array_key_exists('default', $item)
+                ) {
                     try {
                         // remark probelm with Format and timezone
                         // https://stackoverflow.com/questions/32109936/php-datetime-format-does-not-respect-timezones

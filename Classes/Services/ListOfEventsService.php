@@ -23,6 +23,7 @@ namespace Porthd\Timer\Services;
 
 use DateInterval;
 use DateTime;
+use Exception;
 use Porthd\Ichschauweg\Utilities\FlexFormUtility;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
@@ -32,6 +33,7 @@ use Porthd\Timer\Interfaces\TimerInterface;
 use stdClass;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class ListOfEventsService
 {
@@ -46,39 +48,35 @@ class ListOfEventsService
     protected const KEY_EVENT_LIST_TIMER = 'timer';
 
     protected const DEFAULT_MAX_COUNT = 25;
+    protected const DEFAULT_MAX_GAP = 'P7D';
 
     /**
      * @param array<mixed> $eventsTimerList
      * @param DateTime $timerEventZone
      * @param LoopLimiter $loopLimiter
-     * @param bool $flagReverse
-     * @param int $maxCount
      * @return array<mixed>
+     * @throws TimerException
      */
     public static function generateEventsListFromTimerList(
         array $eventsTimerList,
         DateTime $timerEventZone,
-        LoopLimiter $loopLimiter,
-        bool $flagReverse = false,
-        int $maxCount = TimerConst::SAVE_LIMIT_MAX_EVENTS
+        LoopLimiter $loopLimiter
     ): array {
         /** @var ListOfTimerService $timerResolver */
         $timerResolver = GeneralUtility::makeInstance(ListOfTimerService::class);
-        if ($flagReverse) {
+        if ($loopLimiter->isFlagReserve()) {
             return self::listOfEventsBelowStartTime(
                 $timerEventZone,
                 $eventsTimerList,
                 $timerResolver,
-                $loopLimiter,
-                $maxCount
+                $loopLimiter
             );
         }
         return self::listOfEventsAboveStartTime(
             $timerEventZone,
             $eventsTimerList,
             $timerResolver,
-            $loopLimiter,
-            $maxCount
+            $loopLimiter
         );
     }
 
@@ -186,15 +184,13 @@ class ListOfEventsService
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
-     * @param int $maxCount
      * @return array<mixed>
      */
     protected static function listOfEventsBelowStartTime(
         DateTime $timerEventZone,
         array $eventsTimerList,
         ListOfTimerService $timerResolver,
-        LoopLimiter $loopLimiter,
-        int $maxCount = TimerConst::SAVE_LIMIT_MAX_EVENTS
+        LoopLimiter $loopLimiter
     ): array {
         $listOfTimers = self::timerListBelowStartDate(
             $timerEventZone,
@@ -213,13 +209,25 @@ class ListOfEventsService
                     'Porthd\Timer\Services\ListOfEventsService::compareForBelowList' :
                     $loopLimiter->getUserCompareFunction()
             );
-            while ($count <= $maxCount) {
+            if (!is_callable($userCompareString)) {
+                throw new TimerException(
+                    'The comparefunction `' . $userCompareString . '` is not callable in `listOfEventsBelowStartTime`. ' .
+                    'Check your definition of TypoScript at the attribute `' . TimerConst::ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE . '`. ' .
+                    'Please make a screenshot and inform the webmaster.',
+                    1673162230
+                );
+            }
+            while ((
+                $loopLimiter->getFlagMaxCount() ?
+                ($count <= $loopLimiter->getMaxCount()) :
+                (true)
+            )) {
                 foreach ($listOfTimers as $key => $timerItem) {
                     /** @var TimerStartStopRange $range */
                     $range = clone $timerItem[self::KEY_EVENT_LIST_RANGE];
                     if ($range->hasResultExist()) {
                         if ($limitInfos->index < 0) {
-                            // The first entrie is the best result
+                            // The first entry is the best result
                             $limitInfos->beginning = $range->getBeginning();
                             $limitInfos->ending = $range->getEnding();
                             $limitInfos->base = $limitInfos->ending;
@@ -237,6 +245,11 @@ class ListOfEventsService
                 }
 
                 if (
+                    (
+                        $loopLimiter->getFlagMaxCount() ?
+                        (true) :
+                        ($limitInfos->base <= $loopLimiter->getMaxLate())
+                    ) ||
                     ($limitInfos->index < 0) ||
                     (self::limitsAllowOneMoreLoop($loopLimiter, $count, $limitInfos->base, false) === false)
                 ) {
@@ -289,15 +302,13 @@ class ListOfEventsService
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
-     * @param int $maxCount
      * @return array<mixed>
      */
     protected static function listOfEventsAboveStartTime(
         DateTime $timerEventZone,
         array $eventsTimerList,
         ListOfTimerService $timerResolver,
-        LoopLimiter $loopLimiter,
-        int $maxCount = TimerConst::SAVE_LIMIT_MAX_EVENTS
+        LoopLimiter $loopLimiter
     ): array {
         $listOfTimers = self::timerListAboveStartDate(
             $timerEventZone,
@@ -315,7 +326,19 @@ class ListOfEventsService
                     'Porthd\Timer\Services\ListOfEventsService::compareForAboveList' :
                     $loopLimiter->getUserCompareFunction()
             );
-            while ($count <= $maxCount) {
+            if (!is_callable($userCompareString)) {
+                throw new TimerException(
+                    'The comparefunction `' . $userCompareString . '` is not callable in `listOfEventsAboveStartTime`. ' .
+                    'Check your definition of TypoScript at the attribute `' . TimerConst::ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE . '`. ' .
+                    'Please make a screenshot and inform the webmaster.',
+                    1673162538
+                );
+            }
+            while ((
+                $loopLimiter->getFlagMaxCount() ?
+                ($count <= $loopLimiter->getMaxCount()) :
+                (true)
+            )) {
                 foreach ($listOfTimers as $key => $timerItem) {
                     /** @var TimerStartStopRange $range */
                     $range = clone $timerItem[self::KEY_EVENT_LIST_RANGE];
@@ -336,7 +359,13 @@ class ListOfEventsService
                         }
                     }
                 }
-                if (($limitInfos->index < 0) ||
+                if (
+                    (
+                        $loopLimiter->getFlagMaxCount() ?
+                        (false) :
+                        ($loopLimiter->getMaxLate() <= $limitInfos->base)
+                    ) ||
+                    ($limitInfos->index < 0) ||
                     (self::limitsAllowOneMoreLoop($loopLimiter, $count, $limitInfos->base, true) === false)
                 ) {
                     break;
@@ -384,44 +413,106 @@ class ListOfEventsService
     }
 
     /**
+     * Help to rebuild some arguments for SortListQueryProcessor and for RangeListQueryProcessor
+     *
+     * @param ContentObjectRenderer $cObj
      * @param array<mixed> $arguments
+     * @param LoopLimiter $loopLimiter
+     * @return void
+     */
+    public static function getDatetimeRestrictions(
+        ContentObjectRenderer $cObj,
+        array $arguments,
+        LoopLimiter $loopLimiter
+    ) {
+        $dateTimeFormat = $cObj->stdWrapValue(
+            TimerConst::ARGUMENT_DATETIME_FORMAT,
+            $arguments,
+            TimerInterface::TIMER_FORMAT_DATETIME
+        );
+        $loopLimiter->setDatetimeFormat($dateTimeFormat);
+        $flagRevers = $cObj->stdWrapValue(TimerConst::ARGUMENT_REVERSE, $arguments, false);
+        $loopLimiter->setFlagReserve($flagRevers);
+    }
+
+    /**
+     * @param ContentObjectRenderer $cObj
+     * @param array<mixed> $arguments
+     * @param LoopLimiter $loopLimiter
      * @param DateTime $basicDateTime
-     * @param int $defaultMax
      * @return LoopLimiter
      * @throws TimerException
      */
     public static function getListRestrictions(
+        ContentObjectRenderer $cObj,
         array $arguments,
-        DateTime $basicDateTime,
-        $defaultMax = self::DEFAULT_MAX_COUNT
+        LoopLimiter $loopLimiter,
+        DateTime $basicDateTime
     ): LoopLimiter {
-        $loopLimiter = new LoopLimiter();
-        if (
-            (isset($arguments[TimerConst::ARGUMENT_MAX_COUNT])) &&
-            (($maxCount = (int)$arguments[TimerConst::ARGUMENT_MAX_COUNT]) > 0)
-        ) {
-            $loopLimiter->setMaxCount($maxCount);
+        /**
+         * 1. detect the existence of the three variable
+         * 2. define the value or default value for maxCount
+         * 3. define the value or default value for maxGap and define based on this and the reverse-information the default maxLate-Value
+         * 4. define the value or default value for maxLate
+         * 5. define the flag, if the maxCount or the maxLate-Value should be used
+         * 6. define a custom compare-funktion, which will be used to generate the sorted informations
+         */
+        $flagMaxCount = (
+            (array_key_exists(TimerConst::ARGUMENT_MAX_COUNT, $arguments)) ||
+            (array_key_exists(TimerConst::ARGUMENT_MAX_COUNT . '.', $arguments))
+        );
+        $flagMaxGap = (
+            (array_key_exists(TimerConst::ARGUMENT_MAX_GAP, $arguments)) ||
+            (array_key_exists(TimerConst::ARGUMENT_MAX_GAP . '.', $arguments))
+        );
+        $flagMaxLate = (
+            (array_key_exists(TimerConst::ARGUMENT_MAX_LATE, $arguments)) ||
+            (array_key_exists(TimerConst::ARGUMENT_MAX_LATE . '.', $arguments))
+        );
+
+        $maxCount = $cObj->stdWrapValue(TimerConst::ARGUMENT_MAX_COUNT, $arguments, self::DEFAULT_MAX_COUNT);
+        $loopLimiter->setMaxCount($maxCount);
+
+        $flagMaxCountFinal = (
+            ($flagMaxCount && ($maxCount > 0)) ||
+            ((!$flagMaxCount) && (!$flagMaxGap) && (!$flagMaxLate))
+        );
+        $loopLimiter->setFlagMaxCount($flagMaxCountFinal);
+
+        $defaultLate = clone $basicDateTime;
+        $defaultMaxGapString = $cObj->stdWrapValue(
+            TimerConst::ARGUMENT_MAX_GAP,
+            $arguments,
+            self::DEFAULT_MAX_GAP
+        );
+        if ($loopLimiter->getFlagReserve()) {
+            $defaultLate->sub(new DateInterval($defaultMaxGapString));
         } else {
-            $loopLimiter->setMaxCount($defaultMax);
+            $defaultLate->add(new DateInterval($defaultMaxGapString));
         }
-        if (isset($arguments[TimerConst::ARGUMENT_MAX_LATE])) {
-            $myDate = DateTime::createFromFormat(
-                TimerInterface::TIMER_FORMAT_DATETIME,
-                $arguments[TimerConst::ARGUMENT_MAX_LATE],
-                $basicDateTime->getTimezone()
+
+        $maxLateString = $cObj->stdWrapValue(
+            TimerConst::ARGUMENT_MAX_LATE,
+            $arguments,
+            $defaultLate->format($loopLimiter->getDatetimeFormat())
+        );
+        $myDate = DateTime::createFromFormat(
+            $loopLimiter->getDatetimeFormat(),
+            $maxLateString,
+            $basicDateTime->getTimezone()
+        );
+        if ($myDate === false) {
+            throw new TimerException(
+                'The date-string `' . $arguments[TimerConst::ARGUMENT_MAX_LATE] . ' or ' .
+                print_r($arguments[TimerConst::ARGUMENT_MAX_LATE] . '.', true) .
+                '` could not converted to a datetime-Object. ' .
+                'Check your format of date-time (should be: `' . $loopLimiter->getDatetimeFormat() . '`). ',
+                1648555534
             );
-            $loopLimiter->setMaxLate($myDate);
-        } else {
-            $loopLimiter->setMaxLate(null);
         }
-        if ((isset($arguments[TimerConst::ARGUMENT_MAX_LATE])) ||
-            ($loopLimiter->getMaxLate() === null)
-        ) {
-            $loopLimiter->setFlagMaxType(true);
-        } else {
-            $loopLimiter->setFlagMaxType(false);
-        }
-        if (isset($arguments[TimerConst::ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE])) {
+        $loopLimiter->setMaxLate($myDate);
+
+        if (array_key_exists(TimerConst::ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE, $arguments)) {
             $name = $arguments[TimerConst::ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE];
             $method = explode('->', $name);
             if ((count($method) !== 2) ||

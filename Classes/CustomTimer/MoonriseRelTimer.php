@@ -31,8 +31,6 @@ use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
-use Psr\Log\LoggerAwareInterface;
-use TYPO3\CMS\Core\SingletonInterface;
 
 class MoonriseRelTimer implements TimerInterface
 {
@@ -206,10 +204,17 @@ class MoonriseRelTimer implements TimerInterface
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
+        if (!array_key_exists(self::ARG_REQ_DURATION_MINUTES, $params)) {
+            return false;
+        }
         $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
         $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        $flagCheck = ($number - $floatNumber == 0);
+        if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
+            $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
+        }
         return (
-            ($number - $floatNumber == 0) &&
+            ($flagCheck) &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
@@ -224,7 +229,7 @@ class MoonriseRelTimer implements TimerInterface
     protected function validateRelMinToEvent(array $params = []): bool
     {
         $number = (int)(
-            isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
+            array_key_exists(self::ARG_REL_MIN_TO_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_EVENT] :
             0
         );
@@ -351,7 +356,8 @@ class MoonriseRelTimer implements TimerInterface
         $rangeMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
 
         if ((!in_array($params[self::ARG_MOON_STATUS], self::LIST_MOON_STATUS)) ||
-            (!isset($moonInfoList[$params[self::ARG_MOON_STATUS]], $moonInfoList[('flag' . ucfirst($params[self::ARG_MOON_STATUS]))])) ||
+            (!array_key_exists($params[self::ARG_MOON_STATUS], $moonInfoList)) ||
+            (!array_key_exists('flag'.ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
             ($rangeMin === 0)
         ) {
             throw new TimerException(
@@ -435,7 +441,8 @@ class MoonriseRelTimer implements TimerInterface
         );
         $rangeMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         if ((!in_array($params[self::ARG_MOON_STATUS], self::LIST_MOON_STATUS)) ||
-            (!isset($moonInfoList[$params[self::ARG_MOON_STATUS]], $moonInfoList[('flag' . ucfirst($params[self::ARG_MOON_STATUS]))])) ||
+            (!array_key_exists($params[self::ARG_MOON_STATUS], $moonInfoList)) ||
+            (!array_key_exists('flag'.ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
             ($rangeMin === 0)
         ) {
             throw new TimerException(
@@ -505,20 +512,20 @@ class MoonriseRelTimer implements TimerInterface
     protected function defineLongitudeLatitudeByParams(array $params, int $gap): array
     {
         $latitude = (float)(
-            (((isset($params[self::ARG_LATITUDE])) &&
+            (((array_key_exists(self::ARG_LATITUDE, $params)) &&
             ($params[self::ARG_LATITUDE] >= self::ARG_LATITUDE_MIN) &&
             $params[self::ARG_LATITUDE] <= self::ARG_LATITUDE_MAX)) ?
             ($params[self::ARG_LATITUDE]) :
             (self::DEFAULT_LATITUDE)
         );
         $longitude = (float)self::DEFAULT_LONGITUDE;
-        if ((isset($params[self::ARG_USE_ACTIVE_TIMEZONE])) &&
+        if ((array_key_exists(self::ARG_USE_ACTIVE_TIMEZONE, $params)) &&
             (!empty($params[self::ARG_USE_ACTIVE_TIMEZONE]))
         ) {
             // the timezone Pacific/Auckland  has an offset of 46800 s relativ to UTC
             $longitude = $gap / 240.0;  // =360/86400
         } else {
-            if ((isset($params[self::ARG_LONGITUDE])) &&
+            if ((array_key_exists(self::ARG_LONGITUDE, $params)) &&
                 ($params[self::ARG_LONGITUDE] >= self::ARG_LONGITUDE_MIN) &&
                 ($params[self::ARG_LONGITUDE] <= self::ARG_LONGITUDE_MAX)
             ) {
@@ -553,7 +560,8 @@ class MoonriseRelTimer implements TimerInterface
         );
         $rangeMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         if ((!in_array($params[self::ARG_MOON_STATUS], self::LIST_MOON_STATUS)) ||
-            (!isset($moonInfoList[$params[self::ARG_MOON_STATUS]], $moonInfoList[('flag' . ucfirst($params[self::ARG_MOON_STATUS]))])) ||
+            (!array_key_exists($params[self::ARG_MOON_STATUS], $moonInfoList)) ||
+            (!array_key_exists('flag'.ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
             ($rangeMin === 0)
         ) {
             throw new TimerException(

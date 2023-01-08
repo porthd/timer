@@ -201,7 +201,7 @@ class SunriseRelTimer implements TimerInterface
     protected function validateSunPosition(array $params = []): bool
     {
         $string = (
-            (isset($params[self::ARG_SUN_POSITION])) ?
+            (array_key_exists(self::ARG_SUN_POSITION, $params)) ?
                 $params[self::ARG_SUN_POSITION] :
                 ''
         );
@@ -219,10 +219,17 @@ class SunriseRelTimer implements TimerInterface
      */
     protected function validateDurationMinutes(array $params = []): bool
     {
+        if (!array_key_exists(self::ARG_REQ_DURATION_MINUTES, $params)) {
+            return false;
+        }
         $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
         $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
+        $flagCheck = ($number - $floatNumber == 0);
+        if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
+            $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
+        }
         return (
-            ($number - $floatNumber == 0) &&
+            ($flagCheck) &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
@@ -237,7 +244,7 @@ class SunriseRelTimer implements TimerInterface
     protected function validateDurationNatural(array $params = []): bool
     {
         $value = (
-            isset($params[self::ARG_DURATION_NATURAL]) ?
+            array_key_exists(self::ARG_DURATION_NATURAL, $params) ?
                 $params[self::ARG_DURATION_NATURAL] :
                 'fail'
         );
@@ -252,7 +259,7 @@ class SunriseRelTimer implements TimerInterface
     protected function validateRelToEvent(array $params = []): bool
     {
         $value = (
-            isset($params[self::ARG_REL_TO_TIMEREVENT]) ?
+            array_key_exists(self::ARG_REL_TO_TIMEREVENT, $params) ?
                 $params[self::ARG_REL_TO_TIMEREVENT] :
                 0
         );
@@ -630,17 +637,17 @@ class SunriseRelTimer implements TimerInterface
     protected function defineLongitudeLatitudeByParams(array $params, int $gap): array
     {
         $latitude = (float)(
-            ((isset($params[self::ARG_LATITUDE])) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
+            ((array_key_exists(self::ARG_LATITUDE, $params)) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
                 ($params[self::ARG_LATITUDE]) :
                 (self::DEFAULT_LATITUDE)
         );
-        if ((isset($params[self::ARG_LONGITUDE])) &&
+        if ((array_key_exists(self::ARG_LONGITUDE, $params)) &&
             ($params[self::ARG_LONGITUDE] >= -180) &&
             ($params[self::ARG_LONGITUDE] <= 180)
         ) {
             $longitude = (float)$params[self::ARG_LONGITUDE];
         } else {
-            if ((isset($params[self::ARG_USE_ACTIVE_TIMEZONE])) &&
+            if ((array_key_exists(self::ARG_USE_ACTIVE_TIMEZONE, $params)) &&
                 (!empty($params[self::ARG_USE_ACTIVE_TIMEZONE]))
             ) {
                 // the timezone Pacific/Auckland  has an offset of 46800 s relativ to UTC

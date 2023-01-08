@@ -92,7 +92,7 @@ class ConfigurationUtility
         $flag = true;
         foreach ($nestList as $nestStage) {
             if (is_array($helper)) {
-                if (!isset($helper[$nestStage])) {
+                if (!array_key_exists($nestStage, $helper)) {
                     $helper[$nestStage] = [];
                 }
                 $helper = &$helper[$nestStage];

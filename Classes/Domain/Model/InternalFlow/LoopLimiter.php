@@ -23,23 +23,42 @@ namespace Porthd\Timer\Domain\Model\InternalFlow;
 
 use DateTime;
 use Exception;
-use Porthd\Timer\Domain\Model\Interfaces\TimerModellInterface;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use Porthd\Timer\Interfaces\TimerInterface;
 
 /**
- * LoopLimiter is a helpfull getter/setter-model for the RangeListDataprocessor.
- * It prevent an infinite looping while the rangeListdataprocessor trys to merge overlapping ranges together.
+ * LoopLimiter is a helpful getter/setter-model for the datapocessors `RangeListQueryProcessor` and `SortListQueryProcessor`.
+ * It prevents i.e. an infinite looping while the dataprocessor trys to merge overlapping ranges together.
+ * It help to handle the usage of typoscript-arguments for these dataprocessors.
  */
 class LoopLimiter
 {
+    /**
+     * datetimeFormat
+     *
+     * @var string
+     */
+    protected $datetimeFormat = TimerInterface::TIMER_FORMAT_DATETIME;
+
+    /**
+     * flagReserve
+     *
+     * @var bool
+     */
+    protected $flagReserve = false;
+
     /**
      * flagMaxType
      *
      * @var bool
      */
     protected $flagMaxType = true;
+
+    /**
+     * flagMaxCount
+     *
+     * @var bool
+     */
+    protected $flagMaxCount = true;
 
     /**
      * maxCount
@@ -87,6 +106,58 @@ class LoopLimiter
     }
 
     /**
+     * Returns the datetimeFormat
+     *
+     * @return string $datetimeFormat
+     */
+    public function getDatetimeFormat()
+    {
+        return $this->datetimeFormat;
+    }
+
+    /**
+     * Sets the datetimeFormat
+     *
+     * @param string $datetimeFormat
+     * @return void
+     */
+    public function setDatetimeFormat($datetimeFormat)
+    {
+        $this->datetimeFormat = (string)$datetimeFormat;
+    }
+
+    /**
+     * Returns the flagReserve
+     *
+     * @return bool $flagReserve
+     */
+    public function getFlagReserve()
+    {
+        return $this->flagReserve;
+    }
+
+    /**
+     * Returns the flagReserve
+     *
+     * @return bool $flagReserve
+     */
+    public function isFlagReserve()
+    {
+        return $this->getFlagReserve();
+    }
+
+    /**
+     * Sets the flagReserve
+     *
+     * @param bool $flagReserve
+     * @return void
+     */
+    public function setFlagReserve($flagReserve)
+    {
+        $this->flagReserve = (bool)$flagReserve;
+    }
+
+    /**
      * Returns the flagMaxType
      *
      * @return bool $flagMaxType
@@ -114,7 +185,28 @@ class LoopLimiter
      */
     public function setFlagMaxType($flagMaxType)
     {
-        $this->flagMaxType = $flagMaxType;
+        $this->flagMaxType = (bool)$flagMaxType;
+    }
+
+    /**
+     * Returns the flagMaxCount
+     *
+     * @return bool $flagMaxCount
+     */
+    public function getFlagMaxCount()
+    {
+        return $this->flagMaxCount;
+    }
+
+    /**
+     * Sets the flagMaxCount
+     *
+     * @param bool $flagMaxCount
+     * @return void
+     */
+    public function setFlagMaxCount($flagMaxCount)
+    {
+        $this->flagMaxCount = (bool)$flagMaxCount;
     }
 
     /**
@@ -135,7 +227,7 @@ class LoopLimiter
      */
     public function setMaxCount($maxCount)
     {
-        $this->maxCount = $maxCount;
+        $this->maxCount = (int)$maxCount;
     }
 
 
@@ -155,7 +247,7 @@ class LoopLimiter
      * @param DateTime|null $maxLate
      * @return void
      */
-    public function setMaxLate($maxLate)
+    public function setMaxLate(?DateTime $maxLate)
     {
         $this->maxLate = (($maxLate !== null) ?
             clone $maxLate :

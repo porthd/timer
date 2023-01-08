@@ -27,7 +27,6 @@ use PDO;
 use Doctrine\DBAL\Exception as DbalException;
 use Porthd\Timer\Command\UpdateTimerCommand;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\Exception\TimerException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -150,7 +149,9 @@ class GeneralRepository implements TimerRepositoryInterface
             if (!empty($field)) {
                 $value = $condition[UpdateTimerCommand::YAML_SUBWHERE_VALUE] ?: '';
                 $compare = $condition[UpdateTimerCommand::YAML_SUBWHERE_COMPARE] ?: 'eq';
-                if (isset($condition[UpdateTimerCommand::YAML_SUBWHERE_TYPE]) && ($condition[UpdateTimerCommand::YAML_SUBWHERE_TYPE] === 'int')) {
+                if (array_key_exists(UpdateTimerCommand::YAML_SUBWHERE_TYPE, $condition) &&
+                    ($condition[UpdateTimerCommand::YAML_SUBWHERE_TYPE] === 'int')
+                ) {
                     $type = PDO::PARAM_INT;
                 } else {
                     $type = PDO::PARAM_STR;

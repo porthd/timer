@@ -248,7 +248,12 @@ class DatePeriodTimerTest extends TestCase
         // Variation of durationMinutes
         //floats counld not be key  of arrays in PHP
         foreach ([
-                     1000000000 => true,
+                     1000000000 => false,
+                     -1000000000 => false,
+                     444444 => true,
+                     444443 => true,
+                     -444444 => true,
+                     -444443 => true,
                      120 => true,
                      '100.1' => false,
                      '-0.1' => false,

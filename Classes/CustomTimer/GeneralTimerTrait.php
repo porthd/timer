@@ -31,7 +31,9 @@ use Porthd\Timer\Utilities\TcaUtility;
 
 
 /**
- * @package DailyTimer
+ * @package GeneralTimerTrait
+ * trait for timerclasses to use the datas, defined by the flexforms in
+ * EXT:timer\Configuration\FlexForms\TimerDef\General\GeneralTimer.flexform
  */
 trait GeneralTimerTrait
 {
@@ -44,7 +46,7 @@ trait GeneralTimerTrait
     {
         $count = 0;
         foreach ($list as $key) {
-            if (isset($params[$key])) {
+            if (array_key_exists($key, $params)) {
                 $count++;
             }
         }
@@ -84,7 +86,7 @@ trait GeneralTimerTrait
      */
     protected function validateFlagZone(array $params = []): bool
     {
-        return((isset($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE])) &&
+        return((array_key_exists(TimerInterface::ARG_USE_ACTIVE_TIMEZONE, $params)) &&
             (
                 !is_array($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE]) &&
                 !is_object($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE]) &&
@@ -104,7 +106,7 @@ trait GeneralTimerTrait
      */
     protected function validateZone(array $params = []): bool
     {
-        return isset($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]) &&
+        return array_key_exists(TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT, $params) &&
             TcaUtility::isTimeZoneInList(
                 $params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]
             );

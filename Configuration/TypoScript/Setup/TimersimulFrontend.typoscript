@@ -18,7 +18,6 @@ tt_content.timer_timersimul {
         pidInList.stdWrap.cObject.field = pages
         recursive = 1
 
-
         # output variable with the resulting list
         as = examplelist
 

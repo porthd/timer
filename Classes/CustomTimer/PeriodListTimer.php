@@ -34,8 +34,6 @@ use Porthd\Timer\Utilities\GeneralTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -238,7 +236,7 @@ INFOSYNTAX;
     public function validateYamlOrException(array $yamlArray, string $infoAboutYamlFile = ''): void
     {
         $flag = true;
-        if (!isset($yamlArray[self::YAML_MAIN_KEY_PERIODLIST])) {
+        if (!array_key_exists(self::YAML_MAIN_KEY_PERIODLIST, $yamlArray)) {
             throw new TimerException(
                 'The yaml-file has not the correct syntax. It must contain the attribute ' .
                 self::YAML_MAIN_KEY_PERIODLIST . ' at the starting level. Other attributes will be ignored at the starting-level. ' .
@@ -257,14 +255,14 @@ INFOSYNTAX;
                 $item[self::YAML_ITEMS_KEY_STOP]
             );
             // required fields
-            $flag = isset($item[self::YAML_ITEMS_KEY_START]);
-            $flag = $flag && isset($item[self::YAML_ITEMS_KEY_START]) &&
+            $flag = array_key_exists(self::YAML_ITEMS_KEY_START, $item);
+            $flag = $flag && array_key_exists(self::YAML_ITEMS_KEY_START, $item) &&
                 ($start !== false);
-            $flag = $flag && isset($item[self::YAML_ITEMS_KEY_STOP]) &&
+            $flag = $flag && array_key_exists(self::YAML_ITEMS_KEY_STOP, $item) &&
                 ($stop !== false);
-            $flag = $flag && ((!isset($item[self::YAML_ITEMS_KEY_TITLE])) ||
+            $flag = $flag && ((!array_key_exists(self::YAML_ITEMS_KEY_TITLE, $item)) ||
                     (!empty($item[self::YAML_ITEMS_KEY_TITLE])));
-            $flag = $flag && ((!isset($item[self::YAML_ITEMS_KEY_DATA])) ||
+            $flag = $flag && ((!array_key_exists(self::YAML_ITEMS_KEY_DATA, $item)) ||
                     (!empty($item[self::YAML_ITEMS_KEY_DATA])));
             if (!$flag) {
                 throw new TimerException(
@@ -279,7 +277,7 @@ INFOSYNTAX;
                     1668236285
                 );
             }
-            $flag = ((!isset($item[self::YAML_ITEMS_KEY_ZONE])) ||
+            $flag = ((!array_key_exists(self::YAML_ITEMS_KEY_ZONE, $item)) ||
                     (in_array($item[self::YAML_ITEMS_KEY_ZONE], $timeZone)));
             if (!$flag) {
                 throw new TimerException(
@@ -337,7 +335,7 @@ INFOSYNTAX;
     protected function validateYamlFilePath(array $params = []): bool
     {
         $filePath = (
-            isset($params[self::ARG_YAML_PERIOD_FILE_PATH]) ?
+            array_key_exists(self::ARG_YAML_PERIOD_FILE_PATH, $params) ?
                 $params[self::ARG_YAML_PERIOD_FILE_PATH] :
                 ''
         );
@@ -537,7 +535,7 @@ INFOSYNTAX;
 
     protected function readPeriodListFromYamlFile(array $params): array
     {
-        if ((!isset($params[self::ARG_YAML_PERIOD_FILE_PATH])) &&
+        if ((!array_key_exists(self::ARG_YAML_PERIOD_FILE_PATH, $params)) &&
             ($params[self::ARG_YAML_PERIOD_FAL_INFO] < 1)
         ) {
             return [];

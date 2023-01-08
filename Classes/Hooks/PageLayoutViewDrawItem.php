@@ -60,7 +60,7 @@ class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
      */
     public function preProcess(PageLayoutView &$parentObject, &$drawItem, &$headerContent, &$itemContent, array &$row): void
     {
-        if (!isset($this->supportedContentTypes[$row['CType']])) {
+        if (!array_key_exists($row['CType'], $this->supportedContentTypes)) {
             return;
         }
 
@@ -138,7 +138,7 @@ class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
     {
         $processedRow = $databaseRow;
         foreach ($processedTcaColumns as $field => $config) {
-            if (!isset($config['children'])) {
+            if (!array_key_exists('children', $config)) {
                 continue;
             }
             $processedRow[$field] = [];

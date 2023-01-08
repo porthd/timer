@@ -134,7 +134,7 @@ class ListOfTimerService implements SingletonInterface
     public function isAllowedInRange(string $selector, DateTime $checkDate, array $params = []): bool
     {
         if ((!is_array($this->list)) ||
-            (!isset($this->list[$selector]))
+            (!array_key_exists($selector, $this->list))
         ) {
             return false;
         }
@@ -151,7 +151,7 @@ class ListOfTimerService implements SingletonInterface
      */
     public function isActive($selector, DateTime $checkDate, $params = []): bool
     {
-        if (!isset($this->list[$selector])) {
+        if (!array_key_exists($selector, $this->list)) {
             return false;
         }
         $activeZoneName = $checkDate->getTimezone()->getName();
@@ -181,7 +181,7 @@ class ListOfTimerService implements SingletonInterface
         DateTime $checkDate,
         array $params = []
     ): TimerStartStopRange {
-        if (!isset($this->list[$selector])) {
+        if (!array_key_exists($selector, $this->list)) {
             $failAll = new TimerStartStopRange();
             $failAll->failAllActive($checkDate);
             return $failAll;
@@ -246,7 +246,7 @@ class ListOfTimerService implements SingletonInterface
                 123457867
             );
         }
-        if (!isset($this->list[$selector])) {
+        if (!array_key_exists($selector, $this->list)) {
             /** @var TimerStartStopRange $timerStartStop */
             $timerStartStop = new TimerStartStopRange();
             $timerStartStop->failAllActive($eventTimeZone);
@@ -297,7 +297,7 @@ class ListOfTimerService implements SingletonInterface
                         if (in_array(TimerInterface::class, $classInterface)) {
                             /** @var TimerInterface $classObject */
                             $classObject = GeneralUtility::makeInstance($className);
-                            if (isset($this->list[$classObject::selfName()])) {
+                            if (array_key_exists($classObject::selfName(), $this->list)) {
                                 unset($this->list[$classObject::selfName()]);
                             }
                         } else {

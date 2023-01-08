@@ -142,7 +142,7 @@ class WeekdaylyTimer implements TimerInterface
     protected function validateActiveWeekday(array $params = []): bool
     {
         $flag = true;
-        if (isset($params[self::ARG_REQ_ACTIVE_WEEKDAY])) {
+        if (array_key_exists(self::ARG_REQ_ACTIVE_WEEKDAY, $params)) {
             $flag = false;
             if (is_numeric($params[self::ARG_REQ_ACTIVE_WEEKDAY])) {
                 $value = (int)$params[self::ARG_REQ_ACTIVE_WEEKDAY];
@@ -306,7 +306,7 @@ class WeekdaylyTimer implements TimerInterface
     protected function getParameterActiveWeekday(array $params)
     {
         $result = 127;
-        if ((isset($params[self::ARG_REQ_ACTIVE_WEEKDAY])) &&
+        if ((array_key_exists(self::ARG_REQ_ACTIVE_WEEKDAY, $params)) &&
             (is_numeric($params[self::ARG_REQ_ACTIVE_WEEKDAY]))
         ) {
             $value = (int)$params[self::ARG_REQ_ACTIVE_WEEKDAY];

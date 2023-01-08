@@ -92,13 +92,15 @@ class TimerConst
     // - dataprocessor `SortListQueryProcessor`
     // - viewhelper `ìsActiveViewHelper
     // - helperservice `listOfEventsService`
+    public const ARGUMENT_FIELDNAME = 'fieldName';
+    public const ARGUMENT_AS = 'as';
     public const ARGUMENT_DATETIME_FORMAT = 'datetimeFormat';
     public const ARGUMENT_REVERSE = 'reverse';
     public const ARGUMENT_ACTIVEZONE = 'timezone';
     public const ARGUMENT_DATETIME_START = 'datetimeStart';
     public const ARGUMENT_MAX_LATE = 'maxLate';
+    public const ARGUMENT_MAX_GAP = 'maxGap';
     public const ARGUMENT_MAX_COUNT = 'maxCount';
-    public const SAVE_LIMIT_MAX_EVENTS = 500;
     public const ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE = 'userRangeCompare';
 
     public const CACHE_IDENT_TIMER_YAMLLIST = 'timer_yamllist';

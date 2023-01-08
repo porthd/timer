@@ -34,13 +34,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class MoonphaseRelTimerTest extends TestCase
 {
     protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_USE_ACTIVE_TIMEZONE = TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
     protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
     protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerMoonphaseRel';
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
-
 
 
     /**
@@ -163,7 +162,10 @@ class MoonphaseRelTimerTest extends TestCase
                     $filePath,
                     strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                 );
-            $this->assertTrue((false), 'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
+            $this->assertTrue(
+                (false),
+                'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. '
+            );
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
@@ -182,7 +184,11 @@ class MoonphaseRelTimerTest extends TestCase
 
     public function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(
+            TimerInterface::TIMER_FORMAT_DATETIME,
+            '2020-12-31 12:00:00',
+            new DateTimeZone('Europe/Berlin')
+        );
         $minusOneSecond = clone $testDate;
         $minusOneSecond->sub(new DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
@@ -327,11 +333,20 @@ class MoonphaseRelTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false], [false,true],['false',true], [new Datetime(), false],
-                     ['hallo',false],
-                     ['0',true],[0.0,true],["0.0",false],
-                     ['true',true],['1',true],[1,true],
-                     [1.0,true],['1.0',false],] as $value) {
+                     [null, false],
+                     [false, true],
+                     ['false', true],
+                     [new Datetime(), false],
+                     ['hallo', false],
+                     ['0', true],
+                     [0.0, true],
+                     ["0.0", false],
+                     ['true', true],
+                     ['1', true],
+                     [1, true],
+                     [1.0, true],
+                     ['1.0', false],
+                 ] as $value) {
             $result[] = [
                 'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
@@ -526,8 +541,8 @@ class MoonphaseRelTimerTest extends TestCase
                 ],
             ];
         }
-        // variation of durationMinutes
-        // '0.0'=>false, '-10.0' => false, '10.0' => false minus the same integer resolve not an integer zero
+        //         variation of durationMinutes
+        //         '0.0'=>false, '-10.0' => false, '10.0' => false minus the same integer resolve not an integer zero
         foreach ([
                      28801 => false,
                      -28801 => false,
@@ -568,24 +583,29 @@ class MoonphaseRelTimerTest extends TestCase
         }
 
         // variation of durationMinutes
-        foreach ([
-                     28801 => false,
-                     -28801 => false,
-                     -28800 => true,
-                     28800 => true,
-                     '-28800' => true,
-                     '28800' => true,
-                     '-100' => true,
-                     '10' => true,
-                     '-10.1' => false,
-                     '10.1' => false,
-                     '-10.0' => false,
-                     '10.0' => false,
-                     0 => false,
-                     '0.0' => false,
-                     1 => true,
-                     '-1' => true,
-                 ] as $myMin => $myExpects
+        $list = [
+            28801 => false,
+            -28801 => false,
+            -28800 => true,
+            28800 => true,
+//                     '-28800' => true, // is identical to abowe
+//                     '28800' => true,  // is identical to above
+            '-100' => true,
+            '10 ' => false,
+            //
+            '10' => true,
+            //
+            '-10.1' => false,
+            '10.1' => false,
+            '-10.0' => false,
+            '10.0' => false,
+            // 10.0 => false,  // not allowed; autoconversion of (float)10.0 to (int)10, which will overide the correct entry
+            0 => false,
+            '0.0' => false,
+            1 => true,
+            '-1' => true,
+        ];
+        foreach ($list as $myMin => $myExpects
         ) {
             $result[] = [
                 'message' => 'The test for durationMinutes with `' . $myMin .
@@ -666,7 +686,7 @@ class MoonphaseRelTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => '',
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -679,7 +699,7 @@ class MoonphaseRelTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -692,7 +712,7 @@ class MoonphaseRelTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 1,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -707,7 +727,7 @@ class MoonphaseRelTimerTest extends TestCase
                 [
                     'params' => [
                         TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                       TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
+                        TimerInterface::ARG_USE_ACTIVE_TIMEZONE => $testAllowActive, // Variation
                     ],
                     'active' => 'Lauder/Furz',
                 ],
@@ -721,7 +741,7 @@ class MoonphaseRelTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 7200,
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => 0,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -734,7 +754,7 @@ class MoonphaseRelTimerTest extends TestCase
             [
                 'params' => [
                     TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT => 'Kauderwelsch/Murz',
-                   TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
+                    TimerInterface::ARG_USE_ACTIVE_TIMEZONE => true,
                 ],
                 'active' => 'Lauder/Furz',
             ],
@@ -1066,7 +1086,7 @@ class MoonphaseRelTimerTest extends TestCase
                 $flagResult = (!in_array($key, [0, 3]));
                 $result[] = [
                     'message' => 'The date-time  `' . $dateString . '` ' . (($flagResult) ? 'must be' : 'must not be') .
-                        ' active for the type of moon `'.$typeOfMoon.'`.',
+                        ' active for the type of moon `' . $typeOfMoon . '`.',
                     'expects' => [
                         'result' => $flagResult,
                     ],
@@ -1155,7 +1175,8 @@ class MoonphaseRelTimerTest extends TestCase
             'message' => 'The nextRange in this example is correctly detected, because the active Time ist part of an active range. ',
             'expects' => [
                 'result' => [
-                    'beginning' => '2022-07-15 20:38:00', // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
+                    'beginning' => '2022-07-15 20:38:00',
+                    // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
                     'ending' => '2022-07-15 22:39:00',
                     'exist' => true,
                 ],
@@ -1263,7 +1284,8 @@ class MoonphaseRelTimerTest extends TestCase
             'message' => 'The prevRange in this example is correctly detected, because the startdate is one minute higher than the previous active range',
             'expects' => [
                 'result' => [
-                    'beginning' => '2022-07-15 20:38:00', // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
+                    'beginning' => '2022-07-15 20:38:00',
+                    // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
                     'ending' => '2022-07-15 22:39:00',
                     'exist' => true,
                 ],
@@ -1290,7 +1312,8 @@ class MoonphaseRelTimerTest extends TestCase
             'message' => 'The prevRange in this example is correctly detected, because the startdate is one minute higher than the previous active range',
             'expects' => [
                 'result' => [
-                    'beginning' => '2022-07-15 20:38:00', // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
+                    'beginning' => '2022-07-15 20:38:00',
+                    // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
                     'ending' => '2022-07-15 22:39:00',
                     'exist' => true,
                 ],
@@ -1317,7 +1340,8 @@ class MoonphaseRelTimerTest extends TestCase
             'message' => 'The prevRange in this example is correctly detected, because the startdate is one minute higher than the previous active range',
             'expects' => [
                 'result' => [
-                    'beginning' => '2022-07-15 20:38:00', // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
+                    'beginning' => '2022-07-15 20:38:00',
+                    // fullmoon calculated by algorithm : 13. Juli 2022, 20.37 instead of   13. Juli 2022, 20:37
                     'ending' => '2022-07-15 22:39:00',
                     'exist' => true,
                 ],

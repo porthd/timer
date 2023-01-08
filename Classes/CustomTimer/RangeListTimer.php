@@ -193,7 +193,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         array $yamlConfig,
         string $pathOfYamlFile = ''
     ): void {
-        if ((!isset($yamlConfig[self::YAML_MAIN_LIST_KEY])) ||
+        if ((!array_key_exists(self::YAML_MAIN_LIST_KEY, $yamlConfig)) ||
             (!is_array($yamlConfig[self::YAML_MAIN_LIST_KEY]))
         ) {
             throw new TimerException(
@@ -208,23 +208,23 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         foreach ($yamlConfig[self::YAML_MAIN_LIST_KEY] as $item) {
             // required fields
             $flag = (
-                isset($item[self::YAML_LIST_ITEM_SELECTOR]) &&
+                array_key_exists(self::YAML_LIST_ITEM_SELECTOR, $item) &&
                 $timerList->validateSelector($item[self::YAML_LIST_ITEM_SELECTOR])
             );
             if (!$flag) {
                 throw new TimerException(
-                    'The selector for the timer`' . $item[self::YAML_LIST_ITEM_SELECTOR]  .
+                    'The selector for the timer`' . $item[self::YAML_LIST_ITEM_SELECTOR] .
                     '` is not defined or instantiated. ' .
-                'Check the timer-definitions in your YAML-file `' . $pathOfYamlFile . '`.',
+                    'Check the timer-definitions in your YAML-file `' . $pathOfYamlFile . '`.',
                     1668247251
                 );
             };
-            $flag = ((!isset($item[self::YAML_LIST_ITEM_TITLE])) ||
+            $flag = ((!array_key_exists(self::YAML_LIST_ITEM_TITLE, $item)) ||
                 (!empty($item[self::YAML_LIST_ITEM_TITLE])));
-            $flag = $flag && ((!isset($item[self::YAML_LIST_ITEM_DESCRIPTION])) ||
+            $flag = $flag && ((!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
                     (!empty($item[self::YAML_LIST_ITEM_DESCRIPTION])));
             $flag = $flag && (
-                (!isset($item[self::YAML_LIST_ITEM_DESCRIPTION])) ||
+                (!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
                 (
                     (is_array($item[self::YAML_LIST_ITEM_PARAMS])) &&
                     (!empty($item[self::YAML_LIST_ITEM_PARAMS]))
@@ -308,7 +308,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $flag = true;
         foreach ([self::ARG_YAML_ACTIVE_FILE_PATH, self::ARG_YAML_FORBIDDEN_FILE_PATH] as $paramKey) {
             $filePath = (
-                isset($params[$paramKey]) ?
+                array_key_exists($paramKey, $params) ?
                     $params[$paramKey] :
                     ''
             );
@@ -344,7 +344,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $flag = true;
         foreach ([self::ARG_DATABASE_ACTIVE_RANGE_LIST, self::ARG_DATABASE_FORBIDDEN_RANGE_LIST] as $paramKey) {
             $commaList = (
-                isset($params[$paramKey]) ?
+                array_key_exists($paramKey, $params) ?
                     $params[$paramKey] :
                     ''
             );
@@ -420,13 +420,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             $forbiddenTimer = array_merge($yamlForbiddenConfig, $databaseForbiddenConfig);
             if (!empty($forbiddenTimer)) {
                 foreach ($forbiddenTimer as $singleForbiddenTimer) {
-                    if (
-                        (!isset($singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR], $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                        ($timerList->validate(
-                            $singleForbiddenTimer[self::YAML_LIST_ITEM_SELECTOR],
-                            $singleForbiddenTimer[self::YAML_LIST_ITEM_PARAMS]
-                        ))
-                    ) {
+                    $flagParamFailure = $this->isParamFailure($singleForbiddenTimer, $timerList);
+                    if ($flagParamFailure) {
                         // log only the missing of an allowed-timerdcefinition
                         $this->logger->critical(
                             'The needed parameter `' . print_r(
@@ -485,7 +480,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $this->loopRecursiveLimiter = (int)(
-            (isset($params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT])) ?
+            (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
                 $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
                 self::MAX_TIME_LIMIT_MERGE_COUNT
         );
@@ -1047,13 +1042,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         while (($expandLimit > 0) && ($flagChange)) {
             $flagChange = false;
             foreach ($listOfTimer as $singleActiveTimer) {
-                if (
-                    (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                    ($timerList->validate(
-                        $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                    ))
-                ) {
+                $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+                if ($flagParamFailure) {
                     // log only the missing of an allowed definition of timer
                     $this->logger->critical(
                         'The needed values `' . print_r(
@@ -1110,13 +1100,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         while (($expandLimit > 0) && ($flagChange)) {
             $flagChange = false;
             foreach ($listOfTimer as $singleActiveTimer) {
-                if (
-                    (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                    ($timerList->validate(
-                        $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                    ))
-                ) {
+                $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+                if ($flagParamFailure) {
                     // log only the missing of an allowed definition of timer
                     $this->logger->critical(
                         'The needed values `' . print_r(
@@ -1173,13 +1158,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         while (($expandLimit > 0) && ($flagChange)) {
             $flagChange = false;
             foreach ($listOfTimer as $singleActiveTimer) {
-                if (
-                    (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                    ($timerList->validate(
-                        $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                    ))
-                ) {
+                $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+                if ($flagParamFailure) {
                     // log only the missing of an allowed definition of timer
                     $this->logger->critical(
                         'The needed values `' . print_r(
@@ -1233,13 +1213,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $result->failAllActive($refDateNotInActive);
         $flagFirst = true;
         foreach ($activeTimerList as $singleActiveTimer) {
-            if (
-                (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate(
-                    $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                ))
-            ) {
+            $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+            if ($flagParamFailure) {
                 // log only the missing of an allowed definition of timer
                 $this->logger->critical(
                     'The needed values `' . print_r(
@@ -1288,13 +1263,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $result->failAllActive($refDateNotInActive);
         $flagFirst = true;
         foreach ($activeTimerList as $singleActiveTimer) {
-            if (
-                (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate(
-                    $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                ))
-            ) {
+            $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+
+            if ($flagParamFailure) {
                 // log only the missing of an allowed definition of timer
                 $this->logger->critical(
                     'The needed values `' . print_r(
@@ -1337,7 +1308,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $loopRecursiveLimiter = (
-            (isset($params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT])) ?
+            (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
                 $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
                 self::MAX_TIME_LIMIT_MERGE_COUNT
         );
@@ -1426,13 +1397,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
 
         while ($loopLimiter > 0) {
             foreach ($activeTimerList as $singleActiveTimer) {
-                if (
-                    (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                    ($timerList->validate(
-                        $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                        $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                    ))
-                ) {
+                $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+
+                if ($flagParamFailure) {
                     // log only the missing of an allowed-timerdcefinition
                     $this->logger->critical(
                         'The needed values `' . print_r(
@@ -1604,7 +1571,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         array $params,
         string $key = self::ARG_DATABASE_ACTIVE_RANGE_LIST
     ): array {
-        if (!isset($params[$key])) {
+        if (!array_key_exists($key, $params)) {
             return [];
         }
         return $this->readListFromDatabase($params[$key]);
@@ -1727,13 +1694,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $firstActiveCurrentRange = new TimerStartStopRange();
         $firstActiveCurrentRange->failAllActive($refDateForRange);
         foreach ($activeTimerList as $singleActiveTimer) {
-            if (
-                (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate(
-                    $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                ))
-            ) {
+            $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+            if ($flagParamFailure) {
                 // log only the missing of an allowed-timerdcefinition
                 $this->logger->critical(
                     'The needed values `' . print_r(
@@ -1938,13 +1900,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $currentRange = new TimerStartStopRange();
         $currentRange->failAllActive($dateLikeEventZone);
         foreach ($listOfTimer as $singleActiveTimer) {
-            if (
-                (!isset($singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR], $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS])) &&
-                ($timerList->validate(
-                    $singleActiveTimer[self::YAML_LIST_ITEM_SELECTOR],
-                    $singleActiveTimer[self::YAML_LIST_ITEM_PARAMS]
-                ))
-            ) {
+            $flagParamFailure = $this->isParamFailure($singleActiveTimer, $timerList);
+            if ($flagParamFailure) {
                 // log only the missing of an allowed definition of timer
                 $this->logger->critical(
                     'The needed values `' . print_r(
@@ -2040,6 +1997,24 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     protected function getPublicPathByEnviroment(): string
     {
         return Environment::getPublicPath();
+    }
+
+    /**
+     * @param array<mixed> $singleTimerParams
+     * @param ListOfTimerService $timerList
+     * @return bool
+     */
+    protected function isParamFailure(array $singleTimerParams, ListOfTimerService $timerList): bool
+    {
+        $flagParamFailure = (!array_key_exists(self::YAML_LIST_ITEM_SELECTOR, $singleTimerParams)) ||
+            (!array_key_exists(self::YAML_LIST_ITEM_PARAMS, $singleTimerParams)) ||
+            (
+                !$timerList->validate(
+                $singleTimerParams[self::YAML_LIST_ITEM_SELECTOR],
+                $singleTimerParams[self::YAML_LIST_ITEM_PARAMS]
+            )
+            );
+        return $flagParamFailure;
     }
     /**
      * // for testing approches

@@ -511,10 +511,10 @@ class DailyTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The test for `activeWeekday` will be okay' .
+            'message' => 'The test for `activeWeekday` will NOT be okay' .
                 ', because a `null` in `activeWeekday` is not allowed.',
             'expects' => [
-                'result' => true,
+                'result' => false,
             ],
             'params' => [
                 'required' => [
@@ -617,7 +617,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         // variation of startTimeSeconds
-        /// Attentioon second argument
+        /// Attention second argument
         foreach (['12:35:00' => false, '26:35:00' => false, 'asdfaf' => false, 43200 => true] as $value => $expected) {
             $result[] = [
                 'message' => 'The test ' . ($expected ? 'is okay' : 'failed') . ' with the value `' . $value . '` in the parameter `starttime`.',

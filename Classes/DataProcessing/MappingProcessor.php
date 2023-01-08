@@ -132,29 +132,29 @@ class MappingProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ) {
-        if (isset($processorConfiguration[self::ATTR_OUTPUT_FORMAT])) {
+        if (array_key_exists(self::ATTR_OUTPUT_FORMAT, $processorConfiguration)) {
             $outputFormat = $cObj->stdWrapValue(self::ATTR_OUTPUT_FORMAT, $processorConfiguration, false);
         } else {
             $outputFormat = self::DEFAULT_OUTPUT_FORMAT;
         }
-        if (isset($processorConfiguration[self::ATTR_FLEX_INPUT_FIELD])) {
+        if (array_key_exists(self::ATTR_FLEX_INPUT_FIELD, $processorConfiguration)) {
             $inputFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_INPUT_FIELD, $processorConfiguration, false);
         } else {
             $inputFieldName = self::DEFAULT_FLEX_FIELD;
         }
-        if (isset($processorConfiguration[self::ATTR_FLEX_OUTPUTFIELD])) {
+        if (array_key_exists(self::ATTR_FLEX_OUTPUTFIELD, $processorConfiguration)) {
             $outputFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_OUTPUTFIELD, $processorConfiguration, false);
         } else {
             $outputFieldName = self::DEFAULT_OUTPUTFIELD;
         }
-        if (isset($processedData[$outputFieldName])) {
+        if (array_key_exists($outputFieldName, $processedData)) {
             throw new TimerException(
                 'The new fieldname `' . $outputFieldName . '` is already defined. ' .
                 'Check the typoscript-configuration of your dataprocessor `' . self::class . '`.',
                 1668758629
             );
         }
-        if ((isset($processorConfiguration[self::ATTR_IF_DOT]) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
+        if ((array_key_exists(self::ATTR_IF_DOT, $processorConfiguration) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
             (empty($processedData[$inputFieldName])) ||
             (!is_array($processedData[$inputFieldName]))
         ) {
@@ -168,7 +168,7 @@ class MappingProcessor implements DataProcessorInterface
             $posttext = ((!empty($genericConfig[self::ATTR_GENERIC_POSTTEXT])) ? $genericConfig[self::ATTR_GENERIC_POSTTEXT] : self::DEFAULT_GENERIC_POSTTEXT);
             $type = ((!empty($genericConfig[self::ATTR_GENERIC_TYPE])) ? $genericConfig[self::ATTR_GENERIC_TYPE] : self::DEFAULT_GENERIC_TYPE);
             foreach ($processedData[$inputFieldName] as $mapKey => $mapItem) {
-                if (!isset($result[$mapKey])) {
+                if (!array_key_exists($mapKey, $result)) {
                     $result[$mapKey] = [];
                 }
                 switch ($type) {
@@ -190,8 +190,8 @@ class MappingProcessor implements DataProcessorInterface
         foreach (($processorConfiguration[self::ATTR_MAPPING_DOT] ?? []) as $oldFileName => $mappingText) {
             $newFieldName = ((!empty($mappingText)) ? (string)$mappingText : $oldFileName);
             foreach ($processedData[$inputFieldName] as $mapKey => $mapItem) {
-                if ((isset($result[$mapKey][$newFieldName])) ||
-                    (!isset($mapItem[$oldFileName]))
+                if ((array_key_exists($newFieldName, $result[$mapKey])) ||
+                    (!array_key_exists($oldFileName, $mapItem))
                 ) {
                     throw new TimerException(
                         'The new fieldname `' . $newFieldName . '` is already defined in the new mapping-array ' .

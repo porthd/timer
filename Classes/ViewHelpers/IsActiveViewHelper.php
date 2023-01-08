@@ -96,12 +96,12 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
     public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
     {
         try {
-            if (isset($arguments[self::ARGUMENT_FLEXFORM_STRING])) {
+            if (!empty($arguments[self::ARGUMENT_FLEXFORM_STRING])) {
                 $paramsString = $arguments[self::ARGUMENT_FLEXFORM_STRING];
                 $flexParams = GeneralUtility::xml2array($paramsString);
                 $params = TcaUtility::flexformArrayFlatten($flexParams);
             } else {
-                if (isset($arguments[self::ARGUMENT_PARAM_LIST])) {
+                if (array_key_exists(self::ARGUMENT_PARAM_LIST, $arguments)) {
                     $params = $arguments[self::ARGUMENT_PARAM_LIST];
                 } else {
                     throw new TimerException(

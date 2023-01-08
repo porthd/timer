@@ -34,12 +34,12 @@ class GeneralTimerUtility
      */
     public static function getTimeZoneOfEvent(string $activeZoneName, array $params = []): string
     {
-        if ((isset($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE])) &&
+        if ((array_key_exists(TimerInterface::ARG_USE_ACTIVE_TIMEZONE, $params)) &&
             (in_array($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE], ['1', 'true', 'TRUE', 1, true]))
         ) {
             return $activeZoneName;
         }
-        if ((isset($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) &&
+        if ((array_key_exists(TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT, $params)) &&
             (is_numeric($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) &&
             (($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT] - (int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]) === 0)
         ) {
@@ -63,7 +63,8 @@ class GeneralTimerUtility
                 134456897
             );
         }
-        return ((isset($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) && (is_string($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) ?
+        return ((array_key_exists(TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT, $params)) &&
+        (is_string($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) ?
             $paramTimeZoneName :
             $activeZoneName
         );

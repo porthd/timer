@@ -23,7 +23,8 @@ namespace Porthd\Timer\Domain\Model\Interfaces;
 
 
 /**
- * TimerModellInterface
+ * interface for general needed function in getter/setter models to tables, which should be used by the timer-extension
+ * it may be helpful to extend i.e. the table for the news-extension
  */
 interface TimerModellInterface
 {
