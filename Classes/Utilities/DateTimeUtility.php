@@ -131,14 +131,14 @@ class DateTimeUtility
      * if only one is give, the timegap is zero
      * if the Timezone is undefined, the method throws an exception
      *
-     * @param string $eventTimeZone the name of the timezone i.e. 'europe/berlin', which has a gap to the base timezone
+     * @param string $eventTimeZone the name of the timezone i.e. 'europe/berlin' (TimerConst::DEFAULT_TIMEZONE), which has a gap to the base timezone
      * @param string $frontendTimeZone name of the base timezone
      * @return int timegag in seconds (positive an negative)
      * @throws TimerException
      */
     public static function getTimezoneOffset(
-        string $eventTimeZone = 'Europe/Berlin',
-        string $frontendTimeZone = 'Europe/Berlin'
+        string $eventTimeZone = TimerConst::DEFAULT_TIMEZONE,
+        string $frontendTimeZone = TimerConst::DEFAULT_TIMEZONE
     ): int {
         if ((empty($frontendTimeZone)) || ($frontendTimeZone === $eventTimeZone)) {
             return 0;

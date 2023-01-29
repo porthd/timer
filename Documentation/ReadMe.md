@@ -1,4 +1,4 @@
-# extension timer
+# extension timer - version 11.x
 
 ## Preliminary remark
 
@@ -194,21 +194,80 @@ The timers do not cover every case. You can also define your own timer class, wh
 There are four view helpers:
 
 - timer:isActive - works similar to `f:if`, checking if a time is in the active range of a periodic timer.
-- timer:flexToArray - When converting a Flexform definition to an array, the array contains many superfluous
-  intermediate levels. These levels can be removed with the Viewhelper, so that the resulting array of the flexform
+- timer:flexToArray - When converting a Flexform definition to an array, the
+  array contains many superfluous
+  intermediate levels. These levels can be removed with the Viewhelper, so that
+  the resulting array of the flexform
   array becomes flatter/simpler.
-- timer:format.date - works like `f:format.date`, allowing the output of times for a specific time zone.
-- timer:format.jewishDate - works similarly to `f:format.date`, outputting times for a specific time zone
+- timer:format.date - works like `f:format.date`, allowing the output of times
+  for a specific time zone.
+- timer:format.jewishDate - works similarly to `f:format.date`, outputting times
+  for a specific time zone
   allowed and whereby the dates are transformed into the Jewish calendar.
+- timer:format.calendarDate - works more comprehensively than `f:format.date`
+  because in addition to taking into account the time zone, it also allows you
+  to choose from the various calendars supported by PHP
+  allowed and also allowed three instead of two date formatting variants.
+  Besides being defined according to the strftime formatting rules and the
+  dateTimeInterface::format formatting rules, the ICU formatting language can
+  also be used.
+  A well-known shortcoming is that the conversion from the Chinese lunar
+  calendar to the Gregorian (western) solar calendar has an error that is to be
+  found in PHP. The timer makes the view helper ``timer:format.jewishDate``
+  superfluous.
+
+#### timer:format.calendarDate - Attributes
+
+- **flagformat** determines which formatting rules should be used: 0
+  = [PHP-DateTime](https://www.php.net/manual/en/datetime.format.php),
+  1: [ICU-Datetime- formatting](https://unicode-org.github.io/icu/userguide/format_parse/datetime/)
+  or 2 = [PHP-strftime](https://www.php.net/manual/en/function.strftime .php).
+- **format** defines the format of the date output.
+- **base** is important for relative dates like 'now', '+4 days' or similar.
+- **timezone** defines for which time zone a date should be output. You can get
+  a list of allowed time zone names using the PHP
+  function `timezone_abbreviations_list()`. But you can also find
+  a [list by continents](https://www.php.net/manual/en/timezones.php) in the PHP
+  documentation.
+- **date** allows a date from the Gregorian (western) calendar to be specified
+  if no specification is made for `datestring`. You can implicitly define the
+  value for `date` by enclosing the value with the viewhelper tags. If you don't
+  specify anything, if `datestring` is empty or missing, the current date will
+  be used automatically.
+- **datestring** allows specifying a date from a non-Gregorian calendar in the
+  format ``year/month/day hour/minute/second``, where the year must be four
+  digits and all other values two digits. The hour can be any value from 0 to
+  23. Values between 1 and 13 are acceptable for the months.
+- **calendarsource** defines the underlying calendar for the date
+  in `datestring`. PHP allows the following values: 0:'buddhist', 1:'chinese',
+  2:'coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem' ,
+  8:'gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'
+  islamic-rgsa', 14:'islamic-tbla', 15 :'islamic-umalqura', 16: 'japanese',
+  17: 'persian', 18: 'roc'.
+- **calendartarget** defines the calendar for which the date should be output.
+  PHP allows the following values: 0:'buddhist', 1:'chinese', 2:'coptic', 3:'
+  dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem' , 8:'gregorian',
+  9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'islamic-rgsa',
+  14:'islamic-tbla', 15 :'islamic-umalqura', 16: 'japanese', 17: 'persian',
+  18: 'roc'.
+- **locale** determines the regional localization and consists of the two-letter
+  language abbreviation (de, en, fr, es, ...) and separated by an underscore
+  from the abbreviation for the nation (DE, GB, US, AT, Switzerland, France,
+  ...). The value in __locale__ could look like this: `de_DE`, `en_GB`
+  or `es_US`.
 
 ### Data Processors
 
-Since the results of the data processors are cached, the user must determine what a reasonable caching period is and
+Since the results of the data processors are cached, the user must determine
+what a reasonable caching period is and
 define this accordingly.
 
-In principle, an example for the application of the same should be found as a comment in the source code of the respective DataProcessors.
-For the friends of TypoScript programming it should be said that the parameters are read in via the stdWrap method.
-The recursive use of Typoscript to dynamize the setup is therefore possible; even if it is expressly not recommended here.
+In principle, an example for the application of the same should be found as a
+comment in the source code of the respective DataProcessors.
+For the friends of TypoScript programming it should be said that the parameters
+are read in via the stdWrap method.
+The recursive use of Typoscript to dynamize the setup is therefore possible;
+even if it is expressly not recommended here.
 
 #### RangeListQueryProcessor
 

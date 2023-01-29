@@ -5,6 +5,7 @@
         <langDisable>1</langDisable>
     </meta>
     <sheets>
+        <!-- @deprecated since v11, will be removed in v12 -->
         <timer>FILE:EXT:timer/Configuration/FlexForms/TimerDef/Specific/JewsihHolidayTimer.flexform</timer>
         <general>FILE:EXT:timer/Configuration/FlexForms/TimerDef/General/GeneralTimer.flexform</general>
     </sheets>

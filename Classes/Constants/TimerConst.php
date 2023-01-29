@@ -54,16 +54,6 @@ class TimerConst
     public const GLOBALS_SUBKEY_EXCLUDE = 'removeTimer';
     public const HOOK_CHANGE_LIST_OF_TIMEZONES = 'changeListOfTimezones'; // modify the list of uesed timezone-codes with your own hook-Method
 
-
-    /** needed parameter in flexform of timer **/
-    /**
-     * used for default timezone definition
-     * used in
-     * - TcaUtility
-     */
-    public const DEFAULT_TIME_ZONE = 'UTC';
-
-
     /**
      * needed in repositorys and repository-related classes
      * and needed in cronjob for updating startime and endtime
@@ -104,4 +94,6 @@ class TimerConst
     public const ARGUMENT_HOOK_CUSTOM_EVENT_COMPARE = 'userRangeCompare';
 
     public const CACHE_IDENT_TIMER_YAMLLIST = 'timer_yamllist';
+
+    public const DEFAULT_TIMEZONE = 'Europe/Berlin';
 }

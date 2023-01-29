@@ -114,6 +114,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderS
  * ``1980-12-13``
  * Depending on the value of ``{dateObject}``.
  *
+ * @deprecated since v11, will be removed in v12
+ *
  */
 class JewishDateViewHelper extends AbstractViewHelper
 {
@@ -123,7 +125,6 @@ class JewishDateViewHelper extends AbstractViewHelper
     public const ARG_BASE = 'base';
     public const ARG_TIMEZONE = 'timezone';
     public const ARG_DATE = 'date';
-    public const ARG_COMMENT_HIDE = 'hideHumanityComment';
 
     /**
      * Needed as child node's output can return a DateTime object which can't be escaped

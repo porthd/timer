@@ -120,7 +120,6 @@ class PeriodlistProcessor implements DataProcessorInterface
 
     protected const OUTPUT_KEY_DATA = 'data';
     protected const DEFAULT_MAX_COUNT = '25';
-    protected const DEFAULT_TIME_ZONE = 'Europe/Berlin';
     protected const DEFAULT_RESULT_VARIABLE_NAME = 'periodlist';
 
 
@@ -222,11 +221,6 @@ class PeriodlistProcessor implements DataProcessorInterface
         }
         // The variable to be used within the result
         $maxCount = (int)$cObj->stdWrapValue(self::ATTR_MAX_COUNT, $processorConfiguration, self::DEFAULT_MAX_COUNT);
-        $defaultZone = (int)$cObj->stdWrapValue(
-            self::ATTR_TIME_ZONE_DEFAULT,
-            $processorConfiguration,
-            self::DEFAULT_TIME_ZONE
-        );
         $targetVariableName = $cObj->stdWrapValue(
             self::ATTR_RESULT_VARIABLE_NAME,
             $processorConfiguration,

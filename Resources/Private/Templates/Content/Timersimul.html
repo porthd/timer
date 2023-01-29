@@ -3,26 +3,26 @@
       data-namespace-typo3-fluid="true"
 >
 <head>
-<f:comment>
-    <!--***************************************************************
-    *
-    *  Copyright notice
-    *
-    *  (c) 2022 Dr. Dieter Porth <info@mobger.de>
-    *
-    *  All rights reserved
-    *
-    *  This script is free software; you can redistribute it and/or modify
-    *  it under the terms of the GNU General Public License as published by
-    *  the Free Software Foundation; either version 3 of the License, or
-    *  (at your option) any later version.
-    *
-    *  The GNU General Public License can be found at
-    *  http://www.gnu.org/copyleft/gpl.html.
-    *
-    *  This copyright notice MUST APPEAR in all copies of the script!
-    *************************************************************** -->
-</f:comment>
+    <f:comment>
+        <!--***************************************************************
+        *
+        *  Copyright notice
+        *
+        *  (c) 2022 Dr. Dieter Porth <info@mobger.de>
+        *
+        *  All rights reserved
+        *
+        *  This script is free software; you can redistribute it and/or modify
+        *  it under the terms of the GNU General Public License as published by
+        *  the Free Software Foundation; either version 3 of the License, or
+        *  (at your option) any later version.
+        *
+        *  The GNU General Public License can be found at
+        *  http://www.gnu.org/copyleft/gpl.html.
+        *
+        *  This copyright notice MUST APPEAR in all copies of the script!
+        *************************************************************** -->
+    </f:comment>
 </head>
 <body>
 
@@ -69,13 +69,16 @@
                          extensionName="timer"
             />
         </div>
-        <h3><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+        <h3>
+            <f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
                          extensionName="timer"
-        /></h3>
+            />
+        </h3>
         <div>
             <f:translate key="content.timersimul.viewhelper.prolog.formatDate"
                          extensionName="timer"
-            /><br />
+            />
+            <br/>
         </div>
         <h3>
             <f:translate key="content.timersimul.viewhelper.subtitle.flex"
@@ -85,7 +88,8 @@
         <div>
             <f:translate key="content.timersimul.viewhelper.prolog.flex"
                          extensionName="timer"
-            /><br />
+            />
+            <br/>
             <table>
                 <tr>
                     <th>
@@ -99,7 +103,8 @@
                         />
                     </th>
                 </tr>
-                <timer:flex flexstring="{data.tx_timer_timer}" as="timerflex" flattenkeys="data,general,timer,sDEF,lDEF,vDEF">
+                <timer:flex flexstring="{data.tx_timer_timer}" as="timerflex"
+                            flattenkeys="data,general,timer,sDEF,lDEF,vDEF">
                     <f:for each="{timerflex}" as="value" key="key">
                         <tr>
                             <td>{key}</td>
@@ -107,7 +112,8 @@
                         </tr>
                     </f:for>
                 </timer:flex>
-            </table><br />
+            </table>
+            <br/>
         </div>
 
         <h3>
@@ -118,86 +124,246 @@
         <div>
             <f:translate key="content.timersimul.viewhelper.prolog.isActive"
                          extensionName="timer"
-            /><br />
-            <timer:isActive     flexformstring="{data.tx_timer_timer}"
-                                selector="{data.tx_timer_selector}"
-                                timestamp="1600000000"
+            />
+            <br/>
+            <timer:isActive flexformstring="{data.tx_timer_timer}"
+                            selector="{data.tx_timer_selector}"
+                            timestamp="1600000000"
             >
                 <f:then>
-                    <em><f:translate key="content.timersimul.viewhelper.prologresult.isActive.active"
-                                 extensionName="timer"
-                    /></em>
-                    <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                    <em>
+                        <f:translate key="content.timersimul.viewhelper.prologresult.isActive.active"
                                      extensionName="timer"
-                    /></h4>
-                    TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
+                        />
+                    </em>
+                    <h4>
+                        <f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                                     extensionName="timer"
+                        />
+                    </h4>
+                    TYPO3:
+                    <f:format.date format="Y-m-d H:i:s">1600000000</f:format.date>
+                    <br/>
                 </f:then>
                 <f:else>
-                    <del><f:translate key="content.timersimul.viewhelper.prologresult.isActive.inactive"
-                                 extensionName="timer"
-                    /></del>
-                    <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                    <del>
+                        <f:translate key="content.timersimul.viewhelper.prologresult.isActive.inactive"
                                      extensionName="timer"
-                    /></h4>
-                    TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
+                        />
+                    </del>
+                    <h4>
+                        <f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                                     extensionName="timer"
+                        />
+                    </h4>
+                    TYPO3:
+                    <f:format.date format="Y-m-d H:i:s">1600000000</f:format.date>
+                    <br/>
                 </f:else>
-            </timer:isActive><br />
+            </timer:isActive>
+            <br/>
             <f:translate key="content.timersimul.viewhelper.postprolog.isActive"
                          extensionName="timer"
-            /><br />
-            <timer:flex flexstring="{data.tx_timer_timer}" as="timerflex" flattenkeys="data,general,timer,sDEF,lDEF,vDEF">
+            />
+            <br/>
+            <timer:flex flexstring="{data.tx_timer_timer}" as="timerflex"
+                        flattenkeys="data,general,timer,sDEF,lDEF,vDEF">
                 <timer:isActive paramlist="{timerflex}"
                                 timestamp="1600003600"
                                 selector="{data.tx_timer_selector}"
                                 timezone="Asia/Dubai"
                 >
                     <f:then>
-                        <em><f:translate key="content.timersimul.viewhelper.prologresult.isActive.active"
+                        <em>
+                            <f:translate key="content.timersimul.viewhelper.prologresult.isActive.active"
                                          extensionName="timer"
-                        /></em><br />
-                        <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                            />
+                        </em><br/>
+                        <h4>
+                            <f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
                                          extensionName="timer"
-                        /></h4>
-                        TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
-                        timer: <timer:format.date  format="Y-m-d H:i:s">1600000000</timer:format.date><br />
-                        timer(Bangkok): <timer:format.date timezone="Asia/Bangkok" format="Y-m-d H:i:s">1600000000</timer:format.date><br />
-                        timer(Dubai): <timer:format.date timezone="Asia/Dubai" format="Y-m-d H:i:s">1600000000</timer:format.date>
+                            />
+                        </h4>
+                        TYPO3:
+                        <f:format.date format="Y-m-d H:i:s">1600000000</f:format.date>
+                        <br/>
+                        timer:
+                        <timer:format.date format="Y-m-d H:i:s">1600000000</timer:format.date>
+                        <br/>
+                        timer(Bangkok):
+                        <timer:format.date timezone="Asia/Bangkok" format="Y-m-d H:i:s">1600000000</timer:format.date>
+                        <br/>
+                        timer(Dubai):
+                        <timer:format.date timezone="Asia/Dubai" format="Y-m-d H:i:s">1600000000</timer:format.date>
                     </f:then>
                     <f:else>
-                        <del><f:translate key="content.timersimul.viewhelper.prologresult.isActive.inactive"
-                            extensionName="timer"
-                            /></del><br />
-                        <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
-                            extensionName="timer"
-                            /></h4>
-                        TYPO3: <f:format.date  format="Y-m-d H:i:s">1600000000</f:format.date><br />
-                        timer: <timer:format.date  format="Y-m-d H:i:s">1600000000</timer:format.date><br />
-                        timer(Bangkok): <timer:format.date timezone="Asia/Bangkok" format="Y-m-d H:i:s">1600000000</timer:format.date><br />
-                        timer(Dubai): <timer:format.date timezone="Asia/Dubai" format="Y-m-d H:i:s">1600000000</timer:format.date>
+                        <del>
+                            <f:translate key="content.timersimul.viewhelper.prologresult.isActive.inactive"
+                                         extensionName="timer"
+                            />
+                        </del>
+                        <br/>
+                        <h4>
+                            <f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
+                                         extensionName="timer"
+                            />
+                        </h4>
+                        TYPO3:
+                        <f:format.date format="Y-m-d H:i:s">1600000000</f:format.date>
+                        <br/>
+                        timer:
+                        <timer:format.date format="Y-m-d H:i:s">1600000000</timer:format.date>
+                        <br/>
+                        timer(Bangkok):
+                        <timer:format.date timezone="Asia/Bangkok" format="Y-m-d H:i:s">1600000000</timer:format.date>
+                        <br/>
+                        timer(Dubai):
+                        <timer:format.date timezone="Asia/Dubai" format="Y-m-d H:i:s">1600000000</timer:format.date>
                     </f:else>
                 </timer:isActive>
             </timer:flex>
         </div>
         <div>
-        <h4><f:translate key="content.timersimul.viewhelper.subtitle.formatJewishDate"
-                         extensionName="timer"
-        /></h4>
+            <h4>
+                <f:translate key="content.timersimul.viewhelper.subtitle.formatJewishDate"
+                             extensionName="timer"
+                />
+            </h4>
 
-        Ref.  <timer:format.date format="d.m.Y - H:i:s">1600000000</timer:format.date> <br />
-        &nbsp;&nbsp;&nbsp;    <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.unixtimestamp"
-                                                                                                    extensionName="timer"
-        /><br />
-        <br />
+            Ref.
+            <timer:format.date format="d.m.Y - H:i:s">1600000000</timer:format.date>
+            <br/>
+            &nbsp;&nbsp;&nbsp;
+            <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.unixtimestamp"
+                         extensionName="timer"
+            />
+            <br/>
+            <br/>
+            <ol>
+                <li>
+                    <timer:format.jewishDate>1600000000</timer:format.jewishDate>
+                </li>
+                <li>
+                    <timer:format.jewishDate format="H:i">1600000000</timer:format.jewishDate>
+                </li>
+                <li>
+                    <timer:format.jewishDate format="H:i e" timezone="UTC">1600000000</timer:format.jewishDate>
+                </li>
+                <li>
+                    <timer:format.jewishDate format="H:i e" timezone="Asia/Bangkok">1600000000</timer:format.jewishDate>
+                </li>
+                <li>
+                    <timer:format.jewishDate format="Y" base="1600000000">-1 year</timer:format.jewishDate>
+                    (Ref. - 1 Year)
+                </li>
+                <li>
+                    <timer:format.jewishDate format="d.m.Y - H:i:s" base="1600000000">+1 week 2 days 4 hours 2 seconds
+                    </timer:format.jewishDate>
+                    (Ref. +1 week 2 days 4 hours 2 seconds)
+                </li>
+                <li>
+                    <timer:format.jewishDate format="%d. %B %Y">1600000000</timer:format.jewishDate>
+                    <br/>
+                    <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime"/>
+                </li>
+                <li> {timer:format.jewishDate(date: '@1600000000')}</li>
+                <li> {timer:format.jewishDate(format:'Y M d',date: '@1600000000')}</li>
+            </ol>
+            <h4>
+                <f:translate key="content.timersimul.viewhelper.subtitle.formatCalendarDate"
+                             extensionName="timer"
+                />
+            </h4>
+            <div>
+                <f:translate key="content.timersimul.viewhelper.formatCalendarDate.aspect.unixtimestamp"
+                             extensionName="timer"
+                />
+            </div>
             <ul>
-            <li>1.  <timer:format.jewishDate>1600000000</timer:format.jewishDate></li>
-            <li>2. <timer:format.jewishDate format="H:i">1600000000</timer:format.jewishDate></li>
-            <li>3. <timer:format.jewishDate format="H:i e" timezone="UTC">1600000000</timer:format.jewishDate></li>
-            <li>4. <timer:format.jewishDate format="H:i e" timezone="Asia/Bangkok">1600000000</timer:format.jewishDate></li>
-        <li>5. <timer:format.jewishDate format="Y" base="1600000000">-1 year</timer:format.jewishDate> (Ref. - 1 Year)</li>
-        <li>6. <timer:format.jewishDate format="d.m.Y - H:i:s" base="1600000000">+1 week 2 days 4 hours 2 seconds</timer:format.jewishDate>  (Ref. +1 week 2 days 4 hours 2 seconds)</li>
-            <li>7. <timer:format.jewishDate format="%d. %B %Y">1600000000</timer:format.jewishDate> <br /><f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime"/></li>
-        <li>8. {timer:format.jewishDate(date: '@1600000000')}</li>
-        <li>9. {timer:format.jewishDate(format:'Y M d',date: '@1600000000')}</li>
+                <li>Ref. &lt;f:format.date&gt;:
+                    <f:format.date format="d.m.Y H:i:s">
+                        1600000000
+                    </f:format.date>
+                </li>
+                <li>2. Ref. &lt;timer:format.date&gt; (PHP):
+                    <timer:format.date format="d.m.Y H:i:s">
+                        1600000000
+                    </timer:format.date>
+                </li>
+                <f:for
+                    each="{0:'buddhist', 1:'chinese', 2:'coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem', 8:'gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'islamic-rgsa', 14:'islamic-tbla', 15:'islamic-umalqura', 16:'japanese', 17:'persian', 18:'roc'}"
+                    as="calendar"
+                >
+                    <li>gregorian => {calendar}:
+                        <br/>ICU-Format <a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/">(link)</a>:
+                        <timer:format.calendarDate calendartarget="{calendar}" locale="de_DE"
+                                                   format="yyyy-MM-dd G HH:mm:ss '(ICU-Format)'" flagformat="1">
+                            1600000000
+                        </timer:format.calendarDate>
+                        <br/>PHP-DateTime <a href="https://www.php.net/manual/en/datetime.format.php">(link)</a>:
+                        <timer:format.calendarDate calendartarget="{calendar}" locale="de_DE"
+                                                   format="d.m.Y  H:i:s \(\P\H\P\-\D\a\t\e\T\i\m\e\)" flagformat="0">
+                            1600000000
+                        </timer:format.calendarDate>
+                        <br/>PHP-strftime <a href="https://www.php.net/manual/en/function.strftime.php">(link)</a>:
+                        <timer:format.calendarDate calendartarget="{calendar}" locale="de_DE"
+                                                   format="%a %d. %B %G %r (php-strftime)" flagformat="2">
+                            1600000000
+                        </timer:format.calendarDate>
+                        <br/>inline <a
+                            href="https://docs.typo3.org/m/typo3/book-extbasefluid/10.4/en-us/8-Fluid/1a-inline-syntax.html">(link)</a>:
+                        {timer:format.calendarDate(calendartarget:calendar,locale:'de_DE',format:'yyyy/MM/dd
+                        HH:mm:ss',flagformat:'1',date:'1600000000')}
+                    </li>
+                    <li>gregorian => {calendar} => gregorian:
+                        <br/>ICU-Format <a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/">(link)</a>:
+                        <timer:format.calendarDate calendarsource="{calendar}" calendartarget="gregorian" locale="de_DE"
+                                                   format="yyyy-MM-dd G HH:mm:ss '(ICU-Format)'" flagformat="1"
+                                                   datestring="{timer:format.calendarDate(calendartarget:calendar,locale:'de_DE',format:'yyyy/MM/dd HH:mm:ss',flagformat:'1',date:'1600000000')}"
+                        />
+                        <br/>PHP-DateTime <a href="https://www.php.net/manual/en/datetime.format.php">(link)</a>:
+                        <timer:format.calendarDate calendarsource="{calendar}" calendartarget="gregorian" locale="de_DE"
+                                                   format="d.m.Y  H:i:s \(\P\H\P\-\D\a\t\e\T\i\m\e\)" flagformat="0"
+                                                   datestring="{timer:format.calendarDate(calendartarget:calendar,locale:'de_DE',format:'yyyy/MM/dd HH:mm:ss',flagformat:'1',date:'1600000000')}"
+                        />
+                        <br/>PHP-strftime <a href="https://www.php.net/manual/en/function.strftime.php">(link)</a>:
+                        <timer:format.calendarDate calendarsource="{calendar}" calendartarget="gregorian" locale="de_DE"
+                                                   format="%a %d. %B %G %r (php-strftime)" flagformat="2"
+                                                   datestring="{timer:format.calendarDate(calendartarget:calendar,locale:'de_DE',format:'yyyy/MM/dd HH:mm:ss',flagformat:'1',date:'1600000000')}"
+                        />
+                    </li>
+                    <li>gregorian => {calendar} => persian:
+                        <br/>PHP-strftime <a href="https://www.php.net/manual/en/function.strftime.php">(link)</a>:
+                        <timer:format.calendarDate calendarsource="{calendar}" calendartarget="persian" locale="de_DE"
+                                                   format="%a %d. %B %G %r (see persian block)" flagformat="2"
+                                                   datestring="{timer:format.calendarDate(calendartarget:calendar,locale:'de_DE',format:'yyyy/MM/dd HH:mm:ss',flagformat:'1',date:'1600000000')}"
+                        />
+                        <br/>&nbsp;
+                    </li>
+                </f:for>
+            </ul>
+            <div>
+                <f:translate key="content.timersimul.viewhelper.formatCalendarDate.aspect.current"
+                             extensionName="timer"
+                />
+            </div>
+            <ul>
+                <li>Ref. &lt;f:format.date&gt;:
+                    <f:format.date format="D d. M Y H:i:s (z)">now</f:format.date>
+                </li>
+                <li>2. Ref. &lt;timer:format.date&gt;:
+                    <timer:format.date format="D d. M Y H:i:s (z)">now</timer:format.date>
+                </li>
+                <f:for
+                    each="{0:'buddhist', 1:'chinese', 2:'coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem', 7:'generic', 8:'gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'islamic-rgsa', 14:'islamic-tbla', 15:'islamic-umalqura', 16:'japanese', 17:'persian', 18:'roc'}"
+                    as="calendar"
+                >
+                    <li>{calendar}:
+                        <timer:format.calendarDate calendartarget="{calendar}" locale="de_DE"
+                                                   format="D d. M Y H:i:s (z)" flagformat="0">now
+                        </timer:format.calendarDate>
+                    </li>
+                </f:for>
             </ul>
         </div>
     </section>
@@ -212,7 +378,8 @@
         </h2>
         <ol>
             <f:for each="{examplelist}" as="entry">
-                <li><strong> {entry.data.timer.title} ({entry.data.timer.tx_timer_selector} - {entry.data.gap} min) </strong><br/>
+                <li><strong> {entry.data.timer.title} ({entry.data.timer.tx_timer_selector} - {entry.data.gap}
+                    min) </strong><br/>
                     <span>
                         [ <f:format.date date="{entry.data.range.beginning}" format="d.m.Y - H:i:s"/>
                         - <f:format.date date="{entry.data.range.ending}" format="d.m.Y - H:i:s"/> ]

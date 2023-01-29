@@ -30,6 +30,10 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+/**
+ *  * @deprecated since v11, will be removed in v12
+ */
 class JewishDateUtility extends JewishHolidayConst
 {
     /**

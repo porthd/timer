@@ -5,6 +5,7 @@
         <langDisable>1</langDisable>
     </meta>
     <ROOT>
+<!-- @deprecated since v11, will be removed in v12 -->
         <TCEforms>
             <sheetTitle>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerJewishHoliday.sheet.title

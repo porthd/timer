@@ -35,6 +35,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class TcaUtility
 {
+    protected const STANDARD_TIMEZONE = 'UTC';
     /**
      * selected list of timezone. This list may contain a reduced list of allowed timezones for this extension.
      * The list should be needed for validation.
@@ -137,7 +138,7 @@ class TcaUtility
         if (!empty($listOfTimezones)) {
             self::$listOfTimezones = $listOfTimezones;
         } else {
-            self::$listOfTimezones = [TimerConst::DEFAULT_TIME_ZONE,];
+            self::$listOfTimezones = [self::STANDARD_TIMEZONE,];
         }
     }
 

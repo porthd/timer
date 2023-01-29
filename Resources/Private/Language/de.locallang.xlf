@@ -72,9 +72,19 @@
 				<source>Date-Viewhelper for Jewish Date</source>
 				<target>Date-Viewhelper for Jewish-Date</target>
 			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.formatCalendarDate">
+				<source>Generalized date view helper for various PHP supported calendars</source>
+				<target>Generalisierter Datums-Viewhelper für verschiedene, vom PHP unterstützte Kalender</target>
+			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.prolog.formatDate">
-				<source>The viewhelper &lt;timer:format.date&gt; is similiar to the TYPO3-Viehelper &lt;f:format.date&gt;. The onlydifference is the addional attribute `timezone`. You can define the output of time for a define timezone with it.</source>
-				<target>Der Viewhelper &lt;timer:format.date&gt; ist fast identisch mit dem TYPO3-Viehelper &lt;f:format.date&gt; und kennt das zusätzliche Attribut `timezone`. Dies erlaubt die Formatierung der Zeit-Datumsausgabe für eine definierte Zeitzone.</target>
+				<source>The viewhelper &lt;timer:format.date&gt; is similiar to the TYPO3-Viehelper &lt;f:format.date&gt;.
+					The onlydifference is the addional attribute `timezone`. You can define the output of time for a
+					define timezone with it.
+				</source>
+				<target>Der Viewhelper &lt;timer:format.date&gt; ist fast identisch mit dem TYPO3-Viehelper &lt;f:format.date&gt;
+					und kennt das zusätzliche Attribut `timezone`. Dies erlaubt die Formatierung der Zeit-Datumsausgabe
+					für eine definierte Zeitzone.
+				</target>
 			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.prologresult.isActive.inactive">
 				<source>An inactive state has just been reached here.</source>
@@ -313,12 +323,67 @@
 			</trans-unit>
 
 			<trans-unit id="content.timersimul.viewhelper.formatJewishDate.aspect.unixtimestamp">
-				<source>(All subsequent dates, converted to the Jewish calendar, refer to the selected Unix timestamp `1600000000s`. The time specification in the past means the seconds that have passed since January 1st, 1970. On average, one billion seconds corresponds to almost 31.7 years.)</source>
-				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf den jüdischen Kalender, beziehen sich auf den gewählten Unix-Timestamp `1600000000s`. Die in der Vergangenheit liegende Zeitangabe meint die Sekunden, die seit dem 1.1.1970 vergangen sind. Eine Milliarde Sekunden entsprechen im Mittel knapp 31,7 Jahren.)</target>
+				<source>(All subsequent dates, converted to the Jewish calendar, refer to the selected Unix timestamp
+					`1600000000s`. The time specification in the past means the seconds that have passed since January
+					1st, 1970. On average, one billion seconds corresponds to almost 31.7 years.)
+				</source>
+				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf den jüdischen Kalender, beziehen sich auf den
+					gewählten Unix-Timestamp `1600000000s`. Die in der Vergangenheit liegende Zeitangabe meint die
+					Sekunden, die seit dem 1.1.1970 vergangen sind. Eine Milliarde Sekunden entsprechen im Mittel knapp
+					31,7 Jahren.)
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.unixtimestamp">
+				<source>(All subsequent dates, converted to the various calendars, refer to the selected Unix timestamp
+					`1600000000s`. The time specification in the past means the seconds that have passed since January
+					1st, 1970. On average, one billion seconds corresponds to almost 31 ,7 years. In the first
+					sub-block, the various formatting variants are tested as examples. The inline variant is tested,
+					which generates the foreign date in the fixed format in the second sub-block, in order to do this
+					with the three formatting variants ICU, PHP-dateTime and PHP-strftime to generate an identical date
+					as above. The last sub-block converts the foreign date into the Persian calendar to show that you
+					can convert between the calendars at will. Only the Chinese calendar is problematic, probably
+					because of a bug in PHP.)
+				</source>
+				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf die verschiedenen Kalender, beziehen sich auf
+					den gewählten Unix-Timestamp `1600000000s`. Die in der Vergangenheit liegende Zeitangabe meint die
+					Sekunden, die seit dem 1.1.1970 vergangen sind. Eine Milliarde Sekunden entsprechen im Mittel knapp
+					31,7 Jahren. Im ersten Teilblock werden die verschiedenen Formatierungsvarianten exemplarisch
+					erprobt. Auf wird die Inline-Variante erprobt, die im zweiten Teilblock das fremde Datum im
+					fixierten Format generiert, um so mit den drei Formatierungsvarianten ICU, PHP-dateTime und
+					PHP-strftime das identische Datum wie oben zu erzeugen. der letzte Teilblock konvertiert das fremde
+					Datum in den persischen Kalender, um so zu zeigen, dass man zwischen den Kalender beliebig
+					konvertieren kann. Problematisch ist nur der chinesische Kalender, vermutlich wegen eines Bugs im
+					PHP.)
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.current">
+				<source>(All subsequent dates, converted to the various calendars, refer to the current system date.)
+				</source>
+				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf die verschiedenen Kalender, beziehen sich auf
+					das aktuelle Systemdatum.)
+				</target>
 			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime">
-				<source>(In contrast to the TYPO3 view helper `f:format.date`, this view helper `timer:format.jewishDate` does not support the format parameters of the php function `strftime`.)</source>
-				<target>(Im Gegensatz zum TYPO3-Viewhelper `f:format.date` werden von diesem Viewhelper `timer:format.jewishDate` die Format-Parameter der php-Funktion `strftime` nicht unterstützt.)</target>
+				<source>(In contrast to the TYPO3 view helper `f:format.date`, this view helper
+					`timer:format.jewishDate` does not support the format parameters of the php function `strftime`.)
+				</source>
+				<target>(Im Gegensatz zum TYPO3-Viewhelper `f:format.date` werden von diesem Viewhelper
+					`timer:format.jewishDate` die Format-Parameter der php-Funktion `strftime` nicht unterstützt.)
+				</target>
+			</trans-unit>
+
+			<trans-unit id="calendarDateViewHelper.php.error">
+				<source>The poorly documented calendar function IntlDateFormater in PHP seems to have a bug when
+					converting Chinese dates to Gregorian dates. As long as the bug is not fixed, no result for the
+					conversion from the Chinese date to the Gregorian date will be output here. If the bug has been
+					fixed in future PHP versions, this will be taken into account accordingly.
+				</source>
+				<target>Die schlecht-dokumentierte Kalenderfunktion IntlDateFormater in PHP scheint einen Bug bei der
+					Umrechnung des chinesischen Datums in das gregorianische Datum zu haben. Solange der Bug nicht
+					gefixt ist, wird hier kein Ergebnis für die Umreechnung vom chinesischen Datum zum Gregorianischen
+					Datum ausgegeben. Falls in zukünftigen PHP-Versionen der Bug gefixt wurde, wird dies entsprechend
+					mit berücksichtigt.
+				</target>
 			</trans-unit>
 		</body>
 	</file>

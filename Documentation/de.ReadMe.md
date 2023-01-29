@@ -1,4 +1,4 @@
-# Extension Timer
+# Extension Timer - Version 11.x
 
 ## Vorbemerkung
 
@@ -202,23 +202,89 @@ eigene Parameter mitgeben.
 
 Es gibt vier Viewhelper:
 
-- timer:isActive - funktioniert ähnlich wie `f:if`, wobei geprüft wird, ob ein Zeitpunkt im aktiven Bereich eines
+- timer:isActive - funktioniert ähnlich wie `f:if`, wobei geprüft wird, ob ein
+  Zeitpunkt im aktiven Bereich eines
   periodischen Timers liegt.
-- timer:flexToArray - Wenn man eine Flexform-Definition in einen Array umwandelt, dass enthält der Array viele
-  überflüssige Zwischenebenen. Mit dem Viewhelper lassen sich diese Ebenen entfernen, so dass der resultierenArray des
+- timer:flexToArray - Wenn man eine Flexform-Definition in einen Array
+  umwandelt, dass enthält der Array viele
+  überflüssige Zwischenebenen. Mit dem Viewhelper lassen sich diese Ebenen
+  entfernen, so dass der resultierenArray des
   Flexformarrays flacher/einfacher wird.
-- timer:format.date - funktioniert wie `f:format.date`, wobei es zusätzlich die Ausgabe von Zeiten für eine bestimmte Zeitzone
+- timer:format.date - funktioniert wie `f:format.date`, wobei es zusätzlich die
+  Ausgabe von Zeiten für eine bestimmte Zeitzone
   erlaubt.
-- timer:format.jewishDate - funktioniert ähnlich `f:format.date`, wobei es die Ausgabe von Zeiten für eine bestimmte Zeitzone
-  erlaubt und wobei die Datumsangaben in den jüdischen Kalender transformiert werden.
+- timer:format.jewishDate - funktioniert ähnlich `f:format.date`, wobei es die
+  Ausgabe von Zeiten für eine bestimmte Zeitzone
+  erlaubt und wobei die Datumsangaben in den jüdischen Kalender transformiert
+  werden.
+- timer:format.calendarDate - funktioniert umfassender als `f:format.date`, weil
+  er neben der Berücksichtigung der Zeitzone auch die Auswahl der verschiedenen
+  von PHP unterstützten Kalender
+  erlaubt und auch drei statt bisher zwei Datumsformatierungsvarianten erlaubt.
+  Neben der Definition als gemäß der strftime-Formatierungsregeln und der
+  dateTimeInterface::format-Formatierungsregeln kann auch die
+  ICU-Formatierungssprache verwendet werden.
+  Ein bekanntes Manko ist, dass die Umrechnung vom chinesischen Mondkalender in
+  den gregorianischen (westlichen) Sonnenkalender mit einem Fehler behaftet ist,
+  der im PHP zu suchen ist. Der Timer macht den
+  Viewhelper ``timer:format.jewishDate`` überflüssig.
+
+#### timer:format.calendarDate - Attribute
+
+- **flagformat** bestimmt, welche Formtierungsregeln benutzt werden sollen: 0
+  = [PHP-DateTime](https://www.php.net/manual/en/datetime.format.php),
+  1: [ICU-Datetime-Formatierung](https://unicode-org.github.io/icu/userguide/format_parse/datetime/)
+  oder 2 = [PHP-strftime](https://www.php.net/manual/en/function.strftime.php).
+- **format** definiert die Form der Ausgabe des Datums.
+- **base** ist für relative Datumsangaben wie 'now', '+4 days' oder ähnliches
+  wichtig.
+- **timezone** definiert, für welche Zeitzone ein Datum ausgegeben werden soll.
+  Eine Liste der zulässigen-Zeitzonennamen erhalten sie über die
+  PHP-Funktion `timezone_abbreviations_list()`. Aber auch in der
+  PHP-Dokumentation finden sie
+  eine [nach Kontinenten vorgeordnete Liste](https://www.php.net/manual/en/timezones.php)
+  .
+- **date** erlaubt die Angabe eines Datums aus dem gregorianischen (westlichen)
+  Kalender, sofern bei `datestring` keine Angabe gemacht wurde. Sie können den
+  Wert für `date` implizit definieren, indem sie den Wert mit den
+  Viewhelper-Tags einschließen. Wenn sie keine Angaben machen, wird -
+  wenn `datestring` leer ist oder fehlt - automatisch das aktuelle Datum
+  verwendet.
+- **datestring** erlaubt die Angabe eines Datums aus einem nicht-gregorianischen
+  Kalender im Format ``Jahr/Monat/Tag Stunde/Minute/Sekunde``, wobei das Jahr
+  vierstellig sein muss und alle anderen Angaben zweistellig. Für die Stunde ist
+  jeder Wert von 0 bis 23 zulässig. Für die Monate sind Werte zwischen 1 und 13
+  zulässig.
+- **calendarsource** definiert den zugrunde liegenden Kalender für das Datum
+  in  `datestring`. PHP erlaubt folgende Werte: 0:'buddhist', 1:'chinese', 2:'
+  coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem', 8:'
+  gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'
+  islamic-rgsa', 14:'islamic-tbla', 15:'islamic-umalqura', 16:'japanese', 17:'
+  persian', 18:'roc'.
+- **calendartarget** definiert den Kalender, für welchen das das Datum
+  ausgegeben werden soll. PHP erlaubt folgende Werte: 0:'buddhist', 1:'chinese',
+  2:'coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem', 8:'
+  gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'
+  islamic-rgsa', 14:'islamic-tbla', 15:'islamic-umalqura', 16:'japanese', 17:'
+  persian', 18:'roc'.
+- **locale** bestimme die regionale Lokalisierung und setzt sich aus dem
+  zweibuchstabigen Sprachkürzel (de, en, fr, es, ...) und getrennt durch einen
+  Unterstrich aus dem Kürzel für die Nation (DE, GB, US, AT, CH, FR, ...). Der
+  Wert in __locale__ könnte zum Beispiel folgendes Aussehen haben: `de_DE`
+  , `en_GB` oder auch `es_US`.
 
 ### Dataprozessoren
 
-Da die Ergebnisse der Datenprozessoren gecacht werden, muss sich der User überlegen, was ein sinnvoller
+Da die Ergebnisse der Datenprozessoren gecacht werden, muss sich der User
+überlegen, was ein sinnvoller
 Caching-Zeitraum ist und dies entsprechend definieren.
 
-Grundsätzlich sollte im Sourcecode der jeweiligen DataProcessoren als Kommentar ein Beispiel für die Anwendung desselben zu finden sein.
-Für die Freunde der TypoScript-Programmierung sei gesagt, dass die Parameter über die stdWrap-Methode eingelesen werden. Die rekursive Nutzung von Typoscript zur Dynamisierung der Aufsetzung ist also möglich; auch wenn es hier ausdrücklich nicht empfohlen wird.
+Grundsätzlich sollte im Sourcecode der jeweiligen DataProcessoren als Kommentar
+ein Beispiel für die Anwendung desselben zu finden sein.
+Für die Freunde der TypoScript-Programmierung sei gesagt, dass die Parameter
+über die stdWrap-Methode eingelesen werden. Die rekursive Nutzung von Typoscript
+zur Dynamisierung der Aufsetzung ist also möglich; auch wenn es hier
+ausdrücklich nicht empfohlen wird.
 
 #### RangeListQueryProcessor
 

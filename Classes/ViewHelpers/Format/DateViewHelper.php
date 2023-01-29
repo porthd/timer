@@ -25,6 +25,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use Porthd\Timer\Utilities\ConvertDateUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -178,9 +179,11 @@ class DateViewHelper extends AbstractViewHelper
         $format = $arguments['format'] ?? '';
 
         if (empty($arguments['timezone'])) {
-            $context = GeneralUtility::makeInstance(Context::class);
-            // Reading the current data instead of $GLOBALS
-            $timezone = $context->getPropertyFromAspect('date', 'timezone');
+            // @todo wait, until the bug in the Context:class is resolved.
+            //            $context = GeneralUtility::makeInstance(Context::class);
+            //            // Reading the current data instead of $GLOBALS
+            //            $timezone = $context->getPropertyFromAspect('date', 'timezone');
+            $timezone = date_default_timezone_get();
         } else {
             $timezone = $arguments['timezone'];
         }
@@ -227,7 +230,8 @@ class DateViewHelper extends AbstractViewHelper
 
         if (str_contains($format, '%')) {
             // @todo Replace deprecated strftime in php 8.1. Suppress warning in v11.
-            return @strftime($format, (int)$date->format('U'));
+//            return @strftime($format, (int)$date->format('U'));
+            return ConvertDateUtility::mapStrftimeFormatToDateTimeFormat($date, $format);
         }
         return $date->format($format);
     }

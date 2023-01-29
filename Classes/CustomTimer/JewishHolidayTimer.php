@@ -32,6 +32,12 @@ use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 use Porthd\Timer\Utilities\JewishDateUtility;
 
+/**
+ * Most of the hjoliday depends on a specific date in the calendar.
+ * I plan to develop a general HolidayTimer, which contains a more genral list of holidays.
+ *
+ * @deprecated since v11, will be removed in v12
+ */
 class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
 {
     use GeneralTimerTrait;
