@@ -8,7 +8,7 @@ defined('TYPO3_MODE') || die('Access denied.');
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
+ *  (c) 2020,2023 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *

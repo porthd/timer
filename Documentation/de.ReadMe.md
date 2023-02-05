@@ -74,11 +74,12 @@ Für periodisch erscheinden Content oder periodisch erscheinden Seite muss ein d
 eingerichtet werden. Er wertet out-of-the-box die Elemente aus, für die eine Timer definiert ist und für die das Flag
 der Scheduler-Auswertung auf aktiv gesetzt wurde.
 
-### Contentelement `periodlist` für einfache Terminlisten
+#### Contentelement `periodlist` für einfache Terminlisten
 
 Das Content-Element `periodlist` ist ähnlich aufgebaut wie das Content-Element `textmedia`.
 Es erlaubt zusätzlich die Ausgabe von einfachen Terminlisten, sofern für den voreingestellten
 Timer `periodlisttimer` eine gültige yaml-Datei mit einer Terminliste hinterlegt wird.
+
 #### Anmerkungen
 ##### _Anmerkung 1_
 Um einen möglichst flexible Einbindung von Terminlisten zu ermöglichen, gibt es die zwei Eingabefelder `yamlPeriodFilePath` und `yamlPeriodFalRelation`.
@@ -138,9 +139,19 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
             );
 ````
 
-#### CustomTimer - Übersicht
+### vordefinierte Timer - Übersicht
 
-
+* CalendarDateRelTimer - (In Vorbereitung) Die allermeisten religiösen,
+  historischen, politischen, ökonmischen oder sonstigen Feiertage sind über ein
+  Datum fest in einem Kalender fixiert. Die Mächtigen wollen vermeiden, dass sie
+  das gemeine Volk mental überfordern (damit auch jeder Dölmer das Fest auch zum
+  richtigen Zeitpunkt würdigt). Im Laufe der Menschheitgeschichte wurden viel
+  verschiedene Kalendersysteme entwicklet und es gibt viele regional
+  unterschiedlich wichtige Festtatge. Dieser Variablilität will der Timer
+  Rechnung tragen, indem er die Berücksichtigung von verschiedene
+  Kalendersysteme erlaubt.
+  (Beispiel 5760 Minuten (=2 Tage) nach Ramadan (1.9.; islamischer Kalender) für
+  720 Minuten (=6 Stunden))
 * DailyTimer - Tägliche für einige Minuten wiederkehrende aktive Zeiten
   (täglich ab 10:00 für 120 Minuten)
 * DatePeriodTimer - Periodisch für einige Minuten wiederkehrende aktive Zeiten relativ zu einem Startzeitpunkt. Bedenken
@@ -150,10 +161,39 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
 * DefaultTimer - Defaulttimer/Nullelement
 * EasterRelTimer - Bestimmt den aktiven Zeitraum relativ zu wichtigen deutschen Feiertagen (Neujahr, Silvester, Welt-Handtuch-Tag, Tag-der-Dummheit) und den meist beweglichen wichtigen christlichen Feiertagen (erster Advent, Weihnachten, Rosenmontag, Karfreitag, Ostern, Himmelfahrt, Pfingsten)
   (2. Advent von 12:00-14:00, Rosenmontag von 20:00 bis 6:00 des Folgetages)
-* JewishHolidayTimer (in Progress 2022-12-28) - Perioden startend relativ zu einem der jüdischen Feiertage bezogen auf den jüdischen Kalender
-  (IMHO: Ich war lange am Überlegen, ob ich diesen Timer hinzufüge, weil ich Teile des Judentums für moralisch problematisch halte. Es ist bei orthodoxen Juden gelebte und gelobte Praxis (https://www.zentralratderjuden.de/fileadmin/user_upload/pdfs/Wichtige_Dokumente/ZdJ_tb2019_web.pdf Seite 21), dass der Penis ihrer männlichen Nachkommen aus religiösen Gründen beschnitten wird. Ich frage mich, welchen Wert hat eine Religion hat, die ihr Stolz darauf aufbaut, dass sie schwache hilflose Babies vergewaltigen kann, indem sie dessen Penisvorhaut unter dessen Schreien für den Gott opfern. Was unterscheidet dieser Religionswahn vom auserwählten Volk in seiner grundsätzlichen Denkweise von dem Arierwahn, dem manche Perverse heute noch anhängen? Aus humaniastischer Sicht endet für mich die Erziehungsfreiheit der Eltern zu dem Zeitpunkt, wenn sie für ihren eigenen religiösen Glauben ihren Kindern Gewalt antun wollen. Jedes Baby hat das Recht, seine eigene Religion bzw. seinen eigenen Glauben frei zu wählen. Die Eltern dürfen und sollen durch Reden und durch ihr eigenes Leben als Vorbild auf die Entscheidungsfindung durch das Kind einwirken; denn niemand kennt sicher die einzig wahre Wahrheit. Ich denke: Jede Vergewaltigung aus religiösen Gründen ist eine perverse Straftat - sei es bei den Katholiken oder bei den Juden oder bei irgendwelchen sonstigen Sekten. Dr. Dieter Porth)
-  **!!!Achtung: ich kann nicht für die Korrektheit der jüdischen Feiertage garantieren, da ich mich damit überhaupt nicht auskenne. Bitte vor Gebrauch unbeddingt auf Korrektheit prüfen und gegebenenfalls selbst einen besseren Timer schreiben.**
-  _Beim Testen merkte ich, dass das berechnete Datum für Yom Kippur nicht berücksichtigte, dass der Feiertag nach dem Sonnenuntergang des Vortages beginnt. Für eine Korrektur fehlte mir an dieser Stelle die Lust. So wichtig ist der jüdische Kalender für mich nun auch wieder nicht. Aus dem gleichen Grund wurden die Tests nur exemplarisch am Beispiel vom Yom Kippur durchgeführt._
+* JewishHolidayTimer (in Progress 2022-12-28) - Perioden startend relativ zu
+  einem der jüdischen Feiertage bezogen auf den jüdischen Kalender
+  (IMHO: Ich war lange am Überlegen, ob ich diesen Timer hinzufüge, weil ich
+  Teile des Judentums für moralisch problematisch halte. Es ist bei orthodoxen
+  Juden gelebte und gelobte
+  Praxis (https://www.zentralratderjuden.de/fileadmin/user_upload/pdfs/Wichtige_Dokumente/ZdJ_tb2019_web.pdf
+  Seite 21), dass der Penis ihrer männlichen Nachkommen aus religiösen Gründen
+  beschnitten wird. Ich frage mich, welchen Wert hat eine Religion hat, die ihr
+  Stolz darauf aufbaut, dass sie schwache hilflose Babies vergewaltigen kann,
+  indem sie dessen Penisvorhaut unter dessen Schreien für den Gott opfern. Was
+  unterscheidet dieser Religionswahn vom auserwählten Volk in seiner
+  grundsätzlichen Denkweise von dem Arierwahn, dem manche Perverse heute noch
+  anhängen? Aus humaniastischer Sicht endet für mich die Erziehungsfreiheit der
+  Eltern zu dem Zeitpunkt, wenn sie für ihren eigenen religiösen Glauben ihren
+  Kindern Gewalt antun wollen. Jedes Baby hat das Recht, seine eigene Religion
+  bzw. seinen eigenen Glauben frei zu wählen. Die Eltern dürfen und sollen durch
+  Reden und durch ihr eigenes Leben als Vorbild auf die Entscheidungsfindung
+  durch das Kind einwirken; denn niemand kennt sicher die einzig wahre Wahrheit.
+  Ich denke: Jede Vergewaltigung aus religiösen Gründen ist eine perverse
+  Straftat - sei es bei den Katholiken oder bei den Juden oder bei irgendwelchen
+  sonstigen Sekten. Dr. Dieter Porth)
+  **!!!Achtung: ich kann nicht für die Korrektheit der jüdischen Feiertage
+  garantieren, da ich mich damit überhaupt nicht auskenne. Bitte vor Gebrauch
+  unbeddingt auf Korrektheit prüfen und gegebenenfalls selbst einen besseren
+  Timer schreiben.**
+  _Beim Testen merkte ich, dass das berechnete Datum für Yom Kippur nicht
+  berücksichtigte, dass der Feiertag nach dem Sonnenuntergang des Vortages
+  beginnt. Für eine Korrektur fehlte mir an dieser Stelle die Lust. So wichtig
+  ist der jüdische Kalender für mich nun auch wieder nicht. Aus dem gleichen
+  Grund wurden die Tests nur exemplarisch am Beispiel vom Yom Kippur
+  durchgeführt._
+  **Empfehlung:** _Nutzen sie stattdessen den neuen allgemeineren
+  Timer `calendarDateRelTimer`_**
 * MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen bestimmten Zeitraum
 * MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für einen bestimmten Zeitraum
 * PeriodListTimer - Liest Daten zu aktiven Perioden aus einer Yaml-Datei ein. Hilfreich zum Beispiel
@@ -169,7 +209,7 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
 * WeekdaylyTimer - Wöchentliche Wiederholung an einem bestimmtem Wochentag oder zu bestimmten Wochentagen. (Beispiel: Jeden Montag oder
   Donnerstag)
 
-#### CustomTimer - Generelle Parameter bei allen Timern
+#### Generelle Parameter bei allen vordefinierten Timern
 
 Einige Parameter sind bei allen Timern gleich. Zwei Parameter behandeln den Umgang mit Zeitzonen. Zwei weitere Parameter
 bestimmen den Zeitraum, in welchen der Timer überhaupt gültig ist. Auf einen Parameter zur Steuerung des Scheduler wurde
@@ -217,6 +257,8 @@ Es gibt vier Viewhelper:
   Ausgabe von Zeiten für eine bestimmte Zeitzone
   erlaubt und wobei die Datumsangaben in den jüdischen Kalender transformiert
   werden.
+  **Deprecated - Wird in Version 12 entfernt! _Nutzen sie stattdessen den neuen
+  Viewhelper `timer:format.calendarDate`_**
 - timer:format.calendarDate - funktioniert umfassender als `f:format.date`, weil
   er neben der Berücksichtigung der Zeitzone auch die Auswahl der verschiedenen
   von PHP unterstützten Kalender
@@ -260,13 +302,15 @@ Es gibt vier Viewhelper:
   coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem', 8:'
   gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'
   islamic-rgsa', 14:'islamic-tbla', 15:'islamic-umalqura', 16:'japanese', 17:'
-  persian', 18:'roc'.
+  persian', 18:'roc'. Zusätzlich ist als 19. auch 'julian' für den Julianischen
+  Kalender erlaubt.
 - **calendartarget** definiert den Kalender, für welchen das das Datum
   ausgegeben werden soll. PHP erlaubt folgende Werte: 0:'buddhist', 1:'chinese',
   2:'coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem', 8:'
   gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'
   islamic-rgsa', 14:'islamic-tbla', 15:'islamic-umalqura', 16:'japanese', 17:'
-  persian', 18:'roc'.
+  persian', 18:'roc'. Zusätzlich ist als 19. auch 'julian' für den Julianischen
+  Kalender erlaubt.
 - **locale** bestimme die regionale Lokalisierung und setzt sich aus dem
   zweibuchstabigen Sprachkürzel (de, en, fr, es, ...) und getrennt durch einen
   Unterstrich aus dem Kürzel für die Nation (DE, GB, US, AT, CH, FR, ...). Der

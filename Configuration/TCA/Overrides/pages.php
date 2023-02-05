@@ -40,6 +40,7 @@ $tmp_timer_columns = [
     'tx_timer_selector' => [
         'exclude' => true,
         'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_selector',
+        'description' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.fieldDescription.tx_timer_selector',
         'l10n_mode' => 'prefixLangTitle',
         'config' => [
             'type' => 'select',

@@ -67,7 +67,6 @@ class WeekdayInMonthTimer implements TimerInterface
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_NTH_WEEKDAY_IN_MONTH,
         self::ARG_ACTIVE_WEEKDAY,
-        self::ARG_USE_ACTIVE_TIMEZONE,
     ];
     protected const ARG_OPT_LIST = [
         self::ARG_START_COUNT_AT_END,
@@ -453,7 +452,7 @@ class WeekdayInMonthTimer implements TimerInterface
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
-        $result->failOnlyPrevActive($dateLikeEventZone);
+        $result->failAllActive($dateLikeEventZone);
 
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);
@@ -566,7 +565,7 @@ class WeekdayInMonthTimer implements TimerInterface
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
-        $result->failOnlyNextActive($dateLikeEventZone);
+        $result->failAllActive($dateLikeEventZone);
 
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);

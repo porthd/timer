@@ -114,8 +114,9 @@ class FlexToArrayProcessor implements DataProcessorInterface
         } else {
             $selectorFieldName = self::DEFAULT_SELECTOR_FIELD;
         }
-        if ((array_key_exists(self::ATTR_IF_DOT, $processorConfiguration) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
-            (!array_key_exists(self::OUTPUT_ARG_DATA, $processedData[$selectorFieldName])) ||
+        if ((array_key_exists(self::ATTR_IF_DOT,
+                    $processorConfiguration) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
+            (!array_key_exists($selectorFieldName, $processedData[self::OUTPUT_ARG_DATA])) ||
             (trim($processedData[self::OUTPUT_ARG_DATA][$selectorFieldName]) !== PeriodListTimer::TIMER_NAME)
         ) {
             return $processedData;

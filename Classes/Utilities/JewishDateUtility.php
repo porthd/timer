@@ -32,7 +32,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  ***************************************************************/
 
 /**
- *  * @deprecated since v11, will be removed in v12
+ *
  */
 class JewishDateUtility extends JewishHolidayConst
 {

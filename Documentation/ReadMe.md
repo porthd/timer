@@ -115,6 +115,7 @@ The DataProcessor `PeriodlistProcessor` allows the reading of the appointment li
 is defined. In addition to the actual fields, the data processor also generates the corresponding DatTime objects for the start and end times of the appointments and calculates the number of days (24 hours = 1 day) between the appointments.
 The third data processor `MappingProcessor` is required to transfer the appointment data to the Fluid template as a JSON string.
 In this way, the data can easily be made available to the calendar framework via an HTML attribute.
+
 ### Use of the periodic timer (Customtimer)
 
 The extension currently comes with several periodic timers. Two of the timers are not yet fully developed. This is one
@@ -134,8 +135,18 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
             );
 ````
 
-#### CustomTimer - Overview
+#### Predefined Timer - Overview
 
+* CalendarDateRelTimer - (In preparation) Most religious, historical, political,
+  economic or other holidays are fixed on a date in a calendar. The powerful
+  want to avoid mentally overwhelming the common people (so that every Dölmer
+  also appreciates the festival at the right time). In the course of human
+  history, many different calendar systems have been developed and there are
+  many regionally different important festivals. The timer wants to take this
+  variability into account by allowing the consideration of different calendar
+  systems.
+  (Example 5760 minutes (=2 days) after Ramadan (1.9.; Islamic calendar) for 720
+  minutes (=6 hours))
 * DailyTimer - active times recurring daily for a few minutes
   (daily from 10:00 a.m. for 120 minutes)
 * DatePeriodTimer - active times recurring periodically for a few minutes relative to a start time. Consider it, that
@@ -145,10 +156,35 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
 * DefaultTimer - Default timer/null element
 * EasterRelTimer - Determines the active period relative to important German public holidays (New Year's Eve, New Year's Eve, World Towel Day, Day of Stupidity) and the most important Christian public holidays (first Advent, Christmas, Shrove Monday, Good Friday, Easter, Ascension Day, Pentecost)
   (2nd Advent from 12:00 p.m. to 2:00 p.m., Rose Monday from 8:00 p.m. to 6:00 a.m. of the following day)
-* JewishHolidayTimer (in progress 2022-12-28) - Periods starting relative to one of the Jewish holidays related to the Jewish calendar
-  (IMHO: I was thinking for a long time about adding this timer because I consider parts of Judaism to be morally problematic. It is a practice that is lived and promised by orthodox Jews (https://www.zentralratderjuden.de/fileadmin/user_upload/pdfs/Important_Documents/ZdJ_tb2019_web.pdf on page 21 [german text]) that their male offspring's penises are circumcised for religious reasons I wonder what the value of a religion is that prides itself on being able to rape weak, helpless babies by using its Sacrificing the foreskin of the penis under its screams for the god. What distinguishes this religious delusion from the chosen people in its fundamental way of thinking from the Aryan delusion that some perverts still cling to today? From a humanistic point of view, the freedom of parents to educate ends for me at the time when they for their own religious beliefs want to do violence to their children Every baby has the right to express their own religion or beliefs freely  to choose. Parents can and should influence the child's decision-making through speech and through their own life as an example; because no one knows for sure the only true truth. I think: Any rape for religious reasons is a perverse crime - be it by the Catholics or the Jews or any other sect. dr Dieter Porth)
-  **!!!Warning: I cannot guarantee the correctness of the Jewish holidays, as I am not familiar with them at all. Please check for correctness before use.**
-  _During testing, I noticed that the calculated date for Yom Kippur did not take into account that the holiday begins after sunset the previous day. I didn't feel like making a correction at this point. The Jewish calendar is not that important for me. For the same reason, the tests were only carried out as an example using the example of Yom Kippur._
+* JewishHolidayTimer (in progress 2022-12-28) - Periods starting relative to one
+  of the Jewish holidays related to the Jewish calendar
+  (IMHO: I was thinking for a long time about adding this timer because I
+  consider parts of Judaism to be morally problematic. It is a practice that is
+  lived and promised by orthodox
+  Jews (https://www.zentralratderjuden.de/fileadmin/user_upload/pdfs/Important_Documents/ZdJ_tb2019_web.pdf
+  on page 21 [german text]) that their male offspring's penises are circumcised
+  for religious reasons I wonder what the value of a religion is that prides
+  itself on being able to rape weak, helpless babies by using its Sacrificing
+  the foreskin of the penis under its screams for the god. What distinguishes
+  this religious delusion from the chosen people in its fundamental way of
+  thinking from the Aryan delusion that some perverts still cling to today? From
+  a humanistic point of view, the freedom of parents to educate ends for me at
+  the time when they for their own religious beliefs want to do violence to
+  their children Every baby has the right to express their own religion or
+  beliefs freely to choose. Parents can and should influence the child's
+  decision-making through speech and through their own life as an example;
+  because no one knows for sure the only true truth. I think: Any rape for
+  religious reasons is a perverse crime - be it by the Catholics or the Jews or
+  any other sect. dr Dieter Porth)
+  **!!!Warning: I cannot guarantee the correctness of the Jewish holidays, as I
+  am not familiar with them at all. Please check for correctness before use.**
+  _During testing, I noticed that the calculated date for Yom Kippur did not
+  take into account that the holiday begins after sunset the previous day. I
+  didn't feel like making a correction at this point. The Jewish calendar is not
+  that important for me. For the same reason, the tests were only carried out as
+  an example using the example of Yom Kippur._
+  **Recommendation:** _Use the new more general timer `calendarDateRelTimer`_**
+  instead
 * MoonphaseRelTimer - Periods starting relative to a moon phase for a specified time period
 * MoonriseRelTimer - Periods relative to moonrise or moonset for a specified time period
 * PeriodListTimer - Reads active period data from a yaml file. Helpful, for example, for holiday
@@ -193,7 +229,8 @@ The timers do not cover every case. You can also define your own timer class, wh
 
 There are four view helpers:
 
-- timer:isActive - works similar to `f:if`, checking if a time is in the active range of a periodic timer.
+- timer:isActive - works similar to `f:if`, checking if a time is in the active
+  range of a periodic timer.
 - timer:flexToArray - When converting a Flexform definition to an array, the
   array contains many superfluous
   intermediate levels. These levels can be removed with the Viewhelper, so that
@@ -204,6 +241,8 @@ There are four view helpers:
 - timer:format.jewishDate - works similarly to `f:format.date`, outputting times
   for a specific time zone
   allowed and whereby the dates are transformed into the Jewish calendar.
+  **Deprecated - Will be removed in version 12! _Use the new view
+  helper `timer:format.calendarDate`_**
 - timer:format.calendarDate - works more comprehensively than `f:format.date`
   because in addition to taking into account the time zone, it also allows you
   to choose from the various calendars supported by PHP
@@ -243,19 +282,19 @@ There are four view helpers:
   2:'coptic', 3:'dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem' ,
   8:'gregorian', 9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'
   islamic-rgsa', 14:'islamic-tbla', 15 :'islamic-umalqura', 16: 'japanese',
-  17: 'persian', 18: 'roc'.
+  17: 'persian', 18: 'roc'. In addition 19., 'julian' is also allowed for the
+  Julian calendar.
 - **calendartarget** defines the calendar for which the date should be output.
   PHP allows the following values: 0:'buddhist', 1:'chinese', 2:'coptic', 3:'
   dangi', 4:'default', 5:'ethiopic', 6:'ethiopic-amete-alem' , 8:'gregorian',
   9:'hebrew', 10:'indian', 11:'islamic', 12:'islamic-civil', 13:'islamic-rgsa',
   14:'islamic-tbla', 15 :'islamic-umalqura', 16: 'japanese', 17: 'persian',
-  18: 'roc'.
+  18: 'roc'. In addition 19., 'julian' is also allowed for the Julian calendar.
 - **locale** determines the regional localization and consists of the two-letter
   language abbreviation (de, en, fr, es, ...) and separated by an underscore
   from the abbreviation for the nation (DE, GB, US, AT, Switzerland, France,
   ...). The value in __locale__ could look like this: `de_DE`, `en_GB`
   or `es_US`.
-
 ### Data Processors
 
 Since the results of the data processors are cached, the user must determine

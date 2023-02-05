@@ -1,0 +1,151 @@
+# example for yaml, which you can call in your task of UpdateTimesCommand
+#
+calendarDateRel:
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmas'
+    identifier: 'gre-christmas'
+    day: '25'
+    month: '12'
+    calendar: 'gregorian'
+    # tag = religion, politics, culture, historical, economics
+    tag: 'religion'
+    # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+    rank: 5
+    # list of localized events
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.newyear'
+    identifier: 'gre-newyear'
+    day: '1'
+    month: '1'
+    calendar: 'gregorian'
+    # tag = religion, politics, culture, historical, economics
+    tag: 'culture'
+    rank: 5
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.silvester'
+    identifier: 'gre-silvester'
+    day: '31'
+    month: '12'
+    calendar: 'gregorian'
+    tag: 'culture'
+    rank: 4
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.eco.greg.valentinsday'
+    identifier: 'gre-valentinsday'
+    day: '14'
+    month: '2'
+    calendar: 'gregorian'
+    tag: 'economics'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.towlday'
+    identifier: 'gre-towlday'
+    day: '25'
+    month: '5'
+    calendar: 'gregorian'
+    tag: 'historical'
+    rank: 1
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.pol.greg.labourday'
+    identifier: 'gre-labourday'
+    day: '1'
+    month: '5'
+    calendar: 'gregorian'
+    tag: 'political'
+    rank: 5
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.germanunity'
+    identifier: 'gre-germanunity'
+    day: '3'
+    month: '10'
+    calendar: 'gregorian'
+    tag: 'political'
+    rank: 5
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.lailatAlBaraa'
+    identifier: 'isl-lailatAlBaraa'
+    day: '14'
+    month: '8'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.ramadan'
+    identifier: 'isl-ramadan'
+    day: '1'
+    month: '9'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.laylatulQadr'
+    identifier: 'isl-laylatulqadr'
+    day: '27'
+    month: '9'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidAlFitr'
+    identifier: 'isl-eidalfitr'
+    day: '1'
+    month: '10'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidUlAdha'
+    identifier: 'isl-eiduladha'
+    day: '10'
+    month: '12'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidUlAdha'
+    identifier: 'isl-eiduladha'
+    day: '1'
+    month: '1'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidUlAdha'
+    identifier: 'isl-eiduladha'
+    day: '10'
+    month: '1'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.mawlidAnNabiSunnits'
+    identifier: 'isl-mawlidannabisunnits'
+    day: '12'
+    month: '3'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'
+  - eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.mawlidAnNabiSchiits'
+    identifier: 'isl-mawlidannabischiits'
+    day: '17'
+    month: '3'
+    calendar: 'islamic'
+    tag: 'religion'
+    rank: 2
+    locale:
+      - 'de_DE'

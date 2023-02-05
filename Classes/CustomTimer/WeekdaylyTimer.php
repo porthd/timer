@@ -43,10 +43,7 @@ class WeekdaylyTimer implements TimerInterface
 
         self::ARG_REQ_ACTIVE_WEEKDAY,
     ];
-    protected const ARG_OPT_LIST = [
-        self::ARG_EVER_TIME_ZONE_OF_EVENT,
-        self::ARG_USE_ACTIVE_TIMEZONE,
-    ];
+    protected const ARG_OPT_LIST = [];
 
     /**
      * @var TimerStartStopRange|null

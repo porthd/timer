@@ -51,6 +51,7 @@ class DatePeriodTimer implements TimerInterface
         self::ARG_ULTIMATE_RANGE_END,
         self::ARG_USE_ACTIVE_TIMEZONE,
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
+
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_REQ_PERIOD_LENGTH,
         self::ARG_REQ_PERIOD_UNIT,

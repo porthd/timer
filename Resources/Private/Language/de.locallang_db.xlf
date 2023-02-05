@@ -15,26 +15,36 @@
             </trans-unit>
             <trans-unit id="tx_timer_general.field.tx_timer_scheduler">
                 <source>allow to modify the start- and endtime of this element with the scheduler by a command-line-task (CLI)</source>
-                <target>erlauben, die Start- und Endzeit dieses Elements mit dem Planer über eine Befehlszeilenaufgabe (CLI) zu ändern</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_general.field.tx_timer_timer">
-                <source>flexform-parameter for selected timer of active periods</source>
-                <target>Flexform-Parameter für ausgewählten Timer aktiver Perioden</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_general.field.tx_timer_selector">
-                <source>Select the timer-model</source>
-                <target>Wählen Sie das Timer-Modell aus</target>
-            </trans-unit>
+				<target>erlauben, die Start- und Endzeit dieses Elements mit dem Planer über eine Befehlszeilenaufgabe
+					(CLI) zu ändern
+				</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_general.field.tx_timer_timer">
+				<source>flexform-parameter for selected timer of active periods</source>
+				<target>Flexform-Parameter für ausgewählten Timer aktiver Perioden</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_general.field.tx_timer_selector">
+				<source>Select the timer-model</source>
+				<target>Wählen Sie das Timer-Modell aus</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_general.fieldDescription.tx_timer_selector">
+				<source>If an expected timer model is missing here, then you should check whether the selection value in
+					the settings for the `timer` extension also includes the value for the timer you expect.
+				</source>
+				<target>Wenn hier ein erwartetes Timer-Modell fehlt, dann sollten sie prüfen, ob der Auswahlwert bei den
+					Einstellungen zur Extension `timer` auch den Wert für den von Ihnen erwarteten Timer mit umfasst.
+				</target>
+			</trans-unit>
 
-            <trans-unit id="tx_timer_domain_model_event.model.title">
-                <source>Simple event-model</source>
-                <target>Einfaches Event-Modell</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_event.tab.single">
-                <source>Event</source>
-                <target>Vorfall</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_event.tab.teaser">
+			<trans-unit id="tx_timer_domain_model_event.model.title">
+				<source>Simple event-model</source>
+				<target>Einfaches Event-Modell</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_event.tab.single">
+				<source>Event</source>
+				<target>Vorfall</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_event.tab.teaser">
                 <source>Teaser</source>
                 <target>Teaser</target>
             </trans-unit>
@@ -95,28 +105,55 @@
             <trans-unit id="extension.configuration.template.flag.useTestContent">
                 <source>Flag for TestContent: Only if the value is 1,true or TRUE, you can activate the predefined content-elements of this extension for your tests.</source>
                 <target>Flag for TestContent: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.</target>
-            </trans-unit>
-            <trans-unit id="extension.configuration.template.flag.flagPreviewTimerFrontend">
-                <source>Show preview-mark everytime on the page (inclusive a dat-time-form for temporäry previews).</source>
-                <target>Vorschau-Markierung immer auf der Seite anzeigen (inklusive Datum-Uhrzeit-Formular für temporäre Vorschauen).</target>
-            </trans-unit>
-            <trans-unit id="extension.configuration.template.flag.defaultBaseTimeZone">
-                <source>Default Timezone: Each timer-event is defined for its own timezone. You define her, which timezone will set on default by the typo3-backend. The default-value by blank or undefined zones is `UTC`.</source>
-                <target>Default Timezone: Jedes Timer-Event ist für seine eigene Zeitzone definiert. Sie legen hier fest, welche Zeitzone vom Typo3-Backend standardmäßig eingestellt wird. Der Default-Wert bei leeren oder undefinierten Zonen ist `UTC`.</target>
-            </trans-unit>
-            <trans-unit id="extension.configuration.template.flag.selectInternatTimer">
-                <source>Activate predefined Timer: Summarize the values to activate only the timer you really need. (all = 2047  // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048)</source>
-                <target>Vordefinierten Timer aktivieren: Fassen Sie die Werte zusammen, um nur den wirklich benötigten Timer zu aktivieren. (all = 2047 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048)</target>
-            </trans-unit>
+			</trans-unit>
+			<trans-unit id="extension.configuration.template.flag.flagPreviewTimerFrontend">
+				<source>Show preview-mark everytime on the page (inclusive a dat-time-form for temporäry previews).
+				</source>
+				<target>Vorschau-Markierung immer auf der Seite anzeigen (inklusive Datum-Uhrzeit-Formular für temporäre
+					Vorschauen).
+				</target>
+			</trans-unit>
+			<trans-unit id="extension.configuration.template.flag.defaultBaseTimeZone">
+				<source>Default Timezone: Each timer-event is defined for its own timezone. You define her, which
+					timezone will set on default by the typo3-backend. The default-value by blank or undefined zones is
+					`UTC`.
+				</source>
+				<target>Default Timezone: Jedes Timer-Event ist für seine eigene Zeitzone definiert. Sie legen hier
+					fest, welche Zeitzone vom Typo3-Backend standardmäßig eingestellt wird. Der Default-Wert bei leeren
+					oder undefinierten Zonen ist `UTC`.
+				</target>
+			</trans-unit>
+			<trans-unit id="extension.configuration.template.flag.selectInternatTimer">
+				<source>Activate predefined Timer: Summarize the values to activate only the timer you really need. (all
+					= 8191 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel
+					= 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024,
+					JewishHoliday = 2048, CalendarDate = 4096 )
+				</source>
+				<target>Vordefinierten Timer aktivieren: Fassen Sie die Werte zusammen, um nur den wirklich benötigten
+					Timer zu aktivieren. (all = 8191 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8,
+					MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256,
+					WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048, CalendarDate = 4096)
+				</target>
+			</trans-unit>
+			<trans-unit id="extension.configuration.template.flag.baseTimeZone">
+				<source>Predefined time zone</source>
+				<target>Vordefinierte Zeitzone</target>
+			</trans-unit>
+			<trans-unit id="extension.configuration.template.file.yamlHolidayList">
+				<source>Yaml file with predefined list of calendar-fixed holidays</source>
+				<target>Yaml-Datei mit vordefinierter Liste von kalender-fixierten Feiertagen</target>
+			</trans-unit>
 
-            <trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.title">
-                <source>Periods after Date (i.e. Yearly)</source>
-                <target>Zeiträume nach dem Datum (z. B. jährlich)</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.description">
-                <source>Remark an active delay-time after as special date repeating in flexible ways</source>
-                <target>Bemerken Sie eine aktive Verzögerungszeit danach als Sonderdatum, das sich flexibel wiederholen lässt</target>
-            </trans-unit>
+			<trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.title">
+				<source>Periods after Date (i.e. Yearly)</source>
+				<target>Zeiträume nach dem Datum (z.B. jährlich)</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.description">
+				<source>Remark an active delay-time after as special date repeating in flexible ways</source>
+				<target>Bemerken Sie eine aktive Verzögerungszeit danach als Sonderdatum, das sich flexibel wiederholen
+					lässt
+				</target>
+			</trans-unit>
             <trans-unit id="tx_timer.tca.general.div.timerParams.label">
                 <source>Periods</source>
                 <target>Perioden</target>

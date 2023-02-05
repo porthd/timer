@@ -96,4 +96,8 @@ class TimerConst
     public const CACHE_IDENT_TIMER_YAMLLIST = 'timer_yamllist';
 
     public const DEFAULT_TIMEZONE = 'Europe/Berlin';
+    public const INTERNAL_TIMEZONE = 'UTC';
+
+    public const ADDITIONAL_CALENDAR_JULIAN = 'julian';
+    public const FAKE_CALENDAR_JULIAN_BY_GREGORIAN = 'gregorian';
 }

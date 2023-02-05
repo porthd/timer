@@ -46,9 +46,8 @@ class DailyTimer implements TimerInterface
     protected const ARG_REQ_LIST = [
         self::ARG_ULTIMATE_RANGE_BEGINN,
         self::ARG_ULTIMATE_RANGE_END,
-        self::ARG_USE_ACTIVE_TIMEZONE,
-        self::ARG_EVER_TIME_ZONE_OF_EVENT,
 
+        self::ARG_EVER_TIME_ZONE_OF_EVENT,
         self::ARG_REQ_START_TIME,
         self::ARG_REQ_DURATION_MINUTES,
         self::ARG_USE_ACTIVE_TIMEZONE,
@@ -57,7 +56,6 @@ class DailyTimer implements TimerInterface
 
     protected const ARG_OPT_LIST = [
         self::ARG_OPT_ACTIVE_WEEKDAY,
-        self::ARG_EVER_TIME_ZONE_OF_EVENT,
     ];
 
     /**

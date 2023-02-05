@@ -177,7 +177,7 @@ class DefaultTimer implements TimerInterface
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
-            $result->failOnlyNextActive($dateLikeEventZone);
+            $result->failAllActive($dateLikeEventZone);
             return $result;
         }
 
@@ -195,7 +195,7 @@ class DefaultTimer implements TimerInterface
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
-            $result->failOnlyNextActive($dateLikeEventZone);
+            $result->failAllActive($dateLikeEventZone);
             return $result;
         }
 

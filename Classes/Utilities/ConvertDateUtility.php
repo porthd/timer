@@ -183,7 +183,7 @@ class ConvertDateUtility
      * @param string $locale
      * @param string $calendar
      * @param string $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss
-     * @param string $timeZone
+     * @param string $timeZoneName
      * @return DateTime
      * @throws TimerException
      */
@@ -191,13 +191,39 @@ class ConvertDateUtility
         string $locale,
         string $calendar,
         string $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss,
-        string $timeZone = TimerConst::DEFAULT_TIMEZONE
+        string $timeZoneName = TimerConst::INTERNAL_TIMEZONE
     ): DateTime {
+        if ($calendar === TimerConst::ADDITIONAL_CALENDAR_JULIAN) {
+            $calendar = TimerConst::FAKE_CALENDAR_JULIAN_BY_GREGORIAN;
+            $list = explode(' ', $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss);
+            [$year, $month, $day] = array_map(
+                'intval',
+                explode('/', $list[0])
+            );
+
+            $julianDay = juliantojd(
+                (int)$month,
+                (int)$day,
+                (int)$year
+            );
+            $monthDayYear = jdtogregorian($julianDay);
+            [$month, $day, $year] = array_map('intval', explode('/', $monthDayYear));
+            $day = str_pad(((string)$day), 2, '0', STR_PAD_LEFT);
+            $month = str_pad(((string)$month), 2, '0', STR_PAD_LEFT);
+            if (abs($year) < 10000) {
+                $year = str_pad(((string)abs($year)), 4, '0', STR_PAD_LEFT);
+            } else {
+                $year = (string)$year;
+            }
+            $list[0] = implode('/', [$year, $month, $day]);
+            $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss = implode(' ', $list);
+        }
+
         $traditionalFormatter = new IntlDateFormatter(
             $locale . '@calendar=' . $calendar,
             IntlDateFormatter::SHORT,
             IntlDateFormatter::SHORT,
-            'Europe/Berlin',
+            $timeZoneName,
             IntlDateFormatter::TRADITIONAL,
             self::INTL_DATE_FORMATTER_DEFAULT_PATTERN
         );
@@ -213,7 +239,7 @@ class ConvertDateUtility
             );
         }
         $dateTime = new DateTime('@' . ((int)$parsedTimestamp));
-        $dateTime->setTimezone(new DateTimeZone($timeZone));
+        $dateTime->setTimezone(new DateTimeZone($timeZoneName));
         return $dateTime;
     }
 
@@ -248,7 +274,25 @@ class ConvertDateUtility
         DateTime $dateTime,
         bool $flagFormat = false,
         string $icuFormat = self::INTL_DATE_FORMATTER_DEFAULT_PATTERN
-    ): string {
+    ): string
+    {
+        $myDate = clone $dateTime;
+        if ($calendar === TimerConst::ADDITIONAL_CALENDAR_JULIAN) {
+            $calendar = TimerConst::FAKE_CALENDAR_JULIAN_BY_GREGORIAN;
+            $julianDay = gregoriantojd(
+                (int)$myDate->format('m'),
+                (int)$myDate->format('d'),
+                (int)$myDate->format('Y')
+            );
+            $monthDayYear = jdtojulian($julianDay);
+            [$month, $day, $year] = explode('/', $monthDayYear);
+            $myDate->setDate(
+                ((int)$year),
+                ((int)$month),
+                ((int)$day)
+            );
+        }
+
         if ($flagFormat) {
             $format = $icuFormat;
         } else {
@@ -259,12 +303,12 @@ class ConvertDateUtility
             $locale . '@calendar=' . $calendar,
             IntlDateFormatter::SHORT,
             IntlDateFormatter::SHORT,
-            $dateTime->getTimezone()->getName(),
+            $myDate->getTimezone()->getName(),
             IntlDateFormatter::TRADITIONAL,
             $format
         );
 
-        return $traditionalFormatter->format($dateTime->getTimestamp());
+        return $traditionalFormatter->format($myDate);
     }
 
     /**
@@ -530,5 +574,30 @@ class ConvertDateUtility
             return $resultMonth;
         }
         return 'm';
+    }
+
+    /**
+     * @param string $nameCalendar
+     * @return void
+     */
+    public static function validateCalendarNameOrThrowException(string $nameCalendar): void
+    {
+        $bundle = new ResourceBundle('', 'ICUDATA');
+        $calendarNames = [
+            TimerConst::ADDITIONAL_CALENDAR_JULIAN,
+        ];
+        $calendars = $bundle->get('calendar');
+        foreach ($calendars as $n => $v) {
+            $calendarNames[] = $n;
+        }
+        if (!in_array($nameCalendar, $calendarNames, true)) {
+            throw new TimerException(
+                'The name of the calender `' . $nameCalendar . '` ist not part of the array of allowed ' .
+                'calendarnames `' . implode(',', $calendarNames) . '`. ' .
+                'Check your spelling, check the typecasting or trim the value. Otherwise make ' .
+                'a screenshot and inform the webmaster. ',
+                1675498101
+            );
+        }
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<!-- I use <target> in this default-language-file, because englisch is not my native language. TYPO3 won`t use this target-definition. -->
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2023-01-31T12:51:00Z"
+		  product-name="timer">
+		<header/>
+		<body>
+			<trans-unit id="calendarDate.christ.greg.christmas">
+				<source>christmas</source>
+				<target>Weihnachten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.newyear">
+				<source>new year</source>
+				<target>Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.silvester">
+				<source>silvester</source>
+				<target>Silvester</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.eco.greg.valentinsday">
+				<source>Valentine's Day (Flower Day)</source>
+				<target>Valentinstag (Tag der Blumen)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.towlday">
+				<source>World Towel Day</source>
+				<target>Welthandtuchtag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.pol.greg.labourday">
+				<source>Labor Day</source>
+				<target>Tag der Arbeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.germanunity">
+				<source>Day of German unity</source>
+				<target>Tag der Deutschen Einheit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.lailatAlBaraa">
+				<source>Lailat al-Barā'a (Night of Forgiveness)</source>
+				<target>Lailat al-Barā'a (Nacht der Vergebung)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.ramadan">
+				<source>Ramadan (start; calculated)</source>
+				<target>Ramadan (Beginn; berechnet)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.laylatulQadr">
+				<source>Laylatul Qadr (Night of Destiny) [according to DITIB]</source>
+				<target>Laylatul Qadr (Nacht der Bestimmung) [laut DITIB]</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.eidAlFitr">
+				<source>Feast of Breaking the Fast or Eid al-Fitr or Sugar Feast</source>
+				<target>Fest des Fastenbrechens oder Eid al-Fitr oder Zuckerfest</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.eidUlAdha">
+				<source>Islamic Festival of Sacrifice or Eid ul-Adha</source>
+				<target>Islamisches Opferfest oder Eid ul-Adha</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.eidUlAdha">
+				<source>Islamic New Year</source>
+				<target>Islamisches Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.eidUlAdha">
+				<source>Ashura</source>
+				<target>Aschura</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.mawlidAnNabiSunnits">
+				<source>Birthday of the Prophet (Maulid an-Nabī) [Sunnis]</source>
+				<target>Geburtstag des Propheten (Maulid an-Nabī) [Sunniten]</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.mawlidAnNabiSchiits">
+				<source>Birthday of the Prophet (Maulid an-Nabī) [Shia]</source>
+				<target>Geburtstag des Propheten (Maulid an-Nabī) [Schiiten]</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
+

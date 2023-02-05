@@ -416,7 +416,7 @@ class MoonriseRelTimer implements TimerInterface
             return $this->validateUltimateRangeForNextRange($timerRange, $params, $dateLikeEventZone);
         }
 
-        $timerRange->failOnlyNextActive($dateLikeEventZone);
+        $timerRange->failAllActive($dateLikeEventZone);
         return $timerRange;
     }
 
@@ -499,7 +499,7 @@ class MoonriseRelTimer implements TimerInterface
             return $this->validateUltimateRangeForPrevRange($timerRange, $params, $dateLikeEventZone);
         }
 
-        $timerRange->failOnlyNextActive($dateLikeEventZone);
+        $timerRange->failAllActive($dateLikeEventZone);
         return $timerRange;
     }
 

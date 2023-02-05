@@ -25,7 +25,6 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
-use Doctrine\Common\Annotations\Annotation\Attribute;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\ConvertDateUtility;
@@ -102,9 +101,182 @@ class CalendarDateViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * @param array $arguments
-     * @param $date
-     * @return array
+     * Initialize arguments
+     *
+     * @return void
+     */
+    public function initializeArguments(): void
+    {
+        $this->registerArgument(
+            self::ARG_BASE,
+            'mixed',
+            'A base time (an object implementing DateTimeInterface or a string) used if $date is a ' .
+            'relative date specification. Defaults to current time in the georgian format. '
+        );
+        $this->registerArgument(
+            self::ARG_FROM_CALENDAR,
+            'mixed',
+            'This entry defines only the calendar for the value in `' . self::ARG_CALENDAR_STRING .
+            '`.if nothing is defined, it will use the western calendar (gregorian) as reference. ',
+            false,
+            ConvertDateUtility::DEFAULT_CALENDAR
+        );
+        $this->registerArgument(
+            self::ARG_TO_CALENDAR,
+            'mixed',
+            'This entry defines the calendar for the output by name. If nothing is defined, it will use ' .
+            'the western calendar (gregorian) as reference. Allowed are the calendars of the IntlDateFormatter ' .
+            '(see https://www.php.net/manual/en/intldateformatter.create.php). Zusätzlich wird für die ' .
+            ' Feiertage bei einigen orthodoxen christlichen Kirchen zusätzlich auch der ' .
+            'Julianische Kalender (julian) unterstützt. ',
+            false,
+            ConvertDateUtility::DEFAULT_CALENDAR
+        );
+        $this->registerArgument(
+            self::ARG_CALENDAR_STRING,
+            'string',
+            'This argument has more priority than the attribute`' . self::ARG_DATE . '`. I contains a string ' .
+            'with the must-have-structure `year/month/day hour:minute:second`. The year must have four digits. The ' .
+            'other numbers must have two digits.It will be used in the calendar, which is defined ' .
+            'in the attribute `' . self::ARG_FROM_CALENDAR . '`. '
+        );
+        $this->registerArgument(
+            self::ARG_DATE,
+            'mixed',
+            'If the attribute `' . self::ARG_DATE . '` is not set, this attribute will define a ' .
+            'DateTime-object. As value either an object implementing DateTimeInterface or a string that is accepted. ' .
+            'The date will be converted to the calendar, defined by the attribute `' . self::ARG_FROM_CALENDAR .
+            '`. The output of the date ist defined by the format. '
+        );
+        $this->registerArgument(
+            self::ARG_FORMAT,
+            'string',
+            'Format String can follow three different formating rules: ' .
+            'the rules for strftime() [https://www.php.net/manual/en/function.strftime.php], ' .
+            'the rules for DatetimeInterface::format() [https://www.php.net/manual/en/datetime.format] or ' .
+            'the ICU-rules [https://unicode-org.github.io/icu/userguide/format_parse/datetime/]. ',
+            false,
+            self::DEFAULT_FORMAT_YMDHIS
+        );
+        $this->registerArgument(
+            self::ARG_FLAG_ICUFORMAT,
+            'int',
+            'If this is `' . self::FORMAT_PHP_DATETIME . '`, empty or containing an undefined integer, ' .
+            'the php-dateTime-format (https://www.php.net/manual/en/datetime.format.php) will be used. If this ' .
+            'is `' . self::FORMAT_ICU_DATETIME . '`, the output is defined by the format-definitions of ICU' .
+            '(https://unicode-org.github.io/icu/userguide/format_parse/datetime/). If this is `' .
+            self::FORMAT_PHP_STRFTIME . '`, the output is defined by the format-definitions of ' .
+            'strftime (https://www.php.net/manual/en/function.strftime).',
+            false,
+            0
+        );
+        $this->registerArgument(
+            self::ARG_LOCALE,
+            'mixed',
+            'Shortcut of the locale i.e. de_DE, en or something similar. It will be used for the output. ',
+            false,
+            ConvertDateUtility::DEFAULT_LOCALE
+        );
+        $this->registerArgument(
+            self::ARG_TIMEZONE,
+            'string',
+            'This attribute is only used, if the attribute `' . self::ARG_CALENDAR_STRING .
+            '` is defined and used. Define an individual timezone for the output of the date i.e `Europe/Berlin`. ' .
+            'See https://www.php.net/manual/en/timezones.php for more informations. Defaults is the currently used ' .
+            'timezone defined by `date_default_timezone_get()`. '
+        );
+    }
+
+    /**
+     * @param array<mixed> $arguments
+     * @param \Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     *
+     * @return string
+     * @throws Exception
+     */
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ) {
+        $dateRaw = $renderChildrenClosure();
+        [$fromCalendar, $toCalendar, $locale, $flagFormat, $format, $timezone, $base, $date, $calendarString] =
+            self::readArguments($arguments, $dateRaw);
+
+        // @todo check against PHP-versions, until the bug is fixed
+        if (in_array($fromCalendar, ConvertDateUtility::DEFAULT_LIST_DEFECTIVE_CALENDAR)) {
+            return LocalizationUtility::translate(
+                'calendarDateViewHelper.php.error',
+                TimerConst::EXTENSION_NAME
+            );
+        }
+
+        if ((empty($calendarString)) ||
+            ($dateRaw instanceof DateTimeInterface) ||
+            ($fromCalendar === ConvertDateUtility::DEFAULT_CALENDAR)
+        ) {
+            // convert date and time from DateTime (gregoprian calendar) into non-gregorian calendar
+            if ((!$date instanceof DateTime) && (!$date instanceof DateTimeImmutable)) {
+                try {
+                    $base = $base instanceof \DateTimeInterface ? (int)$base->format('U') : (int)strtotime((MathUtility::canBeInterpretedAsInteger($base) ? '@' : '') . $base);
+                    $dateTimestamp = strtotime(
+                        (MathUtility::canBeInterpretedAsInteger($date) ? '@' : '') . $date,
+                        $base
+                    );
+                    $date = new DateTime();
+                    $date->setTimestamp($dateTimestamp);
+                } catch (\Exception $exception) {
+                    throw new TimerException('"' . print_r($date, true) . '" could not be parsed by \DateTime ' .
+                        'constructor or the timezone `' . print_r(
+                            $timezone,
+                            true
+                        ) . '` is wrong/unallowed: ' . $exception->getMessage(), 1241722579);
+                }
+            }
+            $date->setTimezone(new DateTimeZone($timezone));
+            $result = self::switchFormatAndConvertDateToCalendar($flagFormat, $locale, $toCalendar, $date, $format);
+            return $result;
+        }
+
+        self::validCalendarStringOrThrowException($calendarString);
+        $greorgianDateFromForeignCalendar = ConvertDateUtility::convertFromCalendarToDateTime(
+            $locale,
+            $fromCalendar,
+            $calendarString,
+        );
+        if ($toCalendar === ConvertDateUtility::DEFAULT_CALENDAR) {
+            // convert date and time from non-gregorian calendar into gregorian calendar
+
+            return self::switchFormatAndConvertCalandarInDateTimeString(
+                $flagFormat,
+                $greorgianDateFromForeignCalendar,
+                $locale,
+                $format
+            );
+        }
+        // convert date and time from non-gregorian calendar into (other?) non-gregorian calendar
+        $gregorianResult = self::switchFormatAndConvertCalandarInDateTimeString(
+            self::FORMAT_ICU_DATETIME,
+            $greorgianDateFromForeignCalendar,
+            $locale,
+            ConvertDateUtility::INTL_DATE_FORMATTER_DEFAULT_PATTERN
+        );
+        $gregorianDateTime = DateTime::createFromFormat(ConvertDateUtility::PHP_DATE_FORMATTER_DEFAULT_PATTERN,
+            $gregorianResult);
+        return self::switchFormatAndConvertDateToCalendar(
+            $flagFormat,
+            $locale,
+            $toCalendar,
+            $gregorianDateTime,
+            $format
+        );
+    }
+
+    /**
+     * @param array<mixed> $arguments
+     * @param null|string|int|DateTimeInterface $date
+     * @return array<mixed>
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     private static function readArguments(array $arguments, $date): array
@@ -114,11 +286,13 @@ class CalendarDateViewHelper extends AbstractViewHelper
             ConvertDateUtility::DEFAULT_CALENDAR :
             $arguments[self::ARG_FROM_CALENDAR]
         );
+        ConvertDateUtility::validateCalendarNameOrThrowException($fromCalendar);
         $toCalendar = (
         (empty($arguments[self::ARG_TO_CALENDAR])) ?
             ConvertDateUtility::DEFAULT_CALENDAR :
             $arguments[self::ARG_TO_CALENDAR]
         );
+        ConvertDateUtility::validateCalendarNameOrThrowException($toCalendar);
         $locale = (
         (empty($arguments[self::ARG_LOCALE])) ?
             ConvertDateUtility::DEFAULT_LOCALE :
@@ -184,6 +358,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
 
         return [$fromCalendar, $toCalendar, $locale, $flagFormat, $format, $timezone, $base, $date, $calendarString];
     }
+
 
     /**
      * @param string $calendarString
@@ -306,183 +481,5 @@ class CalendarDateViewHelper extends AbstractViewHelper
                 break;
         }
         return $result;
-    }
-
-    /**
-     * Initialize arguments
-     *
-     * @return void
-     */
-    public function initializeArguments(): void
-    {
-        $this->registerArgument(
-            self::ARG_BASE,
-            'mixed',
-            'A base time (an object implementing DateTimeInterface or a string) used if $date is a relative date specification. Defaults to current time in the georgian format.'
-        );
-        $this->registerArgument(
-            self::ARG_FROM_CALENDAR,
-            'mixed',
-            'This entry defines only the calendar for the value in `' . self::ARG_CALENDAR_STRING . '`. if nothing is defined, it will use the western calendar (gregorian) as reference.',
-            false,
-            ConvertDateUtility::DEFAULT_CALENDAR
-        );
-        $this->registerArgument(
-            self::ARG_TO_CALENDAR,
-            'mixed',
-            'This entry defines the calendar for the output by name. If nothing is defined, it will use the western calendar (gregorian) as reference.',
-            false,
-            ConvertDateUtility::DEFAULT_CALENDAR
-        );
-        $this->registerArgument(
-            self::ARG_CALENDAR_STRING,
-            'string',
-            'This argument has more priority than the attribute`' . self::ARG_DATE . '`. I contains a string' .
-            ' with the must-have-structure `year/month/day hour:minute:second`. The year must have four digits. The other' .
-            ' numbers must have two digits.It will be used in the calendar, which is defined' .
-            ' in the attribute `' . self::ARG_FROM_CALENDAR . '`.'
-        );
-        $this->registerArgument(
-            self::ARG_DATE,
-            'mixed',
-            'If the attribute `' . self::ARG_DATE . '` is not set, this attribute will define a ' .
-            'DateTime-object. As value either an object implementing DateTimeInterface or a string that is accepted.' .
-            ' The date will be converted to the calendar, defined by the attribute `' . self::ARG_FROM_CALENDAR .
-            '`. The output of the date ist defined by the format.'
-        );
-        $this->registerArgument(
-            self::ARG_FORMAT,
-            'string',
-            'Format String with the following notations: w = Numeric representation of the day of the week' .
-            ' beginning with zero for sunday, D = shortcut for weekday (translated), d = day-number with leading zero,' .
-            ' j = day of the month without leading zeros, t = Number of days in the given month, n = ' .
-            'simple month-number , m = month-number with leading zero, M = full monthname, F = full monthname, ' .
-            'y = two digit year , Y = all digits of the year, a =	Lowercase Ante meridiem and Post meridiem ' .
-            '(am or pm) ,A =	Uppercase Ante meridiem and Post meridiem (AM or PM), g = 12-hour format of an hour ' .
-            'without leading zeros (1 through 12), G = 24-hour format of an hour without leading zeros (0 through 23),' .
-            ' h = 12-hour format of an hour with leading zeros (01 through 12), H = 24-hour format of an hour with ' .
-            'leading zeros (01 through 23), i = two digit minute number, s = two digit second-number, U = seconds ' .
-            'since the Unix Epoch (January 1 1970 00:00:00 GMT), e = Timezone identifier, I = (capital i) Whether or' .
-            ' not the date is in daylight saving time 1 if Daylight Saving Time, 0 otherwise., O = Difference to ' .
-            'Greenwich time (GMT) without colon between hours and minutes, P = Difference to Greenwich time (GMT) ' .
-            'with colon between hours and minutes, p = The same as P, but returns Z instead of +00:00 (available as ' .
-            'of PHP 8.0.0), T = Timezone abbreviation, if known; otherwise the GMT offset., Z = Timezone offset in ' .
-            'seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always ' .
-            'positive., U = Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT), \ = escape the following char.' .
-            ' All other character are used as shown.',
-            false,
-            self::DEFAULT_FORMAT_YMDHIS
-        );
-        $this->registerArgument(
-            self::ARG_FLAG_ICUFORMAT,
-            'int',
-            'If this is `' . self::FORMAT_PHP_DATETIME . '`, empty or containing an undefined integer, ' .
-            'the php-dateTime-format (https://www.php.net/manual/en/datetime.format.php) will be used. If this ' .
-            'is `' . self::FORMAT_ICU_DATETIME . '`, the output is defined by the format-definitions of ICU' .
-            '(https://unicode-org.github.io/icu/userguide/format_parse/datetime/). If this is `' .
-            self::FORMAT_PHP_STRFTIME . '`, the output is defined by the format-definitions of ' .
-            'strftime (https://www.php.net/manual/en/function.strftime).',
-            false,
-            0
-        );
-        $this->registerArgument(
-            self::ARG_LOCALE,
-            'mixed',
-            'Shortcut of the locale i.e. de_DE, en or something similar. It will be used for the output.',
-            false,
-            ConvertDateUtility::DEFAULT_LOCALE
-        );
-        $this->registerArgument(
-            self::ARG_TIMEZONE,
-            'string',
-            'This attribute is only used, if the attribute `' . self::ARG_CALENDAR_STRING . '` is defined and used. Define an individual timezone for the output of the date i.e `Europe/Berlin`. See https://www.php.net/manual/en/timezones.php for more informations. Defaults is the currently used timezone defined by `date_default_timezone_get()`.'
-        );
-    }
-
-    /**
-     * @param array<mixed> $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     *
-     * @return string
-     * @throws Exception
-     */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ) {
-        $dateRaw = $renderChildrenClosure();
-        [$fromCalendar, $toCalendar, $locale, $flagFormat, $format, $timezone, $base, $date, $calendarString] =
-            self::readArguments($arguments, $dateRaw);
-
-        // @todo check against PHP-versions, until the bug is fixed
-        if (in_array($fromCalendar, ConvertDateUtility::DEFAULT_LIST_DEFECTIVE_CALENDAR)) {
-            return LocalizationUtility::translate(
-                'calendarDateViewHelper.php.error',
-                TimerConst::EXTENSION_NAME
-            );
-        }
-
-        if ((empty($calendarString)) ||
-            ($dateRaw instanceof DateTimeInterface) ||
-            ($fromCalendar === ConvertDateUtility::DEFAULT_CALENDAR)
-        ) {
-            // convert date and time from DateTime (gregoprian calendar) into non-gregorian calendar
-            if ((!$date instanceof DateTime) && (!$date instanceof DateTimeImmutable)) {
-                try {
-                    $base = $base instanceof \DateTimeInterface ? (int)$base->format('U') : (int)strtotime((MathUtility::canBeInterpretedAsInteger($base) ? '@' : '') . $base);
-                    $dateTimestamp = strtotime(
-                        (MathUtility::canBeInterpretedAsInteger($date) ? '@' : '') . $date,
-                        $base
-                    );
-                    $date = new DateTime();
-                    $date->setTimestamp($dateTimestamp);
-                } catch (\Exception $exception) {
-                    throw new TimerException('"' . print_r($date, true) . '" could not be parsed by \DateTime ' .
-                        'constructor or the timezone `' . print_r(
-                            $timezone,
-                            true
-                        ) . '` is wrong/unallowed: ' . $exception->getMessage(), 1241722579);
-                }
-            }
-            $date->setTimezone(new DateTimeZone($timezone));
-            $result = self::switchFormatAndConvertDateToCalendar($flagFormat, $locale, $toCalendar, $date, $format);
-            return $result;
-        }
-
-        self::validCalendarStringOrThrowException($calendarString);
-        $greorgianDateFromForeignCalendar = ConvertDateUtility::convertFromCalendarToDateTime(
-            $locale,
-            $fromCalendar,
-            $calendarString,
-            $timezone
-        );
-        if ($toCalendar === ConvertDateUtility::DEFAULT_CALENDAR) {
-            // convert date and time from non-gregorian calendar into gregorian calendar
-
-            return self::switchFormatAndConvertCalandarInDateTimeString(
-                $flagFormat,
-                $greorgianDateFromForeignCalendar,
-                $locale,
-                $format
-            );
-        }
-        // convert date and time from non-gregorian calendar into (other?) non-gregorian calendar
-        $gregorianResult = self::switchFormatAndConvertCalandarInDateTimeString(
-            self::FORMAT_ICU_DATETIME,
-            $greorgianDateFromForeignCalendar,
-            $locale,
-            ConvertDateUtility::INTL_DATE_FORMATTER_DEFAULT_PATTERN
-        );
-        $gregorianDateTime = DateTime::createFromFormat(ConvertDateUtility::PHP_DATE_FORMATTER_DEFAULT_PATTERN,
-            $gregorianResult);
-        return self::switchFormatAndConvertDateToCalendar(
-            $flagFormat,
-            $locale,
-            $toCalendar,
-            $gregorianDateTime,
-            $format
-        );
     }
 }

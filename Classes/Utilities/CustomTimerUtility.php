@@ -6,7 +6,7 @@ namespace Porthd\Timer\Utilities;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
+ *  (c) 2023 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -237,6 +237,7 @@ class CustomTimerUtility
 
     /**
      * @param string $yamlFilePath
+     * @param YamlFileLoader $yamlFileLoader
      * @param ValidateYamlInterface|null $validatorObject
      * @param LoggerInterface|null $logger
      * @return array<mixed>
@@ -245,10 +246,9 @@ class CustomTimerUtility
     public static function readListFromYamlFileFromPathOrUrl(
         string $yamlFilePath,
         YamlFileLoader $yamlFileLoader,
-        ?ValidateYamlInterface $validatorObject,
-        ?LoggerInterface $logger
+        ?ValidateYamlInterface $validatorObject = null,
+        ?LoggerInterface $logger = null
     ): array {
-//        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
         if (file_exists($yamlFilePath)) {
             $yamlFilePathNew = realpath($yamlFilePath);
             if (!file_exists($yamlFilePathNew)) {
@@ -256,13 +256,17 @@ class CustomTimerUtility
             }
             $result = $yamlFileLoader->load($yamlFilePathNew);
         } else {
-            if (GeneralUtility::validPathStr($yamlFilePath)) { // Dont Allow relative poathes or pathes with '//' or '\\'
+            // Don't allow relative pathes or pathes with '//' or pathes with '\\'
+            if (GeneralUtility::validPathStr($yamlFilePath)) {
+                if (strpos($yamlFilePath, 'FILE:') === 0) {
+                    $yamlFilePath = substr($yamlFilePath, strlen('FILE:'));
+                }
                 $yamlFilePathNew = GeneralUtility::getFileAbsFileName($yamlFilePath);
                 if (!file_exists($yamlFilePathNew)) {
                     return [];
                 }
                 $result = $yamlFileLoader->load($yamlFilePathNew);
-            } elseif (preg_match('@^http[s]://@i', $yamlFilePath) === 1) { // open accessible url
+            } elseif (preg_match('@^http[s]://@i', $yamlFilePath) === 1) {     // open accessible url
                 $yamlFileData = file_get_contents($yamlFilePath);
                 if ($yamlFileData === false) {
                     if ($logger !== null) {

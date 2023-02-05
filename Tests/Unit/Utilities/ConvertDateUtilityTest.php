@@ -49,92 +49,220 @@ class ConvertDateUtilityTest extends TestCase
                  ] as $locale => $timeZoneName) {
             foreach ([
                          'buddhist' => [
-                             'foreign' => '2563/09/13 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '2563/09/13 18:26:40',
+                                 'Europe/London' => '2563/09/13 18:26:40',
+                                 'Europe/Berlin' => '2563/09/13 18:26:40',
+                                 'America/Chicago' => '2563/09/13 18:26:40',
+                                 'America/Mexico_City' => '2563/09/13 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
 //                         'chinese' => [
-//                             'foreign' => '0037/07/26 16:26:40',
-//                             'dateTime' => '2020/09/13/14/26/40',
+//                             'tzForeign' => [
+//                                 'UTC' => '0037/07/26 18:26:40',
+//                                 'Europe/London' => '0037/07/26 18:26:40',
+//                                 'Europe/Berlin' => '0037/07/26 18:26:40',
+//                                 'America/Chicago' => '0037/07/26 18:26:40',
+//                                 'America/Mexico_City' => '0037/07/26 18:26:40',
+//                             ],
+//                             'utcDateTime' => '2020/09/13/18/26/40',
 //                         ],
                          'coptic' => [
-                             'foreign' => '1737/01/03 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1737/01/03 18:26:40',
+                                 'Europe/London' => '1737/01/03 18:26:40',
+                                 'Europe/Berlin' => '1737/01/03 18:26:40',
+                                 'America/Chicago' => '1737/01/03 18:26:40',
+                                 'America/Mexico_City' => '1737/01/03 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
 //                         'dangi' => [
-//                             'foreign' => '0037/07/26 16:26:40',
-//                             'dateTime' => '2020/09/13/14/26/40',
+//                             'tzForeign' => [
+//                                 'UTC' => '0037/07/26 18:26:40',
+//                                 'Europe/London' => '0037/07/26 18:26:40',
+//                                 'Europe/Berlin' => '0037/07/26 18:26:40',
+//                                 'America/Chicago' => '0037/07/26 18:26:40',
+//                                 'America/Mexico_City' => '0037/07/26 18:26:40',
+//                             ],
+//                             'utcDateTime' => '2020/09/13/18/26/40',
 //                         ],
                          'ethiopic' => [
-                             'foreign' => '2013/01/03 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '2013/01/03 18:26:40',
+                                 'Europe/London' => '2013/01/03 18:26:40',
+                                 'Europe/Berlin' => '2013/01/03 18:26:40',
+                                 'America/Chicago' => '2013/01/03 18:26:40',
+                                 'America/Mexico_City' => '2013/01/03 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'ethiopic-amete-alem' => [
-                             'foreign' => '7513/01/03 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '7513/01/03 18:26:40',
+                                 'Europe/London' => '7513/01/03 18:26:40',
+                                 'Europe/Berlin' => '7513/01/03 18:26:40',
+                                 'America/Chicago' => '7513/01/03 18:26:40',
+                                 'America/Mexico_City' => '7513/01/03 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'gregorian' => [
-                             'foreign' => '2020/09/13 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '2020/09/13 18:26:40',
+                                 'Europe/London' => '2020/09/13 18:26:40',
+                                 'Europe/Berlin' => '2020/09/13 18:26:40',
+                                 'America/Chicago' => '2020/09/13 18:26:40',
+                                 'America/Mexico_City' => '2020/09/13 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'hebrew' => [
-                             'foreign' => '5780/12/24 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '5780/12/24 18:26:40',
+                                 'Europe/London' => '5780/12/24 18:26:40',
+                                 'Europe/Berlin' => '5780/12/24 18:26:40',
+                                 'America/Chicago' => '5780/12/24 18:26:40',
+                                 'America/Mexico_City' => '5780/12/24 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'indian' => [
-                             'foreign' => '1942/06/22 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1942/06/22 18:26:40',
+                                 'Europe/London' => '1942/06/22 18:26:40',
+                                 'Europe/Berlin' => '1942/06/22 18:26:40',
+                                 'America/Chicago' => '1942/06/22 18:26:40',
+                                 'America/Mexico_City' => '1942/06/22 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'islamic' => [
-                             'foreign' => '1442/01/25 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1442/01/25 18:26:40',
+                                 'Europe/London' => '1442/01/25 18:26:40',
+                                 'Europe/Berlin' => '1442/01/25 18:26:40',
+                                 'America/Chicago' => '1442/01/25 18:26:40',
+                                 'America/Mexico_City' => '1442/01/25 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'islamic-civil' => [
-                             'foreign' => '1442/01/25 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1442/01/25 18:26:40',
+                                 'Europe/London' => '1442/01/25 18:26:40',
+                                 'Europe/Berlin' => '1442/01/25 18:26:40',
+                                 'America/Chicago' => '1442/01/25 18:26:40',
+                                 'America/Mexico_City' => '1442/01/25 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'islamic-rgsa' => [
-                             'foreign' => '1442/01/25 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1442/01/25 18:26:40',
+                                 'Europe/London' => '1442/01/25 18:26:40',
+                                 'Europe/Berlin' => '1442/01/25 18:26:40',
+                                 'America/Chicago' => '1442/01/25 18:26:40',
+                                 'America/Mexico_City' => '1442/01/25 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'islamic-tbla' => [
-                             'foreign' => '1442/01/26 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1442/01/26 18:26:40',
+                                 'Europe/London' => '1442/01/26 18:26:40',
+                                 'Europe/Berlin' => '1442/01/26 18:26:40',
+                                 'America/Chicago' => '1442/01/26 18:26:40',
+                                 'America/Mexico_City' => '1442/01/26 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'islamic-umalqura' => [
-                             'foreign' => '1442/01/25 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1442/01/25 18:26:40',
+                                 'Europe/London' => '1442/01/25 18:26:40',
+                                 'Europe/Berlin' => '1442/01/25 18:26:40',
+                                 'America/Chicago' => '1442/01/25 18:26:40',
+                                 'America/Mexico_City' => '1442/01/25 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'japanese' => [
-                             'foreign' => '0002/09/13 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '0002/09/13 18:26:40',
+                                 'Europe/London' => '0002/09/13 18:26:40',
+                                 'Europe/Berlin' => '0002/09/13 18:26:40',
+                                 'America/Chicago' => '0002/09/13 18:26:40',
+                                 'America/Mexico_City' => '0002/09/13 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
                          'persian' => [
-                             'foreign' => '1399/06/23 16:26:40',
-                             'dateTime' => '2020/09/13/14/26/40',
+                             'tzForeign' => [
+                                 'UTC' => '1399/06/23 18:26:40',
+                                 'Europe/London' => '1399/06/23 18:26:40',
+                                 'Europe/Berlin' => '1399/06/23 18:26:40',
+                                 'America/Chicago' => '1399/06/23 18:26:40',
+                                 'America/Mexico_City' => '1399/06/23 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
                          ],
-//                         'roc' => [
-//                             'foreign' => '0109/09/13 16:26:40 ',
-//                             'dateTime' => '2020/09/13/14/26/40',
-//                         ],
+                         'roc' => [
+                             'tzForeign' => [
+                                 'UTC' => '0109/09/13 18:26:40',
+                                 'Europe/London' => '0109/09/13 18:26:40',
+                                 'Europe/Berlin' => '0109/09/13 18:26:40',
+                                 'America/Chicago' => '0109/09/13 18:26:40',
+                                 'America/Mexico_City' => '0109/09/13 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
+                         ],
+                         'julian' => [
+                             'tzForeign' => [
+                                 'UTC' => '2020/08/31 18:26:40',
+                                 'Europe/London' => '2020/08/31 18:26:40',
+                                 'Europe/Berlin' => '2020/08/31 18:26:40',
+                                 'America/Chicago' => '2020/08/31 18:26:40',
+                                 'America/Mexico_City' => '2020/08/31 18:26:40',
+                             ],
+                             'utcDateTime' => '2020/09/13/18/26/40',
+                         ],
                      ] as $calendar => $calendarResult) {
-                $helpDate = DateTime::createFromFormat('Y/m/d/H/i/s', $calendarResult['dateTime']);
-                $helpDate->setTimezone(new DateTimeZone($timeZoneName)); // internal add of 2 hours becaus of timeZone
+                $myTimeZone = new DateTimeZone($timeZoneName);
+                // Exp 15:26 => akt 16:26
+                $tzDateTime = DateTime::createFromFormat(
+                    'Y/m/d/H/i/s',
+                    $calendarResult['utcDateTime'],
+                    new DateTimeZone('UTC')
+                );
+                $tzDateTime->setTimezone($myTimeZone); // internal add of 2 hours becaus of timeZone
 
+                // Exp 15:26 => akt 18:26
+                $tzDateTime = DateTime::createFromFormat('Y/m/d/H/i/s', $calendarResult['utcDateTime'],
+                    $myTimeZone); // diff 1H
+                $checkTime = DateTime::createFromFormat(
+                    'Y/m/d H:i:s',
+                    $calendarResult['tzForeign'][$timeZoneName],
+                    new DateTimeZone('UTC')
+                );
+                $checkTime->setTimezone($myTimeZone);
                 $result[] = [
-                    'message' => 'In the first step the testdate `' . $calendarResult['dateTime'] . '` of the ' .
+                    'message' => 'In the first step the UTC-testdate `' . $calendarResult['utcDateTime'] . '` of the ' .
                         'gregorian-calendar will be transformed to the date `' .
-                        $calendarResult['foreign'] . '`(may be wrong) ' . "\n" . 'of the calendar `' . $calendar . '` with the locale-parameter `' .
-                        $locale . ' (' . $timeZoneName . ')`.' . ' In the first step the calculated date `' . $calendarResult['foreign'] .
-                        '` will be' . "\n" .
-                        ' transformed back to the date `' . $calendarResult['dateTime'] . '`.' .
-                        "\n" . 'helpdate: ' . $helpDate->format('Y/m/d/H/i/s'),
+                        $calendarResult['tzForeign'][$timeZoneName] . ' ' . "\n" . 'of the calendar `' . $calendar .
+                        '` with the locale-parameter `' .
+                        $locale . ' (' . $timeZoneName . ')`.' . ' After the first step the calculated date `' .
+                        $calendarResult['tzForeign'][$timeZoneName] .
+                        '` will be                         transformed back to the expected timezone-date `' .
+                        '` (UTC-date `' . $calendarResult['utcDateTime'] . '`).',
                     'expects' => [
-                        'foreign' => $calendarResult['foreign'],
-                        'dateTime' => $calendarResult['dateTime'],
-                        'revertDate' => $helpDate,
+                        'tzTimezoneForeign' => $calendarResult['tzForeign'][$timeZoneName],
+                        'tzDateTime' => $tzDateTime->format('Y/m/d H:i:s'),
+                        'revertDate' => $tzDateTime,
                     ],
                     'params' => [
-                        'dateTime' => $helpDate,
+                        'tzDateTime' => $tzDateTime,
                         'locale' => $locale,
                         'timezone' => $timeZoneName,
                         'calendar' => $calendar,
@@ -161,7 +289,7 @@ class ConvertDateUtilityTest extends TestCase
             $formatedCalendarDate = ConvertDateUtility::convertFromDateTimeToCalendar(
                 $params['locale'],
                 $params['calendar'],
-                $params['dateTime'],
+                $params['tzDateTime'],
                 ConvertDateUtility::INTL_DATE_FORMATTER_DEFAULT_PATTERN
             );
             $dateTime = ConvertDateUtility::convertFromCalendarToDateTime(
@@ -170,8 +298,27 @@ class ConvertDateUtilityTest extends TestCase
                 $formatedCalendarDate,
                 $params['timezone']
             );
+            $checkHelp = new DateTime('@' . $params['tzDateTime']->format('U'));
+            if ($params['timezone'] !== 'UTC') {
+                $this->assertTrue(
+                    ($checkHelp)->format('Y-m-d H:i:s') !== $expects['revertDate']->format('Y-m-d H:i:s'),
+                    'Internal test A: Is the internal date in UTC-format different from the time of the end`' .
+                    $expects['revertDate']->format('Y-m-d H:i:s') . '`?'
+                );
+            } else {
+                $this->assertTrue(
+                    ($checkHelp)->format('Y-m-d H:i:s') === $expects['revertDate']->format('Y-m-d H:i:s'),
+                    'Internal test A: Is the internal end-date equal to the UTC-time `' .
+                    $expects['revertDate']->format('Y-m-d H:i:s') . '`?'
+                );
+            }
+            $this->assertTrue(
+                $params['tzDateTime']->format('U') === $expects['revertDate']->format('U'),
+                'Internal test B: Are the datetime equal for start `' . $params['tzDateTime']->format('U') .
+                '` and end `' . $expects['revertDate']->format('U') . '`?'
+            );
             $this->assertEquals(
-                $expects['foreign'],
+                $expects['tzTimezoneForeign'],
                 $formatedCalendarDate,
                 'Step 1: ' . $message
             );
@@ -186,7 +333,6 @@ class ConvertDateUtilityTest extends TestCase
     public function dataProviderConvertFromDateTimeToCalendarGivenDateTimeConvertedToEstimatedFormat()
     {
         $helpDate = DateTime::createFromFormat('Y/m/d/H/i/s', '2003/09/06/09/06/03', new DateTimeZone('Europe/Berlin'));
-//        $helpDate->setTimezone(new DateTimeZone('Europe/Berlin'));
         $result = [];
         // documentation = https://unicode-org.github.io/icu/userguide/format_parse/datetime/
         foreach ([

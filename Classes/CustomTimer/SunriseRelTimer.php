@@ -87,7 +87,6 @@ class SunriseRelTimer implements TimerInterface
     ];
     protected const ARG_OPT_LIST = [
         self::ARG_REL_TO_TIMEREVENT,
-        self::ARG_USE_ACTIVE_TIMEZONE,
     ];
     public const DAY_IN_SECONDS = 86400;
     public const MAXIMUM_DAYS_FOR_CALCULATE = 366;
@@ -410,7 +409,7 @@ class SunriseRelTimer implements TimerInterface
         if (($sunInfoList = date_sun_info($tStamp, $latitude, $longitude)) === false) { // @phpstan-ignore-line
             $noDate = clone $dateLikeEventZone;
             $noDate->sub(new DateInterval('P1D'));
-            $result->failOnlyPrevActive($noDate);
+            $result->failAllActive($noDate);
             return $result;
         }
 
@@ -484,12 +483,38 @@ class SunriseRelTimer implements TimerInterface
         if (($sunInfoList = date_sun_info($tStamp, $latitude, $longitude)) === false) { // @phpstan-ignore-line
             $noDate = clone $dateLikeEventZone;
             $noDate->add(new DateInterval('P1D'));
-            $result->failOnlyNextActive($noDate);
-            $flagPrev = true;
+            $result->failAllActive($noDate);
+            return $result;
         }
 
-        if ($flagPrev === false) {
-            $sunPosTStamp = $this->getSunstatusOrThrowExcept($params, $sunInfoList);
+        $sunPosTStamp = $this->getSunstatusOrThrowExcept($params, $sunInfoList);
+        if ($sunPosTStamp !== false) {
+            [$lowerLimit, $upperLimit] = $this->getUpperLowerRangeRelToSunPos(
+                $params,
+                $sunPosTStamp,
+                $dateLikeEventZone,
+                $sunInfoList
+            );
+
+            if ($upperLimit < $dateLikeEventZone) {
+                $result->setBeginning($lowerLimit);
+                $result->setEnding($upperLimit);
+                $result->setResultExist(true);
+                $flagPrev = true;
+            }
+        }
+        $countAgainstInfinity = 0;
+        while (($flagPrev === false) &&
+            ($countAgainstInfinity <= self::MAXIMUM_DAYS_FOR_CALCULATE) &&
+            (
+                ($sunPosTStamp === false) ||
+                (!isset($upperLimit)) ||
+                ($dateLikeEventZone <= $upperLimit)
+            )
+        ) {
+            $tStamp -= self::DAY_IN_SECONDS;
+            $sunInfoList = date_sun_info($tStamp, $latitude, $longitude); // result `false` should not happened here
+            $sunPosTStamp = $sunInfoList[$params[self::ARG_SUN_POSITION]];
             if ($sunPosTStamp !== false) {
                 [$lowerLimit, $upperLimit] = $this->getUpperLowerRangeRelToSunPos(
                     $params,
@@ -497,49 +522,22 @@ class SunriseRelTimer implements TimerInterface
                     $dateLikeEventZone,
                     $sunInfoList
                 );
-
                 if ($upperLimit < $dateLikeEventZone) {
                     $result->setBeginning($lowerLimit);
                     $result->setEnding($upperLimit);
                     $result->setResultExist(true);
                     $flagPrev = true;
+                    break;
                 }
             }
-            $countAgainstInfinity = 0;
-            while (($flagPrev === false) &&
-                ($countAgainstInfinity <= self::MAXIMUM_DAYS_FOR_CALCULATE) &&
-                (
-                    ($sunPosTStamp === false) ||
-                    (!isset($upperLimit)) ||
-                    ($dateLikeEventZone <= $upperLimit)
-                )
-            ) {
-                $tStamp -= self::DAY_IN_SECONDS;
-                $sunInfoList = date_sun_info($tStamp, $latitude, $longitude); // result `false` should not happened here
-                $sunPosTStamp = $sunInfoList[$params[self::ARG_SUN_POSITION]];
-                if ($sunPosTStamp !== false) {
-                    [$lowerLimit, $upperLimit] = $this->getUpperLowerRangeRelToSunPos(
-                        $params,
-                        $sunPosTStamp,
-                        $dateLikeEventZone,
-                        $sunInfoList
-                    );
-                    if ($upperLimit < $dateLikeEventZone) {
-                        $result->setBeginning($lowerLimit);
-                        $result->setEnding($upperLimit);
-                        $result->setResultExist(true);
-                        $flagPrev = true;
-                        break;
-                    }
-                }
-                $countAgainstInfinity++;
-            }
-            if ($flagPrev === false) {
-                $noDate = clone $dateLikeEventZone;
-                $noDate->add(new DateInterval('P1D'));
-                $result->failOnlyNextActive($noDate);
-            }
+            $countAgainstInfinity++;
         }
+        if ($flagPrev === false) {
+            $noDate = clone $dateLikeEventZone;
+            $noDate->add(new DateInterval('P1D'));
+            $result->failOnlyNextActive($noDate);
+        }
+
 
         return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
@@ -637,9 +635,12 @@ class SunriseRelTimer implements TimerInterface
     protected function defineLongitudeLatitudeByParams(array $params, int $gap): array
     {
         $latitude = (float)(
-            ((array_key_exists(self::ARG_LATITUDE, $params)) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
-                ($params[self::ARG_LATITUDE]) :
-                (self::DEFAULT_LATITUDE)
+        ((array_key_exists(
+                self::ARG_LATITUDE,
+                $params
+            )) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
+            ($params[self::ARG_LATITUDE]) :
+            (self::DEFAULT_LATITUDE)
         );
         if ((array_key_exists(self::ARG_LONGITUDE, $params)) &&
             ($params[self::ARG_LONGITUDE] >= -180) &&

@@ -13,6 +13,7 @@ use Porthd\Timer\CustomTimer\SunriseRelTimer;
 use Porthd\Timer\CustomTimer\WeekdayInMonthTimer;
 use Porthd\Timer\CustomTimer\WeekdaylyTimer;
 use Porthd\Timer\CustomTimer\JewishHolidayTimer;
+use Porthd\Timer\CustomTimer\CalendarDateRelTimer;
 use Porthd\Timer\Hooks\Backend\FlexformManipulationHook;
 use Porthd\Timer\Hooks\Backend\StartEndTimerManipulationHook;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
@@ -112,6 +113,7 @@ call_user_func(
                 WeekdayInMonthTimer::class,
                 WeekdaylyTimer::class,
                 JewishHolidayTimer::class,
+                CalendarDateRelTimer::class,
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
 

@@ -4,6 +4,14 @@
 		<header/>
 		<body>
 			<!-- Names for the backend associated to flexform -->
+			<trans-unit id="tca.txTimerSelector.txTimerCalendarDateRel.select.name">
+				<source>(not working; in preparation) Period relativ to calendar-fixed events related to different
+					calendars
+				</source>
+				<target>(nicht funktionsfähig; in Vorbereitung) Zeitraum relativ zu kalender-fixierten Feiertage
+					relative zu verschiedenen Kalendern
+				</target>
+			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerDaily.select.name">
 				<source>time on daily every selected weekday</source>
 				<target>Uhrzeit täglich an jedem ausgewählten Wochentag</target>
@@ -13,11 +21,15 @@
 				<target>Zeitraum um Datum jedes Jahr</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerDefault.select.name">
-				<source> </source>
-				<target> </target>
+				<source></source>
+				<target></target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerEasterRel.select.name">
-				<source>Period relativ to easter and other christian holydays</source>
+				<source>Period relativ to Easter and other christian Holydays</source>
+				<target>Zeitraum relativ zu Ostern und anderen christlichen Feiertagen</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerEasterRel.select.name">
+				<source>Period relativ to Easter and other christian Holydays</source>
 				<target>Zeitraum relativ zu Ostern und anderen christlichen Feiertagen</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerJewishHoliday.select.name">
@@ -25,7 +37,7 @@
 				<target>Zeitraum relativ zu jüdischen Feiertagen</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerMoonphaseRel.select.name">
-				<source>Timer relativ to the phase of moon </source>
+				<source>Timer relativ to the phase of moon</source>
 				<target>Timer relativ zur Mondphase</target>
 			</trans-unit>
 			<trans-unit id="tca.txTimerSelector.txTimerMoonriseRel.select.name">
@@ -502,6 +514,187 @@
 			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_always_julian">
 				<source>cal_easter_always_julian (proleptic gregorian for ever)</source>
 				<target>cal_easter_always_julian (proleptischer Gregorianer für immer)</target>
+			</trans-unit>
+
+			<!-- calendarDateRelTimer -->
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.sheet.title">
+				<source>calendar related dates</source>
+				<target>kalendarische Daten bezogen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.sheet.shortDescr">
+				<source>Define an active area relative to an important religious, cultural, or political holiday that
+					has a specific date on a selected calendar.
+				</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu einem wichtigen religiösen, kulturelln oder
+					politischen Feiertag, der in einem ausgewählten Kalender ein spezifisches Datum hat.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.sheet.description">
+				<source>Example: From the beginning of the Lailat al-Barā'a [namedDateMidnight], i.e. from 14.8. from
+					0:00 in the Islamic calendar, exactly 14400 minutes (10 days) [relMinToSelectedTimerEvent] away,
+					according to the Islamic calendar [calendarUse], a content element is active for a period of 1440
+					minutes (= 1 day) [durationMinutes].
+				</source>
+				<target>Beispiel: Vom Beginn des Lailat al-Barā'a [namedDateMidnight], also vom 14.8. ab 0:00 im
+					islamischen Kalender, genau 14400 Minuten (10 Tage) [relMinToSelectedTimerEvent] entfernt ist gemäß
+					des Islamischen Kalenders [calendarUse] für die Zeit von 1440 Minuten (= 1 Tag) [durationMinutes]
+					ein Inhaltselement aktiv.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.namedDate.title">
+				<source>Selection of calendar-fixed holidays such as Labor Day (May 1; Gregorian), Christmas (December
+					25; Gregorian) or Lailat al-Barā'a (August 14; Islamic) [overrides flexform definition]
+				</source>
+				<target>Auswahl kalender-fixierter Feiertage wie Tag-der-Arbeit(1.5.; gregorianisch), Weihnachten
+					(25.12.; gregorianisch) oder Lailat al-Barā'a (14.8.; islamisch) [übersteuert Flexform-Definition]
+				</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.religion">
+				<source>religious motivated calendar</source>
+				<target>religiöse motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.politics">
+				<source>political motivated calendar</source>
+				<target>politisch motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.culture">
+				<source>cultural motivated calendar</source>
+				<target>kulturell motivierter kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.history">
+				<source>historical motivated calendar</source>
+				<target>Historisch motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.economics">
+				<source>economical motivated calendar</source>
+				<target>wirtschaftlich motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.other">
+				<source>other motivation</source>
+				<target>andere Motivation</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.julian">
+				<source>julian calendar</source>
+				<target>Julianischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.customSelected">
+				<source>custom-selected calendar-based event</source>
+				<target>Kalender-basierte Ergeignis Selbt gewählt</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.buddhist">
+				<source>buddhist calendar</source>
+				<target>Buddhistischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.chinese">
+				<source>chinese calendar</source>
+				<target>Chinesischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.coptic">
+				<source>coptic calendar</source>
+				<target>Koptischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.dangi">
+				<source>dangi calendar (corean calender)</source>
+				<target>Koreanischer Kalender (dangi)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.ethiopic">
+				<source>general ethiopic calendar</source>
+				<target>Gemeiner Äthiopischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.ethiopicAmeteAlem">
+				<source>ethiopic calendar (amete alem)</source>
+				<target>Äthiopischer Kalender (amete alem)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.gregorian">
+				<source>gregorian calendar</source>
+				<target>Gregorianischer Kalender (westlicher Kalender)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.hebrew">
+				<source>hebrew calendar</source>
+				<target>Hebräischer Kalender (Jüdischer Kalender)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.indian">
+				<source>indian calendar</source>
+				<target>Indischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamic">
+				<source>islamic calendar</source>
+				<target>Gemeiner islamischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicCivil">
+				<source>islamic-civil calendar</source>
+				<target>Ziviler islamischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicRgsa">
+				<source>islamic-rgsa calendar</source>
+				<target>Islamischer (rgsa) Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicTbla">
+				<source>islamic-tbla calendar</source>
+				<target>Islamischer (tbla) Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicUmalqura">
+				<source>islamic-umalqura calendar</source>
+				<target>Islamischer (umalqura) Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.japanese">
+				<source>japanese calendar</source>
+				<target>Japanischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.persian">
+				<source>persian calendar</source>
+				<target>Persicher Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.roc">
+				<source>calender for the republic of china (Taiwan)</source>
+				<target>Kalender der Republik von China (Taiwan)</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.namedDate.undefined">
+				<source>--self defined--</source>
+				<target>--selbstdefiniert--</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relative to the selected named date</source>
+				<target>Minuten relativ zum ausgewählten benannten Datum</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.durationMinutes">
+				<source>time span between -444444 and +444444 minutes</source>
+				<target>Zeitspanne zwischen -444444 und +444444 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.calendar.title">
+				<source>Choose the calendar</source>
+				<target>Wähle den Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.day.title">
+				<source>Choose the day of the month for the holiday</source>
+				<target>Wähle den Tag im Monat für den Feiertag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.month.title">
+				<source>Choose the month for the holiday</source>
+				<target>Wähle den Monat für den Feiertag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.eventtitle.title">
+				<source>Choose the name or the language-alias &lt;LLL:key&gt; for the holiday</source>
+				<target>Wähle den Namen oder den Fremdsprachen-Alias &lt;LLL:key&gt; für den Feiertag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.tag.title">
+				<source>Choose the category-tag for the event (optional)</source>
+				<target>Wähle den Kategoriewert für das Ereignis (optional)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.rank.title">
+				<source>rank or importance of the event day</source>
+				<target>Rank bzw. Wichtigkeit des Eventtages</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.locale.title">
+				<source>select the locales for the event day (optional)</source>
+				<target>Wähle die Region für den Eventtages (optional)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.namedDate.undefined">
+				<source>---</source>
+				<target>---</target>
 			</trans-unit>
 
 			<!-- General for all timer txTimerGeneral  -->

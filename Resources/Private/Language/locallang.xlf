@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<!-- I use target in this default-language-file, because englisch is not my native language. TYPO3 won`t use this target-definition. -->
+	<!-- I use <target> in this default-language-file, because englisch is not my native language. TYPO3 won`t use this target-definition. -->
 	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z" product-name="timer">
 		<header/>
 		<body>
@@ -489,7 +489,7 @@
 				</source>
 				<target>Die schlecht-dokumentierte Kalenderfunktion IntlDateFormater in PHP scheint einen Bug bei der
 					Umrechnung des chinesischen Datums in das gregorianische Datum zu haben. Solange der Bug nicht
-					gefixt ist, wird hier kein Ergebnis für die Umreechnung vom chinesischen Datum zum Gregorianischen
+					gefixt ist, wird hier kein Ergebnis für die Umrechnung vom chinesischen Datum zum Gregorianischen
 					Datum ausgegeben. Falls in zukünftigen PHP-Versionen der Bug gefixt wurde, wird dies entsprechend
 					mit berücksichtigt.
 				</target>

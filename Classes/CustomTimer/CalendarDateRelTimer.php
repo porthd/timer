@@ -6,7 +6,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  Copyright notice
  *
- *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
+ *  (c) 2023 Dr. Dieter Porth <info@mobger.de>
  *
  *  All rights reserved
  *
@@ -30,69 +30,81 @@ use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
 
-class EasterRelTimer implements TimerInterface
+class CalendarDateRelTimer implements TimerInterface
 {
     use GeneralTimerTrait;
 
-    public const TIMER_NAME = 'txTimerEasterRel';
+    public const TIMER_NAME = 'txTimerCalendarDateRel';
 
 
     protected const ARG_NAMED_DATE_MIDNIGHT = 'namedDateMidnight';
-    protected const ARG_NAMED_DATE_MIDNIGHT_DEFAULT = self::ARG_NAMED_DATE_EASTER;
-    protected const ARG_MIN_NAMED_DATE_MIDNIGHT = 0;
-    protected const ARG_MAX_NAMED_DATE_MIDNIGHT = 6;
-    protected const ARG_NAMED_DATE_EASTER = 'easter';
-    protected const ARG_NAMED_DATE_ASCENSION_OF_CHRIST = 'ascension';
-    protected const ARG_NAMED_DATE_PENTECOST = 'pentecost';
-    protected const ARG_NAMED_DATE_FIRST_ADVENT = 'firstadvent';
-    protected const ARG_NAMED_DATE_CHRISTMAS = 'christmas';
-    protected const ARG_NAMED_DATE_ROSE_MONDAY = 'rosemonday';
-    protected const ARG_NAMED_DATE_GOOD_FRIDAY = 'goodfriday';
-    protected const ARG_NAMED_DATE_TOWL_DAY = 'towlday';
-    protected const ARG_NAMED_DATE_STUPID_DAY = 'stupidday';
-    protected const ARG_NAMED_DATE_NEW_YEAR = 'newyear';
-    protected const ARG_NAMED_DATE_SILVESTER = 'silvester';
-    protected const ARG_NAMED_DATE_LABOURDAY = 'labourday';
-    protected const ARG_NAMED_DATE_LIST = [
-        self::ARG_NAMED_DATE_EASTER,
-        self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST,
-        self::ARG_NAMED_DATE_PENTECOST,
-        self::ARG_NAMED_DATE_FIRST_ADVENT,
-        self::ARG_NAMED_DATE_CHRISTMAS,
-        self::ARG_NAMED_DATE_ROSE_MONDAY,
-        self::ARG_NAMED_DATE_GOOD_FRIDAY,
-        self::ARG_NAMED_DATE_TOWL_DAY,
-        self::ARG_NAMED_DATE_STUPID_DAY,
-        self::ARG_NAMED_DATE_NEW_YEAR,
-        self::ARG_NAMED_DATE_SILVESTER,
-        self::ARG_NAMED_DATE_LABOURDAY,
-    ];
-
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
     protected const ARG_REQ_REL_TO_MIN = -475200;
     protected const ARG_REQ_REL_TO_MAX = 475200;
-    protected const ARG_CALENDAR_USE = 'calendarUse';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
     protected const ARG_REQ_DURMIN_MIN = -475200;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
     protected const ARG_REQ_DURMIN_MAX = 475200;
+    protected const ARG_EVENT_TITLE = 'eventtitle';
+    protected const ARG_EVENT_CALENDAR = 'calendar';
+    protected const ARG_LIST_EVENT_CALENDAR = [
+        'customSelected',
+        'buddhist',
+        'chinese',
+        'coptic',
+        'dangi',
+        'ethiopic',
+        'ethiopic',
+        'gregorian',
+        'hebrew',
+        'indian',
+        'islamic',
+        'islamicCivil',
+        'islamicRgsa',
+        'islamicTbla',
+        'islamicUmalqura',
+        'japanese',
+        'persian',
+        'roc',
+        'julian',
+    ];
+    protected const ARG_EVENT_IDENT = 'identifier';
+    protected const ARG_EVENT_DAY = 'day';
+    protected const ARG_EVENT_MONTH = 'month';
+    protected const ARG_EVENT_TAG = 'tag';
+    protected const ARG_LIST_EVENT_TAG = [
+        'religion',
+        'politics',
+        'culture',
+        'history',
+        'economics',
+    ];
+    protected const ARG_EVENT_RANK = 'rank';
+    protected const ARG_EVENT_LOCALE = 'locale';
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     public const TIMER_FLEXFORM_ITEM = [
-        self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/EasterRelTimer.flexform',
+        self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/CalendarDateRelTimer.flexform',
     ];
 
     protected const ARG_REQ_LIST = [
-        self::ARG_ULTIMATE_RANGE_BEGINN,
-        self::ARG_ULTIMATE_RANGE_END,
-
         self::ARG_NAMED_DATE_MIDNIGHT,
         self::ARG_REQ_DURATION_MINUTES,
+
+        self::ARG_ULTIMATE_RANGE_BEGINN,
+        self::ARG_ULTIMATE_RANGE_END,
         self::ARG_USE_ACTIVE_TIMEZONE,
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
     ];
     protected const ARG_OPT_LIST = [
-        self::ARG_CALENDAR_USE,
+        self::ARG_EVENT_TITLE,
+        self::ARG_EVENT_CALENDAR,
+        self::ARG_EVENT_IDENT,
+        self::ARG_EVENT_DAY,
+        self::ARG_EVENT_MONTH,
+        self::ARG_EVENT_TAG,
+        self::ARG_EVENT_RANK,
+        self::ARG_EVENT_LOCALE,
         self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT,
     ];
 
@@ -112,7 +124,7 @@ class EasterRelTimer implements TimerInterface
     protected $lastIsActiveParams = [];
 
     /**
-     * tested 20201230
+     * tested
      *
      * @return string
      */
@@ -122,20 +134,20 @@ class EasterRelTimer implements TimerInterface
     }
 
     /**
-     * tested 20201230
+     * tested
      *
      * @return array<mixed>
      */
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerEasterRel.select.name',
+            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerCalendarDateRel.select.name',
             self::TIMER_NAME,
         ];
     }
 
     /**
-     * tested 20221009
+     * tested
      *
      * @param string $activeZoneName
      * @param array<mixed> $params
@@ -147,7 +159,7 @@ class EasterRelTimer implements TimerInterface
     }
 
     /**
-     * tested 20201230
+     * tested
      *
      * @return array<mixed>
      */
@@ -158,8 +170,8 @@ class EasterRelTimer implements TimerInterface
 
 
     /**
-     * tested special 20221115
-     * tested general 20201230
+     * tested
+     * tested
      *
      * The method test, if the parameter are valid or not
      * remark: This method must not be tested, if the sub-methods are valid.
@@ -174,8 +186,7 @@ class EasterRelTimer implements TimerInterface
         $countRequired = $this->validateArguments($params);
         $flag = $flag && ($countRequired === count(self::ARG_REQ_LIST));
         $flag = $flag && $this->validateDurationMinutes($params);
-        $flag = $flag && $this->validateNamedDateMidnight($params);
-        $flag = $flag && $this->validateCalendarUse($params);
+        $flag = $flag && $this->validateEventDefinition($params);
         $flag = $flag && $this->validateRelMinToSelectedTimerEvent($params);
         $countOptions = $this->validateOptional($params);
         return $flag && ($countOptions >= 0) &&
@@ -217,22 +228,21 @@ class EasterRelTimer implements TimerInterface
      * @param array<mixed> $params
      * @return bool
      */
-    protected function validateNamedDateMidnight(array $params = []): bool
+    protected function validateEventDefinition(array $params = []): bool
     {
-        $key = $params[self::ARG_NAMED_DATE_MIDNIGHT] ?: self::ARG_NAMED_DATE_MIDNIGHT_DEFAULT;
-        return in_array($key, self::ARG_NAMED_DATE_LIST, true);
-    }
+        if ((int)$params[self::ARG_NAMED_DATE_MIDNIGHT] !== 0) {
+            return true;
+        }
+        $flag = true;
+        $flag = $flag && (!empty($params[self::ARG_EVENT_TITLE]));
+        $flag = $flag && in_array($params[self::ARG_EVENT_CALENDAR], self::ARG_LIST_EVENT_CALENDAR);
+        $flag = $flag && (!empty($params[self::ARG_EVENT_IDENT]));
+        $flag = $flag && ($params[self::ARG_EVENT_DAY] >= 1) && ($params[self::ARG_EVENT_DAY] <= 32);
+        $flag = $flag && ($params[self::ARG_EVENT_MONTH] >= 1) && ($params[self::ARG_EVENT_MONTH] <= 13);
+        $flag = $flag && in_array($params[self::ARG_EVENT_TAG], self::ARG_LIST_EVENT_TAG);
+        $flag = $flag && ($params[self::ARG_EVENT_RANK] >= 0) && ($params[self::ARG_EVENT_RANK] <= 5);
 
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array<mixed> $params
-     * @return bool
-     */
-    protected function validateCalendarUse(array $params = []): bool
-    {
-        $number = ((!empty($params[self::ARG_CALENDAR_USE])) ? $params[self::ARG_CALENDAR_USE] : 0);
-        $value = (int)$number;
-        return (is_numeric($number) && (($value - $number) === 0) && in_array($value, [0, 1, 2, 3]));
+        return $flag;
     }
 
     /**
@@ -262,7 +272,7 @@ class EasterRelTimer implements TimerInterface
     }
 
     /**
-     * tested 20201226
+     * tested
      *
      * @param DateTime $dateLikeEventZone
      * @param array<mixed> $params
@@ -275,7 +285,7 @@ class EasterRelTimer implements TimerInterface
     }
 
     /**
-     * tested 20220910
+     * tested
      *
      * check, if the timer ist for this time active
      *
@@ -285,38 +295,39 @@ class EasterRelTimer implements TimerInterface
      */
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
     {
-        if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-            $result = new TimerStartStopRange();
-            $result->failAllActive($dateLikeEventZone);
-            $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-            return $result->getResultExist();
-        }
-
-        $testRanges = $this->calcDefinedRangesByStartDateTime($dateLikeEventZone, $params);
-
-        $flag = false;
-        $start = clone $dateLikeEventZone;
-        $start->sub(new DateInterval('PT30S'));
-        $stop = clone $dateLikeEventZone;
-        $stop->add(new DateInterval('PT30S'));
-        $flagFirst = true;
-        foreach ([2, 1, 0, -1, -2,] as $index) {
-            if ($testRanges[$index]['begin'] <= $dateLikeEventZone) {
-                if ($flagFirst) {
-                    $start = clone $testRanges[$index]['begin'];
-                    $stop = clone $testRanges[$index]['end'];
-                    $flagFirst = false;
-                }
-                if ($dateLikeEventZone <= $testRanges[$index]['end']) {
-                    $flag = true;
-                    $start = clone $testRanges[$index]['begin'];
-                    $stop = clone $testRanges[$index]['end'];
-                    break;
-                }
-            }
-        }
-        $this->setIsActiveResult($start, $stop, $flag, $dateLikeEventZone, $params);
-        return $this->lastIsActiveResult->getResultExist();
+        return true;
+//        if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
+//            $result = new TimerStartStopRange();
+//            $result->failAllActive($dateLikeEventZone);
+//            $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
+//            return $result->getResultExist();
+//        }
+//
+//        $testRanges = $this->calcDefinedRangesByStartDateTime($dateLikeEventZone, $params);
+//
+//        $flag = false;
+//        $start = clone $dateLikeEventZone;
+//        $start->sub(new DateInterval('PT30S'));
+//        $stop = clone $dateLikeEventZone;
+//        $stop->add(new DateInterval('PT30S'));
+//        $flagFirst = true;
+//        foreach ([2, 1, 0, -1, -2,] as $index) {
+//            if ($testRanges[$index]['begin'] <= $dateLikeEventZone) {
+//                if ($flagFirst) {
+//                    $start = clone $testRanges[$index]['begin'];
+//                    $stop = clone $testRanges[$index]['end'];
+//                    $flagFirst = false;
+//                }
+//                if ($dateLikeEventZone <= $testRanges[$index]['end']) {
+//                    $flag = true;
+//                    $start = clone $testRanges[$index]['begin'];
+//                    $stop = clone $testRanges[$index]['end'];
+//                    break;
+//                }
+//            }
+//        }
+//        $this->setIsActiveResult($start, $stop, $flag, $dateLikeEventZone, $params);
+//        return $this->lastIsActiveResult->getResultExist();
     }
 
     /**
@@ -332,7 +343,7 @@ class EasterRelTimer implements TimerInterface
     }
 
     /**
-     * tested 20210110
+     * tested
      *
      * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
@@ -342,57 +353,57 @@ class EasterRelTimer implements TimerInterface
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
-        $result->failAllActive($dateLikeEventZone);
-
-
-        $relToDateMin = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
-            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
-            0
-        );
-        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
-        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $methodId = $this->detectCalendar($params);
-        $testDay = clone $dateLikeEventZone;
-        $yearInterval = new DateInterval(('P1Y'));
-        $testDay->sub($yearInterval);
-        $testDay->sub($yearInterval);
-        $testDay->sub($yearInterval);
-        $flagRebuild = false;
-        for ($i = 0; $i < 7; $i++) {
-            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
-            if ($relToDateMin >= 0) {
-                $checkday->add($relInterval);
-            } else {
-                $checkday->sub($relInterval);
-            }
-            if ($durationMin >= 0) {
-                if ($dateLikeEventZone <= $checkday) {
-                    $flagRebuild = true;
-                    break;
-                }
-            } else {
-                $checkday->sub($durInterval);
-                if ($dateLikeEventZone <= $checkday) {
-                    $flagRebuild = true;
-                    break;
-                }
-            }
-            $testDay->add($yearInterval);
-        }
-        if ($flagRebuild === true) {
-            $result->setBeginning($checkday);
-            $checkday->add($durInterval);
-            $result->setEnding($checkday);
-            $result->setResultExist(true);
-        }
-
-        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
+//        $result->failAllActive($dateLikeEventZone);
+        return $result;
+//
+//        $relToDateMin = (int)(
+//        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+//            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
+//            0
+//        );
+//        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
+//        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
+//        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
+//        $methodId = $this->detectCalendar($params);
+//        $testDay = clone $dateLikeEventZone;
+//        $yearInterval = new DateInterval(('P1Y'));
+//        $testDay->sub($yearInterval);
+//        $testDay->sub($yearInterval);
+//        $testDay->sub($yearInterval);
+//        $flagRebuild = false;
+//        for ($i = 0; $i < 7; $i++) {
+//            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
+//            if ($relToDateMin >= 0) {
+//                $checkday->add($relInterval);
+//            } else {
+//                $checkday->sub($relInterval);
+//            }
+//            if ($durationMin >= 0) {
+//                if ($dateLikeEventZone <= $checkday) {
+//                    $flagRebuild = true;
+//                    break;
+//                }
+//            } else {
+//                $checkday->sub($durInterval);
+//                if ($dateLikeEventZone <= $checkday) {
+//                    $flagRebuild = true;
+//                    break;
+//                }
+//            }
+//            $testDay->add($yearInterval);
+//        }
+//        if ($flagRebuild === true) {
+//            $result->setBeginning($checkday);
+//            $checkday->add($durInterval);
+//            $result->setEnding($checkday);
+//            $result->setResultExist(true);
+//        }
+//
+//        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
-     * tested 20210110
+     * tested
      *
      * @param DateTime $dateLikeEventZone
      * @param array<mixed> $params
@@ -403,49 +414,50 @@ class EasterRelTimer implements TimerInterface
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
         $result->failAllActive($dateLikeEventZone);
+        return $result;
 
-        $relToDateMin = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
-            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
-            0
-        );
-        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
-        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-        $methodId = $this->detectCalendar($params);
-        $testDay = clone $dateLikeEventZone;
-        $yearInterval = new DateInterval(('P1Y'));
-        $testDay->add($yearInterval);
-        $testDay->add($yearInterval);
-        $testDay->add($yearInterval);
-        $flagRebuild = false;
-        for ($i = 0; $i < 7; $i++) {
-            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
-            if ($relToDateMin >= 0) {
-                $checkday->add($relInterval);
-            } else {
-                $checkday->sub($relInterval);
-            }
-            if ($checkday < $dateLikeEventZone) {
-                if ($durationMin < 0) {
-                    $flagRebuild = true;
-                    break;
-                }
-                $checkday->add($durInterval);
-                if ($checkday < $dateLikeEventZone) { // $checkday mark now the end of the range
-                    $flagRebuild = true;
-                    break;
-                }
-            }
-            $testDay->sub($yearInterval);
-        }
-        if ($flagRebuild === true) {
-            $result->setEnding($checkday);  // datetime object will be cloned in internal variable
-            $checkday->sub($durInterval);
-            $result->setBeginning($checkday);
-            $result->setResultExist(true);
-        }
-        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
+//        $relToDateMin = (int)(
+//        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+//            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
+//            0
+//        );
+//        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
+//        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
+//        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
+//        $methodId = $this->detectCalendar($params);
+//        $testDay = clone $dateLikeEventZone;
+//        $yearInterval = new DateInterval(('P1Y'));
+//        $testDay->add($yearInterval);
+//        $testDay->add($yearInterval);
+//        $testDay->add($yearInterval);
+//        $flagRebuild = false;
+//        for ($i = 0; $i < 7; $i++) {
+//            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
+//            if ($relToDateMin >= 0) {
+//                $checkday->add($relInterval);
+//            } else {
+//                $checkday->sub($relInterval);
+//            }
+//            if ($checkday < $dateLikeEventZone) {
+//                if ($durationMin < 0) {
+//                    $flagRebuild = true;
+//                    break;
+//                }
+//                $checkday->add($durInterval);
+//                if ($checkday < $dateLikeEventZone) { // $checkday mark now the end of the range
+//                    $flagRebuild = true;
+//                    break;
+//                }
+//            }
+//            $testDay->sub($yearInterval);
+//        }
+//        if ($flagRebuild === true) {
+//            $result->setEnding($checkday);  // datetime object will be cloned in internal variable
+//            $checkday->sub($durInterval);
+//            $result->setBeginning($checkday);
+//            $result->setResultExist(true);
+//        }
+//        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -457,7 +469,7 @@ class EasterRelTimer implements TimerInterface
     protected function detectCalendar($params = []): int
     {
         $calendar = (
-            (array_key_exists(self::ARG_CALENDAR_USE, $params)) ?
+        (array_key_exists(self::ARG_CALENDAR_USE, $params)) ?
             ($params[self::ARG_CALENDAR_USE]) :
             0
         );
@@ -567,7 +579,7 @@ class EasterRelTimer implements TimerInterface
     protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
     {
         $relToDateMin = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );

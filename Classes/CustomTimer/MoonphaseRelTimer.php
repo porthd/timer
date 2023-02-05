@@ -368,7 +368,7 @@ class MoonphaseRelTimer implements TimerInterface
             return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
         }
 
-        $result->failOnlyNextActive($dateLikeEventZone);
+        $result->failAllActive($dateLikeEventZone);
         return $result;
     }
 
@@ -430,7 +430,7 @@ class MoonphaseRelTimer implements TimerInterface
             return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
         }
 
-        $result->failOnlyNextActive($dateLikeEventZone);
+        $result->failAllActive($dateLikeEventZone);
         return $result;
     }
 
