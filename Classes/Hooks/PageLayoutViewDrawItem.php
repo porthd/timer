@@ -36,6 +36,8 @@ class PageLayoutViewDrawItem implements PageLayoutViewDrawItemHookInterface
      */
     protected $supportedContentTypes = [
         'timer_timersimul' => 'Timersimul',
+        'timer_periodlist' => 'Periodlist',
+        'timer_holidaycalendar' => 'Holidaycalendar',
     ];
 
     /**

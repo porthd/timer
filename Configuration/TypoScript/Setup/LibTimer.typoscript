@@ -1,11 +1,11 @@
-lib.dataprocessor.timer.media.pages  = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
-lib.dataprocessor.timer.media.pages {
-    references.fieldName = media
-    references.table = pages
-    as = myfiles
-}
-lib.dataprocessor.timer.media.sorted  = Porthd\Timer\DataProcessing\SortListQueryProcessor
-lib.dataprocessor.timer.media.sorted {
-        fieldName = myfiles
-        as = mysortedfiles
-}
+#lib.dataprocessor.timer.media.pages  = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
+#lib.dataprocessor.timer.media.pages {
+#  references.fieldName = media
+#  references.table = pages
+#  as = myfiles
+#}
+#lib.dataprocessor.timer.media.sorted  = Porthd\Timer\DataProcessing\SortListQueryProcessor
+#lib.dataprocessor.timer.media.sorted {
+#  fieldName = myfiles
+#  as = mysortedfiles
+#}

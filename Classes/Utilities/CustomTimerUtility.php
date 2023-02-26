@@ -194,7 +194,7 @@ class CustomTimerUtility
      * @param YamlFileLoader $yamlFileLoader
      * @return array<mixed>
      */
-    public static function readListFromYamlFilesInFal(
+    public static function readListsFromFalFiles(
         string $yamlFalParam,
         string $relationTable,
         int $relationUid,
@@ -210,7 +210,7 @@ class CustomTimerUtility
             TimerConst::TIMER_FIELD_FLEX_ACTIVE,
             $relationUid
         );
-        $rawResult = [];
+        $result = [];
 
         /** @var FileReference $fileObject */
         foreach ($fileObjects as $fileObject) {
@@ -220,7 +220,7 @@ class CustomTimerUtility
                 trim($pathStorage, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR .
                 trim($filePathInStorage, DIRECTORY_SEPARATOR);
             if (file_exists($filePath)) {
-                $rawResult[] = $yamlFileLoader->load($filePath);
+                $result[] = self::readFilePathIntoArray($filePath, $yamlFileLoader);
             } else {
                 if ($logger !== null) {
                     $logger->warning(
@@ -232,68 +232,68 @@ class CustomTimerUtility
                 }
             }
         }
-        return $rawResult;
+        return $result;
     }
 
     /**
-     * @param string $yamlFilePath
+     * @param string $filePath
      * @param YamlFileLoader $yamlFileLoader
      * @param ValidateYamlInterface|null $validatorObject
      * @param LoggerInterface|null $logger
      * @return array<mixed>
      * @throws TimerException
      */
-    public static function readListFromYamlFileFromPathOrUrl(
-        string $yamlFilePath,
+    public static function readListFromFileOrUrl(
+        string $filePath,
         YamlFileLoader $yamlFileLoader,
         ?ValidateYamlInterface $validatorObject = null,
         ?LoggerInterface $logger = null
     ): array {
-        if (file_exists($yamlFilePath)) {
-            $yamlFilePathNew = realpath($yamlFilePath);
-            if (!file_exists($yamlFilePathNew)) {
+        if (file_exists($filePath)) {
+            $filePathNew = realpath($filePath);
+            if (!file_exists($filePathNew)) {
                 return [];
             }
-            $result = $yamlFileLoader->load($yamlFilePathNew);
+            $result = self::readFilePathIntoArray($filePathNew, $yamlFileLoader);
         } else {
             // Don't allow relative pathes or pathes with '//' or pathes with '\\'
-            if (GeneralUtility::validPathStr($yamlFilePath)) {
-                if (strpos($yamlFilePath, 'FILE:') === 0) {
-                    $yamlFilePath = substr($yamlFilePath, strlen('FILE:'));
+            if (GeneralUtility::validPathStr($filePath)) {
+                if (strpos($filePath, 'FILE:') === 0) {
+                    $filePath = substr($filePath, strlen('FILE:'));
                 }
-                $yamlFilePathNew = GeneralUtility::getFileAbsFileName($yamlFilePath);
-                if (!file_exists($yamlFilePathNew)) {
+                $filePathNew = GeneralUtility::getFileAbsFileName($filePath);
+                if (!file_exists($filePathNew)) {
                     return [];
                 }
-                $result = $yamlFileLoader->load($yamlFilePathNew);
-            } elseif (preg_match('@^http[s]://@i', $yamlFilePath) === 1) {     // open accessible url
-                $yamlFileData = file_get_contents($yamlFilePath);
-                if ($yamlFileData === false) {
+                $result = self::readFilePathIntoArray($filePathNew, $yamlFileLoader);
+            } elseif (preg_match('@^http[s]://@i', $filePath) === 1) {     // open accessible url
+                $fileData = file_get_contents($filePath);
+                if ($fileData === false) {
                     if ($logger !== null) {
                         $logger->warning(
-                            'The file `' . $yamlFilePath . '` could not be found. Perhaps the server is down.' .
+                            'The file `' . $filePath . '` could not be found. Perhaps the server is down.' .
                             'Check your yaml-definition or the existence of the file on the foreign server.',
-                            [$yamlFilePath, 'open accessible url']
+                            [$filePath, 'open accessible url']
                         );
                     }
                     return [];
                 }
-                $result = Yaml::parse($yamlFileData);
-            } elseif (preg_match('@^(.+):(.+):http[s]://@i', $yamlFilePath) === 1) { // url secured by server password
+                $result = self::parseFileDateIntoArray($filePath, $fileData);
+            } elseif (preg_match('@^(.+):(.+):http[s]://@i', $filePath) === 1) { // url secured by server password
                 $splitList = array_filter(
                     array_map(
                         'trim',
-                        explode(':', $yamlFilePath, 3)
+                        explode(':', $filePath, 3)
                     )
                 );
                 if ((count($splitList) !== 3) ||
                     (empty($splitList[0])) ||
                     (empty($splitList[1])) ||
                     (strpos($splitList[2], 'https://') === 0) ||
-                    (strpos($yamlFilePath, 'http://') === 0)
+                    (strpos($filePath, 'http://') === 0)
                 ) {
                     throw new TimerException(
-                        'The parameter `' . $yamlFilePath . '` is not correctly defined. ' .
+                        'The parameter `' . $filePath . '` is not correctly defined. ' .
                         'If you want to get a yaml-file from a password-protected server, you must use the structure ' .
                         '`<username>:<password>:<url>`. There is no colon allowed in the username and in the password. ' .
                         'The `<username>` and the `<password>` must not empty. There is no colon allowed in the ' .
@@ -307,22 +307,22 @@ class CustomTimerUtility
                         'header' => 'Authorization: Basic ' . base64_encode("$splitList[0]:$splitList[1]"),
                     ],
                 ]);
-                $yamlFileData = file_get_contents($splitList[2], false, $context);
-                if ($yamlFileData === false) {
+                $fileData = file_get_contents($splitList[2], false, $context);
+                if ($fileData === false) {
                     if ($logger !== null) {
                         $logger->warning(
-                            'The file `' . $yamlFilePath . '` did not exist. ' .
+                            'The file `' . $filePath . '` did not exist. ' .
                             'Check your yaml-definition or the existence of the server or the existence of the file ' .
                             'on the foreign server.',
-                            [$yamlFilePath, 'by server-password secured url']
+                            [$filePath, 'by server-password secured url']
                         );
                     }
                     return [];
                 }
-                $result = Yaml::parse($yamlFileData);
+                $result = self::parseFileDateIntoArray($filePath, $fileData);
             } else {
                 throw new TimerException(
-                    'Your parameter `' . $yamlFilePath . '` could not resolved. ' .
+                    'Your parameter `' . $filePath . '` could not resolved. ' .
                     'Allowed are one of the following file-allocation-types. You can firstly define an existing path on the ' .
                     'server, which may contain relativ definitions. You can secondly use the TYPO3-filepath-definition ' .
                     'containing the prefix `EXT:`. You can thirdly use a simple URL beginning with `http://` or `https://`, if ' .
@@ -336,7 +336,71 @@ class CustomTimerUtility
         }
         // validate the yaml-structure or throw an exception
         if ($validatorObject !== null) {
-            $validatorObject->validateYamlOrException($result, ($yamlFilePathNew ?? '-- undefined --'));
+            $validatorObject->validateYamlOrException($result, ($filePathNew ?? '-- undefined --'));
+        }
+        return $result;
+    }
+
+    /**
+     * @param $filePathNew
+     * @param YamlFileLoader $yamlFileLoader
+     * @param string $filePath
+     * @return array|string
+     * @throws TimerException
+     */
+    protected static function readFilePathIntoArray($filePathNew, YamlFileLoader $yamlFileLoader)
+    {
+        $infos = pathinfo($filePathNew);
+        switch ($infos['extension']) {
+            case 'yaml':
+            case 'yml':
+                $result = $yamlFileLoader->load($filePathNew);
+                break;
+            case 'csv':
+                $csvString = CsvYamlJsonMapperUtility::readCsvFile($filePathNew);
+                $rawCsvArray = CsvYamlJsonMapperUtility::mapCsvToRawArray($csvString);
+                $result = CsvYamlJsonMapperUtility::reorganizeSimpleArrayByHeadline($rawCsvArray);
+                break;
+            case 'json':
+                $result = CsvYamlJsonMapperUtility::readJsonFile($filePathNew);
+                break;
+            default:
+                throw new TimerException(
+                    'The file `' . $filePathNew . '`(reorganized) must have the extenion `yaml`,`yml`,`csv` or `json`. ' .
+                    'The extension is needed, to detect the dateformat (yaml, csv, json) of the file. ' .
+                    'Other formats are not supported. check the spellings of the path. If you think, ' .
+                    'that some runs wrong, then make a screenshot ' .
+                    'and inform the wewbmaster ',
+                    1669454592
+                );
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $fileData
+     * @return mixed|mixed[]|string
+     * @throws TimerException
+     */
+    protected static function parseFileDateIntoArray(string $filePath, string $fileData)
+    {
+        $hashPos = strrpos($filePath, '#');
+        $format = '';
+        if ($hashPos > 0) {
+            $format = substr($filePath, $hashPos);
+        }
+        switch ($format) {
+            case 'csv':
+                $rawCsvArray = CsvYamlJsonMapperUtility::mapCsvToRawArray($fileData);
+                $result = CsvYamlJsonMapperUtility::reorganizeSimpleArrayByHeadline($rawCsvArray);
+                break;
+            case 'json' :
+                $result = CsvYamlJsonMapperUtility::mapJsonToArray($fileData);
+                break;
+            default:
+                $result = Yaml::parse($fileData);
+                break;
         }
         return $result;
     }

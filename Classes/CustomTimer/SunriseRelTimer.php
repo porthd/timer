@@ -635,10 +635,10 @@ class SunriseRelTimer implements TimerInterface
     protected function defineLongitudeLatitudeByParams(array $params, int $gap): array
     {
         $latitude = (float)(
-        ((array_key_exists(
-                self::ARG_LATITUDE,
-                $params
-            )) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
+            ((array_key_exists(
+                    self::ARG_LATITUDE,
+                    $params
+                )) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
             ($params[self::ARG_LATITUDE]) :
             (self::DEFAULT_LATITUDE)
         );

@@ -1,1 +1,1 @@
-@import 'EXT:timer/Configuration/TypoScript/PeriodlistConstants/Periodlist.typoscript'
+@import 'EXT:timer/Configuration/TypoScript/Periodlist/PeriodlistConstants/Periodlist.typoscript'

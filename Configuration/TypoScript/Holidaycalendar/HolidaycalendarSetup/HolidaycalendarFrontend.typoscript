@@ -1,0 +1,199 @@
+tt_content.timer_holidaycalendar >
+tt_content.timer_holidaycalendar < lib.holidaycalendar.contentElement
+tt_content.timer_holidaycalendar {
+
+    templateName = Holidaycalendar
+
+    dataProcessing {
+        10 = Porthd\Timer\DataProcessing\HolidaycalendarProcessor
+        10 {
+
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            #!!! every parameter will support the typoscript-functionality `stdWrap` !!!
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            #!!! The chinese-calendar is not supported yet, because the php is buggy !!!
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            # regular if syntax
+            #if.isTrue.field = record
+
+            # This definition will override the system-definition and take this locale for the definition of locales.
+            # You should normally not use this, becuse the locale should be defined in your LocalConfiguration.php.
+            # The value will be seen in see GLOBALS['TYPO3_CONF_VAR']['SYS']['systemLocale'].
+            # if there is no information and if this definition is missing, the locale 'en_GB.utf-8' will be used.
+            locale = de_DE.utf-8
+            # default is `gregorian`. Allowed are all calendars, which your intlDateFormatter in your php can handle,
+            #    and the julian calendar
+            calendar = gregorian
+            # default is the timezone of your TYPO3-System (normally defined in the LocalConfiguration.php or
+            #   see GLOBALS['TYPO3_CONF_VAR']['SYS']['phpTimeZone']
+            timezone = Europe/Berlin
+            start {
+                # last year
+                year.stdWrap.cObject = TEXT
+                year.stdWrap.cObject {
+                    value.stdWrap.cObject = TEXT
+                    value.stdWrap.cObject {
+                        data = date:Y
+                        intval = 1
+                        wrap = |
+                    }
+
+                    prioriCalc = 1
+                }
+
+                # inclusive monthnumber,  if missing, then it is equal to current month
+                month = 1
+                # inclusive daynumber,  if missing, then it is equal to current day
+                day = 1
+            }
+
+            stop {
+                # second next year
+                year.stdWrap.cObject = TEXT
+                year.stdWrap.cObject {
+                    value.stdWrap.cObject = TEXT
+                    value.stdWrap.cObject {
+                        data = date:Y
+                        intval = 1
+                        wrap = |+2
+                    }
+
+                    prioriCalc = 1
+                }
+
+                # inclusive monthnumber,  if missing, then it is equal to startmonth
+                month = 1
+                # inclusive daynumber,  if missing, then it is equal to the startday
+                day = 1
+                # if `daybefore` is unequal to 0, then the date will be decremented by one day. So you can detect one year in a
+                #   foreign calendar without knowing the number of days in the last month.
+                # if `daybefore` is zero or if the value is missing, nothing will happen.
+                daybefore = 1
+            }
+
+            # the alias-file contain a list of alias-phrases, which are merged nondestructive to the `add` part of each related holiday-definition,  under the attribute `aliasDateRel`.
+            # this parameterblock is optional
+            # direct path, EXT:Path or URL to the file with the alias-definition
+            # the definition of `aliasConfig` will overrule the definition of `aliasPath`.
+            #            aliasPath = directPath
+            #            aliasConfig {
+            #                flexDbField = pi_flexform
+            #                pathFlexField = aliasPath
+            #                falFlexField = aliasPath
+            #            }
+
+            # the holiday file can contain a list of alias-phrases, which are merged nondestructive to the `add` part of each related holiday-definition, under the attribute `aliasDateRel`
+            # the holiday file has a list of holiday- or eventday-definition under the attribute 'calendarDateRel'
+            # the definition of `holidayConfig` will overrule the definition of `holidayPath`.
+            # the missing of both (`holidayPath` and `holidayConfig`) will cause an exception.
+            # direct path, EXT:Path or URL to the file with the holiday-definition
+            holidayPath = EXT:timer/Resources/Public/Csv/ExcelLikeListForHolidays.csv
+            holidayConfig {
+                flexDbField = pi_flexform
+                pathFlexField = holidayFilePath
+                falFlexField = holidayFalRelation
+            }
+
+            as = holidayList
+        }
+
+        20 = Porthd\Timer\DataProcessing\MappingProcessor
+        20 {
+
+            # regular if syntax
+            #if.isTrue.field = record
+
+            inputfield = holidayList
+            # Each field must part of holidaycalendar
+            # allowed types are
+            #    `constant`(=pretext.posttext),
+            #    `index`(=pretext.<indexOfDataRow>.posttext)
+            #    `datetime` (=dateTimeObject->format(posttext); dateTimeObject is in the Field, which is declared be pretext)
+            # every entry must be some formal
+            #            generic {
+            #                id {
+            #                    pretext = event
+            #                    posttext = holiday
+            #                    type = index
+            #                }
+            #
+            #                calendarId {
+            #                    pretext = cal1
+            #                    posttext =
+            #                    type = constant
+            #                }
+            #                start {
+            #                    pretext = date
+            #                    posttext = Y-m-d
+            #                    type = constant
+            #                }
+            #            }
+            generic {
+                category {
+                    pretext = allday
+                    posttext =
+                    type = constant
+                }
+
+                start {
+                    pretext = date
+                    posttext = Y-m-d
+                    type = datetime
+                }
+
+                end {
+                    pretext = date
+                    posttext = Y-m-d
+                    type = datetime
+                }
+            }
+
+            mapping {
+                # sourceFieldName in holidaycalendar(see inputfield) => targetFieldName
+                #                cal {
+                #                    identifier = id
+                #                    title = title
+                #                    eventtitle = eventtitle
+                #                    tag = calendarId
+                #                }
+
+            }
+
+            # outputformat has the values `array`,`json`
+            # if the outputformat is unknown, json will be the default
+            outputFormat = json
+            # output variable with the resulting list
+            # default-value is `holidaycalendar`
+            asString = holidaycalendarJson
+
+        }
+
+        30 = Porthd\Timer\DataProcessing\FlexToArrayProcessor
+        30 {
+            # regular if syntax
+            #if.isTrue.field = record
+
+            # field with flexform-array
+            # default is `tx_timer_timer`
+            field = pi_flexform
+
+            # field with selector for flexform-array
+            # default is 'tx_timer_selector'
+            # selectorField = tx_timer_selector
+
+            # A definition of flattenkeys will override the default definition.
+            #   the attributes `timer` and `general` are used as sheet-names in my customTimer-flexforms
+            #   The following defintion is the default: `data,general,timer,sDEF,lDEF,vDEF`
+            flattenkeys = data,general,timer,sDEF,lDEF,vDEF
+
+            # output variable with the resulting list
+            as = flexlist
+        }
+    }
+
+}
+
+lib.holidaycalendar.main = TEXT
+lib.holidaycalendar.main.current = 1
+lib.holidaycalendar.main.dataWrap = {field:tx_timer_timer}

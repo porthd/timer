@@ -6,3 +6,9 @@ useInternalTimer = 8191
 baseTimeZone = Europe/Berlin
 # cat=timer/timerBasic; type=string; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.file.yamlHolidayList
 yamlHoliydayList = FILE:EXT:timer/Configuration/Yaml/CalendarDateRelTimer.yaml
+# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.useTimersimul
+flagTimersimul = true
+# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.usePeriodlist
+flagPeriodlist = true
+# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.useHolidaycalendar
+flagHolidaycalendar = true

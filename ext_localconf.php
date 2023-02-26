@@ -66,6 +66,7 @@ call_user_func(
                      'tx_timer-timer' => 'EXT:timer/Resources/Public/Icons/icon_timer.svg',
                      'tx_timer_timersimul' => 'EXT:timer/Resources/Public/Icons/Content/timersimul.svg',
                      'tx_timer_periodlist' => 'EXT:timer/Resources/Public/Icons/Content/periodlist.svg',
+                     'tx_timer_holidaycalendar' => 'EXT:timer/Resources/Public/Icons/Content/holidaycalendar.svg',
                  ] as $name => $path
         ) {
             $iconRegistry->registerIcon(
@@ -117,18 +118,60 @@ call_user_func(
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
 
-            $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_timersimul'] = 'EXT:timer/Configuration/RTE/TimerTimersimul.yaml';
-            $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_periodlist'] = 'EXT:timer/Configuration/RTE/TimerPeriodlist.yaml';
-            ExtensionManagementUtility::addPageTSConfig(
-                "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentElementWizard.tsconfig'" .
-                "\n" .
+
+            $tsConfig =
                 "@import 'EXT:timer/Configuration/TsConfig/Page/BackendPreview.tsconfig'" .
                 "\n" .
-                "@import 'EXT:timer/Configuration/TsConfig/Page/RteTimerSimul.tsconfig'"
-            );
+                "@import 'EXT:timer/Configuration/TsConfig/Page/RteTimerSimul.tsconfig'";
 
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST ] ??= [];
-            if (!array_key_exists('frontend', $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
+            if (!empty($timerConfig['flagTimersimul'])) {
+                $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_timersimul'] = 'EXT:timer/Configuration/RTE/TimerTimersimul.yaml';
+                $tsConfig .= "\n" . "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentTimersimul.tsconfig'";
+
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+                    TimerConst::EXTENSION_NAME,
+                    'setup',
+                    "@import 'EXT:timer/Configuration/TypoScript/Timersimul/setup.typoscript'" . "\n"
+                );
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+                    TimerConst::EXTENSION_NAME,
+                    'constants',
+                    "@import 'EXT:timer/Configuration/TypoScript/Timersimul/constants.typoscript'" . "\n"
+                );
+            }
+            if (!empty($timerConfig['flagPeriodlist'])) {
+                $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_periodlist'] = 'EXT:timer/Configuration/RTE/TimerPeriodlist.yaml';
+                $tsConfig .= "\n" . "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentPeriodlist.tsconfig'";
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+                    TimerConst::EXTENSION_NAME,
+                    'setup',
+                    "@import 'EXT:timer/Configuration/TypoScript/Periodlist/setup.typoscript'" . "\n"
+                );
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+                    TimerConst::EXTENSION_NAME,
+                    'constants',
+                    "@import 'EXT:timer/Configuration/TypoScript/Periodlist/constants.typoscript'" . "\n"
+                );
+            }
+            if (!empty($timerConfig['flagHolidaycalendar'])) {
+                $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_holidaycalendar'] = 'EXT:timer/Configuration/RTE/TimerHolidaycalendar.yaml';
+                $tsConfig .= "\n" . "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentHolidaycalendar.tsconfig'";
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+                    TimerConst::EXTENSION_NAME,
+                    'setup',
+                    "@import 'EXT:timer/Configuration/TypoScript/Holidaycalendar/setup.typoscript'" . "\n"
+                );
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+                    TimerConst::EXTENSION_NAME,
+                    'constants',
+                    "@import 'EXT:timer/Configuration/TypoScript/Holidaycalendar/constants.typoscript'" . "\n"
+                );
+            }
+            ExtensionManagementUtility::addPageTSConfig($tsConfig);
+
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
+            if (!array_key_exists('frontend',
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = VariableFrontend::class;
             }
         }

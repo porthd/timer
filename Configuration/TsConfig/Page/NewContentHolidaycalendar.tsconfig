@@ -1,0 +1,15 @@
+mod.wizards.newContentElement.wizardItems.common {
+    elements {
+        timer_holidaycalendar {
+            iconIdentifier = tx_timer_holidaycalendar
+            title = LLL:EXT:timer/Resources/Private/Language/locallang_db_new_content_el.xlf:wizards.newContentElement.holidaycalendar_title
+            description = LLL:EXT:timer/Resources/Private/Language/locallang_db_new_content_el.xlf:wizards.newContentElement.holidaycalendar_description
+            tt_content_defValues {
+                CType = timer_holidaycalendar
+            }
+        }
+    }
+
+    show := addToList(timer_holidaycalendar)
+}
+

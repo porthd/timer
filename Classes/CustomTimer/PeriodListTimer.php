@@ -541,14 +541,14 @@ INFOSYNTAX;
             return [];
         }
         // $this must allow the usage of the method `validateYamlOrException`
-        $fileResult = CustomTimerUtility::readListFromYamlFileFromPathOrUrl(
+        $fileResult = CustomTimerUtility::readListFromFileOrUrl(
             $params[self::ARG_YAML_PERIOD_FILE_PATH],
             $this->yamlFileLoader,
             $this,
             $this->logger
         );
         $fileResult = $fileResult[self::YAML_MAIN_KEY_PERIODLIST] ?? [];
-        $falRawResult = CustomTimerUtility::readListFromYamlFilesInFal(
+        $falRawResult = CustomTimerUtility::readListsFromFalFiles(
             $params[self::ARG_YAML_PERIOD_FAL_INFO],
             ($params[TimerConst::TIMER_RELATION_TABLE] ?? ''),
             ($params[TimerConst::TIMER_RELATION_UID] ?? 0),

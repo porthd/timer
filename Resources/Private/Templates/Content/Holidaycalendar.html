@@ -1,0 +1,102 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:timer="http://www.mobger.de/2019/timer"
+      data-namespace-typo3-fluid="true"
+>
+<head>
+    <f:comment>
+        <!--***************************************************************
+        *
+        *  Copyright notice
+        *
+        *  (c) 2023 Dr. Dieter Porth <info@mobger.de>
+        *
+        *  All rights reserved
+        *
+        *  This script is free software; you can redistribute it and/or modify
+        *  it under the terms of the GNU General Public License as published by
+        *  the Free Software Foundation; either version 3 of the License, or
+        *  (at your option) any later version.
+        *
+        *  The GNU General Public License can be found at
+        *  http://www.gnu.org/copyleft/gpl.html.
+        *
+        *  This copyright notice MUST APPEAR in all copies of the script!
+        *************************************************************** -->
+    </f:comment>
+</head>
+<body>
+
+<f:layout name="Typo3Default"/>
+
+<f:section name="Header">
+    <f:if condition="{gallery.position.noWrap} != 1">
+        <f:render partial="Header/All" arguments="{_all}"/>
+    </f:if>
+
+</f:section>
+<f:section name="Main">
+    <f:debug>{holidaycalendarJson}</f:debug>
+    <f:if condition="{holidaycalendarJson}">
+        <div id="calendar"
+             style="height: 600px;"
+             data-events='{holidaycalendarJson}'
+        ></div>
+        <f:if condition="{flexlist.calendarJsFilePath}">
+            <f:asset.script identifier="myHolidaycalendarFrame" src="{flexlist.calendarJsFilePath}"/>
+        </f:if>
+        <f:if condition="{flexlist.calendarAddJsFilePath}">
+            <f:asset.script identifier="myHolidaycalendarAddFrame" src="{flexlist.calendarAddJsFilePath}"/>
+        </f:if>
+        <f:if condition="{flexlist.customCalendarJsFilePath}">
+            <f:asset.script identifier="myHolidaycalendarCustom" src="{flexlist.customCalendarJsFilePath}"/>
+        </f:if>
+        <f:if condition="{flexlist.calendarCssFilePath}">
+            <f:asset.css identifier="myHolidaycalendarFrame" href="{flexlist.calendarCssFilePath}"/>
+        </f:if>
+        <f:if condition="{flexlist.customCalendarCssFilePath}">
+            <f:asset.css identifier="myHolidaycalendarCustom" href="{flexlist.customCalendarCssFilePath}"/>
+        </f:if>
+    </f:if>
+
+    <div
+        class="ce-textpic ce-{gallery.position.horizontal} ce-{gallery.position.vertical}{f:if(condition: gallery.position.noWrap, then: ' ce-nowrap')}">
+        <f:if condition="{gallery.position.vertical} != 'below'">
+            <f:render partial="Media/Gallery" arguments="{_all}"/>
+        </f:if>
+
+        <f:if condition="{data.bodytext}">
+            <f:then>
+                <div class="ce-bodytext">
+                    <f:if condition="{gallery.position.noWrap}">
+                        <f:render partial="Header/All" arguments="{_all}"/>
+                    </f:if>
+                    <f:format.html>{data.bodytext}</f:format.html>
+                </div>
+            </f:then>
+            <f:else>
+                <f:if condition="{gallery.position.noWrap}">
+                    <f:if condition="{data.header}">
+                        <div class="ce-bodytext">
+                            <f:render partial="Header/All" arguments="{_all}"/>
+                        </div>
+                    </f:if>
+                </f:if>
+            </f:else>
+        </f:if>
+
+        <f:if condition="{HolidaycalendarList}">
+            <f:render partial="Periodlist"
+                      section="Main"
+                      arguments="{periodlist:periodlist}"
+            />
+        </f:if>
+
+        <f:if condition="{gallery.position.vertical} == 'below'">
+            <f:render partial="Media/Gallery" arguments="{_all}"/>
+        </f:if>
+    </div>
+
+</f:section>
+</body>
+</html>
+

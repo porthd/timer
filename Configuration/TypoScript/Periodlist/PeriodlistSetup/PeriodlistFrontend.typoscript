@@ -11,20 +11,20 @@ tt_content.timer_periodlist {
             # regular if syntax
             #if.isTrue.field = record
 
-#            limit {
-#                lower = TEXT
-#                lower {
-#                    data = date:U
-#                    strftime = %Y-%m-%d %H:%M:%S
-#
-#                }
-#
-#                #upper = TEXT
-#                #upper {
-#                #    data = date:U
-#                #    strftime = %Y-%m-%d %H:%M:%S#
-#                #}
-#            }
+            #            limit {
+            #                lower = TEXT
+            #                lower {
+            #                    data = date:U
+            #                    strftime = %Y-%m-%d %H:%M:%S
+            #
+            #                }
+            #
+            #                #upper = TEXT
+            #                #upper {
+            #                #    data = date:U
+            #                #    strftime = %Y-%m-%d %H:%M:%S#
+            #                #}
+            #            }
 
             dateToString {
                 # startJson is the targetfieldName in the following dataprocessor mappingProcessor
@@ -36,14 +36,15 @@ tt_content.timer_periodlist {
                     #   These fields are datetime-object and they are generated from the estimated fields `start`and `stop` by this dataprocessor
                     source = startDatetime
                 }
-           #     endJson {
-           #         format = Y-m-d
-           #         source = stopDatetime
-           #     }
+
+                #     endJson {
+                #         format = Y-m-d
+                #         source = stopDatetime
+                #     }
             }
 
             # define the list by length
-             maxCount = 100
+            maxCount = 100
 
             # output variable with the resulting list
             # default-value is `periodlist`
@@ -69,6 +70,7 @@ tt_content.timer_periodlist {
                     posttext = holiday
                     type = index
                 }
+
                 calendarId {
                     pretext = cal1
                     posttext =
@@ -99,7 +101,7 @@ tt_content.timer_periodlist {
 
             # field with flexform-array
             # default is `tx_timer_timer`
-            field = tx_timer_timer
+            field = pi_flexform
 
             # field with selector for flexform-array
             # default is 'tx_timer_selector'

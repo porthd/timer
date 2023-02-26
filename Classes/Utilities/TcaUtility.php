@@ -56,7 +56,7 @@ class TcaUtility
 
     // predefined list of obsolete XML-tags in flexform, which can be removed in flattened flexform-arrays.
     // flattened flexform-arrays are easier to handle in the frontend.
-    protected const DEFAULT_FLATTEN_KEYS_LIST = ['data', 'general', 'timer', 'sDEF', 'lDEF', 'vDEF',];
+
 
 
     /**
@@ -209,7 +209,7 @@ class TcaUtility
      * @param array<int,string> $removeList
      * @return array|mixed
      */
-    public static function flexformArrayFlatten($array, $removeList = self::DEFAULT_FLATTEN_KEYS_LIST)
+    public static function flexformArrayFlatten($array, $removeList = TimerConst::DEFAULT_FLATTEN_KEYS_LIST)
     {
         if (!is_array($array)) {
             return $array;

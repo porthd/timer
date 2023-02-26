@@ -48,6 +48,8 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class ConvertDateUtility
 {
     public const DEFAULT_CALENDAR = 'gregorian';
+    public const DEFAULT_JULIAN_CALENDAR = 'julian';
+    public const DEFAULT_HEBREW_CALENDAR = 'hebrew';
     public const DEFAULT_LIST_DEFECTIVE_CALENDAR = ['chinese'];
     public const DEFAULT_LOCALE = 'en';
     protected const MAP_ESCAPE_CHAR = '\\';
@@ -182,6 +184,33 @@ class ConvertDateUtility
     /**
      * @param string $locale
      * @param string $calendar
+     * @param string $timeZoneName
+     * @return void
+     * @throws TimerException
+     */
+    public static function allowedLocaleCalendarTimezone(string $locale, string $calendar, string $timeZoneName)
+    {
+        if ((!in_array($calendar, self::getAllCalendars())) ||
+            (!in_array($locale, self::getAllLocales())) ||
+            (!self::isValidTimezoneId($timeZoneName))
+        ) {
+            throw new TimerException(
+                'The needed calandar `' . $calendar . '`. ' . 'Or the needed locale `' . $locale . '` is not defined. ' .
+                '$Or the needed timeZone `' . $timeZoneName . '` is not defined. ' .
+                'Check for type error or typecast errors. ' .
+                ' Otherwise make a screenshot and inform the webmaster.' . "\n" .
+                'Allowed Calendars: (' . implode(',', self::$calendars) . ')' . "\n" .
+                'Allowed locales: (' . implode(',', self::$locales) . ')' . "\n" .
+                'Allowed Timezones: (' . implode(',', DateTimeZone::listIdentifiers()) . ')',
+                1673710564
+            );
+        }
+
+    }
+
+    /**
+     * @param string $locale
+     * @param string $calendar
      * @param string $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss
      * @param string $timeZoneName
      * @return DateTime
@@ -193,6 +222,7 @@ class ConvertDateUtility
         string $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss,
         string $timeZoneName = TimerConst::INTERNAL_TIMEZONE
     ): DateTime {
+
         if ($calendar === TimerConst::ADDITIONAL_CALENDAR_JULIAN) {
             $calendar = TimerConst::FAKE_CALENDAR_JULIAN_BY_GREGORIAN;
             $list = explode(' ', $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss);
@@ -218,12 +248,12 @@ class ConvertDateUtility
             $list[0] = implode('/', [$year, $month, $day]);
             $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss = implode(' ', $list);
         }
-
+        $timeZone = new DateTimeZone($timeZoneName);
         $traditionalFormatter = new IntlDateFormatter(
             $locale . '@calendar=' . $calendar,
             IntlDateFormatter::SHORT,
             IntlDateFormatter::SHORT,
-            $timeZoneName,
+            $timeZone,
             IntlDateFormatter::TRADITIONAL,
             self::INTL_DATE_FORMATTER_DEFAULT_PATTERN
         );
@@ -232,9 +262,9 @@ class ConvertDateUtility
         if ($parsedTimestamp === false) {
             throw new TimerException(
                 'The IntlDateFormatter give be an false. The date `' .
-                $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss . '` could not be rekognized.' .
-                ' Perhaps datestring did not fullfill the format `year/mobnth/day hour/minute/second`.' .
-                ' Make a Screenshot and inform the webmaster.',
+                $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss . '` could not be recognized.' .
+                ' Perhaps datestring did not fullfill the format `year/month/day hour:minute:second`.' .
+                ' Make a screenshot and inform the webmaster.',
                 1675003765
             );
         }
@@ -272,10 +302,9 @@ class ConvertDateUtility
         string $locale,
         string $calendar,
         DateTime $dateTime,
-        bool $flagFormat = false,
+        bool $flagFormat = true,
         string $icuFormat = self::INTL_DATE_FORMATTER_DEFAULT_PATTERN
-    ): string
-    {
+    ): string {
         $myDate = clone $dateTime;
         if ($calendar === TimerConst::ADDITIONAL_CALENDAR_JULIAN) {
             $calendar = TimerConst::FAKE_CALENDAR_JULIAN_BY_GREGORIAN;
@@ -303,7 +332,7 @@ class ConvertDateUtility
             $locale . '@calendar=' . $calendar,
             IntlDateFormatter::SHORT,
             IntlDateFormatter::SHORT,
-            $myDate->getTimezone()->getName(),
+            $myDate->getTimezone(),
             IntlDateFormatter::TRADITIONAL,
             $format
         );
@@ -351,10 +380,10 @@ class ConvertDateUtility
                 'Allowed Calendars: (' . implode(',', self::$calendars) . ')' .
                 'Allowed locales: (' . implode(',', self::$locales) . ')' .
                 'Allowed Timezones: (' . implode(',', DateTimeZone::listIdentifiers()) . ')',
-                1673710564
+                1673711486
             );
         }
-        if ($calendar === 'gregorian') {
+        if ($calendar === self::DEFAULT_CALENDAR) {
             $cal = IntlGregorianCalendar::createInstance(new DateTimeZone($timeZone), $locale);
             $formatter = new IntlDateFormatter(
                 $locale,

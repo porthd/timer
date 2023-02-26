@@ -76,7 +76,7 @@ class TcaService
             ->get(TimerConst::EXTENSION_NAME);
         $pathYamlHolidayList = $timerConfig[self::CONFIG_PATH_VARIABLE];
         $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
-        $yamlList = CustomTimerUtility::readListFromYamlFileFromPathOrUrl($pathYamlHolidayList, $yamlFileLoader);
+        $yamlList = CustomTimerUtility::readListFromFileOrUrl($pathYamlHolidayList, $yamlFileLoader);
         $yamlCalendarList = $yamlList[self::YAML_CALENDAR_DATE_REL];
         array_walk($yamlCalendarList, function (&$value, $key) {
             $value = [

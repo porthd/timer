@@ -1,4 +1,3 @@
-
 tt_content.timer_timersimul >
 tt_content.timer_timersimul < lib.timersimul.contentElement
 tt_content.timer_timersimul {

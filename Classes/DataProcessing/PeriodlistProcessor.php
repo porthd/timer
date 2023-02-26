@@ -106,7 +106,6 @@ class PeriodlistProcessor implements DataProcessorInterface
     protected const ATTR_LIMIT_DOT_UPPER = 'upper';
     protected const ATTR_FLAG_START = 'flagStart';
     protected const ATTR_MAX_COUNT = 'maxCount';
-    protected const ATTR_TIME_ZONE_DEFAULT = 'defaultZone';
     protected const ATTR_RESULT_VARIABLE_NAME = 'as';
     protected const ADDITIONAL_POST_KEY_FOR_START_DATETIME = 'startDatetime';
     protected const ADDITIONAL_POST_KEY_FOR_STOP_DATETIME = 'stopDatetime';
@@ -171,10 +170,11 @@ class PeriodlistProcessor implements DataProcessorInterface
         $paramList[TimerConst::TIMER_RELATION_TABLE] = 'tt_content';
         $paramList[TimerConst::TIMER_RELATION_UID] = (int)$processedData['data']['uid'];
         $yamlFile = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH];
-        $rawResultFile = CustomTimerUtility::readListFromYamlFileFromPathOrUrl($yamlFile, $yamlFileLoader, $periodListTimer, $this->logger);
+        $rawResultFile = CustomTimerUtility::readListFromFileOrUrl($yamlFile, $yamlFileLoader, $periodListTimer,
+            $this->logger);
         $rawResultFile = $rawResultFile[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST] ?? [];
         $yamlFal = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FAL_INFO];
-        $rawResultFalList = CustomTimerUtility::readListFromYamlFilesInFal(
+        $rawResultFalList = CustomTimerUtility::readListsFromFalFiles(
             $yamlFal,
             $paramList[TimerConst::TIMER_RELATION_TABLE],
             $paramList[TimerConst::TIMER_RELATION_UID],

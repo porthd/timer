@@ -1544,7 +1544,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             return [];
         }
         // $this must the method `validateYamlOrException`
-        $result = CustomTimerUtility::readListFromYamlFileFromPathOrUrl(
+        $result = CustomTimerUtility::readListFromFileOrUrl(
             $params[$key],
             $yamlFileLoader,
             $this,

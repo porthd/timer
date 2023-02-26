@@ -5,71 +5,338 @@
 		  product-name="timer">
 		<header/>
 		<body>
+			<trans-unit id="calendarDate.christ.greg.christmasEve">
+				<source>christmas eve</source>
+				<target>Heiligabend</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.christmasWeekend">
+				<source>Christmas or following Monday</source>
+				<target>Weihnachten oder nachfolgender Montag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.boxingdayWeekend">
+				<source>Christmas (2nd day) or following Monday</source>
+				<target>Weihnachten (2. Tag) oder nachfolgender Montag</target>
+			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.christmas">
-				<source>christmas</source>
+				<source>Christmas</source>
 				<target>Weihnachten</target>
 			</trans-unit>
-			<trans-unit id="calendarDate.cult.greg.newyear">
-				<source>new year</source>
-				<target>Neujahr</target>
+			<trans-unit id="calendarDate.christ.greg.christmasSecondDay">
+				<source>Christmas (Day 2)</source>
+				<target>Weihnachten (2. Tag)</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.cult.greg.silvester">
-				<source>silvester</source>
+				<source>New Year's Eve</source>
 				<target>Silvester</target>
 			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.newyear">
+				<source>New Year or following Monday</source>
+				<target>Neujahr oder nachfolgender Montag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.newyear">
+				<source>New Year</source>
+				<target>Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.holyThreeKings">
+				<source>Holy Three Kings</source>
+				<target>Heilige drei Könige</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mariapregnant">
+				<source>Candlemas</source>
+				<target>Mariä Lichtmeß</target>
+			</trans-unit>
 			<trans-unit id="calendarDate.eco.greg.valentinsday">
-				<source>Valentine's Day (Flower Day)</source>
-				<target>Valentinstag (Tag der Blumen)</target>
+				<source>valentines day</source>
+				<target>Valentinstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.eco.greg.WomensShrovetide">
+				<source>Women's Shrovetide</source>
+				<target>Weiberfastnacht</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.rosemonday">
+				<source>Shrove Monday</source>
+				<target>Rosenmontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.carnival">
+				<source>carnival</source>
+				<target>Fasching</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.worldwomenday">
+				<source>International Women's Day</source>
+				<target>Weltweibertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.sanktpatrickday">
+				<source>St Patrick Day</source>
+				<target>St. Patrick Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.goodfriday">
+				<source>Good Friday</source>
+				<target>Karfreitag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.easter">
+				<source>Easter</source>
+				<target>Ostern</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.eastermonday">
+				<source>easter monday</source>
+				<target>Ostermontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.stupidity">
+				<source>World Stupid Day</source>
+				<target>Welttag der Dummheit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.walpurgis">
+				<source>Walpurgis Night</source>
+				<target>Walpurgisnacht</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.labourday">
+				<source>Labor Day</source>
+				<target>Tag der Arbeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.earlyMayBankHoliday">
+				<source>Early May bank holiday</source>
+				<target>Early May bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.freeByAllierts">
+				<source>à l'occasion de la fête de la liberation allée</source>
+				<target>à l'occasion de la fête de la libération alliée</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mothersday">
+				<source>Mother's Day</source>
+				<target>Muttertag</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.hist.greg.towlday">
 				<source>World Towel Day</source>
 				<target>Welthandtuchtag</target>
 			</trans-unit>
-			<trans-unit id="calendarDate.pol.greg.labourday">
-				<source>Labor Day</source>
-				<target>Tag der Arbeit</target>
+			<trans-unit id="calendarDate.hist.greg.springBankHoliday">
+				<source>Spring bank holiday</source>
+				<target>Spring bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ascension">
+				<source>Ascension Day</source>
+				<target>Christi Himmerlfahrt</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.pentecost">
+				<source>Pentecost</source>
+				<target>Pfingsten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.pentecostmonday">
+				<source>Whit Monday</source>
+				<target>Pfingstmontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.happycadaver">
+				<source>fCorpus Christi</source>
+				<target>fFronleichnam</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.revolte17june">
+				<source>Uprising of June 17th</source>
+				<target>Aufstand des 17. Juni</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.peterandpaul">
+				<source>peter and paul</source>
+				<target>Peter und Paul</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.orangemenSDay">
+				<source>Battle of the Boyne (Orangemen's Day)</source>
+				<target>Battle of the Boyne (Orangemen’s Day)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.grandNationfrance">
+				<source>National Day France</source>
+				<target>Nationalfeiertag Frankreich</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.augsburgepeacefete">
+				<source>Augsburg Peace Festival</source>
+				<target>Augsburger Friedensfest</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mariaascension">
+				<source>Assumption Day</source>
+				<target>Maria Himmelfahrt</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.springBankHoliday">
+				<source>Spring bank holiday</source>
+				<target>Spring bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.worldchildrenday">
+				<source>World Children's Day</source>
+				<target>Welt Kindertag</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.hist.greg.germanunity">
 				<source>Day of German unity</source>
 				<target>Tag der Deutschen Einheit</target>
 			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.haloween">
+				<source>Halloween</source>
+				<target>Haloween</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.reformationDay">
+				<source>Reformation Day</source>
+				<target>Reformationstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.allSaintsDay">
+				<source>all saints day</source>
+				<target>Allerheiligen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.fallOfTheWall">
+				<source>fall of the wall</source>
+				<target>Mauerfall</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.armistice1918">
+				<source>armistice; on the occasion of the armistice of 1918</source>
+				<target>Armistice; anlässlich des Waffenstillstands 1918</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.startcarneval">
+				<source>Beginning of the carnival season</source>
+				<target>Beginn der Karnevalszeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.sanktAndrewDay">
+				<source>Saint Andrew Day</source>
+				<target>St Andrew Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.dayOfPrayerAndRepentance">
+				<source>repentance and bed day</source>
+				<target>Buß und Betttag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.deadSunday">
+				<source>dead sunday</source>
+				<target>Totensonntag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.firstAdvent">
+				<source>1 Advent</source>
+				<target>1. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.nobelprice">
+				<source>Nobel Prize Ceremony</source>
+				<target>Nobelpreisverleihung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.secondAdvent">
+				<source>2nd Advent</source>
+				<target>2. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.thirdAdvent">
+				<source>3rd Advent</source>
+				<target>3. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.forthAdvent">
+				<source>4th Advent</source>
+				<target>4. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.chin.newyear">
+				<source>Chinese New Year</source>
+				<target>Chin. Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.buddh.indean.vesakh">
+				<source>Vesakh</source>
+				<target>Vesakh</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.buddh.indean.vesakhother">
+				<source>Vesakh (other)</source>
+				<target>Vesakh (other)</target>
+			</trans-unit>
 			<trans-unit id="calendarDate.rel.isl.lailatAlBaraa">
-				<source>Lailat al-Barā'a (Night of Forgiveness)</source>
-				<target>Lailat al-Barā'a (Nacht der Vergebung)</target>
+				<source>Laylat Al Baraat (Night of Forgiveness)</source>
+				<target>Laylat Al Baraat (Nacht der Vergebung)</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.rel.isl.ramadan">
-				<source>Ramadan (start; calculated)</source>
-				<target>Ramadan (Beginn; berechnet)</target>
+				<source>Ramadan (beginning of Lent)</source>
+				<target>Ramadan (Beginn der Fastenzeit)</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.rel.isl.laylatulQadr">
-				<source>Laylatul Qadr (Night of Destiny) [according to DITIB]</source>
-				<target>Laylatul Qadr (Nacht der Bestimmung) [laut DITIB]</target>
+				<source>Laylat al-Qadr (Night of Destiny)</source>
+				<target>Laylat al-Qadr (Nacht der Bestimmung)</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.rel.isl.eidAlFitr">
-				<source>Feast of Breaking the Fast or Eid al-Fitr or Sugar Feast</source>
-				<target>Fest des Fastenbrechens oder Eid al-Fitr oder Zuckerfest</target>
+				<source>Eid al-Fitr (Day of Breaking the Fast)</source>
+				<target>Eid al-Fitr (Tag des Fastenbrechens)</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.rel.isl.eidUlAdha">
-				<source>Islamic Festival of Sacrifice or Eid ul-Adha</source>
-				<target>Islamisches Opferfest oder Eid ul-Adha</target>
+				<source>Eid ul-Adha (Feast of Sacrifice)</source>
+				<target>Eid ul-Adha (Opferfest)</target>
 			</trans-unit>
-			<trans-unit id="calendarDate.rel.isl.eidUlAdha">
-				<source>Islamic New Year</source>
-				<target>Islamisches Neujahr</target>
-			</trans-unit>
-			<trans-unit id="calendarDate.rel.isl.eidUlAdha">
+			<trans-unit id="calendarDate.rel.isl.aschura">
 				<source>Ashura</source>
 				<target>Aschura</target>
 			</trans-unit>
-			<trans-unit id="calendarDate.rel.isl.mawlidAnNabiSunnits">
-				<source>Birthday of the Prophet (Maulid an-Nabī) [Sunnis]</source>
-				<target>Geburtstag des Propheten (Maulid an-Nabī) [Sunniten]</target>
+			<trans-unit id="calendarDate.rel.isl.newYear">
+				<source>Islamic New Year</source>
+				<target>Isl. Neujahr</target>
 			</trans-unit>
-			<trans-unit id="calendarDate.rel.isl.mawlidAnNabiSchiits">
-				<source>Birthday of the Prophet (Maulid an-Nabī) [Shia]</source>
-				<target>Geburtstag des Propheten (Maulid an-Nabī) [Schiiten]</target>
+			<trans-unit id="calendarDate.rel.isl.sunnit.MaulidAnNabi">
+				<source>Sunnis: Birthday of the Prophet (Maulid an-Nabī)</source>
+				<target>Sunniten: Geburtstag des Propheten (Maulid an-Nabī)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.schiit.MaulidAnNabi">
+				<source>Shias: Birthday of the Prophet (Maulid an-Nabī)</source>
+				<target>Schiiten: Geburtstag des Propheten (Maulid an-Nabī)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.ch.dayOfThanksPrayerAndRepentance">
+				<source>Federal Day of Thanksgiving, Repentance and Prayer</source>
+				<target>Eidgenössischer Dank-, Buss- und Bettag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.ch.genfPrayer">
+				<source>Geneva bed day</source>
+				<target>Genfer Betttag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.roschHaschana">
+				<source>Jewish New Year (Rosh Hashanah)</source>
+				<target>Jüd. Neujahrsfest (Rosch Haschana)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.roschHaschanaIi">
+				<source>Jewish Lunar New Year Day 2 (Rosh Hashanah II)</source>
+				<target>Jüd. Neujahrsfest 2. Tag (Rosch Haschana II)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomKippur">
+				<source>Day of Atonement (Yom Kippur)</source>
+				<target>Versöhnungstag (Jom Kippur)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.sukkot">
+				<source>Feast of Tabernacles (Sukkot)</source>
+				<target>Laubhüttenfest (Sukkot)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.scheminiAzeret">
+				<source>Closing Festival (Shemini Atzeret)</source>
+				<target>Schlussfest (Schemini Azeret)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.simchatTora">
+				<source>Torah joy festival (Simchat Torah)</source>
+				<target>Torafreudenfest (Simchat Tora)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.chanukka">
+				<source>Temple dedication (Hanukkah)</source>
+				<target>Tempelweihfest (Chanukka)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.tuBischwat">
+				<source>New Year Festival of Trees (Tu Bishvat)</source>
+				<target>Neujahrsfest der Bäume (Tu Bischwat)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.purim">
+				<source>Salvation of the Jews in Persia (Purim)</source>
+				<target>Errettung der Juden in Persien (Purim)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.pessach">
+				<source>Beginning of the 1st pilgrimage festival (Pessach / crossing)</source>
+				<target>Beginn des 1. Wallfahrtfestes (Pessach / Überschreitung)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.firstSchawuot">
+				<source>1st day of the Feast of Weeks (Shavuot)</source>
+				<target>1. Tag des Wochenfests (Schawuot)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.secondSchawuot">
+				<source>2nd day of the Feast of Weeks (Shavuot)</source>
+				<target>2. Tag des Wochenfests (Schawuot)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomHaschoa">
+				<source>Memorial Day for the Victims of the Shoah (Yom Hashoah)</source>
+				<target>Gedenktag an die Opfer der Schoa (Jom Haschoa)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomHaAzmaUt">
+				<source>Independence Day (Yom Ha'azma'ut)</source>
+				<target>Unabhängigkeitstag (Jom Ha’azma’ut)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomJeruschalajim">
+				<source>Jerusalem Day (Yom Yerushalayim)</source>
+				<target>Jerusalemtag (Jom Jeruschalajim)</target>
 			</trans-unit>
 		</body>
 	</file>
 </xliff>
-

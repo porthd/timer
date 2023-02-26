@@ -159,7 +159,10 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   auf Stundenbasis zu unerwarteten Ergebnissen führen kann.
   (ganzen Tag in jedem Jahr zum Geburtstag, jede Woche für 120 Minuten bis 12:00 ab dem 13.5.1970, ..)
 * DefaultTimer - Defaulttimer/Nullelement
-* EasterRelTimer - Bestimmt den aktiven Zeitraum relativ zu wichtigen deutschen Feiertagen (Neujahr, Silvester, Welt-Handtuch-Tag, Tag-der-Dummheit) und den meist beweglichen wichtigen christlichen Feiertagen (erster Advent, Weihnachten, Rosenmontag, Karfreitag, Ostern, Himmelfahrt, Pfingsten)
+* EasterRelTimer - Bestimmt den aktiven Zeitraum relativ zu wichtigen deutschen
+  Feiertagen (Neujahr, Silvester, Welt-Handtuch-Tag, Tag-der-Dummheit) und den
+  meist beweglichen wichtigen christlichen Feiertagen (erster Advent,
+  Weihnachten, Rosenmontag, Karfreitag, Ostern, Himmelfahrt, Pfingsten)
   (2. Advent von 12:00-14:00, Rosenmontag von 20:00 bis 6:00 des Folgetages)
 * JewishHolidayTimer (in Progress 2022-12-28) - Perioden startend relativ zu
   einem der jüdischen Feiertage bezogen auf den jüdischen Kalender
@@ -194,30 +197,278 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   durchgeführt._
   **Empfehlung:** _Nutzen sie stattdessen den neuen allgemeineren
   Timer `calendarDateRelTimer`_**
-* MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen bestimmten Zeitraum
+* MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen
+  bestimmten Zeitraum
 * MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für einen bestimmten Zeitraum
 * PeriodListTimer - Liest Daten zu aktiven Perioden aus einer Yaml-Datei ein. Hilfreich zum Beispiel
   für Ferienlisten oder Tourenpläne von Künstlern
 * RangeListTimer - Liest periodische Liste aus Yaml-Dateien oder aus der Tabelle `` ein und mergt sie
-  bei Überlappung zu neuen aktiven Bereichen zusammen. Man kann auch eine Liste mit unerlaubten Bereichen definieren,
-  die solche Überlappungen reduzieren können. (Beispiel: jeden Dienstag und Donnerstag von 12-14 Uhr [aktive Timer] außer in den Schulferien und an
+  bei Überlappung zu neuen aktiven Bereichen zusammen. Man kann auch eine Liste
+  mit unerlaubten Bereichen definieren,
+  die solche Überlappungen reduzieren können. (Beispiel: jeden Dienstag und
+  Donnerstag von 12-14 Uhr [aktive Timer] außer in den Schulferien und an
   Feiertagen [forbidden timer])
 * SunriseRelTimer - Perioden relativ zum Sonnenaufgang und Sonnenuntergang
-* WeekdayInMonthTimer - Perioden zu bestimmten Wochentagen innerhalb eines Monats ab bestimmten Uhrzeiten mit bestimmter
+* WeekdayInMonthTimer - Perioden zu bestimmten Wochentagen innerhalb eines
+  Monats ab bestimmten Uhrzeiten mit bestimmter
   Dauer
   (Beispiel: jeden zweiten Freitag im Monat in dem zwei Stunden vor 19:00 )
-* WeekdaylyTimer - Wöchentliche Wiederholung an einem bestimmtem Wochentag oder zu bestimmten Wochentagen. (Beispiel: Jeden Montag oder
+* WeekdaylyTimer - Wöchentliche Wiederholung an einem bestimmtem Wochentag oder
+  zu bestimmten Wochentagen. (Beispiel: Jeden Montag oder
   Donnerstag)
+
+#### Anmerkungen zum Workflow beim CalendarDateRelTimer
+
+##### Herausforderung
+
+Die Einschätzung, welche Feiertage ein Redakteur benutzen können darf/soll,
+werden sicher von Webseite zu Webseite unterschiedlich sein. Vielleicht will man
+nur christliche, jüdische, islamische oder andere Feiertage nutzen.
+Weiter wird sich wohl jeder Redakteur wünschen, dass die Auswahl der Feiertage
+auf die Notwendigen beschränkt sind und dass unerwünschte Feiertage dem
+Redakteur überhaupt nicht zur Auswahl stehen.
+Weiterhin werden seitens der Entwickler ganz unterschiedliche Wünsche bestehen,
+welche Informationen zusätzlich zu den Feiertagen noch gespeichert werden
+sollen.
+Gleichzeitig möchte man die Liste der Feiertage möglicht übersichtlich verwalten
+können.
+
+##### Workflow für individuelle Listen
+
+Man verwaltet die Liste der Feiertage in einer Tabellenkalulation wie `Excel`
+oder `calc` und speichert die Daten in einer CSV-Datei.
+Die CSV-Datei lädt man per FTP auf dem Server hoch und gibt den Pfad zur
+CSV-Datei bei den Settings für die Extension-Konfigurationen an.
+Nach dem Löschen des Caches hat man dann die neue Liste im
+Timer `CalendarDateRelTimer` verfügbar.
+
+##### unterstützte Feiertagsberechnungen (aktuell nicht funktionsfähig und getestet 2023-02-25)
+
+Die Berechnug ist wie jedes menschengemachte System im Grundsatz einfach; aber
+im Detail meisten hoch kompliziert, weil die Schlauen sich in ihrer Dummheit von
+den Dummen abgrenzen wollen und weil manchen Menschen die Macht wollen, anderen
+zu erzählen, was die Wahrheit ist. Sei es drum. Es werden aktuell folgnden
+Berechnungsschmeata unterstützt, die in der CSV-Datei in der `arg.type`
+anzugeben sind:
+
+- _fixed_: Für einen definierten Kalender (`arg.calendar`) wird ein definierter
+  Tag (`arg.day`) und ein definierter Monat (`arg.month`) angegeben. Tag und
+  Monat sind als Zahlen anzugeben. Der Schaltmonat im jüdischen Kalender wird in
+  der Regel übersprungen und wenn eine Jahr mit einem Schaltmonat vorliegt, wird
+  der Zielmonat intern automatisch um eins erhöht, weil der IntlFormatter den
+  Monat einfach weiterzahlt, dan in jüdischen Schaltjahren der IntlDateFormatter
+  einfach 13 Monate für das Jahr zugrundelegt. Wenn sie in Schaltjahren auf den
+  Schaltmonat ersten Adar (6) statt auf den zweiten Adar (7) zugreifen wollen,
+  müssen sie bei Nutzung des jüdischen Kalenders in `arg.status` einen Wert
+  größer als '1' hinterlegen.
+- _fixedweekend_: Für einen definierten Kalender (`arg.calendar`) wird ein
+  definierter Tag (`arg.day`)
+  und ein definierter Monat (`arg.month`) angegeben. Tag und Monat sind als
+  Zahlen anzugeben.
+  Wenn der berechnete Tag auf bestimmte Samstag oder Sonntag fällt, wird der
+  nachfolgende Montag verwendet.
+  Wenn in `arg.status` eine `1` angegeben ist, dann wird statt des Montags der
+  nächste Dienstag verwendet, wenn der vorhergehende Tag auf einen Samstag oder
+  einen Sonntag fällt. Diese Ausnahme ist der Regelung für den 2.
+  Weihnachtstage/Boxingday in England geschuldet.
+  Technisch ist die Mechanik eigentlich analog zu `_fixed_`.
+- _easterly_: Dieses Schlüsselwort gilt nur für eine Berechnungsform beschränkt
+  auf den gregorianischen oder auf den julianischen Kalender (`arg.calendar`).
+  Es bestimmt einen Feiertag relativ zum Ostersonntag, der mit Hilfe der
+  Osterformel von Gauß bzw. der PHP-Funktion berechnet werden kann.
+  In `arg.statusCount` wird die positive oder negative Zahl der Tage relative
+  zum Ostersonntag angegeben. Wenn die Zahl fehlt oder dort eine `0` steht, dann
+  ist natürlich der Ostersonntag selbst gemeint.
+- _weekdayly_: Hier berechnet man für einen ausgewählten
+  Kalender (`arg.calendar`) den i.ten (`arg.statusCount`)
+  Wochentag (`arg.status`) innerhalb eines Monats (`arg.month`). Der Wochentag
+  wird über eine Nummer charakterisiert, wobei die 1 für den Montag und die 7
+  für den Sonntag steht. Wenn in `arg.statusCount` eine negative Nummer steht,
+  dann wird die Position des Wochentags relativ zum Monatsende bestimmt. Es
+  findet keine Prüfung statt, ob das Datum noch im besagten Monat liegt. Wenn
+  in `arg.secDayCount` noch ein wert angegeben ist, dann wird der Tag relativ
+  zum berechnent Wochentag bestimmt. Die wird beispielsweise für den Genfer
+  Bettag in der chweiz benötigt, der immer am Donnerstag nach dem ersten Sonntag
+  im September gefeiert wird.
+- _mooninmonth_: Manche Feste wurden im Laufe der Geschichten von einem
+  Kalendersystem auf ein anderes Kalendersystem übertragen, wie dies zum
+  Beispiel beim Vesakh-Fetst der Fall ist.
+  Heute wird das Fest in manchen Ländern am ersten in anderen Ländern
+  gegebenenfalls am zweiten Vollmond-Tag im Mai gefeiert. Verallgemeinert
+  bedeutet dies für einen ausgerwählten Kalender (`arg.calendar`), dass der
+  Monat im Feld `arg.month` als Nummer angegeben wird. Der Kalender wird
+  in `arg.calendar` definiert. Die Phase des Mondes wird in `arg.status` mit der
+  Codierung 0/new_moon = Neumond, 1/first_quarter = zunehmender Halbmond,
+  2/full_moon = Vollmond und 3/last_quarter = abnehmender (islamisch?) Halbmond
+  definiert. Wenn in `arg.statusCount` eine '1' angegeben ist oder wenn weine
+  Angabe fehlt, wird immer die erste Mondphase im Monat verwendet, auch wenn es
+  im Monat zwei gleiche Mondphasen geben sollte. Andernfalls wird die zweite
+  Mondphase verwendet, sofern diese im gleichen Monat existiert.
+
+Die Methoden sind so definiert, dass immer ein Datum bestimmt wird. Die
+Proceduren zur Berechnung geben immer ein Gregorianisches Datum zurück.
+
+##### Vorab-Erläuterungen zur internen Struktur der CSV-Liste
+
+Man verwaltet die Liste der Feiertage in einem Tabellenkalkulationsprogramm
+wie `Excel` von MS Office oder wie `calc` aus Libri Office.
+Ein [calc-Beispiel](ExcelLikeListForHolidays.ods) und
+auch [die daraus gespeicherte CSV-Datei](ExcelLikeListForHolidays.csv) sind hier
+in der Dokumentation zu finden.
+Wichtig ist bei dem Beispiel die gewählte Titelzeile (erste Zeile), weil die
+Notation der Titel die Struktur eines assoziativen Arrays mit mehreren Ebenen
+definiert.
+Der Ausdruck 'add.rank' im Titel führt zu folgenden Array, wenn in der
+entsprechenden Zeile in der CSV der Spalte der Wert `5` zugeordnet ist:
+
+```
+$liste = [
+    // ...
+    [
+        'arg' => [
+            'rank' => 5,
+        ],
+    ],
+    // ...
+];
+```
+
+Der Teilausdruck COMMA hat eine besondere Bedeutung, weil er die Angabe im Feld
+dieser Spalte immer als Kommaseparierte Liste interpretiert, die automatisch in
+einen Array mit getrimmten Werten umgewandelt wird.
+Der Ausdruck 'add.locale.COMMA' im Titel führt zu folgenden Array, wenn in der
+ensprechenden Zeile in der CSV der Spalte der Wert `de_DE, de_CH , de_AT `
+zugeordnet ist:
+
+```
+$liste = [
+    // ...
+    [
+        'arg' => [
+            'locale' => [
+                'de_DE',
+                'de_CH',
+                'de_AT',
+            ],
+        ],
+    ],
+    // ...
+];
+```
+
+Die Struktur erlaubt es, eine kompakte CSV-Liste in eine lesbarere Yaml-Struktur
+zu überführen.
+Alternativ können sie deshalb auch eine Datei im Yaml-format verwenden, um die
+Feiertage verfügbar zu haben.
+Sie können für eigenen Informationen zusätzliche Spalten einfügen.
+Es wird angestrebt, die Angaben immer auch im Frontend verfügbar zu machen.
+
+##### Erläuterungen zur internen Struktur der CSV-Liste
+
+Die Struktur lässt sich am leichtesten am Beispiel der YAML-Struktur erläutern.
+Zu den einzelnen Bestandteilen sind die Erläuterungen als Kommentar mit
+angeführt.
+
+```
+  -
+# Hilfstitel für die Übersicht in der Excel-Datei. Der Wert wird im Programm nicht genutzt.
+    title: 'Heiligabend'
+# Verweis auf die Fremdsprachendatei, in welcher der Termin sprachlich definiert ist. Wenn man nur eine Sprache nutzt,
+#    kann man hier auch Klartext eintragen - zum Beispiel das Gleiche wie bei `title`.
+    eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmasEve'
+# Der Identifier sollte eindeutig in der Liste sein. In den meisten Fällen sollte wie hier die Abkürzung des Kalenders
+#    plus die Abkürzung des Festtagsnamens zu einem eindeutigen Identifier führen. Ist in Zukunft gegebenenfalls
+#    für den internen Gebrauch vorgesehen.
+    identifier: 'greg-christmasEve'
+# `type` bestimmt, wie das Datum berechnet wird. Definiert sind aktuell die für Groß- und Kleinschreibung empfindlichen
+#    Begriffe `fixed`, `easterly`, `weekdayinmonth`, `weekdayly`, `mooninmonth` und `leapmonth`.
+# - `fixed`: Hier wird jährlich für einen bestimmten Kalender eine definierter Tag und Monat bestimmt.
+# - `easterly`: Hier wird jährlich ein gemäß der Tage relativ zum Ostersonntag ein Festtag bestimmt. Als Kalender
+#   können nur der gregorianische und der Julianische Kalender ausgewählt werden. Alle anderen führen zu einer
+#   Fehlermeldung. Auf diesen Wege lassen sich die meisten christlichen Festtage bestimmen.
+# - `weekdayinmonth`: Hier wird ein bestimmter Wochentag für einen bestimmten Monat in einem bestimmten Kalender
+#   definiert. Diese Form der Berechnung wird zum Beispiel für den `Dank-, Buss- und Bettag` in der Schweiz benötigt.
+# - `weekdayly`: Hier wird relativ zu einem definierten Tag und Monat ein bestimmter Wochentag gesucht. Ein Beispiel
+#   wäre der vierte Advent, der der letzte Sonntag vor Weihnachten ist. Diese Methode erlaubt auch die Berechnung von
+#   einem  etwas komplexeren Fall: dem Buß- und Bettag. Dieser findet vier Tage vor dem Totensonntag statt,
+#   wobei der Totensonntag seinerseits als der 5.te Sonntag vor Weihnachten definiert ist, welches seinerseits
+#   bekanntlich immer am 25.12. stattfindet.
+# `mooninmonth`: Hier wird innerhalb eines bestimmten Monats für einen definierten Kalender das Tag mit einer
+#   bestimmten Mondstellung (Vollmond, Neumond) bestimmt. (Es wird unterstellt, dass die Schaffer von Feiertage immer
+#   nur Monate auswählen, die auch genügend Tage für einen vollen Mondzyklus haben.)
+# `leapmonth`: Diese Methode ist auf den jüdischen Kalender beschränkt, um das Purim-Fest berechnen zu können, dass
+#   im Schaltmonat des jüdischen Kalenders liegen kann. Alle anderen Kalenderangaben führen zu einem Fehler.
+    type: 'fixed'
+#  Hier werden die zusätzlichen Argumente für die jeweilige Feiertagsberechnungsmethode definiert.
+    arg:
+      #wichtig für: `fixed`, `weekdayinmonth`, `weekdayly`, `mooninmonth` und `leapmonth`.
+      month: '12'
+      #wichtig für: `fixed`,  `weekdayly`, und `leapmonth`.
+      day: '24'
+      #wichtig für alle: `fixed`, `easterly`, `weekdayinmonth`, `weekdayly`, `mooninmonth` und `leapmonth`.
+      calendar: 'gregorian'
+      #wichtig für: `easterly`, `weekdayinmonth`, `weekdayly` und `mooninmonth`.
+      status: ''
+      #wichtig für: `easterly`, `weekdayinmonth`, `weekdayly` und `mooninmonth`.
+      statusCount: ''
+      #wichtig für: `weekdayly`.
+      secDayCount: ''
+# Hiermit soll der Feiertag charakterisiert werden. Die Angabe ist optional und wird aktuell im Programm nicht verwendet.
+#   Die Angabe habe ich eingeführt, was die Motivation für Feiertage ist/sein könnte. Benutzt habe ich die Kategorien
+#   `religion`,`culture`,`economic`, `politics` und `historical`. Auffällig fand ich, dass viele Feiertage religiös
+#   motiviert sind. Dienen Feiertage den Religionsführern als lohnendes Ritual zur Aufrechterhaltung der geistigen
+#   Konditionierung/Manipulation der Menschen?
+#  - `religion`: Diese Feste dienen zur Bindung der Gläubigen an die Institution des Glaubens. Als Religionsgegner
+#    könnte man sagen, dass die Feste zur Stabilisierung der Konditionierung der Gläubigen dienen.
+#  - `culture`: Hier werden bestimmte Rituale von einer größeren Gruppe von Menschen gepflegt, ohne dass noch deutlich
+#    erkennbar ist, aus welchen Grund das Fest überhaupt entstanden ist. Beispiele wären Silvester oder
+#    auch der Muttertag.
+#  - `economic`: Haupttriebfeder für den Festtag ist das ökonomische Interesse. Ein typisches Beispiel ist der
+#    Valentinstag. Weihnachten als Konsumfest könnte man in Deutschland vielleicht auch zu diesen Tagen zählen.
+#  - `politics`: Bei Politischen feiertagen möchte man bestimmte politische Themen oder Fragestellungen dauerhaft in
+#    der Diskussion behalten. Beispiele für politische Feiertage sind der 1. Mai (Tag der Arbeit),
+#    8.3 (Weltfrauentag) oder auch der 16.4 (Tag der Dummheit).
+#  - `historical`: Dieser Tage steht immer unter dem Aspekt des Gedenkens an ein historisch belegtes Ereignis. Ein
+#    Beispiel wäre der Tag der Deutschen Einheit, der an die Unterzeichnung der Verträge zur Deutschen
+#    Wiedervereinigung erinnern soll. Der 9. November, also der Tag des Mauerfalls, wurde vermutlich nie ernsthaft als
+#    Feiertag diskutiert, weil es die damaligen Machthaber und ihr vermeintliches Handeln hätte unwichtig erscheinen lassen.
+    tag: 'religion'
+# In diesem Block `add` können beliebige weitere Attribute definiert werden. Für die Berechnung der Feiertage
+#    sind diese Daten nicht notwendig. Sie können aber zum frontend durchgeschleift werden.
+    add:
+# hier habe ich über Schlagworte versucht, den Motivationsbereich bzw. die Nutzergruppen näher einzugrenzen.
+      category:
+        - 'christian'
+# Der Rank definiert die Wichtigkeit des Feiertages. In dem Wert spiegelt sich meine naive Einschätzung wieder. Er ist nicht objektivierbar.
+      rank: '3'
+# Hier könnte man definieren, in welchen Regionen und/oder Sprachzonen bestimmte Feiertage wichtig sind. Aktuell ist meine Liste nur exemplarisch und extrem lückenhaft.
+      locale:
+        - 'de_DE'
+        - 'de_AT'
+        - 'de_CH'
+# Hier könnte man definieren, in welchen Regionen und/oder Sprachzonen bestimmte Feiertage arbeitsfreie Tage sind.
+      freelocale:
+        - 'de_DE'
+        - 'de_AT'
+        - 'de_CH'
+# Man möchte nicht für jeden Feiertag immer wieder das Gleiche schreiben. Über einen Alias kann man in den Addlock weitere Informationen hineinmergen. Achtung: das Alias kann auch hier stehende Definitionen überschreiben.
+      alias: ''
+```
 
 #### Generelle Parameter bei allen vordefinierten Timern
 
-Einige Parameter sind bei allen Timern gleich. Zwei Parameter behandeln den Umgang mit Zeitzonen. Zwei weitere Parameter
-bestimmen den Zeitraum, in welchen der Timer überhaupt gültig ist. Auf einen Parameter zur Steuerung des Scheduler wurde
-verzichtet. Mir ist kein Anwendungsfall eingefallen, wo ein solcher Ausschluss wirklich sinnvoll ist.
+Einige Parameter sind bei allen Timern gleich. Zwei Parameter behandeln den
+Umgang mit Zeitzonen. Zwei weitere Parameter
+bestimmen den Zeitraum, in welchen der Timer überhaupt gültig ist. Auf einen
+Parameter zur Steuerung des Scheduler wurde
+verzichtet. Mir ist kein Anwendungsfall eingefallen, wo ein solcher Ausschluss
+wirklich sinnvoll ist.
 Wer so etwas braucht, kann gern einen entsprechenden Timer programmieren.
 
-* timeZoneOfEvent - speichert den Namen der zu verwendenden Zeitzone. wenn die Zeitzone des Server mit der Zeitzone des
-  Event nicht übereinstimmt, wird die Server-ezeit auf die Zeitzonenzeit des Events umgerechnet.
+* timeZoneOfEvent - speichert den Namen der zu verwendenden Zeitzone. wenn die
+  Zeitzone des Server mit der Zeitzone des
+  Event nicht übereinstimmt, wird die Server-ezeit auf die Zeitzonenzeit des
+  Events umgerechnet.
   *Wertebereich*:
   Liste der generierten Zeitzonen. Die Zeitzonenproblematik ist wichtig, weil einige Timer die Zeiten auf UTC umrechen
   müssen. (Sonnenlauf, ...)

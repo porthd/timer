@@ -6,3 +6,5 @@
 .idea
 .~
 .env
+
+/Documentation/ExcelLikeListForHolidays.csv

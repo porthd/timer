@@ -100,4 +100,6 @@ class TimerConst
 
     public const ADDITIONAL_CALENDAR_JULIAN = 'julian';
     public const FAKE_CALENDAR_JULIAN_BY_GREGORIAN = 'gregorian';
+
+    public const DEFAULT_FLATTEN_KEYS_LIST = ['data', 'general', 'timer', 'sDEF', 'lDEF', 'vDEF',];
 }

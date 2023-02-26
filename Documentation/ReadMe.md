@@ -154,8 +154,12 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   periodicities.
   (whole day every year for birthdays, every week for 120 minutes until 12:00 from May 13, 1970, ..)
 * DefaultTimer - Default timer/null element
-* EasterRelTimer - Determines the active period relative to important German public holidays (New Year's Eve, New Year's Eve, World Towel Day, Day of Stupidity) and the most important Christian public holidays (first Advent, Christmas, Shrove Monday, Good Friday, Easter, Ascension Day, Pentecost)
-  (2nd Advent from 12:00 p.m. to 2:00 p.m., Rose Monday from 8:00 p.m. to 6:00 a.m. of the following day)
+* EasterRelTimer - Determines the active period relative to important German
+  public holidays (New Year's Eve, New Year's Eve, World Towel Day, Day of
+  Stupidity) and the most important Christian public holidays (first Advent,
+  Christmas, Shrove Monday, Good Friday, Easter, Ascension Day, Pentecost)
+  (2nd Advent from 12:00 p.m. to 2:00 p.m., Rose Monday from 8:00 p.m. to 6:00
+  a.m. of the following day)
 * JewishHolidayTimer (in progress 2022-12-28) - Periods starting relative to one
   of the Jewish holidays related to the Jewish calendar
   (IMHO: I was thinking for a long time about adding this timer because I
@@ -185,7 +189,8 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   an example using the example of Yom Kippur._
   **Recommendation:** _Use the new more general timer `calendarDateRelTimer`_**
   instead
-* MoonphaseRelTimer - Periods starting relative to a moon phase for a specified time period
+* MoonphaseRelTimer - Periods starting relative to a moon phase for a specified
+  time period
 * MoonriseRelTimer - Periods relative to moonrise or moonset for a specified time period
 * PeriodListTimer - Reads active period data from a yaml file. Helpful, for example, for holiday
   lists or artist tour plans

@@ -172,9 +172,10 @@ class DatePeriodTimer implements TimerInterface
      */
     public function validateChangeArguments(array $params = []): bool
     {
-        return (
-            ((array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (!array_key_exists(self::ARG_REQ_START_TIME, $params))) ||
-            ((!array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (array_key_exists(self::ARG_REQ_START_TIME, $params)))
+        return ((array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) ||
+            (array_key_exists(self::ARG_REQ_START_TIME, $params))
+//            ((array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (!array_key_exists(self::ARG_REQ_START_TIME, $params))) ||
+//            ((!array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (array_key_exists(self::ARG_REQ_START_TIME, $params)))
         );
     }
 

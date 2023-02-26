@@ -40,6 +40,8 @@ call_user_func(
             Porthd\Timer\Hooks\PageLayoutViewDrawItem::class;
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['timer_periodlist'] =
             Porthd\Timer\Hooks\PageLayoutViewDrawItem::class;
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['timer_holidaycalendar'] =
+            Porthd\Timer\Hooks\PageLayoutViewDrawItem::class;
 
         // add cshfiles for main table/model
         $modelList = [

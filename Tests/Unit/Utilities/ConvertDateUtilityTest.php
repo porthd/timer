@@ -290,7 +290,9 @@ class ConvertDateUtilityTest extends TestCase
                 $params['locale'],
                 $params['calendar'],
                 $params['tzDateTime'],
+                true,
                 ConvertDateUtility::INTL_DATE_FORMATTER_DEFAULT_PATTERN
+
             );
             $dateTime = ConvertDateUtility::convertFromCalendarToDateTime(
                 $params['locale'],
