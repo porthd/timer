@@ -4,7 +4,7 @@
           product-name="timer">
         <header/>
         <body>
-            <trans-unit id="command.scheduler.title.timer.updater">
+			<trans-unit id="command.scheduler.title.timer.updater">
 				<source>Update starttime and endtime in various tables</source>
 				<target>Startzeit und Endzeit in verschiedenen Tabellen aktualisieren</target>
 			</trans-unit>
@@ -57,46 +57,46 @@
 			<trans-unit id="tx_timer_domain_model_event.palette.timerteaserlink">
 				<source>Aspects</source>
 				<target>Aspekte</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_event.field.title">
-                <source>Title</source>
-                <target>Titel</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_event.field.description">
-                <source>Informations</source>
-                <target>Informationen</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_event.field.teaser_slogan">
-                <source>Slogan</source>
-                <target>Slogan</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_event.field.teaser_infotext">
-                <source>Shortinfos</source>
-                <target>Kurzinfos</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_event.field.flag_test">
-                <source>For tests only</source>
-                <target>Nur für Tests</target>
-            </trans-unit>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_event.field.title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_event.field.description">
+				<source>Informations</source>
+				<target>Informationen</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_event.field.teaser_slogan">
+				<source>Slogan</source>
+				<target>Slogan</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_event.field.teaser_infotext">
+				<source>Shortinfos</source>
+				<target>Kurzinfos</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_event.field.flag_test">
+				<source>For tests only</source>
+				<target>Nur für Tests</target>
+			</trans-unit>
 
-            <trans-unit id="tx_timer_domain_model_listing.model.title">
-                <source>Simple listing-model</source>
-                <target>Einfaches Listing-Modell</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_listing.tab.single">
-                <source>listing times</source>
-                <target>Auflistungszeiten</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_listing.palette.timerlang">
-                <source>Lanuage-parts</source>
-                <target>Sprachteile</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_listing.palette.timerteaserlink">
-                <source>Aspects</source>
-                <target>Aspekte</target>
-            </trans-unit>
-            <trans-unit id="tx_timer_domain_model_listing.field.title">
-                <source>Title</source>
+			<trans-unit id="tx_timer_domain_model_listing.model.title">
+				<source>Simple listing-model</source>
+				<target>Einfaches Listing-Modell</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_listing.tab.single">
+				<source>listing times</source>
+				<target>Auflistungszeiten</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_listing.palette.timerlang">
+				<source>Lanuage-parts</source>
+				<target>Sprachteile</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_listing.palette.timerteaserlink">
+				<source>Aspects</source>
+				<target>Aspekte</target>
+			</trans-unit>
+			<trans-unit id="tx_timer_domain_model_listing.field.title">
+				<source>Title</source>
 				<target>Titel</target>
 			</trans-unit>
 			<trans-unit id="tx_timer_domain_model_listing.field.description">
@@ -195,19 +195,31 @@
 			</trans-unit>
 			<trans-unit id="tx_timer.tca.element.name.timerPeriodlist">
 				<source>simple list of dates</source>
-                <target>Einfache Liste mit Terminen</target>
-            </trans-unit>
-            <trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libFLuidContent">
-                <source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
-                <target>Schlüssel für Pfade: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.fluidContent`</target>
-            </trans-unit>
-            <trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libContentElement">
-                <source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.contentElment`</source>
-                <target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElment`</target>
-            </trans-unit>
-            <trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libFLuidContent">
-                <source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
-                <target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.fluidContent`</target>
+				<target>Einfache Liste mit Terminen</target>
+			</trans-unit>
+			<trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libFLuidContent">
+				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript
+					`lib.fluidContent`
+				</source>
+				<target>Schlüssel für Pfade: Nummer für Template-, Partial- und Layout-Pfade im Typoscript
+					`lib.fluidContent`
+				</target>
+			</trans-unit>
+			<trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libContentElement">
+				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript
+					`lib.contentElment`
+				</source>
+				<target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript
+					`lib.contentElment`
+				</target>
+			</trans-unit>
+			<trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libFLuidContent">
+				<source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the
+					typoscript `lib.fluidContent`
+				</source>
+				<target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im
+					Typoscript `lib.fluidContent`
+				</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libContentElement">
 				<source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the
@@ -266,36 +278,46 @@
 				<target>
 					<![CDATA[ <br /> Der Commandcontroller aktualisiert die Felder starttime und endtime in einer selektierten Tabelle, wenn das tx_timer_select-Field nicht leer und das Feld `deleted`null ist. <br /> Die yaml-Datei enthält die Liste der Tabellen im Array ``. Das Subarray `where-equal` einer Tabelle enthält zusätzliche Feld-Wert-Paare für den Where-Block der Abfrage. <br /> Das Array `rootline` schränkt die Ergebnisse auf Zeilen ein, die Teil des Zweigs mit den aufgelisteten PIDs in seinem Stamm/Zweig sind. <br /> ]]></target>
 			</trans-unit>
-            <trans-unit id="task.timer.updateTimesByTimer.yamltablelist">
-                <source>The yaml-file contains the List of table, which should be updated, and the cache-commands
-                    <target>Die yaml-Datei enthält die Liste der Tabellen, die aktualisiert werden sollen, und die Cache-Anweisungen</target>
-                </source>
-            </trans-unit>
-            <trans-unit id="task.timer.exception.yamlNotExit.1">
-                <source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
-                <target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable `%s`.</target>
-            </trans-unit>
-            <trans-unit id="task.timer.warning.yamlNotAllUpdated.3">
-                <source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
-                <target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable `%s`.</target>
-            </trans-unit>
+			<trans-unit id="task.timer.updateTimesByTimer.yamltablelist">
+				<source>The yaml-file contains the List of table, which should be updated, and the cache-commands
+					<target>Die yaml-Datei enthält die Liste der Tabellen, die aktualisiert werden sollen, und die
+						Cache-Anweisungen
+					</target>
+				</source>
+			</trans-unit>
+			<trans-unit id="task.timer.exception.yamlNotExit.1">
+				<source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
+				<target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable
+					`%s`.
+				</target>
+			</trans-unit>
+			<trans-unit id="task.timer.warning.yamlNotAllUpdated.3">
+				<source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
+				<target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable
+					`%s`.
+				</target>
+			</trans-unit>
 
-            <trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.title">
-                <source>Reset of publishingDate and Expiration Date</source>
-                <target>Zurücksetzen von Veröffentlichungsdatum und Ablaufdatum</target>
-            </trans-unit>
-            <trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.message">
-                <source>The fields `starttime`(publishingDate) and `endtime`(Expiration Date) have been changed to zero.</source>
-                <target>Die Felder `starttime`(publishingDate) und `endtime`(expiration date) wurden auf Null geändert.</target>
-            </trans-unit>
+			<trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.title">
+				<source>Reset of publishingDate and Expiration Date</source>
+				<target>Zurücksetzen von Veröffentlichungsdatum und Ablaufdatum</target>
+			</trans-unit>
+			<trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.message">
+				<source>The fields `starttime`(publishingDate) and `endtime`(Expiration Date) have been changed to
+					zero.
+				</source>
+				<target>Die Felder `starttime`(publishingDate) und `endtime`(expiration date) wurden auf Null
+					geändert.
+				</target>
+			</trans-unit>
 
-            <trans-unit id="tt_content.CType.div._timer_">
-                <source>timer</source>
-                <target>Timer</target>
-            </trans-unit>
-            <trans-unit id="tt_content.CType.timer_timersimul">
-                <source>Timer Simulation</source>
-                <target>Timer-Simulation</target>
+			<trans-unit id="tt_content.CType.div._timer_">
+				<source>timer</source>
+				<target>Timer</target>
+			</trans-unit>
+			<trans-unit id="tt_content.CType.timer_timersimul">
+				<source>Timer Simulation</source>
+				<target>Timer-Simulation</target>
             </trans-unit>
             <trans-unit id="timer.typoescript.constants.pathes.templates">
                 <source>Templtes:Path to template root (FE)</source>

@@ -86,6 +86,35 @@
 					für eine definierte Zeitzone.
 				</target>
 			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.prolog.forCommaList">
+				<source>The viewhelper &lt;timer:forCommaList&gt; is similiar to the TYPO3-Viehelper &lt;f:for&gt; and
+					use comma-separated list for its iterations.
+				</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; ist fast identisch mit dem TYPO3-Viehelper &lt;f:for&gt;
+					und nutzt Komma-separierte Listen für das Iterieren.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.forCommaList.foo">
+				<source>The viewhelper &lt;timer:forCommaList&gt; produce the string `1234` from the string `1,2,3,4`.
+				</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; produziert den Zahlenreihe `1234` aus dem String
+					`1,2,3,4`.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.forCommaList.revertNoTrim">
+				<source>The viewhelper &lt;timer:forCommaList&gt; produce a list from `cherry` to `apple` based on
+					`apple ,pear ,banana , cherry `.
+				</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; produziert eine Liste von `cherry` bis `apple` aus
+					`apple ,pear ,banana , cherry `.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.forCommaList.limiter">
+				<source>The viewhelper &lt;timer:forCommaList&gt; produce a list with the colon as limiter.</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; porduziert ein Liste, wobei das Semikolon als Limiter
+					fungiert.
+				</target>
+			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.prologresult.isActive.inactive">
 				<source>An inactive state has just been reached here.</source>
 				<target>Hier wurde gerade ein inaktiver Zustand erreicht.</target>

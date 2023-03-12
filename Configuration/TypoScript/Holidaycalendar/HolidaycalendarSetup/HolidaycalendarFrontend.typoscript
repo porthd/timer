@@ -95,15 +95,26 @@ tt_content.timer_holidaycalendar {
                 falFlexField = holidayFalRelation
             }
 
+            # `timeAdd` define the minimal needed distance between two events of the same holiday or custom.
+            # The syntax is defined by the PHP-dateInterval https://www.php.net/manual/en/dateinterval.construct.php
+            # !!! Remark: The interval-definition must begin with a `P`. The char `T` divides in the interval
+            #          the date-part from the time-part. In this way:
+            #         - `P1M` means the interval of one month.
+            #         - `PT1M` means the interval of one minute
+            # The default value for `timeAdd` is one day.
+            #timeAdd = P1D
+
+            # name of output-variable
             as = holidayList
         }
 
-        20 = Porthd\Timer\DataProcessing\MappingProcessor
+        20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
         20 {
 
             # regular if syntax
             #if.isTrue.field = record
 
+            # The defaultvalue for the inputfield is 'holidayList';
             inputfield = holidayList
             # Each field must part of holidaycalendar
             # allowed types are
@@ -130,42 +141,79 @@ tt_content.timer_holidaycalendar {
             #                }
             #            }
             generic {
-                category {
+                10 {
+                    # the inputfield may missing
+                    inField =
+                    # if the outputfield is missing or the key has an typeerror, an exception will occur.
+                    outField = category
                     pretext = allday
                     posttext =
+                    # allowed types are `constant`, `includevalue`, `includeindex`, `datetime`
+                    # if the inField is missing for type `includevalue`, a empty string will be used
                     type = constant
                 }
 
-                start {
-                    pretext = date
-                    posttext = Y-m-d
+                20 {
+                    inField = dateStart
+                    # the outputfield must contain a DateTime-Object
+                    outField = start
+                    format = Y-m-d
                     type = datetime
                 }
 
-                end {
-                    pretext = date
-                    posttext = Y-m-d
+                30 {
+                    inField = dateEnd
+                    outField = end
+                    format = Y-m-d
                     type = datetime
                 }
+
+                40 {
+                    inField = cal.eventtitle
+                    outField = title
+                    type = translate
+                }
+
             }
 
             mapping {
-                # sourceFieldName in holidaycalendar(see inputfield) => targetFieldName
-                #                cal {
-                #                    identifier = id
-                #                    title = title
-                #                    eventtitle = eventtitle
-                #                    tag = calendarId
-                #                }
+                10 {
+                    inField = cal.identifier
+                    outField = id
+                }
 
+                20 {
+                    inField = cal.title
+                    outField = basetitle
+                }
+
+                30 {
+                    inField = cal.tag
+                    outField = calendarId
+                }
+
+                #
+                #                @todo 2023-03-12: allow custom function
+                #               40 {
+                #                    inField = cal.add.freelocale
+                #                    outField = class
+                #                    type = userfunc
+                #                    userfunc =
+                #                }
             }
 
-            # outputformat has the values `array`,`json`
-            # if the outputformat is unknown, json will be the default
+
+            # outputformat has the values `array`,`json`, `yaml`
+            # if the outputformat is unknown/undifined, `json` will be used by default
             outputFormat = json
+
+            # if the output-format is yaml, then `yamlStartKey` will define a starting-key for your result-array.
+            # the default is an empty string, which emans no starting-key for your array in a simplified yaml-format
+            #yamlStartKey = holydayList
+
             # output variable with the resulting list
-            # default-value is `holidaycalendar`
-            asString = holidaycalendarJson
+            # default-value is `holidayListJson`
+            as = holidaycalendarJson
 
         }
 
@@ -178,17 +226,13 @@ tt_content.timer_holidaycalendar {
             # default is `tx_timer_timer`
             field = pi_flexform
 
-            # field with selector for flexform-array
-            # default is 'tx_timer_selector'
-            # selectorField = tx_timer_selector
-
             # A definition of flattenkeys will override the default definition.
             #   the attributes `timer` and `general` are used as sheet-names in my customTimer-flexforms
             #   The following defintion is the default: `data,general,timer,sDEF,lDEF,vDEF`
             flattenkeys = data,general,timer,sDEF,lDEF,vDEF
 
             # output variable with the resulting list
-            as = flexlist
+            as = holidayflexlist
         }
     }
 

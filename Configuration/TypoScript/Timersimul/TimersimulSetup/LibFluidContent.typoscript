@@ -4,26 +4,21 @@ lib.timersimul.fluidContent {
     templateRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_timersimul.view.templateRootPath}
     }
-
     partialRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_timersimul.view.partialRootPath}
     }
-
     layoutRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_timersimul.view.layoutRootPath}
     }
 }
-
 lib.timersimul.contentElement < lib.contentElement
 lib.timersimul.contentElement {
     templateRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.contentElement}= {$contentElement.tx_timer_timersimul.view.templateRootPath}
     }
-
     partialRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.contentElement}= {$contentElement.tx_timer_timersimul.view.partialRootPath}
     }
-
     layoutRootPaths {
         {$contentElement.tx_timer_timersimul.pathSlotNumber.contentElement}= {$contentElement.tx_timer_timersimul.view.layoutRootPath}
     }

@@ -1380,54 +1380,46 @@
 				<target>Lade YAML-Datei</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarJsFilePath.label">
-				<source>javascript path to calendar-framework</source>
-				<target>Javascript-Pfad zum Kalender-Framework</target>
+				<source>comma-separated list of javascript pathes to calendar-framework</source>
+				<target>Komma-separierte Liste der Javascript-Pfade zum Kalender-Framework</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarJsFilePath.description">
-				<source>Path to the javascript framework that can be used to display a list of dates in the form of a
-					calendar (optional)
+				<source>comma-separated list of javascript pathes that can be used to display a list of dates in the
+					form of a calendar (optional)
 				</source>
-				<target>Pfad zum Javascript-Framework, mit dem eine Datumsliste in Form eines Kalenders dargestellt
-					werden kann (optional)
-				</target>
-			</trans-unit>
-			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarAddJsFilePath.label">
-				<source>javascript path to additional Javascript for the calendar-framework</source>
-				<target>Javascript-Pfad zu Zusatz-Javascript für das Kalender-Framework</target>
-			</trans-unit>
-			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarAddJsFilePath.description">
-				<source>Path to the additional javascript that can be used to display a list of dates in the form of a
-					calendar (optional)
-				</source>
-				<target>Pfad zum zusätzlichen Javascript, mit dem eine Datumsliste in Form eines Kalenders dargestellt
-					werden kann (optional)
+				<target>Komma-separierte Liste zu den Javascript-Pfaden des Javascript-Frameworks, mit dem eine
+					Datumsliste in Form eines Kalenders dargestellt werden kann (optional)
 				</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.contentHolidaycalendar.field.customCalendarJsFilePath">
-				<source>Path to the custom javascript that can be used to display a list of dates in the form of a
-					calendar (optional)
+				<source>comma-separated list of pathes to the custom javascript that can be used to display a list of
+					dates in the form of a calendar (optional, individual for each content-element)
 				</source>
-				<target>Pfad zum benutzerdefinierten Javascript, mit dem eine Datumsliste in Form eines Kalenders
-					dargestellt werden kann (optional)
+				<target>Komma-separierte Liste der Pfade zum benutzerdefinierten Javascript, mit dem eine Datumsliste in
+					Form eines Kalenders dargestellt werden kann (optional, individuell für jedes Content-Element)
 				</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarCssFilePath.label">
-				<source>Path to CSS of the calendar-framework</source>
-				<target>Pfad zum CSS/Stylesheets des Kalenderdarstellung-Framework</target>
+				<source>comma-separated list of pathes to CSS of the calendar-framework</source>
+				<target>Komma-separierte Liste der Pfade zum CSS/Stylesheets des Kalenderdarstellung-Framework</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarCssFilePath.description">
 				<source>Many JavaScript frameworks for the calendar display of appointment lists come with their own CSS
-					file, which can be integrated here by specifying the path - if necessary also in the `EXT:`
-					notation.
+					file or CSS files, which can be integrated here by specifying the path - if necessary also in the
+					`EXT:` notation.
 				</source>
 				<target>Viele JavaScript-Frameworks zur Kalender-Darstellung von Terminlisten bringen eine eigene
-					CSS-Datei mit, die gegebenenfalls hier über die Angabe des Pfade - ggfls auch in der `EXT:`-Notation
-					- eingebunden werden kann.
+					CSS-Datei oder Dateien mit, die gegebenenfalls hier über die Angabe des Pfade - ggfls auch in der
+					`EXT:`-Notation - eingebunden werden kann.
 				</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.contentHolidaycalendar.field.customCalendarCssFilePath">
-				<source>Path to the css-file with additional customized stylesheets</source>
-				<target>Pfad zur CSS-Datei mit zusätzlichen benutzerdefinierten Stylesheets</target>
+				<source>comma-separated list of pathes to the css-file(s) with additional customized stylesheets
+					(optional, individual for each content-element)
+				</source>
+				<target>Komma-separierte Liste der Pfade zu CSS-Datei(en) mit zusätzlichen benutzerdefinierten
+					Stylesheets (optional, individuell für jedes Content-Element)
+				</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.contentElement.holidaycalendar.sheet.title">
 				<source>list of single timegaps from Yaml-files (not working yet)</source>

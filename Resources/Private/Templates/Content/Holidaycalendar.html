@@ -27,7 +27,6 @@
 <body>
 
 <f:layout name="Typo3Default"/>
-
 <f:section name="Header">
     <f:if condition="{gallery.position.noWrap} != 1">
         <f:render partial="Header/All" arguments="{_all}"/>
@@ -35,26 +34,61 @@
 
 </f:section>
 <f:section name="Main">
-    <f:debug>{holidaycalendarJson}</f:debug>
+    <f:comment>
+        <!--
+            Example inspired by https://github.com/nhn/tui.calendar/issues/620
+            => https://github.com/nhn/tui.calendar/blob/master/examples/example00-basic.html
+            => https://github.com/nhn/tui.calendar/blob/master/examples/js/app.js
+
+            The documentation of ToastUiCalendar seems to be really spartanic. It is similiar to the TYPO3 documentation at version 6.
+            I am missing some explained examples. the xeample-code didn`t easily lead to the main points of structure.
+        -->
+    </f:comment>
     <f:if condition="{holidaycalendarJson}">
-        <div id="calendar"
-             style="height: 600px;"
-             data-events='{holidaycalendarJson}'
-        ></div>
-        <f:if condition="{flexlist.calendarJsFilePath}">
-            <f:asset.script identifier="myHolidaycalendarFrame" src="{flexlist.calendarJsFilePath}"/>
+        <f:comment>
+            <f:render partial="HolidayCalendar/PreMenu"
+                      section="Main"
+                      arguments="{holidaycalendarJson:holidaycalendarJson}"
+            />
+        </f:comment>
+        <div>
+            <f:render partial="HolidayCalendar/Menu"
+                      section="Main"
+                      arguments="{holidaycalendarJson:holidaycalendarJson}"
+            />
+            <f:render partial="HolidayCalendar/Main"
+                      section="Main"
+                      arguments="{holidaycalendarJson:holidaycalendarJson}"
+            />
+        </div>
+        <f:if condition="{holidayflexlist.calendarJsFilePath}">
+            <timer:forCommaList each="{holidayflexlist.calendarJsFilePath}"
+                                as="jsFilePath" key="key"
+                                trim="1"
+            >
+                <f:asset.script identifier="myHolidaycalendarFrame{key}" src="{jsFilePath}"/>
+            </timer:forCommaList>
         </f:if>
-        <f:if condition="{flexlist.calendarAddJsFilePath}">
-            <f:asset.script identifier="myHolidaycalendarAddFrame" src="{flexlist.calendarAddJsFilePath}"/>
+        <f:if condition="{holidayflexlist.customCalendarJsFilePath}">
+            <timer:forCommaList each="{holidayflexlist.customCalendarJsFilePath}"
+                                as="jsFilePath" key="key"
+            >
+                <f:asset.script identifier="myHolidaycalendarCustomJs{data.uid}-{key}" src="{jsFilePath}"/>
+            </timer:forCommaList>
         </f:if>
-        <f:if condition="{flexlist.customCalendarJsFilePath}">
-            <f:asset.script identifier="myHolidaycalendarCustom" src="{flexlist.customCalendarJsFilePath}"/>
+        <f:if condition="{holidayflexlist.calendarCssFilePath}">
+            <timer:forCommaList each="{holidayflexlist.calendarCssFilePath}"
+                                as="cssFilePath" key="key"
+            >
+                <f:asset.css identifier="myHolidaycalendarFrame{key}" href="{cssFilePath}"/>
+            </timer:forCommaList>
         </f:if>
-        <f:if condition="{flexlist.calendarCssFilePath}">
-            <f:asset.css identifier="myHolidaycalendarFrame" href="{flexlist.calendarCssFilePath}"/>
-        </f:if>
-        <f:if condition="{flexlist.customCalendarCssFilePath}">
-            <f:asset.css identifier="myHolidaycalendarCustom" href="{flexlist.customCalendarCssFilePath}"/>
+        <f:if condition="{holidayflexlist.customCalendarCssFilePath}">
+            <timer:forCommaList each="{holidayflexlist.calendarCssFilePath}"
+                                as="cssFilePath" key="key"
+            >
+                <f:asset.css identifier="myHolidaycalendarCustom{data.uid}-{key}" href="{cssFilePath}"/>
+            </timer:forCommaList>
         </f:if>
     </f:if>
 

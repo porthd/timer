@@ -77,7 +77,7 @@ DOMTEST;
         $rawArray = CsvYamlJsonMapperUtility::mapCsvToRawArray($myTestString);
         $filteredArray = CsvYamlJsonMapperUtility::removeEmptyRowCsv($rawArray, 0);
         $checkedArray = CsvYamlJsonMapperUtility::reorganizeSimpleArrayByHeadline($filteredArray);
-        $checkYaml = CsvYamlJsonMapperUtility::mapNotativeCsvArrayToYaml($checkedArray);
+        $checkYaml = CsvYamlJsonMapperUtility::mapAssoativeArrayToYaml($checkedArray);
         $this->assertEquals($testYaml, $checkYaml, 'use a simple csv-string to check various specific cases.');
     }
 }

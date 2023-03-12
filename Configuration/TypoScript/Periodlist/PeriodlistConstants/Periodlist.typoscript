@@ -1,3 +1,4 @@
+
 contentElement.tx_timer_periodlist {
     pathSlotNumber {
         # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_periodlist.const.pathesFor.libFLuidContent
@@ -5,13 +6,11 @@ contentElement.tx_timer_periodlist {
         # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_periodlist.const.pathesFor.libContentElement
         contentElement = 349
     }
-
     backendView {
         templateRootPath = EXT:timer/Resources/Private/Backend/Templates/Content/
         partialRootPath = EXT:timer/Resources/Private/Backend/Partials/Content/
         layoutRootPath = EXT:timer/Resources/Private/Backend/Layouts/
     }
-
     view {
         templateRootPath = EXT:timer/Resources/Private/Templates/Content/
         partialRootPath = EXT:timer/Resources/Private/Partials/Content/

@@ -236,27 +236,16 @@
                         <type>input</type>
                         <size>30</size>
                         <eval>trim</eval>
-                        <default>EXT:timer/Resources/Public/Javascript/tui_calendar_2.1.3/toastui-calendar.min.js
+                        <default>EXT:timer/Resources/Public/Javascript/ToastUiCalendarExample/chance.1.0.13.min.js,
+                            EXT:timer/Resources/Public/Javascript/ToastUiCalendarExample/moment.2.20.1.min.js,
+                            EXT:timer/Resources/Public/Javascript/ToastUiCalendarExample/tui-code-snippet.min.js,
+                            EXT:timer/Resources/Public/Javascript/ToastUiCalendarExample/tui-date-picker.min.js,
+                            EXT:timer/Resources/Public/Javascript/ToastUiCalendarExample/tui-time-picker.min.js,
+                            EXT:timer/Resources/Public/Javascript/tui_calendar_2.1.3/toastui-calendar.min.js
                         </default>
                     </config>
                 </TCEforms>
             </calendarJsFilePath>
-            <calendarAddJsFilePath>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentHolidaycalendar.field.calendarAddJsFilePath.label
-                    </label>
-                    <description>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentHolidaycalendar.field.calendarAddJsFilePath.description
-                    </description>>
-                    <config>
-                        <type>input</type>
-                        <size>30</size>
-                        <eval>trim</eval>
-                        <default></default>
-                    </config>
-                </TCEforms>
-            </calendarAddJsFilePath>
             <customCalendarJsFilePath>
                 <TCEforms>
                     <label>
@@ -266,7 +255,11 @@
                         <type>input</type>
                         <size>30</size>
                         <eval>trim</eval>
-                        <default></default>
+                        <default>
+                            EXT:timer/Resources/Public/Javascript/CustomTuiCalendarList.js,
+                            EXT:timer/Resources/Public/Javascript/CustomTuiCalendarSchedules.js,
+                            EXT:timer/Resources/Public/Javascript/CustomTuiCalendar.js
+                        </default>
                     </config>
 
                 </TCEforms>
@@ -283,7 +276,8 @@
                         <type>input</type>
                         <size>30</size>
                         <eval>trim</eval>
-                        <default>EXT:timer/Resources/Public/Javascript/tui_calendar_2.1.3/toastui-calendar.min.css
+                        <default>EXT:timer/Resources/Public/Stylesheets/toastui-calendar.min.css,
+                            EXT:timer/Resources/Public/Stylesheets/ToastUiCalendarIcons.css
                         </default>
                     </config>
                 </TCEforms>

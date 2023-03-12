@@ -3,10 +3,10 @@
     <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2020-10-17T10:23:55+02:00" product-name="timer">
         <header/>
         <body>
-            <trans-unit id="wizards.newContentElement.timersimul_title">
-                <source>Timer Simulation</source>
-                <target>Timer-Simulation</target>
-            </trans-unit>
+			<trans-unit id="wizards.newContentElement.timersimul_title">
+				<source>Timer Simulation</source>
+				<target>Timer-Simulation</target>
+			</trans-unit>
 			<trans-unit id="wizards.newContentElement.timersimul_description">
 				<source>Simulate the time of the presentation of a page</source>
 				<target>Simulieren Sie den Zeitpunkt der Präsentation einer Seite</target>

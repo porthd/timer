@@ -80,15 +80,8 @@ INFOSYNTAX;
 
     public const TIMER_NAME = 'txTimerPeriodList';
 
-
     public const ARG_YAML_PERIOD_FILE_PATH = 'yamlPeriodFilePath';
     public const ARG_YAML_PERIOD_FAL_INFO = 'yamlPeriodFalRelation';
-    public const ARG_PATH_CALENDAR_JS_FILE_PATH = 'calendarJsFilePath';
-    public const ARG_PATH_CUSTOM_CALENDAR_JS_FILE_PATH = 'customCalendarJsFilePath';
-    public const ARG_PATH_CALENDAR_CSS_FILE_PATH = 'calendarCssFilePath';
-    public const ARG_PATH_CUSTOM_CALENDAR_CSS_FILE_PATH = 'customCalendarCssFilePath';
-
-    protected const MAX_TIME_LIMIT_MERGE_COUNT = 4; // count of loops to check for overlapping ranges
 
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
@@ -97,11 +90,6 @@ INFOSYNTAX;
     ];
 
     protected const ARG_OPT_LIST = [
-        self::ARG_PATH_CALENDAR_JS_FILE_PATH,
-        self::ARG_PATH_CUSTOM_CALENDAR_JS_FILE_PATH,
-        self::ARG_PATH_CALENDAR_CSS_FILE_PATH,
-        self::ARG_PATH_CUSTOM_CALENDAR_CSS_FILE_PATH,
-
         self::ARG_YAML_PERIOD_FILE_PATH,
         self::ARG_YAML_PERIOD_FAL_INFO,
 

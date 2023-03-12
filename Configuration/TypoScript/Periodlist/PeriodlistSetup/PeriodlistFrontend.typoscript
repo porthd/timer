@@ -70,7 +70,6 @@ tt_content.timer_periodlist {
                     posttext = holiday
                     type = index
                 }
-
                 calendarId {
                     pretext = cal1
                     posttext =
@@ -102,10 +101,6 @@ tt_content.timer_periodlist {
             # field with flexform-array
             # default is `tx_timer_timer`
             field = pi_flexform
-
-            # field with selector for flexform-array
-            # default is 'tx_timer_selector'
-            # selectorField = tx_timer_selector
 
             # A definition of flattenkeys will override the default definition.
             #   the attributes `timer` and `general` are used as sheet-names in my customTimer-flexforms

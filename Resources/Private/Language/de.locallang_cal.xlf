@@ -5,6 +5,11 @@
 		  product-name="timer">
 		<header/>
 		<body>
+			<trans-unit id="calendarDate.christ.greg.testCutomTimerForTimer">
+				<source>my test for customtimer, which is defined by this extension</source>
+				<target>Mein Test für einen Nutzer-definierten Timer, der durch die Extension bereitgestellt wird
+				</target>
+			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.christmasEve">
 				<source>christmas eve</source>
 				<target>Heiligabend</target>
@@ -63,11 +68,15 @@
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.worldwomenday">
 				<source>International Women's Day</source>
-				<target>Weltweibertag</target>
+				<target>Weltfrauentag</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.sanktpatrickday">
 				<source>St Patrick Day</source>
 				<target>St. Patrick Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.greenthursday">
+				<source>Green Thursday</source>
+				<target>Grüner Donnerstag</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.goodfriday">
 				<source>Good Friday</source>
@@ -122,12 +131,12 @@
 				<target>Pfingsten</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.pentecostmonday">
-				<source>Whit Monday</source>
+				<source>White Monday</source>
 				<target>Pfingstmontag</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.happycadaver">
-				<source>fCorpus Christi</source>
-				<target>fFronleichnam</target>
+				<source>Corpus Christi</source>
+				<target>Fronleichnam</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.revolte17june">
 				<source>Uprising of June 17th</source>
@@ -336,6 +345,326 @@
 			<trans-unit id="calendarDate.rel.hebr.jomJeruschalajim">
 				<source>Jerusalem Day (Yom Yerushalayim)</source>
 				<target>Jerusalemtag (Jom Jeruschalajim)</target>
+			</trans-unit>
+
+			<trans-unit id="calendarDate.cult.greg.jpNewYear">
+				<source>New Year (Japan)</source>
+				<target>Neujahr (Japan)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfDemocracy">
+				<source>Cape Verde: Democracy Day</source>
+				<target>Kap Verde: Tag der Demokratie</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfAdults">
+				<source>adult day</source>
+				<target>Tag der Erwachsenen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfAdultsNew">
+				<source>adult day</source>
+				<target>Tag der Erwachsenen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfHeros">
+				<source>Cape Verde: National Heroes Day</source>
+				<target>Kap Verde: Nationaler Heldentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpFirstFebruary">
+				<source>Bank Holiday February</source>
+				<target>Bankholiday February</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpStateFoundation">
+				<source>Japan Founding Day</source>
+				<target>Japan Tag der Staatsgründung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpTennoBirthday">
+				<source>Japan Emperor's Birthday</source>
+				<target>Japan Geburtstag des Kaisers</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.spring">
+				<source>beginning of spring</source>
+				<target>Frühlingsanfang</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crJuanSantaMaria">
+				<source>Costa Rica: Juan Santamaria Day</source>
+				<target>Costa Rica: Juan Santamaría Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfShowa">
+				<source>Day of the Showa era</source>
+				<target>Tag der Showa-Ära</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfGroundLaw">
+				<source>Japan: Constitution Day</source>
+				<target>Japan: Tag derVerfassung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfGreenings">
+				<source>Japan: Green Day</source>
+				<target>Japan: Tag des Grüns</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfChildren">
+				<source>Japan: Children's Day</source>
+				<target>Japan: Tag der Kinder</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfChildren">
+				<source>Cape Verde: Children's Day</source>
+				<target>Kap Verde: Kindertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.earlyjunebankholiday">
+				<source>Early June bank holiday</source>
+				<target>Early June bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfIndependency">
+				<source>Cape Verde: Independence Day</source>
+				<target>Kap Verde: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfOcean">
+				<source>Japan: Sea Day</source>
+				<target>Japan: Tag des Meeres</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfSport">
+				<source>Japan: Sports Day</source>
+				<target>Japan: Tag des Sports</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crAnexionDelPartidoDeNicoyaGuanacaste">
+				<source>Annex del Partido de Nicoya / Guanacaste</source>
+				<target>Anexión del Partido de Nicoya / Guanacaste</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crVirgenDeLosÁngeles">
+				<source>Day of the Virgin of the Angels</source>
+				<target>Tag der Jungfrau der Engel</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfMountain">
+				<source>Japan: Mountain Day</source>
+				<target>Japan: Tag des Berges</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaMadre">
+				<source>Costa Rica: Mother's Day/Día de la Madre</source>
+				<target>Costa Rica: Muttertag/Día de la Madre</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaPersonaNegra">
+				<source>Dia de la Persona Negra</source>
+				<target>Día de la Persona Negra</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaIndependencia">
+				<source>Catsa Rica's Independence Day</source>
+				<target>Catsa Ricas Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.autumn">
+				<source>beginning of autumn</source>
+				<target>Herbstsanfang</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.ieLatestOctoberBankholiday">
+				<source>Latest October bank holiday</source>
+				<target>Latest October bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfCulture">
+				<source>Japan: Culture Day</source>
+				<target>Japan: Tag der Kultur</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfThanksForLabour">
+				<source>Japan: Labor Thanksgiving Day</source>
+				<target>Japan: Tag des Dankes für die Arbeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaAbolicionEjercito">
+				<source>Army Abolition Day (Costa Rica)</source>
+				<target>Tag der Abschaffung der Armee (Costa Rica)</target>
+			</trans-unit>
+
+			<trans-unit id="calendarDate.cult.greg.muNewyearSecondDay">
+				<source>Mauritius: New Year Second Day</source>
+				<target>Mauritius: Neujahr Zweiter Tag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liBertoldsDay">
+				<source>Bertolds day</source>
+				<target>Bertoldstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mcSainteDevota">
+				<source>Monaco:Sainte Devota (Patron of Monaco)</source>
+				<target>Monaco:Sainte Devota (Patron of Monaco)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mxConstituationLayOfMexico">
+				<source>Mexican Constitution Day</source>
+				<target>Tag der mexikanischen Verfassung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.muAbolitionOfSlavery">
+				<source>Mauritius: Abolition of Slavery</source>
+				<target>Mauritius: Abschaffung der Sklaverei</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzHerosDay">
+				<source>Mozambique: Heroes' Day</source>
+				<target>Mosambik: Heldentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrArmedForceDay">
+				<source>Liberia: Army Day</source>
+				<target>Liberia: Tag der Armee</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.muNationalHoliday">
+				<source>Mauritius: National Day</source>
+				<target>Mauritius: Nationalfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrDecorationDay">
+				<source>Liberia: Days of Embellishment</source>
+				<target>Liberia: Tage der Ausschmückung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrJJRobertsBirthday">
+				<source>Liberia: J.J. Roberts' birthday</source>
+				<target>Liberia: J. J. Roberts’ Geburtstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liJosefi">
+				<source>joseph</source>
+				<target>Josefi</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mxBirthdayOfBenitoJuarez">
+				<source>Mexico: Birthday of Benito Juárez</source>
+				<target>Mexico: Geburtstag von Benito Juárez</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrFastPrayerDay">
+				<source>Liberia: Fasting and Prayer</source>
+				<target>Liberia: Fasten und Beten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtFreedomDay">
+				<source>Malta: Freedom Day</source>
+				<target>Malta: Freiheitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzWomenDay">
+				<source>Mozambique: Women's Day</source>
+				<target>Mosambik: Frauentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDayOfGroundlaw">
+				<source>Latvia: Convening of the Latvian Constitutional Committee, Labor Day</source>
+				<target>Lettland: Einberufung des lettischen Verfassungsausschusses, Tag der Arbeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDayOfNewIndependence">
+				<source>Latvia: Renewal of IndependenceConvening of Latvian Constitutional Committee, Labor Day</source>
+				<target>Lettland: Erneuerung der UnabhängigkeitEinberufung des lettischen Verfassungsausschusses, Tag
+					der Arbeit
+				</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrNationalUnificationDay">
+				<source>Liberia: National Unification Day</source>
+				<target>Liberia: Tag der nationalen Vereinigung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrNationHoliday">
+				<source>State holiday Croatia</source>
+				<target>Staatsfeiertag Kroatien</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtSetteGiugno">
+				<source>Malta: Sette Giugno</source>
+				<target>Malta: Sette Giugno</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrDayOfAntifashismFights">
+				<source>Croatia: Day of Antifascist Struggle</source>
+				<target>Kroation:Tag des antifaschistischen Kampfes</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDayOfJohanni">
+				<source>Latvia: Midsummer Day</source>
+				<target>Lettland: Johannisfest</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvJaeni">
+				<source>Latvia: Jan</source>
+				<target>Lettland: Jäni</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzIndependenceDay">
+				<source>Mozambique: Independence Day</source>
+				<target>Mosambik: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrIndependenceDay">
+				<source>Liberia: Independence Day</source>
+				<target>Liberia: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrDayOfWinAndThanks">
+				<source>Croatia: Day of Victory and Homeland Gratitude</source>
+				<target>Kroation: Tag des Sieges und der heimatlichen Dankbarkeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liMariabirthday">
+				<source>Birth of Mary</source>
+				<target>Maria Geburt</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrFlagDay">
+				<source>Liberia: Flag Day</source>
+				<target>Liberia: Flaggentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzVictoryDay">
+				<source>Mozambique: Victory Day</source>
+				<target>Mosambik: Siegestag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtVictoriaDay">
+				<source>Malta: Victory Day</source>
+				<target>Malta: Siegestag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mxDiaIndependencia">
+				<source>Mexico's Independence Day</source>
+				<target>Mexikos Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtIndependenceDay">
+				<source>Malta: Independence Day</source>
+				<target>Malta: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzArmedForcesDay">
+				<source>Mozambique: Army Day</source>
+				<target>Mosambik: Tag der Armee</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzPeaceAndReconciliationDay">
+				<source>Mozambique: Day of Peace and Reconciliation</source>
+				<target>Mosambik: Tag des Friedens und der Versöhnung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.muAllSaintsDay">
+				<source>Mauritius: All Saints' Day</source>
+				<target>Mauritius: Allerheiligen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.muArrivalOfIndenturedLabourers">
+				<source>Mauritius: Arrival of the Indian workers</source>
+				<target>Mauritius: Ankunft der indischen Arbeiter</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrThanksGivingDay">
+				<source>Liberia: Thanksgiving Day</source>
+				<target>Liberia: Thanksgiving Day (Erntedankfest)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrDayOfVictimsOfHomewar">
+				<source>Croatia: Memorial Day for the victims of the Homeland War and Vukovar and Škabrnja</source>
+				<target>Kroation: Gedenktag für die Opfer des Heimatkrieges und von Vukovar und Škabrnja</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDateOfStateFoundation">
+				<source>Latvia: Proclamation of the Republic of Latvia 1918 (National Day)</source>
+				<target>Lettland: Proklamierung der Republik Lettland 1918 (Nationalfeiertag)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mcNationHoliday">
+				<source>Monaco: National Day</source>
+				<target>Monaco: Nationalfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mxNovemberRevolution">
+				<source>Commemorating the November 20th - Anniversary of the Mexican Revolution</source>
+				<target>Gedenken an den 20 November - Jahrestag der mexikanischen Revolution</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrPresidentTubmansBirthday">
+				<source>Liberia: President Tubman's birthday</source>
+				<target>Liberia: Präsident Tubman’s Geburtstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.sanktAndrewDay">
+				<source>Mexico: handover of power to the new president</source>
+				<target>Mexiko: Machtübergabe an den neuen Präsidenten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liNikolaus">
+				<source>Nicholas</source>
+				<target>Nikolaus</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liMariaPregnancy">
+				<source>Conception</source>
+				<target>Mariä Empfangnis</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtRepublicDay">
+				<source>Malta: Republic Day</source>
+				<target>Malta: Tag der Republic</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.worldanticorruptionday">
+				<source>World Anti-Corruption Day</source>
+				<target>Weltantikorruptionstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.earlyAugustBankholiday">
+				<source>early August bank holiday</source>
+				<target>Früher August-Bankfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpHonorForElderPeople">
+				<source>Day of Homage to Age</source>
+				<target>Tag der Ehrerbietung vor dem Alter</target>
 			</trans-unit>
 		</body>
 	</file>

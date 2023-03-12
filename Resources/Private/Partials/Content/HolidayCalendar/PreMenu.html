@@ -1,0 +1,49 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:timer="http://www.mobger.de/2019/timer"
+      data-namespace-typo3-fluid="true"
+>
+<head>
+    <f:comment>
+        <!--***************************************************************
+        *
+        *  Copyright notice
+        *
+        *  (c) 2023 Dr. Dieter Porth <info@mobger.de>
+        *
+        *  All rights reserved
+        *
+        *  This script is free software; you can redistribute it and/or modify
+        *  it under the terms of the GNU General Public License as published by
+        *  the Free Software Foundation; either version 3 of the License, or
+        *  (at your option) any later version.
+        *
+        *  The GNU General Public License can be found at
+        *  http://www.gnu.org/copyleft/gpl.html.
+        *
+        *  This copyright notice MUST APPEAR in all copies of the script!
+        *************************************************************** -->
+    </f:comment>
+</head>
+<body>
+<f:section name="Main">
+    <f:comment>
+        <!--
+            Example inspired by https://github.com/nhn/tui.calendar/issues/620
+            => https://github.com/nhn/tui.calendar/blob/master/examples/example00-basic.html
+            => https://github.com/nhn/tui.calendar/blob/master/examples/js/app.js
+
+            The documentation of ToastUiCalendar seems to be really spartanic. It is similiar to the TYPO3 documentation at version 6.
+            I am missing some explained examples. the xeample-code didn`t easily lead to the main points of structure.
+        -->
+    </f:comment>
+
+    <div id="top">
+        <a href="https://github.com/nhn/tui.calendar">
+            <img src="{f:uri.resource(path:'Images/ToastUiCalendar/img-bi.png', extensionName: 'timer')}"
+                 srcset="{f:uri.resource(path:'Images/ToastUiCalendar/img-bi@2.png', extensionName: 'timer')} 2x,{f:uri.resource(path:'Images/ToastUiCalendar/img-bi@3.png', extensionName: 'timer')} 3x">
+        </a>
+    </div>
+</f:section>
+</body>
+</html>
+

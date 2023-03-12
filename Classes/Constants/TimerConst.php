@@ -102,4 +102,6 @@ class TimerConst
     public const FAKE_CALENDAR_JULIAN_BY_GREGORIAN = 'gregorian';
 
     public const DEFAULT_FLATTEN_KEYS_LIST = ['data', 'general', 'timer', 'sDEF', 'lDEF', 'vDEF',];
+
+    public const LIST_SEASON_OF_YEAR = ['spring', 'summer', 'autumn', 'winter'];
 }

@@ -4,26 +4,21 @@ lib.holidaycalendar.fluidContent {
     templateRootPaths {
         {$contentElement.tx_timer_holidaycalendar.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_holidaycalendar.view.templateRootPath}
     }
-
     partialRootPaths {
         {$contentElement.tx_timer_holidaycalendar.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_holidaycalendar.view.partialRootPath}
     }
-
     layoutRootPaths {
         {$contentElement.tx_timer_holidaycalendar.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_holidaycalendar.view.layoutRootPath}
     }
 }
-
 lib.holidaycalendar.contentElement < lib.contentElement
 lib.holidaycalendar.contentElement {
     templateRootPaths {
         {$contentElement.tx_timer_holidaycalendar.pathSlotNumber.contentElement}= {$contentElement.tx_timer_holidaycalendar.view.templateRootPath}
     }
-
     partialRootPaths {
         {$contentElement.tx_timer_holidaycalendar.pathSlotNumber.contentElement}= {$contentElement.tx_timer_holidaycalendar.view.partialRootPath}
     }
-
     layoutRootPaths {
         {$contentElement.tx_timer_holidaycalendar.pathSlotNumber.contentElement}= {$contentElement.tx_timer_holidaycalendar.view.layoutRootPath}
     }

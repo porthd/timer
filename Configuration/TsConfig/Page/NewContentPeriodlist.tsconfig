@@ -9,7 +9,6 @@ mod.wizards.newContentElement.wizardItems.common {
             }
         }
     }
-
     show := addToList(timer_periodlist)
 }
 

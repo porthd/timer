@@ -6,12 +6,6 @@ Die Basis für diese Dokumentation ist die deutsche Variante `de.ReadMe.md`. Die
 von `google.translate.de` übersetzt. Der Dokumentation ist eine Präsentatin beigefügt, die ich im Jahre 2022 für das
 TYPO3-Barcamp in Kamp-Lintfort vorbereitet hatte
 
-## ACHTUNG
-
-- ~~8 November 2022: Die Timer `RangeListTimer` und `PeriodListTimer` funktionieren bisher nicht wie gewünscht.~~
-- 27 Dezember 2022: Die Timer `RangeListTimer` und `PeriodListTimer` sollten jetzt funktionieren. Es sind entsprechende Tests definiert worden.
-
-
 ## Motivation
 
 TYPO3 stellt in seinen Standardtabellen die Felder `starttime` und `endtime` zur Verfügung. Über die Felder können
@@ -70,54 +64,226 @@ Nutzungsanspruch ist noch ein Schedulertask zu aktivieren oder im eigenen Typosc
 
 ### Periodisch erscheinender Content oder periodisch erscheinende Seiten
 
-Für periodisch erscheinden Content oder periodisch erscheinden Seite muss ein der Consolen-Task der Extension
-eingerichtet werden. Er wertet out-of-the-box die Elemente aus, für die eine Timer definiert ist und für die das Flag
-der Scheduler-Auswertung auf aktiv gesetzt wurde.
+Für den periodisch erscheinenden Content oder die periodisch erscheinende Seite
+muss der Planer/Scheduler-Task der Extension
+eingerichtet werden, damit die Felder `starttime`und `endtime` regelmäßig
+aktuallisiert werden.
+Der Task aktuallisiert gegebenenfalls die Felder `starttime`und `endtime` für
+diejenigen Elemente aus, für die Werte im Feld `tx_timer_selector` definiert
+sind und für die das Flag im Feld `tx_timer_scheduler`
+der Scheduler-Auswertung auf aktiv gesetzt wurde und deren `endtime` in der
+Vergangenheit liegt bzw. nicht definiert ist.
 
 #### Contentelement `periodlist` für einfache Terminlisten
 
-Das Content-Element `periodlist` ist ähnlich aufgebaut wie das Content-Element `textmedia`.
-Es erlaubt zusätzlich die Ausgabe von einfachen Terminlisten, sofern für den voreingestellten
-Timer `periodlisttimer` eine gültige yaml-Datei mit einer Terminliste hinterlegt wird.
+Das Content-Element `periodlist` ist ähnlich aufgebaut wie das
+Content-Element `textmedia`.
+Es erlaubt zusätzlich die Ausgabe von einfachen Terminlisten. Die Daten für
+diese Content-Elment werden
+als Flexform im Feld `pi_flexform` gespeichert.
+
+Neben den Parametern für die periodischen Daten kann man auch zusätzlich Pfade
+zum JavaScript und zum CSS angeben.
+Auf diese Weise kann man ein eigenes Kalender-System einbinden. Exemplarische
+wurde
+hier das schlanke JavaScript-Framework von Jack
+Ducasse ([https://github.com/jackducasse/caleandar](https://github.com/jackducasse/caleandar))
+verwendet. Grundsätzlich kann man nautürlich auch jedes andere
+Kalender-Framework verwenden.
+
+#### Contentelement `holidaycalendar` für Feiertag
+
+Die meisten wollen Termine nicht in unübersichtlichen TYPO3-Backend pflegen,
+weil man dort schnell die Übersicht verliert.
+Eine übersichtliche Auflistung von Terminen
+kann man in einer Excel-Liste erreichen. Die meisten Redakteure sind auch in der
+Lage,
+die Daten in ihrer Excel-Tabelle als CSV-Datei zu speichern.
+
+Das Content-Element `holidaycalendar` ist eine Weiterentwicklung des
+Content-Elementes `periodlist`,
+wobei hier der Fokus auf den Redakteur-Workflow gelegt wird. Es erlaubt
+zusätzlich die Ausgabe von einfachen Feiertagslisten
+oder anderer Terminlisten, die über einfach zu erstellende `excel`-Listen
+definiert werden. Die Daten für dieses Content-Element werden
+als Flexform im Feld `pi_flexform` gespeichert.
+
+Neben den Parametern für die periodischen Daten kann man auch zusätzlich Pfade
+zum JavaScript und zum CSS angeben.
+Für das Out-Of-The-Box-Beispiel wurde das mächtige
+Kalender-Framework [ToastUI-calendar](https://github.com/nhn/tui.calendar/)
+voreingestellt.
+Es ist ein mächtiges Framework, dass leider mit einer etwas spartanischen
+Dokumentation daherkommt.
+(Vielleicht habe ich mich mit der Integration auch nur schwergetan, weil ich
+bisher wenig Erfahrungen im JavaScript-Bereich habe sammeln können.)
+Für den initialen Aufruf des Content-Elments mussten mehrere JavaScripte
+eingebunden werden, weshalb der `timer:forCommaList`-Viewhelper programmiert
+wurde.
+Die Aufzählung der verschiedenen JavaScript-Dateien kann als Komma-separierte
+Liste
+in einem Feld erfolgen. Die JavaSript und StyleSheet-Felder mit der
+Namensbestandteil `custom` sind für jede Content-element individuell und werden
+bei mehrfacher verwendung des Content-Elementes auch mehrfach geladen.
+Die Dateien aus den anderen beiden Felder werden nur einmal für eine Seite
+geladen, egal wie oft das Content-Element auf der Seite verwendet wird.
+
+Der Dateimport kann über eine CSV-Datei oder eine Yaml-Datei erfolgen. Da die
+meisten Redakteure vermutlicht mit der
+Erstellung einer Yaml-Datei überfordert sind, wurde auch der Import als
+CSV-Datei ermöglicht.
+Eine CSV-Datei kann der Redaktuer leicht mit `excel` (Microsoft Office)
+oder `calc` (LibriOffice/ Open Office) erzeugen, indem er seine Tabelle als
+CSV-datei abspeichert.
+Der Import der Datei in das Content-Elmente erfolgt entweder über die Angabe der
+Pfade (Feld: `holidayFilePath`) oder alternativ über das File-System von TYPO3 (
+Feld: `holidayFalRelation`).
+Über die Felder `aliasFilePath` und `aliasFalRelation` kann der Redakteur auch
+Alias-Definitionen importieren.
+In den Alias-Definitionen findet man oft wiederverwendete
+Definitionsbestandteile,
+die den Datenarray eines Eintrags automatisch erweitern, wenn im
+Feld `add.alias` der entsprechende Name der Alias-Definition zu finden ist. (**
+Achtung: Diese alias-Feature wuirde bislang noch nicht getestet.**)
+
+Voreingestellt ist das mächtige
+Kalender-Framework [ToastUI-calendar](https://github.com/nhn/tui.calendar/).
+
+Als voreingestellte Daten zu den Feiertagen in verschiedenen Ländern (Ich
+übernehme keine Garantie für die Richtigkeit und Vollständigkeit der Daten.)
+wird eine CSV-Datei eingespielt, die mit `calc` aus
+der [Datei (ExcelLikeListForHolidays.ods)](ExcelLikeListForHolidays.ods) erzeugt
+wurde.
+Die Datei sollte sich auch in `excel` einlesen und bearbeiten lassen.
+Über die Punktnotation im Titel kann man hinterher die Aufbaustruktur des Arrays
+im PHP steuern.
+
+```
+Title in CSV:
+   title
+Value in first row of CSV:
+   'my value'
+
+>>> will be transformed to >>>
+
+php:
+ 0=> [
+     'title' =>'my value',
+ ]
+
+=====================================================
+Title in CSV:
+   title.COMMA
+Value in first row of CSV:
+   'my value,my stuff,my idea'
+
+>>> will be transformed to >>>
+
+php:
+ 0 => [
+     'title' => [
+        'my value',
+        'my stuff',
+        'my idea',
+     ],
+ ]
+
+=====================================================
+Title in CSV:
+   title.subtitle.label
+Value in first row of CSV:
+   'my value,my stuff,my idea'
+>>> will be transformed to >>>
+php:
+ 0 => [
+     'title' => [
+        'subtitle' =>[
+            'label' => 'my value,my stuff,my idea',
+        ],
+     ],
+ ]
+
+```
+
+(Für mich war erstaunlich, wie viele unterschiedliche Varianten und
+Berechnungsregeln es für Feiertage gibt. )
 
 #### Anmerkungen
+
 ##### _Anmerkung 1_
-Um einen möglichst flexible Einbindung von Terminlisten zu ermöglichen, gibt es die zwei Eingabefelder `yamlPeriodFilePath` und `yamlPeriodFalRelation`.
-Das Feld `yamlPeriodFilePath` hat eher den Integrator im Blick und erlaubt  vier Varianten,
+
+Um einen möglichst flexible Einbindung von Terminlisten zu ermöglichen, gibt es
+die zwei Eingabefelder `yamlPeriodFilePath` und `yamlPeriodFalRelation`.
+Das Feld `yamlPeriodFilePath` hat eher den Integrator im Blick und erlaubt vier
+Varianten,
 um den Ort der YAML-Datei zu spezifizieren:
+
 1. absolute Pfadangabe ggfls. auch mit relativem Pfad
 2. Pfadangabe mit dem Prefix `EXT:`
 3. einfache URL beginnend mit `http://` oder mit `https://`
-4. URL mit Serverpasswort im Format `Nutzername:Passwort:Url`, wobei die eigentliche URL mit URL beginnend mit `http://` oder mit `https://` beginnt. Bei den URL-Angaben wird nicht die YAML-Anweisung `import` unterstützt.
+4. URL mit Serverpasswort im Format `Nutzername:Passwort:Url`, wobei die
+   eigentliche URL mit URL beginnend mit `http://` oder mit `https://` beginnt.
+   Bei den URL-Angaben wird nicht die YAML-Anweisung `import` unterstützt.
 
-Das Feld `yamlPeriodFalRelation` hat eher den Redaktuer im Blick und erlaubt die Einbindung der YAML-Datei über das TYPO3 Backend.
+Das Feld `yamlPeriodFalRelation` hat eher den Redaktuer im Blick und erlaubt die
+Einbindung der YAML-Datei über das TYPO3 Backend.
 Hier hat der Redakteur auch die Möglichkeit, mehrere Dateien einzubinden, die vom Timer wie eine große Liste behandelt werden.
 
 ##### _Anmerkung 2_
-Im Attribut `data` können verschiedenen Daten hinterlegt werden, so daß über ein passendes Partial oder Template strukturiert
-Sonderinformationen wie Eintrittspreis, Vorverkaufspreise oder Ähnliches per Datei mit übergeben werden können.
-Diese Form eignet sich gut, wenn es darum geht, automatisiert Daten über das Format einer YAML-Datei aus anderen Quellen
+
+Im Attribut `data` können verschiedenen Daten hinterlegt werden, so daß über ein
+passendes Partial oder Template strukturiert
+Sonderinformationen wie Eintrittspreis, Vorverkaufspreise oder Ähnliches per
+Datei mit übergeben werden können.
+Diese Form eignet sich gut, wenn es darum geht, automatisiert Daten über das
+Format einer YAML-Datei aus anderen Quellen
 entgegenzunehmen. Dies erspart das Einpflegen der Daten im Backend.
 
 #### Darstellung der Termine im Kalender
 
-Die Flexform-Definition wurde um zwei Pfad-Felder für JavaScript und für Stylesheets erweitert.
-Auf diesem Weg ist es möglich, die Termine auch in Kalender-Form darzustellen. Die Default-Einstellungen sind so gesetzt,
-dass die Schulferien für Niedersachsen und Bremen aus dem Jahr 2022 in einem Kalender dargestellt werden.
+Die Flexform-Definition wurde um zwei Pfad-Felder für JavaScript und für
+Stylesheets erweitert.
+Auf diesem Weg ist es möglich, die Termine auch in Kalender-Form darzustellen.
+Die Default-Einstellungen sind so gesetzt,
+dass die Schulferien für Niedersachsen und Bremen aus dem Jahr 2022 in einem
+Kalender dargestellt werden.
 
 #### Dataprozessoren für diesen Timer
-Damit die Daten eingelesen werden können, wurden drei Datenprozessoren definiert.
-Der `FlexToArrayProcessor` erlaubt es, Flexform-Felder auszulesen und in einfache Array umzuwandeln.
-Auf diesem Weg kann man dynamisch die JavaAScript- und Stylesheet-Dateien vom Inhaltselement laden lassen.
-Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei
-definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
-Der dritte Datenprozessor `MappingProcessor` ist nötig, um die Termindaten als JSON-String an das Fluid-Template zu übergeben.
-So können die Daten leicht über ein HTML-Attribut dem Calendar-Framework zur Verfügung gestellt werden.
+
+Damit die Daten eingelesen werden können, wurden drei Datenprozessoren
+definiert.
+
+Der `FlexToArrayProcessor` erlaubt es, Flexform-Felder auszulesen und in
+einfache Array umzuwandeln.
+Auf diesem Weg kann man dynamisch die JavaAScript- und Stylesheet-Dateien vom
+Inhaltselement laden lassen.
+
+Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste,
+die beim PeriodlistTimer in der Yaml-Datei
+definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für
+die Start- und Endzeit
+der Termine auch die entsprechenden DatTime-Objekte und berechnet die Anzahl der
+Tage (24Stunden = 1 Tag) zwischen den Terminen.
+
+~~Der dritte Datenprozessor `MappingProcessor` ist nötig, um die Termindaten als
+JSON-String an das Fluid-Template zu übergeben.
+So können die Daten leicht über ein HTML-Attribut dem Calendar-Framework zur
+Verfügung gestellt werden.~~
+`MappingProcessor` ist deprecated und wird in der Version 12 entfernt, weil er
+keine Arrays mit mehreren Ebenen unterstützt.
+
+Zukünftig wird für das Mapping als dritte
+Datenprozessor `BetterMappingProcessor` verwendet werden.
+Er kann helfen, einen geeigneten JSON-String an das Fluid-Template zu übergeben.
+So können die Daten leicht über ein HTML-Attribut dem TuiCalendar-Framework oder
+einem anderen Calendar-Framework zur Verfügung gestellt werden.
 
 ### Contentelement `timersimul` als Beispiel
 
-Das Content-Element `timersimul` zeigt exemplarisch die Anwendung der Viewhelper und der Datenprozessoren. In
-Produktivumgebungen sollten sie für Editoren ausblenden. Es wird entfernt werden, wenn die Extension den Status `beta`
+Das Content-Element `timersimul` zeigt exemplarisch die Anwendung der Viewhelper
+und der Datenprozessoren. In
+Produktivumgebungen sollten sie für Editoren ausblenden. Es wird entfernt
+werden, wenn die Extension den Status `beta`
 erreicht.
 
 ### Nutzung der periodischen Timer (Customtimer)
@@ -151,13 +317,20 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   Rechnung tragen, indem er die Berücksichtigung von verschiedene
   Kalendersysteme erlaubt.
   (Beispiel 5760 Minuten (=2 Tage) nach Ramadan (1.9.; islamischer Kalender) für
-  720 Minuten (=6 Stunden))
+  720 Minuten (=6 Stunden)). Gleichzeitig lassen sich über diesen Timer auch
+  Listen von Terminen ausgeben. Es wird dabei der Workflow unterstützt, die
+  Terminlisten - also Feiertagsliste wie auch Timer-Definitionen in einer
+  Exceltabelle zu definieren und dem Timer selbst die Liste als CSV-Datei zur
+  Verfügung zu stellen.
 * DailyTimer - Tägliche für einige Minuten wiederkehrende aktive Zeiten
   (täglich ab 10:00 für 120 Minuten)
-* DatePeriodTimer - Periodisch für einige Minuten wiederkehrende aktive Zeiten relativ zu einem Startzeitpunkt. Bedenken
-  sie, dass wegen der Rückführung der Zeit auf die UTC-Zone während der Berechnung die Sommerzeit bei Periodizitäten
+* DatePeriodTimer - Periodisch für einige Minuten wiederkehrende aktive Zeiten
+  relativ zu einem Startzeitpunkt. Bedenken
+  sie, dass wegen der Rückführung der Zeit auf die UTC-Zone während der
+  Berechnung die Sommerzeit bei Periodizitäten
   auf Stundenbasis zu unerwarteten Ergebnissen führen kann.
-  (ganzen Tag in jedem Jahr zum Geburtstag, jede Woche für 120 Minuten bis 12:00 ab dem 13.5.1970, ..)
+  (ganzen Tag in jedem Jahr zum Geburtstag, jede Woche für 120 Minuten bis 12:00
+  ab dem 13.5.1970, ..)
 * DefaultTimer - Defaulttimer/Nullelement
 * EasterRelTimer - Bestimmt den aktiven Zeitraum relativ zu wichtigen deutschen
   Feiertagen (Neujahr, Silvester, Welt-Handtuch-Tag, Tag-der-Dummheit) und den
@@ -199,10 +372,13 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   Timer `calendarDateRelTimer`_**
 * MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen
   bestimmten Zeitraum
-* MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für einen bestimmten Zeitraum
-* PeriodListTimer - Liest Daten zu aktiven Perioden aus einer Yaml-Datei ein. Hilfreich zum Beispiel
+* MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für
+  einen bestimmten Zeitraum
+* PeriodListTimer - Liest Daten zu aktiven Perioden aus einer Yaml-Datei ein.
+  Hilfreich zum Beispiel
   für Ferienlisten oder Tourenpläne von Künstlern
-* RangeListTimer - Liest periodische Liste aus Yaml-Dateien oder aus der Tabelle `` ein und mergt sie
+* RangeListTimer - Liest periodische Liste aus Yaml-Dateien oder aus der
+  Tabelle `` ein und mergt sie
   bei Überlappung zu neuen aktiven Bereichen zusammen. Man kann auch eine Liste
   mit unerlaubten Bereichen definieren,
   die solche Überlappungen reduzieren können. (Beispiel: jeden Dienstag und
@@ -261,17 +437,21 @@ anzugeben sind:
   Schaltmonat ersten Adar (6) statt auf den zweiten Adar (7) zugreifen wollen,
   müssen sie bei Nutzung des jüdischen Kalenders in `arg.status` einen Wert
   größer als '1' hinterlegen.
-- _fixedweekend_: Für einen definierten Kalender (`arg.calendar`) wird ein
+- _fixedshifting_: Für einen definierten Kalender (`arg.calendar`) wird ein
   definierter Tag (`arg.day`)
-  und ein definierter Monat (`arg.month`) angegeben. Tag und Monat sind als
-  Zahlen anzugeben.
-  Wenn der berechnete Tag auf bestimmte Samstag oder Sonntag fällt, wird der
-  nachfolgende Montag verwendet.
-  Wenn in `arg.status` eine `1` angegeben ist, dann wird statt des Montags der
-  nächste Dienstag verwendet, wenn der vorhergehende Tag auf einen Samstag oder
-  einen Sonntag fällt. Diese Ausnahme ist der Regelung für den 2.
-  Weihnachtstage/Boxingday in England geschuldet.
-  Technisch ist die Mechanik eigentlich analog zu `_fixed_`.
+  und ein definierter Monat (`arg.month`) angegeben. In manchen Ländern ist es
+  üblich, für den Feiertag einen Ersatzfeiertag zur Verfügung zu stellen,
+  wenn der Feiertag selbst zum Beispiel auf das Wochenende oder auf einen
+  bestimmten Wochentag fällt.
+  In der Spalte `arg.statuscount` findet sich bei diesem Typ eine
+  komma-separierte Liste von sieben ganzen Zahlen. Die Zahlen kennzeichen, um
+  wieviel Tage
+  ein Feiertag verschoben wird, wenn der Feiertag zum Beispiel auf einen
+  Mittwoch fällt. In der Liste repräsentiert die
+  erste Zahl den Montag und die letzte Zahlden Sonntag. In dem Beispiel '
+  0,1,2,0,3,2,1' würde ein Feiertag um drei Tage (5.ter Eintrag) verschoben,
+  wenn er auf einen Freitag (5.ter Tag in der Woche) fällt.
+  Technisch funktioniert die Mechanik analog zu `_fixed_`.
 - _easterly_: Dieses Schlüsselwort gilt nur für eine Berechnungsform beschränkt
   auf den gregorianischen oder auf den julianischen Kalender (`arg.calendar`).
   Es bestimmt einen Feiertag relativ zum Ostersonntag, der mit Hilfe der
@@ -320,7 +500,6 @@ Notation der Titel die Struktur eines assoziativen Arrays mit mehreren Ebenen
 definiert.
 Der Ausdruck 'add.rank' im Titel führt zu folgenden Array, wenn in der
 entsprechenden Zeile in der CSV der Spalte der Wert `5` zugeordnet ist:
-
 ```
 $liste = [
     // ...
@@ -339,7 +518,6 @@ einen Array mit getrimmten Werten umgewandelt wird.
 Der Ausdruck 'add.locale.COMMA' im Titel führt zu folgenden Array, wenn in der
 ensprechenden Zeile in der CSV der Spalte der Wert `de_DE, de_CH , de_AT `
 zugeordnet ist:
-
 ```
 $liste = [
     // ...
@@ -368,7 +546,6 @@ Es wird angestrebt, die Angaben immer auch im Frontend verfügbar zu machen.
 Die Struktur lässt sich am leichtesten am Beispiel der YAML-Struktur erläutern.
 Zu den einzelnen Bestandteilen sind die Erläuterungen als Kommentar mit
 angeführt.
-
 ```
   -
 # Hilfstitel für die Übersicht in der Excel-Datei. Der Wert wird im Programm nicht genutzt.
@@ -455,6 +632,110 @@ angeführt.
       alias: ''
 ```
 
+##### Wichtige Spalten/Spaltenbezeichner in der CSV
+
+- _title_: Diese Spalte bezeichnet den Feiertag und muss immer mit mindestens
+  einem Zeichen (kein Whitespace-Zeichen) gefüllt sein.
+- _identifier_: Diese Spalte bezeichnet in der Liste einen eindeutigen
+  Identifier für den Feiertag. Er sollte eine Abkürzung des
+  genutzten Kalenders enthalten und eine Abkürzung für den Feiertag.
+  Gegebenenefalls kann es hilfreich sei, in den Identifier auch den die
+  Locale-Bezeichnujng für das Land einfließen zu lassen.
+- _arg.timer_: die ist einen Oberbegriff, unter welchen die verschiedenen
+  Parameter für die jeweiligen Timer erfasst, die für die Extension `timer`
+  genutzt werden.
+- _arg_: erfasst die Argumente für die verschiedenen Timer/Typen `fixed`
+  , `fixedrelated`, `fixedshifting`, `weekdayly`, `easterly` oder `mooninmonth`.
+  Die Parameter werden zur Berechnung der Feiertage verwendet.
+- _arg.startYear_: Die Jahrezahl beschreibt, ab welchem Jahr des gewählten
+  Kalenders der Feiertag gültig ist. Er gilt für alle Typen (`fixed`
+  , `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `season`
+  , `seasonshifting`, `weekdayly`, `easterly` oder `mooninmonth`).
+- _arg.endYear_:  Die Jahrezahl beschreibt, bis welchem Jahr des gewählten
+  Kalenders einschließlich der Feiertag gültig ist/war. Er gilt wie oben für
+  alle Typen.
+- _arg.day_: Der Parameter beschreibt einen Tag im Monat für eine
+  Feiertagsberechnung. Genutzt wird der Eintrag in `fixed`, `fixedrelated`
+  , `fixedshifting`,`fixedmultiyear`, `weekdayly`.
+- _arg.month_: Der Parameter beschreibt den Monat, der für die
+  Feiertagsberechnung wichtig ist. Genutzt wird der Eintrag in `fixed`
+  , `fixedrelated`, `fixedmultiyear`, `fixedshifting`, `weekdayly`
+  oder `mooninmonth`
+- _arg.type_: Beschreibt den Typ der Kalenderberechnung. Möglich sind `fixed`
+  , `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `weekdayly`, `easterly`
+  oder `mooninmonth`. Möglich sind auch alle Identifikatoren, die die
+  verschiedenen Timer als Identifikatoren zur Verfügung stellen.
+- _arg.calendar_: Der Parameter defininiert welche Kalender genutzt wird. In der
+  Regel ist der Kalender `gregorian`. Erlaubt sind weiter: `buddhist`, `chinese`
+  , `coptic`, `dangi`, `ethiopic`, `ethiopic`, `gregorian`, `hebrew`, `indian`
+  , `islamic`, `islamic`, `islamic`, `islamic`, `islamic`, `julianisch`
+  , `japanese`, `persian`, `roc`. Der Parameter gilt für alle Typen (`fixed`
+  , `fixedshifting`, `weekdayly`, `easterly` oder `mooninmonth`).
+- _arg.status_: Genutzt wird der Eintrag in `fixedmultiyear`, `fixedrelated`
+  , `season`, `weekdayly` oder `mooninmonth`. Bei `weekdayly` oder
+  bei `fixedrelated` gibt er den Wochentag als Ziffer (1 = Montag, ...7 =
+  Sonntag) an. Bei `mooninmonth` gibt er die Mondphase (1 = zunehmender
+  Halbmond, 2 = Vollmond, 3 = abnehmender Halbmond, 4 = Neumond) an.
+  Bei `season` gibt er den Beginn der astronomischen Jahreszeit (1 =
+  Frühling-Tag-Nacht-Gleiche, 2 = Sommersonnenwende, 3 Herbst-Tag-Nacht-Gleiche,
+  4 = Wintersonnenwende) an. Bei `fixedmultiyear` wird hier ein Bezugjahr
+  angegeben.
+- _arg.statusCount_: Genutzt wird der Eintrag in `fixedshifting`, `fixedrelated`
+  , `seasonshifting`, `fixedmultiyear`, `weekdayly`,`mooninmonth`
+  oder `easterly`. Bei `fixedshifting` wird über eine kommaseparierte Liste die
+  Abweichung zum bestehenden Wochentag definiert. Bei `easterly` wird der
+  Abstand zum Ostersonntag definiert. Bei `weekdayly` oder bei `fixedrelated`
+  wird angegeben, welcher (erster, zweiter, ..) Wochentag im entsprechenden
+  Monat bzw. relativ zum Fixdatum gemeint ist. Negative Zahlen zählen vom
+  Monatsende aus bzw. in Richtung Vergangenheit. Bei `mooninmonth` wird
+  definiert, ob die erste oder zweite Mondpahse im Monat gemeint ist.
+- _arg.secDayCount_: Genutzt wird der Eintrag nur in `weekdayly`
+  oder `fixedrelated`. Er definiert den Abstand in Tage relativ zum ausgewählten
+  Wochentag. (Sonderdefinition für den Schweizer bzw. Eidgenössischen Dank-,
+  Buss- und Bettag )
+
+##### Verschiedene Typen der Feiertagsberechnung
+
+- `fixed`: Dieser Type definiert den Feiertag über ein bestimmtes Datum im
+  Kalender.
+- `fixedrelated`: Dieser Type erklärt sich am besten über den Advent, welches
+  der i.te Sonntag vorm 25.12. ist. Hier wird das Fixdatum definiert. Im
+  Parameter `status` wird die Nummer des Wochentages (0=Sonntag,..,6=Samstag).
+  In `statusCount` wird die Anzahl der Wochentage angegeben, wobei eine negative
+  Zahl für den i-ten Wochentag vorm Fixtag meint. Wenn in `arg.secDayCount` noch
+  eine Zahl steht, dann wird das Datum bestimmt, welches die entsprechende
+  Anzahl von Tage vom i-ten Wochentag entfernt ist. (Dies wird zum Beispiel für
+  den Buß- und Bettag benötigt.)
+- `fixedshifting`: Dieser Type definiert den Feiertag über ein bestimmtes Datum
+  im Kalender, wobei verschiedene Wochentage zu Abweichungen (
+  Substitutuioonsfeiertag) führen können.
+- `fixedmultiyear`: Dieser Type definiert den Feiertag über ein bestimmtes Datum
+  im Kalender, wobei der Termin aber nur alle x Jahre gefeiert wird.
+  In `arg.status` wird ein Jahr angegeben, in welchem der Tage gefeiert wurde.
+  In `arg.statusCount`findet sich der Wert, nach wie vielen Jahren der Tag
+  erneut gefiert wird. Der alle sechs Jahre stattfindende
+  Präsidentschaftswechsel in Mexiko braucht zum Beispiel diese Variante, wenn
+  ich es richtig verstanden habe.
+- `season`: Hier wird der Anfang einer astronomischen Jahreszeit bestimmt (
+  Tag-Nachtgleiche im Frühling, ...)
+- `seasonshifting`: Hier wird der Anfang einer astronomischen Jahreszeit
+  bestimmt (Tag-Nachtgleiche im Frühling, ...), wobei es an bestimmten
+  Wochentage wie bei `fixedshifting` substituierende Abweichungen geben kann.
+- `weekdayly`: Hier wird ein bestimmter Wochentag in einem bestimmten Monat zum
+  Feiertag erklärt.
+- `easterly`: Hier bezieht sich der Feiertag auf den jeweiligen Ostersonntag.
+  Diese Feiertage beziehen sich entwweder auf den Julianischen oder den
+  gregorianischen Kalender.
+- `mooninmonth`: Hier wird eine bestimmte Mondphase in einem bestimmten Monat
+  erwartet.
+
+##### Definition von Parameter für Timer der Extension
+
+Der erste Eintrag in der Beispieldatei deutet an, wie man Timer der Funktion in
+der Excel-Datei definieren kann. Es sind dann jeweils die Daten zu füllen, die
+der Timer üblicherweise braucht. (Siehe Flexform-Felder)
+Der Name des Timers ist in der Spalte `arg.type` einzugeben.
+
 #### Generelle Parameter bei allen vordefinierten Timern
 
 Einige Parameter sind bei allen Timern gleich. Zwei Parameter behandeln den
@@ -470,12 +751,15 @@ Wer so etwas braucht, kann gern einen entsprechenden Timer programmieren.
   Event nicht übereinstimmt, wird die Server-ezeit auf die Zeitzonenzeit des
   Events umgerechnet.
   *Wertebereich*:
-  Liste der generierten Zeitzonen. Die Zeitzonenproblematik ist wichtig, weil einige Timer die Zeiten auf UTC umrechen
+  Liste der generierten Zeitzonen. Die Zeitzonenproblematik ist wichtig, weil
+  einige Timer die Zeiten auf UTC umrechen
   müssen. (Sonnenlauf, ...)
   *Anmerkung*:
-  Aktuell werden alle Zeitzonen generiert. Es besteht die Möglichkeit, die Zeitzonen auf einen generelle Auswahl zu
+  Aktuell werden alle Zeitzonen generiert. Es besteht die Möglichkeit, die
+  Zeitzonen auf einen generelle Auswahl zu
   beschränken.
-* useTimeZoneOfFrontend - ja/nein-Parameter. Wenn der Wert gesetzt ist, wird immer die Zeitzone des Servers verwendet.
+* useTimeZoneOfFrontend - ja/nein-Parameter. Wenn der Wert gesetzt ist, wird
+  immer die Zeitzone des Servers verwendet.
 * ultimateBeginningTimer - Ultimativer Beginn der Timers
   *Default*:
     1. Januar 0001 00:00:00
@@ -491,7 +775,7 @@ eigene Parameter mitgeben.
 
 ### Viewhelper
 
-Es gibt vier Viewhelper:
+Es gibt fünf Viewhelper:
 
 - timer:isActive - funktioniert ähnlich wie `f:if`, wobei geprüft wird, ob ein
   Zeitpunkt im aktiven Bereich eines
@@ -501,6 +785,14 @@ Es gibt vier Viewhelper:
   überflüssige Zwischenebenen. Mit dem Viewhelper lassen sich diese Ebenen
   entfernen, so dass der resultierenArray des
   Flexformarrays flacher/einfacher wird.
+- timer:forCommaList - funktioniert analog wie `f:for`, nur dass statt eines
+  Arrays oder eines iterierbaren Objects
+  hier ein String mit einer komma-separierten Liste beim Attribute `each`
+  anzugeben ist. Über den zusätzlichen Parameter `limiter` kann
+  man das Komma auch durch andere Zeichen ersetzen. Über den zusätzlichen
+  boolschen Schalter `trim` kann man erzwingen, dass
+  bei den einzelnen Strings aus der Liste die Weißzeichen (Space, Umbruch, ...)
+  am Anfang und Ende des Strings entfernt werden.
 - timer:format.date - funktioniert wie `f:format.date`, wobei es zusätzlich die
   Ausgabe von Zeiten für eine bestimmte Zeitzone
   erlaubt.
@@ -717,10 +1009,6 @@ Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das In
             # Standard ist `tx_timer_timer`
             field = tx_timer_timer
 
-            # Feld mit Selektor für Flexform-Array
-            # Standard bei fehlender Definition ist 'tx_timer_selector'
-            # selectorField = tx_timer_selector
-
             # Eine Definition von Flattenkeys überschreibt die Standarddefinition.
             #    Die Attribute `timer` und `general` werden als Blattnamen in meinen customTimer-flexforms verwendet
             #    Die folgende Definition ist die Standard-Vorgabe bei fehlender Definition: `data,general,timer,sDEF,lDEF,vDEF`
@@ -731,7 +1019,7 @@ Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das In
 
 ```
 
-#### MappingProcessor
+#### MappingProcessor (deprecated)
 Der Datenprozessor `MappingProcessor` erlaubt das Mappen/Abbilden von Arrays in neue Arrays oder in einen JSON-String.
 So können die Daten leicht HTML-Attribute dem JavaScript zur Verfügung gestellt werden.
 Der Datenprozessor kennt einfache generische Funktionen, um zum Beispiel Events eindeutige IDs zuzuordnen.
@@ -785,9 +1073,135 @@ Weiter erlaubt er das Mappen/Abbilden von Feldinhalten und das Anlegen von neuen
 
 ```
 
+#### BetterMappingProcessor
+
+Der Datenprozessor `BetterMappingProcessor` erlaubt das Mappen/Abbilden von
+Arrays in neue Arrays oder in einen JSON-String.
+Die Logik ist zum Mapping-Dataprocessor leicht abgewandelt, jetzt die Input- und
+Outputfelder direkt definiert werden müssen.
+Durch die Punkt-Notation ist es möglich, bei assoziativen Array mit mehreren
+Ebenen die Daten aus den tieferen Ebenen einzulesen bzw. für die Ausgabe einen
+assoziativen Array mit mehreren Ebenen zu erzeugen.
+Der Generic-Bereich wurde um zwei Varianten erweitert.
+Es ist für die Zukunft geplant, den Dataprozessor mit einer Schnittstelle für
+eine User-Funktion zu erweitern.
+Wie bisher erlaubt der Dataprocessor das Mappen/Abbilden von Feldinhalten, von
+Datumswerten und auch das Anlegen von neuen Feldern
+mit konstanten Daten.
+
+```
+        20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
+        20 {
+
+            # regular if syntax
+            #if.isTrue.field = record
+
+            # The defaultvalue for the inputfield is 'holidayList';
+            inputfield = holidayList
+            # Each field must part of holidaycalendar
+            # allowed types are
+            #    `constant`(=pretext.posttext),
+            #    `index`(=pretext.<indexOfDataRow>.posttext)
+            #    `datetime` (=dateTimeObject->format(posttext); dateTimeObject is in the Field, which is declared be pretext)
+            # every entry must be some formal
+            #            generic {
+            #                id {
+            #                    pretext = event
+            #                    posttext = holiday
+            #                    type = index
+            #                }
+            #
+            #                calendarId {
+            #                    pretext = cal1
+            #                    posttext =
+            #                    type = constant
+            #                }
+            #                start {
+            #                    pretext = date
+            #                    posttext = Y-m-d
+            #                    type = constant
+            #                }
+            #            }
+            generic {
+                10 {
+                    # the inputfield may missing
+                    inField =
+                    # if the outputfield is missing or the key has an typeerror, an exception will occur.
+                    outField = category
+                    pretext = allday
+                    posttext =
+                    # allowed types are `constant`, `includevalue`, `includeindex`, `datetime`
+                    # if the inField is missing for type `includevalue`, a empty string will be used
+                    type = constant
+                }
+                20 {
+                    inField = dateStart
+                    # the outputfield must contain a DateTime-Object
+                    outField = start
+                    format = Y-m-d
+                    type = datetime
+                }
+                30 {
+                    inField = dateEnd
+                    outField = end
+                    format = Y-m-d
+                    type = datetime
+                }
+                40 {
+                    inField = cal.eventtitle
+                    outField = title
+                    type = translate
+                }
+
+            }
+
+            mapping {
+                10 {
+                    inField = cal.identifier
+                    outField = id
+                }
+                20 {
+                    inField = cal.title
+                    outField = basetitle
+                }
+                30 {
+                    inField = cal.tag
+                    outField = calendarId
+                }
+#
+#                @todo 2023-03-12: allow custom function
+#               40 {
+#                    inField = cal.add.freelocale
+#                    outField = class
+#                    type = userfunc
+#                    userfunc =
+#                }
+            }
+
+
+            # outputformat has the values `array`,`json`, `yaml`
+            # if the outputformat is unknown/undifined, `json` will be used by default
+            outputFormat = json
+
+            # if the output-format is yaml, then `yamlStartKey` will define a starting-key for your result-array.
+            # the default is an empty string, which emans no starting-key for your array in a simplified yaml-format
+            #yamlStartKey = holydayList
+
+            # output variable with the resulting list
+            # default-value is `holidayListJson`
+            as = holidaycalendarJson
+
+        }
+
+```
+
 #### PeriodlistProcessor
-Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste, die beim PeriodlistTimer in der Yaml-Datei
-definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
+
+Der DataProcessor `PeriodlistProcessor` erlaubt das Auslesen der Terminliste,
+die beim PeriodlistTimer in der Yaml-Datei
+definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für
+die Start- und Endzueit der Termine auch die entsptrechenden DatTime-Objekte und
+berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
 
 ```
         10 = Porthd\Timer\DataProcessing\PeriodlistProcessor

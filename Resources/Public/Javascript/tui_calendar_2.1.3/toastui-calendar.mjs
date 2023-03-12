@@ -44,18 +44,15 @@ import DatePicker from "tui-date-picker";
 
 var n$2, l$3, u$3, t$2, o$3, r$3, f$3 = {}, e$1 = [],
     c$3 = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
-
 function s$3(n2, l2) {
     for (var u2 in l2)
         n2[u2] = l2[u2];
     return n2;
 }
-
 function a$3(n2) {
     var l2 = n2.parentNode;
     l2 && l2.removeChild(n2);
 }
-
 function h$3(l2, u2, i2) {
     var t2, o2, r2, f2 = {};
     for (r2 in u2)
@@ -65,7 +62,6 @@ function h$3(l2, u2, i2) {
             f2[r2] === void 0 && (f2[r2] = l2.defaultProps[r2]);
     return v$3(l2, f2, t2, o2, null);
 }
-
 function v$3(n2, i2, t2, o2, r2) {
     var f2 = {
         type: n2,
@@ -84,15 +80,12 @@ function v$3(n2, i2, t2, o2, r2) {
     };
     return r2 == null && l$3.vnode != null && l$3.vnode(f2), f2;
 }
-
 function p$3(n2) {
     return n2.children;
 }
-
 function d$3(n2, l2) {
     this.props = n2, this.context = l2;
 }
-
 function _$3(n2, l2) {
     if (l2 == null)
         return n2.__ ? _$3(n2.__, n2.__.__k.indexOf(n2) + 1) : null;
@@ -101,7 +94,6 @@ function _$3(n2, l2) {
             return u2.__e;
     return typeof n2.type == "function" ? _$3(n2) : null;
 }
-
 function k$2(n2) {
     var l2, u2;
     if ((n2 = n2.__) != null && n2.__c != null) {
@@ -113,11 +105,9 @@ function k$2(n2) {
         return k$2(n2);
     }
 }
-
 function b$2(n2) {
     (!n2.__d && (n2.__d = true) && t$2.push(n2) && !g$4.__r++ || o$3 !== l$3.debounceRendering) && ((o$3 = l$3.debounceRendering) || setTimeout)(g$4);
 }
-
 function g$4() {
     for (var n2; g$4.__r = t$2.length;)
         n2 = t$2.sort(function (n3, l2) {
@@ -127,7 +117,6 @@ function g$4() {
             n3.__d && (o2 = (t2 = (l2 = n3).__v).__e, (r2 = l2.__P) && (u2 = [], (i2 = s$3({}, t2)).__v = t2.__v + 1, j$3(r2, t2, i2, l2.__n, r2.ownerSVGElement !== void 0, t2.__h != null ? [o2] : null, u2, o2 == null ? _$3(t2) : o2, t2.__h), z$2(u2, t2), t2.__e != o2 && k$2(t2)));
         });
 }
-
 function w$3(n2, l2, u2, i2, t2, o2, r2, c2, s2, a2) {
     var h2, y2, d2, k2, b2, g2, w2, x2 = i2 && i2.__k || e$1, C2 = x2.length;
     for (u2.__k = [], h2 = 0; h2 < l2.length; h2++)
@@ -150,19 +139,16 @@ function w$3(n2, l2, u2, i2, t2, o2, r2, c2, s2, a2) {
         for (h2 = 0; h2 < w2.length; h2++)
             M$2(w2[h2], w2[++h2], w2[++h2]);
 }
-
 function m$2(n2, l2, u2) {
     for (var i2, t2 = n2.__k, o2 = 0; t2 && o2 < t2.length; o2++)
         (i2 = t2[o2]) && (i2.__ = n2, l2 = typeof i2.type == "function" ? m$2(i2, l2, u2) : A$2(u2, i2, i2, t2, i2.__e, l2));
     return l2;
 }
-
 function x$3(n2, l2) {
     return l2 = l2 || [], n2 == null || typeof n2 == "boolean" || (Array.isArray(n2) ? n2.some(function (n3) {
         x$3(n3, l2);
     }) : l2.push(n2)), l2;
 }
-
 function A$2(n2, l2, u2, i2, t2, o2) {
     var r2, f2, e2;
     if (l2.__d !== void 0)
@@ -179,7 +165,6 @@ function A$2(n2, l2, u2, i2, t2, o2) {
             }
     return r2 !== void 0 ? r2 : t2.nextSibling;
 }
-
 function C$1(n2, l2, u2, i2, t2) {
     var o2;
     for (o2 in u2)
@@ -187,11 +172,9 @@ function C$1(n2, l2, u2, i2, t2) {
     for (o2 in l2)
         t2 && typeof l2[o2] != "function" || o2 === "children" || o2 === "key" || o2 === "value" || o2 === "checked" || u2[o2] === l2[o2] || H$2(n2, o2, l2[o2], u2[o2], i2);
 }
-
 function $$1(n2, l2, u2) {
     l2[0] === "-" ? n2.setProperty(l2, u2) : n2[l2] = u2 == null ? "" : typeof u2 != "number" || c$3.test(l2) ? u2 : u2 + "px";
 }
-
 function H$2(n2, l2, u2, i2, t2) {
     var o2;
     n:
@@ -220,15 +203,12 @@ function H$2(n2, l2, u2, i2, t2) {
             typeof u2 == "function" || (u2 != null && (u2 !== false || l2[0] === "a" && l2[1] === "r") ? n2.setAttribute(l2, u2) : n2.removeAttribute(l2));
         }
 }
-
 function I$2(n2) {
     this.l[n2.type + false](l$3.event ? l$3.event(n2) : n2);
 }
-
 function T$2(n2) {
     this.l[n2.type + true](l$3.event ? l$3.event(n2) : n2);
 }
-
 function j$3(n2, u2, i2, t2, o2, r2, f2, e2, c2) {
     var a2, h2, v2, y2, _2, k2, b2, g2, m2, x2, A2, C2, $2, H2 = u2.type;
     if (u2.constructor !== void 0)
@@ -264,7 +244,6 @@ function j$3(n2, u2, i2, t2, o2, r2, f2, e2, c2) {
         u2.__v = null, (c2 || r2 != null) && (u2.__e = e2, u2.__h = !!c2, r2[r2.indexOf(e2)] = null), l$3.__e(n3, u2, i2);
     }
 }
-
 function z$2(n2, u2) {
     l$3.__c && l$3.__c(u2, n2), n2.some(function (u3) {
         try {
@@ -276,7 +255,6 @@ function z$2(n2, u2) {
         }
     });
 }
-
 function L$2(l2, u2, i2, t2, o2, r2, e2, c2) {
     var s2, h2, v2, y2 = i2.props, p2 = u2.props, d2 = u2.type, k2 = 0;
     if (d2 === "svg" && (o2 = true), r2 != null) {
@@ -309,7 +287,6 @@ function L$2(l2, u2, i2, t2, o2, r2, e2, c2) {
     }
     return l2;
 }
-
 function M$2(n2, u2, i2) {
     try {
         typeof n2 == "function" ? n2(u2) : n2.current = u2;
@@ -317,7 +294,6 @@ function M$2(n2, u2, i2) {
         l$3.__e(n3, i2);
     }
 }
-
 function N(n2, u2, i2) {
     var t2, o2;
     if (l$3.unmount && l$3.unmount(n2), (t2 = n2.ref) && (t2.current && t2.current !== n2.__e || M$2(t2, null, u2)), (t2 = n2.__c) != null) {
@@ -334,23 +310,19 @@ function N(n2, u2, i2) {
             t2[o2] && N(t2[o2], u2, typeof n2.type != "function");
     i2 || n2.__e == null || a$3(n2.__e), n2.__e = n2.__d = void 0;
 }
-
 function O$2(n2, l2, u2) {
     return this.constructor(n2, u2);
 }
-
 function P$2(u2, i2, t2) {
     var o2, r2, e2;
     l$3.__ && l$3.__(u2, i2), r2 = (o2 = typeof t2 == "function") ? null : t2 && t2.__k || i2.__k, e2 = [], j$3(i2, u2 = (!o2 && t2 || i2).__k = h$3(p$3, null, [u2]), r2 || f$3, f$3, i2.ownerSVGElement !== void 0, !o2 && t2 ? [t2] : r2 ? null : i2.firstChild ? n$2.call(i2.childNodes) : null, e2, !o2 && t2 ? t2 : r2 ? r2.__e : i2.firstChild, o2), z$2(e2, u2);
 }
-
 function q$3(l2, u2, i2) {
     var t2, o2, r2, f2 = s$3({}, l2.props);
     for (r2 in u2)
         r2 == "key" ? t2 = u2[r2] : r2 == "ref" ? o2 = u2[r2] : f2[r2] = u2[r2];
     return arguments.length > 2 && (f2.children = arguments.length > 3 ? n$2.call(arguments, 2) : i2), v$3(l2.type, f2, t2 || l2.key, o2 || l2.ref, null);
 }
-
 function B$1(n2, l2) {
     var u2 = {
         __c: l2 = "__cC" + r$3++, __: n2, Consumer: function (n3, l3) {
@@ -393,17 +365,14 @@ n$2 = e$1.slice, l$3 = {
 }, d$3.prototype.render = p$3, t$2 = [], g$4.__r = 0, r$3 = 0;
 var t$1, u$2, r$2, o$2, i$2 = 0, c$2 = [], f$2 = [], e = l$3.__b, a$2 = l$3.__r, v$2 = l$3.diffed, l$2 = l$3.__c,
     m$1 = l$3.unmount;
-
 function p$2(t2, r2) {
     l$3.__h && l$3.__h(u$2, t2, i$2 || r2), i$2 = 0;
     var o2 = u$2.__H || (u$2.__H = {__: [], __h: []});
     return t2 >= o2.__.length && o2.__.push({__V: f$2}), o2.__[t2];
 }
-
 function y$1(n2) {
     return i$2 = 1, d$2(z$1, n2);
 }
-
 function d$2(n2, r2, o2) {
     var i2 = p$2(t$1++, 2);
     return i2.t = n2, i2.__c || (i2.__ = [o2 ? o2(r2) : z$1(void 0, r2), function (n3) {
@@ -411,39 +380,32 @@ function d$2(n2, r2, o2) {
         i2.__[0] !== t2 && (i2.__ = [t2, i2.__[1]], i2.__c.setState({}));
     }], i2.__c = u$2), i2.__;
 }
-
 function _$2(r2, o2) {
     var i2 = p$2(t$1++, 3);
     !l$3.__s && w$2(i2.__H, o2) && (i2.__ = r2, i2.u = o2, u$2.__H.__h.push(i2));
 }
-
 function h$2(r2, o2) {
     var i2 = p$2(t$1++, 4);
     !l$3.__s && w$2(i2.__H, o2) && (i2.__ = r2, i2.u = o2, u$2.__h.push(i2));
 }
-
 function s$2(n2) {
     return i$2 = 5, F$2(function () {
         return {current: n2};
     }, []);
 }
-
 function F$2(n2, u2) {
     var r2 = p$2(t$1++, 7);
     return w$2(r2.__H, u2) ? (r2.__V = n2(), r2.u = u2, r2.__h = n2, r2.__V) : r2.__;
 }
-
 function T$1(n2, t2) {
     return i$2 = 8, F$2(function () {
         return n2;
     }, t2);
 }
-
 function q$2(n2) {
     var r2 = u$2.context[n2.__c], o2 = p$2(t$1++, 9);
     return o2.c = n2, r2 ? (o2.__ == null && (o2.__ = true, r2.sub(u$2)), r2.props.value) : n2.__;
 }
-
 function b$1() {
     for (var t2; t2 = c$2.shift();)
         if (t2.__P)
@@ -497,27 +459,22 @@ l$3.__b = function (n2) {
     }), u2 && l$3.__e(u2, r2.__v));
 };
 var g$3 = typeof requestAnimationFrame == "function";
-
 function j$2(n2) {
     var t2 = u$2, r2 = n2.__c;
     typeof r2 == "function" && (n2.__c = void 0, r2()), u$2 = t2;
 }
-
 function k$1(n2) {
     var t2 = u$2;
     n2.__c = n2.__(), u$2 = t2;
 }
-
 function w$2(n2, t2) {
     return !n2 || n2.length !== t2.length || t2.some(function (t3, u2) {
         return t3 !== n2[u2];
     });
 }
-
 function z$1(n2, t2) {
     return typeof t2 == "function" ? t2(n2) : t2;
 }
-
 function n$1(n2) {
     for (var r2 = arguments.length, t2 = Array(r2 > 1 ? r2 - 1 : 0), e2 = 1; e2 < r2; e2++)
         t2[e2 - 1] = arguments[e2];
@@ -525,11 +482,9 @@ function n$1(n2) {
         return "'" + n3 + "'";
     }).join(",") : "") + ". Find the full error at: https://bit.ly/3cXEKWf");
 }
-
 function r$1(n2) {
     return !!n2 && !!n2[Q$1];
 }
-
 function t(n2) {
     return !!n2 && (function (n3) {
         if (!n3 || typeof n3 != "object")
@@ -541,7 +496,6 @@ function t(n2) {
         return t2 === Object || typeof t2 == "function" && Function.toString.call(t2) === Z$1;
     }(n2) || Array.isArray(n2) || !!n2[L$1] || !!n2.constructor[L$1] || s$1(n2) || v$1(n2));
 }
-
 function i$1(n2, r2, t2) {
     t2 === void 0 && (t2 = false), o$1(n2) === 0 ? (t2 ? Object.keys : nn)(n2).forEach(function (e2) {
         t2 && typeof e2 == "symbol" || r2(e2, n2[e2], n2);
@@ -549,41 +503,32 @@ function i$1(n2, r2, t2) {
         return r2(e2, t3, n2);
     });
 }
-
 function o$1(n2) {
     var r2 = n2[Q$1];
     return r2 ? r2.i > 3 ? r2.i - 4 : r2.i : Array.isArray(n2) ? 1 : s$1(n2) ? 2 : v$1(n2) ? 3 : 0;
 }
-
 function u$1(n2, r2) {
     return o$1(n2) === 2 ? n2.has(r2) : Object.prototype.hasOwnProperty.call(n2, r2);
 }
-
 function a$1(n2, r2) {
     return o$1(n2) === 2 ? n2.get(r2) : n2[r2];
 }
-
 function f$1(n2, r2, t2) {
     var e2 = o$1(n2);
     e2 === 2 ? n2.set(r2, t2) : e2 === 3 ? (n2.delete(r2), n2.add(t2)) : n2[r2] = t2;
 }
-
 function c$1(n2, r2) {
     return n2 === r2 ? n2 !== 0 || 1 / n2 == 1 / r2 : n2 != n2 && r2 != r2;
 }
-
 function s$1(n2) {
     return X && n2 instanceof Map;
 }
-
 function v$1(n2) {
     return q$1 && n2 instanceof Set;
 }
-
 function p$1(n2) {
     return n2.o || n2.t;
 }
-
 function l$1(n2) {
     if (Array.isArray(n2))
         return Array.prototype.slice.call(n2);
@@ -600,57 +545,45 @@ function l$1(n2) {
     }
     return Object.create(Object.getPrototypeOf(n2), r2);
 }
-
 function d$1(n2, e2) {
     return e2 === void 0 && (e2 = false), y(n2) || r$1(n2) || !t(n2) ? n2 : (o$1(n2) > 1 && (n2.set = n2.add = n2.clear = n2.delete = h$1), Object.freeze(n2), e2 && i$1(n2, function (n3, r2) {
         return d$1(r2, true);
     }, true), n2);
 }
-
 function h$1() {
     n$1(2);
 }
-
 function y(n2) {
     return n2 == null || typeof n2 != "object" || Object.isFrozen(n2);
 }
-
 function b(r2) {
     var t2 = tn[r2];
     return t2 || n$1(18, r2), t2;
 }
-
 function _$1() {
     return U;
 }
-
 function j$1(n2, r2) {
     r2 && (b("Patches"), n2.u = [], n2.s = [], n2.v = r2);
 }
-
 function O$1(n2) {
     g$2(n2), n2.p.forEach(S$1), n2.p = null;
 }
-
 function g$2(n2) {
     n2 === U && (U = n2.l);
 }
-
 function w$1(n2) {
     return U = {p: [], l: U, h: n2, m: true, _: 0};
 }
-
 function S$1(n2) {
     var r2 = n2[Q$1];
     r2.i === 0 || r2.i === 1 ? r2.j() : r2.O = true;
 }
-
 function P$1(r2, e2) {
     e2._ = e2.p.length;
     var i2 = e2.p[0], o2 = r2 !== void 0 && r2 !== i2;
     return e2.h.g || b("ES5").S(e2, r2, o2), o2 ? (i2[Q$1].P && (O$1(e2), n$1(4)), t(r2) && (r2 = M$1(e2, r2), e2.l || x$2(e2, r2)), e2.u && b("Patches").M(i2[Q$1].t, r2, e2.u, e2.s)) : r2 = M$1(e2, i2, []), O$1(e2), e2.u && e2.v(e2.u, e2.s), r2 !== H$1 ? r2 : void 0;
 }
-
 function M$1(n2, r2, t2) {
     if (y(r2))
         return r2;
@@ -672,7 +605,6 @@ function M$1(n2, r2, t2) {
     }
     return e2.o;
 }
-
 function A$1(e2, i2, o2, a2, c2, s2) {
     if (r$1(c2)) {
         var v2 = M$1(e2, c2, s2 && i2 && i2.i !== 3 && !u$1(i2.D, a2) ? s2.concat(a2) : void 0);
@@ -686,16 +618,13 @@ function A$1(e2, i2, o2, a2, c2, s2) {
         M$1(e2, c2), i2 && i2.A.l || x$2(e2, c2);
     }
 }
-
 function x$2(n2, r2, t2) {
     t2 === void 0 && (t2 = false), n2.h.F && n2.m && d$1(r2, t2);
 }
-
 function z(n2, r2) {
     var t2 = n2[Q$1];
     return (t2 ? p$1(t2) : n2)[r2];
 }
-
 function I$1(n2, r2) {
     if (r2 in n2)
         for (var t2 = Object.getPrototypeOf(n2); t2;) {
@@ -705,15 +634,12 @@ function I$1(n2, r2) {
             t2 = Object.getPrototypeOf(t2);
         }
 }
-
 function k(n2) {
     n2.P || (n2.P = true, n2.l && k(n2.l));
 }
-
 function E$1(n2) {
     n2.o || (n2.o = l$1(n2.t));
 }
-
 function R$1(n2, r2, t2) {
     var e2 = s$1(r2) ? b("MapSet").N(r2, t2) : v$1(r2) ? b("MapSet").T(r2, t2) : n2.g ? function (n3, r3) {
         var t3 = Array.isArray(n3), e3 = {
@@ -735,7 +661,6 @@ function R$1(n2, r2, t2) {
     }(r2, t2) : b("ES5").J(r2, t2);
     return (t2 ? t2.A : _$1()).p.push(e2), e2;
 }
-
 function D$1(e2) {
     return r$1(e2) || n$1(22, e2), function n2(r2) {
         if (!t(r2))
@@ -928,14 +853,11 @@ an.createDraft.bind(an);
 an.finishDraft.bind(an);
 var produce = fn;
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-
 function isUndefined$3(obj) {
     return obj === void 0;
 }
-
 var isUndefined_1 = isUndefined$3;
 var isUndefined$2 = isUndefined_1;
-
 function range(start, stop, step) {
     var arr = [];
     var flag;
@@ -951,7 +873,6 @@ function range(start, stop, step) {
     }
     return arr;
 }
-
 var range_1 = range;
 const DEFAULT_DAY_NAME_MARGIN_LEFT = "0";
 const MONTH_EVENT_HEIGHT = 24;
@@ -976,45 +897,32 @@ const DEFAULT_EVENT_COLORS = {
 };
 const TIME_EVENT_CONTAINER_MARGIN_LEFT = 2;
 const COLLAPSED_DUPLICATE_EVENT_WIDTH_PX = 9;
-
 function isBoolean(obj) {
     return typeof obj === "boolean" || obj instanceof Boolean;
 }
-
 var isBoolean_1 = isBoolean;
-
 function isNumber(obj) {
     return typeof obj === "number" || obj instanceof Number;
 }
-
 var isNumber_1 = isNumber;
-
 function isObject$1(obj) {
     return obj === Object(obj);
 }
-
 var isObject_1 = isObject$1;
-
 function isString$1(obj) {
     return typeof obj === "string" || obj instanceof String;
 }
-
 var isString_1 = isString$1;
-
 function isNil(value) {
     return isUndefined_1(value) || value === null;
 }
-
 function isPresent(value) {
     return !isNil(value);
 }
-
 function isFunction$2(value) {
     return typeof value === "function";
 }
-
 const CSS_PREFIX = "toastui-calendar-";
-
 function cls(...args) {
     const result = [];
     args.forEach((arg) => {
@@ -1033,15 +941,12 @@ function cls(...args) {
     });
     return result.map((str) => `${CSS_PREFIX}${str}`).join(" ");
 }
-
 function toPercent(value) {
     return `${value}%`;
 }
-
 function toPx(value) {
     return `${value}px`;
 }
-
 function extractPercentPx(value) {
     const percentRegexp = /(\d+)%/;
     const percentResult = value.match(percentRegexp);
@@ -1052,7 +957,6 @@ function extractPercentPx(value) {
         px: pxResult ? parseInt(`${pxResult[1]}${pxResult[2]}`, 10) : 0
     };
 }
-
 function getEventColors(uiModel, calendarColor) {
     const eventColors = uiModel.model.getColors();
     return Object.keys(DEFAULT_EVENT_COLORS).reduce((colors, _key) => {
@@ -1062,13 +966,10 @@ function getEventColors(uiModel, calendarColor) {
         return colors;
     }, {});
 }
-
 const rISO8601 = /^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.)?([0-9]+)?([+-]\d\d(?::?\d\d)?|\s*Z)?$/;
-
 function throwNotSupported() {
     throw new Error("This operation is not supported.");
 }
-
 function getDateTime(dateString) {
     const match = rISO8601.exec(dateString);
     if (match) {
@@ -1086,7 +987,6 @@ function getDateTime(dateString) {
     }
     return null;
 }
-
 function createFromDateString(dateString) {
     const info = getDateTime(dateString);
     if (info && !info.zoneInfo) {
@@ -1129,7 +1029,6 @@ class LocalDate {
         return this.d.toString();
     }
 }
-
 const getterMethods = [
     "getTime",
     "getTimezoneOffset",
@@ -1172,7 +1071,6 @@ class UTCDate extends LocalDate {
         return 0;
     }
 }
-
 const getterProperties = [
     "FullYear",
     "Month",
@@ -1229,7 +1127,6 @@ class InvalidViewTypeError extends Error {
         this.name = "InvalidViewTypeError";
     }
 }
-
 const logger = {
     error: (firstArg, ...restArgs) => {
         console.error(`${MESSAGE_PREFIX}${firstArg}`, ...restArgs);
@@ -1239,15 +1136,12 @@ const logger = {
     }
 };
 let Constructor = LocalDate;
-
 function date(...args) {
     return new Constructor(...args);
 }
-
 function getLocalTimezoneOffset() {
     return -new Date().getTimezoneOffset();
 }
-
 function calculateTimezoneOffset(timezoneName, targetDate = new TZDate()) {
     if (!isIntlDateTimeFormatSupported()) {
         logger.warn("Intl.DateTimeFormat is not fully supported. So It will return the local timezone offset only.\nYou can use a polyfill to fix this issue.");
@@ -1258,7 +1152,6 @@ function calculateTimezoneOffset(timezoneName, targetDate = new TZDate()) {
     const utcDate = tokenToUtcDate(token);
     return Math.round((utcDate.getTime() - targetDate.getTime()) / 60 / 1e3);
 }
-
 function isUsingDST(targetDate, timezoneName) {
     if (timezoneName) {
         validateIANATimezoneName(timezoneName);
@@ -1270,15 +1163,12 @@ function isUsingDST(targetDate, timezoneName) {
     }
     return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset()) !== targetDate.toDate().getTimezoneOffset();
 }
-
 const dtfCache = {};
 const timezoneNameValidationCache = {};
-
 function isIntlDateTimeFormatSupported() {
     var _a, _b;
     return isFunction$2((_b = (_a = Intl == null ? void 0 : Intl.DateTimeFormat) == null ? void 0 : _a.prototype) == null ? void 0 : _b.formatToParts);
 }
-
 function validateIANATimezoneName(timezoneName) {
     if (timezoneNameValidationCache[timezoneName]) {
         return true;
@@ -1291,7 +1181,6 @@ function validateIANATimezoneName(timezoneName) {
         throw new InvalidTimezoneNameError(timezoneName);
     }
 }
-
 function getDateTimeFormat(timezoneName) {
     if (dtfCache[timezoneName]) {
         return dtfCache[timezoneName];
@@ -1310,7 +1199,6 @@ function getDateTimeFormat(timezoneName) {
     dtfCache[timezoneName] = dtf;
     return dtf;
 }
-
 const typeToPos = {
     year: 0,
     month: 1,
@@ -1319,7 +1207,6 @@ const typeToPos = {
     minute: 4,
     second: 5
 };
-
 function tokenizeTZDate(tzDate, timezoneName) {
     const dtf = getDateTimeFormat(timezoneName);
     const formatted = dtf.formatToParts(tzDate.toDate());
@@ -1331,13 +1218,11 @@ function tokenizeTZDate(tzDate, timezoneName) {
         return result;
     }, []);
 }
-
 function tokenToUtcDate(token) {
     const [year, monthPlusOne, day, hour, minute, second] = token;
     const month = monthPlusOne - 1;
     return new Date(Date.UTC(year, month, day, hour % 24, minute, second));
 }
-
 function getTZOffsetMSDifference(offset) {
     return (getLocalTimezoneOffset() - offset) * MS_PER_MINUTES;
 }
@@ -1496,7 +1381,6 @@ class TZDate {
         return new TZDate(this.getTime() + (isPresent(this.tzOffset) ? getTZOffsetMSDifference(this.tzOffset) : 0));
     }
 }
-
 function pick(obj, ...propNames) {
     return propNames.reduce((acc, key) => {
         if (obj.hasOwnProperty(key)) {
@@ -1505,11 +1389,9 @@ function pick(obj, ...propNames) {
         return acc;
     }, {});
 }
-
 function clone$1(source) {
     return Object.assign(Object.create(Object.getPrototypeOf(source)), source);
 }
-
 function mergeObject(target, source = {}) {
     if (!isObject_1(source)) {
         return target;
@@ -1525,7 +1407,6 @@ function mergeObject(target, source = {}) {
     });
     return target;
 }
-
 const eventUIPropsKey = [
     "top",
     "left",
@@ -1651,18 +1532,15 @@ class EventUIModel {
         return clonedEventUIModel;
     }
 }
-
 function compareBooleansASC(a2, b2) {
     if (a2 !== b2) {
         return a2 ? -1 : 1;
     }
     return 0;
 }
-
 function compareNumbersASC(a2, b2) {
     return Number(a2) - Number(b2);
 }
-
 function compareStringsASC(_a, _b) {
     const a2 = String(_a);
     const b2 = String(_b);
@@ -1671,7 +1549,6 @@ function compareStringsASC(_a, _b) {
     }
     return a2 > b2 ? 1 : -1;
 }
-
 function compareEventsASC(a2, b2) {
     const modelA = a2 instanceof EventUIModel ? a2.model : a2;
     const modelB = b2 instanceof EventUIModel ? b2.model : b2;
@@ -1693,7 +1570,6 @@ function compareEventsASC(a2, b2) {
     }
     return modelA.cid() - modelB.cid();
 }
-
 function bsearch(arr, search, fn2, compareFn) {
     let minIndex = 0;
     let maxIndex = arr.length - 1;
@@ -1715,7 +1591,6 @@ function bsearch(arr, search, fn2, compareFn) {
     }
     return ~maxIndex;
 }
-
 var array = {
     bsearch,
     compare: {
@@ -1727,15 +1602,12 @@ var array = {
         }
     }
 };
-
 function first(array2) {
     return array2[0];
 }
-
 function last(array2) {
     return array2[array2.length - 1];
 }
-
 function findLastIndex(array2, predicate) {
     for (let i2 = array2.length - 1; i2 >= 0; i2 -= 1) {
         if (predicate(array2[i2])) {
@@ -1744,7 +1616,6 @@ function findLastIndex(array2, predicate) {
     }
     return -1;
 }
-
 function fill(length, value) {
     if (length > 0) {
         return Array.from({length}, () => {
@@ -1756,7 +1627,6 @@ function fill(length, value) {
     }
     return [];
 }
-
 var Day$2 = /* @__PURE__ */ ((Day2) => {
     Day2[Day2["SUN"] = 0] = "SUN";
     Day2[Day2["MON"] = 1] = "MON";
@@ -1774,7 +1644,6 @@ const memo = {
     millisecondsFrom: {}
 };
 const convByTimeUnit = [24, 60, 60, 1e3];
-
 function leadingZero(number, length) {
     let zero = "";
     let i2 = 0;
@@ -1786,7 +1655,6 @@ function leadingZero(number, length) {
     }
     return (zero + number).slice(length * -1);
 }
-
 function getHourForMeridiem(date2) {
     let hour = date2.getHours();
     if (hour === 0) {
@@ -1797,7 +1665,6 @@ function getHourForMeridiem(date2) {
     }
     return hour;
 }
-
 const tokenFunc = {
     YYYYMMDD(date2) {
         return [
@@ -1838,7 +1705,6 @@ const MS_PER_DAY = 864e5;
 const MS_PER_MINUTES = 6e4;
 const MS_EVENT_MIN_DURATION = 20 * MS_PER_MINUTES;
 const MS_PER_THIRTY_MINUTES = 30 * 60 * 1e3;
-
 function toFormat(date2, strFormat) {
     let result = strFormat;
     Object.entries(tokenFunc).forEach(([token, converter]) => {
@@ -1846,7 +1712,6 @@ function toFormat(date2, strFormat) {
     });
     return result;
 }
-
 function convMilliseconds(type, value, iteratee) {
     const index = {
         date: 0,
@@ -1859,7 +1724,6 @@ function convMilliseconds(type, value, iteratee) {
     }
     return [value].concat(convByTimeUnit.slice(index[type])).reduce(iteratee);
 }
-
 function millisecondsFrom(type, value) {
     const cache = memo.millisecondsFrom;
     const key = type + value;
@@ -1873,13 +1737,11 @@ function millisecondsFrom(type, value) {
     cache[key] = result;
     return cache[key];
 }
-
 function toStartOfDay(date2) {
     const d2 = date2 ? new TZDate(date2) : new TZDate();
     d2.setHours(0, 0, 0, 0);
     return d2;
 }
-
 function makeDateRange(startDate, endDate, step) {
     const startTime = startDate.getTime();
     const endTime = endDate.getTime();
@@ -1893,11 +1755,9 @@ function makeDateRange(startDate, endDate, step) {
     }
     return result;
 }
-
 function clone(date2) {
     return new TZDate(date2);
 }
-
 function compare(d1, d2) {
     const _d1 = d1.getTime();
     const _d2 = d2.getTime();
@@ -1909,27 +1769,21 @@ function compare(d1, d2) {
     }
     return 0;
 }
-
 function isSameYear(d1, d2) {
     return d1.getFullYear() === d2.getFullYear();
 }
-
 function isSameMonth(d1, d2) {
     return isSameYear(d1, d2) && d1.getMonth() === d2.getMonth();
 }
-
 function isSameDate(d1, d2) {
     return isSameMonth(d1, d2) && d1.getDate() === d2.getDate();
 }
-
 function max(d1, d2) {
     return compare(d1, d2) === 1 ? d1 : d2;
 }
-
 function min(d1, d2) {
     return compare(d1, d2) === -1 ? d1 : d2;
 }
-
 function parse(str, fixMonth = -1) {
     const matches = str.match(dateFormatRx);
     let separator;
@@ -1950,32 +1804,26 @@ function parse(str, fixMonth = -1) {
     }
     return new TZDate().setWithRaw(Number(ymd[0]), Number(ymd[1]) + fixMonth, Number(ymd[2]), Number(hms[0]), Number(hms[1]), Number(hms[2]), 0);
 }
-
 function toEndOfDay(date2) {
     const d2 = date2 ? new TZDate(date2) : new TZDate();
     d2.setHours(23, 59, 59, 999);
     return d2;
 }
-
 function isWeekend(day) {
     return day === 0 || day === 6;
 }
-
 function isSunday(day) {
     return day === 0;
 }
-
 function isSaturday(day) {
     return day === 6;
 }
-
 function toStartOfMonth(date2) {
     const startDate = new TZDate(date2);
     startDate.setDate(1);
     startDate.setHours(0, 0, 0, 0);
     return startDate;
 }
-
 function toEndOfMonth(date2) {
     const endDate = toStartOfMonth(date2);
     endDate.setMonth(endDate.getMonth() + 1);
@@ -1983,7 +1831,6 @@ function toEndOfMonth(date2) {
     endDate.setHours(23, 59, 59, 999);
     return endDate;
 }
-
 function getRowStyleInfo(days, narrowWeekend, startDayOfWeek, workweek) {
     const limitDaysToApplyNarrowWeekend = 5;
     const uniformWidth = 100 / days;
@@ -2018,37 +1865,31 @@ function getRowStyleInfo(days, narrowWeekend, startDayOfWeek, workweek) {
         cellWidthMap: cellWidthMap.map((widthList) => widthList.map(toPercent))
     };
 }
-
 function addMilliseconds(d2, step) {
     const date2 = clone(d2);
     date2.setMilliseconds(d2.getMilliseconds() + step);
     return date2;
 }
-
 function addMinutes(d2, step) {
     const date2 = clone(d2);
     date2.setMinutes(d2.getMinutes() + step);
     return date2;
 }
-
 function setTimeStrToDate(d2, timeStr) {
     const date2 = clone(d2);
     date2.setHours(...timeStr.split(":").map(Number));
     return date2;
 }
-
 function addDate(d2, step) {
     const date2 = clone(d2);
     date2.setDate(d2.getDate() + step);
     return date2;
 }
-
 function subtractDate(d2, steps) {
     const date2 = clone(d2);
     date2.setDate(d2.getDate() - steps);
     return date2;
 }
-
 function addMonths(d2, step = 1) {
     const date2 = clone(d2);
     if (step !== 0) {
@@ -2063,7 +1904,6 @@ function addMonths(d2, step = 1) {
     }
     return date2;
 }
-
 function getDateDifference(d1, d2) {
     const _d1 = new TZDate(d1.getFullYear(), d1.getMonth(), d1.getDate()).getTime();
     const _d2 = new TZDate(d2.getFullYear(), d2.getMonth(), d2.getDate()).getTime();
@@ -2103,7 +1943,6 @@ function collidesWith({
 function isSameEvent(event, eventId, calendarId) {
     return event.id === eventId && event.calendarId === calendarId;
 }
-
 function idGenerator() {
     let id = 0;
     return {
@@ -2118,7 +1957,6 @@ const getId = function () {
     const generator = idGenerator();
     return () => generator.next();
 }();
-
 function stamp(obj) {
     if (!obj.__fe_id) {
         obj.__fe_id = getId();
@@ -2363,7 +2201,6 @@ class EventModel {
         };
     }
 }
-
 EventModel.schema = {
     required: ["title"],
     dateRange: ["start", "end"]
@@ -2527,7 +2364,6 @@ class Collection {
         return this.internalMap.size;
     }
 }
-
 function createEventCollection(...initItems) {
     const collection = new Collection((event) => event.cid());
     if (initItems.length) {
@@ -2535,15 +2371,12 @@ function createEventCollection(...initItems) {
     }
     return collection;
 }
-
 function getDateRange(start, end) {
     return makeDateRange(toStartOfDay(start), toEndOfDay(end), MS_PER_DAY);
 }
-
 function isAllday(event) {
     return event.isAllday || event.category === "time" && Number(event.end) - Number(event.start) > MS_PER_DAY;
 }
-
 function filterByCategory(uiModel) {
     const {model} = uiModel;
     if (isAllday(model)) {
@@ -2551,7 +2384,6 @@ function filterByCategory(uiModel) {
     }
     return model.category;
 }
-
 function addToMatrix(idsOfDay, event) {
     const containDates = getDateRange(event.getStarts(), event.getEnds());
     containDates.forEach((date2) => {
@@ -2560,7 +2392,6 @@ function addToMatrix(idsOfDay, event) {
         matrix.push(event.cid());
     });
 }
-
 function removeFromMatrix(idsOfDay, event) {
     const modelID = event.cid();
     Object.values(idsOfDay).forEach((ids) => {
@@ -2570,22 +2401,18 @@ function removeFromMatrix(idsOfDay, event) {
         }
     });
 }
-
 function addEvent(calendarData, event) {
     calendarData.events.add(event);
     addToMatrix(calendarData.idsOfDay, event);
     return event;
 }
-
 function createEvent(calendarData, eventData) {
     const event = new EventModel(eventData);
     return addEvent(calendarData, event);
 }
-
 function createEvents(calendarData, events = []) {
     return events.map((eventData) => createEvent(calendarData, eventData));
 }
-
 function updateEvent(calendarData, eventId, calendarId, eventData) {
     const {idsOfDay} = calendarData;
     const event = calendarData.events.find((item) => isSameEvent(item, eventId, calendarId));
@@ -2597,18 +2424,15 @@ function updateEvent(calendarData, eventId, calendarId, eventData) {
     addToMatrix(idsOfDay, event);
     return true;
 }
-
 function deleteEvent(calendarData, event) {
     removeFromMatrix(calendarData.idsOfDay, event);
     calendarData.events.remove(event);
     return event;
 }
-
 function clearEvents(calendarData) {
     calendarData.idsOfDay = {};
     calendarData.events.clear();
 }
-
 function createCalendarSlice(calendars = []) {
     return {
         calendar: {
@@ -2618,7 +2442,6 @@ function createCalendarSlice(calendars = []) {
         }
     };
 }
-
 function createCalendarDispatchers(set) {
     return {
         createEvents: (events) => set(produce((state) => {
@@ -2668,7 +2491,6 @@ function createCalendarDispatchers(set) {
         }))
     };
 }
-
 var DraggingState = /* @__PURE__ */ ((DraggingState2) => {
     DraggingState2[DraggingState2["IDLE"] = 0] = "IDLE";
     DraggingState2[DraggingState2["INIT"] = 1] = "INIT";
@@ -2676,7 +2498,6 @@ var DraggingState = /* @__PURE__ */ ((DraggingState2) => {
     DraggingState2[DraggingState2["CANCELED"] = 3] = "CANCELED";
     return DraggingState2;
 })(DraggingState || {});
-
 function createDndSlice() {
     return {
         dnd: {
@@ -2690,7 +2511,6 @@ function createDndSlice() {
         }
     };
 }
-
 function createDndDispatchers(set) {
     return {
         initDrag: (initState) => {
@@ -2726,7 +2546,6 @@ function createDndDispatchers(set) {
         }
     };
 }
-
 function createGridSelectionSlice() {
     return {
         gridSelection: {
@@ -2739,7 +2558,6 @@ function createGridSelectionSlice() {
         }
     };
 }
-
 function createGridSelectionDispatchers(set) {
     return {
         setGridSelection: (type, gridSelection) => {
@@ -2763,10 +2581,8 @@ function createGridSelectionDispatchers(set) {
         }))
     };
 }
-
 const DEFAULT_RESIZER_LENGTH = 3;
 const DEFAULT_DUPLICATE_EVENT_CID = -1;
-
 function getRestPanelHeight(dayGridRowsState, lastPanelType, initHeight) {
     return Object.keys(dayGridRowsState).reduce((acc, rowName) => {
         if (rowName === lastPanelType) {
@@ -2775,7 +2591,6 @@ function getRestPanelHeight(dayGridRowsState, lastPanelType, initHeight) {
         return acc - dayGridRowsState[rowName].height - DEFAULT_RESIZER_LENGTH;
     }, initHeight);
 }
-
 function createWeekViewLayoutSlice() {
     return {
         layout: 500,
@@ -2786,7 +2601,6 @@ function createWeekViewLayoutSlice() {
         }
     };
 }
-
 function createWeekViewLayoutDispatchers(set) {
     return {
         setLastPanelType: (type) => {
@@ -2825,16 +2639,13 @@ function createWeekViewLayoutDispatchers(set) {
         }))
     };
 }
-
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
 const DEFAULT_DAY_NAMES = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 const getDayName = (dayIndex) => {
     return DEFAULT_DAY_NAMES[dayIndex];
 };
-
 function getDayNames(days, weekDayNamesOption) {
     return days.map((day) => {
         const dayIndex = day.getDay();
@@ -2849,7 +2660,6 @@ function getDayNames(days, weekDayNamesOption) {
         };
     });
 }
-
 function initializeCollapseDuplicateEvents(options) {
     if (!options) {
         return false;
@@ -2863,7 +2673,6 @@ function initializeCollapseDuplicateEvents(options) {
     }
     return __spreadValues(__spreadValues({}, initialCollapseDuplicateEvents), options);
 }
-
 function initializeWeekOptions(weekOptions = {}) {
     const week = __spreadValues({
         startDayOfWeek: Day$2.SUN,
@@ -2882,13 +2691,11 @@ function initializeWeekOptions(weekOptions = {}) {
     week.collapseDuplicateEvents = initializeCollapseDuplicateEvents(week.collapseDuplicateEvents);
     return week;
 }
-
 function initializeTimezoneOptions(timezoneOptions = {}) {
     return __spreadValues({
         zones: []
     }, timezoneOptions);
 }
-
 function initializeMonthOptions(monthOptions = {}) {
     const month = __spreadValues({
         dayNames: [],
@@ -2904,7 +2711,6 @@ function initializeMonthOptions(monthOptions = {}) {
     }
     return month;
 }
-
 function initializeGridSelectionOptions(options) {
     if (isBoolean_1(options)) {
         return {
@@ -2917,9 +2723,7 @@ function initializeGridSelectionOptions(options) {
         enableClick: true
     }, options);
 }
-
 const initialEventFilter = (event) => !!event.isVisible;
-
 function createOptionsSlice(options = {}) {
     var _a, _b, _c, _d, _e, _f;
     return {
@@ -2937,7 +2741,6 @@ function createOptionsSlice(options = {}) {
         }
     };
 }
-
 function createOptionsDispatchers(set) {
     return {
         setOptions: (newOptions = {}) => set(produce((state) => {
@@ -2952,14 +2755,12 @@ function createOptionsDispatchers(set) {
         }))
     };
 }
-
 var PopupType = /* @__PURE__ */ ((PopupType2) => {
     PopupType2["SeeMore"] = "seeMore";
     PopupType2["Form"] = "form";
     PopupType2["Detail"] = "detail";
     return PopupType2;
 })(PopupType || {});
-
 function createPopupSlice() {
     return {
         popup: {
@@ -2969,7 +2770,6 @@ function createPopupSlice() {
         }
     };
 }
-
 function createPopupDispatchers(set) {
     return {
         showSeeMorePopup: (param) => set(produce((state) => {
@@ -3005,11 +2805,9 @@ function createPopupDispatchers(set) {
         }))
     };
 }
-
 const noop = () => {
 };
 const CSS_AUTO_REGEX = /^auto$|^$|%/;
-
 function getStyle(el, style) {
     let value = el.style[style];
     if ((!value || value === "auto") && document.defaultView) {
@@ -3018,14 +2816,12 @@ function getStyle(el, style) {
     }
     return value === "auto" ? null : value;
 }
-
 function invalidateSizeValue(value) {
     if (isString_1(value)) {
         return CSS_AUTO_REGEX.test(value);
     }
     return value === null;
 }
-
 function getSize(el) {
     const w2 = getStyle(el, "width");
     const h2 = getStyle(el, "height");
@@ -3041,17 +2837,14 @@ function getSize(el) {
         height: parseFloat(h2 != null ? h2 : "0")
     };
 }
-
 const ElementClass = typeof Element === "undefined" ? noop : Element;
 const elProto = ElementClass.prototype;
 elProto.matches || elProto.webkitMatchesSelector || elProto.msMatchesSelector || function (selector) {
     return Array.from(document.querySelectorAll(selector)).includes(this);
 };
-
 function stripTags(str) {
     return str.replace(/<([^>]+)>/gi, "");
 }
-
 const SIXTY_MINUTES = 60;
 const templates = {
     milestone(model) {
@@ -3242,13 +3035,11 @@ const templates = {
         return body;
     }
 };
-
 function createTemplateSlice(templateConfig = {}) {
     return {
         template: __spreadValues(__spreadValues({}, templates), templateConfig)
     };
 }
-
 function createTemplateDispatchers(set) {
     return {
         setTemplate: (template) => set(produce((state) => {
@@ -3256,7 +3047,6 @@ function createTemplateDispatchers(set) {
         }))
     };
 }
-
 function createViewSlice(initialView = "week") {
     const renderDate = new TZDate();
     renderDate.setHours(0, 0, 0, 0);
@@ -3267,7 +3057,6 @@ function createViewSlice(initialView = "week") {
         }
     };
 }
-
 function createViewDispatchers(set) {
     return {
         changeView: (nextView) => set(produce((state) => {
@@ -3278,10 +3067,8 @@ function createViewDispatchers(set) {
         }))
     };
 }
-
 const isSSR = isUndefined_1(window) || !window.navigator;
 const useIsomorphicLayoutEffect = isSSR ? _$2 : h$2;
-
 function createStoreContext() {
     const StoreContext = B$1(null);
 
@@ -3362,7 +3149,6 @@ function createStoreContext() {
         useInternalStore: useInternalStore2
     };
 }
-
 function createStore(storeCreator2) {
     let state;
     const listeners = /* @__PURE__ */ new Set();
@@ -3397,7 +3183,6 @@ function createStore(storeCreator2) {
     state = storeCreator2(setState, getState, internal);
     return internal;
 }
-
 const storeCreator = (options) => (set) => {
     return __spreadProps(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, createOptionsSlice(options)), createTemplateSlice(options.template)), createPopupSlice()), createWeekViewLayoutSlice()), createCalendarSlice(options.calendars)), createViewSlice(options.defaultView)), createDndSlice()), createGridSelectionSlice()), {
         dispatch: {
@@ -3414,7 +3199,6 @@ const storeCreator = (options) => (set) => {
 };
 const initCalendarStore = (options = {}) => createStore(storeCreator(options));
 const {StoreProvider, useStore, useInternalStore} = createStoreContext();
-
 function useDispatch(group) {
     return useStore(T$1((state) => {
         if (!group) {
@@ -3423,11 +3207,9 @@ function useDispatch(group) {
         return state.dispatch[group];
     }, [group]));
 }
-
 function topLevelStateSelector(group) {
     return (state) => state[group];
 }
-
 const calendarSelector = topLevelStateSelector("calendar");
 const weekViewLayoutSelector = topLevelStateSelector("weekViewLayout");
 const templateSelector = topLevelStateSelector("template");
@@ -4363,7 +4145,6 @@ var purify = {exports: {}};
 })(purify);
 var browser = window.DOMPurify || (window.DOMPurify = purify.exports.default || purify.exports);
 const TEMP_TARGET_ATTRIBUTE = "data-target-temp";
-
 function addAttributeHooks() {
     browser.addHook("beforeSanitizeAttributes", (node) => {
         if (node.tagName === "A") {
@@ -4385,7 +4166,6 @@ function addAttributeHooks() {
         }
     });
 }
-
 function removeAttributeHooks() {
     browser.removeAllHooks();
 }
@@ -4411,7 +4191,6 @@ function Template({template, param, as: tagName = "div"}) {
         className: `${(_a = htmlOrVnode.props.className) != null ? _a : ""} ${cls(`template-${template}`)}`
     });
 }
-
 const EventBusContext = B$1(null);
 const EventBusProvider = EventBusContext.Provider;
 const useEventBus = () => {
@@ -4433,13 +4212,11 @@ const timezonesSelector = (state) => {
     var _a;
     return (_a = state.options.timezone.zones) != null ? _a : [];
 };
-
 function useTZConverter() {
     const customOffsetCalculator = useStore(customOffsetCalculatorSelector);
     const hasCustomOffsetCalculator = isPresent(customOffsetCalculator);
     return T$1((timezoneName, tzDate = new TZDate()) => tzDate.tz(hasCustomOffsetCalculator ? customOffsetCalculator(timezoneName, tzDate.getTime()) : timezoneName), [customOffsetCalculator, hasCustomOffsetCalculator]);
 }
-
 function usePrimaryTimezone() {
     const primaryTimezoneName = useStore(primaryTimezoneSelector);
     const tzConverter = useTZConverter();
@@ -4517,7 +4294,6 @@ function DayName({dayName, style, type, theme}) {
         param: dayName
     })));
 }
-
 const commonThemeSelector = topLevelStateSelector("common");
 const monthThemeSelector = topLevelStateSelector("month");
 const weekDayGridLeftSelector = (theme) => theme.week.dayGridLeft;
@@ -4644,13 +4420,11 @@ const DEFAULT_MONTH_THEME = {
         backgroundColor: "inherit"
     }
 };
-
 function createCommonTheme(commonTheme = {}) {
     return {
         common: mergeObject(DEFAULT_COMMON_THEME, commonTheme)
     };
 }
-
 function createThemeDispatch(set) {
     return {
         setTheme: (theme) => {
@@ -4677,19 +4451,16 @@ function createThemeDispatch(set) {
         }
     };
 }
-
 function createMonthTheme(monthTheme = {}) {
     return {
         month: mergeObject(DEFAULT_MONTH_THEME, monthTheme)
     };
 }
-
 function createWeekTheme(weekTheme = {}) {
     return {
         week: mergeObject(DEFAULT_WEEK_THEME, weekTheme)
     };
 }
-
 const themeStoreCreator = (themeOptions = {}) => (set) => {
     return __spreadProps(__spreadValues(__spreadValues(__spreadValues({}, createCommonTheme(themeOptions == null ? void 0 : themeOptions.common)), createWeekTheme(themeOptions == null ? void 0 : themeOptions.week)), createMonthTheme(themeOptions == null ? void 0 : themeOptions.month)), {
         dispatch: __spreadValues({}, createThemeDispatch(set))
@@ -4701,15 +4472,12 @@ const {
     useInternalStore: useInternalThemeStore,
     useStore: useTheme
 } = createStoreContext();
-
 function useCommonTheme() {
     return useTheme(commonThemeSelector);
 }
-
 function useMonthTheme() {
     return useTheme(monthThemeSelector);
 }
-
 function weekDayNameSelector(theme) {
     return {
         common: {
@@ -4725,7 +4493,6 @@ function weekDayNameSelector(theme) {
         }
     };
 }
-
 function monthDayNameSelector(theme) {
     return {
         common: {
@@ -4776,14 +4543,12 @@ function GridHeader({
         theme
     }))));
 }
-
 const DEFAULT_VISIBLE_WEEKS = 6;
 var CellBarType = /* @__PURE__ */ ((CellBarType2) => {
     CellBarType2["header"] = "header";
     CellBarType2["footer"] = "footer";
     return CellBarType2;
 })(CellBarType || {});
-
 function getCollisionGroup(events, usingTravelTime = true) {
     const collisionGroups = [];
     let previousEventList;
@@ -4808,7 +4573,6 @@ function getCollisionGroup(events, usingTravelTime = true) {
     });
     return collisionGroups;
 }
-
 function getLastRowInColumn(matrix, col) {
     let {length: row} = matrix;
     while (row > 0) {
@@ -4819,7 +4583,6 @@ function getLastRowInColumn(matrix, col) {
     }
     return -1;
 }
-
 function getMatrices(collection, collisionGroups, usingTravelTime = true) {
     const result = [];
     collisionGroups.forEach((group) => {
@@ -4850,7 +4613,6 @@ function getMatrices(collection, collisionGroups, usingTravelTime = true) {
     });
     return result;
 }
-
 function getEventInDateRangeFilter(start, end) {
     return (model) => {
         const ownStarts = model.getStarts();
@@ -4858,7 +4620,6 @@ function getEventInDateRangeFilter(start, end) {
         return !(ownEnds < start || ownStarts > end);
     };
 }
-
 function positionUIModels(start, end, matrices, iteratee) {
     const ymdListToRender = makeDateRange(start, end, MS_PER_DAY).map((date2) => toFormat(date2, "YYYYMMDD"));
     matrices.forEach((matrix) => {
@@ -4877,7 +4638,6 @@ function positionUIModels(start, end, matrices, iteratee) {
         });
     });
 }
-
 function limit$1(start, end, uiModel) {
     if (uiModel.getStarts() < start) {
         uiModel.exceedLeft = true;
@@ -4889,7 +4649,6 @@ function limit$1(start, end, uiModel) {
     }
     return uiModel;
 }
-
 function limitRenderRange(start, end, uiModelColl) {
     if (uiModelColl instanceof Collection) {
         uiModelColl.each((uiModel) => {
@@ -4918,12 +4677,10 @@ function _isAllday({model}) {
 function _isNotAllday(uiModel) {
     return !_isAllday(uiModel);
 }
-
 function _weightTopValue(uiModel) {
     uiModel.top = uiModel.top || 0;
     uiModel.top += 1;
 }
-
 function _adjustRenderRange(start, end, uiModelColl) {
     uiModelColl.each((uiModel) => {
         if (uiModel.model.isAllday || uiModel.model.hasMultiDates) {
@@ -4931,7 +4688,6 @@ function _adjustRenderRange(start, end, uiModelColl) {
         }
     });
 }
-
 function _getAlldayMaxTopIndexAtYMD(idsOfDay, ymd, uiModelAlldayColl) {
     const topIndexesInDate = [];
     idsOfDay[ymd].forEach((cid) => {
@@ -4944,7 +4700,6 @@ function _getAlldayMaxTopIndexAtYMD(idsOfDay, ymd, uiModelAlldayColl) {
     }
     return 0;
 }
-
 function _adjustTimeTopIndex(idsOfDay, uiModelColl) {
     const vAlldayColl = uiModelColl.filter(_isAllday);
     const sortedTimeEvents = uiModelColl.filter(_isNotAllday).sort(array.compare.event.asc);
@@ -4958,7 +4713,6 @@ function _adjustTimeTopIndex(idsOfDay, uiModelColl) {
         maxIndexInYMD[eventYMD] = timeUIModel.top = alldayMaxTopInYMD + 1;
     });
 }
-
 function _stackTimeFromTop(idsOfDay, uiModelColl) {
     const uiModelAlldayColl = uiModelColl.filter(_isAllday);
     const sortedTimeEvents = uiModelColl.filter(_isNotAllday).sort(array.compare.event.asc);
@@ -4986,7 +4740,6 @@ function _stackTimeFromTop(idsOfDay, uiModelColl) {
         topArrayInYMD.push(timeUIModel.top);
     });
 }
-
 function _addMultiDatesInfo$1(uiModelColl) {
     uiModelColl.each((uiModel) => {
         const {model} = uiModel;
@@ -4999,7 +4752,6 @@ function _addMultiDatesInfo$1(uiModelColl) {
         }
     });
 }
-
 function findByDateRange$1(calendarData, condition) {
     const {start, end, andFilters = [], alldayFirstMode = false} = condition;
     const {events, idsOfDay} = calendarData;
@@ -5020,7 +4772,6 @@ function findByDateRange$1(calendarData, condition) {
     }
     return matrices;
 }
-
 function _makeHourRangeFilter(hStart, hEnd) {
     return (uiModel) => {
         const ownHourStart = uiModel.getStarts();
@@ -5035,7 +4786,6 @@ function _makeHourRangeFilter(hStart, hEnd) {
         return ownHourStartTime >= hourStart && ownHourStartTime < hourEnd || ownHourEndTime > hourStart && ownHourEndTime <= hourEnd || ownHourStartTime < hourStart && ownHourEndTime > hourStart || ownHourEndTime > hourEnd && ownHourStartTime < hourEnd;
     };
 }
-
 function _makeGetUIModelFuncForTimeView(hourStart, hourEnd) {
     if (hourStart === 0 && hourEnd === 24) {
         return (uiModelColl) => {
@@ -5046,7 +4796,6 @@ function _makeGetUIModelFuncForTimeView(hourStart, hourEnd) {
         return uiModelColl.filter(_makeHourRangeFilter(hourStart, hourEnd)).sort(array.compare.event.asc);
     };
 }
-
 function splitEventByDateRange(idsOfDay, start, end, uiModelColl) {
     const result = {};
     const range2 = getDateRange(start, end);
@@ -5066,7 +4815,6 @@ function splitEventByDateRange(idsOfDay, start, end, uiModelColl) {
     }, {});
     return result;
 }
-
 function getUIModelForTimeView(idsOfDay, condition) {
     const {start, end, uiModelTimeColl, hourStart, hourEnd} = condition;
     const ymdSplitted = splitEventByDateRange(idsOfDay, start, end, uiModelTimeColl);
@@ -5081,7 +4829,6 @@ function getUIModelForTimeView(idsOfDay, condition) {
     });
     return result;
 }
-
 function _addMultiDatesInfo(uiModelColl) {
     uiModelColl.each((uiModel) => {
         const {model} = uiModel;
@@ -5090,7 +4837,6 @@ function _addMultiDatesInfo(uiModelColl) {
         uiModel.renderEnds = toEndOfDay(model.getEnds());
     });
 }
-
 function getUIModelForAlldayView(start, end, uiModelColl) {
     if (!uiModelColl || !uiModelColl.size) {
         return [];
@@ -5104,7 +4850,6 @@ function getUIModelForAlldayView(start, end, uiModelColl) {
     positionUIModels(start, end, matrices);
     return matrices;
 }
-
 function findByDateRange(calendarData, condition) {
     var _a, _b;
     const {start, end, panels, andFilters = [], options} = condition;
@@ -5135,23 +4880,18 @@ function findByDateRange(calendarData, condition) {
         time: {}
     });
 }
-
 function limit(value, minArr, maxArr) {
     const v2 = Math.max(value, ...minArr);
     return Math.min(v2, ...maxArr);
 }
-
 function ratio(a2, b2, y2) {
     return b2 * y2 / a2;
 }
-
 function isBetween$1(value, min2, max2) {
     return min2 <= value && value <= max2;
 }
-
 const EVENT_HEIGHT = 22;
 const TOTAL_WIDTH = 100;
-
 function forEachMatrix3d(matrices, iteratee) {
     matrices.forEach((matrix) => {
         matrix.forEach((row) => {
@@ -5161,21 +4901,16 @@ function forEachMatrix3d(matrices, iteratee) {
         });
     });
 }
-
 function isWithinHeight(containerHeight, eventHeight) {
     return ({top}) => containerHeight >= top * eventHeight;
 }
-
 function isExceededHeight(containerHeight, eventHeight) {
     return ({top}) => containerHeight < top * eventHeight;
 }
-
 function getExceedCount(uiModel, containerHeight, eventHeight) {
     return uiModel.filter(isExceededHeight(containerHeight, eventHeight)).length;
 }
-
 const getWeekendCount = (row) => row.filter((cell) => isWeekend(cell.getDay())).length;
-
 function getGridWidthAndLeftPercentValues(row, narrowWeekend, totalWidth) {
     const weekendCount = getWeekendCount(row);
     const gridCellCount = row.length;
@@ -5194,7 +4929,6 @@ function getGridWidthAndLeftPercentValues(row, narrowWeekend, totalWidth) {
         leftList
     };
 }
-
 function getWidth(widthList, start, end) {
     return widthList.reduce((acc, width, index) => {
         if (start <= index && index <= end) {
@@ -5203,7 +4937,6 @@ function getWidth(widthList, start, end) {
         return acc;
     }, 0);
 }
-
 const isInGrid = (gridDate) => {
     return (uiModel) => {
         const eventStart = toStartOfDay(uiModel.getStarts());
@@ -5211,11 +4944,9 @@ const isInGrid = (gridDate) => {
         return eventStart <= gridDate && gridDate <= eventEnd;
     };
 };
-
 function getGridDateIndex(date2, row) {
     return row.findIndex((cell) => date2 >= toStartOfDay(cell) && date2 <= toEndOfDay(cell));
 }
-
 const getLeftAndWidth = (startIndex, endIndex, row, narrowWeekend) => {
     const {widthList} = getGridWidthAndLeftPercentValues(row, narrowWeekend, TOTAL_WIDTH);
     return {
@@ -5240,7 +4971,6 @@ const getEventLeftAndWidth = (start, end, row, narrowWeekend) => {
         left: !gridStartIndex ? 0 : getWidth(widthList, 0, gridStartIndex - 1)
     };
 };
-
 function getEventUIModelWithPosition(uiModel, row, narrowWeekend = false) {
     const modelStart = uiModel.getStarts();
     const modelEnd = uiModel.getEnds();
@@ -5249,7 +4979,6 @@ function getEventUIModelWithPosition(uiModel, row, narrowWeekend = false) {
     uiModel.left = left;
     return uiModel;
 }
-
 function getRenderedEventUIModels(row, calendarData, narrowWeekend) {
     const {idsOfDay} = calendarData;
     const eventUIModels = findByDateRange$1(calendarData, {
@@ -5271,7 +5000,6 @@ function getRenderedEventUIModels(row, calendarData, narrowWeekend) {
         gridDateEventModelMap
     };
 }
-
 const getDayGridEventModels = (eventModels, row, narrowWeekend = false) => {
     forEachMatrix3d(eventModels, (uiModel) => {
         const modelStart = uiModel.getStarts();
@@ -5284,11 +5012,9 @@ const getDayGridEventModels = (eventModels, row, narrowWeekend = false) => {
     return flattenMatrix3d(eventModels);
 };
 const getModels = (models) => models.filter((model) => !!model);
-
 function flattenMatrix3d(matrices) {
     return matrices.flatMap((matrix) => matrix.flatMap((models) => getModels(models)));
 }
-
 const getTimeGridEventModels = (eventMatrix) => Array.from(new Set(Object.values(eventMatrix).reduce((result, matrix3d) => result.concat(...flattenMatrix3d(matrix3d)), [])));
 const getWeekViewEvents = (row, calendarData, {
     narrowWeekend,
@@ -5341,7 +5067,6 @@ const getWeekViewEvents = (row, calendarData, {
         time: []
     });
 };
-
 function createDateMatrixOfMonth(renderTargetDate, {
     workweek = false,
     visibleWeeksCount = 0,
@@ -5406,7 +5131,6 @@ function getColumnsData(datesOfWeek, narrowWeekend = false) {
         return result;
     }, []);
 }
-
 function createTimeGridData(datesOfWeek, options) {
     var _a;
     const columns = getColumnsData(datesOfWeek, (_a = options.narrowWeekend) != null ? _a : false);
@@ -5517,7 +5241,6 @@ function createSortedGridSelection(initPos, currentPos, isReversed) {
         endRowIndex: isReversed ? initPos.rowIndex : currentPos.rowIndex
     };
 }
-
 function calculateTimeGridSelectionByCurrentIndex(timeGridSelection, columnIndex, maxRowIndex) {
     if (isNil(timeGridSelection)) {
         return null;
@@ -5546,7 +5269,6 @@ function calculateTimeGridSelectionByCurrentIndex(timeGridSelection, columnIndex
     }
     return resultGridSelection;
 }
-
 const timeGridSelectionHelper = {
     sortSelection: (initPos, currentPos) => {
         const isReversed = initPos.columnIndex > currentPos.columnIndex || initPos.columnIndex === currentPos.columnIndex && initPos.rowIndex > currentPos.rowIndex;
@@ -5560,7 +5282,6 @@ const timeGridSelectionHelper = {
     },
     calculateSelection: calculateTimeGridSelectionByCurrentIndex
 };
-
 function calculateDayGridMonthSelectionByCurrentIndex(gridSelection, currentIndex, weekLength) {
     if (!(isPresent(gridSelection) && isPresent(currentIndex) && isPresent(weekLength))) {
         return null;
@@ -5579,7 +5300,6 @@ function calculateDayGridMonthSelectionByCurrentIndex(gridSelection, currentInde
     }
     return {startCellIndex, endCellIndex};
 }
-
 const dayGridMonthSelectionHelper = {
     sortSelection: (initPos, currentPos) => {
         const isReversed = initPos.rowIndex > currentPos.rowIndex || initPos.rowIndex === currentPos.rowIndex && initPos.columnIndex > currentPos.columnIndex;
@@ -5594,14 +5314,12 @@ const dayGridMonthSelectionHelper = {
     },
     calculateSelection: calculateDayGridMonthSelectionByCurrentIndex
 };
-
 function calculateAlldayGridRowSelectionByCurrentIndex(gridSelection) {
     return isPresent(gridSelection) ? {
         startCellIndex: gridSelection.startColumnIndex,
         endCellIndex: gridSelection.endColumnIndex
     } : null;
 }
-
 const alldayGridRowSelectionHelper = {
     sortSelection: (initPos, currentPos) => {
         const isReversed = initPos.columnIndex > currentPos.columnIndex;
@@ -5636,7 +5354,6 @@ function S(n2, t2) {
         n2[e2] = t2[e2];
     return n2;
 }
-
 function C(n2, t2) {
     for (var e2 in n2)
         if (e2 !== "__source" && !(e2 in t2))
@@ -5646,11 +5363,9 @@ function C(n2, t2) {
             return true;
     return false;
 }
-
 function E(n2) {
     this.props = n2;
 }
-
 function g$1(n2, t2) {
     function e2(n3) {
         var e3 = this.props.ref, r3 = e3 == n3.ref;
@@ -5672,7 +5387,6 @@ l$3.__b = function (n2) {
     n2.type && n2.type.__f && n2.ref && (n2.props.ref = n2.ref, n2.ref = null), w && w(n2);
 };
 var x$1 = typeof Symbol != "undefined" && Symbol.for && Symbol.for("react.forward_ref") || 3911;
-
 function R(n2) {
     function t2(t3) {
         var e2 = S({}, t3);
@@ -5681,7 +5395,6 @@ function R(n2) {
 
     return t2.$$typeof = x$1, t2.render = t2, t2.prototype.isReactComponent = t2.__f = true, t2.displayName = "ForwardRef(" + (n2.displayName || n2.name) + ")", t2;
 }
-
 var A = l$3.__e;
 l$3.__e = function (n2, t2, e2, r2) {
     if (n2.then) {
@@ -5692,16 +5405,13 @@ l$3.__e = function (n2, t2, e2, r2) {
     A(n2, t2, e2, r2);
 };
 var O = l$3.unmount;
-
 function T() {
     this.__u = 0, this.t = null, this.__b = null;
 }
-
 function L(n2) {
     var t2 = n2.__.__c;
     return t2 && t2.__a && t2.__a(n2);
 }
-
 function D() {
     this.u = null, this.o = null;
 }
@@ -5761,13 +5471,11 @@ var F = function (n2, t2, e2) {
             n2.u = e2 = e2[2];
         }
 };
-
 function I(n2) {
     return this.getChildContext = function () {
         return n2.context;
     }, n2.children;
 }
-
 function M(n2) {
     var t2 = this, e2 = n2.i;
     t2.componentWillUnmount = function () {
@@ -5782,7 +5490,6 @@ function M(n2) {
         }
     }), P$2(h$3(I, {context: t2.context}, n2.__v), t2.l)) : t2.l && t2.componentWillUnmount();
 }
-
 function V(n2, t2) {
     var e2 = h$3(M, {__v: n2, i: t2});
     return e2.containerInfo = t2, e2;
@@ -5923,7 +5630,6 @@ function GridCell$1({
         onClickCollapseButton
     }));
 }
-
 const GridCells = g$1(function GridCells2({
                                               uiModels,
                                               weekDates,
@@ -5968,7 +5674,6 @@ function HorizontalEventResizeIcon({onMouseDown}) {
         className: `${cls("icon")} ${cls("ic-handle-y")}`
     }));
 }
-
 const LayoutContainerContext = B$1(null);
 const LayoutContainerProvider = LayoutContainerContext.Provider;
 const useLayoutContainer = () => {
@@ -5986,11 +5691,9 @@ const DRAGGING_TYPE_CREATORS = {
     moveEvent: (area, id) => `event/${area}/move/${id}`,
     gridSelection: (type) => `gridSelection/${type}`
 };
-
 function useCalendarById(calendarId) {
     return useStore(T$1((state) => state.calendar.calendars.find((cal) => cal.id === calendarId), [calendarId]));
 }
-
 function useCalendarColor(model) {
     var _a;
     const calendar = useCalendarById((_a = model == null ? void 0 : model.calendarId) != null ? _a : null);
@@ -6001,7 +5704,6 @@ function useCalendarColor(model) {
         dragBackgroundColor: calendar == null ? void 0 : calendar.dragBackgroundColor
     }), [calendar]);
 }
-
 var KEY = /* @__PURE__ */ ((KEY2) => {
     KEY2["ESCAPE"] = "Escape";
     return KEY2;
@@ -6010,7 +5712,6 @@ const KEYCODE = {
     ["Escape"]: 27
 };
 const MINIMUM_DRAG_MOUSE_DISTANCE = 3;
-
 function useTransientUpdate(selector, subscriber) {
     const store = useInternalStore();
     const selectorRef = s$2(selector);
@@ -6021,11 +5722,9 @@ function useTransientUpdate(selector, subscriber) {
     }, [selector, subscriber]);
     _$2(() => store.subscribe((slice) => subscriberRef.current(slice), (state) => selectorRef.current(state)), [selector, store]);
 }
-
 function isKeyPressed(e2, key) {
     return e2.key ? e2.key === key : e2.keyCode === KEYCODE[key];
 }
-
 function isLeftClick(buttonNum) {
     return buttonNum === 0;
 }
@@ -6137,7 +5836,6 @@ function useDrag(draggingItemType, {onInit, onDragStart, onDrag, onMouseUp, onPr
 function passConditionalProp(condition, prop) {
     return condition ? prop : void 0;
 }
-
 function getMargins(flat) {
     return {
         vertical: flat ? 5 : 2,
@@ -6203,7 +5901,6 @@ function getTestId({model}) {
     const id = model.id ? `${model.id}-` : "";
     return `${calendarId}${id}${model.title}`;
 }
-
 const classNames$k = {
     eventBody: cls("weekday-event"),
     eventTitle: cls("weekday-event-title"),
@@ -6346,7 +6043,6 @@ function useWhen(callback, condition) {
         }
     }, [condition]);
 }
-
 function useCurrentPointerPositionInGrid(gridPositionFinder) {
     const [currentGridPos, setCurrentGridPos] = y$1(null);
     useTransientUpdate(dndSelector, (dndState) => {
@@ -6363,7 +6059,6 @@ function useCurrentPointerPositionInGrid(gridPositionFinder) {
     const clearCurrentGridPos = T$1(() => setCurrentGridPos(null), []);
     return [currentGridPos, clearCurrentGridPos];
 }
-
 const getTargetEventId = (itemType, area, behavior) => {
     function isEventDraggingType(_itemType) {
         return new RegExp(`^event/${area}/${behavior}/\\d+$`).test(_itemType);
@@ -6374,7 +6069,6 @@ const getTargetEventId = (itemType, area, behavior) => {
     }
     return isEventDraggingType(itemType) ? last(itemType.split("/")) : null;
 };
-
 function useDraggingEvent(area, behavior) {
     const [isDraggingEnd, setIsDraggingEnd] = y$1(false);
     const [isDraggingCanceled, setIsDraggingCanceled] = y$1(false);
@@ -6550,7 +6244,6 @@ function useDOMNode() {
     }, []);
     return [node, setNodeRef];
 }
-
 function useGridRowHeightController(maxTop, category) {
     const [clickedIndex, setClickedIndex] = y$1(0);
     const [isClickedCount, setClickedCount] = y$1(false);
@@ -6577,7 +6270,6 @@ function useGridRowHeightController(maxTop, category) {
         onClickCollapseButton
     };
 }
-
 function requestTimeout(fn2, delay, registerCancel) {
     let start;
     const loop = (timestamp) => {
@@ -6620,7 +6312,6 @@ function useClickPrevention({
     };
     return [handleClick, handleDblClick];
 }
-
 const GRID_SELECTION_TYPE_MAP = {
     dayGridMonth: "month",
     dayGridWeek: "allday",
@@ -6769,7 +6460,6 @@ function useGridSelection({
     _$2(() => clearGridSelection, [clearGridSelection]);
     return onMouseDown;
 }
-
 const rowTitleTemplate = `alldayTitle`;
 
 function AlldayGridRow({
@@ -6900,7 +6590,6 @@ function OtherGridRow({
         className: cls(`panel-${category}-events`)
     }, horizontalEvents)));
 }
-
 const classNames$j = {
     detailItem: cls("detail-item"),
     detailItemIndent: cls("detail-item", "detail-item-indent"),
@@ -6979,7 +6668,6 @@ function EventDetailSectionDetail({event}) {
         as: "span"
     }))));
 }
-
 const classNames$i = {
     sectionHeader: cls("popup-section", "section-header"),
     content: cls("content"),
@@ -7003,7 +6691,6 @@ function EventDetailSectionHeader({event}) {
         as: "span"
     })));
 }
-
 const SEE_MORE_POPUP_SLOT_CLASS_NAME = cls("see-more-popup-slot");
 const EVENT_FORM_POPUP_SLOT_CLASS_NAME = cls("event-form-popup-slot");
 const EVENT_DETAIL_POPUP_SLOT_CLASS_NAME = cls("event-detail-popup-slot");
@@ -7055,7 +6742,6 @@ function FloatingLayerProvider({children}) {
         className: EVENT_DETAIL_POPUP_SLOT_CLASS_NAME
     })));
 }
-
 const useFloatingLayer = (floatingLayerType) => {
     var _a;
     const floatingLayers = q$2(FloatingLayerContext);
@@ -7064,15 +6750,12 @@ const useFloatingLayer = (floatingLayerType) => {
     }
     return (_a = floatingLayers == null ? void 0 : floatingLayers[floatingLayerType]) != null ? _a : null;
 };
-
 function isTopOutOfLayout(top, layoutRect, popupRect) {
     return top + popupRect.height > layoutRect.top + layoutRect.height;
 }
-
 function isLeftOutOfLayout(left, layoutRect, popupRect) {
     return left + popupRect.width > layoutRect.left + layoutRect.width;
 }
-
 const eventFormPopupParamSelector = (state) => {
     return state.popup[PopupType.Form];
 };
@@ -7096,7 +6779,6 @@ const classNames$h = {
     deleteButton: cls("delete-button"),
     verticalLine: cls("vertical-line")
 };
-
 function calculatePopupPosition$1(eventRect, layoutRect, popupRect) {
     let top = eventRect.top + eventRect.height / 2 - popupRect.height / 2;
     let left = eventRect.left + eventRect.width;
@@ -7111,7 +6793,6 @@ function calculatePopupPosition$1(eventRect, layoutRect, popupRect) {
         Math.max(left, layoutRect.left) + window.scrollX
     ];
 }
-
 function calculatePopupArrowPosition(eventRect, layoutRect, popupRect) {
     const top = eventRect.top + eventRect.height / 2 + window.scrollY;
     const popupLeft = eventRect.left + eventRect.width;
@@ -7119,7 +6800,6 @@ function calculatePopupArrowPosition(eventRect, layoutRect, popupRect) {
     const direction = isOutOfLayout ? DetailPopupArrowDirection.right : DetailPopupArrowDirection.left;
     return {top, direction};
 }
-
 function EventDetailPopup() {
     const {useFormPopup} = useStore(optionsSelector);
     const popupParams = useStore(eventDetailPopupParamSelector);
@@ -7237,7 +6917,6 @@ function EventDetailPopup() {
         className: classNames$h.fill
     })))), detailPopupSlot);
 }
-
 const classNames$g = {
     dropdownMenu: cls("dropdown-menu"),
     dropdownMenuItem: cls("dropdown-menu-item"),
@@ -7290,7 +6969,6 @@ function useDropdownState() {
     const toggleDropdown = () => setOpened((prev) => !prev);
     return {isOpened, setOpened, toggleDropdown};
 }
-
 var FormStateActionType = /* @__PURE__ */ ((FormStateActionType2) => {
     FormStateActionType2["init"] = "init";
     FormStateActionType2["setCalendarId"] = "setCalendarId";
@@ -7309,7 +6987,6 @@ const defaultFormState = {
     isPrivate: false,
     state: "Busy"
 };
-
 function formStateReducer(state, action) {
     switch (action.type) {
         case "init":
@@ -7332,11 +7009,9 @@ function formStateReducer(state, action) {
             return state;
     }
 }
-
 function useFormState(initCalendarId) {
     return d$2(formStateReducer, __spreadValues({calendarId: initCalendarId}, defaultFormState));
 }
-
 const classNames$f = {
     popupSection: ["dropdown-section", "calendar-section"],
     popupSectionItem: cls("popup-section-item", "popup-button"),
@@ -7371,7 +7046,6 @@ function CalendarSelector({calendars, selectedCalendarId, formStateDispatch}) {
         onChangeIndex: changeIndex
     }));
 }
-
 const classNames$e = {
     closeButton: cls("popup-button", "popup-close"),
     closeIcon: cls("icon", "ic-close")
@@ -7395,7 +7069,6 @@ function ClosePopupButton({type, close}) {
         className: classNames$e.closeIcon
     }));
 }
-
 const classNames$d = {
     confirmButton: cls("popup-button", "popup-confirm")
 };
@@ -7551,7 +7224,6 @@ function StateDropdownMenu({setOpened, setEventState}) {
         template: "popupStateFree"
     })))));
 }
-
 const classNames$a = {
     popupSection: ["dropdown-section", "state-section"],
     popupSectionItem: cls("popup-section-item", "popup-button"),
@@ -7584,7 +7256,6 @@ function EventStateSelector({eventState = "Busy", formStateDispatch}) {
         setEventState: handleChangeEventState
     }));
 }
-
 const classNames$9 = {
     popupSectionItem: cls("popup-section-item", "popup-section-location"),
     locationIcon: cls("icon", "ic-location"),
@@ -7611,7 +7282,6 @@ function LocationInputBox({location: location2, formStateDispatch}) {
         onChange: handleLocationChange
     })));
 }
-
 const classNames$8 = {
     popupSectionItem: cls("popup-section-item", "popup-section-title"),
     privateButton: cls("popup-section-item", "popup-section-private", "popup-button"),
@@ -7653,14 +7323,12 @@ function TitleInputBox({title, isPrivate = false, formStateDispatch}) {
         checked: isPrivate
     })));
 }
-
 const classNames$7 = {
     popupContainer: cls("popup-container"),
     formContainer: cls("form-container"),
     popupArrowBorder: cls("popup-arrow-border"),
     popupArrowFill: cls("popup-arrow-fill")
 };
-
 function calculatePopupPosition(popupArrowPointPosition, layoutRect, popupRect) {
     let top = popupArrowPointPosition.top - popupRect.height - HALF_OF_POPUP_ARROW_HEIGHT;
     let left = popupArrowPointPosition.left - popupRect.width / 2;
@@ -7681,11 +7349,9 @@ function calculatePopupPosition(popupArrowPointPosition, layoutRect, popupRect) 
         direction
     };
 }
-
 function isBooleanKey(key) {
     return BOOLEAN_KEYS_OF_EVENT_MODEL_DATA.indexOf(key) !== -1;
 }
-
 function getChanges(event, eventObject) {
     return Object.entries(eventObject).reduce((changes, [key, value]) => {
         const eventObjectKey = key;
@@ -7699,7 +7365,6 @@ function getChanges(event, eventObject) {
         return changes;
     }, {});
 }
-
 function EventFormPopup() {
     var _a;
     const {calendars} = useStore(calendarSelector);
@@ -7817,11 +7482,9 @@ function EventFormPopup() {
         className: classNames$7.popupArrowFill
     }))))), formPopupSlot);
 }
-
 function shownPopupParamSelector(state) {
     return Object.values(state.popup).find((popup) => isPresent(popup));
 }
-
 function PopupOverlay() {
     const shownPopupParam = useStore(shownPopupParamSelector);
     const {hideAllPopup} = useDispatch("popup");
@@ -7838,14 +7501,12 @@ function PopupOverlay() {
         onClick
     });
 }
-
 const classNames$6 = {
     container: cls("see-more-container"),
     seeMore: cls("see-more"),
     header: cls("see-more-header"),
     list: cls("month-more-list")
 };
-
 function SeeMoreEventsPopup() {
     const popupParams = useStore(seeMorePopupParamSelector);
     const {date: date2, events = [], popupPosition} = popupParams != null ? popupParams : {};
@@ -7906,7 +7567,6 @@ function SeeMoreEventsPopup() {
         flat: true
     }))))), seeMorePopupSlot);
 }
-
 function getLayoutStylesFromInfo(width, height) {
     const styles = {height: toPercent(100)};
     if (width) {
@@ -8041,7 +7701,6 @@ function getPanelStyle({
     }
     return __spreadProps(__spreadValues({}, style), {minHeight, maxHeight, minWidth, maxWidth});
 }
-
 const Panel = R(function Panel2({
                                     name,
                                     initialWidth = DEFAULT_PANEL_HEIGHT,
@@ -8114,7 +7773,6 @@ const classNames$5 = {
     moveEvent: cls("dragging--move-event"),
     resizeEvent: cls("dragging--resize-vertical-event")
 };
-
 function getMarginLeft(left) {
     const {percent, px} = extractPercentPx(`${left}`);
     return left > 0 || percent > 0 || px > 0 ? TIME_EVENT_CONTAINER_MARGIN_LEFT : 0;
@@ -8526,7 +8184,6 @@ function ResizingGuideByColumn({
         isResizingGuide: true
     });
 }
-
 const classNames$4 = {
     column: cls("column"),
     backgrounds: cls("background-events"),
@@ -8573,7 +8230,6 @@ function getBackgroundColor({
     }
     return defaultBackgroundColor;
 }
-
 const Column = g$1(function Column2({
                                         columnDate,
                                         columnWidth,
@@ -8613,14 +8269,12 @@ const Column = g$1(function Column2({
         timeGridRows
     }));
 });
-
 function gridLineBorderSelector(theme) {
     return {
         halfHourLineBorder: theme.week.timeGridHalfHourLine.borderBottom,
         hourLineBorder: theme.week.timeGridHourLine.borderBottom
     };
 }
-
 const GridLines = g$1(function GridLines2({
                                               timeGridRows
                                           }) {
@@ -8674,7 +8328,6 @@ function getMovingEventPosition({
     const height = isEndAtNextDate ? maxHeight : Math.max(indexDiff, 1) * rowHeight;
     return {top, height};
 }
-
 const initXSelector = (state) => state.dnd.initX;
 const initYSelector = (state) => state.dnd.initY;
 
@@ -8779,7 +8432,6 @@ function MovingEventShadow$1({
         nextStartTime
     });
 }
-
 const TEST_IDS = {
     NOW_INDICATOR: "timegrid-now-indicator",
     NOW_INDICATOR_LABEL: "timegrid-now-indicator-label"
@@ -8861,7 +8513,6 @@ function NowIndicator({top, columnWidth, columnCount, columnIndex}) {
         }
     }));
 }
-
 const classNames$2 = {
     now: addTimeGridPrefix("current-time"),
     dayDifference: addTimeGridPrefix("day-difference")
@@ -8889,7 +8540,6 @@ function NowIndicatorLabel({unit, top, now, zonedNow}) {
         as: "span"
     }));
 }
-
 const monthVisibleEventCountSelector = (state) => {
     var _a;
     return (_a = state.options.month.visibleEventCount) != null ? _a : 6;
@@ -8912,7 +8562,6 @@ const classNames$1 = {
     last: addTimeGridPrefix("time-last"),
     hidden: addTimeGridPrefix("time-hidden")
 };
-
 function backgroundColorSelector(theme) {
     return {
         primaryTimezoneBackgroundColor: theme.week.timeGridLeft.backgroundColor,
@@ -9029,7 +8678,6 @@ const TimeColumn = g$1(function TimeColumn2({timeGridRows, nowIndicatorState}) {
         nowIndicatorState
     }));
 });
-
 function getTopPercentByTime(date2, start, end) {
     const startTime = start.getTime();
     const endTime = end.getTime();
@@ -9038,7 +8686,6 @@ function getTopPercentByTime(date2, start, end) {
     const topPercent = ratio(max2, 100, time);
     return limit(topPercent, [0], [100]);
 }
-
 function getTopHeightByTime(start, end, minTime, maxTime) {
     const top = getTopPercentByTime(start, minTime, maxTime);
     const bottom = getTopPercentByTime(end, minTime, maxTime);
@@ -9048,9 +8695,7 @@ function getTopHeightByTime(start, end, minTime, maxTime) {
         height
     };
 }
-
 const MIN_HEIGHT_PERCENT = 1;
-
 function isBetween(startColumnTime, endColumnTime) {
     return (uiModel) => {
         const {goingDuration = 0, comingDuration = 0} = uiModel.model;
@@ -9059,7 +8704,6 @@ function isBetween(startColumnTime, endColumnTime) {
         return !(ownEnds <= startColumnTime || ownStarts >= endColumnTime);
     };
 }
-
 function setInnerHeights(uiModel, options) {
     const {renderStart, renderEnd, modelStart, modelEnd} = options;
     const {goingDuration = 0, comingDuration = 0} = uiModel.model;
@@ -9076,7 +8720,6 @@ function setInnerHeights(uiModel, options) {
     }
     uiModel.modelDurationHeight = modelDurationHeight;
 }
-
 function setCroppedEdges(uiModel, options) {
     const {goingStart, comingEnd, startColumnTime, endColumnTime} = options;
     if (goingStart < startColumnTime) {
@@ -9086,7 +8729,6 @@ function setCroppedEdges(uiModel, options) {
         uiModel.croppedEnd = true;
     }
 }
-
 function getDuplicateLeft(uiModel, baseLeft) {
     const {duplicateEvents, duplicateEventIndex} = uiModel;
     const prevEvent = duplicateEvents[duplicateEventIndex - 1];
@@ -9106,12 +8748,10 @@ function getDuplicateLeft(uiModel, baseLeft) {
     }
     return left;
 }
-
 function getDuplicateWidth(uiModel, baseWidth) {
     const {collapse} = uiModel;
     return collapse ? `${COLLAPSED_DUPLICATE_EVENT_WIDTH_PX}px` : `calc(${toPercent(baseWidth)} - ${toPx((COLLAPSED_DUPLICATE_EVENT_WIDTH_PX + TIME_EVENT_CONTAINER_MARGIN_LEFT) * (uiModel.duplicateEvents.length - 1) + TIME_EVENT_CONTAINER_MARGIN_LEFT)})`;
 }
-
 function setDimension(uiModel, options) {
     const {startColumnTime, endColumnTime, baseWidth, columnIndex, renderStart, renderEnd} = options;
     const {duplicateEvents} = uiModel;
@@ -9130,7 +8770,6 @@ function setDimension(uiModel, options) {
     }
     uiModel.setUIProps(dimension);
 }
-
 function getRenderInfoOptions(uiModel, columnIndex, baseWidth, startColumnTime, endColumnTime) {
     const {goingDuration = 0, comingDuration = 0} = uiModel.model;
     const modelStart = uiModel.getStarts();
@@ -9218,7 +8857,6 @@ function setDuplicateEvents(uiModels, options, selectedDuplicateEventCid) {
     });
     return uiModels;
 }
-
 function setRenderInfoOfUIModels(events, startColumnTime, endColumnTime, selectedDuplicateEventCid, collapseDuplicateEventsOptions) {
     const uiModels = events.filter(isTimeEvent).filter(isBetween(startColumnTime, endColumnTime)).sort(array.compare.event.asc);
     if (collapseDuplicateEventsOptions) {
@@ -9240,7 +8878,6 @@ function setRenderInfoOfUIModels(events, startColumnTime, endColumnTime, selecte
     });
     return uiModels;
 }
-
 function useInterval(callback, delay) {
     const savedCallback = s$2(callback);
     _$2(() => {
@@ -9255,7 +8892,6 @@ function useInterval(callback, delay) {
         }
     }, [delay]);
 }
-
 function useIsMounted() {
     const isMountedRef = s$2(true);
     _$2(() => {
@@ -9265,7 +8901,6 @@ function useIsMounted() {
     }, []);
     return T$1(() => isMountedRef.current, []);
 }
-
 const classNames = {
     timegrid: cls(className),
     scrollArea: cls(addTimeGridPrefix("scroll-area"))
@@ -9459,7 +9094,6 @@ function TimezoneLabels({top}) {
         left: timezoneLabelWidth * subTimezones.length
     }, primaryTimezone)));
 }
-
 const VIEW_TYPE = {
     MONTH: "month",
     WEEK: "week",
@@ -9467,7 +9101,6 @@ const VIEW_TYPE = {
 };
 const DEFAULT_TASK_PANEL = ["milestone", "task"];
 const DEFAULT_EVENT_PANEL = ["allday", "time"];
-
 function getActivePanels(taskView, eventView) {
     const activePanels = [];
     if (taskView === true) {
@@ -9482,7 +9115,6 @@ function getActivePanels(taskView, eventView) {
     }
     return activePanels;
 }
-
 function useEventsWithTimezone(events) {
     const primaryTimezoneName = useStore(primaryTimezoneSelector);
     const tzConverter = useTZConverter();
@@ -9521,7 +9153,6 @@ function useEventsWithTimezone(events) {
         return totalEvents;
     }, [events, primaryTimezoneName, tzConverter]);
 }
-
 function useCalendarData(calendar, ...filters) {
     const filteredEvents = F$2(() => calendar.events.filter(Collection.and(...filters)), [calendar.events, filters]);
     const filteredEventsWithTimezone = useEventsWithTimezone(filteredEvents);
@@ -9529,11 +9160,9 @@ function useCalendarData(calendar, ...filters) {
         events: filteredEventsWithTimezone
     }), [calendar, filteredEventsWithTimezone]);
 }
-
 function isTimeGridDraggingType(draggingItemType) {
     return /^(event|gridSelection)\/timeGrid/.test(draggingItemType != null ? draggingItemType : "");
 }
-
 function useTimeGridScrollSync(scrollArea, rowCount) {
     useTransientUpdate(dndSelector, ({y: y2, draggingItemType, draggingState}) => {
         if (isPresent(scrollArea) && isTimeGridDraggingType(draggingItemType) && draggingState === DraggingState.DRAGGING && isPresent(y2)) {
@@ -9550,12 +9179,10 @@ function useTimeGridScrollSync(scrollArea, rowCount) {
         }
     });
 }
-
 function timegridHeightSelector(state) {
     var _a, _b, _c;
     return (_c = (_b = (_a = state.weekViewLayout) == null ? void 0 : _a.dayGridRows) == null ? void 0 : _b.time) == null ? void 0 : _c.height;
 }
-
 function useTimezoneLabelsTop(timePanel) {
     const timeGridPanelHeight = useStore(timegridHeightSelector);
     const [stickyTop, setStickyTop] = y$1(null);
@@ -9566,7 +9193,6 @@ function useTimezoneLabelsTop(timePanel) {
     }, [timeGridPanelHeight, timePanel]);
     return stickyTop;
 }
-
 function useDayViewState() {
     const calendar = useStore(calendarSelector);
     const options = useStore(optionsSelector);
@@ -9580,7 +9206,6 @@ function useDayViewState() {
         renderDate
     }), [calendar, options, gridRowLayout, lastPanelType, renderDate]);
 }
-
 function Day$1() {
     var _a, _b;
     const {calendar, options, gridRowLayout, lastPanelType, renderDate} = useDayViewState();
@@ -9910,7 +9535,6 @@ function GridCell({date: date2, events = [], style, parentContainer, contentArea
         onClickExceedCount: onOpenSeeMorePopup
     }));
 }
-
 const GridRow = g$1(function GridRow2({
                                           week,
                                           rowInfo,
@@ -9953,7 +9577,6 @@ function GridSelectionByRow({weekDates, narrowWeekend, rowIndex}) {
         narrowWeekend
     });
 }
-
 const MonthEvents = g$1(function MonthEvents2({
                                                   contentAreaHeight,
                                                   eventHeight = EVENT_HEIGHT,
@@ -10175,9 +9798,7 @@ function ResizingGuideByRow({
         resizingWidth
     }));
 }
-
 const TOTAL_PERCENT_HEIGHT = 100;
-
 function useCellContentAreaHeight(eventHeight) {
     const visibleEventCount = useStore(monthVisibleEventCountSelector);
     const {headerHeight: themeHeaderHeight, footerHeight: themeFooterHeight} = useTheme(monthGridCellSelector);
@@ -10275,7 +9896,6 @@ function getMonthDayNames(options) {
     }));
     return monthDayNames.filter((dayNameInfo) => workweek ? !isWeekend(dayNameInfo.day) : true);
 }
-
 function Month$1() {
     const options = useStore(optionsSelector);
     const {renderDate} = useStore(viewSelector);
@@ -10303,7 +9923,6 @@ function Month$1() {
         cellWidthMap
     }));
 }
-
 function useWeekViewState() {
     const options = useStore(optionsSelector);
     const calendar = useStore(calendarSelector);
@@ -10317,7 +9936,6 @@ function useWeekViewState() {
         renderDate
     }), [calendar, gridRowLayout, lastPanelType, options, renderDate]);
 }
-
 function Week$1() {
     var _a, _b;
     const {options, calendar, gridRowLayout, lastPanelType, renderDate} = useWeekViewState();
@@ -10404,21 +10022,17 @@ function Week$1() {
         top: stickyTop
     })) : null);
 }
-
 const views = {
     month: Month$1,
     week: Week$1,
     day: Day$1
 };
-
 function Main() {
     const {currentView} = useStore(viewSelector);
     const CurrentViewComponent = F$2(() => views[currentView] || (() => null), [currentView]);
     return /* @__PURE__ */ h$3(CurrentViewComponent, null);
 }
-
 var r = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|^--/i, n = /[&<>"]/;
-
 function o(e2) {
     var t2 = String(e2);
     return n.test(t2) ? t2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") : t2;
@@ -10429,7 +10043,6 @@ var a = function (e2, t2) {
 }, i = function (e2, t2, r2) {
     return String(e2).length > (t2 || 40) || !r2 && String(e2).indexOf("\n") !== -1 || String(e2).indexOf("<") !== -1;
 }, l = {};
-
 function s(e2) {
     var t2 = "";
     for (var n2 in e2) {
@@ -10438,29 +10051,24 @@ function s(e2) {
     }
     return t2 || void 0;
 }
-
 function f(e2, t2) {
     for (var r2 in t2)
         e2[r2] = t2[r2];
     return e2;
 }
-
 function u(e2, t2) {
     return Array.isArray(t2) ? t2.reduce(u, e2) : t2 != null && t2 !== false && e2.push(t2), e2;
 }
 
 var c = {shallow: true}, p = [], _ = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/,
     d = /[\s\n\\/='"\0<>]/;
-
 function v() {
     this.__d = true;
 }
-
 m.render = m;
 var g = function (e2, t2) {
     return m(e2, t2, c);
 }, h = [];
-
 function m(t2, r2, n2) {
     r2 = r2 || {}, n2 = n2 || {};
     var o2 = l$3.__s;
@@ -10468,7 +10076,6 @@ function m(t2, r2, n2) {
     var a2 = x(t2, r2, n2);
     return l$3.__c && l$3.__c(t2, h), h.length = 0, l$3.__s = o2, a2;
 }
-
 function x(r2, n2, l2, c2, g2, h2) {
     if (r2 == null || typeof r2 == "boolean")
         return "";
@@ -10596,9 +10203,7 @@ function x(r2, n2, l2, c2, g2, h2) {
         return U2.substring(0, U2.length - 1) + " />";
     return !G2 || B2 || R2 ? (m2 && ~U2.indexOf("\n") && (U2 += "\n"), U2 = U2 + "</" + w2 + ">") : U2 = U2.replace(/>$/, " />"), U2;
 }
-
 m.shallowRender = g;
-
 function forEachOwnProperties$2(obj, iteratee, context) {
     var key;
     context = context || null;
@@ -10610,10 +10215,8 @@ function forEachOwnProperties$2(obj, iteratee, context) {
         }
     }
 }
-
 var forEachOwnProperties_1 = forEachOwnProperties$2;
 var forEachOwnProperties$1 = forEachOwnProperties_1;
-
 function imagePing$1(url, trackingInfo) {
     var trackingElement = document.createElement("img");
     var queryString = "";
@@ -10627,17 +10230,14 @@ function imagePing$1(url, trackingInfo) {
     document.body.removeChild(trackingElement);
     return trackingElement;
 }
-
 var imagePing_1 = imagePing$1;
 var isUndefined$1 = isUndefined_1;
 var imagePing = imagePing_1;
 var ms7days = 7 * 24 * 60 * 60 * 1e3;
-
 function isExpired(date2) {
     var now = new Date().getTime();
     return now - date2 > ms7days;
 }
-
 function sendHostname(appName, trackingId) {
     var url = "https://www.google-analytics.com/collect";
     var hostname = location.hostname;
@@ -10667,7 +10267,6 @@ function sendHostname(appName, trackingId) {
         }
     }, 1e3);
 }
-
 var sendHostname_1 = sendHostname;
 
 function CalendarContainer({theme, store, eventBus, children}) {
@@ -10679,9 +10278,7 @@ function CalendarContainer({theme, store, eventBus, children}) {
         store
     }, /* @__PURE__ */ h$3(FloatingLayerProvider, null, children))));
 }
-
 const GA_TRACKING_ID = "UA-129951699-1";
-
 function extend$1(target, objects) {
     var hasOwnProp = Object.prototype.hasOwnProperty;
     var source, prop, i2, len;
@@ -10695,35 +10292,25 @@ function extend$1(target, objects) {
     }
     return target;
 }
-
 var extend_1 = extend$1;
-
 function isNull$1(obj) {
     return obj === null;
 }
-
 var isNull_1 = isNull$1;
 var isUndefined = isUndefined_1;
 var isNull = isNull_1;
-
 function isExisty$1(param) {
     return !isUndefined(param) && !isNull(param);
 }
-
 var isExisty_1 = isExisty$1;
-
 function isArray$2(obj) {
     return obj instanceof Array;
 }
-
 var isArray_1 = isArray$2;
-
 function isFunction$1(obj) {
     return obj instanceof Function;
 }
-
 var isFunction_1 = isFunction$1;
-
 function forEachArray$1(arr, iteratee, context) {
     var index = 0;
     var len = arr.length;
@@ -10734,12 +10321,10 @@ function forEachArray$1(arr, iteratee, context) {
         }
     }
 }
-
 var forEachArray_1 = forEachArray$1;
 var isArray$1 = isArray_1;
 var forEachArray = forEachArray_1;
 var forEachOwnProperties = forEachOwnProperties_1;
-
 function forEach$1(obj, iteratee, context) {
     if (isArray$1(obj)) {
         forEachArray(obj, iteratee, context);
@@ -10747,7 +10332,6 @@ function forEach$1(obj, iteratee, context) {
         forEachOwnProperties(obj, iteratee, context);
     }
 }
-
 var forEach_1 = forEach$1;
 var extend = extend_1;
 var isExisty = isExisty_1;
@@ -10757,7 +10341,6 @@ var isArray = isArray_1;
 var isFunction = isFunction_1;
 var forEach = forEach_1;
 var R_EVENTNAME_SPLIT = /\s+/g;
-
 function CustomEvents() {
     this.events = null;
     this.contexts = null;
@@ -11367,7 +10950,6 @@ class CalendarCore {
         return this;
     }
 }
-
 function isValidViewType(viewType) {
     return !!Object.values(VIEW_TYPE).find((type) => type === viewType);
 }

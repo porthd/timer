@@ -25,6 +25,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\HolidaycalendarService;
 use Porthd\Timer\Utilities\ConvertDateUtility;
@@ -69,12 +70,17 @@ class HolidaycalendarProcessor implements DataProcessorInterface
     protected const ATTR_PATH_FLEX_FIELD = 'pathFlexField';
     protected const ATTR_PATH_FAL_FIELD = 'falFlexField';
     protected const ATTR_AS = 'as';
+    protected const ATTR_TIME_ADD = 'timeAdd';
 
 //
     protected const DEFAULT_AS = 'holidayList';
+    protected const DEFAULT_TIME_ADD = 'P1D';
+    protected const YAML_HOLIDAY_TITLE = 'title';
+    protected const YAML_HOLIDAY_IDENTIFIER = 'identifier';
     protected const YAML_HOLIDAY_ADD = 'add';
     protected const YAML_HOLIDAY_ADD_ALIAS = 'alias';
-    protected const RESULT_HOLIDAY_DATE = 'date';
+    protected const RESULT_HOLIDAY_DATE_START = 'dateStart';
+    protected const RESULT_HOLIDAY_DATE_END = 'dateEnd';
     protected const RESULT_HOLIDAY_CALENDAR = 'cal';
 
     protected const LOCALE_EN_GB_UTF = 'en_GB.utf-8';
@@ -116,7 +122,8 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ) {
+    )
+    {
         $timeRangeInfo = $this->getTimeRangeInformations($processorConfiguration, $cObj);
         $aliasPath = $this->getAliasForCalendarYaml($processorConfiguration, $cObj, $processedData);
         //  in the holidayPath is not defined, an exception will be thrown
@@ -125,6 +132,11 @@ class HolidaycalendarProcessor implements DataProcessorInterface
             $as = $cObj->stdWrapValue(self::ATTR_AS, $processorConfiguration, false);
         } else {
             $as = self::DEFAULT_AS;
+        }
+        if (array_key_exists(self::ATTR_TIME_ADD, $processorConfiguration)) {
+            $timeAddInterval = $cObj->stdWrapValue(self::ATTR_TIME_ADD, $processorConfiguration, false);
+        } else {
+            $timeAddInterval = self::DEFAULT_TIME_ADD;
         }
 
         // Read the Yamle-Parts fram a separated aliasfile
@@ -141,47 +153,70 @@ class HolidaycalendarProcessor implements DataProcessorInterface
                 1677394183
             );
         }
+
         $holidayArray = CustomTimerUtility::readListFromFileOrUrl($holidayPath, $yamlFileLoader);
 
         // merge the alias-dateinto the array of the holidays
-        if (!empty($aliasArray)) {
-            // merge the both alias-parts and the merge them into the holiday-List
-            foreach ($holidayArray as &$item) {
-                if ((isset($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
-                    (!empty($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
-                    (!empty($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]]))
-                ) {
-                    $item[self::YAML_HOLIDAY_ADD] = array_merge($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]],
-                        $item[self::YAML_HOLIDAY_ADD]);
-                }
+        // mark empty rows and merge the both alias-parts and the merge them into the holiday-List
+        $emptyRow = [];
+        foreach ($holidayArray as $key => &$item) {
+            //  empty rows should already be removed, if the input was an csv-file
+            // a row is empty, if the columns `identifier` and/or `title` are empty
+            if ((empty($item[self::YAML_HOLIDAY_IDENTIFIER])) ||
+                (empty($item[self::YAML_HOLIDAY_TITLE]))
+            ) {
+                $emptyRow[] = $key;
+            }
+            if ((!empty($aliasArray)) &&
+                (isset($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
+                (!empty($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
+                (!empty($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]]))
+            ) {
+                $item[self::YAML_HOLIDAY_ADD] = array_merge($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]],
+                    $item[self::YAML_HOLIDAY_ADD]);
             }
         }
+        // remove other empty rows in holidayArray
+        foreach ($emptyRow as $key) {
+            unset($holidayArray[$key]);
+        }
+
 
         // Generate the list of holidays for the range
         $holidayList = [];
-        $startDateGregorianOrig = $this->detectGregorianDate($timeRangeInfo, false);
-        $startDateGregorianOrig->sub(new DateInterval('P1D'));
+        $startDateGregorianOrig = $this->detectGregorianDate($timeRangeInfo);
         $stopDateGregorian = $this->detectGregorianDate($timeRangeInfo, true);
-//        $hilidayCalendarService = GeneralUtility::makeInstance(HolidaycalendarService::class);
         foreach ($holidayArray as $holiday) {
             $startDateGregorian = $startDateGregorianOrig;
             if (!$this->holidaycalendarService->forbiddenCalendar($holiday)) {
-                while ($stopDateGregorian >= ($startDateGregorian = $this->holidaycalendarService->nextHoliday(
+                /** @var $timerGregorian TimerStartStopRange */
+                do {
+                    $timerRange = $this->holidaycalendarService->nextHoliday(
                         $timeRangeInfo->locale,
                         $startDateGregorian,
                         $holiday
-                    ))
-                ) {
-                    $holidayList[] = [
-                        self::RESULT_HOLIDAY_DATE => $startDateGregorian,
+                    );
+                    if ((!$timerRange->hasResultExist()) ||
+                        ($stopDateGregorian < $timerRange->getEnding())
+                    ) {
+                        break;
+                    }
+                    // is the holiyday allowed by the restrictions
+                    $myItem = [
+                        self::RESULT_HOLIDAY_DATE_START => $timerRange->getBeginning(),
+                        self::RESULT_HOLIDAY_DATE_END => $timerRange->getEnding(),
                         self::RESULT_HOLIDAY_CALENDAR => $holiday,
                     ];
-                    $startDateGregorian->add(new DateInterval('P1D'));
-                    // @todo allow custom hook of DataFormat
-                }
+                    // @todo allow custom manipulation of the DataFormat (PSR-14 [I did not understood that concept]? or Hook)
+
+                    $holidayList[] = $myItem;
+                    // try to get one new holiday or event
+                    $startDateGregorian = clone $timerRange->getBeginning();
+                    $startDateGregorian->add(new DateInterval($timeAddInterval));
+                } while (true);
             }
         }
-        // @todo flag to allow sorting by date or by custom function
+        // @todo allow custom sorting by date or by custom function (PSR-14 [I did not understood that concept]? or Hook)
 
         // The result in the holiday-list should not be deleted or schould have priority.
         $processedData[$as] = $holidayList;
@@ -218,7 +253,6 @@ class HolidaycalendarProcessor implements DataProcessorInterface
                 $result->setTime(0, 0, 0);
                 $result->setDate($timeRangeInfo->startYear, $timeRangeInfo->startMonth, $timeRangeInfo->startDay);
             } else {
-
                 $dateString = $timeRangeInfo->startYear . '/' . $timeRangeInfo->startMonth . '/' . $timeRangeInfo->startDay . ' ' .
                     '00:00:00';
                 $result = ConvertDateUtility::convertFromCalendarToDateTime(
@@ -227,7 +261,6 @@ class HolidaycalendarProcessor implements DataProcessorInterface
                     $dateString,
                     $timeRangeInfo->timezone
                 );
-
             }
 
         }

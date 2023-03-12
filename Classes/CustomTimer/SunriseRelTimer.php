@@ -639,8 +639,8 @@ class SunriseRelTimer implements TimerInterface
                     self::ARG_LATITUDE,
                     $params
                 )) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
-            ($params[self::ARG_LATITUDE]) :
-            (self::DEFAULT_LATITUDE)
+                ($params[self::ARG_LATITUDE]) :
+                (self::DEFAULT_LATITUDE)
         );
         if ((array_key_exists(self::ARG_LONGITUDE, $params)) &&
             ($params[self::ARG_LONGITUDE] >= -180) &&

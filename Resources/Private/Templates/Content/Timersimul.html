@@ -71,6 +71,53 @@
             />
         </div>
         <h3>
+            <f:translate key="content.timersimul.viewhelper.subtitle.forCommaList"
+                         extensionName="timer"
+            />
+        </h3>
+        <div>
+            <f:translate key="content.timersimul.viewhelper.prolog.forCommaList"
+                         extensionName="timer"
+            />
+            <br/>
+            <h4>
+                <f:translate key="content.timersimul.viewhelper.subtitle.forCommaList.foo"
+                             extensionName="timer"
+                />
+            </h4>
+            <div>
+                <timer:forCommaList each="1,2,3,4" as="foo">{foo}</timer:forCommaList>
+            </div>
+            <h4>
+                <f:translate key="content.timersimul.viewhelper.subtitle.forCommaList.revertNoTrim"
+                             extensionName="timer"
+                />
+            </h4>
+            <ul>
+                <!-- respect whitespace -->
+                <timer:forCommaList each="apple ,pear ,banana , cherry "
+                                    trim="0" reverse="1"
+                                    as="fruit" key="label"
+                >
+                    <li>{label}: {fruit}</li>
+                </timer:forCommaList>
+            </ul>
+            <h4>
+                <f:translate key="content.timersimul.viewhelper.subtitle.forCommaList.limiter"
+                             extensionName="timer"
+                />
+            </h4>
+            <ul>
+                <timer:forCommaList each="1; 2; 3; 4 }" as="foo" limiter=";" iteration="fooIterator">
+                    <li>Index: {fooIterator.index} Cycle: {fooIterator.cycle} Total: {fooIterator.total}{f:if(condition:
+                        fooIterator.isEven, then: ' Even')}{f:if(condition: fooIterator.isOdd, then: '
+                        Odd')}{f:if(condition: fooIterator.isFirst, then: ' First')}{f:if(condition: fooIterator.isLast,
+                        then: ' Last')}
+                    </li>
+                </timer:forCommaList>
+            </ul>
+        </div>
+        <h3>
             <f:translate key="content.timersimul.viewhelper.subtitle.formatDate"
                          extensionName="timer"
             />

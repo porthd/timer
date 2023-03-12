@@ -69,8 +69,6 @@ class FlexToArrayProcessor implements DataProcessorInterface
 {
     protected const ATTR_FLEX_FIELD = 'field';
     protected const DEFAULT_FLEX_FIELD = TimerConst::TIMER_FIELD_FLEX_ACTIVE;
-    protected const ATTR_SELECTOR_FIELD = 'selectorfield';
-    protected const DEFAULT_SELECTOR_FIELD = 'tx_timer_selector';
     protected const ATTR_IF_DOT = 'if.';
     protected const OUTPUT_ARG_DATA = 'data';
     protected const ATTR_RESULT_VARIABLE_NAME = 'as';
@@ -109,15 +107,9 @@ class FlexToArrayProcessor implements DataProcessorInterface
         } else {
             $flexFieldName = self::DEFAULT_FLEX_FIELD;
         }
-        if (array_key_exists(self::ATTR_SELECTOR_FIELD, $processorConfiguration)) {
-            $selectorFieldName = $cObj->stdWrapValue(self::ATTR_SELECTOR_FIELD, $processorConfiguration, false);
-        } else {
-            $selectorFieldName = self::DEFAULT_SELECTOR_FIELD;
-        }
-        if ((array_key_exists(self::ATTR_IF_DOT,
-                    $processorConfiguration) && !$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT])) ||
-            (!array_key_exists($selectorFieldName, $processedData[self::OUTPUT_ARG_DATA])) ||
-            (trim($processedData[self::OUTPUT_ARG_DATA][$selectorFieldName]) !== PeriodListTimer::TIMER_NAME)
+        if (
+            (array_key_exists(self::ATTR_IF_DOT, $processorConfiguration)) &&
+            (!$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT]))
         ) {
             return $processedData;
         }

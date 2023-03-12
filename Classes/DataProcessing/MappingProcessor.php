@@ -75,6 +75,8 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *
  *      }
  *
+ * @deprecated since v11, will be removed in v12
+ * replace by BetterMappingProcessor
  */
 class MappingProcessor implements DataProcessorInterface
 {
@@ -93,13 +95,16 @@ class MappingProcessor implements DataProcessorInterface
     protected const DEFAULT_GENERIC_POSTTEXT = '';
     protected const ATTR_GENERIC_TYPE = 'type';
     protected const DEFAULT_GENERIC_TYPE = self::VAL_GENERIC_TYPE_INDEX;
-    protected const VAL_GENERIC_TYPE_DATE = 'datetime';
     protected const VAL_GENERIC_TYPE_INDEX = 'index';
     protected const VAL_GENERIC_TYPE_CONSTANT = 'constant';
     protected const ATTR_MAPPING_DOT = 'mapping.';
     protected const ATTR_OUTPUT_FORMAT = 'outputFormat';
     protected const VAL_OUTPUT_FORMAT_JSON = 'json';
     protected const VAL_OUTPUT_FORMAT_ARRAY = 'array';
+    protected const LIST_OUTPUT_FORMAT = [
+        self::VAL_OUTPUT_FORMAT_ARRAY,
+        self::VAL_OUTPUT_FORMAT_JSON,
+    ];
     protected const DEFAULT_OUTPUT_FORMAT = self::VAL_OUTPUT_FORMAT_JSON;
 
 
@@ -169,9 +174,6 @@ class MappingProcessor implements DataProcessorInterface
                     $result[$mapKey] = [];
                 }
                 switch ($type) {
-                    case self::VAL_GENERIC_TYPE_DATE:
-                        $result[$mapKey][$newFieldName] = $mapItem[$pretext]->format($posttext);
-                        break;
                     case self::VAL_GENERIC_TYPE_INDEX:
                         $result[$mapKey][$newFieldName] = $pretext . $mapKey . $posttext;
                         break;

@@ -223,7 +223,7 @@ class CsvYamlJsonMapperUtility
      * @param string $indent
      * @return string
      */
-    public static function mapNotativeCsvArrayToYaml(
+    public static function mapAssoativeArrayToYaml(
         array $array,
         string $startAttribute = 'mapped',
         string $indent = self::INDENT
@@ -249,7 +249,7 @@ class CsvYamlJsonMapperUtility
                 $raw .= self::SINGLE_QUOTE . $item . self::SINGLE_QUOTE . self::NEW_LINE;
             } elseif (is_array($item)) {
                 $raw .= self::NEW_LINE;
-                $raw .= self::mapNotativeCsvArrayToYaml($item, '', $indent . self::INDENT);
+                $raw .= self::mapAssoativeArrayToYaml($item, '', $indent . self::INDENT);
             }
 
             $yaml .= $raw;
