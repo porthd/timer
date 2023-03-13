@@ -90,7 +90,6 @@
                 viewName = 'week';
                 break;
             case 'toggle-monthly':
-                options.month.visibleWeeksCount = 0;
                 viewName = 'month';
                 break;
             default:
