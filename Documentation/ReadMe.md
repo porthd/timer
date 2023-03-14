@@ -170,7 +170,6 @@ the [File (ExcelLikeListForHolidays.ods)](ExcelLikeListForHolidays.ods).
 The file should also read and edit in `excel`.
 You can use the dot notation in the title to control the structure of the array
 in PHP afterwards.
-
 ```
 Title to CSV:
     title
@@ -222,7 +221,6 @@ php:
 are for public holidays. )
 
 #### Remarks
-
 ##### _Note 1_
 
 In order to enable the most flexible integration of appointment lists, there are
@@ -230,7 +228,6 @@ two input fields `yamlPeriodFilePath` and `yamlPeriodFalRelation`.
 The field `yamlPeriodFilePath` has more the integrator in mind and allows four
 variants,
 to specify the location of the YAML file:
-
 1. Absolute path specification if necessary. also with relative path
 2. Path specification with the prefix `EXT:`
 3. Simple URL starting with `http://` or with `https://`
@@ -501,7 +498,6 @@ notation of the titles defines the structure of an associative array with
 several levels.
 The expression 'add.rank' in the title leads to the following array if the
 value `5` is assigned to the column in the corresponding row in the CSV:
-
 ```
 $list = [
      // ...
@@ -520,7 +516,6 @@ automatically converted into an array with trimmed values.
 The expression 'add.locale.COMMA' in the title leads to the following array if
 the value `de_DE, de_CH , de_AT ` is assigned to the column in the corresponding
 line in the CSV:
-
 ```
 $list = [
      // ...
@@ -546,10 +541,8 @@ Efforts are being made to always make the information available in the frontend
 as well.
 
 ##### Explanations of the internal structure of the CSV list
-
 The structure is easiest to explain using the example of the YAML structure.
 The explanations for the individual components are included as comments.
-
 ```
    -
 # Auxiliary title for the overview in the Excel file. The value is not used in the program.
@@ -635,7 +628,6 @@ The explanations for the individual components are included as comments.
 # You don't want to write the same thing over and over again for every holiday. Additional information can be merged into the addlock via an alias. Warning: the alias can also overwrite definitions here.
        alias: ''
 ```
-
 ##### Important columns/column identifiers in the CSV
 
 - _title_: This column designates the holiday and must always contain at least
@@ -724,7 +716,6 @@ The explanations for the individual components are included as comments.
 - `easterly`: Here the holiday refers to the respective Easter Sunday. These
   holidays refer to either the Julian or the Gregorian calendar.
 - `mooninmonth`: Here a certain moon phase is expected in a certain month.
-
 ##### Definition of parameters for the timer of the extension
 
 The first entry in the sample file indicates how to define timers of the
@@ -904,7 +895,6 @@ a table. The
 Data processor works similar to `DbQueryProcessor`.
 
 ##### _Example in Typoscript_
-
 ```
 tt_content.timer_timersimul >
 tt_content.timer_timersimul < lib.contentElement
@@ -990,7 +980,6 @@ sorted according to periodicity
 Have the list transferred and converted and use it accordingly in the template.
 
 ##### _Example in TypoScript_
-
 ```
          dataProcessing {
              ...

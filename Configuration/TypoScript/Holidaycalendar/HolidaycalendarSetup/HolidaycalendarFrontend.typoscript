@@ -152,7 +152,6 @@ tt_content.timer_holidaycalendar {
                     # if the inField is missing for type `includevalue`, a empty string will be used
                     type = constant
                 }
-
                 20 {
                     inField = dateStart
                     # the outputfield must contain a DateTime-Object
@@ -160,14 +159,12 @@ tt_content.timer_holidaycalendar {
                     format = Y-m-d
                     type = datetime
                 }
-
                 30 {
                     inField = dateEnd
                     outField = end
                     format = Y-m-d
                     type = datetime
                 }
-
                 40 {
                     inField = cal.eventtitle
                     outField = title

@@ -157,7 +157,6 @@ wurde.
 Die Datei sollte sich auch in `excel` einlesen und bearbeiten lassen.
 Über die Punktnotation im Titel kann man hinterher die Aufbaustruktur des Arrays
 im PHP steuern.
-
 ```
 Title in CSV:
    title
@@ -209,7 +208,6 @@ php:
 Berechnungsregeln es für Feiertage gibt. )
 
 #### Anmerkungen
-
 ##### _Anmerkung 1_
 
 Um einen möglichst flexible Einbindung von Terminlisten zu ermöglichen, gibt es
@@ -217,7 +215,6 @@ die zwei Eingabefelder `yamlPeriodFilePath` und `yamlPeriodFalRelation`.
 Das Feld `yamlPeriodFilePath` hat eher den Integrator im Blick und erlaubt vier
 Varianten,
 um den Ort der YAML-Datei zu spezifizieren:
-
 1. absolute Pfadangabe ggfls. auch mit relativem Pfad
 2. Pfadangabe mit dem Prefix `EXT:`
 3. einfache URL beginnend mit `http://` oder mit `https://`
@@ -227,7 +224,8 @@ um den Ort der YAML-Datei zu spezifizieren:
 
 Das Feld `yamlPeriodFalRelation` hat eher den Redaktuer im Blick und erlaubt die
 Einbindung der YAML-Datei über das TYPO3 Backend.
-Hier hat der Redakteur auch die Möglichkeit, mehrere Dateien einzubinden, die vom Timer wie eine große Liste behandelt werden.
+Hier hat der Redakteur auch die Möglichkeit, mehrere Dateien einzubinden, die
+vom Timer wie eine große Liste behandelt werden.
 
 ##### _Anmerkung 2_
 
@@ -631,7 +629,6 @@ angeführt.
 # Man möchte nicht für jeden Feiertag immer wieder das Gleiche schreiben. Über einen Alias kann man in den Addlock weitere Informationen hineinmergen. Achtung: das Alias kann auch hier stehende Definitionen überschreiben.
       alias: ''
 ```
-
 ##### Wichtige Spalten/Spaltenbezeichner in der CSV
 
 - _title_: Diese Spalte bezeichnet den Feiertag und muss immer mit mindestens
@@ -693,7 +690,6 @@ angeführt.
   oder `fixedrelated`. Er definiert den Abstand in Tage relativ zum ausgewählten
   Wochentag. (Sonderdefinition für den Schweizer bzw. Eidgenössischen Dank-,
   Buss- und Bettag )
-
 ##### Verschiedene Typen der Feiertagsberechnung
 
 - `fixed`: Dieser Type definiert den Feiertag über ein bestimmtes Datum im
@@ -728,7 +724,6 @@ angeführt.
   gregorianischen Kalender.
 - `mooninmonth`: Hier wird eine bestimmte Mondphase in einem bestimmten Monat
   erwartet.
-
 ##### Definition von Parameter für Timer der Extension
 
 Der erste Eintrag in der Beispieldatei deutet an, wie man Timer der Funktion in

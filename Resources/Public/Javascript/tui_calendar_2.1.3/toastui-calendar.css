@@ -408,6 +408,7 @@
 }
 
 
+
 .toastui-calendar-panel-title {
     display: table;
     float: left;
@@ -516,6 +517,7 @@
 .toastui-calendar-week-view .toastui-calendar-panel:not(.toastui-calendar-time) {
     overflow-y: scroll;
 }
+
 
 
 .toastui-calendar-floating-layer {
@@ -974,6 +976,7 @@
     top: -7px;
     right: 1px;
 }
+
 
 
 .toastui-calendar-day-names {

@@ -9,15 +9,55 @@
     var idTuiCalendar = 'tuicalendar';
     var eventContainer = document.getElementById(idTuiCalendar);
     var events = JSON.parse(eventContainer.dataset.events);
-    // var events= JSON.parse('[{"category":"allday","start":"2023-12-24","end":"2023-12-24"},{"category":"allday","start":"2024-12-24","end":"2024-12-24"},{"category":"allday","start":"2023-12-25","end":"2023-12-25"},{"category":"allday","start":"2024-12-25","end":"2024-12-25"},{"category":"allday","start":"2023-12-26","end":"2023-12-26"},{"category":"allday","start":"2024-12-26","end":"2024-12-26"},{"category":"allday","start":"2023-12-25","end":"2023-12-25"},{"category":"allday","start":"2024-12-25","end":"2024-12-25"},{"category":"allday","start":"2023-12-26","end":"2023-12-26"},{"category":"allday","start":"2024-12-26","end":"2024-12-26"},{"category":"allday","start":"2023-12-31","end":"2023-12-31"},{"category":"allday","start":"2023-01-02","end":"2023-01-02"},{"category":"allday","start":"2024-01-01","end":"2024-01-01"}]');
     var cal, resizeThrottled;
     // var useCreationPopup = false;
     var useDetailPopup = true;
+    var lllMilestone = ((eventContainer.dataset.milestone) ? eventContainer.dataset.milestone : 'milestone');
+    var lllTask = ((eventContainer.dataset.task) ? eventContainer.dataset.task : 'task');
+    var lllAllDay = ((eventContainer.dataset.allday) ? eventContainer.dataset.allday : 'All Day');
+    var listOfDayNames = ((eventContainer.dataset.weekdays) ? JSON.parse(eventContainer.dataset.weekdays) : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+    ;
     // var datePicker, selectedCalendar;
     cal = new Calendar('#' + idTuiCalendar, {
         defaultView: 'month',
         useDetailPopup: useDetailPopup,
         calendars: CalendarList,
+
+        taskView: true,    // Can be also ['milestone', 'task']
+        scheduleView: true,  // Can be also ['allday', 'time']
+        Template: {
+            milestone: function (schedule) {
+                return '<span style="color:red;"><i class="fa fa-flag"></i> ' + schedule.title + '</span>';
+            },
+            milestoneTitle: function () {
+                return lllMilestone; // Translate the required language.
+            },
+            task: function (schedule) {
+                return '&nbsp;&nbsp;#' + schedule.title;
+            },
+            taskTitle: function () {
+                return '<label><input type="checkbox" />' + lllTask + '</label>'; // translate the required language.
+            },
+            allday: function (schedule) {
+                return schedule.title + ' <i class="fa fa-refresh"></i>';
+            },
+            alldayTitle: function () {
+                return lllAllDay; // Translate the required language.
+            },
+            time: function (schedule) {
+                return schedule.title + ' <i class="fa fa-refresh"></i>' + schedule.start;
+            }
+        },
+        month: {
+            dayNames: listOfDayNames, // Translate the required language.
+            startDayOfWeek: 0,
+            narrowWeekend: true
+        },
+        week: {
+            dayNames: listOfDayNames, // Translate the required language.
+            startDayOfWeek: 0,
+            narrowWeekend: true
+        }
     });
     cal.createEvents(events);
 
@@ -77,11 +117,12 @@
      * @param {Event} e - click event
      */
     function onClickMenu(e) {
-        let target = e.target.closest('a[role="menuitem"]');
-        let action = getDataAction(target);
-        let options = cal.getOptions();
-        let viewName = '';
+        var target = e.target.closest('a[role="menuitem"]');
+        var action = getDataAction(target);
+        var options = cal.getOptions();
+        var viewLllName = target.innerText;
 
+        var viewName = '';
         switch (action) {
             case 'toggle-daily':
                 viewName = 'day';
@@ -95,11 +136,10 @@
             default:
                 break;
         }
-
         cal.setOptions(options, true);
         cal.changeView(viewName, true);
 
-        setDropdownCalendarType();
+        setDropdownCalendarType(viewLllName);
         setRenderRangeText();
     }
 
@@ -174,25 +214,23 @@
         });
     }
 
-    function setDropdownCalendarType() {
+    function setDropdownCalendarType(viewName) {
         var calendarTypeName = document.getElementById('calendarTypeName');
         var calendarTypeIcon = document.getElementById('calendarTypeIcon');
         var options = cal.getOptions();
         var type = cal.getViewName();
         var iconClassName;
+        var showName = (viewName) ? viewName : calendarTypeName.dataset.default;
 
         if (type === 'day') {
-            type = 'Daily';
             iconClassName = 'calendar-icon ic_view_day';
         } else if (type === 'week') {
-            type = 'Weekly';
             iconClassName = 'calendar-icon ic_view_week';
         } else {
-            type = 'Monthly';
             iconClassName = 'calendar-icon ic_view_month';
         }
 
-        calendarTypeName.innerHTML = type;
+        calendarTypeName.innerHTML = showName;
         calendarTypeIcon.className = iconClassName;
     }
 

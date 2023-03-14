@@ -36,11 +36,24 @@
             I am missing some explained examples. the xeample-code didn`t easily lead to the main points of structure.
         -->
     </f:comment>
-
-    <div id="tuicalendar"
-         style="height: 600px;"
-         data-events='{holidaycalendarJson}'
-    ></div>
+    <f:alias map="{
+        sun:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.sun\',extensionName:\'timer\')}',
+        mon:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.mon\',extensionName:\'timer\')}',
+        tue:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.tue\',extensionName:\'timer\')}',
+        wed:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.wed\',extensionName:\'timer\')}',
+        thu:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.thu\',extensionName:\'timer\')}',
+        fri:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.fri\',extensionName:\'timer\')}',
+        sat:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.sat\',extensionName:\'timer\')}'
+    }">
+        <div id="tuicalendar"
+             style="height: 600px;"
+             data-events='{holidaycalendarJson}'
+             data-milestone="{f:translate(key:'contentElement.holidayCalendar.tuicalendar.milestone',extensionName:'timer')}"
+             data-task="{f:translate(key:'contentElement.holidayCalendar.tuicalendar.task',extensionName:'timer')}"
+             data-allday="{f:translate(key:'contentElement.holidayCalendar.tuicalendar.allday',extensionName:'timer')}"
+             data-weekdays='["{sun}","{mon}","{tue}","{wed}","{thu}","{fri}","{sat}"]'
+        ></div>
+    </f:alias>
 </f:section>
 </body>
 </html>

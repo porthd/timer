@@ -74,6 +74,7 @@ class HolidaycalendarService
     ];
 
 
+
     public function forbiddenCalendar(array $holidayItem): bool
     {
         return ($holidayItem[self::ATTR_ARG][self::ATTR_ARG_CALENDAR] === 'chinese');

@@ -81,11 +81,11 @@ class TcaService
         array_walk($yamlCalendarList, function (&$value, $key) {
             $value = [
                 (
-                (strpos($value[self::YAML_CALLIST_ITEM_EVENTTITLE], 'LLL:') === 0) ?
-                    ucfirst(
-                        $this->translate($value[self::YAML_CALLIST_ITEM_EVENTTITLE])
-                    ) :
-                    $value[self::YAML_CALLIST_ITEM_IDENTIFIER]
+                    (strpos($value[self::YAML_CALLIST_ITEM_EVENTTITLE], 'LLL:') === 0) ?
+                        ucfirst(
+                            $this->translate($value[self::YAML_CALLIST_ITEM_EVENTTITLE])
+                        ) :
+                        $value[self::YAML_CALLIST_ITEM_IDENTIFIER]
                 ),
             ];
         });

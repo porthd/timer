@@ -523,6 +523,62 @@
 					mit berücksichtigt.
 				</target>
 			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.milestone">
+				<source>milestone</source>
+				<source>Meilenstein</source>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.task">
+				<source>task</source>
+				<target>Aufgabe</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.allday">
+				<source>All Day</source>
+				<target>Ganztag</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.sun">
+				<source>Sun</source>
+				<target>So.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.mon">
+				<source>Mon</source>
+				<target>Mo.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.tue">
+				<source>Tue</source>
+				<target>Di.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.wed">
+				<source>Wed</source>
+				<target>Mi.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.thu">
+				<source>Thu</source>
+				<target>Do.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.fri">
+				<source>Fri</source>
+				<target>Fr.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.sat">
+				<source>Sat</source>
+				<target>Sa.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.daily">
+				<source>day</source>
+				<target>Tag</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.weekly">
+				<source>week</source>
+				<target>Woche</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.monthly">
+				<source>month</source>
+				<target>Monat</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.today">
+				<source>today</source>
+				<target>heute</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

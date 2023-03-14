@@ -1,5 +1,4 @@
 <?php
-
 namespace Porthd\Timer\CustomTimer\StrangerCode\Season;
 
 /**

@@ -55,7 +55,6 @@
     display: inline-block;
     vertical-align: middle;
 }
-
 .toastui-calendar-icon.toastui-calendar-ic-title {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAO5JREFUKBVjYCATMOLSFxkZqfHnz5+1QHktNDVbV69e7cOCJgjmQjXtB3IksMh7g8SY0CXQNTEyMlYD1fBCabhyFI3omkCq/v//PwnotC8gGq4LyIBrxKYJpBBoU15oaCgPiEbWCPYjUEIFGBBY/QS0qRWooRVIg/UBDXgMYoBtBHJSgWxsAQFWjET8BBqQBuLDNM4Can6GpAAb8ydQMADo3x0gSbDGlStX3gVqdMSjGUUTSCNKAggPD1cDOmU/EEuBJKEAQxNIHEUjSABNM1ZNIHXMIAIZXL169a2+vv5moK18QKeXAv20B1meYjYAr7xrljpOzc0AAAAASUVORK5CYII=) no-repeat;
 }
@@ -409,6 +408,7 @@
 }
 
 
+
 .toastui-calendar-panel-title {
     display: table;
     float: left;
@@ -517,6 +517,7 @@
 .toastui-calendar-week-view .toastui-calendar-panel:not(.toastui-calendar-time) {
     overflow-y: scroll;
 }
+
 
 
 .toastui-calendar-floating-layer {
@@ -975,6 +976,7 @@
     top: -7px;
     right: 1px;
 }
+
 
 
 .toastui-calendar-day-names {

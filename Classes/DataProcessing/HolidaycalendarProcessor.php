@@ -122,8 +122,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    )
-    {
+    ) {
         $timeRangeInfo = $this->getTimeRangeInformations($processorConfiguration, $cObj);
         $aliasPath = $this->getAliasForCalendarYaml($processorConfiguration, $cObj, $processedData);
         //  in the holidayPath is not defined, an exception will be thrown

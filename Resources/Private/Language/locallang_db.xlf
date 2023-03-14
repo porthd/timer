@@ -207,10 +207,10 @@
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libContentElement">
 				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript
-					`lib.contentElment`
+					`lib.contentElement`
 				</source>
 				<target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript
-					`lib.contentElment`
+					`lib.contentElement`
 				</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libFLuidContent">
@@ -223,10 +223,10 @@
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libContentElement">
 				<source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the
-					typoscript `lib.contentElment`
+					typoscript `lib.contentElement`
 				</source>
 				<target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im
-					Typoscript `lib.contentElment`
+					Typoscript `lib.contentElement`
 				</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_timersimul.pages.forList">
@@ -234,7 +234,7 @@
 					`tx_timer_timersimul`
 				</source>
 				<target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript
-					`lib.contentElment`
+					`lib.contentElement`
 				</target>
 			</trans-unit>
 			<trans-unit id="backend.pageModul.timerTimersimul.info">
@@ -319,16 +319,16 @@
 				<source>Timer Simulation</source>
 				<target>Timer-Simulation</target>
 			</trans-unit>
-            <trans-unit id="timer.typoescript.constants.pathes.templates">
-                <source>Templtes:Path to template root (FE)</source>
-                <target>Vorlagen:Pfad zum Vorlagenstamm (FE)</target>
-            </trans-unit>
-            <trans-unit id="timer.typoescript.constants.pathes.partials">
-                <source>Partials:Path to template partials (FE)</source>
-                <target>Partials:Pfad zu Template-Partials (FE)</target>
-            </trans-unit>
-            <trans-unit id="timer.typoescript.constants.pathes.layout">
-                <source>Layout:Path to template layouts (FE)</source>
+			<trans-unit id="timer.typoescript.constants.pathes.templates">
+				<source>Templtes:Path to template root (FE)</source>
+				<target>Vorlagen:Pfad zum Vorlagenstamm (FE)</target>
+			</trans-unit>
+			<trans-unit id="timer.typoescript.constants.pathes.partials">
+				<source>Partials:Path to template partials (FE)</source>
+				<target>Partials:Pfad zu Template-Partials (FE)</target>
+			</trans-unit>
+			<trans-unit id="timer.typoescript.constants.pathes.layout">
+				<source>Layout:Path to template layouts (FE)</source>
                 <target>Layout:Pfad zu Vorlagenlayouts (FE)</target>
             </trans-unit>
 
