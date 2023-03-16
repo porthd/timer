@@ -329,9 +329,9 @@
 			</trans-unit>
 			<trans-unit id="timer.typoescript.constants.pathes.layout">
 				<source>Layout:Path to template layouts (FE)</source>
-                <target>Layout:Pfad zu Vorlagenlayouts (FE)</target>
-            </trans-unit>
+				<target>Layout:Pfad zu Vorlagenlayouts (FE)</target>
+			</trans-unit>
 
-        </body>
+		</body>
     </file>
 </xliff>

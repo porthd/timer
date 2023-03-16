@@ -328,10 +328,10 @@
 				<target>Partials:Pfad zu Template-Partials (FE)</target>
 			</trans-unit>
 			<trans-unit id="timer.typoescript.constants.pathes.layout">
-                <source>Layout:Path to template layouts (FE)</source>
-                <target>Layout:Pfad zu Vorlagenlayouts (FE)</target>
-            </trans-unit>
+				<source>Layout:Path to template layouts (FE)</source>
+				<target>Layout:Pfad zu Vorlagenlayouts (FE)</target>
+			</trans-unit>
 
-        </body>
+		</body>
     </file>
 </xliff>

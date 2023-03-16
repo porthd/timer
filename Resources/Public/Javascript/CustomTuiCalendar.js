@@ -23,9 +23,9 @@
         useDetailPopup: useDetailPopup,
         calendars: CalendarList,
 
-        taskView: true,    // Can be also ['milestone', 'task']
-        scheduleView: true,  // Can be also ['allday', 'time']
-        Template: {
+        taskView: false,    // Can be also ['milestone', 'task']
+        scheduleView: false,  // Can be also ['allday', 'time']
+        template: {
             milestone: function (schedule) {
                 return '<span style="color:red;"><i class="fa fa-flag"></i> ' + schedule.title + '</span>';
             },
@@ -36,7 +36,7 @@
                 return '&nbsp;&nbsp;#' + schedule.title;
             },
             taskTitle: function () {
-                return '<label><input type="checkbox" />' + lllTask + '</label>'; // translate the required language.
+                return '<label>' + lllTask + '</label>'; // translate the required language.
             },
             allday: function (schedule) {
                 return schedule.title + ' <i class="fa fa-refresh"></i>';
@@ -46,7 +46,15 @@
             },
             time: function (schedule) {
                 return schedule.title + ' <i class="fa fa-refresh"></i>' + schedule.start;
-            }
+            },
+
+            popupEdit: function () {
+                return '';
+            },
+
+            popupDelete: function () {
+                return 'X';
+            },
         },
         month: {
             dayNames: listOfDayNames, // Translate the required language.

@@ -1253,3 +1253,113 @@ berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
         }
 
 ```
+
+#### HolidaycalendarProcessor (buggy)
+
+Der Dataprozessor dient der Auswertung von dev CSV-Dateien mit den
+Feiertagsterminen. (2023-03-16 - Die Berechnung ist noch buggy.)
+
+```
+        10 = Porthd\Timer\DataProcessing\HolidaycalendarProcessor
+        10 {
+
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            #!!! every parameter will support the typoscript-functionality `stdWrap` !!!
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            #!!! The chinese-calendar is not supported yet, because the php is buggy !!!
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            # regular if syntax
+            #if.isTrue.field = record
+
+            # This definition will override the system-definition and take this locale for the definition of locales.
+            # You should normally not use this, becuse the locale should be defined in your LocalConfiguration.php.
+            # The value will be seen in see GLOBALS['TYPO3_CONF_VAR']['SYS']['systemLocale'].
+            # if there is no information and if this definition is missing, the locale 'en_GB.utf-8' will be used.
+            locale = de_DE.utf-8
+            # default is `gregorian`. Allowed are all calendars, which your intlDateFormatter in your php can handle,
+            #    and the julian calendar
+            calendar = gregorian
+            # default is the timezone of your TYPO3-System (normally defined in the LocalConfiguration.php or
+            #   see GLOBALS['TYPO3_CONF_VAR']['SYS']['phpTimeZone']
+            timezone = Europe/Berlin
+            start {
+                # last year
+                year.stdWrap.cObject = TEXT
+                year.stdWrap.cObject {
+                    value.stdWrap.cObject = TEXT
+                    value.stdWrap.cObject {
+                        data = date:Y
+                        intval = 1
+                        wrap = |
+                    }
+
+                    prioriCalc = 1
+                }
+
+                # inclusive monthnumber,  if missing, then it is equal to current month
+                month = 1
+                # inclusive daynumber,  if missing, then it is equal to current day
+                day = 1
+            }
+
+            stop {
+                # second next year
+                year.stdWrap.cObject = TEXT
+                year.stdWrap.cObject {
+                    value.stdWrap.cObject = TEXT
+                    value.stdWrap.cObject {
+                        data = date:Y
+                        intval = 1
+                        wrap = |+2
+                    }
+
+                    prioriCalc = 1
+                }
+
+                # inclusive monthnumber,  if missing, then it is equal to startmonth
+                month = 1
+                # inclusive daynumber,  if missing, then it is equal to the startday
+                day = 1
+                # if `daybefore` is unequal to 0, then the date will be decremented by one day. So you can detect one year in a
+                #   foreign calendar without knowing the number of days in the last month.
+                # if `daybefore` is zero or if the value is missing, nothing will happen.
+                daybefore = 1
+            }
+
+            # the alias-file contain a list of alias-phrases, which are merged nondestructive to the `add` part of each related holiday-definition,  under the attribute `aliasDateRel`.
+            # this parameterblock is optional
+            # direct path, EXT:Path or URL to the file with the alias-definition
+            # the definition of `aliasConfig` will overrule the definition of `aliasPath`.
+            #            aliasPath = directPath
+            #            aliasConfig {
+            #                flexDbField = pi_flexform
+            #                pathFlexField = aliasPath
+            #                falFlexField = aliasPath
+            #            }
+
+            # the holiday file can contain a list of alias-phrases, which are merged nondestructive to the `add` part of each related holiday-definition, under the attribute `aliasDateRel`
+            # the holiday file has a list of holiday- or eventday-definition under the attribute 'calendarDateRel'
+            # the definition of `holidayConfig` will overrule the definition of `holidayPath`.
+            # the missing of both (`holidayPath` and `holidayConfig`) will cause an exception.
+            # direct path, EXT:Path or URL to the file with the holiday-definition
+            holidayPath = EXT:timer/Resources/Public/Csv/ExcelLikeListForHolidays.csv
+            holidayConfig {
+                flexDbField = pi_flexform
+                pathFlexField = holidayFilePath
+                falFlexField = holidayFalRelation
+            }
+
+            # `timeAdd` define the minimal needed distance between two events of the same holiday or custom.
+            # The syntax is defined by the PHP-dateInterval https://www.php.net/manual/en/dateinterval.construct.php
+            # !!! Remark: The interval-definition must begin with a `P`. The char `T` divides in the interval
+            #          the date-part from the time-part. In this way:
+            #         - `P1M` means the interval of one month.
+            #         - `PT1M` means the interval of one minute
+            # The default value for `timeAdd` is one day.
+            #timeAdd = P1D
+
+            # name of output-variable
+            as = holidayList
+        }
+```

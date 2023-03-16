@@ -534,7 +534,7 @@
 			</trans-unit>
 			<trans-unit id="calendarDate.hist.greg.lvDayOfNewIndependence">
 				<source>Latvia: Renewal of IndependenceConvening of Latvian Constitutional Committee, Labor Day</source>
-				<target>Lettland: Erneuerung der UnabhängigkeitEinberufung des lettischen Verfassungsausschusses, Tag
+				<target>Lettland: Erneuerung der Unabhängigkeit / Einberufung des lettischen Verfassungsausschusses, Tag
 					der Arbeit
 				</target>
 			</trans-unit>
@@ -665,6 +665,1032 @@
 			<trans-unit id="calendarDate.cult.greg.jpHonorForElderPeople">
 				<source>Day of Homage to Age</source>
 				<target>Tag der Ehrerbietung vor dem Alter</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpNewYear">
+				<source>New Year</source>
+				<target>Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzPostNewYear">
+				<source>Post New Year</source>
+				<target>Post-Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzWaitangiDay">
+				<source>Waitangi Day</source>
+				<target>Waitangi Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzAnzacDay">
+				<source>Anzac Day (New Zealand)</source>
+				<target>Anzac Day (Neuseeland)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzKingsBirthday">
+				<source>King's Birthday (New Zealand)</source>
+				<target>Kings Birthday (Neuseeland)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzMatakiri">
+				<source>Matakiri (estimated, new moon after rising of the Pleiades; New Zealand)</source>
+				<target>Matakiri (geschätzt, Neumond nach Aufgang der Plejaden; Neuseeland)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzLabourDay">
+				<source>Labor Day(New Zealand)</source>
+				<target>Tag der Arbeit(Neuseeland)</target>
+			</trans-unit>
+
+
+			<trans-unit id="locale.icu.nation.afg">
+				<source>Afghanistan</source>
+				<target>Afghanistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.alb">
+				<source>Albania</source>
+				<target>Albanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dza">
+				<source>Algeria</source>
+				<target>Algerien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.asm">
+				<source>American Samoa</source>
+				<target>Amerikanischen Samoa-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.and">
+				<source>Andorra</source>
+				<target>Andorra</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ago">
+				<source>Angola</source>
+				<target>Angola</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aia">
+				<source>Anguilla</source>
+				<target>Anguilla</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ata">
+				<source>Antarctica</source>
+				<target>Antarktis</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.atg">
+				<source>Antigua and Barbuda</source>
+				<target>Antigua und Barbuda</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.arg">
+				<source>Argentina</source>
+				<target>Argentinien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.arm">
+				<source>Armenia</source>
+				<target>Armenien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.abw">
+				<source>Aruba</source>
+				<target>Aruba</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aus">
+				<source>Australia</source>
+				<target>Australien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aut">
+				<source>Austria</source>
+				<target>Österreich</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aze">
+				<source>Azerbaijan</source>
+				<target>Aserbaidschan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bhs">
+				<source>Bahamas</source>
+				<target>Bahamas</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bhr">
+				<source>Bahrain</source>
+				<target>Bahrein</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bgd">
+				<source>Bangladesh</source>
+				<target>Bangladesch</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.brb">
+				<source>Barbados</source>
+				<target>Barbados</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.blr">
+				<source>Belarus</source>
+				<target>Weißrussland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bel">
+				<source>Belgium</source>
+				<target>Belgien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.blz">
+				<source>Belize</source>
+				<target>Belize</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ben">
+				<source>Benin</source>
+				<target>Benin</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bmu">
+				<source>Bermuda</source>
+				<target>Bermudas</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.btn">
+				<source>Bhutan</source>
+				<target>Bhutan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bol">
+				<source>Bolivia (Plurinational State of)</source>
+				<target>Bolivien (plurinationaler Staat)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bes">
+				<source>Bonaire, Sint Eustatius and Saba</source>
+				<target>Bonaire, Sint Eustatius und Saba</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bih">
+				<source>Bosnia and Herzegovina</source>
+				<target>Bosnien und Herzegowina</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bwa">
+				<source>Botswana</source>
+				<target>Botswana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bvt">
+				<source>Bouvet Island</source>
+				<target>Bouvet-Insel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bra">
+				<source>Brazil</source>
+				<target>Brasilien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.iot">
+				<source>British Indian Ocean Territory</source>
+				<target>Britisches Territorium im Indischen Ozean (das)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.brn">
+				<source>Brunei Darussalam</source>
+				<target>Brunei Darussalam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bgr">
+				<source>Bulgaria</source>
+				<target>Bulgarien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bfa">
+				<source>Burkina Faso</source>
+				<target>Burkina Faso</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bdi">
+				<source>Burundi</source>
+				<target>Burundi</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cpv">
+				<source>Cabo Verde</source>
+				<target>Cabo Verde</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.khm">
+				<source>Cambodia</source>
+				<target>Kambodscha</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cmr">
+				<source>Cameroon</source>
+				<target>Kamerun</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.can">
+				<source>Canada</source>
+				<target>Kanada</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cym">
+				<source>Cayman Islands</source>
+				<target>Kaimaninseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.caf">
+				<source>Central African Republic</source>
+				<target>Zentralafrikanische Republik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tcd">
+				<source>Chad</source>
+				<target>Tschad</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.chl">
+				<source>Chile</source>
+				<target>Chile</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.chn">
+				<source>China</source>
+				<target>China</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cxr">
+				<source>Christmas Island</source>
+				<target>Weihnachtsinsel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cck">
+				<source>Cocos (Keeling) Islands</source>
+				<target>Kokos-(Keeling-)Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.col">
+				<source>Colombia</source>
+				<target>Kolumbien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.com">
+				<source>Comoros</source>
+				<target>Komoren (die)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cod">
+				<source>Congo (the Democratic Republic of the)</source>
+				<target>Kongo (die Demokratische Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cog">
+				<source>Congo</source>
+				<target>Kongo</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cok">
+				<source>Cook Islands</source>
+				<target>Cookinseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cri">
+				<source>Costa Rica</source>
+				<target>Costa Rica</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hrv">
+				<source>Croatia</source>
+				<target>Kroatien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cub">
+				<source>Cuba</source>
+				<target>Kuba</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cuw">
+				<source>Curaçao</source>
+				<target>Curacao</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cyp">
+				<source>Cyprus</source>
+				<target>Zypern</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cze">
+				<source>Czechia</source>
+				<target>Tschechien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.civ">
+				<source>Côte d`Ivoire</source>
+				<target>Elfenbeinküste</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dnk">
+				<source>Denmark</source>
+				<target>Dänemark</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dji">
+				<source>Djibouti</source>
+				<target>Dschibuti</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dma">
+				<source>Dominica</source>
+				<target>Dominika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dom">
+				<source>Dominican Republic</source>
+				<target>Dominikanische Republik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ecu">
+				<source>Ecuador</source>
+				<target>Ecuador</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.egy">
+				<source>Egypt</source>
+				<target>Ägypten</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.slv">
+				<source>El Salvador</source>
+				<target>El Salvador</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gnq">
+				<source>Equatorial Guinea</source>
+				<target>Äquatorialguinea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.eri">
+				<source>Eritrea</source>
+				<target>Eritrea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.est">
+				<source>Estonia</source>
+				<target>Estland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.swz">
+				<source>Eswatini</source>
+				<target>Eswatini</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.eth">
+				<source>Ethiopia</source>
+				<target>Äthiopien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.flk">
+				<source>Falkland Islands [Malvinas]</source>
+				<target>Falklandinseln [Malvinas]</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fro">
+				<source>Faroe Islands</source>
+				<target>Färöer (die)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fji">
+				<source>Fiji</source>
+				<target>Fidschi</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fin">
+				<source>Finland</source>
+				<target>Finnland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fra">
+				<source>France</source>
+				<target>Frankreich</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.guf">
+				<source>French Guiana</source>
+				<target>Französisch-Guayana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pyf">
+				<source>French Polynesia</source>
+				<target>Französisch Polynesien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.atf">
+				<source>French Southern Territories</source>
+				<target>Französische Südgebiete</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gab">
+				<source>Gabon</source>
+				<target>Gabun</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gmb">
+				<source>Gambia</source>
+				<target>Gambia (das)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.geo">
+				<source>Georgia</source>
+				<target>Georgia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.deu">
+				<source>Germany</source>
+				<target>Deutschland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gha">
+				<source>Ghana</source>
+				<target>Ghana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gib">
+				<source>Gibraltar</source>
+				<target>Gibraltar</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.grc">
+				<source>Greece</source>
+				<target>Griechenland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.grl">
+				<source>Greenland</source>
+				<target>Grönland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.grd">
+				<source>Grenada</source>
+				<target>Grenada</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.glp">
+				<source>Guadeloupe</source>
+				<target>Guadeloupe</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gum">
+				<source>Guam</source>
+				<target>Guam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gtm">
+				<source>Guatemala</source>
+				<target>Guatemala</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ggy">
+				<source>Guernsey</source>
+				<target>Guernsey</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gin">
+				<source>Guinea</source>
+				<target>Guinea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gnb">
+				<source>Guinea-Bissau</source>
+				<target>Guinea-Bissau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.guy">
+				<source>Guyana</source>
+				<target>Guyana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hti">
+				<source>Haiti</source>
+				<target>Haiti</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hmd">
+				<source>Heard Island and McDonald Islands</source>
+				<target>Heard-Insel und McDonald-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vat">
+				<source>Holy See</source>
+				<target>Heiliger Stuhl</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hnd">
+				<source>Honduras</source>
+				<target>Honduras</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hkg">
+				<source>Hong Kong</source>
+				<target>Hongkong</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hun">
+				<source>Hungary</source>
+				<target>Ungarn</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.isl">
+				<source>Iceland</source>
+				<target>Island</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ind">
+				<source>India</source>
+				<target>Indien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.idn">
+				<source>Indonesia</source>
+				<target>Indonesien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.irn">
+				<source>Iran (Islamic Republic of)</source>
+				<target>Iran (Islamische Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.irq">
+				<source>Iraq</source>
+				<target>Irak</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.irl">
+				<source>Ireland</source>
+				<target>Irland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.imn">
+				<source>Isle of Man</source>
+				<target>Isle of Man</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.isr">
+				<source>Israel</source>
+				<target>Israel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ita">
+				<source>Italy</source>
+				<target>Italien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jam">
+				<source>Jamaica</source>
+				<target>Jamaika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jpn">
+				<source>Japan</source>
+				<target>Japan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jey">
+				<source>Jersey</source>
+				<target>Jersey</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jor">
+				<source>Jordan</source>
+				<target>Jordanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kaz">
+				<source>Kazakhstan</source>
+				<target>Kasachstan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ken">
+				<source>Kenya</source>
+				<target>Kenia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kir">
+				<source>Kiribati</source>
+				<target>Kiribati</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.prk">
+				<source>Korea (the Democratic People`s Republic of)</source>
+				<target>Korea (Demokratische Volksrepublik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kor">
+				<source>Korea (the Republic of)</source>
+				<target>Korea (Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kwt">
+				<source>Kuwait</source>
+				<target>Kuwait</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kgz">
+				<source>Kyrgyzstan</source>
+				<target>Kirgistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lao">
+				<source>Lao People`s Democratic Republic</source>
+				<target>Demokratische Volksrepublik Laos</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lva">
+				<source>Latvia</source>
+				<target>Lettland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lbn">
+				<source>Lebanon</source>
+				<target>Libanon</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lso">
+				<source>Lesotho</source>
+				<target>Lesotho</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lbr">
+				<source>Liberia</source>
+				<target>Liberia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lby">
+				<source>Libya</source>
+				<target>Libyen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lie">
+				<source>Liechtenstein</source>
+				<target>Liechtenstein</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ltu">
+				<source>Lithuania</source>
+				<target>Litauen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lux">
+				<source>Luxembourg</source>
+				<target>Luxemburg</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mac">
+				<source>Macao</source>
+				<target>Macau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mdg">
+				<source>Madagascar</source>
+				<target>Madagaskar</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mwi">
+				<source>Malawi</source>
+				<target>Malawi</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mys">
+				<source>Malaysia</source>
+				<target>Malaysia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mdv">
+				<source>Maldives</source>
+				<target>Malediven</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mli">
+				<source>Mali</source>
+				<target>Mali</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mlt">
+				<source>Malta</source>
+				<target>Malta</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mhl">
+				<source>Marshall Islands</source>
+				<target>Marshallinseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mtq">
+				<source>Martinique</source>
+				<target>Martinique</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mrt">
+				<source>Mauritania</source>
+				<target>Mauretanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mus">
+				<source>Mauritius</source>
+				<target>Mauritius</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.myt">
+				<source>Mayotte</source>
+				<target>Mayotte</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mex">
+				<source>Mexico</source>
+				<target>Mexiko</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fsm">
+				<source>Micronesia (Federated States of)</source>
+				<target>Mikronesien (Föderierte Staaten von)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mda">
+				<source>Moldova (the Republic of)</source>
+				<target>Moldawien (Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mco">
+				<source>Monaco</source>
+				<target>Monaco</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mng">
+				<source>Mongolia</source>
+				<target>Mongolei</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mne">
+				<source>Montenegro</source>
+				<target>Montenegro</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.msr">
+				<source>Montserrat</source>
+				<target>Montserrat</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mar">
+				<source>Morocco</source>
+				<target>Marokko</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.moz">
+				<source>Mozambique</source>
+				<target>Mosambik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mmr">
+				<source>Myanmar</source>
+				<target>Burma</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nam">
+				<source>Namibia</source>
+				<target>Namibia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nru">
+				<source>Nauru</source>
+				<target>Nauru</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.npl">
+				<source>Nepal</source>
+				<target>Nepal</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nld">
+				<source>Netherlands</source>
+				<target>Niederlande</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ncl">
+				<source>New Caledonia</source>
+				<target>Neu-Kaledonien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nzl">
+				<source>New Zealand</source>
+				<target>Neuseeland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nic">
+				<source>Nicaragua</source>
+				<target>Nicaragua</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ner">
+				<source>Niger</source>
+				<target>Niger</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nga">
+				<source>Nigeria</source>
+				<target>Nigeria</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.niu">
+				<source>Niue</source>
+				<target>Niue</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nfk">
+				<source>Norfolk Island</source>
+				<target>Norfolkinsel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mkd">
+				<source>North Macedonia</source>
+				<target>Nordmazedonien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mnp">
+				<source>Northern Mariana Islands</source>
+				<target>Nördliche Marianen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nor">
+				<source>Norway</source>
+				<target>Norwegen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.omn">
+				<source>Oman</source>
+				<target>Oman</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pak">
+				<source>Pakistan</source>
+				<target>Pakistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.plw">
+				<source>Palau</source>
+				<target>Palau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pse">
+				<source>Palestine, State of</source>
+				<target>Palästina, Bundesstaat</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pan">
+				<source>Panama</source>
+				<target>Panama</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.png">
+				<source>Papua New Guinea</source>
+				<target>Papua Neu-Guinea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pry">
+				<source>Paraguay</source>
+				<target>Paraguay</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.per">
+				<source>Peru</source>
+				<target>Peru</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.phl">
+				<source>Philippines</source>
+				<target>Philippinen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pcn">
+				<source>Pitcairn</source>
+				<target>Pitcairn</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pol">
+				<source>Poland</source>
+				<target>Polen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.prt">
+				<source>Portugal</source>
+				<target>Portugal</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pri">
+				<source>Puerto Rico</source>
+				<target>Puerto Rico</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.qat">
+				<source>Qatar</source>
+				<target>Katar</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.rou">
+				<source>Romania</source>
+				<target>Rumänien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.rus">
+				<source>Russian Federation</source>
+				<target>Russische Föderation</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.rwa">
+				<source>Rwanda</source>
+				<target>Ruanda</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.reu">
+				<source>Réunion</source>
+				<target>Réunion</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.blm">
+				<source>Saint Barthélemy</source>
+				<target>Sankt Barthélemy</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.shn">
+				<source>Saint Helena, Ascension and Tristan da Cunha</source>
+				<target>St. Helena, Himmelfahrt und Tristan da Cunha</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kna">
+				<source>Saint Kitts and Nevis</source>
+				<target>St. Kitts und Nevis</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lca">
+				<source>Saint Lucia</source>
+				<target>St. Lucia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.maf">
+				<source>Saint Martin (French part)</source>
+				<target>Saint Martin (französischer Teil)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.spm">
+				<source>Saint Pierre and Miquelon</source>
+				<target>St. Pierre und Miquelon</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vct">
+				<source>Saint Vincent and the Grenadines</source>
+				<target>St. Vincent und die Grenadinen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.wsm">
+				<source>Samoa</source>
+				<target>Samoa</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.smr">
+				<source>San Marino</source>
+				<target>San Marino</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.stp">
+				<source>Sao Tome and Principe</source>
+				<target>Sao Tome und Principe</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sau">
+				<source>Saudi Arabia</source>
+				<target>Saudi-Arabien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sen">
+				<source>Senegal</source>
+				<target>Senegal</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.srb">
+				<source>Serbia</source>
+				<target>Serbien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.syc">
+				<source>Seychelles</source>
+				<target>Seychellen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sle">
+				<source>Sierra Leone</source>
+				<target>Sierra Leone</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sgp">
+				<source>Singapore</source>
+				<target>Singapur</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sxm">
+				<source>Sint Maarten (Dutch part)</source>
+				<target>Sint Maarten (niederländischer Teil)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.svk">
+				<source>Slovakia</source>
+				<target>Slowakei</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.svn">
+				<source>Slovenia</source>
+				<target>Slowenien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.slb">
+				<source>Solomon Islands</source>
+				<target>Salomon-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.som">
+				<source>Somalia</source>
+				<target>Somalia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.zaf">
+				<source>South Africa</source>
+				<target>Südafrika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sgs">
+				<source>South Georgia and the South Sandwich Islands</source>
+				<target>Süd-Georgien und die südlichen Sandwich-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ssd">
+				<source>South Sudan</source>
+				<target>Südsudan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.esp">
+				<source>Spain</source>
+				<target>Spanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lka">
+				<source>Sri Lanka</source>
+				<target>Sri Lanka</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sdn">
+				<source>Sudan</source>
+				<target>Sudan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sur">
+				<source>Suriname</source>
+				<target>Surinam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sjm">
+				<source>Svalbard and Jan Mayen</source>
+				<target>Spitzbergen und Jan Mayen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.swe">
+				<source>Sweden</source>
+				<target>Schweden</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.che">
+				<source>Switzerland</source>
+				<target>Schweiz</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.syr">
+				<source>Syrian Arab Republic</source>
+				<target>Arabische Republik Syrien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.twn">
+				<source>Taiwan (Province of China)</source>
+				<target>Taiwan, Provinz Chinas)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tjk">
+				<source>Tajikistan</source>
+				<target>Tadschikistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tza">
+				<source>Tanzania, the United Republic of</source>
+				<target>Tansania, Vereinigte Republik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tha">
+				<source>Thailand</source>
+				<target>Thailand</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tls">
+				<source>Timor-Leste</source>
+				<target>Timor-Leste</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tgo">
+				<source>Togo</source>
+				<target>Gehen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tkl">
+				<source>Tokelau</source>
+				<target>Tokelau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ton">
+				<source>Tonga</source>
+				<target>Tonga</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tto">
+				<source>Trinidad and Tobago</source>
+				<target>Trinidad und Tobago</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tun">
+				<source>Tunisia</source>
+				<target>Tunesien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tkm">
+				<source>Turkmenistan</source>
+				<target>Turkmenistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tca">
+				<source>Turks and Caicos Islands</source>
+				<target>Turks- und Caicosinseln)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tuv">
+				<source>Tuvalu</source>
+				<target>Tuvalu</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tur">
+				<source>Türkiye</source>
+				<target>Türkiye</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.uga">
+				<source>Uganda</source>
+				<target>Uganda</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ukr">
+				<source>Ukraine</source>
+				<target>Ukraine</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.are">
+				<source>United Arab Emirates</source>
+				<target>Vereinigte Arabische Emirate</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gbr">
+				<source>United Kingdom of Great Britain and Northern Ireland</source>
+				<target>Vereinigtes Königreich Großbritannien und Nordirland (das)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.umi">
+				<source>United States Minor Outlying Islands</source>
+				<target>Kleinere abgelegene Inseln der Vereinigten Staaten</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.usa">
+				<source>United States of America</source>
+				<target>Vereinigte Staaten von Amerika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ury">
+				<source>Uruguay</source>
+				<target>Uruguay</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.uzb">
+				<source>Uzbekistan</source>
+				<target>Usbekistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vut">
+				<source>Vanuatu</source>
+				<target>Vanuatu</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ven">
+				<source>Venezuela (Bolivarian Republic of)</source>
+				<target>Venezuela (Bolivarianische Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vnm">
+				<source>Viet Nam</source>
+				<target>Vietnam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vgb">
+				<source>Virgin Islands (British)</source>
+				<target>Virgin Inseln, Britisch)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vir">
+				<source>Virgin Islands (U.S.)</source>
+				<target>Jungferninseln (USA)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.wlf">
+				<source>Wallis and Futuna</source>
+				<target>Wallis und Futuna</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.esh">
+				<source>Western Sahara*</source>
+				<target>Westsahara*</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.yem">
+				<source>Yemen</source>
+				<target>Jemen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.zmb">
+				<source>Zambia</source>
+				<target>Sambia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.zwe">
+				<source>Zimbabwe</source>
+				<target>Zimbabwe</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ala">
+				<source>Åland Islands</source>
+				<target>Åland-Inseln</target>
 			</trans-unit>
 		</body>
 	</file>

@@ -59,11 +59,17 @@ class BetterMappingProcessor implements DataProcessorInterface
     protected const VAL_LEAF_TYPE_CONSTANT = 'constant';
     protected const VAL_LEAF_TYPE_INDEX = 'includeindex';
     protected const VAL_LEAF_TYPE_TRANSLATE = 'translate';
+    protected const VAL_LEAF_TYPE_USERFUNC = 'userfunc';
     protected const VAL_LEAF_TYPE_VALUE = 'includevalue';
     protected const ATTR_DOT_LEAF_FORMAT = 'format';
     protected const DEFAULT_DATETIME_FORMAT = 'Y-m-d\TH:i:s';
     protected const ATTR_DOT_LEAF_INFIELD = 'inField';
     protected const ATTR_DOT_LEAF_OUTFIELD = 'outField';
+    protected const ATTR_DOT_LEAF_USERFUNC = 'userFunc';
+    public const ATTR_PARAM_USERFUNC_INTERNAL = 'params';
+    public const ATTR_PARAM_USERFUNC_MAPKEY = 'mapKey';
+    public const ATTR_PARAM_USERFUNC_MAPITEM = 'mapItem';
+    public const ATTR_PARAM_USERFUNC_START = 'start';
     protected const ATTR_OUTPUT_FORMAT = 'outputFormat';
     protected const VAL_OUTPUT_FORMAT_YAML = 'yaml';
     protected const VAL_OUTPUT_FORMAT_JSON = 'json';
@@ -179,6 +185,34 @@ class BetterMappingProcessor implements DataProcessorInterface
                         break;
                     case self::VAL_LEAF_TYPE_INDEX:
                         $inValue = $pretext . $mapKey . $posttext;
+                        break;
+                    case self::VAL_LEAF_TYPE_USERFUNC:
+                        $startValue = $this->getInFieldValue(
+                            $mapItem,
+                            $genericConfig[self::ATTR_DOT_LEAF_INFIELD],
+                        );
+                        $userFunc = $genericConfig[self::ATTR_DOT_LEAF_USERFUNC] ?? '';
+                        if (empty($userFunc)) {
+                            throw new TimerException(
+                                'The userfunction is not defined. Check your typoscript. ' .
+                                'If this did not work, make a screenshot and inform the webmaster.',
+                                1678907347
+                            );
+                        }
+                        $parameter = [
+                            self::ATTR_PARAM_USERFUNC_INTERNAL => $genericConfig,
+                            self::ATTR_PARAM_USERFUNC_MAPKEY => $mapKey,
+                            self::ATTR_PARAM_USERFUNC_MAPITEM => $mapItem,
+                            self::ATTR_PARAM_USERFUNC_START => $startValue,
+                        ];
+                        $inValue = GeneralUtility::callUserFunction($userFunc, $parameter, $this);
+                        if (!is_scalar($inValue)) {
+                            throw new \RuntimeException(
+                                'The expected userFunc "' . $userFunc . '" must return a scalar ' .
+                                '(boolean, integer, float, string). It got ' . gettype($inValue) . '.',
+                                1678907644
+                            );
+                        }
                         break;
                     case self::VAL_LEAF_TYPE_TRANSLATE:
                         $lllKey = trim(

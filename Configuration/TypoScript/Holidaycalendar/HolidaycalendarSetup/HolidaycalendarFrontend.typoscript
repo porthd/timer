@@ -165,10 +165,24 @@ tt_content.timer_holidaycalendar {
                     format = Y-m-d
                     type = datetime
                 }
+
                 40 {
                     inField = cal.eventtitle
                     outField = title
                     type = translate
+                }
+
+                50 {
+                    inField = cal.add.freelocale
+                    outField = body
+                    type = userfunc
+                    # define similiar to typoscript-standard: Vender/Namespace/Class->method
+                    userFunc = Porthd\Timer\UserFunc\ResolveLocales->reduceLocalesToNations
+                    # define the parameters for your own userfunction here below
+                    # dafault-string-value for spacer, pretext and posttext is ' '
+                    #spacer =
+                    #pretext =
+                    #posttext =
                 }
 
             }
@@ -178,7 +192,6 @@ tt_content.timer_holidaycalendar {
                     inField = cal.identifier
                     outField = id
                 }
-
                 20 {
                     inField = cal.title
                     outField = basetitle
@@ -189,19 +202,11 @@ tt_content.timer_holidaycalendar {
                     outField = calendarId
                 }
 
-                #
-                #                @todo 2023-03-12: allow custom function
-                #               40 {
-                #                    inField = cal.add.freelocale
-                #                    outField = class
-                #                    type = userfunc
-                #                    userfunc =
-                #                }
             }
 
 
             # outputformat has the values `array`,`json`, `yaml`
-            # if the outputformat is unknown/undifined, `json` will be used by default
+            # if the outputformat is unknown/undefined, `json` will be used by default
             outputFormat = json
 
             # if the output-format is yaml, then `yamlStartKey` will define a starting-key for your result-array.

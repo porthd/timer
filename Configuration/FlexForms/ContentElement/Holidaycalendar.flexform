@@ -277,7 +277,8 @@
                         <size>30</size>
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Stylesheets/toastui-calendar.min.css,
-                            EXT:timer/Resources/Public/Stylesheets/ToastUiCalendarIcons.css
+                            EXT:timer/Resources/Public/Stylesheets/ToastUiCalendarIcons.css,
+                            EXT:timer/Resources/Public/Icons/flag-icons-main/css/flag-icons.min.css
                         </default>
                     </config>
                 </TCEforms>
