@@ -165,13 +165,11 @@ tt_content.timer_holidaycalendar {
                     format = Y-m-d
                     type = datetime
                 }
-
                 40 {
                     inField = cal.eventtitle
                     outField = title
                     type = translate
                 }
-
                 50 {
                     inField = cal.add.freelocale
                     outField = body
@@ -196,7 +194,6 @@ tt_content.timer_holidaycalendar {
                     inField = cal.title
                     outField = basetitle
                 }
-
                 30 {
                     inField = cal.tag
                     outField = calendarId

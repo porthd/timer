@@ -47,6 +47,7 @@ class HolidaycalendarService
     protected const ATTR_ARG_TYPE_EASTERLY = 'easterly';
     protected const ATTR_ARG_TYPE_WEEKDAYLY = 'weekdayly';
     protected const ATTR_ARG_TYPE_MOONINMONTH = 'mooninmonth';
+    protected const ATTR_ARG_TYPE_MATARIKI = 'matariki';
     protected const ATTR_ARG_TYPE_LIST = [
         self::ATTR_ARG_TYPE_FIXED,
         self::ATTR_ARG_TYPE_FIXEDSHIFTING,
@@ -57,6 +58,7 @@ class HolidaycalendarService
         self::ATTR_ARG_TYPE_EASTERLY,
         self::ATTR_ARG_TYPE_WEEKDAYLY,
         self::ATTR_ARG_TYPE_MOONINMONTH,
+        self::ATTR_ARG_TYPE_MATARIKI,
     ];
     protected const ATTR_ARG_DAY = 'day';
     protected const ATTR_ARG_MONTH = 'month';
@@ -73,6 +75,40 @@ class HolidaycalendarService
         3 => 'last_quarter',
     ];
 
+    // https://www.officeholidays.com/holidays/new-zealand/matariki
+    protected const MATARIKI = [
+        '2022' => '2022-6-24',
+        '2023' => '2023-7-14',
+        '2024' => '2024-6-28',
+        '2025' => '2025-6-20',
+        '2026' => '2026-7-10',
+        '2027' => '2027-6-25',
+        '2028' => '2028-7-14',
+        '2029' => '2029-7-6',
+        '2030' => '2030-6-21',
+        '2031' => '2031-7-11',
+        '2032' => '2032-7-2',
+        '2033' => '2033-6-24',
+        '2034' => '2034-7-7',
+        '2035' => '2035-6-29',
+        '2036' => '2036-7-18',
+        '2037' => '2037-7-10',
+        '2038' => '2038-6-25',
+        '2039' => '2039-7-15',
+        '2040' => '2040-7-6',
+        '2041' => '2041-7-19',
+        '2042' => '2042-7-11',
+        '2043' => '2043-7-3',
+        '2044' => '2044-6-24',
+        '2045' => '2045-7-7',
+        '2046' => '2046-6-29',
+        '2047' => '2047-7-19',
+        '2048' => '2048-7-3',
+        '2049' => '2049-6-25',
+        '2050' => '2050-7-15',
+        '2051' => '2051-6-30',
+        '2052' => '2052-6-21',
+    ];
 
 
     public function forbiddenCalendar(array $holidayItem): bool
@@ -144,6 +180,10 @@ class HolidaycalendarService
                 break;
             case self::ATTR_ARG_TYPE_MOONINMONTH:
                 $timerRange = $this->getGregorianDateForMoonInMonthType($locale, $startDate, $holidayArg,
+                    $addYear);
+                break;
+            case self::ATTR_ARG_TYPE_MATARIKI:
+                $timerRange = $this->getGregorianDateForMatarikiType($locale, $startDate, $holidayArg,
                     $addYear);
                 break;
             default :
@@ -260,12 +300,11 @@ class HolidaycalendarService
             // shift list by one day
             $index = ($weekday + 6) % 7;
             $shiftListMoToSu = $holidayArg[self::ATTR_ARG_STATUSCOUNT];
-            $shiftListMoToSuList = array_filter(
+            $shiftListMoToSuList =
                 array_map(
                     'intval',
                     explode(',', $shiftListMoToSu)
-                )
-            );
+                );
             $shiftDays = $shiftListMoToSuList[$index];
             if ($shiftDays < 0) {
                 $holidayDate->sub(new DateInterval(('P' . abs($shiftDays) . 'D')));
@@ -286,7 +325,7 @@ class HolidaycalendarService
     }
 
     /**
-     * tested:
+     * tested: 20230318
      *
      * The method determines the year of the corresponding calendar system from a Gregorian date. The year is used
      * to determine a specific date. If necessary, an integer is added to the year. The date is then converted
@@ -308,7 +347,7 @@ class HolidaycalendarService
     }
 
     /**
-     * tested:
+     * tested: 20230318
      *
      * The method determines the year of the corresponding calendar system from a Gregorian date. The year is used
      * to determine a specific date. If necessary, an integer is added to the year. The date is then converted
@@ -330,7 +369,7 @@ class HolidaycalendarService
     }
 
     /**
-     * tested:
+     * tested: 20230319
      *
      * The method determines the year of the corresponding calendar system from a Gregorian date. The year is used
      * to determine a specific date, which is related by a special weekday and a gap of weeks. In some special cases
@@ -386,7 +425,7 @@ class HolidaycalendarService
     }
 
     /**
-     * tested:
+     * tested: 20230319
      *
      * The method determines the year of the corresponding calendar system from a Gregorian date. The year is used
      * to determine a specific date. If necessary, an integer is added to the year. The date is then converted
@@ -427,6 +466,7 @@ class HolidaycalendarService
         }
         $seasonTime = new DateTime('@' . $seasonList[$season]);
         $seasonTime->setTimezone($startDate->getTimezone());
+        $seasonTime->setTime(0, 0, 0);
         if ($flagShifting) {
             $weekday = (int)$seasonTime->format('w');
             // shift list by one day
@@ -453,6 +493,8 @@ class HolidaycalendarService
     }
 
     /**
+     * tested 20230319
+     *
      * @param string $locale
      * @param DateTime $startDate
      * @param array $holidayArg
@@ -476,7 +518,7 @@ class HolidaycalendarService
     }
 
     /**
-     * tested:
+     * tested:20230319
      *
      * @param string $locale
      * @param DateTime $startDate
@@ -526,7 +568,7 @@ class HolidaycalendarService
 
 
     /**
-     * tested:
+     * tested: 20230319
      *
      *
      *      * Mother's Day is always the second Sunday in May. The method below determines the corresponding i-th day
@@ -559,23 +601,35 @@ class HolidaycalendarService
         DateTime $startDate,
         array $holidayArg,
         int $addYear
-    ): TimerStartStopRange {
+    ): TimerStartStopRange
+    {
+        $wishedCountWeekday = (int)(
+        ((array_key_exists(self::ATTR_ARG_STATUSCOUNT,
+                $holidayArg)) && (empty($holidayArg[self::ATTR_ARG_STATUSCOUNT]))) ?
+            1 :
+            $holidayArg[self::ATTR_ARG_STATUSCOUNT]
+        );
         /** @var TimerStartStopRange $timeRange */
         $timeRange = new TimerStartStopRange();
-        $helpDay = (int)(($holidayArg[self::ATTR_ARG_DAY] > 0) ?
-            $holidayArg[self::ATTR_ARG_DAY] :
-            1
-        );
         if ($holidayArg[self::ATTR_ARG_CALENDAR] === ConvertDateUtility::DEFAULT_CALENDAR) {
             $holidayDate = new DateTime();
             $holidayDate->setTimezone($startDate->getTimezone());
             $holidayDate->setTime(0, 0, 0);
             $setYear = (int)$startDate->format('Y') + $addYear;
-            $holidayDate->setDate(
-                $setYear,
-                (int)$holidayArg[self::ATTR_ARG_MONTH],
-                $helpDay
-            );
+            if ($wishedCountWeekday > 0) {
+                $holidayDate->setDate(
+                    $setYear,
+                    (int)$holidayArg[self::ATTR_ARG_MONTH],
+                    1
+                );
+            } else {
+                $holidayDate->setDate(
+                    $setYear,
+                    ((int)$holidayArg[self::ATTR_ARG_MONTH] + 1),
+                    1
+                );
+                $holidayDate->sub(new DateInterval('P1D'));
+            }
         } else {
             $refYear = clone $startDate;
             $calendarStartDateString = ConvertDateUtility::convertFromDateTimeToCalendar(
@@ -587,17 +641,30 @@ class HolidaycalendarService
             );
             $setYear = (int)(substr($calendarStartDateString, 0, strpos($calendarStartDateString, '/')))
                 + $addYear;
-            $helpDay = $holidayArg[self::ATTR_ARG_DAY];
-            $fixedDateCalendar = str_pad($setYear, 4, '0', STR_PAD_LEFT) . '/'
-                . str_pad($holidayArg[self::ATTR_ARG_MONTH], 2, '0', STR_PAD_LEFT) . '/'
-                . str_pad($helpDay, 2, '0', STR_PAD_LEFT) . ' '
-                . '00:00:00';
-            $holidayDate = ConvertDateUtility::convertFromCalendarToDateTime(
-                $locale,
-                $holidayArg[self::ATTR_ARG_CALENDAR],
-                $fixedDateCalendar,
-                $startDate->getTimezone()->getName()
-            );
+            if ($wishedCountWeekday > 0) {
+                $fixedDateCalendar = str_pad($setYear, 4, '0', STR_PAD_LEFT) . '/'
+                    . str_pad($holidayArg[self::ATTR_ARG_MONTH], 2, '0', STR_PAD_LEFT) . '/'
+                    . '01' . ' '
+                    . '00:00:00';
+                $holidayDate = ConvertDateUtility::convertFromCalendarToDateTime(
+                    $locale,
+                    $holidayArg[self::ATTR_ARG_CALENDAR],
+                    $fixedDateCalendar,
+                    $startDate->getTimezone()->getName()
+                );
+            } else {
+                $fixedDateCalendar = str_pad($setYear, 4, '0', STR_PAD_LEFT) . '/'
+                    . str_pad(($holidayArg[self::ATTR_ARG_MONTH] + 1), 2, '0', STR_PAD_LEFT) . '/'
+                    . '01' . ' '
+                    . '00:00:00';
+                $holidayDate = ConvertDateUtility::convertFromCalendarToDateTime(
+                    $locale,
+                    $holidayArg[self::ATTR_ARG_CALENDAR],
+                    $fixedDateCalendar,
+                    $startDate->getTimezone()->getName()
+                );
+                $holidayDate->sub(new DateInterval('P1D'));
+            }
         }
         $this->setTimeRangeFlagForHoliday($timeRange, $holidayArg, $setYear);
 
@@ -605,22 +672,21 @@ class HolidaycalendarService
         $numberOfWeekday = $holidayDate->format('w');
         // transfered to counting scheme abowe
         $wishedWeekday = ((int)$holidayArg[self::ATTR_ARG_STATUS] ?: 7) % 7;
-        $addDays = (7 + $wishedWeekday - $numberOfWeekday) % 7;
-        $wishedCountWeekday = (
-            (int)(empty($holidayArg[self::ATTR_ARG_STATUSCOUNT])) ?
-                1 :
-                $holidayArg[self::ATTR_ARG_STATUSCOUNT]
-            ) - 1;
-        $addDays += 7 * $wishedCountWeekday;
-        if ($addDays !== 0) {
-            if ($addDays > 0) {
-                $holidayDate->add(new DateInterval('P' . $addDays . 'D'));
-            } else {
-                $holidayDate->sub(new DateInterval('P' . abs($addDays) . 'D'));
-            }
+        if ($wishedCountWeekday > 0) {
+            $addDays = (7 + $wishedWeekday - $numberOfWeekday) % 7;
+            $addDays += 7 * ($wishedCountWeekday - 1);
+            $holidayDate->add(new DateInterval('P' . $addDays . 'D'));
+        } else {
+            $addDays = (7 + $numberOfWeekday - $wishedWeekday) % 7;
+            $addDays -= 7 * ($wishedCountWeekday + 1);
+            $holidayDate->sub(new DateInterval('P' . abs($addDays) . 'D'));
+
         }
+
         // handele holidyas like `Buß- und Betttag` - the wendesday before the fifth sunday before the first christmas day
-        if (empty($holidayArg[self::ATTR_ARG_SECDAYCOUNT])) {
+        if ((array_key_exists(self::ATTR_ARG_SECDAYCOUNT, $holidayArg)) &&
+            (empty($holidayArg[self::ATTR_ARG_SECDAYCOUNT]))
+        ) {
             $secondCount = (int)$holidayArg[self::ATTR_ARG_SECDAYCOUNT];
             if ($secondCount > 0) {
                 $holidayDate->add(new DateInterval('P' . $secondCount . 'D'));
@@ -635,7 +701,7 @@ class HolidaycalendarService
 
 
     /**
-     * tested:
+     * tested: 20230319
      *
      * @param string $locale
      * @param DateTime $startDate
@@ -713,6 +779,17 @@ class HolidaycalendarService
         $holidayDateTime->setTimestamp($moonPhaseTStamp);
         $holidayDateTime->setTimezone($startDate->getTimezone());
         $holidayDateTime->setTime(0, 0, 0);
+        if ($holidayDateTime < $holidayDate) {
+            // get the everytime the first moonnstatus in the month
+            $holidayDateTime = new \DateTime();
+            $holidayDateTime->setTimestamp($nextMoonPhaseTStamp);
+            $holidayDateTime->setTimezone($startDate->getTimezone());
+            $holidayDateTime->setTime(0, 0, 0);
+            $moonPhaseCalculator = new MoonPhase($holidayDateTime->getTimestamp() - 86400);
+            $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
+            $nextMoonPhaseTStamp = $moonPhaseCalculator->get_phase('next_' . $moonPhase);
+
+        }
         // if the condition is true, the second moonphase should be choosed, if the secand moonphase is part of the same month in the original calendar-system
         if ((!empty($holidayArg[self::ATTR_ARG_STATUSCOUNT])) &&
             ((int)$holidayArg[self::ATTR_ARG_STATUSCOUNT] !== 1)
@@ -757,7 +834,38 @@ class HolidaycalendarService
             }
             // get the everytime the first moonmstatus in the month
         }
-        $this->setBeginnengAndEndingInTimeRange($timeRange, $holidayDate);
+        $this->setBeginnengAndEndingInTimeRange($timeRange, $holidayDateTime);
+        return $timeRange;
+    }
+
+    /**
+     * tested: 20230319
+     *
+     * @param string $locale
+     * @param DateTime $startDate
+     * @param array $holidayArg
+     * @param int $addYear
+     * @return TimerStartStopRange
+     * @throws TimerException
+     */
+    protected function getGregorianDateForMatarikiType(
+        string $locale,
+        DateTime $startDate,
+        array $holidayArg,
+        int $addYear
+    ): TimerStartStopRange {
+        /** @var TimerStartStopRange $timeRange */
+        $timeRange = new TimerStartStopRange();
+        $checkYear = (string)((int)$startDate->format('Y') + $addYear);
+        if (array_key_exists($checkYear, self::MATARIKI)) {
+            $holidayDate = date_create_from_format('Y-m-d', self::MATARIKI[$checkYear]);
+            $holidayDate->setTime(0, 0, 0);
+            $this->setBeginnengAndEndingInTimeRange($timeRange, $holidayDate);
+        } else {
+            $timeRange->setBeginning($startDate);
+            $timeRange->setEnding($startDate);
+            $timeRange->setResultExist(false);
+        }
         return $timeRange;
     }
 
