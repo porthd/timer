@@ -1692,6 +1692,10 @@
 				<source>Åland Islands</source>
 				<target>Åland-Inseln</target>
 			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.noConstitutionDay">
+				<source>Constitution Day</source>
+				<target>Tag der Verfassung</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

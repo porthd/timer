@@ -55,7 +55,7 @@ final class TimerStartStopRange
      */
     public function __construct()
     {
-        $currentTStamp = $GLOBALS['EXEC_TIME'] ?: time();
+        $currentTStamp = $GLOBALS['EXEC_TIME'] ?? time();
         $now = new DateTime('@' . $currentTStamp);
         $this->reMilleniumActive($now);
     }

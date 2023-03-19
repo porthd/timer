@@ -1253,12 +1253,10 @@ berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
         }
 
 ```
-
 #### HolidaycalendarProcessor (buggy)
 
 Der Dataprozessor dient der Auswertung von dev CSV-Dateien mit den
 Feiertagsterminen. (2023-03-16 - Die Berechnung ist noch buggy.)
-
 ```
         10 = Porthd\Timer\DataProcessing\HolidaycalendarProcessor
         10 {
