@@ -3,7 +3,7 @@
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
 
-defined('TYPO3_MODE') || die();
+defined('TYPO3') || die();
 
 return [
     'ctrl' => [
@@ -11,7 +11,6 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'versioningWS' => true,
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
@@ -26,6 +25,9 @@ return [
             'tx_timer_timer, tx_timer_selector, ',
         'typeicon_classes' => [
             'default' => 'tx_timer-timer',
+        ],
+        'security' => [
+            'ignorePageTypeRestriction' => true,
         ],
     ],
     'interface' => [
@@ -51,30 +53,20 @@ return [
         'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'special' => 'languages',
-                'items' => [
-                    [
-                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
-                        -1,
-                        'flags-multiple',
-                    ],
-                ],
-                'default' => 0,
-            ],
+            'config' => ['type' => 'language'],
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'default' => 0,
                 'items' => [
-                    ['', 0],
+                    [
+                        TimerConst::TCA_ITEMS_LABEL => '',
+                        TimerConst::TCA_ITEMS_VALUE => 0,
+                    ],
                 ],
                 'foreign_table' => 'tx_timer_domain_model_listing',
                 'foreign_table_where' => 'AND {#tx_timer_domain_model_listing}.{#pid}=###CURRENT_PID### AND {#tx_timer_domain_model_listing}.{#sys_language_uid} IN (-1,0)',
@@ -101,9 +93,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
                         'invertStateDisplay' => true,
+                        TimerConst::TCA_ITEMS_LABEL => '',
                     ],
                 ],
             ],
@@ -112,29 +103,22 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime,int',
+                'type' => 'datetime',
+                'readOnly' => 0,
                 'default' => 0,
-                'behaviour' => [
-                    'allowLanguageSynchronization' => true,
-                ],
+                'nullable' => true,
+                'dbType' => 'datetime',
             ],
         ],
         'endtime' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime,int',
+                'type' => 'datetime',
+                'readOnly' => 0,
                 'default' => 0,
-                'range' => [
-                    'upper' => mktime(0, 0, 0, 1, 1, 2038),
-                ],
-                'behaviour' => [
-                    'allowLanguageSynchronization' => true,
-                ],
+                'nullable' => true,
+                'dbType' => 'datetime',
             ],
         ],
 
@@ -144,7 +128,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
+                'required' => true,
             ],
         ],
         'description' => [
@@ -186,9 +171,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
                         'invertStateDisplay' => true,
+                        TimerConst::TCA_ITEMS_LABEL => '',
                     ],
                 ],
             ],
@@ -202,9 +186,9 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
-                    ]
+                        'invertStateDisplay' => true,
+                        TimerConst::TCA_ITEMS_LABEL => '',
+                    ],
                 ],
             ],
         ],

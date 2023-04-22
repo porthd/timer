@@ -21,6 +21,8 @@ namespace Porthd\Timer\Domain\Model\Interfaces;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Context\Context;
 use DateInterval;
 use DateTime;
 
@@ -55,7 +57,7 @@ final class TimerStartStopRange
      */
     public function __construct()
     {
-        $currentTStamp = $GLOBALS['EXEC_TIME'] ?? time();
+        $currentTStamp = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ?? time();
         $now = new DateTime('@' . $currentTStamp);
         $this->reMilleniumActive($now);
     }

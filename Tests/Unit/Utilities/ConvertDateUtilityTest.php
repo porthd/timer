@@ -239,8 +239,7 @@ class ConvertDateUtilityTest extends TestCase
                 $tzDateTime->setTimezone($myTimeZone); // internal add of 2 hours becaus of timeZone
 
                 // Exp 15:26 => akt 18:26
-                $tzDateTime = DateTime::createFromFormat('Y/m/d/H/i/s', $calendarResult['utcDateTime'],
-                    $myTimeZone); // diff 1H
+                $tzDateTime = DateTime::createFromFormat('Y/m/d/H/i/s', $calendarResult['utcDateTime'], $myTimeZone); // diff 1H
                 $checkTime = DateTime::createFromFormat(
                     'Y/m/d H:i:s',
                     $calendarResult['tzForeign'][$timeZoneName],

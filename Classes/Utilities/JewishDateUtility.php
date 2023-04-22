@@ -53,8 +53,8 @@ class JewishDateUtility extends JewishHolidayConst
     public static function getJewishMonthName(int $jewishMonth, int $jewishYear)
     {
         return ((self::isJewishLeapYear($jewishYear)) ?
-            self::JEWISH_MONTH_NAMES_LEAP[($jewishMonth - 1)] :
-            self::JEWISH_MONTH_NAMES_NON_LEAP[($jewishMonth - 1)]
+            self::JEWISH_MONTH_NAMES_LEAP[($jewishMonth)] :
+            self::JEWISH_MONTH_NAMES_NON_LEAP[($jewishMonth)]
         );
     }
 

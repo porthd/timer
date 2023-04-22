@@ -36,13 +36,11 @@ tt_content.timer_periodlist {
                     #   These fields are datetime-object and they are generated from the estimated fields `start`and `stop` by this dataprocessor
                     source = startDatetime
                 }
-
                 #     endJson {
                 #         format = Y-m-d
                 #         source = stopDatetime
                 #     }
             }
-
             # define the list by length
             maxCount = 100
 
@@ -54,7 +52,6 @@ tt_content.timer_periodlist {
             ## default is `flagStart = 0`,  => that the upper and lower limit use the attribute `stop` as reference for the list
             #flagStart = false
         }
-
         20 = Porthd\Timer\DataProcessing\MappingProcessor
         20 {
 
@@ -76,14 +73,12 @@ tt_content.timer_periodlist {
                     type = constant
                 }
             }
-
             mapping {
                 # sourceFieldName in periodlist(see inputfield) => targetFieldName
                 title = Title
                 startJson = Date
                 diffDaysDatetime = days
             }
-
             # outputformat has the values `array`,`json`
             # if the outputformat is unknown, json will be the default
             outputFormat = json
@@ -92,7 +87,6 @@ tt_content.timer_periodlist {
             asString = periodListJson
 
         }
-
         30 = Porthd\Timer\DataProcessing\FlexToArrayProcessor
         30 {
             # regular if syntax
@@ -111,7 +105,6 @@ tt_content.timer_periodlist {
             as = flexlist
         }
     }
-
 }
 
 lib.periodlist.main = TEXT

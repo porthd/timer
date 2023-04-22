@@ -24,6 +24,7 @@ namespace Porthd\Timer\Hooks\Backend;
 use DateTime;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\DateTimeUtility;
 
@@ -54,14 +55,29 @@ class FlexformManipulationHook
             } else {
                 if ((array_key_exists('renderType', $item)) &&
                     ($item['renderType'] === 'inputDateTime') &&
-                    array_key_exists('default', $item)
+                    array_key_exists(DefaultTimer::TIMER_NAME, $item)
                 ) {
                     try {
                         // remark probelm with Format and timezone
                         // https://stackoverflow.com/questions/32109936/php-datetime-format-does-not-respect-timezones
-                        $dateValue = new DateTime($item['default']);
+                        $dateValue = new DateTime($item[DefaultTimer::TIMER_NAME]);
                         if ($dateValue !== false) {
-                            $item['default'] = DateTimeUtility::formatForZone($dateValue, TimerInterface::TIMER_FORMAT_DATETIME);
+                            $item[DefaultTimer::TIMER_NAME] = DateTimeUtility::formatForZone($dateValue, TimerInterface::TIMER_FORMAT_DATETIME);
+                        }
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
+                }
+                if ((array_key_exists('type', $item)) &&
+                    ($item['type'] === 'datetime') &&
+                    array_key_exists(DefaultTimer::TIMER_NAME, $item)
+                ) {
+                    try {
+                        // remark probelm with Format and timezone
+                        // https://stackoverflow.com/questions/32109936/php-datetime-format-does-not-respect-timezones
+                        $dateValue = new DateTime($item[DefaultTimer::TIMER_NAME]);
+                        if ($dateValue !== false) {
+                            $item[DefaultTimer::TIMER_NAME] = DateTimeUtility::formatForZone($dateValue, TimerInterface::TIMER_FORMAT_DATETIME);
                         }
                     } catch (Exception $e) {
                         // do nothing

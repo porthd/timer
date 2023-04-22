@@ -18,16 +18,16 @@
 		}
 	],
 	"require": {
-		"php": "^7.4 || ^8.0",
+		"php": ">7.4.0 <=8.2.99",
 		"ext-pdo": "*",
 		"ext-dom": "*",
 		"ext-xml": "*",
 		"ext-json": "*",
 		"ext-calendar": "*",
 		"ext-intl": "*",
-		"typo3/cms-core": "^11.5",
-		"typo3/cms-extbase": "^11.5",
-		"typo3/cms-fluid": "^11.5"
+		"typo3/cms-core": "^11.5 || ^12.2",
+		"typo3/cms-extbase": "^11.5 || ^12.2",
+		"typo3/cms-fluid": "^11.5 || ^12.2"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^9.2.2",

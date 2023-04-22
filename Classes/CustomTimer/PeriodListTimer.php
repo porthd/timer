@@ -148,8 +148,8 @@ INFOSYNTAX;
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerPeriodList.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerPeriodList.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -184,8 +184,8 @@ INFOSYNTAX;
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -215,7 +215,7 @@ INFOSYNTAX;
      * The method test, if the parameter in the yaml for the periodlist are okay
      * remark: This method must not be tested, if the sub-methods are valid.
      *
-     * The method will implicitly called in `readPeriodListFromYamlFile(array $params): array`
+     * The method will implicitly called in `readPeriodListFromFileOrUrl(array $params): array`
      *
      * @param array<mixed> $yamlArray
      * @param string $infoAboutYamlFile
@@ -255,9 +255,9 @@ INFOSYNTAX;
             if (!$flag) {
                 throw new TimerException(
                     'The item in yaml-file `' . $infoAboutYamlFile . '` for your `periodListTimer` has not the correct syntax.' .
-                    'Check the items in your YAML-file. Check the correct form of the start and end-date (format: '.
-                    TimerInterface::TIMER_FORMAT_DATETIME. '). A given attribute `'.self::YAML_ITEMS_KEY_TITLE .
-                    '` or a given array `'.self::YAML_ITEMS_KEY_DATA.'` must filled at least with one char or one entry. '.
+                    'Check the items in your YAML-file. Check the correct form of the start and end-date (format: ' .
+                    TimerInterface::TIMER_FORMAT_DATETIME . '). A given attribute `' . self::YAML_ITEMS_KEY_TITLE .
+                    '` or a given array `' . self::YAML_ITEMS_KEY_DATA . '` must filled at least with one char or one entry. ' .
                     'The following items caused the exception: ' .
                     print_r($item, true) . "\n\n==============\n" . self::INFO_STRUCTUR_YAML .
                     "\n\n==============\n\nexample:\n--------------\n" . self::EXAMPLE_STRUCTUR_YAML .
@@ -266,7 +266,7 @@ INFOSYNTAX;
                 );
             }
             $flag = ((!array_key_exists(self::YAML_ITEMS_KEY_ZONE, $item)) ||
-                    (in_array($item[self::YAML_ITEMS_KEY_ZONE], $timeZone)));
+                (in_array($item[self::YAML_ITEMS_KEY_ZONE], $timeZone)));
             if (!$flag) {
                 throw new TimerException(
                     'The item in yaml-file `' . $infoAboutYamlFile . '` for your `periodListTimer` has not the correct timezone.' .
@@ -323,9 +323,9 @@ INFOSYNTAX;
     protected function validateYamlFilePath(array $params = []): bool
     {
         $filePath = (
-            array_key_exists(self::ARG_YAML_PERIOD_FILE_PATH, $params) ?
-                $params[self::ARG_YAML_PERIOD_FILE_PATH] :
-                ''
+        array_key_exists(self::ARG_YAML_PERIOD_FILE_PATH, $params) ?
+            $params[self::ARG_YAML_PERIOD_FILE_PATH] :
+            ''
         );
         if (!empty($filePath)) {
             if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
@@ -364,7 +364,7 @@ INFOSYNTAX;
         $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
         // the method will validate the yaml-file with a internal callback-method, so that the upload of the yaml-file
         //     fails with an exception, if the syntax of the yaml is somehow wrong.
-        $listOfSeparatedDates = $this->readPeriodListFromYamlFile($params);
+        $listOfSeparatedDates = $this->readPeriodListFromFileOrUrl($params);
         $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
             if ($flagTimeZoneByFrontend) {
@@ -424,7 +424,7 @@ INFOSYNTAX;
         }
         // the method will validate the yaml-file with a internal callback-method, so that the upload of the yaml-file
         //     fails with an exception, if the syntax of the yaml is somehow wrong.
-        $listOfSeparatedDates = $this->readPeriodListFromYamlFile($params);
+        $listOfSeparatedDates = $this->readPeriodListFromFileOrUrl($params);
         $oldStart = null;
         $flag = true;
         $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
@@ -478,7 +478,7 @@ INFOSYNTAX;
         }
         // the method will validate the yaml-file with a internal callback-method, so that the upload of the yaml-file
         //     fails with an exception, if the syntax of the yaml is somehow wrong.
-        $listOfSeparatedDates = $this->readPeriodListFromYamlFile($params);
+        $listOfSeparatedDates = $this->readPeriodListFromFileOrUrl($params);
         $oldStop = null;
         $flag = true;
         $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
@@ -521,7 +521,7 @@ INFOSYNTAX;
      * @throws TimerException
      */
 
-    protected function readPeriodListFromYamlFile(array $params): array
+    protected function readPeriodListFromFileOrUrl(array $params): array
     {
         if ((!array_key_exists(self::ARG_YAML_PERIOD_FILE_PATH, $params)) &&
             ($params[self::ARG_YAML_PERIOD_FAL_INFO] < 1)

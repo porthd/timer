@@ -26,6 +26,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -124,8 +125,8 @@ class SunriseRelTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerSunriseRel.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerSunriseRel.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -160,8 +161,8 @@ class SunriseRelTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -200,9 +201,9 @@ class SunriseRelTimer implements TimerInterface
     protected function validateSunPosition(array $params = []): bool
     {
         $string = (
-            (array_key_exists(self::ARG_SUN_POSITION, $params)) ?
-                $params[self::ARG_SUN_POSITION] :
-                ''
+        (array_key_exists(self::ARG_SUN_POSITION, $params)) ?
+            $params[self::ARG_SUN_POSITION] :
+            ''
         );
         return (
             (!empty($string)) &&
@@ -243,9 +244,9 @@ class SunriseRelTimer implements TimerInterface
     protected function validateDurationNatural(array $params = []): bool
     {
         $value = (
-            array_key_exists(self::ARG_DURATION_NATURAL, $params) ?
-                $params[self::ARG_DURATION_NATURAL] :
-                'fail'
+        array_key_exists(self::ARG_DURATION_NATURAL, $params) ?
+            $params[self::ARG_DURATION_NATURAL] :
+            'fail'
         );
         return in_array((string)$value, array_merge(self::LIST_SUN_POSITION, self::LIST_DURATION_NATURAL_ADD));
     }
@@ -258,9 +259,9 @@ class SunriseRelTimer implements TimerInterface
     protected function validateRelToEvent(array $params = []): bool
     {
         $value = (
-            array_key_exists(self::ARG_REL_TO_TIMEREVENT, $params) ?
-                $params[self::ARG_REL_TO_TIMEREVENT] :
-                0
+        array_key_exists(self::ARG_REL_TO_TIMEREVENT, $params) ?
+            $params[self::ARG_REL_TO_TIMEREVENT] :
+            0
         );
         $number = (int)$value;
         return (
@@ -635,12 +636,12 @@ class SunriseRelTimer implements TimerInterface
     protected function defineLongitudeLatitudeByParams(array $params, int $gap): array
     {
         $latitude = (float)(
-            ((array_key_exists(
-                    self::ARG_LATITUDE,
-                    $params
-                )) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
-                ($params[self::ARG_LATITUDE]) :
-                (self::DEFAULT_LATITUDE)
+        ((array_key_exists(
+                self::ARG_LATITUDE,
+                $params
+            )) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
+            ($params[self::ARG_LATITUDE]) :
+            (self::DEFAULT_LATITUDE)
         );
         if ((array_key_exists(self::ARG_LONGITUDE, $params)) &&
             ($params[self::ARG_LONGITUDE] >= -180) &&

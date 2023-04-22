@@ -166,12 +166,18 @@ class PeriodlistProcessor implements DataProcessorInterface
         if (!array_key_exists(PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH, $paramList)) {
             return $processedData;
         }
+
         // Make FAL in timer usable by defining the corresponding table and uid
         $paramList[TimerConst::TIMER_RELATION_TABLE] = 'tt_content';
         $paramList[TimerConst::TIMER_RELATION_UID] = (int)$processedData['data']['uid'];
-        $yamlFile = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH];
-        $rawResultFile = CustomTimerUtility::readListFromFileOrUrl($yamlFile, $yamlFileLoader, $periodListTimer,
-            $this->logger);
+        if (empty(($yamlFile = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FILE_PATH]))) {
+            throw new TimerException(
+                ' The list in csv-, yaml- or json-format is not found. There may be an error in the typoscript.  ' .
+                'Make a screenshot and inform the webmaster.',
+                1677394183
+            );
+        }
+        $rawResultFile = CustomTimerUtility::readListFromFileOrUrl($yamlFile, $yamlFileLoader, $periodListTimer, $this->logger);
         $rawResultFile = $rawResultFile[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST] ?? [];
         $yamlFal = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FAL_INFO];
         $rawResultFalList = CustomTimerUtility::readListsFromFalFiles(

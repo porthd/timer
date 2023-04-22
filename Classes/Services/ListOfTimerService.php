@@ -69,7 +69,15 @@ class ListOfTimerService implements SingletonInterface
         $result = array_values(
             $this->buildArrayByInterfaceFunctions('getSelectorItem')
         );
-        array_unshift($result, DefaultTimer::TIMER_SELECTOR_DEFAULT);
+        $flag = false;
+        foreach ($result as $item) {
+            $flag = $flag || (
+                    DefaultTimer::TIMER_SELECTOR_DEFAULT[TimerConst::TCA_ITEMS_VALUE] === $item[TimerConst::TCA_ITEMS_VALUE]
+                );
+        }
+        if (!$flag) {
+            array_unshift($result, DefaultTimer::TIMER_SELECTOR_DEFAULT);
+        }
         return $result;
     }
 

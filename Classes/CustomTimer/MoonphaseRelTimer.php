@@ -25,6 +25,7 @@ namespace Porthd\Timer\CustomTimer;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\StrangerCode\MoonPhase\Solaris\MoonPhase;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
@@ -100,8 +101,8 @@ class MoonphaseRelTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerMoonphaseRel.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerMoonphaseRel.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -136,8 +137,8 @@ class MoonphaseRelTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -221,9 +222,9 @@ class MoonphaseRelTimer implements TimerInterface
     protected function validateRelMinToEvent(array $params = []): bool
     {
         $value = (
-            isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
-                $params[self::ARG_REL_MIN_TO_EVENT] :
-                0
+        isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
+            $params[self::ARG_REL_MIN_TO_EVENT] :
+            0
         );
         $number = (int)$value;
         return is_int($number) && (($number - $value) === 0) &&
@@ -279,7 +280,7 @@ class MoonphaseRelTimer implements TimerInterface
         /** the result in  $moonPhaseCalculator is the GMT-timestamp relative to the calculation */
         $moonPhaseCalculator = new MoonPhase($utcDateTime);
         $moonPhase = $params[self::ARG_MOON_PHASE];
-        $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
+        $moonPhaseTStamp = (int)$moonPhaseCalculator->get_phase($moonPhase);
         $rangeSec = (int)$params[self::ARG_REQ_DURATION_MINUTES] * 60;
         if ($rangeSec > 0) {
             $higher = $utcDateTime->getTimestamp();
@@ -333,7 +334,7 @@ class MoonphaseRelTimer implements TimerInterface
         $utcDateTime = new DateTime('@' . $baseTStamp, new DateTimeZone('UTC'));
         $moonPhaseCalculator = new MoonPhase($utcDateTime);
         $moonPhase = $params[self::ARG_MOON_PHASE];
-        $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
+        $moonPhaseTStamp = (int)$moonPhaseCalculator->get_phase($moonPhase);
         if ($moonPhaseTStamp === null) {
             throw new TimerException(
                 'The moonphase `' . $moonPhase . '` could not be detected in the method `nextActive`. ' .
@@ -354,7 +355,7 @@ class MoonphaseRelTimer implements TimerInterface
                 );
             } else {
                 $nextMoonPhase = 'next_' . $moonPhase;
-                $startStamp = $moonPhaseCalculator->get_phase($nextMoonPhase);
+                $startStamp = (int)$moonPhaseCalculator->get_phase($nextMoonPhase);
                 [$lowerLimit, $upperLimit] = $this->calculateRangeRoundToMinute(
                     $rangeSec,
                     $startStamp,
@@ -398,7 +399,7 @@ class MoonphaseRelTimer implements TimerInterface
         for ($i = 0; $i < 4; $i++) {
             $refMooningDate = new DateTime('@' . $refStamp);
             $moonPhaseCalculator = new MoonPhase($refMooningDate);
-            $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
+            $moonPhaseTStamp = (int)$moonPhaseCalculator->get_phase($moonPhase);
             if ($moonPhaseTStamp === null) {
                 throw new TimerException(
                     'The moonphase `' . $moonPhase . '` could not be detected in the method `prevActive`. ' .

@@ -26,6 +26,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\StrangerCode\MoonOfDay\MoonRiseSet;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
@@ -106,8 +107,8 @@ class MoonriseRelTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerMoonriseRel.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerMoonriseRel.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -143,8 +144,8 @@ class MoonriseRelTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -229,7 +230,7 @@ class MoonriseRelTimer implements TimerInterface
     protected function validateRelMinToEvent(array $params = []): bool
     {
         $number = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_EVENT, $params) ?
+        array_key_exists(self::ARG_REL_MIN_TO_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_EVENT] :
             0
         );
@@ -248,7 +249,7 @@ class MoonriseRelTimer implements TimerInterface
     {
         $number = (float)($params[self::ARG_LATITUDE] ?: self::DEFAULT_LATITUDE);
         return (
-            ($number >= self::ARG_LATITUDE_MIN)            &&
+            ($number >= self::ARG_LATITUDE_MIN) &&
             ($number <= self::ARG_LATITUDE_MAX)
         );
     }
@@ -357,12 +358,12 @@ class MoonriseRelTimer implements TimerInterface
 
         if ((!in_array($params[self::ARG_MOON_STATUS], self::LIST_MOON_STATUS)) ||
             (!array_key_exists($params[self::ARG_MOON_STATUS], $moonInfoList)) ||
-            (!array_key_exists('flag'.ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
+            (!array_key_exists('flag' . ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
             ($rangeMin === 0)
         ) {
             throw new TimerException(
                 'The moonposition `' . $params[self::ARG_MOON_STATUS] . '` or the range `' . $rangeMin .
-                '` is not correctly defined.' .                ' Allowed are these variations in `nextActive`: `' . implode(
+                '` is not correctly defined.' . ' Allowed are these variations in `nextActive`: `' . implode(
                     '`, `',
                     self::LIST_MOON_STATUS
                 ) . '` and the range must not zero. ',
@@ -442,12 +443,12 @@ class MoonriseRelTimer implements TimerInterface
         $rangeMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         if ((!in_array($params[self::ARG_MOON_STATUS], self::LIST_MOON_STATUS)) ||
             (!array_key_exists($params[self::ARG_MOON_STATUS], $moonInfoList)) ||
-            (!array_key_exists('flag'.ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
+            (!array_key_exists('flag' . ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
             ($rangeMin === 0)
         ) {
             throw new TimerException(
                 'The moonposition `' . $params[self::ARG_MOON_STATUS] . '` or the range `' . $rangeMin .
-                '` is not correctly defined.'. ' Allowed are these variations in `prevActive`: `' . implode(
+                '` is not correctly defined.' . ' Allowed are these variations in `prevActive`: `' . implode(
                     '`, `',
                     self::LIST_MOON_STATUS
                 ) . '` and the range must not zero. ',
@@ -512,7 +513,7 @@ class MoonriseRelTimer implements TimerInterface
     protected function defineLongitudeLatitudeByParams(array $params, int $gap): array
     {
         $latitude = (float)(
-            (((array_key_exists(self::ARG_LATITUDE, $params)) &&
+        (((array_key_exists(self::ARG_LATITUDE, $params)) &&
             ($params[self::ARG_LATITUDE] >= self::ARG_LATITUDE_MIN) &&
             $params[self::ARG_LATITUDE] <= self::ARG_LATITUDE_MAX)) ?
             ($params[self::ARG_LATITUDE]) :
@@ -561,12 +562,12 @@ class MoonriseRelTimer implements TimerInterface
         $rangeMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         if ((!in_array($params[self::ARG_MOON_STATUS], self::LIST_MOON_STATUS)) ||
             (!array_key_exists($params[self::ARG_MOON_STATUS], $moonInfoList)) ||
-            (!array_key_exists('flag'.ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
+            (!array_key_exists('flag' . ucfirst($params[self::ARG_MOON_STATUS]), $moonInfoList)) ||
             ($rangeMin === 0)
         ) {
             throw new TimerException(
                 'The moonposition `' . $params[self::ARG_MOON_STATUS] . '` or the range `' . $rangeMin .
-                '` is not correctly defined.'. ' Allowed are these variations in `calculateRangeRelToMoonStatus`: `' . implode(
+                '` is not correctly defined.' . ' Allowed are these variations in `calculateRangeRelToMoonStatus`: `' . implode(
                     '`, `',
                     self::LIST_MOON_STATUS
                 ) . '` and the range must not zero. ',
@@ -704,7 +705,12 @@ class MoonriseRelTimer implements TimerInterface
      * @return array<mixed>
      * @throws Exception
      */
-    protected function getMoonDatasForDefinedDate($relTime, DateTime $utcDateTime, float $latitude, float $longitude): array
+    protected function getMoonDatasForDefinedDate(
+        $relTime,
+        DateTime $utcDateTime,
+        float $latitude,
+        float $longitude
+    ): array
     {
         $relTime = (int)$relTime;
         if ($relTime > 0) {

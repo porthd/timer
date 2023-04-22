@@ -2,7 +2,7 @@
 contentElement.tx_timer_timersimul {
     pathSlotNumber {
         # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_timersimul.const.pathesFor.libFLuidContent
-        fluidContent = 347
+        contentElement = 347
         # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_timersimul.const.pathesFor.libContentElement
         contentElement = 347
     }
@@ -16,7 +16,6 @@ contentElement.tx_timer_timersimul {
         partialRootPath = EXT:timer/Resources/Private/Partials/Content/
         layoutRootPath = EXT:timer/Resources/Private/Layouts/
     }
-
     dataProcessing {
         20 {
             pidInList = root,-1,139,112,111

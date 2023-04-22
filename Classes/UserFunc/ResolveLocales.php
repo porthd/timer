@@ -2040,10 +2040,10 @@ final class ResolveLocales
      */
     public function reduceLocalesToNations(array $conf, $reference): string
     {
-        $pretext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['pretext'] ?: ' ');
-        $posttext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['posttext'] ?: ' ');
-        $spacer = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['spacer'] ?: ' ');
-        $rawList = $conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_START];
+        $pretext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['pretext'] ?? ' ');
+        $posttext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['posttext'] ?? ' ');
+        $spacer = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['spacer'] ?? ' ');
+        $rawList = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_START] ?? '');
         if (empty($rawList)) {
             return '';
         }

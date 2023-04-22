@@ -26,6 +26,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -98,8 +99,8 @@ class DatePeriodTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerDatePeriod.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerDatePeriod.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -195,13 +196,13 @@ class DatePeriodTimer implements TimerInterface
                     self::TIMER_FORMAT_DATETIME,
                     $params[self::ARG_REQ_OLDSTART_TIME]
                 )
-            ) !== false
+                ) !== false
             );
         }
         return (DateTime::createFromFormat(
-            self::TIMER_FORMAT_DATETIME,
-            $params[self::ARG_REQ_START_TIME]
-        ) !== false
+                self::TIMER_FORMAT_DATETIME,
+                $params[self::ARG_REQ_START_TIME]
+            ) !== false
         );
     }
 
@@ -269,8 +270,8 @@ class DatePeriodTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(self::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(self::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -385,11 +386,11 @@ class DatePeriodTimer implements TimerInterface
         $timeUnitCode = (string)(($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
         if ($unitValue > 0) {
             $periodsBelow = DateTimeUtility::diffPeriod(
-                $startTime,
-                $dateLikeEventZone,
-                $unitValue,
-                $timeUnitCode
-            ) - 2;  // I think, `-1` should although work.
+                    $startTime,
+                    $dateLikeEventZone,
+                    $unitValue,
+                    $timeUnitCode
+                ) - 2;  // I think, `-1` should although work.
         } else {
             $periodsBelow = 0; // event hapens only once
         }
@@ -519,11 +520,11 @@ class DatePeriodTimer implements TimerInterface
         $timeUnitCode = (string)(($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
         if ($unitValue > 0) {
             $periodsAfter = DateTimeUtility::diffPeriod(
-                $startTime,
-                $dateLikeEventZone,
-                $unitValue,
-                $timeUnitCode
-            ) + 3;  // I think, `-1` should although work.
+                    $startTime,
+                    $dateLikeEventZone,
+                    $unitValue,
+                    $timeUnitCode
+                ) + 3;  // I think, `-1` should although work.
         } else {
             $periodsAfter = 0; // event hapens only once
         }

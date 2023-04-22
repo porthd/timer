@@ -23,6 +23,7 @@ namespace Porthd\Timer\CustomTimer;
 
 use DateInterval;
 use DateTime;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -89,8 +90,8 @@ class DailyTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerDaily.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerDaily.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -229,8 +230,8 @@ class DailyTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -256,7 +257,7 @@ class DailyTimer implements TimerInterface
         );
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $startTimeSeconds = (
-            (empty($params[self::ARG_REQ_START_TIME])) ?
+        (empty($params[self::ARG_REQ_START_TIME])) ?
             0 :
             ((int)$params[self::ARG_REQ_START_TIME] % 86400)
         ); // seconds starting at 00:00

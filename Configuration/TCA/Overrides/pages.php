@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') || die();
+defined('TYPO3') || die();
 
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
@@ -17,9 +17,9 @@ $tmp_timer_columns = [
             'renderType' => 'checkboxToggle',
             'items' => [
                 [
-                    0 => '',
-                    1 => '',
-                ]
+                    'invertStateDisplay' => true,
+                    TimerConst::TCA_ITEMS_LABEL => '',
+                ],
             ],
             'default' => true,
         ],

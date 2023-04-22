@@ -1,25 +1,31 @@
 #tt_content.timer_periodlist = FLUIDTEMPLATE
-lib.periodlist.fluidContent < lib.fluidContent
+lib.periodlist.fluidContent < lib.contentElement
 lib.periodlist.fluidContent {
     templateRootPaths {
-        {$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_periodlist.view.templateRootPath}
+        349 = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.templateRootPath}
     }
     partialRootPaths {
-        {$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_periodlist.view.partialRootPath}
+        349 = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.partialRootPath}
     }
     layoutRootPaths {
-        {$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent}= {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+        349 = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
     }
 }
 lib.periodlist.contentElement < lib.contentElement
 lib.periodlist.contentElement {
     templateRootPaths {
-        {$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement}= {$contentElement.tx_timer_periodlist.view.templateRootPath}
+        349 = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.templateRootPath}
     }
     partialRootPaths {
-        {$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement}= {$contentElement.tx_timer_periodlist.view.partialRootPath}
+        349 = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.partialRootPath}
     }
     layoutRootPaths {
-        {$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement}= {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+        349 = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
     }
 }

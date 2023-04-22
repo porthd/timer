@@ -477,11 +477,12 @@ currently supported, which must be specified in the CSV file in the `arg.type`:
   calendar (`arg.calendar`), this means that the month is given as a number in
   the `arg.month` field. The calendar is defined in `arg.calendar`. The phase of
   the moon is defined in `arg.status` with the encoding 0/new_moon = new moon,
-  1/first_quarter = waxing crescent, 2/full_moon = full moon and 3/last_quarter
-  = waning (Islamic?) crescent. If a '1' is specified in `arg.statusCount` or if
-  no specification is given, the first moon phase of the month is always used,
-  even if there are two identical moon phases in the month. Otherwise, the
-  second moon phase is used if it exists in the same month.
+  1/first_quarter = waxing crescent, 2/full_moon = full moon and
+  3/last_quarter = waning (Islamic?) crescent. If a '1' is specified
+  in `arg.statusCount` or if no specification is given, the first moon phase of
+  the month is always used, even if there are two identical moon phases in the
+  month. Otherwise, the second moon phase is used if it exists in the same
+  month.
 
 The methods are defined in such a way that a date is always determined. The
 calculation procedures always return a Gregorian date.
@@ -638,48 +639,49 @@ The explanations for the individual components are included as comments.
   include the locale designation for the country in the identifier.
 - _arg.timer_: this is a generic term under which the various parameters for the
   respective timers used for the `timer` extension are recorded.
-- _arg_: captures the arguments for the different timer/types `fixed`
-  , `fixedrelated`, `fixedshifting`, `weekdayly`, `easterly` or `mooninmonth`.
-  The parameters are used to calculate public holidays.
+- _arg_: captures the arguments for the different
+  timer/types `fixed`, `fixedrelated`, `fixedshifting`, `weekdayly`, `easterly`
+  or `mooninmonth`. The parameters are used to calculate public holidays.
 - _arg.startYear_: The year describes from which year of the selected calendar
-  the holiday is valid. It applies to all types (`fixed`, `fixedrelated`
-  , `fixedshifting`, `fixedmultiyear`, `season`, `seasonshifting`, `weekdayly`
-  , `easterly` or `mooninmonth`).
+  the holiday is valid. It applies to all
+  types (`fixed`, `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `season`, `seasonshifting`, `weekdayly`, `easterly`
+  or `mooninmonth`).
 - _arg.endYear_: The year describes up to which year of the selected calendar
   including the holiday is/was valid. As above, it applies to all types.
 - _arg.day_: The parameter describes a day of the month for a holiday
-  calculation. The entry is used in `fixed`, `fixedrelated`, `fixedshifting`
-  , `fixedmultiyear`, `weekdayly`.
+  calculation. The entry is used
+  in `fixed`, `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `weekdayly`.
 - _arg.month_: The parameter describes the month that is important for the
-  holiday calculation. The entry is used in `fixed`, `fixedrelated`
-  , `fixedmultiyear`, `fixedshifting`, `weekdayly` or `mooninmonth`
-- _arg.type_: Describes the type of calendar calculation. `fixed`
-  , `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `weekdayly`, `easterly`
+  holiday calculation. The entry is used
+  in `fixed`, `fixedrelated`, `fixedmultiyear`, `fixedshifting`, `weekdayly`
+  or `mooninmonth`
+- _arg.type_: Describes the type of calendar
+  calculation. `fixed`, `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `weekdayly`, `easterly`
   or `mooninmonth` are possible. All identifiers that the various timers provide
   as identifiers are also possible.
 - _arg.calendar_: The parameter defines which calendar is used. Usually the
-  calendar is `gregorian`. Also allowed are: `buddhist`, `chinese`, `coptic`
-  , `dangi`, `ethiopic`, `ethiopic`, `gregorian`, `hebrew`, `indian`, `islamic`
-  , `islamic`, `islamic` `, `islamic`, `islamic`, `julian`, `japanese`, `
-  persian`, `roc`. The parameter applies to all types (`fixed`, `
-  fixedshifting`, `weekdayly`, `easterly` or `mooninmonth`).
-- _arg.status_: The entry in `fixedmultiyear`, `fixedrelated`, `season`
-  , `weekdayly` or `mooninmonth` is used. With `weekdayly` or
-  with `fixedrelated` it specifies the day of the week as a number (1 = Monday,
-  ...7 = Sunday). With `mooninmonth` it indicates the phase of the moon (1 =
-  waxing crescent, 2 = full moon, 3 = waning crescent, 4 = new moon).
-  At `season` it indicates the beginning of the astronomical season (1 = spring
-  equinox, 2 = summer solstice, 3 autumn equinox, 4 = winter solstice).
-  With `fixedmultiyear` a reference year is specified here.
-- _arg.statusCount_: The entry is used in `fixedshifting`, `fixedrelated`
-  , `seasonshifting`, `fixedmultiyear`, `weekdayly`, `mooninmonth` or `easterly`
-  . With `fixedshifting`, the deviation from the existing day of the week is
-  defined via a comma-separated list. `easterly` defines the distance to Easter
-  Sunday. With `weekdayly` or with `fixedrelated` it is specified which (first,
-  second, ..) weekday in the corresponding month or relative to the fixed date
-  is meant. Negative numbers count from the end of the month or towards the
-  past. `mooninmonth` defines whether the first or second moon phase of the
-  month is meant.
+  calendar is `gregorian`. Also allowed
+  are: `buddhist`, `chinese`, `coptic`, `dangi`, `ethiopic`, `ethiopic`, `gregorian`, `hebrew`, `indian`, `islamic`, `islamic`, `islamic` `, `
+  islamic`, `islamic`, `julian`, `japanese`, `persian`, `
+  roc`. The parameter applies to all types (`fixed`, `fixedshifting`, `
+  weekdayly`, `easterly` or `mooninmonth`).
+- _arg.status_: The entry
+  in `fixedmultiyear`, `fixedrelated`, `season`, `weekdayly` or `mooninmonth` is
+  used. With `weekdayly` or with `fixedrelated` it specifies the day of the week
+  as a number (1 = Monday, ...7 = Sunday). With `mooninmonth` it indicates the
+  phase of the moon (1 = waxing crescent, 2 = full moon, 3 = waning crescent,
+  4 = new moon). At `season` it indicates the beginning of the astronomical
+  season (1 = spring equinox, 2 = summer solstice, 3 autumn equinox, 4 = winter
+  solstice). With `fixedmultiyear` a reference year is specified here.
+- _arg.statusCount_: The entry is used
+  in `fixedshifting`, `fixedrelated`, `seasonshifting`, `fixedmultiyear`, `weekdayly`, `mooninmonth`
+  or `easterly`. With `fixedshifting`, the deviation from the existing day of
+  the week is defined via a comma-separated list. `easterly` defines the
+  distance to Easter Sunday. With `weekdayly` or with `fixedrelated` it is
+  specified which (first, second, ..) weekday in the corresponding month or
+  relative to the fixed date is meant. Negative numbers count from the end of
+  the month or towards the past. `mooninmonth` defines whether the first or
+  second moon phase of the month is meant.
 - _arg.secDayCount_: The entry is only used in `weekdayly` or `fixedrelated`. It
   defines the distance in days relative to the selected day of the week. (
   Special definition for the Swiss or Federal Day of Thanks, Repentance and
@@ -820,8 +822,8 @@ There are five view helpers:
 - timer:format.jewishDate - works similarly to `f:format.date`, outputting times
   for a specific time zone
   allowed and whereby the dates are transformed into the Jewish calendar.
-  **Deprecated - Will be removed in version 12! _Use the new view
-  helper `timer:format.calendarDate`_**
+  **Deprecated - Will be removed in version
+  12! _Use the new view helper `timer:format.calendarDate`_**
 - timer:format.calendarDate - works more comprehensively than `f:format.date`
   because in addition to taking into account the time zone, it also allows you
   to choose from the various calendars supported by PHP
@@ -836,8 +838,8 @@ There are five view helpers:
 
 #### timer:format.calendarDate - Attributes
 
-- **flagformat** determines which formatting rules should be used: 0
-  = [PHP-DateTime](https://www.php.net/manual/en/datetime.format.php),
+- **flagformat** determines which formatting rules should be used:
+  0 = [PHP-DateTime](https://www.php.net/manual/en/datetime.format.php),
   1: [ICU-Datetime- formatting](https://unicode-org.github.io/icu/userguide/format_parse/datetime/)
   or 2 = [PHP-strftime](https://www.php.net/manual/en/function.strftime .php).
 - **format** defines the format of the date output.
@@ -872,8 +874,8 @@ There are five view helpers:
   calendar.
 - **locale** determines the regional localization and consists of the two-letter
   language abbreviation (de, en, fr, es, ...) and separated by an underscore
-  from the abbreviation for the nation (DE, GB, US, AT, Switzerland, France,
-  ...). The value in __locale__ could look like this: `de_DE`, `en_GB`
+  from the abbreviation for the nation (DE, GB, US, AT, Switzerland,
+  France, ...). The value in __locale__ could look like this: `de_DE`, `en_GB`
   or `es_US`.
 
 ### Data Processors
@@ -929,9 +931,7 @@ Due to the repetition of periods, a data record can be listed several times.
 Therefore, a start time and an end time must always be defined.
 
 | Parameters | Default | Description
-|----------------|--------------------------------
---------------------------------------------------
--------------------------------------------------- ----|--------------
+|----------------|-------------------------------- -------------------------------------------------- -------------------------------------------------- ----|--------------
 | | **_Records_** |
 | if | true | If the value or the typescript expression evaluates to false, the
 data processor is not executed.
@@ -944,8 +944,7 @@ records for determining the list of timer events.
 | | **_Start and General_** |
 | datetimeFormat | Y-m-d H:i:s | Defines the format in which the date is given.
 The characters defined in PHP apply (
-see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php))
-.
+see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
 | datetimeStart | &lt;now&gt; | Defines the point in time at which the list
 should start. If `reverse = false` it is the earliest time, and
 if `reverse = true` it is the latest time.
@@ -964,8 +963,8 @@ the start time. The PHP notation for time intervals is to be used to specify the
 time difference (
 see [Overview](https://www.php.net/manual/en/class.dateinterval.php)).
 | | **_Special_** |
-| userRangeCompare
-| `Porthd\Timer\Services\ListOfEventsService::compareForBelowList`
+|
+userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList`
 or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the
 date values are used to determine the order. The user could also consider other
 sorting criteria. For example, one might want a list sorted first by start date
@@ -1025,9 +1024,7 @@ The parameters `table` plus `pidInList` are therefore omitted and the
 parameter `fieldName` is added.
 
 | Parameters | Default | Description
-|-------------------------------|------------------------------
---------------------------------------------------
--------------------------------------------------- ------|--------------
+|-------------------------------|------------------------------ -------------------------------------------------- -------------------------------------------------- ------|--------------
 | | **_Records_** |
 | if | true | If the value or the typescript expression evaluates to false, the
 data processor is not executed.
@@ -1039,8 +1036,7 @@ at `&lt;f:debug>{sortedrecords}</f:debug>` for the exact structure.
 | | **_Start and General_** |
 | datetimeFormat | Y-m-d H:i:s | Defines the format in which the date is given.
 The characters defined in PHP apply (
-see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php))
-.
+see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
 | datetimeStart | &lt;now&gt; | Defines the point in time at which the list
 should start. If `reverse = false` it is the earliest time, and
 if `reverse = true` it is the latest time.
@@ -1059,8 +1055,8 @@ the start time. The PHP notation for time intervals is to be used to specify the
 time difference (
 see [Overview](https://www.php.net/manual/en/class.dateinterval.php)).
 | | **_Special_** |
-| userRangeCompare
-| `Porthd\Timer\Services\ListOfEventsService::compareForBelowList`
+|
+userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList`
 or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the
 date values are used to determine the order. The user could also consider other
 sorting criteria. For example, one might want a list sorted first by start date

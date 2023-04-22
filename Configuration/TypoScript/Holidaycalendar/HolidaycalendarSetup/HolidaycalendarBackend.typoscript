@@ -3,15 +3,12 @@ module.tx_timer.view {
         0 = EXT:timer/Resources/Private/Backend/Templates/Content/
         20 = {$contentElement.tx_timer_holidaycalendar.backendView.templateRootPath}
     }
-
     partialRootPaths {
         0 = EXT:timer/Resources/Private/Backend/Partials/Content/
         20 = {$contentElement.tx_timer_holidaycalendar.backendView.partialRootPath}
     }
-
     layoutRootPaths {
         0 = EXT:timer/Resources/Private/Backend/Layouts/
         20 = {$contentElement.tx_timer_holidaycalendar.backendView.layoutRootPath}
     }
-
 }

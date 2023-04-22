@@ -21,6 +21,8 @@ namespace Porthd\Timer\Domain\Model\InternalFlow;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Context\Context;
 use DateTime;
 use Exception;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -87,7 +89,7 @@ class LoopLimiter
      */
     protected static function getCurrentTStamp()
     {
-        return $GLOBALS['EXEC_TIME'] ?: time();
+        return GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ?: time();
     }
 
     /**

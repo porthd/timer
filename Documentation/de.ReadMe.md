@@ -143,8 +143,8 @@ Alias-Definitionen importieren.
 In den Alias-Definitionen findet man oft wiederverwendete
 Definitionsbestandteile,
 die den Datenarray eines Eintrags automatisch erweitern, wenn im
-Feld `add.alias` der entsprechende Name der Alias-Definition zu finden ist. (**
-Achtung: Diese alias-Feature wuirde bislang noch nicht getestet.**)
+Feld `add.alias` der entsprechende Name der Alias-Definition zu finden ist. (*
+*Achtung: Diese alias-Feature wuirde bislang noch nicht getestet.**)
 
 Voreingestellt ist das mächtige
 Kalender-Framework [ToastUI-calendar](https://github.com/nhn/tui.calendar/).
@@ -641,44 +641,44 @@ angeführt.
 - _arg.timer_: die ist einen Oberbegriff, unter welchen die verschiedenen
   Parameter für die jeweiligen Timer erfasst, die für die Extension `timer`
   genutzt werden.
-- _arg_: erfasst die Argumente für die verschiedenen Timer/Typen `fixed`
-  , `fixedrelated`, `fixedshifting`, `weekdayly`, `easterly` oder `mooninmonth`.
-  Die Parameter werden zur Berechnung der Feiertage verwendet.
+- _arg_: erfasst die Argumente für die verschiedenen
+  Timer/Typen `fixed`, `fixedrelated`, `fixedshifting`, `weekdayly`, `easterly`
+  oder `mooninmonth`. Die Parameter werden zur Berechnung der Feiertage
+  verwendet.
 - _arg.startYear_: Die Jahrezahl beschreibt, ab welchem Jahr des gewählten
-  Kalenders der Feiertag gültig ist. Er gilt für alle Typen (`fixed`
-  , `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `season`
-  , `seasonshifting`, `weekdayly`, `easterly` oder `mooninmonth`).
+  Kalenders der Feiertag gültig ist. Er gilt für alle
+  Typen (`fixed`, `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `season`, `seasonshifting`, `weekdayly`, `easterly`
+  oder `mooninmonth`).
 - _arg.endYear_:  Die Jahrezahl beschreibt, bis welchem Jahr des gewählten
   Kalenders einschließlich der Feiertag gültig ist/war. Er gilt wie oben für
   alle Typen.
 - _arg.day_: Der Parameter beschreibt einen Tag im Monat für eine
-  Feiertagsberechnung. Genutzt wird der Eintrag in `fixed`, `fixedrelated`
-  , `fixedshifting`,`fixedmultiyear`, `weekdayly`.
+  Feiertagsberechnung. Genutzt wird der Eintrag
+  in `fixed`, `fixedrelated`, `fixedshifting`,`fixedmultiyear`, `weekdayly`.
 - _arg.month_: Der Parameter beschreibt den Monat, der für die
-  Feiertagsberechnung wichtig ist. Genutzt wird der Eintrag in `fixed`
-  , `fixedrelated`, `fixedmultiyear`, `fixedshifting`, `weekdayly`
+  Feiertagsberechnung wichtig ist. Genutzt wird der Eintrag
+  in `fixed`, `fixedrelated`, `fixedmultiyear`, `fixedshifting`, `weekdayly`
   oder `mooninmonth`
-- _arg.type_: Beschreibt den Typ der Kalenderberechnung. Möglich sind `fixed`
-  , `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `weekdayly`, `easterly`
+- _arg.type_: Beschreibt den Typ der Kalenderberechnung. Möglich
+  sind `fixed`, `fixedrelated`, `fixedshifting`, `fixedmultiyear`, `weekdayly`, `easterly`
   oder `mooninmonth`. Möglich sind auch alle Identifikatoren, die die
   verschiedenen Timer als Identifikatoren zur Verfügung stellen.
 - _arg.calendar_: Der Parameter defininiert welche Kalender genutzt wird. In der
-  Regel ist der Kalender `gregorian`. Erlaubt sind weiter: `buddhist`, `chinese`
-  , `coptic`, `dangi`, `ethiopic`, `ethiopic`, `gregorian`, `hebrew`, `indian`
-  , `islamic`, `islamic`, `islamic`, `islamic`, `islamic`, `julianisch`
-  , `japanese`, `persian`, `roc`. Der Parameter gilt für alle Typen (`fixed`
-  , `fixedshifting`, `weekdayly`, `easterly` oder `mooninmonth`).
-- _arg.status_: Genutzt wird der Eintrag in `fixedmultiyear`, `fixedrelated`
-  , `season`, `weekdayly` oder `mooninmonth`. Bei `weekdayly` oder
-  bei `fixedrelated` gibt er den Wochentag als Ziffer (1 = Montag, ...7 =
-  Sonntag) an. Bei `mooninmonth` gibt er die Mondphase (1 = zunehmender
-  Halbmond, 2 = Vollmond, 3 = abnehmender Halbmond, 4 = Neumond) an.
+  Regel ist der Kalender `gregorian`. Erlaubt sind
+  weiter: `buddhist`, `chinese`, `coptic`, `dangi`, `ethiopic`, `ethiopic`, `gregorian`, `hebrew`, `indian`, `islamic`, `islamic`, `islamic`, `islamic`, `islamic`, `julianisch`, `japanese`, `persian`, `roc`.
+  Der Parameter gilt für alle
+  Typen (`fixed`, `fixedshifting`, `weekdayly`, `easterly` oder `mooninmonth`).
+- _arg.status_: Genutzt wird der Eintrag
+  in `fixedmultiyear`, `fixedrelated`, `season`, `weekdayly` oder `mooninmonth`.
+  Bei `weekdayly` oder bei `fixedrelated` gibt er den Wochentag als Ziffer (1 =
+  Montag, ...7 = Sonntag) an. Bei `mooninmonth` gibt er die Mondphase (1 =
+  zunehmender Halbmond, 2 = Vollmond, 3 = abnehmender Halbmond, 4 = Neumond) an.
   Bei `season` gibt er den Beginn der astronomischen Jahreszeit (1 =
   Frühling-Tag-Nacht-Gleiche, 2 = Sommersonnenwende, 3 Herbst-Tag-Nacht-Gleiche,
   4 = Wintersonnenwende) an. Bei `fixedmultiyear` wird hier ein Bezugjahr
   angegeben.
-- _arg.statusCount_: Genutzt wird der Eintrag in `fixedshifting`, `fixedrelated`
-  , `seasonshifting`, `fixedmultiyear`, `weekdayly`,`mooninmonth`
+- _arg.statusCount_: Genutzt wird der Eintrag
+  in `fixedshifting`, `fixedrelated`, `seasonshifting`, `fixedmultiyear`, `weekdayly`,`mooninmonth`
   oder `easterly`. Bei `fixedshifting` wird über eine kommaseparierte Liste die
   Abweichung zum bestehenden Wochentag definiert. Bei `easterly` wird der
   Abstand zum Ostersonntag definiert. Bei `weekdayly` oder bei `fixedrelated`
@@ -811,8 +811,8 @@ Es gibt fünf Viewhelper:
 
 #### timer:format.calendarDate - Attribute
 
-- **flagformat** bestimmt, welche Formtierungsregeln benutzt werden sollen: 0
-  = [PHP-DateTime](https://www.php.net/manual/en/datetime.format.php),
+- **flagformat** bestimmt, welche Formtierungsregeln benutzt werden sollen:
+  0 = [PHP-DateTime](https://www.php.net/manual/en/datetime.format.php),
   1: [ICU-Datetime-Formatierung](https://unicode-org.github.io/icu/userguide/format_parse/datetime/)
   oder 2 = [PHP-strftime](https://www.php.net/manual/en/function.strftime.php).
 - **format** definiert die Form der Ausgabe des Datums.
@@ -822,8 +822,7 @@ Es gibt fünf Viewhelper:
   Eine Liste der zulässigen-Zeitzonennamen erhalten sie über die
   PHP-Funktion `timezone_abbreviations_list()`. Aber auch in der
   PHP-Dokumentation finden sie
-  eine [nach Kontinenten vorgeordnete Liste](https://www.php.net/manual/en/timezones.php)
-  .
+  eine [nach Kontinenten vorgeordnete Liste](https://www.php.net/manual/en/timezones.php).
 - **date** erlaubt die Angabe eines Datums aus dem gregorianischen (westlichen)
   Kalender, sofern bei `datestring` keine Angabe gemacht wurde. Sie können den
   Wert für `date` implizit definieren, indem sie den Wert mit den
@@ -852,8 +851,8 @@ Es gibt fünf Viewhelper:
 - **locale** bestimme die regionale Lokalisierung und setzt sich aus dem
   zweibuchstabigen Sprachkürzel (de, en, fr, es, ...) und getrennt durch einen
   Unterstrich aus dem Kürzel für die Nation (DE, GB, US, AT, CH, FR, ...). Der
-  Wert in __locale__ könnte zum Beispiel folgendes Aussehen haben: `de_DE`
-  , `en_GB` oder auch `es_US`.
+  Wert in __locale__ könnte zum Beispiel folgendes Aussehen
+  haben: `de_DE`, `en_GB` oder auch `es_US`.
 
 ### Dataprozessoren
 

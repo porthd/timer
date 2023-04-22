@@ -199,7 +199,8 @@ class HolidaycalendarService
                         'The type of the holiday calculation (`' . $holidayArg[self::ATTR_ARG_TYPE] .
                         '`) is unknown. Check for the correct wording and for typemistakes. If everythings seems okay, ' .
                         'then make a screenshot and inform the webmaster. ' .
-                        '(allowed types: ' . implode(',', self::ATTR_ARG_TYPE_LIST) . ')',
+                        '(allowed types: ' . implode(',', self::ATTR_ARG_TYPE_LIST) . ')' .
+                        print_r($holidayArg, true),
                         1677389029
                     );
                 }
@@ -300,11 +301,18 @@ class HolidaycalendarService
             // shift list by one day
             $index = ($weekday + 6) % 7;
             $shiftListMoToSu = $holidayArg[self::ATTR_ARG_STATUSCOUNT];
-            $shiftListMoToSuList =
-                array_map(
-                    'intval',
-                    explode(',', $shiftListMoToSu)
+            $shiftListMoToSuList = array_map(
+                'intval',
+                explode(',', $shiftListMoToSu)
+            );
+            if (count($shiftListMoToSuList) !== 7) {
+                throw new TimerException(
+                    'The fixed-array `' . print_r($shiftListMoToSuList, true) .
+                    '` must have seven entries. Please check your holiday-configuration.' .
+                    print_r($holidayArg, true),
+                    1680878662
                 );
+            }
             $shiftDays = $shiftListMoToSuList[$index];
             if ($shiftDays < 0) {
                 $holidayDate->sub(new DateInterval(('P' . abs($shiftDays) . 'D')));
@@ -472,12 +480,18 @@ class HolidaycalendarService
             // shift list by one day
             $index = ($weekday + 6) % 7;
             $shiftListMoToSu = $holidayArg[self::ATTR_ARG_STATUSCOUNT];
-            $shiftListMoToSuList = array_filter(
-                array_map(
-                    'intval',
-                    explode(',', $shiftListMoToSu)
-                )
+            $shiftListMoToSuList = array_map(
+                'intval',
+                explode(',', $shiftListMoToSu)
             );
+            if (count($shiftListMoToSuList) !== 7) {
+                throw new TimerException(
+                    'The fixed-array `' . print_r($shiftListMoToSuList, true) .
+                    '` must have seven entries. Please check your holiday-configuration.' .
+                    print_r($holidayArg, true),
+                    1680878665
+                );
+            }
             $shiftDays = $shiftListMoToSuList[$index];
             if ($shiftDays < 0) {
                 $seasonTime->sub(new DateInterval(('P' . abs($shiftDays) . 'D')));
@@ -597,10 +611,10 @@ class HolidaycalendarService
      * @return TimerStartStopRange
      */
     protected function getGregorianDateForWeekdaylyType(
-        string $locale,
+        string   $locale,
         DateTime $startDate,
-        array $holidayArg,
-        int $addYear
+        array    $holidayArg,
+        int      $addYear
     ): TimerStartStopRange
     {
         $wishedCountWeekday = (int)(
@@ -771,9 +785,17 @@ class HolidaycalendarService
             }
         }
         $moonPhaseCalculator = new MoonPhase($holidayDate->getTimestamp() - 86400);
-        $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
-        $nextMoonPhaseTStamp = $moonPhaseCalculator->get_phase('next_' . $moonPhase);
-
+        $moonPhaseTStamp = $moonPhaseCalculator->getPhaseInt($moonPhase);
+        $nextMoonPhaseTStamp = $moonPhaseCalculator->getPhaseInt('next_' . $moonPhase);
+        if (($nextMoonPhaseTStamp === null) || ($moonPhaseTStamp === null)) {
+            throw new TimerException(
+                'The calcuilation for the moonphase (`' . $moonPhase . '`) leads to null for the timestamp `' .
+                ($holidayDate->getTimestamp() - 86400) . '`. Check the data. ' .
+                'Make a Screenshot and inform the webmaster.' .
+                'The following data are needed: ' . print_r($holidayArg, true),
+                1680880948
+            );
+        }
         // get the everytime the first moonnstatus in the month
         $holidayDateTime = new \DateTime();
         $holidayDateTime->setTimestamp($moonPhaseTStamp);
@@ -786,8 +808,17 @@ class HolidaycalendarService
             $holidayDateTime->setTimezone($startDate->getTimezone());
             $holidayDateTime->setTime(0, 0, 0);
             $moonPhaseCalculator = new MoonPhase($holidayDateTime->getTimestamp() - 86400);
-            $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
-            $nextMoonPhaseTStamp = $moonPhaseCalculator->get_phase('next_' . $moonPhase);
+            //            $moonPhaseTStamp = $moonPhaseCalculator->getPhaseInt($moonPhase);
+            $nextMoonPhaseTStamp = $moonPhaseCalculator->getPhaseInt('next_' . $moonPhase);
+            if ($nextMoonPhaseTStamp === null) {
+                throw new TimerException(
+                    'The calcuilation for the moonphase (`' . $moonPhase . '`) leads to null for the timestamp `' .
+                    ($holidayDate->getTimestamp() - 86400) . '`. Check the data. ' .
+                    'Make a Screenshot and inform the webmaster.' .
+                    'The following data are needed: ' . print_r($holidayArg, true),
+                    1680880948
+                );
+            }
 
         }
         // if the condition is true, the second moonphase should be choosed, if the secand moonphase is part of the same month in the original calendar-system

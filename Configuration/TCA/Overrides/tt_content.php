@@ -1,86 +1,22 @@
 <?php
 
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-defined('TYPO3_MODE') || die();
+defined('TYPO3') || die();
 
 
 call_user_func(function () {
-    // Parts of code, which can by the extension-constants be controlled
-
-//    $tmp_timer_columns = [
-//        'tx_timer_scheduler' => [
-//            'exclude' => true,
-//            'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_scheduler',
-//            'config' => [
-//                'type' => 'check',
-//                'renderType' => 'checkboxToggle',
-//                'items' => [
-//                    [
-//                        0 => '',
-//                        1 => '',
-//                    ],
-//                ],
-//                'default' => true,
-//            ],
-//        ],
-//        TimerConst::TIMER_FIELD_FLEX_ACTIVE => [
-//            'exclude' => true,
-//            'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_timer',
-//            'config' => [
-//                'type' => 'flex',
-//                'ds_pointerField' => 'tx_timer_selector',
-//                'ds' => TcaUtility::mergeNameFlexformArray(),
-//                'behaviour' => [
-//                    'allowLanguageSynchronization' => true,
-//                ],
-//            ],
-//        ],
-//        'tx_timer_selector' => [
-//            'exclude' => true,
-//            'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_selector',
-//            'description' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.fieldDescription.tx_timer_selector',
-//            'config' => [
-//                'type' => 'select',
-//                'renderType' => 'selectSingle',
-//                'allowNonIdValues' => true,
-//                'items' => TcaUtility::mergeSelectorItems(),
-//                'behaviour' => [
-//                    'allowLanguageSynchronization' => true,
-//                ],
-//            ],
-//            'onChange' => 'reload',
-//        ],
-//    ];
-//
-//    ExtensionManagementUtility::addTCAcolumns('tt_content', $tmp_timer_columns);
-//
-//    ExtensionManagementUtility::addToAllTCAtypes(
-//        'tt_content',
-//        '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.label,' .
-//        'tx_timer_scheduler, tx_timer_selector, tx_timer_timer,'
-//    );
 
     // Parts of code, which can by the extension-constants be controlled
     $timerConfig = GeneralUtility::makeInstance(
         ExtensionConfiguration::class
     )->get(TimerConst::EXTENSION_NAME);
 
-//    // define example-content-element
-//    if (!empty($timerConfig['flagTestContent'])) {
-//
-//
-//        // will set in the ext_localconf.php
-//        ExtensionManagementUtility::addStaticFile(
-//            'timer',
-//            'Configuration/TypoScript/',
-//            'Timer'
-//        );
-//    }
     $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['timer_timersimul'] = 'tx_timer_timersimul';
     $tempTypes = [
         'timer_timersimul' => [
@@ -101,9 +37,9 @@ call_user_func(function () {
         'tt_content',
         'CType',
         [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.element.name.timerTimersimul',
-            'timer_timersimul',
-            'tx_timer_timersimul',
+            'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.element.name.timerTimersimul',
+            'value' => 'timer_timersimul',
+            'icon' => 'tx_timer_timersimul',
         ],
         'textmedia',
         'after'
@@ -131,9 +67,9 @@ call_user_func(function () {
         'tt_content',
         'CType',
         [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.element.name.timerPeriodlist',
-            'timer_periodlist',
-            'tx_timer_periodlist',
+            'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.element.name.timerPeriodlist',
+            'value' => 'timer_periodlist',
+            'icon' => 'tx_timer_periodlist',
         ],
         'textmedia',
         'after'
@@ -166,9 +102,9 @@ call_user_func(function () {
         'tt_content',
         'CType',
         [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.element.name.timerHolidaycalendar',
-            'timer_holidaycalendar',
-            'tx_timer_holidaycalendar',
+            'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.element.name.timerHolidaycalendar',
+            'value' => 'timer_holidaycalendar',
+            'icon' => 'tx_timer_holidaycalendar',
         ],
         'textmedia',
         'after'
@@ -188,8 +124,8 @@ call_user_func(function () {
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'invertStateDisplay' => true,
+                        TimerConst::TCA_ITEMS_LABEL => '',
                     ],
                 ],
                 'default' => true,
@@ -219,6 +155,7 @@ call_user_func(function () {
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
+                'default' => DefaultTimer::TIMER_NAME,
             ],
             'onChange' => 'reload',
         ],

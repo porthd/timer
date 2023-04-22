@@ -27,7 +27,7 @@ use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-defined('TYPO3_MODE') || die('Access denied.');
+defined('TYPO3') || die('Access denied in ' . __FILE__ . '.');
 
 /***************************************************************
  *
@@ -124,7 +124,7 @@ call_user_func(
                 "\n" .
                 "@import 'EXT:timer/Configuration/TsConfig/Page/RteTimerSimul.tsconfig'";
 
-            if (!empty($timerConfig['flagTimersimul'])) {
+            if ((bool)$timerConfig['flagTimersimul']) {
                 $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_timersimul'] = 'EXT:timer/Configuration/RTE/TimerTimersimul.yaml';
                 $tsConfig .= "\n" . "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentTimersimul.tsconfig'";
 
@@ -139,7 +139,7 @@ call_user_func(
                     "@import 'EXT:timer/Configuration/TypoScript/Timersimul/constants.typoscript'" . "\n"
                 );
             }
-            if (!empty($timerConfig['flagPeriodlist'])) {
+            if ((bool)$timerConfig['flagPeriodlist']) {
                 $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_periodlist'] = 'EXT:timer/Configuration/RTE/TimerPeriodlist.yaml';
                 $tsConfig .= "\n" . "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentPeriodlist.tsconfig'";
                 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
@@ -153,7 +153,7 @@ call_user_func(
                     "@import 'EXT:timer/Configuration/TypoScript/Periodlist/constants.typoscript'" . "\n"
                 );
             }
-            if (!empty($timerConfig['flagHolidaycalendar'])) {
+            if ((bool)$timerConfig['flagHolidaycalendar']) {
                 $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['timer_holidaycalendar'] = 'EXT:timer/Configuration/RTE/TimerHolidaycalendar.yaml';
                 $tsConfig .= "\n" . "@import 'EXT:timer/Configuration/TsConfig/Page/NewContentHolidaycalendar.tsconfig'";
                 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
@@ -170,8 +170,7 @@ call_user_func(
             ExtensionManagementUtility::addPageTSConfig($tsConfig);
 
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
-            if (!array_key_exists('frontend',
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
+            if (!array_key_exists('frontend', $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = VariableFrontend::class;
             }
         }

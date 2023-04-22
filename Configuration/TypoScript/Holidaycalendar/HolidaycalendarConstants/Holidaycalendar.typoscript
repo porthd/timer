@@ -2,7 +2,7 @@
 contentElement.tx_timer_holidaycalendar {
     pathSlotNumber {
         # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_holidaycalendar.const.pathesFor.libFLuidContent
-        fluidContent = 351
+        contentElement = 351
         # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_holidaycalendar.const.pathesFor.libContentElement
         contentElement = 351
     }
@@ -16,5 +16,4 @@ contentElement.tx_timer_holidaycalendar {
         partialRootPath = EXT:timer/Resources/Private/Partials/Content/
         layoutRootPath = EXT:timer/Resources/Private/Layouts/
     }
-
 }

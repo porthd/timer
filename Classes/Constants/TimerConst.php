@@ -104,4 +104,9 @@ class TimerConst
     public const DEFAULT_FLATTEN_KEYS_LIST = ['data', 'general', 'timer', 'sDEF', 'lDEF', 'vDEF',];
 
     public const LIST_SEASON_OF_YEAR = ['spring', 'summer', 'autumn', 'winter'];
+
+    public const TCA_ITEMS_LABEL = 'label';
+    public const TCA_ITEMS_VALUE = 'value';
+    public const TCA_ITEMS = 'items';
+
 }

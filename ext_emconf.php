@@ -29,20 +29,18 @@
  * "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF['timer'] = [
+$EM_CONF[$_EXTKEY] = [
     'title' => 'Framework for timer',
     'description' => 'The extension allow the usage of periodical timer for files, content-elements, pages and own content-elements. It can be extended by own timing-definitions i.e. fullmoontimer. The extension provide a viewhelper and a sheduler for the controllking of timemanagement. It contain a simple modell for event-presentation.',
     'category' => 'frontend',
     'author' => 'Dr. Dieter Porth',
     'author_email' => 'info@mobger.de',
     'state' => 'beta',
-    'uploadfolder' => 0,
-    'createDirs' => '',
-    'clearCacheOnLoad' => 0,
-    'version' => '11.2.7',
+    'version' => '12.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-11.5.99',
+            'typo3' => '11.5.0-12.4.99',
+            'php' => '7.4.0-8.2.99',
         ],
         'conflicts' => [],
         'suggests' => [],

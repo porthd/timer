@@ -140,7 +140,7 @@ class SortListQueryProcessor implements DataProcessorInterface
         $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'sortedrecords');
 
         // get recordlist from former processed datas
-        $imageList = $processedData[$fieldName];
+        $periodTimerDefList = $processedData[$fieldName];
 
         /** @var LoopLimiter $loopLimiter */
         $loopLimiter = new LoopLimiter();
@@ -149,7 +149,7 @@ class SortListQueryProcessor implements DataProcessorInterface
         ListOfEventsService::getListRestrictions($cObj, $processorConfiguration, $loopLimiter, $timerEventZone);
 
         $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
-            $imageList,
+            $periodTimerDefList,
             $timerEventZone,
             $loopLimiter
         );

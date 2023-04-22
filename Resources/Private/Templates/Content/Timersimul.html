@@ -312,7 +312,9 @@
                 <li>
                     <timer:format.jewishDate format="%d. %B %Y">1600000000</timer:format.jewishDate>
                     <br/>
-                    <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime"/>
+                    <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime"
+                                 extensionName="timer"
+                    />
                 </li>
                 <li> {timer:format.jewishDate(date: '@1600000000')}</li>
                 <li> {timer:format.jewishDate(format:'Y M d',date: '@1600000000')}</li>

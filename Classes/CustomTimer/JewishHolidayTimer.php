@@ -26,6 +26,7 @@ use DateInterval;
 use DateTime;
 use Exception;
 use Porthd\Timer\Constants\JewishHolidayConst;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -104,8 +105,8 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerJewishHoliday.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerJewishHoliday.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -198,7 +199,7 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     protected function validateNamedDateMidnight(array $params = []): bool
     {
         $key = (
-            array_key_exists(self::ARG_NAMED_DATE_MIDNIGHT, $params) ?
+        array_key_exists(self::ARG_NAMED_DATE_MIDNIGHT, $params) ?
             $params[self::ARG_NAMED_DATE_MIDNIGHT] :
             self::ARG_NAMED_DATE_MIDNIGHT_DEFAULT
         );
@@ -241,8 +242,8 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -325,7 +326,7 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
             $testRanges = $this->calcDefinedRangesByStartDateTime($refDate, $params);
             if (empty($testRanges)) {
                 throw new TimerException(
-                    'Unexpected Error: The $testRanges in the method `'.__CLASS__.'nextActive` are empty. '.
+                    'Unexpected Error: The $testRanges in the method `' . __CLASS__ . 'nextActive` are empty. ' .
                     'Please make a screenshot and inform the webmaster.',
                     1672424857
                 );
@@ -370,7 +371,7 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
             );
             if (empty($testRanges)) {
                 throw new TimerException(
-                    'Unexpected Error: The $testRanges in the method `'.__CLASS__.'prevActive` are empty. '.
+                    'Unexpected Error: The $testRanges in the method `' . __CLASS__ . 'prevActive` are empty. ' .
                     'Please make a screenshot and inform the webmaster.',
                     1672424973
                 );
@@ -399,7 +400,7 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
     {
         $relToDateMin = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );

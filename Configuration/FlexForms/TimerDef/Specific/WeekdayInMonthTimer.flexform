@@ -147,11 +147,12 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerWeekdayInMonth.field.startTimeSeconds
                     </label>
                     <config>
-                        <type>input</type>
-                        <renderType>inputDateTime</renderType>
-                        <size>24</size>
-                        <eval>time</eval>
-                        <default>43200</default>
+                        <type>datetime</type>
+                        <readOnly>0</readOnly>
+                        <default>0</default>
+                        <dbType>time</dbType>
+                        <format>time</format>
+                        <nullable>1</nullable>
                     </config>
                 </TCEforms>
             </startTimeSeconds>

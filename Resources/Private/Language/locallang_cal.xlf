@@ -90,6 +90,14 @@
 				<source>easter monday</source>
 				<target>Ostermontag</target>
 			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.orthoEaster">
+				<source>Easter</source>
+				<target>Ostern</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.orthoEasterMonday">
+				<source>easter monday</source>
+				<target>Ostermontag</target>
+			</trans-unit>
 			<trans-unit id="calendarDate.hist.greg.stupidity">
 				<source>World Stupid Day</source>
 				<target>Welttag der Dummheit</target>
@@ -133,6 +141,14 @@
 			<trans-unit id="calendarDate.christ.greg.pentecostmonday">
 				<source>White Monday</source>
 				<target>Pfingstmontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.julian.orthoPentecost">
+				<source>Pentecost (orthodox)</source>
+				<target>Pfingsten (orthodox)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.julian.orthoPentecostMonday">
+				<source>White Monday (orthodox)</source>
+				<target>Pfingstmontag (orthodox)</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.happycadaver">
 				<source>Corpus Christi</source>
@@ -473,8 +489,8 @@
 				<target>Mauritius: Neujahr Zweiter Tag</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.hist.greg.liBertoldsDay">
-				<source>Bertolds day</source>
-				<target>Bertoldstag</target>
+				<source>Bertolds day/second new year day</source>
+				<target>Bertoldstag/zweiter Neujahrstag</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.cult.greg.mcSainteDevota">
 				<source>Monaco:Sainte Devota (Patron of Monaco)</source>
@@ -1695,6 +1711,74 @@
 			<trans-unit id="calendarDate.cult.greg.noConstitutionDay">
 				<source>Constitution Day</source>
 				<target>Tag der Verfassung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.roSanktAndreas">
+				<source>Saint Andrew's Day</source>
+				<target>Tag des heiligen Andreas</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.roNationalHoliday">
+				<source>Romanian National Day</source>
+				<target>rumänischer Nationalfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.jul.christmas">
+				<source>Christmas (Orthodox)</source>
+				<target>Weihnachten (orthodox)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruThirdNewYear">
+				<source>Third New Year's Day</source>
+				<target>Dritter Neujahrstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruForthNewYear">
+				<source>Fourth New Year's Day</source>
+				<target>Vierter Neujahrstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruFifthNewYear">
+				<source>Fifth New Year's Day</source>
+				<target>Fünfter Neujahrstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwNationalHeroDay">
+				<source>Rwanda: National Heroes Day</source>
+				<target>Ruanda: Nationaler Heldentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruDayOfDefendingOfNation">
+				<source>Russia: Defender of the Fatherland Day</source>
+				<target>Russland: Tag des Verteidigers des Vaterlandes</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwGenocideAgainstTheTutsiMemorialDay">
+				<source>Rwanda: Remembrance Day for the Genocide of the Tutsis</source>
+				<target>Ruanda: Gendenktag zum Genozid an den Tutsis</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mdVictorySecWorldWar">
+				<source>Victory Day (Moldova)</source>
+				<target>Tag des Sieges (Moldavien)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruDayOfRussia">
+				<source>Day of Russia</source>
+				<target>Tag Russlands</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwIndependenceDay">
+				<source>Rwanda: Independence Day</source>
+				<target>Ruanda: Tag der Unabhängigkeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwLiberationDay">
+				<source>Rwanda: Liberation Day</source>
+				<target>Ruanda: Tag der Befreiung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwUmuganuraDay">
+				<source>Rwanda: Umuganura Day</source>
+				<target>Ruanda: Umuganura Tag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mdIndependenceDay">
+				<source>Moldova: Independence Day</source>
+				<target>Moldavien: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mdNationalLanguageDay">
+				<source>Moldova: National Languages Day</source>
+				<target>Moldavien: Nationaler Sprachen Tag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruDayOfTheUnityOfThePeople">
+				<source>Russia: People's Unity Day</source>
+				<target>Russland: Tag der Einheit des Volkes</target>
 			</trans-unit>
 		</body>
 	</file>

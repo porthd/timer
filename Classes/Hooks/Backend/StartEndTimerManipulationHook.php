@@ -26,6 +26,7 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -68,7 +69,7 @@ class StartEndTimerManipulationHook
                     'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.message',
                     TimerConst::EXTENSION_NAME
                 ),
-                AbstractMessage::INFO,
+                ContextualFeedbackSeverity::INFO,
                 true
             );
             /** @var FlashMessageService $flashMessageService */

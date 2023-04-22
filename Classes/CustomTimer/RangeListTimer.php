@@ -138,8 +138,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerRangeList.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerRangeList.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -174,8 +174,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -183,7 +183,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * The method test, if the parameter in the yaml for the periodlist are okay
      * remark: This method must not be tested, if the sub-methods are valid.
      *
-     * The method will implicitly called in `readRangeListFromYamlFile(array $params, $key [=self::ARG_YAML_FORBIDDEN_FILE_PATH, self::ARG_YAML_ACTIVE_FILE_PATH]): array`
+     * The method will implicitly called in `readRangeListFromFileOrUrl(array $params, $key [=self::ARG_YAML_FORBIDDEN_FILE_PATH, self::ARG_YAML_ACTIVE_FILE_PATH]): array`
      *
      * @param array<mixed> $yamlConfig
      * @param string $pathOfYamlFile
@@ -224,12 +224,12 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             $flag = $flag && ((!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
                     (!empty($item[self::YAML_LIST_ITEM_DESCRIPTION])));
             $flag = $flag && (
-                (!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
-                (
-                    (is_array($item[self::YAML_LIST_ITEM_PARAMS])) &&
-                    (!empty($item[self::YAML_LIST_ITEM_PARAMS]))
-                )
-            );
+                    (!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
+                    (
+                        (is_array($item[self::YAML_LIST_ITEM_PARAMS])) &&
+                        (!empty($item[self::YAML_LIST_ITEM_PARAMS]))
+                    )
+                );
             if (!$flag) {
                 throw new TimerException(
                     'The optional attributes `' . self::YAML_LIST_ITEM_TITLE . '`, `' . self::YAML_LIST_ITEM_DESCRIPTION .
@@ -308,9 +308,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $flag = true;
         foreach ([self::ARG_YAML_ACTIVE_FILE_PATH, self::ARG_YAML_FORBIDDEN_FILE_PATH] as $paramKey) {
             $filePath = (
-                array_key_exists($paramKey, $params) ?
-                    $params[$paramKey] :
-                    ''
+            array_key_exists($paramKey, $params) ?
+                $params[$paramKey] :
+                ''
             );
             if (!empty($filePath)) {
                 if (strpos($filePath, self::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
@@ -344,9 +344,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $flag = true;
         foreach ([self::ARG_DATABASE_ACTIVE_RANGE_LIST, self::ARG_DATABASE_FORBIDDEN_RANGE_LIST] as $paramKey) {
             $commaList = (
-                array_key_exists($paramKey, $params) ?
-                    $params[$paramKey] :
-                    ''
+            array_key_exists($paramKey, $params) ?
+                $params[$paramKey] :
+                ''
             );
             if (!empty($commaList)) {
                 $flag = $flag && (preg_match('/[^0-9, ]/', $commaList) === 0);
@@ -383,7 +383,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         }
 
 
-        $yamlActiveConfig = $this->readRangeListFromYamlFile(
+        $yamlActiveConfig = $this->readRangeListFromFileOrUrl(
             $this->yamlFileLoader,
             $params,
             self::ARG_YAML_ACTIVE_FILE_PATH
@@ -408,7 +408,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         );
         if ($flag) {
             // test the restriction for active-cases
-            $yamlForbiddenConfig = $this->readRangeListFromYamlFile(
+            $yamlForbiddenConfig = $this->readRangeListFromFileOrUrl(
                 $this->yamlFileLoader,
                 $params,
                 self::ARG_YAML_FORBIDDEN_FILE_PATH
@@ -480,9 +480,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $this->loopRecursiveLimiter = (int)(
-            (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
-                $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
-                self::MAX_TIME_LIMIT_MERGE_COUNT
+        (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
+            $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
+            self::MAX_TIME_LIMIT_MERGE_COUNT
         );
         return $this->validateUltimateRangeForNextRange(
             $this->nextActiveRecursive(
@@ -1308,9 +1308,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $loopRecursiveLimiter = (
-            (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
-                $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
-                self::MAX_TIME_LIMIT_MERGE_COUNT
+        (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
+            $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
+            self::MAX_TIME_LIMIT_MERGE_COUNT
         );
         return $this->validateUltimateRangeForPrevRange(
             $this->prevActiveRecursive(
@@ -1533,11 +1533,12 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @return array<mixed>
      * @throws TimerException
      */
-    protected function readRangeListFromYamlFile(
+    protected function readRangeListFromFileOrUrl(
         YamlFileLoader $yamlFileLoader,
-        array $params,
-        string $key
-    ): array {
+        array          $params,
+        string         $key
+    ): array
+    {
         //        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
 
         if (empty($params[$key])) {
@@ -1863,7 +1864,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     protected function detectActiveAndForbiddenList(array $params): array
     {
-        $yamlFileActiveTimerList = $this->readRangeListFromYamlFile(
+        $yamlFileActiveTimerList = $this->readRangeListFromFileOrUrl(
             $this->yamlFileLoader,
             $params,
             self::ARG_YAML_ACTIVE_FILE_PATH
@@ -1871,7 +1872,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $databaseActiveTimerList = $this->readRangeListFromDatabase($params, self::ARG_DATABASE_ACTIVE_RANGE_LIST);
         $activeTimerList = array_merge($yamlFileActiveTimerList, $databaseActiveTimerList);
 
-        $yamlForbiddenTimerList = $this->readRangeListFromYamlFile(
+        $yamlForbiddenTimerList = $this->readRangeListFromFileOrUrl(
             $this->yamlFileLoader,
             $params,
             self::ARG_YAML_FORBIDDEN_FILE_PATH
@@ -2009,7 +2010,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $flagParamFailure = (!array_key_exists(self::YAML_LIST_ITEM_SELECTOR, $singleTimerParams)) ||
             (!array_key_exists(self::YAML_LIST_ITEM_PARAMS, $singleTimerParams)) ||
             (
-                !$timerList->validate(
+            !$timerList->validate(
                 $singleTimerParams[self::YAML_LIST_ITEM_SELECTOR],
                 $singleTimerParams[self::YAML_LIST_ITEM_PARAMS]
             )

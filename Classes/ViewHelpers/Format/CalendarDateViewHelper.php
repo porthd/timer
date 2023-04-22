@@ -20,7 +20,7 @@ namespace Porthd\Timer\ViewHelpers\Format;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -262,8 +262,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
             $locale,
             ConvertDateUtility::INTL_DATE_FORMATTER_DEFAULT_PATTERN
         );
-        $gregorianDateTime = DateTime::createFromFormat(ConvertDateUtility::PHP_DATE_FORMATTER_DEFAULT_PATTERN,
-            $gregorianResult);
+        $gregorianDateTime = DateTime::createFromFormat(ConvertDateUtility::PHP_DATE_FORMATTER_DEFAULT_PATTERN, $gregorianResult);
         return self::switchFormatAndConvertDateToCalendar(
             $flagFormat,
             $locale,
@@ -277,7 +276,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
      * @param array<mixed> $arguments
      * @param null|string|int|DateTimeInterface $date
      * @return array<mixed>
-     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @throws AspectNotFoundException
      */
     private static function readArguments(array $arguments, $date): array
     {

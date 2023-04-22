@@ -22,6 +22,7 @@ namespace Porthd\Timer\Hooks;
  ***************************************************************/
 
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\Utilities\TcaUtility;
 
 class FlexFormParsingHook
@@ -36,7 +37,7 @@ class FlexFormParsingHook
         if (($identifierArray['fieldName'] === TimerConst::TIMER_FIELD_FLEX_ACTIVE) && ($identifierArray['type'] === 'tca')) {
             $list = TcaUtility::mergeNameFlexformArray();
             if (empty($identifierArray['dataStructureKey'])) {
-                $identifierArray['dataStructureKey'] = 'default';
+                $identifierArray['dataStructureKey'] = DefaultTimer::TIMER_NAME;
             }
             if (in_array($identifierArray['dataStructureKey'], $list)) {
                 $result = $list[$identifierArray['dataStructureKey']];

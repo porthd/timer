@@ -35,7 +35,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class TcaUtility
 {
-    protected const STANDARD_TIMEZONE = 'UTC';
     /**
      * selected list of timezone. This list may contain a reduced list of allowed timezones for this extension.
      * The list should be needed for validation.
@@ -94,7 +93,7 @@ class TcaUtility
      */
     public static function listBaseZoneItemsFlexform($params, $conf): array
     {
-        $params['items'] = [];
+        $params[TimerConst::TCA_ITEMS] = [];
         $count = 0;
         foreach (self::listBaseZoneItems() as $item) {
             $langKey = $item;
@@ -108,14 +107,20 @@ class TcaUtility
             );
             if (!empty($title)) {
                 if (!empty($key)) {
-                    $params['items']['__' . $key] = [$title, $item];
+                    $params[TimerConst::TCA_ITEMS]['__' . $key] = [
+                        TimerConst::TCA_ITEMS_LABEL => $title,
+                        TimerConst::TCA_ITEMS_VALUE => $item,
+                    ];
                 } else {
-                    $params['items']['_0' . $count] = [$title, $item];
+                    $params[TimerConst::TCA_ITEMS]['_0' . $count] = [
+                        TimerConst::TCA_ITEMS_LABEL => $title,
+                        TimerConst::TCA_ITEMS_VALUE => $item,
+                    ];
                     $count++;
                 }
             }
         }
-        ksort($params['items']);
+        ksort($params[TimerConst::TCA_ITEMS]);
         return $params;
     }
 
@@ -138,7 +143,7 @@ class TcaUtility
         if (!empty($listOfTimezones)) {
             self::$listOfTimezones = $listOfTimezones;
         } else {
-            self::$listOfTimezones = [self::STANDARD_TIMEZONE,];
+            self::$listOfTimezones = [TimerConst::INTERNAL_TIMEZONE,];
         }
     }
 

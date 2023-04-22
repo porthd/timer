@@ -20,8 +20,7 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-
+use TYPO3\CMS\Core\Context\Context;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
@@ -46,7 +45,7 @@ class DailyTimerTest extends TestCase
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
-        $GLOBALS = [];
+
         $GLOBALS['TYPO3_CONF_VARS'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
@@ -56,7 +55,9 @@ class DailyTimerTest extends TestCase
 
     protected function resolveGlobalsTypo3Array()
     {
-        unset($GLOBALS);
+        // unset($GLOBALS);
+        $GLOBALS['TYPO3_CONF_VARS'] = [];
+        $GLOBALS['EXEC_TIME'] = 0;
     }
 
     protected function setUp(): void
@@ -98,7 +99,7 @@ class DailyTimerTest extends TestCase
      */
     public function getSelectorItemForCorrectOutput()
     {
-        $result = $this->subject->getSelectorItem();
+        $result = $this->subject::getSelectorItem();
         $this->assertIsArray(
             $result,
             'The result must be an array.'

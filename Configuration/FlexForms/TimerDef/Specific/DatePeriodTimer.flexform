@@ -24,13 +24,11 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDatePeriod.field.startDateTime
                     </label>
                     <config>
-                        <type>input</type>
-                        <renderType>inputDateTime</renderType>
+                        <type>datetime</type>
+                        <readOnly>0</readOnly>
+                        <default>1970-01-01T23:01:00</default>
                         <dbType>datetime</dbType>
-                        <size>24</size>
-                        <max>24</max>
-                        <eval>datetime,required</eval>
-                        <default>1970-01-01 23:01:00</default>
+                        <nullable>1</nullable>
                     </config>
                 </TCEforms>
             </startDateTime>

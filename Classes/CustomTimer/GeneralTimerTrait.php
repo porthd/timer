@@ -8,6 +8,7 @@ use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\TcaUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 /***************************************************************
  *
@@ -260,4 +261,31 @@ trait GeneralTimerTrait
         }
         return clone $prevRange;
     }
+
+    /**
+     * tested
+     *
+     * @param DateTime $dateLikeEventZone
+     * @param array<mixed> $params
+     * @return bool
+     */
+    protected function generalIsAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    {
+        // change in the flex-formdefinition in version-change 11 -> 12
+        if (MathUtility::canBeInterpretedAsInteger($params[self::ARG_ULTIMATE_RANGE_BEGINN])) {
+            $myDate = new DateTime('@' . $params[self::ARG_ULTIMATE_RANGE_BEGINN]);
+            $ultimateBegin = $myDate->format(TimerInterface::TIMER_FORMAT_DATETIME);
+        } else {
+            $ultimateBegin = $params[self::ARG_ULTIMATE_RANGE_BEGINN];
+        }
+        if (MathUtility::canBeInterpretedAsInteger($params[self::ARG_ULTIMATE_RANGE_END])) {
+            $myDate = new DateTime('@' . $params[self::ARG_ULTIMATE_RANGE_END]);
+            $ultimateBegin = $myDate->format(TimerInterface::TIMER_FORMAT_DATETIME);
+        } else {
+            $ultimateEnd = $params[self::ARG_ULTIMATE_RANGE_END];
+        }
+        return ($ultimateBegin <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
+            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $ultimateEnd);
+    }
+
 }

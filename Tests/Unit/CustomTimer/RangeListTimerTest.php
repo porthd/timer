@@ -21,6 +21,9 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use DateInterval;
 use DateTime;
 
@@ -59,7 +62,7 @@ class RangeListTimerTest extends TestCase
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
-        $GLOBALS = [];
+
         $GLOBALS['TYPO3_CONF_VARS'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
@@ -88,8 +91,11 @@ class RangeListTimerTest extends TestCase
 
     protected function resolveGlobalsTypo3Array()
     {
-        unset($GLOBALS);
+        // unset($GLOBALS);
+        $GLOBALS['TYPO3_CONF_VARS'] = [];
+        $GLOBALS['EXEC_TIME'] = 0;
     }
+
     protected function initializeEnvoiroment(): void
     {
         $testToProjectPath = getenv('TYPO3_TEST_TEST_TO_PROJECT_PATH') ?: '../../../../../';
@@ -118,9 +124,9 @@ class RangeListTimerTest extends TestCase
     {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
         if (!array_key_exists('frontend', $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class;
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = VariableFrontend::class;
         }
-        $myCacheInstance = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+        $myCacheInstance = GeneralUtility::makeInstance(CacheManager::class);
         $myCacheInstance->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
     }
 
@@ -135,7 +141,7 @@ class RangeListTimerTest extends TestCase
         $listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
         $yamlFileLoader = new YamlFileLoader();
         $timerList = new ListOfTimerService();
-        $this->subject = GeneralUtility::makeInstance(RangeListTimer::class, ...[null,$listingRepository,$yamlFileLoader,$timerList]);
+        $this->subject = GeneralUtility::makeInstance(RangeListTimer::class, ...[null, $listingRepository, $yamlFileLoader, $timerList]);
         $projectPath = '/var/www/html';
         Environment::initialize(
             new ApplicationContext('Testing'),
@@ -183,7 +189,7 @@ class RangeListTimerTest extends TestCase
      */
     public function getSelectorItem()
     {
-        $result = $this->subject->getSelectorItem();
+        $result = $this->subject::getSelectorItem();
         $this->assertIsArray(
             $result,
             'The result must be an array.'
@@ -242,7 +248,7 @@ class RangeListTimerTest extends TestCase
                     $filePath,
                     strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                 );
-            $this->assertTrue((false), 'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
+            $this->assertTrue((false), 'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
@@ -412,11 +418,11 @@ class RangeListTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false], [false,true],['false',true], [new Datetime(), false],
-                     ['hallo',false],
-                     ['0',true],[0.0,true],["0.0",false],
-                     ['true',true],['1',true],[1,true],
-                     [1.0,true],['1.0',false],] as $value) {
+                     [null, false], [false, true], ['false', true], [new Datetime(), false],
+                     ['hallo', false],
+                     ['0', true], [0.0, true], ["0.0", false],
+                     ['true', true], ['1', true], [1, true],
+                     [1.0, true], ['1.0', false],] as $value) {
             $result[] = [
                 'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [

@@ -21,6 +21,10 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Core\Bootstrap;
 use DateInterval;
 use DateTime;
 
@@ -59,7 +63,7 @@ class PeriodListTimerTest extends TestCase
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
-        $GLOBALS = [];
+
         $GLOBALS['TYPO3_CONF_VARS'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] = [];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['timer'] = [];
@@ -88,7 +92,9 @@ class PeriodListTimerTest extends TestCase
 
     protected function resolveGlobalsTypo3Array()
     {
-        unset($GLOBALS);
+        // unset($GLOBALS);
+        $GLOBALS['TYPO3_CONF_VARS'] = [];
+        $GLOBALS['EXEC_TIME'] = 0;
     }
 
     protected function initializeEnvoiroment(): void
@@ -119,9 +125,9 @@ class PeriodListTimerTest extends TestCase
     {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
         if (!array_key_exists('frontend', $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class;
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = VariableFrontend::class;
         }
-        $myCacheInstance = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+        $myCacheInstance = GeneralUtility::makeInstance(CacheManager::class);
         $myCacheInstance->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
     }
 
@@ -173,7 +179,7 @@ class PeriodListTimerTest extends TestCase
      */
     public function getSelectorItem()
     {
-        $result = $this->subject->getSelectorItem();
+        $result = $this->subject::getSelectorItem();
         $this->assertIsArray(
             $result,
             'The result must be an array.'
@@ -505,14 +511,14 @@ class PeriodListTimerTest extends TestCase
     public function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
-            'yamlPeriodFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/', )),
+            'yamlPeriodFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/',)),
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/', )),
-            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/', )),
-            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/', )),
-            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/', )),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
         ];
         $result = [];
         // variation of obsolete parameter
@@ -684,14 +690,14 @@ class PeriodListTimerTest extends TestCase
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
         $rest = [
-            'yamlPeriodFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/', )),
+            'yamlPeriodFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/',)),
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/', )),
-            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/', )),
-            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/', )),
-            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/', )),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
         ];
 
         $result = [];
@@ -770,14 +776,14 @@ class PeriodListTimerTest extends TestCase
         ];
         // pathes relative to rootpage
         $rest = [
-            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFilePath' => __DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/', )),
-            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/', )),
-            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/', )),
-            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/', )),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
         ];
 
 //                -
@@ -852,9 +858,9 @@ class PeriodListTimerTest extends TestCase
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-            $coreCache = \TYPO3\CMS\Core\Core\Bootstrap::createCache('core', false);
-            $packageCache = \TYPO3\CMS\Core\Core\Bootstrap::createPackageCache($coreCache);
-            $packageManager = \TYPO3\CMS\Core\Core\Bootstrap::createPackageManager(
+            $coreCache = Bootstrap::createCache('core', false);
+            $packageCache = Bootstrap::createPackageCache($coreCache);
+            $packageManager = Bootstrap::createPackageManager(
                 FailsafePackageManager::class,
                 $packageCache
             );
@@ -883,14 +889,14 @@ class PeriodListTimerTest extends TestCase
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
         $rest = [
-            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFilePath' => __DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/', )),
-            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/', )),
-            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/', )),
-            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/', )),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
         ];
 
         $result = [];
@@ -924,19 +930,19 @@ class PeriodListTimerTest extends TestCase
 //            zone: 'Europe/Berlin'
 
         foreach ([
-                     ['date' => '2022-07-13 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
-                     ['date' => '2022-07-14 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
-                     ['date' => '2022-07-15 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
-                     ['date' => '2022-08-24 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
-                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
-                     ['date' => '2022-10-16 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
-                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
-                     ['date' => '2022-10-17 00:01:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
-                     ['date' => '2022-10-18 00:00:01', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
+                     ['date' => '2022-07-13 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+                     ['date' => '2022-07-14 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+                     ['date' => '2022-07-15 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+                     ['date' => '2022-08-24 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+                     ['date' => '2022-10-16 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
+                     ['date' => '2022-10-17 00:01:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
+                     ['date' => '2022-10-18 00:00:01', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
                  ] as $item
         ) {
             $result[] = [
-                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`'.$item['begin'].'`, `'.$item['end'].'`].',
+                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].',
                 'expects' => [
                     'result' => [
                         'beginning' => $item['begin'],
@@ -992,14 +998,14 @@ class PeriodListTimerTest extends TestCase
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
         $rest = [
-            'yamlPeriodFilePath' => __DIR__.'/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
+            'yamlPeriodFilePath' => __DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml',
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/', )),
-            'customCalendarJsFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/', )),
-            'calendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/', )),
-            'customCalendarCssFilePath' => '/..'.substr(realpath(__DIR__.'/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/', )),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
         ];
 
         $result = [];
@@ -1033,18 +1039,18 @@ class PeriodListTimerTest extends TestCase
 //            zone: 'Europe/Berlin'
 
         foreach ([
-                     ['date' => '2023-01-07 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59' ],
-                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
-                     ['date' => '2022-10-29 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
-                     ['date' => '2022-10-28 23:59:59', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
-                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
-                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59' ],
-                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59' ],
+                     ['date' => '2023-01-07 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
+                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+                     ['date' => '2022-10-29 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+                     ['date' => '2022-10-28 23:59:59', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
                  ] as $item
         ) {
             $result[] = [
-                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`'.$item['begin'].'`, `'.$item['end'].'`].'
-                . ' '. (empty($item['msg']) ? '' : $item['msg']),
+                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].'
+                    . ' ' . (empty($item['msg']) ? '' : $item['msg']),
                 'expects' => [
                     'result' => [
                         'beginning' => $item['begin'],

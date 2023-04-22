@@ -60,11 +60,10 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.field.ultimateBeginningTimer
                     </label>
                     <config>
-                        <type>input</type>
-                        <renderType>inputDateTime</renderType>
-                        <dbType>datetime</dbType>
-                        <eval>datetime</eval>
-                        <default>1753-01-01 00:00:00</default>
+                        <type>datetime</type>
+                        <readOnly>0</readOnly>
+                        <default>-2208992400</default>
+                        <nullable>0</nullable>
                     </config>
                 </TCEforms>
             </ultimateBeginningTimer>
@@ -74,11 +73,10 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.field.ultimateEndingTimer
                     </label>
                     <config>
-                        <type>input</type>
-                        <renderType>inputDateTime</renderType>
-                        <dbType>datetime</dbType>
-                        <eval>datetime</eval>
-                        <default>9999-12-31 23:59:59</default>
+                        <type>datetime</type>
+                        <readOnly>0</readOnly>
+                        <default>32535212340</default>
+                        <nullable>0</nullable>
                     </config>
                 </TCEforms>
             </ultimateEndingTimer>

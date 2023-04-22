@@ -422,7 +422,7 @@ class ConvertDateUtility
         foreach ($list as $part) {
             $toggle = false;
             $resultPart = '';
-            $charList = preg_split('//u', $part, null, PREG_SPLIT_NO_EMPTY);
+            $charList = preg_split('//u', $part, -1, PREG_SPLIT_NO_EMPTY);
             foreach ($charList as $char) {
                 if ($char === '%') {
                     $toggle = true;

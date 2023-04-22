@@ -20,7 +20,7 @@ namespace Porthd\Timer\DataProcessing;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
@@ -147,7 +147,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         }
         if (empty($holidayPath)) {
             throw new TimerException(
-                ' The yaml-list with the holidays is not found. Ther may be an error in the typoscript.  ' .
+                ' The yaml-list with the holidays is not found. There may be an error in the typoscript.  ' .
                 'Make a screenshot and inform the webmaster.',
                 1677394183
             );
@@ -270,7 +270,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
      * @param array $processorConfiguration
      * @param ContentObjectRenderer $cObj
      * @return stdClass
-     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @throws AspectNotFoundException
      */
     protected function getTimeRangeInformations(array $processorConfiguration, ContentObjectRenderer $cObj): stdClass
     {

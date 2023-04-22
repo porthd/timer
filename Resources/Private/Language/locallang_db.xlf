@@ -197,6 +197,10 @@
 				<source>simple list of dates</source>
 				<target>Einfache Liste mit Terminen</target>
 			</trans-unit>
+			<trans-unit id="tx_timer.tca.element.name.timerHolidaycalendar">
+				<source>international list of holidays</source>
+				<target>Internationale Liste mit Feiertagen</target>
+			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libFLuidContent">
 				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript
 					`lib.fluidContent`
@@ -227,6 +231,22 @@
 				</source>
 				<target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im
 					Typoscript `lib.contentElement`
+				</target>
+			</trans-unit>
+			<trans-unit id="newContentElement.tx_timer_holidaycalendar.const.pathesFor.libFLuidContent">
+				<source>key for pathes of `timer_holidaycalendar`: number for template-, partial- and layout-pathes in
+					the typoscript `lib.fluidContent`
+				</source>
+				<target>Schlüssel für Pfade von `timer_holidaycalendar`: Nummer für Template-, Partial- und Layout-Pfade
+					im Typoscript `lib.fluidContent`
+				</target>
+			</trans-unit>
+			<trans-unit id="newContentElement.tx_timer_holidaycalendar.const.pathesFor.libContentElement">
+				<source>key for pathes of `timer_holidaycalendar`: number for template-, partial- and layout-pathes in
+					the typoscript `lib.contentElement`
+				</source>
+				<target>Schlüssel für Pfade von `timer_holidaycalendar`: Nummer für Template-, Partial- und Layout-Pfade
+					im Typoscript `lib.contentElement`
 				</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_timersimul.pages.forList">

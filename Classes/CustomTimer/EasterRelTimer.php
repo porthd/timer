@@ -26,6 +26,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
@@ -129,8 +130,8 @@ class EasterRelTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerEasterRel.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerEasterRel.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -270,8 +271,8 @@ class EasterRelTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -346,7 +347,7 @@ class EasterRelTimer implements TimerInterface
 
 
         $relToDateMin = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
@@ -405,7 +406,7 @@ class EasterRelTimer implements TimerInterface
         $result->failAllActive($dateLikeEventZone);
 
         $relToDateMin = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
@@ -457,7 +458,7 @@ class EasterRelTimer implements TimerInterface
     protected function detectCalendar($params = []): int
     {
         $calendar = (
-            (array_key_exists(self::ARG_CALENDAR_USE, $params)) ?
+        (array_key_exists(self::ARG_CALENDAR_USE, $params)) ?
             ($params[self::ARG_CALENDAR_USE]) :
             0
         );
@@ -567,7 +568,7 @@ class EasterRelTimer implements TimerInterface
     protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
     {
         $relToDateMin = (int)(
-            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );

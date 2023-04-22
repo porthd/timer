@@ -24,6 +24,7 @@ namespace Porthd\Timer\CustomTimer;
 
 use DateInterval;
 use DateTime;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
@@ -33,8 +34,8 @@ class DefaultTimer implements TimerInterface
     public const TIMER_NAME = 'default';  // must named default,otherwise TYPO3 will not recognize this default
 
     public const TIMER_SELECTOR_DEFAULT = [
-        '',
-        'default',
+        TimerConst::TCA_ITEMS_LABEL => '',
+        TimerConst::TCA_ITEMS_VALUE => 'default',
     ];
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     public const TIMER_FLEXFORM_ITEM = [
@@ -75,8 +76,8 @@ class DefaultTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerDefault.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerDefault.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 

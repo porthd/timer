@@ -159,7 +159,7 @@ class DateTimeUtility
      */
     public static function getCurrentTime()
     {
-        return $GLOBALS['EXEC_TIME'] ?: time();
+        return GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ?: time();
     }
 
     /**

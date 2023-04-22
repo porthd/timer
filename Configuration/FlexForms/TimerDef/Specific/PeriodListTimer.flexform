@@ -68,8 +68,7 @@
                             </numIndex>
                         </foreign_types>
                         <foreign_match_fields>
-                            <fieldname>tx_timer_timer
-                            </fieldname> <!-- This is wrong, but it works. So i don't change it. CAUTION!! Replace "fal" with the variable name of this field! -->
+                            <fieldname>tx_timer_timer</fieldname> <!-- This is wrong, but it works. So i don't change it. CAUTION!! Replace "fal" with the variable name of this field! -->
                         </foreign_match_fields>
                         <appearance type="array">
                             <newRecordLinkAddTitle>1</newRecordLinkAddTitle>
@@ -115,65 +114,6 @@
                     </config>
                 </TCEforms>
             </yamlPeriodFalRelation>
-            <calendarJsFilePath>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarJsFilePath.label
-                    </label>
-                    <description>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarJsFilePath.description
-                    </description>>
-                    <config>
-                        <type>input</type>
-                        <size>30</size>
-                        <eval>trim</eval>
-                        <default>EXT:timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js</default>
-                    </config>
-                </TCEforms>
-            </calendarJsFilePath>
-            <customCalendarJsFilePath>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.customCalendarJsFilePath
-                    </label>
-                    <config>
-                        <type>input</type>
-                        <size>30</size>
-                        <eval>trim</eval>
-                        <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.js</default>
-                    </config>
-
-                </TCEforms>
-            </customCalendarJsFilePath>
-            <calendarCssFilePath>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarCssFilePath.label
-                    </label>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.calendarCssFilePath.description
-                    </label>
-                    <config>
-                        <type>input</type>
-                        <size>30</size>
-                        <eval>trim</eval>
-                        <default>EXT:timer/Resources/Public/Javascript/caleandar-master/css/theme1.css</default>
-                    </config>
-                </TCEforms>
-            </calendarCssFilePath>
-            <customCalendarCssFilePath>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.periodListTimer.field.customCalendarCssFilePath
-                    </label>
-                    <config>
-                        <type>input</type>
-                        <size>30</size>
-                        <eval>trim</eval>
-                        <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.css</default>
-                    </config>
-                </TCEforms>
-            </customCalendarCssFilePath>
         </el>
     </ROOT>
 </T3DataStructure>

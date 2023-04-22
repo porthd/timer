@@ -354,7 +354,8 @@ class CustomTimerUtility
         switch ($infos['extension']) {
             case 'yaml':
             case 'yml':
-                $result = $yamlFileLoader->load($filePathNew);
+                $flags = YamlFileLoader::PROCESS_PLACEHOLDERS | YamlFileLoader::PROCESS_IMPORTS;
+                $result = $yamlFileLoader->load($filePathNew, $flags);
                 break;
             case 'csv':
                 $csvString = CsvYamlJsonMapperUtility::readCsvFile($filePathNew);

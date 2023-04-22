@@ -20,7 +20,7 @@ namespace Porthd\Timer\ViewHelpers;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -108,8 +108,7 @@ class ForCommaListViewHelper extends AbstractViewHelper
         $this->registerArgument('as', 'string', 'The name of the iteration variable', true);
         $this->registerArgument('key', 'string', 'Variable to assign array key to', false);
         $this->registerArgument('reverse', 'boolean', 'If TRUE, iterates in reverse', false, false);
-        $this->registerArgument('iteration', 'string',
-            'The name of the variable to store iteration information (index, cycle, isFirst, isLast, isEven, isOdd)');
+        $this->registerArgument('iteration', 'string', 'The name of the variable to store iteration information (index, cycle, isFirst, isLast, isEven, isOdd)');
     }
 
     /**
@@ -119,19 +118,15 @@ class ForCommaListViewHelper extends AbstractViewHelper
      * @return string
      * @throws ViewHelper\Exception
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ) {
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
         $templateVariableContainer = $renderingContext->getVariableProvider();
         $flagTrim = ((!empty($arguments['trim'])) ? true : false);
         if (!isset($arguments['each']) || empty($arguments['each'])) {
             return '';
         }
         if (!is_string($arguments['each'])) {
-            throw new ViewHelper\Exception('CommaListViewHelper only supports list, which are separated by a comma or an other limiter',
-                1678601258);
+            throw new Exception('CommaListViewHelper only supports list, which are separated by a comma or an other limiter', 1678601258);
         }
         if (!isset($arguments['limiter']) || empty($arguments['limiter'])) {
             $limiter = ',';

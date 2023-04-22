@@ -38,16 +38,13 @@ tt_content.timer_holidaycalendar {
                         intval = 1
                         wrap = |
                     }
-
                     prioriCalc = 1
                 }
-
                 # inclusive monthnumber,  if missing, then it is equal to current month
                 month = 1
                 # inclusive daynumber,  if missing, then it is equal to current day
                 day = 1
             }
-
             stop {
                 # second next year
                 year.stdWrap.cObject = TEXT
@@ -58,10 +55,8 @@ tt_content.timer_holidaycalendar {
                         intval = 1
                         wrap = |+2
                     }
-
                     prioriCalc = 1
                 }
-
                 # inclusive monthnumber,  if missing, then it is equal to startmonth
                 month = 1
                 # inclusive daynumber,  if missing, then it is equal to the startday
@@ -71,7 +66,6 @@ tt_content.timer_holidaycalendar {
                 # if `daybefore` is zero or if the value is missing, nothing will happen.
                 daybefore = 1
             }
-
             # the alias-file contain a list of alias-phrases, which are merged nondestructive to the `add` part of each related holiday-definition,  under the attribute `aliasDateRel`.
             # this parameterblock is optional
             # direct path, EXT:Path or URL to the file with the alias-definition
@@ -94,7 +88,6 @@ tt_content.timer_holidaycalendar {
                 pathFlexField = holidayFilePath
                 falFlexField = holidayFalRelation
             }
-
             # `timeAdd` define the minimal needed distance between two events of the same holiday or custom.
             # The syntax is defined by the PHP-dateInterval https://www.php.net/manual/en/dateinterval.construct.php
             # !!! Remark: The interval-definition must begin with a `P`. The char `T` divides in the interval
@@ -107,7 +100,6 @@ tt_content.timer_holidaycalendar {
             # name of output-variable
             as = holidayList
         }
-
         20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
         20 {
 
@@ -182,9 +174,7 @@ tt_content.timer_holidaycalendar {
                     #pretext =
                     #posttext =
                 }
-
             }
-
             mapping {
                 10 {
                     inField = cal.identifier
@@ -198,10 +188,7 @@ tt_content.timer_holidaycalendar {
                     inField = cal.tag
                     outField = calendarId
                 }
-
             }
-
-
             # outputformat has the values `array`,`json`, `yaml`
             # if the outputformat is unknown/undefined, `json` will be used by default
             outputFormat = json
@@ -215,7 +202,6 @@ tt_content.timer_holidaycalendar {
             as = holidaycalendarJson
 
         }
-
         30 = Porthd\Timer\DataProcessing\FlexToArrayProcessor
         30 {
             # regular if syntax
@@ -234,7 +220,6 @@ tt_content.timer_holidaycalendar {
             as = holidayflexlist
         }
     }
-
 }
 
 lib.holidaycalendar.main = TEXT

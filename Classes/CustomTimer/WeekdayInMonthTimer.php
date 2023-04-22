@@ -24,6 +24,7 @@ namespace Porthd\Timer\CustomTimer;
 
 use DateInterval;
 use DateTime;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -106,8 +107,8 @@ class WeekdayInMonthTimer implements TimerInterface
     public static function getSelectorItem(): array
     {
         return [
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerWeekdayInMonth.select.name',
-            self::TIMER_NAME,
+            TimerConst::TCA_ITEMS_LABEL => 'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:tca.txTimerSelector.txTimerWeekdayInMonth.select.name',
+            TimerConst::TCA_ITEMS_VALUE => self::TIMER_NAME,
         ];
     }
 
@@ -142,8 +143,8 @@ class WeekdayInMonthTimer implements TimerInterface
      */
     public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
-        return ($params[self::ARG_ULTIMATE_RANGE_BEGINN] <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
-            ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $params[self::ARG_ULTIMATE_RANGE_END]);
+        // use of the trait-function
+        return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
@@ -218,7 +219,7 @@ class WeekdayInMonthTimer implements TimerInterface
     protected function validateActiveMonth(array $params = []): bool
     {
         $value = (
-            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );
@@ -294,7 +295,7 @@ class WeekdayInMonthTimer implements TimerInterface
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);
         $allowedMonths = (int)(
-            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );
@@ -457,7 +458,7 @@ class WeekdayInMonthTimer implements TimerInterface
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);
         $allowedMonths = (int)(
-            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );
@@ -570,7 +571,7 @@ class WeekdayInMonthTimer implements TimerInterface
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);
         $allowedMonths = (int)(
-            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );

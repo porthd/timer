@@ -35,8 +35,7 @@
                                 <numIndex index="1">0</numIndex>
                             </numIndex>
                         </items>
-                        <itemsProcFunc>Porthd\Timer\Services\TcaService->selectCalendarByYamlFileFromExtConstants
-                        </itemsProcFunc>
+                        <itemsProcFunc>Porthd\Timer\Services\TcaService->selectCalendarByYamlFileFromExtConstants</itemsProcFunc>
                         <minitems>0</minitems>
                         <maxitems>1</maxitems>
                         <size>3</size>
@@ -347,8 +346,7 @@
                                 <numIndex index="1"></numIndex>
                             </numIndex>
                         </items>
-                        <itemsProcFunc>Porthd\Timer\Services\TcaService->selectOptionsForLocalesByPhpIntlExtension
-                        </itemsProcFunc>
+                        <itemsProcFunc>Porthd\Timer\Services\TcaService->selectOptionsForLocalesByPhpIntlExtension</itemsProcFunc>
                         <minitems>0</minitems>
                         <maxitems>1</maxitems>
                         <size>3</size>

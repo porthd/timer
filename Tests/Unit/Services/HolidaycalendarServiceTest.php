@@ -20,7 +20,9 @@ class HolidaycalendarServiceTest extends TestCase
 
     protected function resolveGlobalsTypo3Array()
     {
-        unset($GLOBALS);
+        // unset($GLOBALS);
+        $GLOBALS['TYPO3_CONF_VARS'] = [];
+        $GLOBALS['EXEC_TIME'] = 0;
     }
 
     protected function setUp(): void

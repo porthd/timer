@@ -4,7 +4,7 @@ use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-defined('TYPO3_MODE') || die();
+defined('TYPO3') || die();
 call_user_func(function () {
     $tmp_timer_columns = [
         'tx_timer_scheduler' => [
@@ -15,9 +15,9 @@ call_user_func(function () {
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
-                    ]
+                        'invertStateDisplay' => true,
+                        TimerConst::TCA_ITEMS_LABEL => '',
+                    ],
                 ],
                 'default' => false,
             ],
@@ -55,11 +55,11 @@ call_user_func(function () {
             'l10n_display' => 'defaultAsReadonly',
             'l10n_mode' => 'exclude',
             'config' => [
-                'default' => '0',
-                'eval' => 'datetime,int',
-                'renderType' => 'inputDateTime',
-                'type' => 'input',
-                'readOnly' => true,
+                'type' => 'datetime',
+                'readOnly' => 0,
+                'default' => 0,
+                'nullable' => true,
+                'dbType' => 'datetime',
             ],
         ],
         'endtime' => [
@@ -68,11 +68,11 @@ call_user_func(function () {
             'l10n_display' => 'defaultAsReadonly',
             'l10n_mode' => 'exclude',
             'config' => [
-                'default' => '0',
-                'eval' => 'datetime,int',
-                'renderType' => 'inputDateTime',
-                'type' => 'input',
-                'readOnly' => true,
+                'type' => 'datetime',
+                'readOnly' => 0,
+                'default' => 0,
+                'nullable' => true,
+                'dbType' => 'datetime',
             ],
         ],
     ];

@@ -29,6 +29,7 @@ use Porthd\Timer\Domain\Repository\GeneralRepository;
 use Porthd\Timer\Domain\Repository\TimerRepositoryInterface;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\ListOfTimerService;
+use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -153,8 +154,15 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             $this->dataHandler->setLogger($this->logger);
 
             $yamlFilePath = $this->getMyArgument($input);
-            $flags = YamlFileLoader::PROCESS_PLACEHOLDERS | YamlFileLoader::PROCESS_IMPORTS;
-            $yamlConfig = $this->yamlLoader->load($yamlFilePath, $flags);
+            if (empty($yamlFilePath)) {
+                throw new TimerException(
+                    ' The yaml-list with the holidays is not found. There may be an error in the typoscript.  ' .
+                    'Make a screenshot and inform the webmaster.',
+                    1677394183
+                );
+            }
+            $yamlConfig = CustomTimerUtility::readListFromFileOrUrl($yamlFilePath, $this->yamlLoader);
+
             // @todo Throw an error-message, if there was an table not successful (no changes)
             $flagSuccessTable = $this->updateTables($yamlConfig);
             $flagSuccessGeneral = array_reduce($flagSuccessTable, function ($carry, $item) {
