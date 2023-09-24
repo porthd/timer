@@ -18,9 +18,7 @@
 		}
 	],
 	"replace": {
-		"timer": "self.version",
 		"typo3-ter/timer": "self.version",
-		"porthd/timer": "self.version"
 	},
 	"require": {
 		"php": ">=8.1.0 <=8.2.99",
