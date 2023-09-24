@@ -1,4 +1,4 @@
-~~# Extension Timer - version 11.x
+# Extension Timer - version 12.x
 
 ## Preliminary remark
 

@@ -1971,26 +1971,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     }
 
     /**
-     * for testing approches
-     * easy to mock
-     */
-    /**
-     * @return string
-     */
-    protected function getExtentionPathByEnviroment(): string
-    {
-        return Environment::getExtensionsPath();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPublicPathByEnviroment(): string
-    {
-        return Environment::getPublicPath();
-    }
-
-    /**
      * @param array<mixed> $singleTimerParams
      * @param ListOfTimerService $timerList
      * @return bool

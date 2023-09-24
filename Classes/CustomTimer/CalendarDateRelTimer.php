@@ -40,11 +40,38 @@ class CalendarDateRelTimer implements TimerInterface
 
     public const TIMER_NAME = 'txTimerCalendarDateRel';
 
+    protected const ARG_NAMED_DATE_EASTER = 'easter';
+    protected const ARG_NAMED_DATE_ASCENSION_OF_CHRIST = 'ascension';
+    protected const ARG_NAMED_DATE_PENTECOST = 'pentecost';
+    protected const ARG_NAMED_DATE_FIRST_ADVENT = 'firstadvent';
+    protected const ARG_NAMED_DATE_CHRISTMAS = 'christmas';
+    protected const ARG_NAMED_DATE_ROSE_MONDAY = 'rosemonday';
+    protected const ARG_NAMED_DATE_GOOD_FRIDAY = 'goodfriday';
+    protected const ARG_NAMED_DATE_TOWL_DAY = 'towlday';
+    protected const ARG_NAMED_DATE_STUPID_DAY = 'stupidday';
+    protected const ARG_NAMED_DATE_NEW_YEAR = 'newyear';
+    protected const ARG_NAMED_DATE_SILVESTER = 'silvester';
+    protected const ARG_NAMED_DATE_LABOURDAY = 'labourday';
+    protected const ARG_NAMED_DATE_LIST = [
+        self::ARG_NAMED_DATE_EASTER,
+        self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST,
+        self::ARG_NAMED_DATE_PENTECOST,
+        self::ARG_NAMED_DATE_FIRST_ADVENT,
+        self::ARG_NAMED_DATE_CHRISTMAS,
+        self::ARG_NAMED_DATE_ROSE_MONDAY,
+        self::ARG_NAMED_DATE_GOOD_FRIDAY,
+        self::ARG_NAMED_DATE_TOWL_DAY,
+        self::ARG_NAMED_DATE_STUPID_DAY,
+        self::ARG_NAMED_DATE_NEW_YEAR,
+        self::ARG_NAMED_DATE_SILVESTER,
+        self::ARG_NAMED_DATE_LABOURDAY,
+    ];
 
     protected const ARG_NAMED_DATE_MIDNIGHT = 'namedDateMidnight';
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
     protected const ARG_REQ_REL_TO_MIN = -462240;
     protected const ARG_REQ_REL_TO_MAX = 462240;
+    protected const ARG_CALENDAR_USE = 'calendarUse';
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
     protected const ARG_REQ_DURMIN_MIN = -462240;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
@@ -237,8 +264,7 @@ class CalendarDateRelTimer implements TimerInterface
         if ((int)$params[self::ARG_NAMED_DATE_MIDNIGHT] !== 0) {
             return true;
         }
-        $flag = true;
-        $flag = $flag && (!empty($params[self::ARG_EVENT_TITLE]));
+        $flag = (!empty($params[self::ARG_EVENT_TITLE]));
         $flag = $flag && in_array($params[self::ARG_EVENT_CALENDAR], self::ARG_LIST_EVENT_CALENDAR);
         $flag = $flag && (!empty($params[self::ARG_EVENT_IDENT]));
         $flag = $flag && ($params[self::ARG_EVENT_DAY] >= 1) && ($params[self::ARG_EVENT_DAY] <= 32);

@@ -11,6 +11,7 @@ use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\TcaUtility;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
@@ -118,7 +119,7 @@ trait GeneralTimerTrait
 
     /**
      * @param TimerStartStopRange $nextRange
-     * @param array $params
+     * @param array<mixed> $params
      * @param DateTime $dateBelowNextActive
      * @return TimerStartStopRange
      */
@@ -191,7 +192,7 @@ trait GeneralTimerTrait
 
     /**
      * @param TimerStartStopRange $prevRange
-     * @param array $params
+     * @param array<mixed> $params
      * @param DateTime $dateAbovePrevActive
      * @return TimerStartStopRange
      * @throws TimerException
@@ -284,7 +285,7 @@ trait GeneralTimerTrait
         }
         if (MathUtility::canBeInterpretedAsInteger($params[self::ARG_ULTIMATE_RANGE_END])) {
             $myDate = new DateTime('@' . $params[self::ARG_ULTIMATE_RANGE_END]);
-            $ultimateBegin = $myDate->format(TimerInterface::TIMER_FORMAT_DATETIME);
+            $ultimateEnd = $myDate->format(TimerInterface::TIMER_FORMAT_DATETIME);
         } else {
             $ultimateEnd = $params[self::ARG_ULTIMATE_RANGE_END];
         }
@@ -344,6 +345,28 @@ trait GeneralTimerTrait
             return $flag;
         }
         return true;
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getPublicPathByEnviroment(): string
+    {
+        return Environment::getPublicPath();
+    }
+
+
+    /**
+     * for testing approches
+     * easy to mock
+     */
+    /**
+     * @return string
+     */
+    protected function getExtentionPathByEnviroment(): string
+    {
+        return Environment::getExtensionsPath();
     }
 
 }

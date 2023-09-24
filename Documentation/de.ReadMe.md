@@ -1,4 +1,4 @@
-# Extension Timer - Version 11.x
+# Extension Timer - Version 12.x
 
 ## Vorbemerkung
 
@@ -424,7 +424,6 @@ Die CSV-Datei lädt man per FTP auf dem Server hoch und gibt den Pfad zur
 CSV-Datei bei den Settings für die Extension-Konfigurationen an.
 Nach dem Löschen des Caches hat man dann die neue Liste im
 Timer `CalendarDateRelTimer` verfügbar.
-
 ##### unterstützte Feiertagsberechnungen (aktuell nicht funktionsfähig und nicht getestet 2023-02-25)
 
 Die Berechnug ist wie jedes menschengemachte System im Grundsatz einfach; aber

@@ -735,7 +735,10 @@ class HolidaycalendarServiceTest extends TestCase
             $method = self::getPrivateMethod($this->subject, 'getGregorianDateForMatarikiType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+                [$params['startDate'], $params['addYear']]);
+//            Coderefactoring by phpstan 20230923 old code
+//            $result = $method->invokeArgs($this->subject,
+//                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
 

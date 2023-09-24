@@ -85,10 +85,10 @@ class TcaUtility
      * DON`T DELETE!!!!! This function is used in flexform-definitions EXT:Configuration/FlexForms/TimerDef/General/GeneralTimer.flexform
      *
      * @param array<mixed> $params TCA-Array
-     * @param mixed $conf not in use, but definde by the structure of the hook
-     * @return array<mixed>
+     * @param mixed $confUnused not in use, but definde by the structure of the hook
+     * @return void
      */
-    public static function listBaseZoneItemsFlexform(&$params): void
+    public static function listBaseZoneItemsFlexform(&$params, $confUnused): void
     {
         if (!isset($params[TimerConst::TCA_ITEMS])) {
             $params[TimerConst::TCA_ITEMS] = [];
@@ -163,6 +163,7 @@ class TcaUtility
             )->get(TimerConst::EXTENSION_NAME);
             $methodName = TimerConst::HOOK_CHANGE_LIST_OF_TIMEZONES;
             foreach ((self::$timerConfig[TimerConst::HOOK_CHANGE_LIST_OF_TIMEZONES] ?? []) as $classRef) {
+                /** @phpstan-ignore-next-line */
                 $hookObj = GeneralUtility::makeInstance($classRef);
                 if (method_exists($hookObj, $methodName)) {
                     // extend or reduce the current list

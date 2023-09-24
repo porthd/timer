@@ -22,6 +22,7 @@ namespace Porthd\Timer\ViewHelpers;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper;
@@ -101,6 +102,9 @@ class ForCommaListViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
+    /**
+     * @return void
+     */
     public function initializeArguments()
     {
         parent::initializeArguments();
@@ -114,11 +118,10 @@ class ForCommaListViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @param array $arguments
+     * @param array<mixed> $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      * @return string
-     * @throws ViewHelper\Exception
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
@@ -148,13 +151,11 @@ class ForCommaListViewHelper extends AbstractViewHelper
             // array_reverse only supports arrays
             $myList = array_reverse($myList, true);
         }
-        if (isset($arguments['iteration'])) {
-            $iterationData = [
-                'index' => 0,
-                'cycle' => 1,
-                'total' => count($myList),
-            ];
-        }
+        $iterationData = [
+            'index' => 0,
+            'cycle' => 1,
+            'total' => count($myList),
+        ];
 
         $output = '';
         foreach ($myList as $keyValue => $singleElement) {

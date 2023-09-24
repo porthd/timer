@@ -1,0 +1,13 @@
+parameters:
+	level: 6
+	excludePaths:
+		analyse:
+			- Documentation
+			- Tests
+			- ext_emconf.php
+			- Classes/CustomTimer/StrangerCode/
+	fileExtensions:
+		- php
+		- module
+		- inc
+		- typoscript

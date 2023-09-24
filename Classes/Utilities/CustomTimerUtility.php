@@ -194,12 +194,13 @@ class CustomTimerUtility
      * @return array<mixed>
      */
     public static function readListsFromFalFiles(
-        string $yamlFalParam,
-        string $relationTable,
-        int $relationUid,
-        YamlFileLoader $yamlFileLoader,
+        string           $yamlFalParam,
+        string           $relationTable,
+        int              $relationUid,
+        YamlFileLoader   $yamlFileLoader,
         ?LoggerInterface $logger = null
-    ): array {
+    ): array
+    {
         if ($yamlFalParam < 1) {
             return [];
         }
@@ -243,11 +244,12 @@ class CustomTimerUtility
      * @throws TimerException
      */
     public static function readListFromFileOrUrl(
-        string $filePath,
-        YamlFileLoader $yamlFileLoader,
+        string           $filePath,
+        YamlFileLoader   $yamlFileLoader,
         ?ValidateYamlInterface $validatorObject = null,
         ?LoggerInterface $logger = null
-    ): array {
+    ): array
+    {
         if (file_exists($filePath)) {
             $filePathNew = realpath($filePath);
             if (!file_exists($filePathNew)) {
@@ -334,24 +336,22 @@ class CustomTimerUtility
             }
         }
         // validate the yaml-structure or throw an exception
-        $implements = class_implements($validatorObject);
-        if (($validatorObject !== null) &&
-            ($implements !== false) &&
-            (in_array(ValidateYamlInterface::class, $implements))
-        ) {
-            $validatorObject->validateYamlOrException($result, ($filePathNew ?? '-- undefined --'));
+        if (($validatorObject !== null)) {
+            $implements = class_implements($validatorObject);
+            if (in_array(ValidateYamlInterface::class, $implements)) {
+                $validatorObject->validateYamlOrException($result, ($filePathNew ?? '-- undefined --'));
+            }
         }
         return $result;
     }
 
     /**
-     * @param $filePathNew
+     * @param string $filePathNew
      * @param YamlFileLoader $yamlFileLoader
-     * @param string $filePath
-     * @return array|string
+     * @return array<mixed>|string
      * @throws TimerException
      */
-    protected static function readFilePathIntoArray($filePathNew, YamlFileLoader $yamlFileLoader)
+    protected static function readFilePathIntoArray(string $filePathNew, YamlFileLoader $yamlFileLoader)
     {
         $infos = pathinfo($filePathNew);
         switch ($infos['extension']) {

@@ -48,13 +48,15 @@ use TYPO3\CMS\Core\Utility\StringUtility;
  *
  *
  */
-
 /**
  * inspired by https://docs.typo3.org/m/typo3/reference-tca/main/en-us/ColumnsConfig/Type/User/Index.html
  */
 class DurationMinutesFieldElement extends AbstractFormElement
 {
 
+    /**
+     * @return array<mixed>
+     */
     public function render(): array
     {
         // todo default-value
@@ -260,7 +262,7 @@ MINUTEFORSPECIAL;
     </script>
 SCRIPTFORSPECIAL;
         $html[] = '</div>';
-        $resultArray['html'] = implode(LF, $html);
+        $resultArray['html'] = implode(PHP_EOL, $html);
 
         return $resultArray;
     }

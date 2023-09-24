@@ -573,7 +573,7 @@ class ConvertDateUtility
             TimerConst::EXTENSION_NAME
         );
         if ($helpMonth !== null) {
-            $helpList = preg_split('//u', $helpMonth, null, PREG_SPLIT_NO_EMPTY);
+            $helpList = preg_split('//u', $helpMonth, -1, PREG_SPLIT_NO_EMPTY);
             $resultMonth = '';
             foreach ($helpList as $helpChar) {
                 $resultMonth .= '\\' . $helpChar;
@@ -595,7 +595,7 @@ class ConvertDateUtility
             TimerConst::EXTENSION_NAME
         );
         if ($helpMonth !== null) {
-            $helpList = preg_split('//u', $helpMonth, null, PREG_SPLIT_NO_EMPTY);
+            $helpList = preg_split('//u', $helpMonth, -1, PREG_SPLIT_NO_EMPTY);
             $resultMonth = '';
             foreach ($helpList as $helpChar) {
                 $resultMonth .= '\\' . $helpChar;

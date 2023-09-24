@@ -233,6 +233,12 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         return $processedData;
     }
 
+    /**
+     * @param stdClass $timeRangeInfo
+     * @param bool $stopTime
+     * @return DateTime
+     * @throws TimerException
+     */
     protected function detectGregorianDate(stdClass $timeRangeInfo, bool $stopTime = false)
     {
         if ($stopTime) {
@@ -277,7 +283,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
     }
 
     /**
-     * @param array $processorConfiguration
+     * @param array<mixed> $processorConfiguration
      * @param ContentObjectRenderer $cObj
      * @return stdClass
      * @throws AspectNotFoundException
@@ -383,10 +389,11 @@ class HolidaycalendarProcessor implements DataProcessorInterface
     }
 
     /**
-     * @param array $contentObjectConfiguration
+     * @param array<mixed> $processedData
      * @param string $fieldName
      * @param string $flexFormFieldName
      * @return string
+     * @throws TimerException
      */
     protected function getPathForCalendarFromFlexform(
         array $processedData,
@@ -418,9 +425,9 @@ class HolidaycalendarProcessor implements DataProcessorInterface
     }
 
     /**
-     * @param array $processorConfiguration
+     * @param array<mixed> $processorConfiguration
      * @param ContentObjectRenderer $cObj
-     * @param array $contentObjectConfiguration
+     * @param array<mixed> $processedData
      * @return bool|int|string|null
      * @throws TimerException
      */
@@ -437,20 +444,20 @@ class HolidaycalendarProcessor implements DataProcessorInterface
             } else {
                 $flagError = true;
             }
-            $flagPath = true;
+            $pathInFlexformField = '';
             if (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration)) {
                 $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
                     $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
-                $flagPath = false;
             }
             if (($flagError) &&
                 (array_key_exists(self::ATTR_PATH_FAL_FIELD, $processorConfiguration))
             ) {
                 $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FAL_FIELD,
                     $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
-                $flagPath = false;
             }
-            if (($flagError) || ($flagPath)) {
+            if (($flagError) ||
+                (empty($pathInFlexformField))
+            ) {
                 throw new TimerException(
                     'There must have at least the parameter `' . self::ATTR_ALIAS_PATH .
                     '` or the parameter `' . self::ATTR_ALIAS_CONFIG . '` in the typoscript. ' .
@@ -477,9 +484,9 @@ class HolidaycalendarProcessor implements DataProcessorInterface
     }
 
     /**
-     * @param array $processorConfiguration
+     * @param array<mixed> $processorConfiguration
      * @param ContentObjectRenderer $cObj
-     * @param array $processedData
+     * @param array<mixed> $processedData
      * @return bool|int|string|null
      * @throws TimerException
      */

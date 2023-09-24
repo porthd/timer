@@ -101,20 +101,32 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
      */
     protected $yamlFileLoader;
 
+    /**
+     * @var TimerStartStopRange|null
+     */
+    protected $lastIsActiveResult;
+
+    /**
+     * @var int|null
+     */
+    protected $lastIsActiveTimestamp;
+
+    /**
+     * @var array<mixed>
+     */
+    protected $lastIsActiveParams = [];
+
+
     public function __construct(?HolidaycalendarService $holidaycalendarService = null, ?YamlFileLoader $yamlFileLoader = null)
     {
         if ($yamlFileLoader === null) {
-            /** @var YamlFileLoader yamlFileLoader */
             $this->yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
         } else {
-            /** @var YamlFileLoader yamlFileLoader */
             $this->yamlFileLoader = $yamlFileLoader;
         }
         if ($holidaycalendarService === null) {
-            /** @var HolidaycalendarService holidaycalendarService */
             $this->holidaycalendarService = GeneralUtility::makeInstance(HolidaycalendarService::class);
         } else {
-            /** @var HolidaycalendarService holidaycalendarService */
             $this->holidaycalendarService = $holidaycalendarService;
         }
     }
@@ -352,14 +364,14 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
                     } //
                 }
             }
-            $result = $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
-            $this->setIsActiveResult(
-                $result->getBeginning(),
-                $result->getEnding(),
-                ($flag && $result->getResultExist()),
-                $dateLikeEventZone, $params);
-            return $flag;
         }
+        $result = $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
+        $this->setIsActiveResult(
+            $result->getBeginning(),
+            $result->getEnding(),
+            ($flag && $result->getResultExist()),
+            $dateLikeEventZone, $params);
+        return $flag;
     }
 
     /**
@@ -426,9 +438,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
             // recalculation into the gregorian calendar, so its use is forbidden
             // one specific calendar in the PHP-extension intl-date-formatter don't work properly with the
             // recalculation into the gregorian calendar, so its use is forbidden
-            /**
-             * @var SingletonInterface
-             */
             if (!$this->holidaycalendarService->forbiddenCalendar($holiday)) {
                 // midnight start of holiday is $timeRange->getBeginning()
                 // for not every-year holidays, that must be checked with $timerRange->getResultExist()
@@ -502,9 +511,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
             // recalculation into the gregorian calendar, so its use is forbidden
             // one specific calendar in the PHP-extension intl-date-formatter don't work properly with the
             // recalculation into the gregorian calendar, so its use is forbidden
-            /**
-             * @var SingletonInterface
-             */
             if (!$this->holidaycalendarService->forbiddenCalendar($holiday)) {
                 // midnight start of holiday is $timeRange->getBeginning()
                 // for not every-year holidays, that must be checked with $timerRange->getResultExist()
@@ -530,8 +536,8 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     }
 
     /**
-     * @param array $params
-     * @return array
+     * @param array<mixed> $params
+     * @return array<mixed>
      */
     protected function readHolidyaListFromFileOrUrl(array $params): array
     {
@@ -542,6 +548,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         }
         // no check of the yaml-file with the method `validateYamlOrException`
         // the extension of the file defines, if it is a csv-file or a yaml-file
+        $fileResult = [];
         if (!empty($params[self::ARG_CSV_FILE_HOLIDAY_FILE_PATH])) {
             $fileResult = CustomTimerUtility::readListFromFileOrUrl(
                 $params[self::ARG_CSV_FILE_HOLIDAY_FILE_PATH],
@@ -588,21 +595,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         return $finalList;
     }
 
-    /**
-     * @return string
-     */
-    protected function getExtentionPathByEnviroment(): string
-    {
-        return Environment::getExtensionsPath();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPublicPathByEnviroment(): string
-    {
-        return Environment::getPublicPath();
-    }
 
 
     /**

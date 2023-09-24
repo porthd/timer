@@ -33,7 +33,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
-use function Porthd\Timer\DataProcessing\gettype;
+
 
 /**
  * Fetch records from the database, using the default .select syntax from TypoScript.
@@ -212,7 +212,7 @@ class BetterMappingProcessor implements DataProcessorInterface
                         if (!is_scalar($inValue)) {
                             throw new \RuntimeException(
                                 'The expected userFunc "' . $userFunc . '" must return a scalar ' .
-                                '(boolean, integer, float, string). It got ' . gettype($inValue) . '.',
+                                '(boolean, integer, float, string). It gave back: ' . print_r($inValue, true) . '.',
                                 1678907644
                             );
                         }
@@ -366,9 +366,9 @@ class BetterMappingProcessor implements DataProcessorInterface
     /**
      * A recursive approach to get variables in a structure.
      *
-     * @param $origin
-     * @param string|array<string> $fieldReference
-     * @return mixed|void
+     * @param mixed $origin
+     * @param mixed $fieldReference
+     * @return mixed
      * @throws TimerException
      * @throws \ReflectionException
      */
@@ -424,7 +424,9 @@ class BetterMappingProcessor implements DataProcessorInterface
                 if (empty($fieldList)) {
                     return $origin->$methodName();
                 }
-                return $this->getInFieldValue($origin->$methodName(), $fieldList);
+                // todo: check, if this is correct. the logic seems to be difficult
+                $helpValue = $origin->$methodName();
+                return $this->getInFieldValue($helpValue, $fieldList);
             }
             throw new TimerException(
                 'There is a problem with resolving the namepart `' . $fieldReference .

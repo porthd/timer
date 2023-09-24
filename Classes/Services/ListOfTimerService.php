@@ -291,6 +291,7 @@ class ListOfTimerService implements SingletonInterface
                     if (in_array(TimerInterface::class, $classInterface)) {
                         /** @var TimerInterface $classObject */
                         $classObject = GeneralUtility::makeInstance($className);
+                        /** @phpstan-ignore-line */
                         $this->list[$classObject::selfName()] = $classObject;
                     } else {
                         throw new TimerException(
@@ -307,6 +308,7 @@ class ListOfTimerService implements SingletonInterface
                         if (in_array(TimerInterface::class, $classInterface)) {
                             /** @var TimerInterface $classObject */
                             $classObject = GeneralUtility::makeInstance($className);
+                            /** @phpstan-ignore-line */
                             if (array_key_exists($classObject::selfName(), $this->list)) {
                                 unset($this->list[$classObject::selfName()]);
                             }

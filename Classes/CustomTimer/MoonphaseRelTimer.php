@@ -337,7 +337,7 @@ class MoonphaseRelTimer implements TimerInterface
         $utcDateTime = new DateTime('@' . $baseTStamp, new DateTimeZone('UTC'));
         $moonPhaseCalculator = new MoonPhase($utcDateTime);
         $moonPhase = $params[self::ARG_MOON_PHASE];
-        $moonPhaseTStamp = (int)$moonPhaseCalculator->get_phase($moonPhase);
+        $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
         if ($moonPhaseTStamp === null) {
             throw new TimerException(
                 'The moonphase `' . $moonPhase . '` could not be detected in the method `nextActive`. ' .
@@ -345,6 +345,7 @@ class MoonphaseRelTimer implements TimerInterface
                 1672256623
             );
         }
+        $moonPhaseTStamp = (int)$moonPhaseTStamp;
         $rangeSec = (int)$params[self::ARG_REQ_DURATION_MINUTES] * 60;
         [$upper, $lower] = $this->caluculateReverseRange($rangeSec, $baseTStamp, $utcDateTime->getTimestamp());
         $result = new TimerStartStopRange();
@@ -402,7 +403,7 @@ class MoonphaseRelTimer implements TimerInterface
         for ($i = 0; $i < 4; $i++) {
             $refMooningDate = new DateTime('@' . $refStamp);
             $moonPhaseCalculator = new MoonPhase($refMooningDate);
-            $moonPhaseTStamp = (int)$moonPhaseCalculator->get_phase($moonPhase);
+            $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
             if ($moonPhaseTStamp === null) {
                 throw new TimerException(
                     'The moonphase `' . $moonPhase . '` could not be detected in the method `prevActive`. ' .
@@ -410,6 +411,7 @@ class MoonphaseRelTimer implements TimerInterface
                     1672256624
                 );
             }
+            $moonPhaseTStamp = (int)$moonPhaseTStamp;
 
             if ($lowerMooning > $moonPhaseTStamp) {
                 [$lowerLimit, $upperLimit] = $this->calculateRangeRoundToMinute(

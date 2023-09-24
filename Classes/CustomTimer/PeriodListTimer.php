@@ -532,22 +532,6 @@ INFOSYNTAX;
         return array_merge($fileResult, ...$resultList);
     }
 
-    /**
-     * @return string
-     */
-    protected function getExtentionPathByEnviroment(): string
-    {
-        return Environment::getExtensionsPath();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getPublicPathByEnviroment(): string
-    {
-        return Environment::getPublicPath();
-    }
-
 
     /**
      * @param DateTime $dateStart

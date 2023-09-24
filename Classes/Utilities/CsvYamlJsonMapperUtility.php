@@ -72,10 +72,10 @@ class CsvYamlJsonMapperUtility
 
     /**
      *
-     * @param array $rawListWithHeadline
+     * @param array<mixed> $rawListWithHeadline
      * @param string $separator
      * @param string $analyseLeaf
-     * @return array
+     * @return array<mixed>
      */
     public static function reorganizeSimpleArrayByHeadline(
         array $rawListWithHeadline,
@@ -97,6 +97,7 @@ class CsvYamlJsonMapperUtility
             $pointPartTemplate = &$template;
             foreach ($cascadeList as $level) {
                 if ($level !== self::KEY_SPECIAL) {
+                    /** @phpstan-ignore-next-line */
                     if (!array_key_exists($level, $pointPartTemplate)) {
                         $pointPartTemplate[$level] = [];
                     }
@@ -137,6 +138,11 @@ class CsvYamlJsonMapperUtility
     }
 
 
+    /**
+     * @param array<mixed> $ary
+     * @param int $checkColumnForEmpty
+     * @return array<mixed>
+     */
     public static function removeEmptyRowCsv(array $ary, int $checkColumnForEmpty = -1): array
     {
         if ($checkColumnForEmpty >= 0) {
@@ -155,7 +161,7 @@ class CsvYamlJsonMapperUtility
      * @param string $separator
      * @param string $enclosure
      * @param string $escape
-     * @return array
+     * @return array<mixed>
      */
     public static function mapCsvToRawArray(
         string $csvString,
@@ -200,17 +206,17 @@ class CsvYamlJsonMapperUtility
     }
 
     /**
-     * @param array $array
+     * @param array<mixed> $ary
      * @return string
      */
-    public static function mapArrayToJson(array $array): string
+    public static function mapArrayToJson(array $ary): string
     {
-        return json_encode($array, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        return json_encode($ary, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     }
 
     /**
-     * @param array $array
-     * @return array<mixed>
+     * @param string $jsonString
+     * @return string
      */
     public static function mapJsonToArray(string $jsonString): string
     {
@@ -220,24 +226,24 @@ class CsvYamlJsonMapperUtility
     /**
      * build a simple yaml-string define by a multilayered assoative array
      *
-     * @param array $array
+     * @param array<mixed> $ary
      * @param string $startAttribute
      * @param string $indent
      * @return string
      */
     public static function mapAssoativeArrayToYaml(
-        array $array,
+        array $ary,
         string $startAttribute = 'mapped',
         string $indent = self::INDENT
     ): string {
-        if (empty($array)) {
+        if (empty($ary)) {
             return '';
         }
         $yaml = ((empty($startAttribute)) ?
             '' :
             $startAttribute . self::COLON_NL
         );
-        foreach ($array as $key => $item) {
+        foreach ($ary as $key => $item) {
             if (is_int($key)) {
                 $raw = $indent . self::ARY_ITEM;
             } else {
@@ -260,8 +266,8 @@ class CsvYamlJsonMapperUtility
     }
 
     /**
-     * @param array $arr
-     * @return array
+     * @param array<mixed> $arr
+     * @return array<mixed>
      */
     protected static function cloneArray(array $arr): array
     {

@@ -177,7 +177,6 @@ class HolidayTimerTest extends TestCase
             ['result' => true,],
         ];
     }
-
     /**
      * the ultimate green test
      * @dataProvider dataProviderTest
