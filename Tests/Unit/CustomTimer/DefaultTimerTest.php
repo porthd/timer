@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\CustomTimer;
+namespace Porthd\Timer\Tests\Unit\CustomTimer;
 
 /***************************************************************
  *
@@ -20,6 +21,8 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Porthd\Timer\CustomTimer\DefaultTimer;
 use TYPO3\CMS\Core\Context\Context;
 use DateInterval;
 use DateTime;
@@ -84,7 +87,7 @@ class DefaultTimerTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
     /**
@@ -198,7 +201,7 @@ class DefaultTimerTest extends TestCase
     }
 
 
-    public function dataProvider_isAllowedInRange()
+    public static function dataProvider_isAllowedInRange()
     {
         $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
@@ -286,7 +289,7 @@ class DefaultTimerTest extends TestCase
         return $result;
     }
 
-    public function dataProviderGetTimeZoneOfEvent()
+    public static function dataProviderGetTimeZoneOfEvent()
     {
         $result = [];
         /* test allowed minimal structure */

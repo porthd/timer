@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -25,6 +27,7 @@ namespace Porthd\Timer\CustomTimer;
 use DateInterval;
 use DateTime;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Domain\Model\Listing;
 use Porthd\Timer\Domain\Repository\ListingRepository;
@@ -101,7 +104,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
 
     protected const MARK_OF_EXT_FOLDER_IN_FILEPATH = 'EXT:';
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
-    public const TIMER_FLEXFORM_ITEM = [
+    protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/RangeListTimer.flexform',
     ];
 
@@ -305,31 +308,15 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     protected function validateYamlFilePath(array $params = []): bool
     {
-        $flag = true;
-        foreach ([self::ARG_YAML_ACTIVE_FILE_PATH, self::ARG_YAML_FORBIDDEN_FILE_PATH] as $paramKey) {
-            $filePath = (
-            array_key_exists($paramKey, $params) ?
-                $params[$paramKey] :
-                ''
-            );
-            if (!empty($filePath)) {
-                if (strpos($filePath, self::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
-                    $extPath = $this->getExtentionPathByEnviroment();
-                    $filePath = substr($filePath, strlen(self::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-                    $flag = $flag && file_exists($extPath . DIRECTORY_SEPARATOR . $filePath);
-                } else {
-                    $rootPath = $this->getPublicPathByEnviroment();
-                    $flag = $flag && file_exists($rootPath . DIRECTORY_SEPARATOR . $filePath);
-                }
-            } else {
-                $flag = $flag &&
-                    (
-                        ($paramKey === self::ARG_YAML_FORBIDDEN_FILE_PATH) ||
-                        (!empty($params[self::ARG_DATABASE_ACTIVE_RANGE_LIST])) ||
-                        (!empty($params[self::ARG_YAML_ACTIVE_FILE_PATH]))
-                    );
-            }
-        }
+        // Check for activePath or the definitio is missing
+        $flag = $this->validateFilePath(self::ARG_YAML_ACTIVE_FILE_PATH, $params);
+        // disallow the missing
+        $flag = $flag && (!empty($params[self::ARG_YAML_ACTIVE_FILE_PATH]));
+        // !!! allow the FAL-defintion as an substitute
+        $flag = $flag || (!empty($params[self::ARG_DATABASE_ACTIVE_RANGE_LIST]));
+
+        // check for optional existing forbiddenpath
+        $flag = $flag && $this->validateFilePath(self::ARG_YAML_FORBIDDEN_FILE_PATH, $params);
 
         return $flag;
     }
@@ -1535,8 +1522,8 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     protected function readRangeListFromFileOrUrl(
         YamlFileLoader $yamlFileLoader,
-        array          $params,
-        string         $key
+        array  $params,
+        string $key
     ): array
     {
         //        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
@@ -1551,15 +1538,18 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             $this,
             $this->logger
         );
-        if (!is_array($result[self::YAML_MAIN_LIST_KEY])) {
+        if (array_key_exists(self::YAML_MAIN_LIST_KEY, $result)) {
+            $result = $result[self::YAML_MAIN_LIST_KEY];
+        } // else $result without yaml-help-layer
+
+        if (!is_array($result)) {
             throw new TimerException(
-                'The key `' . self::YAML_MAIN_LIST_KEY . '` does not exist in your active yaml-file (`' .
-                $params[$key] . '`). ' .
-                'Please check your configuration.',
+                'The value of the yaml-file, csv-file or json-file in `' . $params[$key] . '` does not results into an array. ' .
+                'Please check your configuration.' . print_r($result, true),
                 1600865701
             );
         }
-        return $result[self::YAML_MAIN_LIST_KEY];
+        return $result;
     }
 
     /**

@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+
+namespace Porthd\Timer\Utilities;
 
 /***************************************************************
  *
@@ -18,8 +21,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-namespace Porthd\Timer\Utilities;
 
 use DateTime;
 use DateTimeZone;

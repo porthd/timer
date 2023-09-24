@@ -144,6 +144,8 @@ multiple times if the content element is used multiple times.
 The files from the other two fields are only loaded once for a page, no matter
 how many times the content element is used on the page.
 
+##### 'alias'-definition: only an experiment in the dataprocessor for holydays
+
 The data can be imported via a CSV file or a Yaml file. Since most editors
 presumably with the
 are overwhelmed when creating a Yaml file, the import as a CSV file has also
@@ -259,7 +261,6 @@ that the school holidays for Lower Saxony and Bremen from the year 2022 are
 shown in a calendar.
 
 #### Data processors for this timer
-
 Three data processors have been defined so that the data can be read.
 
 The `FlexToArrayProcessor` allows reading Flexform fields and converting them
@@ -286,6 +287,7 @@ for the mapping.
 It can help to pass an appropriate JSON string to the Fluid template.
 The data can easily be made available to the TuiCalendar framework or another
 calendar framework via an HTML attribute.
+
 
 ### Content element `timersimul` as an example
 
@@ -347,6 +349,13 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   Christmas, Shrove Monday, Good Friday, Easter, Ascension Day, Pentecost)
   (2nd Advent from 12:00 p.m. to 2:00 p.m., Rose Monday from 8:00 p.m. to 6:00
   a.m. of the following day)
+* HolidayTimer (in progress 2023-09-17) - List for defining holidays. The
+  holidays are recorded in a CSV file and can also be defined via a YAML file.
+  For explanations of the CSV file, see below.
+  The Yaml file blocks all data that is relevant for the holiday calendar under
+  the expression `holidayTimerList`. A separate array element is created in the
+  YAML block for each holiday. The names of the attributes are the same as those
+  used as names for the columns in the CSV.
 * JewishHolidayTimer (in progress 2022-12-28) - periods starting relative to one
   of the Jewish holidays related to the Jewish calendar
   (IMHO: I was thinking for a long time about adding this timer because I
@@ -400,7 +409,6 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   Thursday)
 
 #### Notes on the CalendarDateRelTimer workflow
-
 ##### Challenge
 
 The assessment of which public holidays an editor can/should use will certainly
@@ -413,7 +421,6 @@ Furthermore, the developers will have very different wishes as to which
 information should be saved in addition to the public holidays.
 At the same time, you want to be able to manage the list of public holidays as
 clearly as possible.
-
 ##### Workflow for individual lists
 
 You manage the list of public holidays in a spreadsheet such as `Excel`
@@ -422,7 +429,6 @@ The CSV file is uploaded to the server via FTP and the path to the CSV file is
 specified in the settings for the extension configurations.
 After deleting the cache you have the new list available in the
 timer `CalendarDateRelTimer`.
-
 ##### supported holiday calculations (currently not working and tested 2023-02-25)
 
 Like any man-made system, the calculation is simple in principle; but in detail
@@ -454,35 +460,59 @@ currently supported, which must be specified in the CSV file in the `arg.type`:
   0,1,2,0,3,2,1' a public holiday would be shifted by three days (5th entry) if
   it falls on a Friday (5th day of the week).
   Technically, the mechanics work in the same way as `_fixed_`.
-- _easterly_: This keyword is only valid for a calculation form limited to the
-  Gregorian or to the Julian calendar (`arg.calendar`). It determines a public
-  holiday relative to Easter Sunday, which can be calculated using Gauss's
-  Easter formula or the PHP function. In `arg.statusCount` the positive or
-  negative number of days relative to Easter Sunday is given. If the number is
-  missing or there is a `0`, then of course Easter Sunday itself is meant.
-- _weekdayly_: Here you calculate the i.th (`arg.statusCount`) day of the
-  week (`arg.status`) within a month (`arg.month`) for a selected
+- _fixedrelated_: The fourth Advent example shows that there are holidays that
+  are celebrated on certain days of the week relative to a fixed date (the first
+  day of Christmas in Advent).
+  With the numbers 1 = Monday to 7 = Sunday you define the day of the week
+  in `arg.status` that must precede the fixed date of the target holiday.
+  In `arg.statusCount` you then define how many weeks before the day must take
+  place. For example, the first Advent with `-4` is the fourth Sunday before
+  Christmas.
+  In order to be able to define holiday specials such as the day of repentance
+  and prayer - the Wednesday before the fifth Sunday before Christmas - you can
+  specify in `arg.secDayCount` how many days the actual holiday is away from the
+  calculated day.
+- _season_: This defines the four seasons, which are defined with 1=spring,
+  2=summer, 3=autumn and 4=winter via the `arg.status` attribute.
+- _seasonshifting_: Like _`season`_, this defines the four seasons, which are
+  defined with 1=spring, 2=summer, 3=autumn and 4=winter via the `arg.status`
+  attribute. As with _fixedshifting_, the respective day of the week is also
+  taken into account in the parameter `arg.statusCount` in order to enable a
+  corresponding shift of the public holidays for corresponding days of the week.
+- _matariki_: Matariki is only intended for the Matariki holiday in New Zealand.
+  I haven't found an algorithm that can calculate this holiday in PHP. There is
+  only one list for the next 30 years that I found from a (!) source on the
+  Internet. This calculation routine has no parameters.
+- _easterly_: This keyword only applies to a form of calculation limited to the
+  Gregorian or Julian calendar (`arg.calendar`). It determines a holiday
+  relative to Easter Sunday, which can be calculated using Gauss's Easter
+  formula or the PHP function. In `arg.statusCount` the positive or negative
+  number of days relative to Easter Sunday is specified. If the number is
+  missing or there is a '0' there, then of course it means Easter Sunday itself.
+- _weekdayly_: Here you calculate the ith (`arg.statusCount`)
+  weekday (`arg.status`) within a month (`arg.month`) for a selected
   calendar (`arg.calendar`). The day of the week is characterized by a number,
-  with 1 standing for Monday and 7 for Sunday. If there is a negative number
-  in `arg.statusCount` then the position of the weekday is determined relative
-  to the end of the month. There is no check as to whether the date is still in
-  the month in question. If another value is specified in `arg.secDayCount`,
-  then the day is determined relative to the calculated day of the week. This is
-  required, for example, for the Geneva Day of Prayer in Switzerland, which is
-  always celebrated on the Thursday after the first Sunday in September.
+  where 1 stands for Monday and 7 for Sunday. If there is a negative number
+  in `arg.statusCount`, then the position of the day of the week is determined
+  relative to the end of the month. There is no check whether the date is still
+  in the month in question. If a value is specified in `arg.secDayCount`, then
+  the day is determined relative to the calculated day of the week. This is
+  needed, for example, for Geneva Prayer Day in Switzerland, which is always
+  celebrated on the Thursday after the first Sunday in September.
 - _mooninmonth_: Some festivals have been transferred from one calendar system
-  to another throughout the stories, such as the Vesakh festival.
-  Today the festival is celebrated in some countries on the first in other
-  countries on the second full moon day in May. In general, for a selected
-  calendar (`arg.calendar`), this means that the month is given as a number in
-  the `arg.month` field. The calendar is defined in `arg.calendar`. The phase of
-  the moon is defined in `arg.status` with the encoding 0/new_moon = new moon,
-  1/first_quarter = waxing crescent, 2/full_moon = full moon and
-  3/last_quarter = waning (Islamic?) crescent. If a '1' is specified
-  in `arg.statusCount` or if no specification is given, the first moon phase of
-  the month is always used, even if there are two identical moon phases in the
-  month. Otherwise, the second moon phase is used if it exists in the same
-  month.
+  to another calendar system throughout history, as is the case with the
+  festival of Vesakh.
+  Today the festival is celebrated in some countries on the first full moon day
+  in May and in other countries possibly on the second full moon day. In
+  general, this means for a selected calendar (`arg.calendar`) that the month is
+  specified as a number in the `arg.month` field. The calendar is defined
+  in `arg.calendar`. The phase of the moon is defined in `arg.status` with the
+  encoding 0/new_moon = new moon, 1/first_quarter = waxing crescent,
+  2/full_moon = full moon and 3/last_quarter = waning (Islamic?) crescent. If
+  a '1' is specified in `arg.statusCount` or if no information is specified, the
+  first moon phase of the month is always used, even if there should be two
+  identical moon phases in the month. Otherwise, the second moon phase is used
+  if it exists in the same month.
 
 The methods are defined in such a way that a date is always determined. The
 calculation procedures always return a Gregorian date.
@@ -688,7 +718,6 @@ The explanations for the individual components are included as comments.
   Prayer)
 
 ##### Different types of holiday calculation
-
 - `fixed`: This type defines the holiday over a specific date in the calendar.
 - `fixedrelated`: This type is best explained by Advent, which is the i.th
   Sunday before December 25th. is. The fixed date is defined here. The number of

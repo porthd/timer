@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Services;
 
 /***************************************************************
@@ -24,6 +26,7 @@ namespace Porthd\Timer\Services;
 use DateInterval;
 use DateTime;
 use Exception;
+use Porthd\Timer\Services\ListOfTimerService;
 use Porthd\Ichschauweg\Utilities\FlexFormUtility;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
@@ -633,11 +636,11 @@ class ListOfEventsService
         string $getterFlexParameter
     ): array {
         if (is_array($item)) {
-            $timerSelectName = $item[TimerConst::TIMER_FIELD_SELECT];
+            $timerSelectName = $item[TimerConst::TIMER_FIELD_SELECTOR];
             $timerFlexParameterString = $item[TimerConst::TIMER_FIELD_FLEX_ACTIVE];
         } else {
             if ($item instanceof FileReference) {
-                $timerSelectName = $item->getReferenceProperty(TimerConst::TIMER_FIELD_SELECT);
+                $timerSelectName = $item->getReferenceProperty(TimerConst::TIMER_FIELD_SELECTOR);
                 $timerFlexParameterString = $item->getReferenceProperty(TimerConst::TIMER_FIELD_FLEX_ACTIVE);
             } else {
                 $timerSelectName = $item->$getterSelectName();
@@ -660,7 +663,7 @@ class ListOfEventsService
                 ' ',
                 '',
                 ucwords(
-                    str_replace('_', ' ', TimerConst::TIMER_FIELD_SELECT)
+                    str_replace('_', ' ', TimerConst::TIMER_FIELD_SELECTOR)
                 )
             )
         );

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -58,7 +60,7 @@ class MoonriseRelTimer implements TimerInterface
     protected const ARG_LONGITUDE_MIN = -180; // see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
-    public const TIMER_FLEXFORM_ITEM = [
+    protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/MoonriseRelTimer.flexform',
     ];
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\DataProcessing;
 
 /***************************************************************
@@ -31,6 +33,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
+use function Porthd\Timer\DataProcessing\gettype;
 
 /**
  * Fetch records from the database, using the default .select syntax from TypoScript.

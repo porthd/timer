@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\Tests\CustomTimer;
+namespace Porthd\Timer\Tests\Unit\CustomTimer;
 
 /***************************************************************
  *
@@ -83,7 +84,7 @@ class MoonphaseRelTimerTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
     /**
@@ -184,7 +185,7 @@ class MoonphaseRelTimerTest extends TestCase
         );
     }
 
-    public function dataProvider_isAllowedInRange()
+    public static function dataProvider_isAllowedInRange()
     {
         $testDate = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
@@ -298,7 +299,7 @@ class MoonphaseRelTimerTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderValidateGeneralByVariationArgumentsInParam()
+    public static function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
             'moonPhase' => 'full_moon',
@@ -461,7 +462,7 @@ class MoonphaseRelTimerTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderValidateSpeciallByVariationArgumentsInParam()
+    public static function dataProviderValidateSpeciallByVariationArgumentsInParam()
     {
         $general = [
             'useTimeZoneOfFrontend' => 0,
@@ -652,7 +653,7 @@ class MoonphaseRelTimerTest extends TestCase
     }
 
 
-    public function dataProviderGetTimeZoneOfEvent()
+    public static function dataProviderGetTimeZoneOfEvent()
     {
         $result = [];
         /* test allowed minimal structure */
@@ -785,7 +786,7 @@ class MoonphaseRelTimerTest extends TestCase
         }
     }
 
-    public function dataProviderIsActive()
+    public static function dataProviderIsActive()
     {
         $result = [];
 
@@ -1140,7 +1141,7 @@ class MoonphaseRelTimerTest extends TestCase
     }
 
 
-    public function dataProviderNextActive()
+    public static function dataProviderNextActive()
     {
         $result = [];
 //        '2022-06-16 13:51:00' => false,
@@ -1249,7 +1250,7 @@ class MoonphaseRelTimerTest extends TestCase
         }
     }
 
-    public function dataProviderPrevActive()
+    public static function dataProviderPrevActive()
     {
         $result = [];
 //        '2022-06-16 13:51:00' => false,

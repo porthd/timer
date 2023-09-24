@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Utilities;
 
 /***************************************************************
@@ -22,14 +24,9 @@ namespace Porthd\Timer\Utilities;
  ***************************************************************/
 
 use DateTimeZone;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\DefaultTimer;
-use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\ListOfTimerService;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -91,9 +88,11 @@ class TcaUtility
      * @param mixed $conf not in use, but definde by the structure of the hook
      * @return array<mixed>
      */
-    public static function listBaseZoneItemsFlexform($params, $conf): array
+    public static function listBaseZoneItemsFlexform(&$params): void
     {
-        $params[TimerConst::TCA_ITEMS] = [];
+        if (!isset($params[TimerConst::TCA_ITEMS])) {
+            $params[TimerConst::TCA_ITEMS] = [];
+        }
         $count = 0;
         foreach (self::listBaseZoneItems() as $item) {
             $langKey = $item;
@@ -120,8 +119,12 @@ class TcaUtility
                 }
             }
         }
-        ksort($params[TimerConst::TCA_ITEMS]);
-        return $params;
+        usort($params[TimerConst::TCA_ITEMS], function ($a, $b) {
+            if ($a[TimerConst::TCA_ITEMS_LABEL] === $b[TimerConst::TCA_ITEMS_LABEL]) {
+                return 0;
+            }
+            return $a[TimerConst::TCA_ITEMS_LABEL] < $b[TimerConst::TCA_ITEMS_LABEL] ? -1 : 1;
+        });
     }
 
     /**

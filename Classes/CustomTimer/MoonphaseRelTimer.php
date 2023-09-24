@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -26,6 +28,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\CustomTimer\StrangerCode\MoonPhase\Solaris\MoonPhase;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
@@ -46,14 +49,14 @@ class MoonphaseRelTimer implements TimerInterface
         'last_quarter',
     ];
     protected const ARG_REL_MIN_TO_EVENT = 'relMinToSelectedTimerEvent';
-    protected const ARG_REQ_REL_TO_MIN = -28800;
-    protected const ARG_REQ_REL_TO_MAX = 28800;
+    protected const ARG_REQ_REL_TO_MIN = -37439;
+    protected const ARG_REQ_REL_TO_MAX = 37439;
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_REQ_DURMIN_MIN = -28800;
+    protected const ARG_REQ_DURMIN_MIN = -37439;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 28800;
+    protected const ARG_REQ_DURMIN_MAX = 37439;
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
-    public const TIMER_FLEXFORM_ITEM = [
+    protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/MoonphaseRelTimer.flexform',
     ];
 

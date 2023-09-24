@@ -54,14 +54,24 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.field.relMinToSelectedTimerEvent
                     </label>
                     <config>
-                        <type>input</type>
-                        <size>10</size>
-                        <eval>int</eval>
-                        <range>
-                            <lower>-1439</lower>
-                            <upper>1439</upper>
-                        </range>
-                        <default>0</default>
+                        <type>user</type>
+                        <renderType>durationMinutesField</renderType>
+                        <required>1</required>
+                        <default>120</default>
+                        <parameters>
+                            <flagHours>1</flagHours>
+                            <flagDays>0</flagDays>
+                            <rangeMinutes>
+                                <lower>-59</lower>
+                                <upper>59</upper>
+                                <default>0</default>
+                            </rangeMinutes>
+                            <rangeHours>
+                                <lower>-23</lower>
+                                <upper>23</upper>
+                                <default>0</default>
+                            </rangeHours>
+                        </parameters>
                     </config>
                 </TCEforms>
             </relMinToSelectedTimerEvent>
@@ -71,14 +81,24 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonriseRel.field.durationMinutes
                     </label>
                     <config>
-                        <type>input</type>
-                        <size>10</size>
-                        <eval>int,required</eval>
-                        <range>
-                            <lower>-1439</lower>
-                            <upper>1439</upper>
-                        </range>
-                        <default>60</default>
+                        <type>user</type>
+                        <renderType>durationMinutesField</renderType>
+                        <required>1</required>
+                        <default>120</default>
+                        <parameters>
+                            <flagHours>1</flagHours>
+                            <flagDays>0</flagDays>
+                            <rangeMinutes>
+                                <lower>-59</lower>
+                                <upper>59</upper>
+                                <default>0</default>
+                            </rangeMinutes>
+                            <rangeHours>
+                                <lower>-23</lower>
+                                <upper>23</upper>
+                                <default>0</default>
+                            </rangeHours>
+                        </parameters>
                     </config>
                 </TCEforms>
             </durationMinutes>

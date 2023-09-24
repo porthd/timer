@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
 	<!-- I use <target> in this default-language-file, because englisch is not my native language. TYPO3 won`t use this target-definition. -->
-	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2023-01-31T12:51:00Z"
-		  product-name="timer">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2023-01-31T12:51:00Z" product-name="timer">
 		<header/>
 		<body>
 			<trans-unit id="calendarDate.christ.greg.testCutomTimerForTimer">
 				<source>my test for customtimer, which is defined by this extension</source>
-				<target>Mein Test für einen Nutzer-definierten Timer, der durch die Extension bereitgestellt wird
-				</target>
+				<target>Mein Test für einen Nutzer-definierten Timer, der durch die Extension bereitgestellt wird</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.christ.greg.christmasEve">
 				<source>christmas eve</source>
@@ -550,9 +548,7 @@
 			</trans-unit>
 			<trans-unit id="calendarDate.hist.greg.lvDayOfNewIndependence">
 				<source>Latvia: Renewal of IndependenceConvening of Latvian Constitutional Committee, Labor Day</source>
-				<target>Lettland: Erneuerung der Unabhängigkeit / Einberufung des lettischen Verfassungsausschusses, Tag
-					der Arbeit
-				</target>
+				<target>Lettland: Erneuerung der Unabhängigkeit / Einberufung des lettischen Verfassungsausschusses, Tag der Arbeit</target>
 			</trans-unit>
 			<trans-unit id="calendarDate.cult.greg.lrNationalUnificationDay">
 				<source>Liberia: National Unification Day</source>

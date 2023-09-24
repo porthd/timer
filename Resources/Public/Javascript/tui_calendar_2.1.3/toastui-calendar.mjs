@@ -677,7 +677,6 @@ function D$1(e2) {
         }), c2 === 3 ? new Set(e3) : e3;
     }(e2);
 }
-
 function F$1(n2, r2) {
     switch (r2) {
         case 2:
@@ -995,7 +994,6 @@ function createFromDateString(dateString) {
     }
     return null;
 }
-
 class LocalDate {
     constructor(...args) {
         const [firstArg] = args;
@@ -1061,7 +1059,6 @@ setterMethods.forEach((methodName) => {
         return this.d[methodName](...args);
     };
 });
-
 class UTCDate extends LocalDate {
     clone() {
         return new UTCDate(this.d);
@@ -1106,21 +1103,18 @@ const INVALID_DATETIME_FORMAT = "Invalid DateTime Format";
 const INVALID_TIMEZONE_NAME = "Invalid IANA Timezone Name";
 const INVALID_VIEW_TYPE = "Invalid View Type";
 const MESSAGE_PREFIX = "@toast-ui/calendar: ";
-
 class InvalidTimezoneNameError extends Error {
     constructor(timezoneName) {
         super(`${MESSAGE_PREFIX}${INVALID_TIMEZONE_NAME} - ${timezoneName}`);
         this.name = "InvalidTimezoneNameError";
     }
 }
-
 class InvalidDateTimeFormatError extends Error {
     constructor(dateTimeString) {
         super(`${MESSAGE_PREFIX}${INVALID_DATETIME_FORMAT} - ${dateTimeString}`);
         this.name = "InvalidDateTimeFormatError";
     }
 }
-
 class InvalidViewTypeError extends Error {
     constructor(viewType) {
         super(`${MESSAGE_PREFIX}${INVALID_VIEW_TYPE} - ${viewType}`);
@@ -1226,7 +1220,6 @@ function tokenToUtcDate(token) {
 function getTZOffsetMSDifference(offset) {
     return (getLocalTimezoneOffset() - offset) * MS_PER_MINUTES;
 }
-
 class TZDate {
     constructor(...args) {
         this.tzOffset = null;
@@ -1428,7 +1421,6 @@ const eventUIPropsKey = [
     "collapse",
     "isMain"
 ];
-
 class EventUIModel {
     constructor(event) {
         this.top = 0;
@@ -1909,11 +1901,9 @@ function getDateDifference(d1, d2) {
     const _d2 = new TZDate(d2.getFullYear(), d2.getMonth(), d2.getDate()).getTime();
     return Math.round((_d1 - _d2) / MS_PER_DAY);
 }
-
 function hasCollision(start, end, targetStart, targetEnd) {
     return targetStart > start && targetStart < end || targetEnd > start && targetEnd < end || targetStart <= start && targetEnd >= end;
 }
-
 function collidesWith({
                           start,
                           end,
@@ -1939,7 +1929,6 @@ function collidesWith({
     }
     return hasCollision(start, end, targetStart, targetEnd);
 }
-
 function isSameEvent(event, eventId, calendarId) {
     return event.id === eventId && event.calendarId === calendarId;
 }
@@ -1963,7 +1952,6 @@ function stamp(obj) {
     }
     return obj.__fe_id;
 }
-
 class EventModel {
     constructor(event = {}) {
         this.id = "";
@@ -2210,7 +2198,6 @@ function isTimeEvent({model}) {
     const {category, isAllday: isAllday2, hasMultiDates} = model;
     return category === "time" && !isAllday2 && !hasMultiDates;
 }
-
 class Collection {
     constructor(getItemIDFn) {
         this.internalMap = /* @__PURE__ */ new Map();
@@ -4169,7 +4156,6 @@ function addAttributeHooks() {
 function removeAttributeHooks() {
     browser.removeAllHooks();
 }
-
 function sanitize(str) {
     return browser.sanitize(str);
 }
@@ -4223,11 +4209,9 @@ function usePrimaryTimezone() {
     const getNow = T$1(() => tzConverter(primaryTimezoneName), [primaryTimezoneName, tzConverter]);
     return [primaryTimezoneName, getNow];
 }
-
 function isWeekDayName(type, dayName) {
     return type === "week";
 }
-
 function getWeekDayNameColor({
                                  dayName,
                                  theme,
@@ -4251,7 +4235,6 @@ function getWeekDayNameColor({
     }
     return theme.common.dayName.color;
 }
-
 function getMonthDayNameColor({
                                   dayName,
                                   theme
@@ -4506,7 +4489,6 @@ function monthDayNameSelector(theme) {
         }
     };
 }
-
 function GridHeader({
                         dayNames,
                         marginLeft = DEFAULT_DAY_NAME_MARGIN_LEFT,
@@ -4659,7 +4641,6 @@ function limitRenderRange(start, end, uiModelColl) {
     }
     return limit$1(start, end, uiModelColl);
 }
-
 function convertToUIModel(eventCollection) {
     const uiModelColl = new Collection((uiModel) => {
         return uiModel.cid();
@@ -4673,7 +4654,6 @@ function convertToUIModel(eventCollection) {
 function _isAllday({model}) {
     return model.isAllday || model.hasMultiDates;
 }
-
 function _isNotAllday(uiModel) {
     return !_isAllday(uiModel);
 }
@@ -5112,7 +5092,6 @@ function getWeekDates(renderDate, {startDayOfWeek = Day$2.SUN, workweek}) {
         return acc;
     }, []);
 }
-
 function getColumnsData(datesOfWeek, narrowWeekend = false) {
     const datesCount = datesOfWeek.length;
     const shouldApplyNarrowWeekend = datesCount > 5 && narrowWeekend;
@@ -5157,12 +5136,10 @@ function createTimeGridData(datesOfWeek, options) {
 function getRelativeMousePosition({clientX, clientY}, {left, top, clientLeft, clientTop}) {
     return [clientX - left - clientLeft, clientY - top - clientTop];
 }
-
 function getIndexFromPosition(arrayLength, maxRange, currentPosition) {
     const calculatedIndex = Math.floor(ratio(maxRange, arrayLength, currentPosition));
     return limit(calculatedIndex, [0], [arrayLength - 1]);
 }
-
 function createGridPositionFinder({
                                       rowsCount,
                                       columnsCount,
@@ -5208,7 +5185,6 @@ function createGridPositionFinder({
         };
     };
 }
-
 function commonGridSelectionSelector(theme) {
     return theme.common.gridSelection;
 }
@@ -5232,7 +5208,6 @@ function GridSelection$1({type, gridSelectionData, weekDates, narrowWeekend}) {
         style
     }) : null;
 }
-
 function createSortedGridSelection(initPos, currentPos, isReversed) {
     return {
         startColumnIndex: isReversed ? currentPos.columnIndex : initPos.columnIndex,
@@ -5331,7 +5306,6 @@ const alldayGridRowSelectionHelper = {
     },
     calculateSelection: calculateAlldayGridRowSelectionByCurrentIndex
 };
-
 function dayGridWeekSelectionSelector(state) {
     return alldayGridRowSelectionHelper.calculateSelection(state.gridSelection.dayGridWeek);
 }
@@ -5348,7 +5322,6 @@ function AlldayGridSelection({weekDates, narrowWeekend}) {
         narrowWeekend
     });
 }
-
 function S(n2, t2) {
     for (var e2 in t2)
         n2[e2] = t2[e2];
@@ -5531,14 +5504,11 @@ d$3.prototype.isReactComponent = {}, ["componentWillMount", "componentWillReceiv
     });
 });
 var H = l$3.event;
-
 function Z() {
 }
-
 function Y() {
     return this.cancelBubble;
 }
-
 function q() {
     return this.defaultPrevented;
 }
@@ -5571,7 +5541,6 @@ var Q = l$3.__r;
 l$3.__r = function (n2) {
     Q && Q(n2), n2.__c;
 };
-
 function un(n2) {
     return !!n2.__k && (P$2(null, n2), true);
 }
@@ -5597,7 +5566,6 @@ function CollapseButton({isClicked, isClickedIndex, onClickCollapseButton}) {
         template: "collapseBtnTitle"
     })) : null;
 }
-
 function GridCell$1({
                         width,
                         left,
@@ -5728,7 +5696,6 @@ function isKeyPressed(e2, key) {
 function isLeftClick(buttonNum) {
     return buttonNum === 0;
 }
-
 function isMouseMoved(initX, initY, x2, y2) {
     return Math.abs(initX - x2) >= MINIMUM_DRAG_MOUSE_DISTANCE || Math.abs(initY - y2) >= MINIMUM_DRAG_MOUSE_DISTANCE;
 }
@@ -5832,7 +5799,6 @@ function useDrag(draggingItemType, {onInit, onDragStart, onDrag, onMouseUp, onPr
     }, [isStarted, reset]);
     return handleMouseDown;
 }
-
 function passConditionalProp(condition, prop) {
     return condition ? prop : void 0;
 }
@@ -5842,13 +5808,11 @@ function getMargins(flat) {
         horizontal: 8
     };
 }
-
 function getBorderRadius(exceedLeft, exceedRight) {
     const leftBorderRadius = exceedLeft ? 0 : "2px";
     const rightBorderRadius = exceedRight ? 0 : "2px";
     return `${leftBorderRadius} ${rightBorderRadius} ${rightBorderRadius} ${leftBorderRadius}`;
 }
-
 function getEventItemStyle({
                                uiModel,
                                flat,
@@ -5876,7 +5840,6 @@ function getEventItemStyle({
         marginRight: exceedRight ? 0 : margins.horizontal
     }, defaultItemStyle);
 }
-
 function getContainerStyle({
                                flat,
                                uiModel,
@@ -5908,7 +5871,6 @@ const classNames$k = {
     moveEvent: cls("dragging--move-event"),
     resizeEvent: cls("dragging--resize-horizontal-event")
 };
-
 function HorizontalEvent({
                              flat = false,
                              uiModel,
@@ -6030,7 +5992,6 @@ function HorizontalEvent({
         onMouseDown: handleResizeStart
     }) : null));
 }
-
 function useWhen(callback, condition) {
     const callbackRef = s$2(callback);
     _$2(() => {
@@ -6148,7 +6109,6 @@ function useAlldayGridRowEventMove({rowStyleInfo, gridPositionFinder}) {
         movingLeft: currentMovingLeft
     }), [currentMovingLeft, movingEvent]);
 }
-
 function MovingEventShadow$2({
                                  rowStyleInfo,
                                  gridPositionFinder
@@ -6167,13 +6127,11 @@ function MovingEventShadow$2({
         movingLeft
     });
 }
-
 function getEventColIndex(uiModel, row) {
     const start = getGridDateIndex(uiModel.getStarts(), row);
     const end = getGridDateIndex(uiModel.getEnds(), row);
     return {start, end};
 }
-
 function useAlldayGridRowEventResize({
                                          weekDates,
                                          gridColWidthMap,
@@ -6234,7 +6192,6 @@ function ResizingEventShadow({weekDates, gridColWidthMap, gridPositionFinder}) {
         resizingWidth
     });
 }
-
 function useDOMNode() {
     const [node, setNode] = y$1(null);
     const setNodeRef = T$1((ref) => {
@@ -6288,7 +6245,6 @@ function requestTimeout(fn2, delay, registerCancel) {
     const raf = requestAnimationFrame(loop);
     registerCancel(() => cancelAnimationFrame(raf));
 }
-
 function useClickPrevention({
                                 onClick,
                                 onDblClick,
@@ -6317,12 +6273,10 @@ const GRID_SELECTION_TYPE_MAP = {
     dayGridWeek: "allday",
     timeGrid: "time"
 };
-
 function sortDates(a2, b2) {
     const isIncreased = a2 < b2;
     return isIncreased ? [a2, b2] : [b2, a2];
 }
-
 function useGridSelection({
                               type,
                               selectionSorter,
@@ -6461,7 +6415,6 @@ function useGridSelection({
     return onMouseDown;
 }
 const rowTitleTemplate = `alldayTitle`;
-
 function AlldayGridRow({
                            events,
                            weekDates,
@@ -6543,7 +6496,6 @@ function AlldayGridRow({
         narrowWeekend
     })));
 }
-
 function OtherGridRow({
                           events,
                           weekDates,
@@ -6952,7 +6904,6 @@ function CalendarDropdownMenu({calendars, setOpened, onChangeIndex}) {
         onClick: handleDropdownMenuItemClick
     })));
 }
-
 function PopupSection({
                           children,
                           classNames: classNames2 = [],
@@ -6963,7 +6914,6 @@ function PopupSection({
         onClick
     }, children);
 }
-
 function useDropdownState() {
     const [isOpened, setOpened] = y$1(false);
     const toggleDropdown = () => setOpened((prev) => !prev);
@@ -7079,7 +7029,6 @@ function ConfirmPopupButton({children}) {
         className: classNames$d.confirmButton
     }, /* @__PURE__ */ h$3("span", null, children));
 }
-
 function useStringOnlyTemplate({
                                    template,
                                    model,
@@ -7096,7 +7045,6 @@ function useStringOnlyTemplate({
     }
     return result;
 }
-
 const classNames$c = {
     datePickerContainer: cls("datepicker-container"),
     datePicker: cls("popup-section-item", "popup-date-picker"),
@@ -7577,7 +7525,6 @@ function getLayoutStylesFromInfo(width, height) {
     }
     return styles;
 }
-
 function Layout({
                     children,
                     width,
@@ -7615,7 +7562,6 @@ function Layout({
         style: __spreadProps(__spreadValues({}, getLayoutStylesFromInfo(width, height)), {backgroundColor})
     }, container ? children : null), /* @__PURE__ */ h$3(EventFormPopup, null), /* @__PURE__ */ h$3(EventDetailPopup, null), /* @__PURE__ */ h$3(SeeMoreEventsPopup, null), /* @__PURE__ */ h$3(PopupOverlay, null));
 }
-
 function getDefaultStyle(height, border) {
     return {
         height,
@@ -7667,11 +7613,9 @@ function PanelResizer({name, height}) {
         style: guideStyle
     }));
 }
-
 function getPanelSide(side, maxExpandableSide) {
     return maxExpandableSide ? Math.min(maxExpandableSide, side) : side;
 }
-
 function getPanelStyle({
                            initialHeight,
                            initialWidth,
@@ -7777,7 +7721,6 @@ function getMarginLeft(left) {
     const {percent, px} = extractPercentPx(`${left}`);
     return left > 0 || percent > 0 || px > 0 ? TIME_EVENT_CONTAINER_MARGIN_LEFT : 0;
 }
-
 function getContainerWidth(width, marginLeft) {
     if (isString_1(width)) {
         return width;
@@ -7787,7 +7730,6 @@ function getContainerWidth(width, marginLeft) {
     }
     return "";
 }
-
 function getStyles({
                        uiModel,
                        isDraggingTarget,
@@ -7852,7 +7794,6 @@ function getStyles({
         comingDurationStyle
     };
 }
-
 function isDraggableEvent({
                               uiModel,
                               isReadOnlyCalendar,
@@ -7862,7 +7803,6 @@ function isDraggableEvent({
     const {model} = uiModel;
     return !isReadOnlyCalendar && !model.isReadOnly && !isDraggingTarget && !hasNextStartTime;
 }
-
 function TimeEvent({
                        uiModel,
                        nextStartTime,
@@ -8041,7 +7981,6 @@ function GridSelectionByColumn({columnIndex, timeGridRows}) {
     }
     return /* @__PURE__ */ h$3(GridSelection, __spreadValues({}, gridSelectionProps));
 }
-
 function useTimeGridEventResize({
                                     gridPositionFinder,
                                     totalUIModels,
@@ -8163,7 +8102,6 @@ function useTimeGridEventResize({
     }, isDraggingEnd);
     return guideUIModel;
 }
-
 function ResizingGuideByColumn({
                                    gridPositionFinder,
                                    totalUIModels,
@@ -8189,7 +8127,6 @@ const classNames$4 = {
     backgrounds: cls("background-events"),
     events: cls("events")
 };
-
 function VerticalEvents({
                             eventUIModels,
                             minEventHeight
@@ -8204,7 +8141,6 @@ function VerticalEvents({
         minHeight: minEventHeight
     })));
 }
-
 function backgroundColorSelector$1(theme) {
     return {
         defaultBackgroundColor: theme.week.dayGrid.backgroundColor,
@@ -8212,7 +8148,6 @@ function backgroundColorSelector$1(theme) {
         weekendBackgroundColor: theme.week.weekend.backgroundColor
     };
 }
-
 function getBackgroundColor({
                                 today,
                                 columnDate,
@@ -8296,13 +8231,11 @@ const GridLines = g$1(function GridLines2({
     }));
 });
 const THIRTY_MINUTES = 30;
-
 function getCurrentIndexByTime(time, hourStart) {
     const hour = time.getHours() - hourStart;
     const minutes = time.getMinutes();
     return hour * 2 + Math.floor(minutes / THIRTY_MINUTES);
 }
-
 function getMovingEventPosition({
                                     draggingEvent,
                                     columnDiff,
@@ -8330,7 +8263,6 @@ function getMovingEventPosition({
 }
 const initXSelector = (state) => state.dnd.initX;
 const initYSelector = (state) => state.dnd.initY;
-
 function useTimeGridEventMove({
                                   gridPositionFinder,
                                   timeGridData
@@ -8415,7 +8347,6 @@ function useTimeGridEventMove({
         nextStartTime
     };
 }
-
 function MovingEventShadow$1({
                                  gridPositionFinder,
                                  timeGridData
@@ -8443,7 +8374,6 @@ const classNames$3 = {
     today: cls(addTimeGridPrefix("now-indicator-today")),
     right: cls(addTimeGridPrefix("now-indicator-right"))
 };
-
 function nowIndicatorTheme(theme) {
     return {
         pastBorder: theme.week.nowIndicatorPast.border,
@@ -8568,7 +8498,6 @@ function backgroundColorSelector(theme) {
         subTimezoneBackgroundColor: theme.week.timeGridLeftAdditionalTimezone.backgroundColor
     };
 }
-
 function timeColorSelector(theme) {
     return {
         pastTimeColor: theme.week.pastTime.color,
@@ -8792,7 +8721,6 @@ function getRenderInfoOptions(uiModel, columnIndex, baseWidth, startColumnTime, 
         duplicateEvents: uiModel.duplicateEvents
     };
 }
-
 function setRenderInfo({
                            uiModel,
                            columnIndex,
@@ -8819,7 +8747,6 @@ function setRenderInfo({
     setInnerHeights(uiModel, renderInfoOptions);
     setCroppedEdges(uiModel, renderInfoOptions);
 }
-
 function setDuplicateEvents(uiModels, options, selectedDuplicateEventCid) {
     const {getDuplicateEvents, getMainEvent} = options;
     const eventObjects = uiModels.map((uiModel) => uiModel.model.toEventObject());
@@ -9038,7 +8965,6 @@ function TimezoneLabel({label, offset, tooltip, width = 100, left}) {
         as: "span"
     }));
 }
-
 function useTimezoneCollapseOptions() {
     const showTimezoneCollapseButton = useStore(showTimezoneCollapseButtonOptionSelector);
     const timezonesCollapsed = useStore(timezonesCollapsedOptionSelector);
@@ -9323,7 +9249,6 @@ function MoreEventsButton({type, number, onClickButton, className: className2}) 
         param: number
     }));
 }
-
 function getDateColor({
                           date: date2,
                           theme,
@@ -9351,13 +9276,11 @@ function getDateColor({
     }
     return dayName.color;
 }
-
 function useCellHeaderTheme() {
     const common = useCommonTheme();
     const month = useMonthTheme();
     return F$2(() => ({common, month}), [common, month]);
 }
-
 function CellHeader({
                         type = CellBarType.header,
                         exceedCount = 0,
@@ -9401,7 +9324,6 @@ function CellHeader({
         className: cls("grid-cell-more-events")
     }) : null);
 }
-
 function getSeeMorePopupSize({
                                  grid,
                                  offsetWidth,
@@ -9431,7 +9353,6 @@ function getSeeMorePopupSize({
     }
     return {width, height};
 }
-
 function getSeeMorePopupPosition(popupSize, appContainerSize, cellRect) {
     const {
         width: containerWidth,
@@ -9462,7 +9383,6 @@ function getSeeMorePopupPosition(popupSize, appContainerSize, cellRect) {
     }
     return {top: top + window.scrollY, left: left + window.scrollX};
 }
-
 function getSeeMorePopupRect({
                                  layoutContainer,
                                  cell,
@@ -9473,7 +9393,6 @@ function getSeeMorePopupRect({
     const popupPosition = getSeeMorePopupPosition(popupSize, containerRect, cellRect);
     return __spreadValues(__spreadValues({}, popupSize), popupPosition);
 }
-
 function usePopupPosition(eventLength, parentContainer, layoutContainer) {
     const {width: moreViewWidth, height: moreViewHeight} = useTheme(monthMoreViewSelector);
     const [container, containerRefCallback] = useDOMNode();
@@ -9499,7 +9418,6 @@ function usePopupPosition(eventLength, parentContainer, layoutContainer) {
     }, [layoutContainer, container, eventLength, parentContainer, moreViewWidth, moreViewHeight]);
     return {popupPosition, containerRefCallback};
 }
-
 function weekendBackgroundColorSelector(theme) {
     return theme.month.weekend.backgroundColor;
 }
@@ -9595,7 +9513,6 @@ const MonthEvents = g$1(function MonthEvents2({
         className: className2
     }, dayEvents);
 });
-
 function useDayGridMonthEventMove({
                                       dateMatrix,
                                       rowInfo,
@@ -9660,7 +9577,6 @@ function MovingEventShadow({dateMatrix, gridPositionFinder, rowInfo, rowIndex}) 
         headerHeight: MONTH_CELL_PADDING_TOP + MONTH_CELL_BAR_HEIGHT
     });
 }
-
 function getRowPosOfUIModel(uiModel, dateRow) {
     const startColumnIndex = Math.max(getGridDateIndex(uiModel.getStarts(), dateRow), 0);
     const endColumnIndex = getGridDateIndex(uiModel.getEnds(), dateRow);
@@ -9669,7 +9585,6 @@ function getRowPosOfUIModel(uiModel, dateRow) {
         endColumnIndex
     };
 }
-
 function useDayGridMonthEventResize({
                                         dateMatrix,
                                         gridPositionFinder,
@@ -9769,7 +9684,6 @@ function useDayGridMonthEventResize({
     }, isDraggingEnd);
     return guideProps;
 }
-
 function ResizingGuideByRow({
                                 dateMatrix,
                                 cellWidthMap,
@@ -9886,7 +9800,6 @@ function DayGridMonth({dateMatrix = [], rowInfo = [], cellWidthMap = []}) {
         }));
     }));
 }
-
 function getMonthDayNames(options) {
     const {dayNames, startDayOfWeek, workweek} = options.month;
     const dayIndices = [...Array(7)].map((_2, i2) => (startDayOfWeek + i2) % 7);
@@ -10585,7 +10498,6 @@ CustomEvents.prototype.getListenerLength = function (eventName) {
     return events.length;
 };
 var customEvents = CustomEvents;
-
 class EventBusImpl extends customEvents {
     on(eventName, handler) {
         super.on(eventName, handler);
@@ -10607,7 +10519,6 @@ class EventBusImpl extends customEvents {
         return this;
     }
 }
-
 class CalendarCore {
     constructor(container, options = {}) {
         var _a;
@@ -10953,7 +10864,6 @@ class CalendarCore {
 function isValidViewType(viewType) {
     return !!Object.values(VIEW_TYPE).find((type) => type === viewType);
 }
-
 class Calendar extends CalendarCore {
     constructor(container, options = {}) {
         super(container, options);
@@ -10968,7 +10878,6 @@ class Calendar extends CalendarCore {
         return /* @__PURE__ */ h$3(Main, null);
     }
 }
-
 class Day extends CalendarCore {
     constructor(container, options = {}) {
         super(container, options);
@@ -10979,7 +10888,6 @@ class Day extends CalendarCore {
         return /* @__PURE__ */ h$3(Day$1, null);
     }
 }
-
 class Month extends CalendarCore {
     constructor(container, options = {}) {
         super(container, options);
@@ -10995,7 +10903,6 @@ class Month extends CalendarCore {
         hideSeeMorePopup();
     }
 }
-
 class Week extends CalendarCore {
     constructor(container, options = {}) {
         super(container, options);

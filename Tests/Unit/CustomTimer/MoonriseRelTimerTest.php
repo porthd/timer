@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\CustomTimer;
+namespace Porthd\Timer\Tests\Unit\CustomTimer;
 
 /***************************************************************
  *
@@ -20,6 +21,8 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Porthd\Timer\CustomTimer\MoonriseRelTimer;
 use TYPO3\CMS\Core\Context\Context;
 use DateInterval;
 use DateTime;
@@ -83,7 +86,7 @@ class MoonriseRelTimerTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
     /**
@@ -180,7 +183,7 @@ class MoonriseRelTimerTest extends TestCase
         );
     }
 
-    public function dataProvider_isAllowedInRange()
+    public static function dataProvider_isAllowedInRange()
     {
         $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
@@ -290,7 +293,7 @@ class MoonriseRelTimerTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderValidateGeneralByVariationArgumentsInParam()
+    public static function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
             'moonStatus' => 'moonrise',
@@ -446,7 +449,7 @@ class MoonriseRelTimerTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderValidateSpeciallByVariationArgumentsInParam()
+    public static function dataProviderValidateSpeciallByVariationArgumentsInParam()
     {
         $general = [
             'useTimeZoneOfFrontend' => 0,
@@ -712,7 +715,7 @@ class MoonriseRelTimerTest extends TestCase
     }
 
 
-    public function dataProviderGetTimeZoneOfEvent()
+    public static function dataProviderGetTimeZoneOfEvent()
     {
         $result = [];
         /* test allowed minimal structure */
@@ -845,7 +848,7 @@ class MoonriseRelTimerTest extends TestCase
         }
     }
 
-    public function dataProviderIsActive()
+    public static function dataProviderIsActive()
     {
         $general = [
             'useTimeZoneOfFrontend' => 0,
@@ -1233,7 +1236,7 @@ class MoonriseRelTimerTest extends TestCase
         }
     }
 
-    public function dataProviderNextActive()
+    public static function dataProviderNextActive()
     {
         $general = [
             'useTimeZoneOfFrontend' => 0,
@@ -1602,7 +1605,7 @@ class MoonriseRelTimerTest extends TestCase
         }
     }
 
-    public function dataProviderPrevActive()
+    public static function dataProviderPrevActive()
     {
         $general = [
             'useTimeZoneOfFrontend' => 0,

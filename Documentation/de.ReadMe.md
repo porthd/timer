@@ -128,6 +128,8 @@ bei mehrfacher verwendung des Content-Elementes auch mehrfach geladen.
 Die Dateien aus den anderen beiden Felder werden nur einmal für eine Seite
 geladen, egal wie oft das Content-Element auf der Seite verwendet wird.
 
+##### 'Alias'-Definition: nur Experiment im Kalendar-Dataprocessor
+
 Der Dateimport kann über eine CSV-Datei oder eine Yaml-Datei erfolgen. Da die
 meisten Redakteure vermutlicht mit der
 Erstellung einer Yaml-Datei überfordert sind, wurde auch der Import als
@@ -276,6 +278,7 @@ Er kann helfen, einen geeigneten JSON-String an das Fluid-Template zu übergeben
 So können die Daten leicht über ein HTML-Attribut dem TuiCalendar-Framework oder
 einem anderen Calendar-Framework zur Verfügung gestellt werden.
 
+
 ### Contentelement `timersimul` als Beispiel
 
 Das Content-Element `timersimul` zeigt exemplarisch die Anwendung der Viewhelper
@@ -335,8 +338,16 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   meist beweglichen wichtigen christlichen Feiertagen (erster Advent,
   Weihnachten, Rosenmontag, Karfreitag, Ostern, Himmelfahrt, Pfingsten)
   (2. Advent von 12:00-14:00, Rosenmontag von 20:00 bis 6:00 des Folgetages)
-* JewishHolidayTimer (in Progress 2022-12-28) - Perioden startend relativ zu
-  einem der jüdischen Feiertage bezogen auf den jüdischen Kalender
+* HolidayTimer (in Progress 2023-09-17) - Liste zur Definition von Feiertage.
+  Die Feiertage werden in einer CSV-Datei erfasst und können auch über eine
+  YAML-Datei definiert werden.
+  Erläuterungen zur CSV-Datei siehe weiter unten.
+  Die Yaml-Datei blockt unter dem Ausdruck `holidayTimerList` alle Daten, die
+  für den Holidaykalender relevant sind. Für jeden Feiertag wird ein eigenes
+  Array-Element in dem YAML-Block angelegt. Die Namen der Attribute sind die
+  gleichen, wie sie als Namen für die Spalten in der CSV verwendet werden.
+* JewishHolidayTimer - Perioden startend relativ zu einem der jüdischen
+  Feiertage bezogen auf den jüdischen Kalender
   (IMHO: Ich war lange am Überlegen, ob ich diesen Timer hinzufüge, weil ich
   Teile des Judentums für moralisch problematisch halte. Es ist bei orthodoxen
   Juden gelebte und gelobte
@@ -392,7 +403,6 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   Donnerstag)
 
 #### Anmerkungen zum Workflow beim CalendarDateRelTimer
-
 ##### Herausforderung
 
 Die Einschätzung, welche Feiertage ein Redakteur benutzen können darf/soll,
@@ -406,7 +416,6 @@ welche Informationen zusätzlich zu den Feiertagen noch gespeichert werden
 sollen.
 Gleichzeitig möchte man die Liste der Feiertage möglicht übersichtlich verwalten
 können.
-
 ##### Workflow für individuelle Listen
 
 Man verwaltet die Liste der Feiertage in einer Tabellenkalulation wie `Excel`
@@ -416,7 +425,7 @@ CSV-Datei bei den Settings für die Extension-Konfigurationen an.
 Nach dem Löschen des Caches hat man dann die neue Liste im
 Timer `CalendarDateRelTimer` verfügbar.
 
-##### unterstützte Feiertagsberechnungen (aktuell nicht funktionsfähig und getestet 2023-02-25)
+##### unterstützte Feiertagsberechnungen (aktuell nicht funktionsfähig und nicht getestet 2023-02-25)
 
 Die Berechnug ist wie jedes menschengemachte System im Grundsatz einfach; aber
 im Detail meisten hoch kompliziert, weil die Schlauen sich in ihrer Dummheit von
@@ -450,6 +459,31 @@ anzugeben sind:
   0,1,2,0,3,2,1' würde ein Feiertag um drei Tage (5.ter Eintrag) verschoben,
   wenn er auf einen Freitag (5.ter Tag in der Woche) fällt.
   Technisch funktioniert die Mechanik analog zu `_fixed_`.
+- _fixedrelated_: Das Beispiel vierter Advend zeigt, dass es Feiertage gibt, die
+  an bestimmten Wochentage relativ zu einem fixierten Datum (beim Advent der
+  erste Weihnachtstag) gefeiert werden.
+  Mit den Ziffern 1 = Montag bis 7 = Sonntag definiert man in `arg.status` den
+  Wochentag, der dem Fix-Datum des Zielfeiertages vorangehen muss.
+  In `arg.statusCount` defniert man dann, wie viel Wochen vorher der Tag
+  stattfinden muss. Der erste Advent ist zum Beispiel mit `-4` der vierte
+  Sonntag vor Weihnachten.
+  Um Feiertagsspezialitäten wie den Buß- und Bettag - der Mittwoch vor dem
+  fünften Sonntag vor Weihnachten - definieren zu können, kann man
+  in `arg.secDayCount` angeben, wie viele Tage der eigentliche Feiertag vom
+  berechneten Tag wirklich entfernt ist.
+- _season_: Dies definiert die vier Jahreszeiten, die mit 1=Frühling, 2=Sommer
+  3= Herst und 4 = Winter über das Attribut `arg.status`definiert werden.
+- _seasonshifting_: Dies definiert wie _`season`_ die vier Jahreszeiten, die mit
+  1=Frühling, 2=Sommer 3= Herst und 4 = Winter über das Attribut `arg.status`
+  definiert werden. Wie bei _fixedshifting_ wird auch hier im
+  Parameter `arg.statusCount` der jeweilige Wochentag berücksichtigt, um einen
+  entsprechende Verschiebung des Feiertage bei entsprechenden Wochentagen zu
+  ermöglichen.
+- _matariki_: Matariki ist nur für die Feiertag Matariki in Neuseeland
+  vorgesehen. Ich habe keinen Algorithmus gefunden, der diesen Feiertag in PHP
+  berechnen kann. Es gibt nur einen Liste für die kommenden 30 Jahre die ich bei
+  einer (!) Quelle im Internet gefunden habe. Diese Berechnungsroutine kennt
+  keine Parameter.
 - _easterly_: Dieses Schlüsselwort gilt nur für eine Berechnungsform beschränkt
   auf den gregorianischen oder auf den julianischen Kalender (`arg.calendar`).
   Es bestimmt einen Feiertag relativ zum Ostersonntag, der mit Hilfe der
@@ -540,7 +574,6 @@ Sie können für eigenen Informationen zusätzliche Spalten einfügen.
 Es wird angestrebt, die Angaben immer auch im Frontend verfügbar zu machen.
 
 ##### Erläuterungen zur internen Struktur der CSV-Liste
-
 Die Struktur lässt sich am leichtesten am Beispiel der YAML-Struktur erläutern.
 Zu den einzelnen Bestandteilen sind die Erläuterungen als Kommentar mit
 angeführt.
@@ -808,6 +841,7 @@ Es gibt fünf Viewhelper:
   den gregorianischen (westlichen) Sonnenkalender mit einem Fehler behaftet ist,
   der im PHP zu suchen ist. Der Timer macht den
   Viewhelper ``timer:format.jewishDate`` überflüssig.
+
 
 #### timer:format.calendarDate - Attribute
 

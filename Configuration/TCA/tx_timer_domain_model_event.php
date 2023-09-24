@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
@@ -22,7 +23,7 @@ return [
             'endtime' => 'endtime',
         ],
         'searchFields' => 'title, description, ' .
-            'tx_timer_timer, tx_timer_selector, ' .
+            TimerConst::TIMER_FIELD_FLEX_ACTIVE . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ' .
             'teaser_slogan, teaser_infotext,',
         'typeicon_classes' => [
             'default' => 'tx_timer-timer',
@@ -39,7 +40,7 @@ return [
         '1' => ['showitem' => '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_domain_model_event.tab.single,' .
             'title, description,' .
             '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.tab.timer,' .
-            'tx_timer_scheduler, tx_timer_selector, tx_timer_timer, ' .
+            TimerConst::TIMER_FIELD_SCHEDULER . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ' . TimerConst::TIMER_FIELD_FLEX_ACTIVE . ', ' .
             '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_domain_model_event.tab.teaser,' .
             'teaser_slogan, teaser_infotext,  ' .
             '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,' .
@@ -146,7 +147,7 @@ return [
             ],
         ],
 
-        'tx_timer_scheduler' => [
+        TimerConst::TIMER_FIELD_SCHEDULER => [
             'exclude' => true,
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_scheduler',
             'config' => [
@@ -156,7 +157,7 @@ return [
                     [
                         'invertStateDisplay' => true,
                         TimerConst::TCA_ITEMS_LABEL => '',
-                    ],
+                    ]
                 ],
             ],
         ],
@@ -165,14 +166,15 @@ return [
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_timer',
             'config' => [
                 'type' => 'flex',
-                'ds_pointerField' => 'tx_timer_selector',
+                'ds_pointerField' => TimerConst::TIMER_FIELD_SELECTOR,
                 'ds' => TcaUtility::mergeNameFlexformArray(),
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
+                'default' => 'default',
             ],
         ],
-        'tx_timer_selector' => [
+        TimerConst::TIMER_FIELD_SELECTOR => [
             'exclude' => true,
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_selector',
             'description' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.fieldDescription.tx_timer_selector',
@@ -184,6 +186,7 @@ return [
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
+                'default' => 'default',
             ],
             'onChange' => 'reload',
         ],

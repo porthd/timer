@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\GlobalsUtilities;
+namespace Porthd\Timer\Tests\Unit\GlobalUtilities;
 
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Utilities\ConfigurationUtility;
@@ -33,7 +34,7 @@ class ConfigurationUtilityTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
 

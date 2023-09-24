@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -40,7 +42,6 @@ class DefaultTimer implements TimerInterface
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     public const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/DefaultTimer.flexform',
-        '' => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/DefaultTimer.flexform',
     ];
 
     /**

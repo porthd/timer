@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
 
@@ -45,7 +46,7 @@ class PagesTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
 

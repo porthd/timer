@@ -14,12 +14,8 @@
 				<target>Wählen Sie das Timer-Modell aus</target>
 			</trans-unit>
 			<trans-unit id="tx_timer_general.field.tx_timer_scheduler">
-				<source>allow to modify the start- and endtime of this element with the scheduler by a command-line-task
-					(CLI)
-				</source>
-				<target>erlauben, die Start- und Endzeit dieses Elements mit dem Planer über eine Befehlszeilenaufgabe
-					(CLI) zu ändern
-				</target>
+				<source>allow to modify the start- and endtime of this element with the scheduler by a command-line-task (CLI)</source>
+				<target>erlauben, die Start- und Endzeit dieses Elements mit dem Planer über eine Befehlszeilenaufgabe (CLI) zu ändern</target>
 			</trans-unit>
 			<trans-unit id="tx_timer_general.field.tx_timer_timer">
 				<source>flexform-parameter for selected timer of active periods</source>
@@ -30,12 +26,8 @@
 				<target>Wählen Sie das Timer-Modell aus</target>
 			</trans-unit>
 			<trans-unit id="tx_timer_general.fieldDescription.tx_timer_selector">
-				<source>If an expected timer model is missing here, then you should check whether the selection value in
-					the settings for the `timer` extension also includes the value for the timer you expect.
-				</source>
-				<target>Wenn hier ein erwartetes Timer-Modell fehlt, dann sollten sie prüfen, ob der Auswahlwert bei den
-					Einstellungen zur Extension `timer` auch den Wert für den von Ihnen erwarteten Timer mit umfasst.
-				</target>
+				<source>If an expected timer model is missing here, then you should check whether the selection value in the settings for the `timer` extension also includes the value for the timer you expect.</source>
+				<target>Wenn hier ein erwartetes Timer-Modell fehlt, dann sollten sie prüfen, ob der Auswahlwert bei den Einstellungen zur Extension `timer` auch den Wert für den von Ihnen erwarteten Timer mit umfasst.</target>
 			</trans-unit>
 
 			<trans-unit id="tx_timer_domain_model_event.model.title">
@@ -105,65 +97,32 @@
 			</trans-unit>
 
 			<trans-unit id="extension.configuration.template.flag.useTestContent">
-				<source>Flag for TestContent: Only if the value is 1,true or TRUE, you can activate the predefined
-					content-elements of this extension for your tests.
-				</source>
-				<target>Flag for TestContent: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten
-					Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.
-				</target>
+				<source>Flag for TestContent: Only if the value is 1,true or TRUE, you can activate the predefined content-elements of this extension for your tests.</source>
+				<target>Flag for TestContent: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.</target>
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.flag.useTimersimul">
-				<source>Flag for content-element timersimul: Only if the value is 1,true or TRUE, you can activate the
-					predefined content-elements of this extension for your tests.
-				</source>
-				<target>Schalter für das Inhaltselement timersimul: Nur wenn der Wert 1,true oder TRUE ist, können Sie
-					die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.
-				</target>
+				<source>Flag for content-element timersimul: Only if the value is 1,true or TRUE, you can activate the predefined content-elements of this extension for your tests.</source>
+				<target>Schalter für das Inhaltselement timersimul: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.</target>
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.flag.usePeriodlist">
-				<source>Flag for content-element periodlist: Only if the value is 1,true or TRUE, you can activate the
-					predefined content-elements of this extension for your tests.
-				</source>
-				<target>Schalter für das Inhaltselement periodlist: Nur wenn der Wert 1,true oder TRUE ist, können Sie
-					die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.
-				</target>
+				<source>Flag for content-element periodlist: Only if the value is 1,true or TRUE, you can activate the predefined content-elements of this extension for your tests.</source>
+				<target>Schalter für das Inhaltselement periodlist: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.</target>
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.flag.useHolidaycalendar">
-				<source>Flag for content-element holidaycalendar: Only if the value is 1,true or TRUE, you can activate
-					the predefined content-elements of this extension for your tests.
-				</source>
-				<target>Schalter für das Inhaltselement holidaycalendar: Nur wenn der Wert 1,true oder TRUE ist, können
-					Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.
-				</target>
+				<source>Flag for content-element holidaycalendar: Only if the value is 1,true or TRUE, you can activate the predefined content-elements of this extension for your tests.</source>
+				<target>Schalter für das Inhaltselement holidaycalendar: Nur wenn der Wert 1,true oder TRUE ist, können Sie die vordefinierten Content-Elemente dieser Erweiterung für Ihre Tests aktivieren.</target>
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.flag.flagPreviewTimerFrontend">
-				<source>Show preview-mark everytime on the page (inclusive a dat-time-form for temporäry previews).
-				</source>
-				<target>Vorschau-Markierung immer auf der Seite anzeigen (inklusive Datum-Uhrzeit-Formular für temporäre
-					Vorschauen).
-				</target>
+				<source>Show preview-mark everytime on the page (inclusive a dat-time-form for temporäry previews).</source>
+				<target>Vorschau-Markierung immer auf der Seite anzeigen (inklusive Datum-Uhrzeit-Formular für temporäre Vorschauen).</target>
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.flag.defaultBaseTimeZone">
-				<source>Default Timezone: Each timer-event is defined for its own timezone. You define her, which
-					timezone will set on default by the typo3-backend. The default-value by blank or undefined zones is
-					`UTC`.
-				</source>
-				<target>Default Timezone: Jedes Timer-Event ist für seine eigene Zeitzone definiert. Sie legen hier
-					fest, welche Zeitzone vom Typo3-Backend standardmäßig eingestellt wird. Der Default-Wert bei leeren
-					oder undefinierten Zonen ist `UTC`.
-				</target>
+				<source>Default Timezone: Each timer-event is defined for its own timezone. You define her, which timezone will set on default by the typo3-backend. The default-value by blank or undefined zones is `UTC`.</source>
+				<target>Default Timezone: Jedes Timer-Event ist für seine eigene Zeitzone definiert. Sie legen hier fest, welche Zeitzone vom Typo3-Backend standardmäßig eingestellt wird. Der Default-Wert bei leeren oder undefinierten Zonen ist `UTC`.</target>
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.flag.selectInternatTimer">
-				<source>Activate predefined Timer: Summarize the values to activate only the timer you really need. (all
-					= 8191 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel
-					= 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024,
-					JewishHoliday = 2048, CalendarDate = 4096 )
-				</source>
-				<target>Vordefinierten Timer aktivieren: Fassen Sie die Werte zusammen, um nur den wirklich benötigten
-					Timer zu aktivieren. (all = 8191 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8,
-					MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256,
-					WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048, CalendarDate = 4096)
-				</target>
+				<source>Activate predefined Timer: Summarize the values to activate only the timer you really need. (none = -1 // all[default] = 8191  // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048, CalendarDate = 4096, 8192 = List of Holidays )</source>
+				<target>Vordefinierten Timer aktivieren: Fassen Sie die Werte zusammen, um nur den wirklich benötigten Timer zu aktivieren. (keinen = -1 // all[default] = 8191 // Daily = 1, DatePeriod = 2, Default[null] = 4, EasterRel =8, MoonphaseRel = 16, MoonriseRel = 32, PeriodList = 64, RangeList = 128, SunriseRel = 256, WeekdayInMonth = 512, Weekdayly = 1024, JewishHoliday = 2048, CalendarDate = 4096, Liste von feiertagen = 8192)</target>
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.flag.baseTimeZone">
 				<source>Predefined time zone</source>
@@ -171,8 +130,7 @@
 			</trans-unit>
 			<trans-unit id="extension.configuration.template.file.yamlHolidayList">
 				<source>Yaml file or csv-file in UTF-8 with predefined list of calendar-fixed holidays</source>
-				<target>Yaml-Datei or csv-Datei in UTF-8 mit vordefinierter Liste von kalender-fixierten Feiertagen
-				</target>
+				<target>Yaml-Datei or csv-Datei in UTF-8 mit vordefinierter Liste von kalender-fixierten Feiertagen</target>
 			</trans-unit>
 
 			<trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.title">
@@ -181,9 +139,7 @@
 			</trans-unit>
 			<trans-unit id="tx_timer_domain_model_timings.tca.type.customTimer.datePeriod.description">
 				<source>Remark an active delay-time after as special date repeating in flexible ways</source>
-				<target>Bemerken Sie eine aktive Verzögerungszeit danach als Sonderdatum, das sich flexibel wiederholen
-					lässt
-				</target>
+				<target>Bemerken Sie eine aktive Verzögerungszeit danach als Sonderdatum, das sich flexibel wiederholen lässt</target>
 			</trans-unit>
 			<trans-unit id="tx_timer.tca.general.div.timerParams.label">
 				<source>Periods</source>
@@ -202,90 +158,44 @@
 				<target>Internationale Liste mit Feiertagen</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libFLuidContent">
-				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript
-					`lib.fluidContent`
-				</source>
-				<target>Schlüssel für Pfade: Nummer für Template-, Partial- und Layout-Pfade im Typoscript
-					`lib.fluidContent`
-				</target>
+				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
+				<target>Schlüssel für Pfade: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.fluidContent`</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_timersimul.const.pathesFor.libContentElement">
-				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript
-					`lib.contentElement`
-				</source>
-				<target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript
-					`lib.contentElement`
-				</target>
+				<source>key for pathes: number for template-, partial- and layout-pathes in the typoscript `lib.contentElement`</source>
+				<target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElement`</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libFLuidContent">
-				<source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the
-					typoscript `lib.fluidContent`
-				</source>
-				<target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im
-					Typoscript `lib.fluidContent`
-				</target>
+				<source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
+				<target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.fluidContent`</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_periodlist.const.pathesFor.libContentElement">
-				<source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the
-					typoscript `lib.contentElement`
-				</source>
-				<target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im
-					Typoscript `lib.contentElement`
-				</target>
+				<source>key for pathes of `timer_periodlist`: number for template-, partial- and layout-pathes in the typoscript `lib.contentElement`</source>
+				<target>Schlüssel für Pfade von `timer_periodlist`: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElement`</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_holidaycalendar.const.pathesFor.libFLuidContent">
-				<source>key for pathes of `timer_holidaycalendar`: number for template-, partial- and layout-pathes in
-					the typoscript `lib.fluidContent`
-				</source>
-				<target>Schlüssel für Pfade von `timer_holidaycalendar`: Nummer für Template-, Partial- und Layout-Pfade
-					im Typoscript `lib.fluidContent`
-				</target>
+				<source>key for pathes of `timer_holidaycalendar`: number for template-, partial- and layout-pathes in the typoscript `lib.fluidContent`</source>
+				<target>Schlüssel für Pfade von `timer_holidaycalendar`: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.fluidContent`</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_holidaycalendar.const.pathesFor.libContentElement">
-				<source>key for pathes of `timer_holidaycalendar`: number for template-, partial- and layout-pathes in
-					the typoscript `lib.contentElement`
-				</source>
-				<target>Schlüssel für Pfade von `timer_holidaycalendar`: Nummer für Template-, Partial- und Layout-Pfade
-					im Typoscript `lib.contentElement`
-				</target>
+				<source>key for pathes of `timer_holidaycalendar`: number for template-, partial- and layout-pathes in the typoscript `lib.contentElement`</source>
+				<target>Schlüssel für Pfade von `timer_holidaycalendar`: Nummer für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElement`</target>
 			</trans-unit>
 			<trans-unit id="newContentElement.tx_timer_timersimul.pages.forList">
-				<source>list of page-id for pages, which contains events used by the example content-element
-					`tx_timer_timersimul`
-				</source>
-				<target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript
-					`lib.contentElement`
-				</target>
+				<source>list of page-id for pages, which contains events used by the example content-element `tx_timer_timersimul`</source>
+				<target>Schlüssel für Pfade: Zahl für Template-, Partial- und Layout-Pfade im Typoscript `lib.contentElement`</target>
 			</trans-unit>
 			<trans-unit id="backend.pageModul.timerTimersimul.info">
-				<source>This content-element is only for propose of testing and adding some example-code to the
-					extension. This content element may be removed in later versions as the documentation becomes more
-					polished.
-				</source>
-				<target>Dieses Inhaltselement dient nur zum Testen und Hinzufügen von Beispielcode zur Erweiterung. Dies
-					Inhaltselement wird in späteren Versionen gegebenenfalls wieder entfernt werden, wenn die
-					Dokumentation ausgefeilter geworden ist.
-				</target>
+				<source>This content-element is only for propose of testing and adding some example-code to the extension. This content element may be removed in later versions as the documentation becomes more polished.</source>
+				<target>Dieses Inhaltselement dient nur zum Testen und Hinzufügen von Beispielcode zur Erweiterung. Dies Inhaltselement wird in späteren Versionen gegebenenfalls wieder entfernt werden, wenn die Dokumentation ausgefeilter geworden ist.</target>
 			</trans-unit>
 			<trans-unit id="backend.pageModul.holidaycalendar.info">
-				<source>This content element allows the display of public holidays in another calendar framework. The
-					content element has an exemplary character. This content element may be removed in later versions as
-					the documentation becomes more polished.
-				</source>
-				<target>Dies Inhaltselement erlaubt die Darstellung von Feiertage in einem anderen Kalenderframework.
-					Das Inhaltselement hat beispielhaften Charakter. Dies Inhaltselement wird in späteren Versionen
-					gegebenenfalls wieder entfernt werden, wenn die Dokumentation ausgefeilter geworden ist.
-				</target>
+				<source>This content element allows the display of public holidays in another calendar framework. The content element has an exemplary character. This content element may be removed in later versions as the documentation becomes more polished.</source>
+				<target>Dies Inhaltselement erlaubt die Darstellung von Feiertage in einem anderen Kalenderframework. Das Inhaltselement hat beispielhaften Charakter. Dies Inhaltselement wird in späteren Versionen gegebenenfalls wieder entfernt werden, wenn die Dokumentation ausgefeilter geworden ist.</target>
 			</trans-unit>
 			<trans-unit id="backend.pageModul.periodList.info">
-				<source>This content element is only for testing and adding a calendar framework (JavaScript) to display
-					multi-day appointments. This content element may be removed in later versions as the documentation
-					becomes more polished.
-				</source>
-				<target>Dieses Inhaltselement dient nur zum Testen und Hinzufügen von einen Kalenderframework
-					(JavaScript) zur Darstellung von mehrtägigen Termine. Dies Inhaltselement wird in späteren Versionen
-					gegebenenfalls wieder entfernt werden, wenn die Dokumentation ausgefeilter geworden ist.
-				</target>
+				<source>This content element is only for testing and adding a calendar framework (JavaScript) to display multi-day appointments. This content element may be removed in later versions as the documentation becomes more polished.</source>
+				<target>Dieses Inhaltselement dient nur zum Testen und Hinzufügen von einen Kalenderframework (JavaScript) zur Darstellung von mehrtägigen Termine. Dies Inhaltselement wird in späteren Versionen gegebenenfalls wieder entfernt werden, wenn die Dokumentation ausgefeilter geworden ist.</target>
 			</trans-unit>
 
 			<trans-unit id="task.timer.updateTimesByTimer.title">
@@ -293,29 +203,21 @@
 				<target>Start- und Endzeit per Timer aktualisieren</target>
 			</trans-unit>
 			<trans-unit id="task.timer.updateTimesByTimer.help">
-				<source>
-					<![CDATA[ <br /> The Commandcontroller will update the field starttime and endtime in a selected table, if the tx_timer_select-Field is not empty and the field `deleted`is zero. <br /> The yaml-file contains the list of table in the array ``. The subarray `where-equal` of a table contain additional field-value-pairs for the where-block of the query. <br /> The array `rootline` restricts the results to rows, which aree part of the branch with the listed pids in its root/branch. <br /> ]]></source>
-				<target>
-					<![CDATA[ <br /> Der Commandcontroller aktualisiert die Felder starttime und endtime in einer selektierten Tabelle, wenn das tx_timer_select-Field nicht leer und das Feld `deleted`null ist. <br /> Die yaml-Datei enthält die Liste der Tabellen im Array ``. Das Subarray `where-equal` einer Tabelle enthält zusätzliche Feld-Wert-Paare für den Where-Block der Abfrage. <br /> Das Array `rootline` schränkt die Ergebnisse auf Zeilen ein, die Teil des Zweigs mit den aufgelisteten PIDs in seinem Stamm/Zweig sind. <br /> ]]></target>
+				<source><![CDATA[ <br /> The Commandcontroller will update the field starttime and endtime in a selected table, if the tx_timer_select-Field is not empty and the field `deleted`is zero. <br /> The yaml-file contains the list of table in the array ``. The subarray `where-equal` of a table contain additional field-value-pairs for the where-block of the query. <br /> The array `rootline` restricts the results to rows, which aree part of the branch with the listed pids in its root/branch. <br /> ]]></source>
+				<target><![CDATA[ <br /> Der Commandcontroller aktualisiert die Felder starttime und endtime in einer selektierten Tabelle, wenn das tx_timer_select-Field nicht leer und das Feld `deleted`null ist. <br /> Die yaml-Datei enthält die Liste der Tabellen im Array ``. Das Subarray `where-equal` einer Tabelle enthält zusätzliche Feld-Wert-Paare für den Where-Block der Abfrage. <br /> Das Array `rootline` schränkt die Ergebnisse auf Zeilen ein, die Teil des Zweigs mit den aufgelisteten PIDs in seinem Stamm/Zweig sind. <br /> ]]></target>
 			</trans-unit>
 			<trans-unit id="task.timer.updateTimesByTimer.yamltablelist">
 				<source>The yaml-file contains the List of table, which should be updated, and the cache-commands
-					<target>Die yaml-Datei enthält die Liste der Tabellen, die aktualisiert werden sollen, und die
-						Cache-Anweisungen
-					</target>
+<target>Die yaml-Datei enthält die Liste der Tabellen, die aktualisiert werden sollen, und die Cache-Anweisungen</target>
 				</source>
 			</trans-unit>
 			<trans-unit id="task.timer.exception.yamlNotExit.1">
 				<source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
-				<target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable
-					`%s`.
-				</target>
+				<target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable `%s`.</target>
 			</trans-unit>
 			<trans-unit id="task.timer.warning.yamlNotAllUpdated.3">
 				<source>The parameter for the yaml-file does not exit. Check the path in your variable `%s`.</source>
-				<target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable
-					`%s`.
-				</target>
+				<target>Der Parameter für die yaml-Datei wird nicht beendet. Überprüfen Sie den Pfad in Ihrer Variable `%s`.</target>
 			</trans-unit>
 
 			<trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.title">
@@ -323,12 +225,8 @@
 				<target>Zurücksetzen von Veröffentlichungsdatum und Ablaufdatum</target>
 			</trans-unit>
 			<trans-unit id="timer.startendtimermanipulationhook.hook.postProcess.infoOfResetStartEndtime.message">
-				<source>The fields `starttime`(publishingDate) and `endtime`(Expiration Date) have been changed to
-					zero.
-				</source>
-				<target>Die Felder `starttime`(publishingDate) und `endtime`(expiration date) wurden auf Null
-					geändert.
-				</target>
+				<source>The fields `starttime`(publishingDate) and `endtime`(Expiration Date) have been changed to zero.</source>
+				<target>Die Felder `starttime`(publishingDate) und `endtime`(expiration date) wurden auf Null geändert.</target>
 			</trans-unit>
 
 			<trans-unit id="tt_content.CType.div._timer_">

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Domain\Model\Interfaces;
 
 /***************************************************************
@@ -20,7 +22,6 @@ namespace Porthd\Timer\Domain\Model\Interfaces;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Context\Context;
 use DateInterval;

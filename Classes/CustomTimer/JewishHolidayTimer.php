@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -46,15 +48,15 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     public const TIMER_NAME = 'txTimerJewishHoliday';
 
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
-    protected const ARG_REQ_REL_TO_MIN = -475200;
-    protected const ARG_REQ_REL_TO_MAX = 475200;
+    protected const ARG_REQ_REL_TO_MIN = -462240;
+    protected const ARG_REQ_REL_TO_MAX = 462240;
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_REQ_DURMIN_MIN = -475200;
+    protected const ARG_REQ_DURMIN_MIN = -462240;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 475200;
+    protected const ARG_REQ_DURMIN_MAX = 462240;
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
-    public const TIMER_FLEXFORM_ITEM = [
+    protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/JewsihHolidayTimer.flexform',
     ];
 

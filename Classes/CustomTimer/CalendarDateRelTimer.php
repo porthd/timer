@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -27,6 +29,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
@@ -40,12 +43,12 @@ class CalendarDateRelTimer implements TimerInterface
 
     protected const ARG_NAMED_DATE_MIDNIGHT = 'namedDateMidnight';
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
-    protected const ARG_REQ_REL_TO_MIN = -475200;
-    protected const ARG_REQ_REL_TO_MAX = 475200;
+    protected const ARG_REQ_REL_TO_MIN = -462240;
+    protected const ARG_REQ_REL_TO_MAX = 462240;
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_REQ_DURMIN_MIN = -475200;
+    protected const ARG_REQ_DURMIN_MIN = -462240;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 475200;
+    protected const ARG_REQ_DURMIN_MAX = 462240;
     protected const ARG_EVENT_TITLE = 'eventtitle';
     protected const ARG_EVENT_CALENDAR = 'calendar';
     protected const ARG_LIST_EVENT_CALENDAR = [
@@ -84,7 +87,7 @@ class CalendarDateRelTimer implements TimerInterface
     protected const ARG_EVENT_LOCALE = 'locale';
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
-    public const TIMER_FLEXFORM_ITEM = [
+    protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/CalendarDateRelTimer.flexform',
     ];
 

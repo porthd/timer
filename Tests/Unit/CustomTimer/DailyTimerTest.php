@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\CustomTimer;
+namespace Porthd\Timer\Tests\Unit\CustomTimer;
 
 /***************************************************************
  *
@@ -20,6 +21,8 @@ namespace Porthd\Timer\CustomTimer;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Porthd\Timer\CustomTimer\DailyTimer;
 use TYPO3\CMS\Core\Context\Context;
 use DateInterval;
 use DateTime;
@@ -79,7 +82,7 @@ class DailyTimerTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
     /**
@@ -182,7 +185,7 @@ class DailyTimerTest extends TestCase
     }
 
 
-    public function dataProviderGetTimeZoneOfEvent()
+    public static function dataProviderGetTimeZoneOfEvent()
     {
         $result = [];
         /* test allowed minimal structure */
@@ -318,7 +321,7 @@ class DailyTimerTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderValidateSpecialByVariationArgumentsInParam()
+    public static function dataProviderValidateSpecialByVariationArgumentsInParam()
     {
         $general = [
             'useTimeZoneOfFrontend' => 0,
@@ -713,7 +716,7 @@ class DailyTimerTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderValidateGeneralByVariationArgumentsInParam()
+    public static function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
             'startTimeSeconds' => 43200,
@@ -873,7 +876,7 @@ class DailyTimerTest extends TestCase
         }
     }
 
-    public function dataProviderIsAllowedInRange()
+    public static function dataProviderIsAllowedInRange()
     {
         $testDate = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
@@ -985,7 +988,7 @@ class DailyTimerTest extends TestCase
     }
 
 
-    public function dataProviderIsActive()
+    public static function dataProviderIsActive()
     {
         $result = [];
         foreach ([
@@ -1420,7 +1423,7 @@ class DailyTimerTest extends TestCase
         }
     }
 
-    public function dataProviderNextActive()
+    public static function dataProviderNextActive()
     {
         $result = [];
         // 1. rondomly Test
@@ -1759,7 +1762,7 @@ class DailyTimerTest extends TestCase
         }
     }
 
-    public function dataProviderPrevActive()
+    public static function dataProviderPrevActive()
     {
         $result = [];
         // 1. rondomly Test

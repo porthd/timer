@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Constants;
 
 /***************************************************************
@@ -61,7 +63,7 @@ class TimerConst
      */
     public const TIMER_FIELD_FLEX_ACTIVE = 'tx_timer_timer';
     public const TIMER_FIELD_SCHEDULER = 'tx_timer_scheduler';
-    public const TIMER_FIELD_SELECT = 'tx_timer_selector';
+    public const TIMER_FIELD_SELECTOR = 'tx_timer_selector';
     public const TIMER_FIELD_UID = 'uid';
     public const TIMER_FIELD_PID = 'pid';
     public const TIMER_FIELD_ENDTIME = 'endtime';
@@ -70,7 +72,7 @@ class TimerConst
     public const TIMER_RELATION_UID = 'relation_uid';
     public const TIMER_NEEDED_FIELDS = [
         self::TIMER_FIELD_FLEX_ACTIVE,
-        self::TIMER_FIELD_SELECT,
+        self::TIMER_FIELD_SELECTOR,
         self::TIMER_FIELD_UID,
         self::TIMER_FIELD_PID,
         self::TIMER_FIELD_ENDTIME,

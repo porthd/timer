@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\DataProcessing;
 
 /***************************************************************
@@ -52,6 +54,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
 {
     use LoggerAwareTrait;
 
+    protected const YAML_HOLIDAY_CALENDAR_PROCESSOR = 'holidayCalendarProcessor';
     protected const ATTR_START_DOT = 'start.';
     protected const ATTR_STOP_DOT = 'stop.';
     protected const ATTR_YEAR = 'year';
@@ -144,6 +147,9 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         // exetract the holiday- and alias-parts from the current holiday-File
         if (!empty($aliasPath)) {
             $aliasArray = CustomTimerUtility::readListFromFileOrUrl($aliasPath, $yamlFileLoader);
+            if (array_key_exists(self::YAML_HOLIDAY_CALENDAR_PROCESSOR, $aliasArray)) {
+                $aliasArray = $aliasArray[self::YAML_HOLIDAY_CALENDAR_PROCESSOR];
+            } // else  $aliasArray without yaml-help-layer
         }
         if (empty($holidayPath)) {
             throw new TimerException(
@@ -154,6 +160,9 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         }
 
         $holidayArray = CustomTimerUtility::readListFromFileOrUrl($holidayPath, $yamlFileLoader);
+        if (array_key_exists(self::YAML_HOLIDAY_CALENDAR_PROCESSOR, $holidayArray)) {
+            $holidayArray = $holidayArray[self::YAML_HOLIDAY_CALENDAR_PROCESSOR];
+        } // else $holidayArray without yaml-help-layer
 
         // merge the alias-dateinto the array of the holidays
         // mark empty rows and merge the both alias-parts and the merge them into the holiday-List
@@ -175,6 +184,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
                     $item[self::YAML_HOLIDAY_ADD]);
             }
         }
+        unset($item);
         // remove other empty rows in holidayArray
         foreach ($emptyRow as $key) {
             unset($holidayArray[$key]);

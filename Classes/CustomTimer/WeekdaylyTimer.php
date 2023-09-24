@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -25,6 +27,7 @@ namespace Porthd\Timer\CustomTimer;
 use DateInterval;
 use DateTime;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;

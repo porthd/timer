@@ -33,20 +33,36 @@
                     </config>
                 </TCEforms>
             </startTimeSeconds>
+            <test>
+                <label>nummer</label>
+                <config>
+                    <type>number</type>
+                </config>
+            </test>
             <durationMinutes>
                 <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDaily.field.durationMinutes
                     </label>
                     <config>
-                        <type>input</type>
-                        <size>10</size>
-                        <eval>int,required</eval>
-                        <range>
-                            <lower>-1439</lower>
-                            <upper>1439</upper>
-                        </range>
+                        <type>user</type>
+                        <renderType>durationMinutesField</renderType>
                         <default>60</default>
+                        <required>1</required>
+                        <parameters>
+                            <flagHours>1</flagHours>
+                            <flagDays>0</flagDays>
+                            <rangeMinutes>
+                                <lower>-59</lower>
+                                <upper>59</upper>
+                                <default>0</default>
+                            </rangeMinutes>
+                            <rangeHours>
+                                <lower>-23</lower>
+                                <upper>23</upper>
+                                <default>0</default>
+                            </rangeHours>
+                        </parameters>
                     </config>
                 </TCEforms>
             </durationMinutes>
@@ -59,7 +75,7 @@
                         <type>check</type>
                         <renderType>checkboxToggle</renderType>
                         <cols>4</cols>
-                        <eval>required</eval>
+                        <required>1</required>
                         <items>
                             <numIndex index="0" type="array">
                                 <numIndex index="0">

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\DataProcessing;
 
 /***************************************************************
@@ -177,8 +179,14 @@ class PeriodlistProcessor implements DataProcessorInterface
                 1677394183
             );
         }
-        $rawResultFile = CustomTimerUtility::readListFromFileOrUrl($yamlFile, $yamlFileLoader, $periodListTimer, $this->logger);
-        $rawResultFile = $rawResultFile[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST] ?? [];
+        $rawResultFile = CustomTimerUtility::readListFromFileOrUrl(
+            $yamlFile,
+            $yamlFileLoader,
+            $periodListTimer,
+            $this->logger);
+        if (array_key_exists(PeriodListTimer::YAML_MAIN_KEY_PERIODLIST, $rawResultFile)) {
+            $rawResultFile = $rawResultFile[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST];
+        } // else $rawResultFile without yaml-help-layer
         $yamlFal = $paramList[PeriodListTimer::ARG_YAML_PERIOD_FAL_INFO];
         $rawResultFalList = CustomTimerUtility::readListsFromFalFiles(
             $yamlFal,
@@ -187,9 +195,16 @@ class PeriodlistProcessor implements DataProcessorInterface
             $yamlFileLoader,
             $this->logger
         );
-        $rawResultFal = array_column($rawResultFalList, PeriodListTimer::YAML_MAIN_KEY_PERIODLIST);
-
-        $rawResult = array_merge($rawResultFile, ...$rawResultFal);
+        $resultList = [];
+        // normalize about the help-layer in the yaml-file
+        foreach ($rawResultFalList as $entry) {
+            if (array_key_exists(PeriodListTimer::YAML_MAIN_KEY_PERIODLIST, $entry)) {
+                $resultList[] = $entry[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST];
+            } else {
+                $resultList[] = $entry;
+            }
+        }
+        $rawResult = array_merge($rawResultFile, ...$resultList);
         // detect the other parameters
         $upper = null;
         $lower = null;

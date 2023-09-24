@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
 
@@ -48,7 +49,7 @@ class SysFileReferenceTest extends UnitTestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (false), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (false), 'I should an evergreen, but I am incomplete! :-)');
     }
 
 

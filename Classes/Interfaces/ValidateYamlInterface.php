@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Interfaces;
 
 /***************************************************************
@@ -20,11 +22,6 @@ namespace Porthd\Timer\Interfaces;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-use DateTime;
-use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
-use Porthd\Timer\Exception\TimerException;
-
 interface ValidateYamlInterface
 {
     /**
@@ -32,7 +29,6 @@ interface ValidateYamlInterface
      *
      * @param array<mixed> $yamlConfig
      * @param string $infoAboutYamlFile
-     * @throws TimerException
      *
      */
     public function validateYamlOrException(array $yamlConfig, string $infoAboutYamlFile = ''): void;

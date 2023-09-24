@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Command;
 
 /***************************************************************
@@ -162,7 +164,9 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                 );
             }
             $yamlConfig = CustomTimerUtility::readListFromFileOrUrl($yamlFilePath, $this->yamlLoader);
-
+            if (array_key_exists(self::YAML_MAINGROUP_TABLELIST, $yamlConfig)) {
+                $yamlConfig = $yamlConfig[self::YAML_MAINGROUP_TABLELIST];
+            } // else $yamlConfig without yaml-help-layer
             // @todo Throw an error-message, if there was an table not successful (no changes)
             $flagSuccessTable = $this->updateTables($yamlConfig);
             $flagSuccessGeneral = array_reduce($flagSuccessTable, function ($carry, $item) {
@@ -253,7 +257,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     ) {
         $flagSuccess = [];
         $refDateTime = new DateTime('now');
-        foreach ($yamlConfig[self::YAML_MAINGROUP_TABLELIST] as $key => $tableConfig) {
+        foreach ($yamlConfig as $key => $tableConfig) {
             $this->validateYamlDefinition($tableConfig, $key);
             $listPids = [];
             if (array_key_exists(self::YAML_SUBGROUP_LIST_ROOTLINE, $tableConfig)) {
@@ -327,7 +331,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             return self::FAILURE;
         }
         $firstKey = array_key_first($listOfRows);
-        if ((!array_key_exists(TimerConst::TIMER_FIELD_SELECT, $listOfRows[$firstKey])) ||
+        if ((!array_key_exists(TimerConst::TIMER_FIELD_SELECTOR, $listOfRows[$firstKey])) ||
             (!array_key_exists(TimerConst::TIMER_FIELD_FLEX_ACTIVE, $listOfRows[$firstKey])) ||
             (!array_key_exists(TimerConst::TIMER_FIELD_UID, $listOfRows[$firstKey])) ||
             (!array_key_exists(TimerConst::TIMER_FIELD_PID, $listOfRows[$firstKey])) ||
@@ -356,12 +360,12 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             $normParams[TimerConst::TIMER_RELATION_UID] = $timerUpRow[TimerConst::TIMER_FIELD_UID];
 
             if ($this->timerService->validate(
-                $timerUpRow[TimerConst::TIMER_FIELD_SELECT],
+                $timerUpRow[TimerConst::TIMER_FIELD_SELECTOR],
                 $normParams
             )) {
                 /** @var TimerStartStopRange $timerRange */
                 $timerRange = $this->timerService->nextActive(
-                    $timerUpRow[TimerConst::TIMER_FIELD_SELECT],
+                    $timerUpRow[TimerConst::TIMER_FIELD_SELECTOR],
                     $refDateTime,
                     $normParams
                 );

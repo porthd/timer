@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Utilities;
 
 /***************************************************************
@@ -23,15 +25,11 @@ namespace Porthd\Timer\Utilities;
 
 use DateInterval;
 use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
 use DateTimeZone;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
-use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**

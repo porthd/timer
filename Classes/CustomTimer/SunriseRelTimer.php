@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -27,6 +29,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -53,9 +56,9 @@ class SunriseRelTimer implements TimerInterface
     ];
     protected const LIST_DURATION_NATURAL_ADD = [self::ITEM_DURATION_NATURAL_DEFAULT,];
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_REQ_DURMIN_MIN = -1340;
+    protected const ARG_REQ_DURMIN_MIN = -1319;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 1340;
+    protected const ARG_REQ_DURMIN_MAX = 1319;
     protected const ARG_LATITUDE = 'latitude';
     protected const DEFAULT_LATITUDE = 47.599329;// see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
     protected const ARG_LATITUDE_MAX = 90;// see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
@@ -65,12 +68,12 @@ class SunriseRelTimer implements TimerInterface
     protected const ARG_LONGITUDE_MAX = 180; // see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
     protected const ARG_LONGITUDE_MIN = -180; // see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
     protected const ARG_REL_TO_TIMEREVENT = 'relMinToSelectedTimerEvent';
-    protected const ARG_REQ_RELTOEVENT_MIN = -1340;
-    protected const ARG_REQ_RELTOEVENT_MAX = 1340;
+    protected const ARG_REQ_RELTOEVENT_MIN = -1319;
+    protected const ARG_REQ_RELTOEVENT_MAX = 1319;
 
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
-    public const TIMER_FLEXFORM_ITEM = [
+    protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/SunriseRelTimer.flexform',
     ];
 

@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\Utilities;
+namespace Porthd\Timer\Tests\Unit\Utilities;
 
 /***************************************************************
  *
@@ -24,8 +25,8 @@ namespace Porthd\Timer\Utilities;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
+use Porthd\Timer\Utilities\DateTimeUtility;
 use PHPUnit\Framework\TestCase;
-use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 
 class DateTimeUtilityTest extends TestCase

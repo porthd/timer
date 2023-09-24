@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -60,9 +62,9 @@ class DatePeriodTimer implements TimerInterface
     protected const ARG_OPT_LIST = [
     ];
 
-    protected const ARG_REQ_DURMIN_MIN = -444444;
+    protected const ARG_REQ_DURMIN_MIN = -462240;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 444444;
+    protected const ARG_REQ_DURMIN_MAX = 462240;
 
     /**
      * @var TimerStartStopRange|null

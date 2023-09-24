@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\Services;
+namespace Porthd\Timer\Tests\Unit\Services;
 
 use DateInterval;
 use DateTime;
 use DateTimeZone;
+use Porthd\Timer\Services\HolidaycalendarService;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use ReflectionClass;

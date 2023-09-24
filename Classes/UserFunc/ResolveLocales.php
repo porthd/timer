@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\UserFunc;
 
 use Porthd\Timer\Constants\TimerConst;

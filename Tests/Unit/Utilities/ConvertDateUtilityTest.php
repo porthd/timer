@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\Utilities;
+namespace Porthd\Timer\Tests\Unit\Utilities;
 
 use DateTime;
 use DateTimeZone;
+use Porthd\Timer\Utilities\ConvertDateUtility;
 use PHPUnit\Framework\TestCase;
 
 class ConvertDateUtilityTest extends TestCase
@@ -31,7 +33,7 @@ class ConvertDateUtilityTest extends TestCase
      */
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incoplete! :)');
+        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
 

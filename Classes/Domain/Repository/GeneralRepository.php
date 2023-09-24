@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Domain\Repository;
 
 /***************************************************************
@@ -23,6 +25,7 @@ namespace Porthd\Timer\Domain\Repository;
 
 use DateTime;
 use Exception;
+use Porthd\Timer\Domain\Repository\TimerRepositoryInterface;
 use PDO;
 use Doctrine\DBAL\Exception as DbalException;
 use Porthd\Timer\Command\UpdateTimerCommand;
@@ -93,9 +96,9 @@ class GeneralRepository implements TimerRepositoryInterface
                 '""'
             ),
             $queryBuilder->expr()->isNotNull(TimerConst::TIMER_FIELD_FLEX_ACTIVE),
-            $queryBuilder->expr()->isNotNull(TimerConst::TIMER_FIELD_SELECT),
+            $queryBuilder->expr()->isNotNull(TimerConst::TIMER_FIELD_SELECTOR),
             $queryBuilder->expr()->neq(
-                TimerConst::TIMER_FIELD_SELECT,
+                TimerConst::TIMER_FIELD_SELECTOR,
                 '""'
             ),
             $queryBuilder->expr()->lte(

@@ -17,6 +17,11 @@
 			"email": "info@mobger.de"
 		}
 	],
+	"replace": {
+		"timer": "self.version",
+		"typo3-ter/timer": "self.version",
+		"porthd/timer": "self.version"
+	},
 	"require": {
 		"php": ">7.4.0 <=8.2.99",
 		"ext-pdo": "*",

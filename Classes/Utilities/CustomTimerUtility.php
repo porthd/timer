@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Utilities;
 
 /***************************************************************
@@ -23,13 +25,10 @@ namespace Porthd\Timer\Utilities;
 
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
-use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Interfaces\ValidateYamlInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Yaml\Yaml;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
-use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
@@ -335,7 +334,11 @@ class CustomTimerUtility
             }
         }
         // validate the yaml-structure or throw an exception
-        if ($validatorObject !== null) {
+        $implements = class_implements($validatorObject);
+        if (($validatorObject !== null) &&
+            ($implements !== false) &&
+            (in_array(ValidateYamlInterface::class, $implements))
+        ) {
             $validatorObject->validateYamlOrException($result, ($filePathNew ?? '-- undefined --'));
         }
         return $result;
@@ -355,7 +358,7 @@ class CustomTimerUtility
             case 'yaml':
             case 'yml':
                 $flags = YamlFileLoader::PROCESS_PLACEHOLDERS | YamlFileLoader::PROCESS_IMPORTS;
-                $result = $yamlFileLoader->load($filePathNew, $flags);
+            $result = $yamlFileLoader->load($filePathNew, $flags);
                 break;
             case 'csv':
                 $csvString = CsvYamlJsonMapperUtility::readCsvFile($filePathNew);

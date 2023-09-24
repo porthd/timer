@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
@@ -7,7 +8,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 defined('TYPO3') || die();
 call_user_func(function () {
     $tmp_timer_columns = [
-        'tx_timer_scheduler' => [
+        TimerConst::TIMER_FIELD_SCHEDULER => [
             'exclude' => true,
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_scheduler',
             'config' => [
@@ -17,7 +18,7 @@ call_user_func(function () {
                     [
                         'invertStateDisplay' => true,
                         TimerConst::TCA_ITEMS_LABEL => '',
-                    ],
+                    ]
                 ],
                 'default' => false,
             ],
@@ -27,14 +28,15 @@ call_user_func(function () {
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_timer',
             'config' => [
                 'type' => 'flex',
-                'ds_pointerField' => 'tx_timer_selector',
+                'ds_pointerField' => TimerConst::TIMER_FIELD_SELECTOR,
                 'ds' => TcaUtility::mergeNameFlexformArray(),
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
+                'default' => 'default',
             ],
         ],
-        'tx_timer_selector' => [
+        TimerConst::TIMER_FIELD_SELECTOR => [
             'exclude' => true,
             'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.field.tx_timer_selector',
             'description' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_general.fieldDescription.tx_timer_selector',
@@ -82,9 +84,10 @@ call_user_func(function () {
     ExtensionManagementUtility::addToAllTCAtypes(
         'sys_file_reference',
         '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.label,' .
-        'tx_timer_scheduler, tx_timer_selector, tx_timer_timer,starttime,endtime,'
+        TimerConst::TIMER_FIELD_SCHEDULER . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ' . TimerConst::TIMER_FIELD_FLEX_ACTIVE . ',starttime,endtime,'
     );
 
 
-    $GLOBALS['TCA']['sys_file_reference']['palettes']['imageoverlayPalette']['showitem'] .= ',--linebreak--,tx_timer_timer,tx_timer_selector,--linebreak--,starttime,endtime,';
+    $GLOBALS['TCA']['sys_file_reference']['palettes']['imageoverlayPalette']['showitem'] .= ',--linebreak--,' .
+        TimerConst::TIMER_FIELD_FLEX_ACTIVE . ',' . TimerConst::TIMER_FIELD_SELECTOR . ',--linebreak--,starttime,endtime,';
 });

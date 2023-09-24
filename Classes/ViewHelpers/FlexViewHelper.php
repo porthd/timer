@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\ViewHelpers;
 
 /***************************************************************
@@ -23,7 +25,6 @@ namespace Porthd\Timer\ViewHelpers;
 
 use Closure;
 use Porthd\Timer\Exception\TimerException;
-use Porthd\Timer\Utilities\ConfigurationUtility;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;

@@ -24,11 +24,8 @@
 				<target>Liste von Feiertage aus Datei im csv- oder yaml-Format</target>
 			</trans-unit>
 			<trans-unit id="wizards.newContentElement.holidaycalendar_description">
-				<source>Load your own list of holiday dates in csv or yaml format and display them in the calendar.
-				</source>
-				<target>Laden sie ihre eigene Liste mit Feiertagsterminen im csv- oder yaml-Format und lassen sie diese
-					im Kalender anzeigen.
-				</target>
+				<source>Load your own list of holiday dates in csv or yaml format and display them in the calendar.</source>
+				<target>Laden sie ihre eigene Liste mit Feiertagsterminen im csv- oder yaml-Format und lassen sie diese im Kalender anzeigen.</target>
 			</trans-unit>
 		</body>
     </file>

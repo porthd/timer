@@ -114,15 +114,30 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.field.relMinToSelectedTimerEvent
                     </label>
                     <config>
-                        <type>input</type>
-                        <size>10</size>
-                        <eval1>int</eval1>
-                        <!-- 446400 = 10*30*24*60+10*24*60 -->
-                        <range>
-                            <lower>-444444</lower>
-                            <upper>444444</upper>
-                        </range>
-                        <default>0</default>
+                        <type>user</type>
+                        <required>1</required>
+                        <renderType>durationMinutesField</renderType>
+                        <default>60</default>
+                        <parameters>
+                            <warningZero>0</warningZero>
+                            <flagHours>1</flagHours>
+                            <flagDays>1</flagDays>
+                            <rangeMinutes>
+                                <lower>-59</lower>
+                                <upper>59</upper>
+                                <default>0</default>
+                            </rangeMinutes>
+                            <rangeHours>
+                                <lower>-23</lower>
+                                <upper>23</upper>
+                                <default>0</default>
+                            </rangeHours>
+                            <rangeDays>
+                                <lower>-320</lower>
+                                <upper>320</upper>
+                                <default>0</default>
+                            </rangeDays>
+                        </parameters>
                     </config>
                 </TCEforms>
             </relMinToSelectedTimerEvent>
@@ -172,15 +187,29 @@
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerEasterRel.field.durationMinutes
                     </label>
                     <config>
-                        <type>input</type>
-                        <size>10</size>
-                        <eval>int,required</eval>
-                        <!-- 446400 = 10*30*24*60+10*24*60 -->
-                        <range>
-                            <lower>-444444</lower>
-                            <upper>444444</upper>
-                        </range>
+                        <type>user</type>
+                        <required>1</required>
+                        <renderType>durationMinutesField</renderType>
                         <default>60</default>
+                        <parameters>
+                            <flagHours>1</flagHours>
+                            <flagDays>1</flagDays>
+                            <rangeMinutes>
+                                <lower>-59</lower>
+                                <upper>59</upper>
+                                <default>0</default>
+                            </rangeMinutes>
+                            <rangeHours>
+                                <lower>-23</lower>
+                                <upper>23</upper>
+                                <default>0</default>
+                            </rangeHours>
+                            <rangeDays>
+                                <lower>-320</lower>
+                                <upper>320</upper>
+                                <default>0</default>
+                            </rangeDays>
+                        </parameters>
                     </config>
                 </TCEforms>
             </durationMinutes>

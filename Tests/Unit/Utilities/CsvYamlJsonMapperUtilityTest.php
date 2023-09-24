@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
-namespace Porthd\Timer\Utilities;
+namespace Porthd\Timer\Tests\Unit\Utilities;
 
+use Porthd\Timer\Utilities\CsvYamlJsonMapperUtility;
 use PHPUnit\Framework\TestCase;
 
 class CsvYamlJsonMapperUtilityTest extends TestCase

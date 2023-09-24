@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\CustomTimer;
 
 /***************************************************************
@@ -85,7 +87,7 @@ INFOSYNTAX;
 
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
-    public const TIMER_FLEXFORM_ITEM = [
+    protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/PeriodListTimer.flexform',
     ];
 
@@ -101,6 +103,7 @@ INFOSYNTAX;
         self::ARG_EVER_TIME_ZONE_OF_EVENT,
 
     ];
+    protected const YAML_USE_TIME_ZONE_OF_FRONTEND = 'useTimeZoneOfFrontend';
 
     /**
      * @var TimerStartStopRange|null
@@ -204,9 +207,10 @@ INFOSYNTAX;
         $flag = $flag && $this->validateUltimate($params);
         $countRequired = $this->validateCountArguments($params);
         $flag = ($flag && ($countRequired === count(self::ARG_REQ_LIST)));
-        $flag = $flag && $this->validateYamlFilePath($params);
+        $flag = $flag && $this->validateFilePath(self::ARG_YAML_PERIOD_FILE_PATH, $params);
+        $flag = $flag && $this->validateFileFalIdIfExist(self::ARG_YAML_PERIOD_FAL_INFO, $params);
         $countOptions = $this->validateOptional($params);
-        return $flag && ($countOptions >= 0) &&
+        return $flag && ($countOptions >= 1) &&
             ($countOptions <= count(self::ARG_OPT_LIST));
     }
 
@@ -314,35 +318,6 @@ INFOSYNTAX;
         return $this->countParamsInList(self::ARG_OPT_LIST, $params);
     }
 
-
-    /**
-     * This method are introduced for easy build of unittests
-     * @param array<mixed> $params
-     * @return bool
-     */
-    protected function validateYamlFilePath(array $params = []): bool
-    {
-        $filePath = (
-        array_key_exists(self::ARG_YAML_PERIOD_FILE_PATH, $params) ?
-            $params[self::ARG_YAML_PERIOD_FILE_PATH] :
-            ''
-        );
-        if (!empty($filePath)) {
-            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
-                $extPath = $this->getExtentionPathByEnviroment();
-                $filePath = substr($filePath, strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
-                $flag = file_exists($extPath . DIRECTORY_SEPARATOR . $filePath);
-            } else {
-                $rootPath = $this->getPublicPathByEnviroment();
-                $flag = file_exists($rootPath . DIRECTORY_SEPARATOR . $filePath);
-            }
-        } else {
-            $flag = false;
-        }
-
-        return $flag;
-    }
-
     /**
      * tested 20221120
      *
@@ -361,7 +336,7 @@ INFOSYNTAX;
             return $result->getResultExist();
         }
         $flag = false;
-        $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
+        $flagTimeZoneByFrontend = empty($params[self::YAML_USE_TIME_ZONE_OF_FRONTEND]) ? false : true;
         // the method will validate the yaml-file with a internal callback-method, so that the upload of the yaml-file
         //     fails with an exception, if the syntax of the yaml is somehow wrong.
         $listOfSeparatedDates = $this->readPeriodListFromFileOrUrl($params);
@@ -427,7 +402,7 @@ INFOSYNTAX;
         $listOfSeparatedDates = $this->readPeriodListFromFileOrUrl($params);
         $oldStart = null;
         $flag = true;
-        $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
+        $flagTimeZoneByFrontend = empty($params[self::YAML_USE_TIME_ZONE_OF_FRONTEND]) ? false : true;
         $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
             if ($flagTimeZoneByFrontend) {
@@ -481,7 +456,7 @@ INFOSYNTAX;
         $listOfSeparatedDates = $this->readPeriodListFromFileOrUrl($params);
         $oldStop = null;
         $flag = true;
-        $flagTimeZoneByFrontend = empty($params['useTimeZoneOfFrontend']) ? false : true;
+        $flagTimeZoneByFrontend = empty($params[self::YAML_USE_TIME_ZONE_OF_FRONTEND]) ? false : true;
         $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
             if ($flagTimeZoneByFrontend) {
@@ -535,7 +510,9 @@ INFOSYNTAX;
             $this,
             $this->logger
         );
-        $fileResult = $fileResult[self::YAML_MAIN_KEY_PERIODLIST] ?? [];
+        if (array_key_exists(PeriodListTimer::YAML_MAIN_KEY_PERIODLIST, $fileResult)) {
+            $fileResult = $fileResult[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST];
+        } // else $fileResult without yaml-help-layer
         $falRawResult = CustomTimerUtility::readListsFromFalFiles(
             $params[self::ARG_YAML_PERIOD_FAL_INFO],
             ($params[TimerConst::TIMER_RELATION_TABLE] ?? ''),
@@ -543,9 +520,16 @@ INFOSYNTAX;
             $this->yamlFileLoader,
             $this->logger
         );
-        $rawResultFal = array_column($falRawResult, PeriodListTimer::YAML_MAIN_KEY_PERIODLIST);
-
-        return array_merge($fileResult, ...$rawResultFal);
+        $resultList = [];
+        // normalize about the help-layer in the yaml-file
+        foreach ($falRawResult as $entry) {
+            if (array_key_exists(PeriodListTimer::YAML_MAIN_KEY_PERIODLIST, $entry)) {
+                $resultList[] = $entry[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST];
+            } else {
+                $resultList[] = $entry;
+            }
+        }
+        return array_merge($fileResult, ...$resultList);
     }
 
     /**

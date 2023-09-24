@@ -71,7 +71,7 @@
                             </numIndex>
                         </items>
                         <col>4</col>
-                        <eval>required</eval>
+                        <required>1</required>
                         <default>31</default>
                     </config>
 

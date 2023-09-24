@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Services;
 
 /***************************************************************
@@ -31,6 +33,7 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class TcaService
 {
@@ -77,7 +80,11 @@ class TcaService
         $pathYamlHolidayList = $timerConfig[self::CONFIG_PATH_VARIABLE];
         $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
         $yamlList = CustomTimerUtility::readListFromFileOrUrl($pathYamlHolidayList, $yamlFileLoader);
-        $yamlCalendarList = $yamlList[self::YAML_CALENDAR_DATE_REL];
+        if (array_key_exists(self::YAML_CALENDAR_DATE_REL, $yamlList)) {
+            $yamlCalendarList = $yamlList[self::YAML_CALENDAR_DATE_REL];
+        } else {
+            $yamlCalendarList = $yamlList;
+        }
         array_walk($yamlCalendarList, function (&$value, $key) {
             $value = [
                 (

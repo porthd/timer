@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Porthd\Timer\Hooks\Backend;
 
 /***************************************************************
@@ -50,7 +52,7 @@ class StartEndTimerManipulationHook
     public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $selfDatamapper): void
     {
         if ((
-            (array_key_exists(TimerConst::TIMER_FIELD_SELECT, $fieldArray)) ||
+            (array_key_exists(TimerConst::TIMER_FIELD_SELECTOR, $fieldArray)) ||
             (array_key_exists(TimerConst::TIMER_FIELD_FLEX_ACTIVE, $fieldArray))
         )
         ) {

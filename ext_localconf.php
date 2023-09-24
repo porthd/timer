@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\HolidayTimer;
 use Porthd\Timer\CustomTimer\DailyTimer;
 use Porthd\Timer\CustomTimer\DatePeriodTimer;
 use Porthd\Timer\CustomTimer\DefaultTimer;
@@ -99,25 +101,25 @@ call_user_func(
 
 
         // disallow usage of timer from the extension via the configuration
-        if (!empty($timerConfig['useInternalTimer'])) {
-            $addTimerFlags = (int)$timerConfig['useInternalTimer'];
+        $addTimerFlags = (int)((empty($timerConfig['useInternalTimer'])) ? 0 : $timerConfig['useInternalTimer']);
+        if ($addTimerFlags >= 1) {
             $listOfTimerClasses = [
                 DailyTimer::class, // => 1
                 DatePeriodTimer::class, // => 2
                 DefaultTimer::class, // => 4
-                EasterRelTimer::class,
-                MoonphaseRelTimer::class,
-                MoonriseRelTimer::class,
-                PeriodListTimer::class,
-                RangeListTimer::class,
-                SunriseRelTimer::class,
-                WeekdayInMonthTimer::class,
-                WeekdaylyTimer::class,
-                JewishHolidayTimer::class,
-                CalendarDateRelTimer::class,
+                EasterRelTimer::class, // => 8
+                MoonphaseRelTimer::class, // => 16
+                MoonriseRelTimer::class, // => 32
+                PeriodListTimer::class, // => 64
+                RangeListTimer::class, // => 128
+                SunriseRelTimer::class, // => 256
+                WeekdayInMonthTimer::class, // => 512
+                WeekdaylyTimer::class, // => 1024
+                JewishHolidayTimer::class, // => 2048
+                CalendarDateRelTimer::class, // => 4096
+//                HolidayTimer::class, // => 8192 // 20230924 not working yet
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
-
 
             $tsConfig =
                 "@import 'EXT:timer/Configuration/TsConfig/Page/BackendPreview.tsconfig'" .
@@ -174,5 +176,11 @@ call_user_func(
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST]['frontend'] = VariableFrontend::class;
             }
         }
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1694842416] = [
+            'nodeName' => 'durationMinutesField',
+            'priority' => 1,
+            'class' => \Porthd\Timer\Form\Element\DurationMinutesFieldElement::class,
+        ];
     }
+
 );
