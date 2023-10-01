@@ -1,2 +1,1 @@
 @import 'EXT:timer/Configuration/TypoScript/Setup/Config.typoscript'
-@import 'EXT:timer/Configuration/TypoScript/Setup/LibTimer.typoscript'

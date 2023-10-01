@@ -282,43 +282,6 @@
             <timer:format.date format="d.m.Y - H:i:s">1600000000</timer:format.date>
             <br/>
             &nbsp;&nbsp;&nbsp;
-            <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.unixtimestamp"
-                         extensionName="timer"
-            />
-            <br/>
-            <br/>
-            <ol>
-                <li>
-                    <timer:format.jewishDate>1600000000</timer:format.jewishDate>
-                </li>
-                <li>
-                    <timer:format.jewishDate format="H:i">1600000000</timer:format.jewishDate>
-                </li>
-                <li>
-                    <timer:format.jewishDate format="H:i e" timezone="UTC">1600000000</timer:format.jewishDate>
-                </li>
-                <li>
-                    <timer:format.jewishDate format="H:i e" timezone="Asia/Bangkok">1600000000</timer:format.jewishDate>
-                </li>
-                <li>
-                    <timer:format.jewishDate format="Y" base="1600000000">-1 year</timer:format.jewishDate>
-                    (Ref. - 1 Year)
-                </li>
-                <li>
-                    <timer:format.jewishDate format="d.m.Y - H:i:s" base="1600000000">+1 week 2 days 4 hours 2 seconds
-                    </timer:format.jewishDate>
-                    (Ref. +1 week 2 days 4 hours 2 seconds)
-                </li>
-                <li>
-                    <timer:format.jewishDate format="%d. %B %Y">1600000000</timer:format.jewishDate>
-                    <br/>
-                    <f:translate key="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime"
-                                 extensionName="timer"
-                    />
-                </li>
-                <li> {timer:format.jewishDate(date: '@1600000000')}</li>
-                <li> {timer:format.jewishDate(format:'Y M d',date: '@1600000000')}</li>
-            </ol>
             <h4>
                 <f:translate key="content.timersimul.viewhelper.subtitle.formatCalendarDate"
                              extensionName="timer"
@@ -366,6 +329,14 @@
                         HH:mm:ss',flagformat:'1',date:'1600000000')}
                     </li>
                     <li>gregorian => {calendar} => gregorian:
+                        <f:if condition="{0:calendar}== {0:'gregorian'}">
+                            <h3>
+                                <f:translate
+                                    key="content.timersimul.viewhelper.formatCalendarDate.aspect.conversionionGregorianGregorian"
+                                    extensionName="timer"
+                                />
+                            </h3>
+                        </f:if>
                         <br/>ICU-Format <a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/">(link)</a>:
                         <timer:format.calendarDate calendarsource="{calendar}" calendartarget="gregorian" locale="de_DE"
                                                    format="yyyy-MM-dd G HH:mm:ss '(ICU-Format)'" flagformat="1"
@@ -391,6 +362,7 @@
                         <br/>&nbsp;
                     </li>
                 </f:for>
+
             </ul>
             <div>
                 <f:translate key="content.timersimul.viewhelper.formatCalendarDate.aspect.current"

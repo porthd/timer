@@ -246,7 +246,7 @@
     add.locale.COMMA: de_DE,fr_FR
     add.freelocale.COMMA:
     add.freespecial..COMMA:
--   helping:
+-   helping: not allowed(bug in php)
     title: Chin. Neujahr
     eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.chin.newyear
     identifier: chin-newYear

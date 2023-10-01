@@ -279,7 +279,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
 
 
     /**
-     * tested
+     * tested 20231001
      *
      * check, if the timer ist for this time active
      *
@@ -347,7 +347,10 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
                     break;
                 }
 
-                if ($startDate->format('Y') !== $stopDate->format('Y')) {
+                if (($startDate->format('Y') !== $stopDate->format('Y')) ||
+                    // maybe there is a yearchange in the non-gregorian calendar, then the year of the result should not be the same
+                    ($startDate->format('Y') !== $timerRange->getBeginning()->format('Y'))
+                ) {
                     $timerRange = $this->holidaycalendarService->currentHoliday(
                         $locale,
                         $stopDate,
@@ -389,7 +392,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     /**
      * find the next free range depending on the defined list
      *
-     * tested
+     * tested 20231001
      *
      * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
@@ -441,21 +444,47 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
             if (!$this->holidaycalendarService->forbiddenCalendar($holiday)) {
                 // midnight start of holiday is $timeRange->getBeginning()
                 // for not every-year holidays, that must be checked with $timerRange->getResultExist()
+                // timerrange contains the raw holiday, the result must be recalculated at the end
                 $timerRange = $this->holidaycalendarService->nextHoliday(
                     $locale,
-                    $startDate,
+                    $stopDate,
                     $holiday
                 );
-                if (($timerRange->getResultExist()) &&
-                    ($stopDate < $timerRange->getBeginning()) &&
-                    (
-                        ($result->getBeginning() > $timerRange->getBeginning()) ||
-                        ($result->getResultExist() === false)
-                    )
+                if (($flag === false) &&
+                    ($timerRange->getResultExist())
                 ) {
-                    $result = $timerRange;
+                    $result = clone $timerRange;
+                    $flag = true;
+                } else {
+                    if (($timerRange->getResultExist()) &&
+                        ($timerRange->getBeginning() < $result->getBeginning()) &&
+                        ($startDate < $timerRange->getBeginning())
+                    ) {
+                        // nearer to startdate
+                        $result = clone $timerRange;
+                    }
                 }
             }
+        }
+        // recalculate the holiday to the estimated active Range
+        if (($flag) &&
+            ($result->getResultExist())
+        ) {
+            $refStartDate = $result->getBeginning();
+            if ($relMin > 0) {
+                $refStartDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
+            } else if ($relMin < 0) {
+                $refStartDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
+            }
+            if ($durationMin < 0) {
+                $refStopDate = clone $refStartDate;
+                $refStartDate->sub(new DateInterval('PT' . abs($durationMin) . 'M'));
+            } else {
+                $refStopDate = clone $refStartDate;
+                $refStopDate->add(new DateInterval('PT' . abs($durationMin) . 'M'));
+            }
+            $result->setBeginning($refStartDate);
+            $result->setEnding($refStopDate);
         }
         return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
@@ -463,7 +492,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     /**
      * find the next free range depending on the defined list
      *
-     * tested
+     * tested 20231001
      *
      * @param DateTime $dateLikeEventZone
      * @param array<mixed> $params
@@ -506,30 +535,54 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
 
         // check, if there is one definition of holiday, which works
         $flag = false;
-
-        foreach ($holidayArrayFile as $holiday) {
+        foreach ($holidayArrayFile as $index => $holiday) {
             // recalculation into the gregorian calendar, so its use is forbidden
             // one specific calendar in the PHP-extension intl-date-formatter don't work properly with the
             // recalculation into the gregorian calendar, so its use is forbidden
             if (!$this->holidaycalendarService->forbiddenCalendar($holiday)) {
                 // midnight start of holiday is $timeRange->getBeginning()
                 // for not every-year holidays, that must be checked with $timerRange->getResultExist()
+                // timerrange contains the raw holiday, the result must be recalculated at the end
                 $timerRange = $this->holidaycalendarService->prevHoliday(
                     $locale,
-                    $stopDate,
+                    $startDate,
                     $holiday
                 );
-                if (($timerRange->getResultExist()) &&
-                    ($startDate > $timerRange->getEnding()) &&
-                    (
-                        ($result->getEnding() < $timerRange->getEnding()) ||
-                        ($result->getResultExist() === false)
-                    )
+                if (($flag === false) &&
+                    ($timerRange->getResultExist())
                 ) {
-                    $result = $timerRange;
+                    $result = clone $timerRange;
+                    $flag = true;
+                } else {
+                    if (($timerRange->getResultExist()) &&
+                        ($timerRange->getEnding() > $result->getEnding()) &&
+                        ($startDate > $timerRange->getBeginning())
+                    ) {
+                        // nearer to startdate
+                        $result = clone $timerRange;
+                    }
                 }
             }
-
+        }
+        // recalculate the holiday to the estimated active Range
+        if (($flag) &&
+            ($result->getResultExist())
+        ) {
+            $refStartDate = $result->getBeginning();
+            if ($relMin > 0) {
+                $refStartDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
+            } else if ($relMin < 0) {
+                $refStartDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
+            }
+            if ($durationMin < 0) {
+                $refStopDate = clone $refStartDate;
+                $refStartDate->sub(new DateInterval('PT' . abs($durationMin) . 'M'));
+            } else {
+                $refStopDate = clone $refStartDate;
+                $refStopDate->add(new DateInterval('PT' . abs($durationMin) . 'M'));
+            }
+            $result->setBeginning($refStartDate);
+            $result->setEnding($refStopDate);
         }
 
         return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
@@ -550,8 +603,10 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         // the extension of the file defines, if it is a csv-file or a yaml-file
         $fileResult = [];
         if (!empty($params[self::ARG_CSV_FILE_HOLIDAY_FILE_PATH])) {
+            $rootPath = Environment::getPublicPath();
+            $fullPath = $rootPath . $params[self::ARG_CSV_FILE_HOLIDAY_FILE_PATH];
             $fileResult = CustomTimerUtility::readListFromFileOrUrl(
-                $params[self::ARG_CSV_FILE_HOLIDAY_FILE_PATH],
+                $fullPath,
                 $this->yamlFileLoader,
                 null,
                 $this->logger
@@ -594,7 +649,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         }
         return $finalList;
     }
-
 
 
     /**

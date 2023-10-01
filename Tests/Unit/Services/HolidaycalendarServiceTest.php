@@ -60,7 +60,7 @@ class HolidaycalendarServiceTest extends TestCase
         return $method;
     }
 
-    public function dataProviderGetGregorianDateForFixedTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForFixedTypeBySelectedExamples()
     {
         $result = [];
         $testDateTime = new DateTime();
@@ -158,16 +158,16 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForFixedTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForFixedTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForFixedTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForFixedTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
 
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForFixedType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedType');
 
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
@@ -176,7 +176,7 @@ class HolidaycalendarServiceTest extends TestCase
 
     }
 
-    public function dataProviderGetGregorianDateForFixedWeekendTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForFixedWeekendTypeBySelectedExamples()
     {
         $result = [];
 
@@ -241,16 +241,16 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForFixedShiftingTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForFixedShiftingTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForFixedShiftingTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForFixedShiftingTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
 
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForFixedShiftingType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedShiftingType');
 
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
@@ -260,7 +260,7 @@ class HolidaycalendarServiceTest extends TestCase
 
     }
 
-    public function dataProviderGetGregorianDateForFixedMultiTypeTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForFixedMultiTypeTypeBySelectedExamples()
     {
         $result = [];
 
@@ -312,16 +312,16 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForFixedMultiTypeTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForFixedMultiTypeTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForFixedMultiTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForFixedMultiTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
 
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForFixedMultiType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedMultiType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
@@ -337,7 +337,7 @@ class HolidaycalendarServiceTest extends TestCase
 
     }
 
-    public function dataProviderGetGregorianDateForFixedRelatedTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForFixedRelatedTypeBySelectedExamples()
     {
         $result = [];
 
@@ -406,15 +406,15 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForFixedRelatedTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForFixedRelatedTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForFixedRelatedTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForFixedRelatedTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForFixedRelatedType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedRelatedType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
@@ -422,7 +422,7 @@ class HolidaycalendarServiceTest extends TestCase
         }
     }
 
-    public function dataProviderGetGregorianDateForSeasonTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForSeasonTypeBySelectedExamples()
     {
         $result = [];
 
@@ -481,15 +481,15 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForSeasonTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForSeasonTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForSeasonTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForSeasonTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForSeasonType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForSeasonType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
@@ -498,7 +498,7 @@ class HolidaycalendarServiceTest extends TestCase
 
     }
 
-    public function dataProviderGetGregorianDateForEasterlyTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForEasterlyTypeBySelectedExamples()
     {
         $result = [];
 //        Ostern 9.4.2023
@@ -554,15 +554,15 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForEasterlyTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForEasterlyTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForEasterlyTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForEasterlyTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForEasterlyType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForEasterlyType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
@@ -571,7 +571,7 @@ class HolidaycalendarServiceTest extends TestCase
 
     }
 
-    public function dataProviderGetGregorianDateForWeekdaylyTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForWeekdaylyTypeBySelectedExamples()
     {
         $result = [];
 //        3.3.2023 friday
@@ -656,15 +656,15 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForWeekdaylyTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForWeekdaylyTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForWeekdaylyTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForWeekdaylyTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForWeekdaylyType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForWeekdaylyType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
@@ -673,7 +673,7 @@ class HolidaycalendarServiceTest extends TestCase
 
     }
 
-    public function dataProviderGetGregorianDateForMatarikiTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForMatarikiTypeBySelectedExamples()
     {
         $result = [];
 //        Matariki at         '2023' => '2023-7-14', or         '2027' => '2027-6-25',
@@ -724,15 +724,15 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForMatarikiTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForMatarikiTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForMatarikiTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForMatarikiTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForMatarikiType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForMatarikiType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
                 [$params['startDate'], $params['addYear']]);
@@ -744,7 +744,7 @@ class HolidaycalendarServiceTest extends TestCase
 
     }
 
-    public function dataProviderGetGregorianDateForMoonInMonthTypeBySelectedExamples()
+    public function dataProviderGetHolidayDateForMoonInMonthTypeBySelectedExamples()
     {
         $result = [];
         // 01.12.2024 	1. Neumond Dezember 2024 	Deutschland
@@ -810,15 +810,15 @@ class HolidaycalendarServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderGetGregorianDateForMoonInMonthTypeBySelectedExamples
+     * @dataProvider dataProviderGetHolidayDateForMoonInMonthTypeBySelectedExamples
      * @test
      */
-    public function getGregorianDateForMoonInMonthTypeBySelectedExamples($message, $expects, $params)
+    public function getHolidayDateForMoonInMonthTypeBySelectedExamples($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
             $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
         } else {
-            $method = self::getPrivateMethod($this->subject, 'getGregorianDateForMoonInMonthType');
+            $method = self::getPrivateMethod($this->subject, 'getHolidayDateForMoonInMonthType');
             /** @var TimerStartStopRange $result */
             $result = $method->invokeArgs($this->subject,
                 [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);

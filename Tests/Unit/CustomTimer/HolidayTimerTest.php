@@ -838,318 +838,274 @@ class HolidayTimerTest extends TestCase
         }
     }
 
-//    public static function dataProviderIsActive()
-//    {
-//        $general = [
-//            'useTimeZoneOfFrontend' => 0,
-//            'timeZoneOfEvent' => 'Europe/Berlin',
-//            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
-//            'ultimateEndingTimer' => '9999-12-31 23:59:59',
-//        ];
-//        // pathes relative to rootpage
-//        $rest = [
-//            'relMinToSelectedTimerEvent' => '720',
-//            'durationMinutes' => '120',
-//            'timerHolidaysFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Documentation/Examples_HolidayTimer.yml'), strlen('var/www/html/',)),
-//            'timerHolidaysFalRelation' => '0',
-//        ];
-////                -
-////                title: 'Sommerferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-07-14 00:00:00'
-////            stop: '2022-08-24 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Herbstferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-10-17 00:00:00'
-////            stop: '2022-10-28 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Weihnachtsferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-12-23 00:00:00'
-////            stop: '2023-01-06 23:59:59'
-////            zone: 'Europe/Berlin'
-//
-//        $result = [];
-//        /* test allowed random (minimal) structure */
-//        /**
-//         * Konfiguraton
-//         * ohne Vorbidden
-//         * weihnachten 2022 25 Sonntag 26. Montag
-//         * Aktiv            hidden
-//         */
-//        foreach ([
-//                     ['date' => '2022-08-24 00:00:00', 'expects' => true],
-//                     ['date' => '2022-08-24 23:59:59', 'expects' => true],
-//                     ['date' => '2022-08-25 00:00:00', 'expects' => false],
-//                     ['date' => '2022-10-16 23:59:59', 'expects' => false],
-//                     ['date' => '2022-10-17 00:00:00', 'expects' => true],
-//                     ['date' => '2022-10-28 23:59:59', 'expects' => true],
-//                     ['date' => '2022-10-29 00:00:00', 'expects' => false],
-//                 ] as $params
-//        ) {
-//            $result[] = [
-//                'message' => 'The testValue `' . $params['date'] . '` defines an ' .
-//                    ($params['expects'] ? 'ACTIVE' : 'INACTIVE') . ' time. The testvalue is ' .
-//                    ($params['expects'] ? '' : 'not ') . 'part of an active interval.',
-//                'expects' => [
-//                    'result' => $params['expects'],
-//                ],
-//                'params' => [
-//                    'testValue' => $params['date'],
-//                    'testValueObj' => date_create_from_format(
-//                        TimerInterface::TIMER_FORMAT_DATETIME,
-//                        $params['date'],
-//                        new DateTimeZone('Europe/Berlin')
-//                    ),
-//                    'general' => $general,
-//                    'required' => $rest,
-//                ],
-//            ];
-//        }
-//        return $result;
-//    }
-//
-//    /**
-//     * @dataProvider dataProviderIsActive
-//     * @test
-//     */
-//    public function isActive($message, $expects, $params)
-//    {
-//        if (!isset($expects) && empty($expects)) {
-//            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
-//        } else {
-//            $coreCache = Bootstrap::createCache('core', false);
-//            $packageCache = Bootstrap::createPackageCache($coreCache);
-//            $packageManager = Bootstrap::createPackageManager(
-//                FailsafePackageManager::class,
-//                $packageCache
-//            );
-//            $configParams = array_merge($params['required'], $params['general']);
-//            $value = clone $params['testValueObj'];
-//            $this->assertEquals(
-//                $expects['result'],
-//                $this->subject->isActive($value, $configParams),
-//                'isActive: ' . $message
-//            );
-//            $this->assertEquals(
-//                $params['testValueObj'],
-//                $value,
-//                'isActive: The object of Date is unchanged.'
-//            );
-//        }
-//    }
-//
-//
-//    public static function dataProviderNextActive()
-//    {
-//        $general = [
-//            'useTimeZoneOfFrontend' => 0,
-//            'timeZoneOfEvent' => 'Europe/Berlin',
-//            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
-//            'ultimateEndingTimer' => '9999-12-31 23:59:59',
-//        ];
-//        $rest = [
-//            'relMinToSelectedTimerEvent' => '720',
-//            'durationMinutes' => '120',
-//            'timerHolidaysFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Documentation/Examples_HolidayTimer.yml'), strlen('var/www/html/',)),
-//            'timerHolidaysFalRelation' => '0',
-//        ];
-//
-//        $result = [];
-//        //                -
-////                title: 'Sommerferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-07-14 00:00:00'
-////            stop: '2022-08-24 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Herbstferien Nidersachsen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-10-17 00:00:00'
-////            stop: '2022-10-28 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Herbstferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-10-17 00:00:00'
-////            stop: '2022-10-28 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Weihnachtsferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-12-23 00:00:00'
-////            stop: '2023-01-06 23:59:59'
-////            zone: 'Europe/Berlin'
-//
-//        foreach ([
-//                     ['date' => '2022-07-13 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-//                     ['date' => '2022-07-14 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                     ['date' => '2022-07-15 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                     ['date' => '2022-08-24 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                     ['date' => '2022-10-16 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-//                     ['date' => '2022-10-17 00:01:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-//                     ['date' => '2022-10-18 00:00:01', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-//                 ] as $item
-//        ) {
-//            $result[] = [
-//                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].',
-//                'expects' => [
-//                    'result' => [
-//                        'beginning' => $item['begin'],
-//                        'ending' => $item['end'],
-//                        'exist' => true,
-//                    ],
-//                ],
-//                'params' => [
-//                    'testValue' => $item['date'],
-//                    'testValueObj' => date_create_from_format(
-//                        TimerInterface::TIMER_FORMAT_DATETIME,
-//                        $item['date'],
-//                        new DateTimeZone('Europe/Berlin')
-//                    ),
-//                    'general' => $general,
-//                    'required' => $rest,
-//                ],
-//            ];
-//        }
-//        return $result;
-//    }
-//
-//    /**
-//     * @dataProvider dataProviderNextActive
-//     * @test
-//     */
-//    public function nextActive($message, $expects, $params)
-//    {
-//        if (!isset($expects) && empty($expects)) {
-//            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
-//        } else {
-//            $setting = array_merge($params['required'], $params['general']);
-//            $testValue = clone $params['testValueObj'];
-//            /** @var TimerStartStopRange $result */
-//            $result = $this->subject->nextActive($testValue, $setting);
-//            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-//            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
-//            $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-//            $this->assertTrue(
-//                ($flag),
-//                'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
-//            );
-//        }
-//    }
-//
-//    public static function dataProviderPrevActive()
-//    {
-//        $general = [
-//            'useTimeZoneOfFrontend' => 0,
-//            'timeZoneOfEvent' => 'Europe/Berlin',
-//            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
-//            'ultimateEndingTimer' => '9999-12-31 23:59:59',
-//        ];
-//        $rest = [
-//            'relMinToSelectedTimerEvent' => '720',
-//            'durationMinutes' => '120',
-//            'timerHolidaysFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Documentation/Examples_HolidayTimer.yml'), strlen('var/www/html/',)),
-//            'timerHolidaysFalRelation' => '0',
-//        ];
-//
-//        $result = [];
-//        //                -
-////                title: 'Sommerferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-07-14 00:00:00'
-////            stop: '2022-08-24 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Herbstferien Nidersachsen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-10-17 00:00:00'
-////            stop: '2022-10-28 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Herbstferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-10-17 00:00:00'
-////            stop: '2022-10-28 23:59:59'
-////            zone: 'Europe/Berlin'
-////            -
-////            title: 'Weihnachtsferien Bremen'
-////            data:
-////              description: '- free to fill and free to add new attributes -'
-////            start: '2022-12-23 00:00:00'
-////            stop: '2023-01-06 23:59:59'
-////            zone: 'Europe/Berlin'
-//
-//        foreach ([
-//                     ['date' => '2023-01-07 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-//                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                     ['date' => '2022-10-29 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                     ['date' => '2022-10-28 23:59:59', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-//                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-//                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-//                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-//                 ] as $item
-//        ) {
-//            $result[] = [
-//                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].'
-//                    . ' ' . (empty($item['msg']) ? '' : $item['msg']),
-//                'expects' => [
-//                    'result' => [
-//                        'beginning' => $item['begin'],
-//                        'ending' => $item['end'],
-//                        'exist' => true,
-//                    ],
-//                ],
-//                'params' => [
-//                    'testValue' => $item['date'],
-//                    'testValueObj' => date_create_from_format(
-//                        TimerInterface::TIMER_FORMAT_DATETIME,
-//                        $item['date'],
-//                        new DateTimeZone('Europe/Berlin')
-//                    ),
-//                    'general' => $general,
-//                    'required' => $rest,
-//                ],
-//            ];
-//        }
-//        return $result;
-//    }
-//
-//    /**
-//     * @dataProvider dataProviderPrevActive
-//     * @test
-//     */
-//    public function prevActive($message, $expects, $params)
-//    {
-//        if (!isset($expects) && empty($expects)) {
-//            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
-//        } else {
-//            $setting = array_merge($params['required'], $params['general']);
-//            $testValue = clone $params['testValueObj'];
-//            /** @var TimerStartStopRange $result */
-//            $result = $this->subject->prevActive($testValue, $setting);
-//            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
-//            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
-//            $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-//            $this->assertTrue(
-//                ($flag),
-//                'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
-//            );
-//        }
-//    }
+    public static function dataProviderIsActive()
+    {
+        $general = [
+            'useTimeZoneOfFrontend' => 0,
+            'timeZoneOfEvent' => 'Europe/Berlin',
+            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
+            'ultimateEndingTimer' => '9999-12-31 23:59:59',
+        ];
+        // pathes relative to rootpage
+        $rest = [
+            'relMinToSelectedTimerEvent' => '720',
+            'durationMinutes' => '120',
+            'timerHolidaysFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Documentation/Examples_HolidayTimer.csv'), strlen('var/www/html/',)),
+            'timerHolidaysFalRelation' => '0',
+        ];
+
+        $result = [];
+        /* test allowed random (minimal) structure */
+        /**
+         * Konfiguraton
+         * ohne Vorbidden
+         * weihnachten 2022 25 Sonntag 26. Montag
+         * Aktiv            hidden
+         */
+        foreach ([
+                     ['date' => '2022-12-24 11:59:59', 'expects' => false, 'holiday' => 'before active christmasEve',],
+                     ['date' => '2022-12-24 12:00:00', 'expects' => true, 'holiday' => 'active christmasEve',],
+                     ['date' => '2022-12-24 13:00:00', 'expects' => true, 'holiday' => 'active christmasEve',],
+                     ['date' => '2022-12-24 14:00:00', 'expects' => true, 'holiday' => 'active christmasEve',],
+                     ['date' => '2022-12-24 14:00:01', 'expects' => false, 'holiday' => ' after active christmasEve',],
+                     // check of different holidays
+                     ['date' => '2022-12-24 13:00:00', 'expects' => true, 'holiday' => 'active christmasEve',],
+                     ['date' => '2022-12-27 13:00:00', 'expects' => true, 'holiday' => 'christmas (shift So to Tu)',],
+                     ['date' => '2023-01-09 13:00:00', 'expects' => true, 'holiday' => 'day of adults in Japan (2. Monday in januar)',],
+                     ['date' => '2023-02-20 13:00:00', 'expects' => true, 'holiday' => '48 days before easter',],
+                     ['date' => '2023-07-14 13:00:00', 'expects' => true, 'holiday' => 'Matariki',],
+                     ['date' => '2023-03-20 13:00:00', 'expects' => true, 'holiday' => 'spring (defined by day-night-equal)',],
+                     ['date' => '2023-09-23 13:00:00', 'expects' => true, 'holiday' => 'autumn (defined by day-night-equal, no shift on sunday by one day)',],
+                     ['date' => '2024-09-23 13:00:00', 'expects' => true, 'holiday' => 'autumn (defined by day-night-equal, shift on sunday by one day)',],
+                     ['date' => '2024-11-01 13:00:00', 'expects' => false, 'holiday' => 'multiyear (this holiday every two years since 2023)',],
+                     ['date' => '2023-11-01 13:00:00', 'expects' => true, 'holiday' => 'multiyear (this holiday every two years since 2023)',],
+                     ['date' => '2023-11-22 13:00:00', 'expects' => true, 'holiday' => 'prayer and repentance day (wendesday before the fifth sunday befor christmas)',],
+                     ['date' => '2023-01-22 13:00:00', 'expects' => false, 'holiday' => 'chinese new year (use non-gregorian calendar; not allowed for chinese-calendar; buggy PHP)',],
+                     ['date' => '2023-03-22 13:00:00', 'expects' => true, 'holiday' => 'ramadan (calculated) (use non-gregorian calendar for recalculation)',],
+                     ['date' => '2023-05-05 13:00:00', 'expects' => true, 'holiday' => 'Buddha Purnima (vesakh) (use calculation of moonphase)',],
+                     ['date' => '2023-09-16 13:00:00', 'expects' => true, 'holiday' => 'Rosch Haschana (use hebrew calendar, 1.1.)',],
+
+                 ] as $params
+        ) {
+            $result[] = [
+                'message' => 'The testValue `' . $params['date'] . '` (' . $params['holiday'] . ') defines an ' .
+                    ($params['expects'] ? 'ACTIVE' : 'INACTIVE') . ' time. The testvalue is ' .
+                    ($params['expects'] ? '' : 'not ') . 'part of an active interval.',
+                'expects' => [
+                    'result' => $params['expects'],
+                ],
+                'params' => [
+                    'testValue' => $params['date'],
+                    'testValueObj' => date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $params['date'],
+                        new DateTimeZone('Europe/Berlin')
+                    ),
+                    'general' => $general,
+                    'required' => $rest,
+                ],
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * @dataProvider dataProviderIsActive
+     * @test
+     */
+    public function isActive($message, $expects, $params)
+    {
+        if (!isset($expects) && empty($expects)) {
+            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+        } else {
+            $configParams = array_merge($params['required'], $params['general']);
+            $value = clone $params['testValueObj'];
+            $this->assertEquals(
+                $expects['result'],
+                $this->subject->isActive($value, $configParams),
+                'isActive: ' . $message
+            );
+            $this->assertEquals(
+                $params['testValueObj'],
+                $value,
+                'isActive: The object of Date is unchanged.'
+            );
+        }
+    }
+
+    public static function dataProviderNextActive()
+    {
+        $general = [
+            'useTimeZoneOfFrontend' => 0,
+            'timeZoneOfEvent' => 'Europe/Berlin',
+            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
+            'ultimateEndingTimer' => '9999-12-31 23:59:59',
+        ];
+        // pathes relative to rootpage
+        $rest = [
+            'relMinToSelectedTimerEvent' => '720',
+            'durationMinutes' => '120',
+            'timerHolidaysFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Documentation/Examples_HolidayTimer.csv'), strlen('var/www/html/',)),
+            'timerHolidaysFalRelation' => '0',
+        ];
+
+        $result = [];
+
+        foreach ([
+                     ['date' => '2022-12-03 11:59:00', 'begin' => '2022-12-24 12:00:00', 'end' => '2022-12-24 14:00:00'],
+                     ['date' => '2022-12-24 11:59:00', 'begin' => '2022-12-24 12:00:00', 'end' => '2022-12-24 14:00:00'],
+                     ['date' => '2022-12-24 12:00:00', 'begin' => '2022-12-27 12:00:00', 'end' => '2022-12-27 14:00:00'],
+                     ['date' => '2022-12-27 12:00:00', 'begin' => '2023-01-09 12:00:00', 'end' => '2023-01-09 14:00:00'],
+                     ['date' => '2023-01-09 12:00:00', 'begin' => '2023-02-20 12:00:00', 'end' => '2023-02-20 14:00:00'],
+                     ['date' => '2023-02-20 12:00:00', 'begin' => '2023-03-20 12:00:00', 'end' => '2023-03-20 14:00:00'],
+                     ['date' => '2023-03-20 12:00:00', 'begin' => '2023-03-22 12:00:00', 'end' => '2023-03-22 14:00:00'],
+                     ['date' => '2023-03-22 12:00:00', 'begin' => '2023-05-05 12:00:00', 'end' => '2023-05-05 14:00:00'],
+                     ['date' => '2023-05-05 12:00:00', 'begin' => '2023-07-14 12:00:00', 'end' => '2023-07-14 14:00:00'],
+                     ['date' => '2023-07-14 12:00:00', 'begin' => '2023-09-16 12:00:00', 'end' => '2023-09-16 14:00:00'],
+                     ['date' => '2023-09-16 12:00:00', 'begin' => '2023-09-23 12:00:00', 'end' => '2023-09-23 14:00:00'],
+                     ['date' => '2023-09-23 12:00:00', 'begin' => '2023-11-01 12:00:00', 'end' => '2023-11-01 14:00:00'],
+                     ['date' => '2023-11-01 12:00:00', 'begin' => '2023-11-22 12:00:00', 'end' => '2023-11-22 14:00:00'],
+                     ['date' => '2023-11-22 12:00:00', 'begin' => '2023-11-26 12:00:00', 'end' => '2023-11-26 14:00:00'],
+                     ['date' => '2023-11-26 12:00:00', 'begin' => '2023-11-29 12:00:00', 'end' => '2023-11-29 14:00:00'],
+                     ['date' => '2023-11-29 12:00:00', 'begin' => '2023-11-30 12:00:00', 'end' => '2023-11-30 14:00:00'],
+                     ['date' => '2023-11-30 12:00:00', 'begin' => '2023-12-03 12:00:00', 'end' => '2023-12-03 14:00:00'],
+                     ['date' => '2023-12-03 12:00:00', 'begin' => '2023-12-24 12:00:00', 'end' => '2023-12-24 14:00:00'],
+                 ] as $item
+        ) {
+            $result[] = [
+                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].',
+                'expects' => [
+                    'result' => [
+                        'beginning' => $item['begin'],
+                        'ending' => $item['end'],
+                        'exist' => true,
+                    ],
+                ],
+                'params' => [
+                    'testValue' => $item['date'],
+                    'testValueObj' => date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $item['date'],
+                        new DateTimeZone('Europe/Berlin')
+                    ),
+                    'general' => $general,
+                    'required' => $rest,
+                ],
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * @dataProvider dataProviderNextActive
+     * @test
+     */
+    public function nextActive($message, $expects, $params)
+    {
+        if (!isset($expects) && empty($expects)) {
+            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+        } else {
+            $setting = array_merge($params['required'], $params['general']);
+            $testValue = clone $params['testValueObj'];
+            /** @var TimerStartStopRange $result */
+            $result = $this->subject->nextActive($testValue, $setting);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
+            $this->assertTrue(
+                ($flag),
+                'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
+            );
+        }
+    }
+
+    public static function dataProviderPrevActive()
+    {
+        $general = [
+            'useTimeZoneOfFrontend' => 0,
+            'timeZoneOfEvent' => 'Europe/Berlin',
+            'ultimateBeginningTimer' => '0001-01-01 00:00:00',
+            'ultimateEndingTimer' => '9999-12-31 23:59:59',
+        ];
+        // pathes relative to rootpage
+        $rest = [
+            'relMinToSelectedTimerEvent' => '720',
+            'durationMinutes' => '120',
+            'timerHolidaysFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Documentation/Examples_HolidayTimer.csv'), strlen('var/www/html/',)),
+            'timerHolidaysFalRelation' => '0',
+        ];
+
+        $result = [];
+
+        foreach ([
+                     ['date' => '2022-12-24 14:00:00', 'begin' => '2022-11-30 12:00:00', 'end' => '2022-11-30 14:00:00'],
+                     ['date' => '2022-12-24 14:01:00', 'begin' => '2022-12-24 12:00:00', 'end' => '2022-12-24 14:00:00'],
+                     ['date' => '2022-12-25 14:00:00', 'begin' => '2022-12-24 12:00:00', 'end' => '2022-12-24 14:00:00'],
+                     ['date' => '2022-12-27 14:00:00', 'begin' => '2022-12-24 12:00:00', 'end' => '2022-12-24 14:00:00'],
+                     ['date' => '2023-01-09 14:00:00', 'begin' => '2022-12-27 12:00:00', 'end' => '2022-12-27 14:00:00'],
+                     ['date' => '2023-02-20 14:00:00', 'begin' => '2023-01-09 12:00:00', 'end' => '2023-01-09 14:00:00'],
+                     ['date' => '2023-03-20 14:00:00', 'begin' => '2023-02-20 12:00:00', 'end' => '2023-02-20 14:00:00'],
+                     ['date' => '2023-03-22 14:00:00', 'begin' => '2023-03-20 12:00:00', 'end' => '2023-03-20 14:00:00'],
+                     ['date' => '2023-05-05 14:00:00', 'begin' => '2023-03-22 12:00:00', 'end' => '2023-03-22 14:00:00'],
+                     ['date' => '2023-07-14 14:00:00', 'begin' => '2023-05-05 12:00:00', 'end' => '2023-05-05 14:00:00'],
+                     ['date' => '2023-09-16 14:00:00', 'begin' => '2023-07-14 12:00:00', 'end' => '2023-07-14 14:00:00'],
+                     ['date' => '2023-09-23 14:00:00', 'begin' => '2023-09-16 12:00:00', 'end' => '2023-09-16 14:00:00'],
+                     ['date' => '2023-11-01 14:00:00', 'begin' => '2023-09-23 12:00:00', 'end' => '2023-09-23 14:00:00'],
+                     ['date' => '2023-11-22 14:00:00', 'begin' => '2023-11-01 12:00:00', 'end' => '2023-11-01 14:00:00'],
+                     ['date' => '2023-11-26 14:00:00', 'begin' => '2023-11-22 12:00:00', 'end' => '2023-11-22 14:00:00'],
+                     ['date' => '2023-11-29 14:00:00', 'begin' => '2023-11-26 12:00:00', 'end' => '2023-11-26 14:00:00'],
+                     ['date' => '2023-11-30 14:00:00', 'begin' => '2023-11-29 12:00:00', 'end' => '2023-11-29 14:00:00'],
+                     ['date' => '2023-12-03 14:00:00', 'begin' => '2023-11-30 12:00:00', 'end' => '2023-11-30 14:00:00'],
+                     ['date' => '2023-12-24 14:00:00', 'begin' => '2023-12-03 12:00:00', 'end' => '2023-12-03 14:00:00'],
+                     ['date' => '2023-12-25 14:00:00', 'begin' => '2023-12-24 12:00:00', 'end' => '2023-12-24 14:00:00'],
+                     ['date' => '2023-12-25 14:01:00', 'begin' => '2023-12-25 12:00:00', 'end' => '2023-12-25 14:00:00'],
+                 ] as $item
+        ) {
+            $result[] = [
+                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].'
+                    . ' ' . (empty($item['msg']) ? '' : $item['msg']),
+                'expects' => [
+                    'result' => [
+                        'beginning' => $item['begin'],
+                        'ending' => $item['end'],
+                        'exist' => true,
+                    ],
+                ],
+                'params' => [
+                    'testValue' => $item['date'],
+                    'testValueObj' => date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $item['date'],
+                        new DateTimeZone('Europe/Berlin')
+                    ),
+                    'general' => $general,
+                    'required' => $rest,
+                ],
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * @dataProvider dataProviderPrevActive
+     * @test
+     */
+    public function prevActive($message, $expects, $params)
+    {
+        if (!isset($expects) && empty($expects)) {
+            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+        } else {
+            $setting = array_merge($params['required'], $params['general']);
+            $testValue = clone $params['testValueObj'];
+            /** @var TimerStartStopRange $result */
+            $result = $this->subject->prevActive($testValue, $setting);
+            $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
+            $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
+            $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
+            $this->assertTrue(
+                ($flag),
+                'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
+            );
+        }
+    }
 }

@@ -1,14 +1,6 @@
-# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.useTestContent
-flagTestContent = true
 # cat=timer/internalTimer; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.selectInternatTimer
-useInternalTimer =
+useInternalTimer = 16383
 # cat=timer/timerBasic; type=string; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.baseTimeZone
 baseTimeZone = Europe/Berlin
 # cat=timer/timerBasic; type=string; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.file.yamlHolidayList
 yamlHoliydayList = FILE:EXT:timer/Configuration/Yaml/CalendarDateRelTimer.yaml
-# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.useTimersimul
-flagTimersimul = true
-# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.usePeriodlist
-flagPeriodlist = true
-# cat=timer/internalTimer; type=boolean; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.useHolidaycalendar
-flagHolidaycalendar = true

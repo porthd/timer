@@ -48,10 +48,15 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class ConvertDateUtility
 {
+    public const DEFECT_INTL_DATE_FORMATTER_LIST = [
+        'chinese',
+        'dangi',
+    ];
+
     public const DEFAULT_CALENDAR = 'gregorian';
     public const DEFAULT_JULIAN_CALENDAR = 'julian';
     public const DEFAULT_HEBREW_CALENDAR = 'hebrew';
-    public const DEFAULT_LIST_DEFECTIVE_CALENDAR = ['chinese'];
+
     public const DEFAULT_LOCALE = 'en';
     protected const MAP_ESCAPE_CHAR = '\\';
     protected const MAP_TRANSFORM_STRFTIME_TO_DATETIME_FORMAT = [

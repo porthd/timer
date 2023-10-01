@@ -100,6 +100,3 @@ function hexToRGBA(hex) {
     calendar.borderColor = '#ffd400';
     addCalendar(calendar);
 })();
-
-console.log('calendarlist');
-console.log(CalendarList);

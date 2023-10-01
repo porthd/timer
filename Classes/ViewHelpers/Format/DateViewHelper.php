@@ -232,7 +232,6 @@ class DateViewHelper extends AbstractViewHelper
 
         if (str_contains($format, '%')) {
             // @todo Replace deprecated strftime in php 8.1. Suppress warning in v11.
-//            return @strftime($format, (int)$date->format('U'));
             return ConvertDateUtility::mapStrftimeFormatToDateTimeFormat($date, $format);
         }
         return $date->format($format);

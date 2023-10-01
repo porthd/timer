@@ -12,7 +12,7 @@ helping,title,eventtitle,identifier,arg.type,arg.day,arg.month,arg.calendar,arg.
 ,Präsident Tubman’s Geburtstag (Liberia),LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.lrPresidentTubmansBirthday,greg-lrPresidentTubmansBirthday,fixed,29,11,gregorian,,,,,,political,,5,"en_LR,vai_Latn_LR","en_LR,vai_Latn_LR",
 ,St Andrew Day,LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.sanktAndrewDay,greg-sanktAndrewDay,fixedshifting,30,11,gregorian,,"0,0,0,0,0,2,1",,,,culture,,3,en_GB,,en_GB
 ,1. Advent,LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.firstAdvent,greg-firstAdvent,fixedrelated,25,12,gregorian,7,-4,,,,religion,christian,5,"de_DE,fr_FR",,
-,Chin. Neujahr,LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.chin.newyear,chin-newYear,fixed,1,1,chinese,,,,,,culture,,5,"en_MU,mfe_MU","en_MU,mfe_MU",
+not allowed(bug in php),Chin. Neujahr,LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.chin.newyear,chin-newYear,fixed,1,1,chinese,,,,,,culture,,5,"en_MU,mfe_MU","en_MU,mfe_MU",
 ,Vesakh,LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.buddh.indean.vesakh,ind-vesakh,mooninmonth,,5,gregorian,2,1,,,,religion,buddhist,5,,,
 ,Ramadan (Beginn der Fastenzeit),LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.ramadan,isl-ramadan,fixed,1,9,islamic,,,,,,religion,"islamic, sunnits, schiits",5,,,
 ,Jüd. Neujahrsfest (Rosch Haschana),LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.roschHaschana,hebr-roschHaschana,fixed,1,1,hebrew,,,,,,culture,jewish,3,he_IL,,

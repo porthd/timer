@@ -91,7 +91,15 @@ Ducasse ([https://github.com/jackducasse/caleandar](https://github.com/jackducas
 verwendet. Grundsätzlich kann man nautürlich auch jedes andere
 Kalender-Framework verwenden.
 
+Um das Plugin benutzen zu können, müssen sie beginnend ab Version 12.2 das
+TypoScript für das Contentelement einbinden. (Die vorher notwendige Einbindung
+per Extensionkonstanten ist entfernt worden.)
+
 #### Contentelement `holidaycalendar` für Feiertag
+
+Bemerkung: Um das Plugin benutzen zu können, müssen sie beginnend ab Version
+12.2 das TypoScript für das Contentelement einbinden. (Die vorher notwendige
+Einbindung per Extensionkonstanten ist entfernt worden.)
 
 Die meisten wollen Termine nicht in unübersichtlichen TYPO3-Backend pflegen,
 weil man dort schnell die Übersicht verliert.
@@ -287,6 +295,10 @@ Produktivumgebungen sollten sie für Editoren ausblenden. Es wird entfernt
 werden, wenn die Extension den Status `beta`
 erreicht.
 
+Um das Plugin benutzen zu können, müssen sie beginnend ab Version 12.2 das
+TypoScript für das Contentelement einbinden. (Die vorher notwendige Einbindung
+per Extensionkonstanten ist entfernt worden.)
+
 ### Nutzung der periodischen Timer (Customtimer)
 
 Die Extension bringt derzeit mehrere periodische Timer mit. Zwei der Timer sind noch nicht vollständig entwickelt. Unter
@@ -338,8 +350,8 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   meist beweglichen wichtigen christlichen Feiertagen (erster Advent,
   Weihnachten, Rosenmontag, Karfreitag, Ostern, Himmelfahrt, Pfingsten)
   (2. Advent von 12:00-14:00, Rosenmontag von 20:00 bis 6:00 des Folgetages)
-* HolidayTimer (in Progress 2023-09-17) - Liste zur Definition von Feiertage.
-  Die Feiertage werden in einer CSV-Datei erfasst und können auch über eine
+* HolidayTimer (nutzbar ab 12.2.0) - Liste zur Definition von Feiertage. Die
+  Feiertage werden in einer CSV-Datei erfasst und können auch über eine
   YAML-Datei definiert werden.
   Erläuterungen zur CSV-Datei siehe weiter unten.
   Die Yaml-Datei blockt unter dem Ausdruck `holidayTimerList` alle Daten, die
@@ -377,8 +389,9 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   ist der jüdische Kalender für mich nun auch wieder nicht. Aus dem gleichen
   Grund wurden die Tests nur exemplarisch am Beispiel vom Yom Kippur
   durchgeführt._
-  **Empfehlung:** _Nutzen sie stattdessen den neuen allgemeineren
-  Timer `calendarDateRelTimer`_**
+  **Empfehlung:** _Nutzen sie stattdessen den allgemeineren
+  Timer `calendarDateRelTimer` oder den `holidayTimer` (der Listen von
+  verschiedensten Feiertagen verarbeiten kann)._**
 * MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen
   bestimmten Zeitraum
 * MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für
@@ -458,9 +471,9 @@ anzugeben sind:
   0,1,2,0,3,2,1' würde ein Feiertag um drei Tage (5.ter Eintrag) verschoben,
   wenn er auf einen Freitag (5.ter Tag in der Woche) fällt.
   Technisch funktioniert die Mechanik analog zu `_fixed_`.
-- _fixedrelated_: Das Beispiel vierter Advend zeigt, dass es Feiertage gibt, die
-  an bestimmten Wochentage relativ zu einem fixierten Datum (beim Advent der
-  erste Weihnachtstag) gefeiert werden.
+- _fixedrelated_ oder besser _xmasrelated_: Das Beispiel vierter Advent zeigt,
+  dass es Feiertage gibt, die an bestimmten Wochentage relativ zu einem
+  fixierten Datum (beim Advent der erste Weihnachtstag) gefeiert werden.
   Mit den Ziffern 1 = Montag bis 7 = Sonntag definiert man in `arg.status` den
   Wochentag, der dem Fix-Datum des Zielfeiertages vorangehen muss.
   In `arg.statusCount` defniert man dann, wie viel Wochen vorher der Tag
@@ -823,12 +836,13 @@ Es gibt fünf Viewhelper:
 - timer:format.date - funktioniert wie `f:format.date`, wobei es zusätzlich die
   Ausgabe von Zeiten für eine bestimmte Zeitzone
   erlaubt.
-- timer:format.jewishDate - funktioniert ähnlich `f:format.date`, wobei es die
-  Ausgabe von Zeiten für eine bestimmte Zeitzone
+- (entfernt in 12.2.0) ~~timer:format.jewishDate - funktioniert
+  ähnlich `f:format.date`, wobei es die Ausgabe von Zeiten für eine bestimmte
+  Zeitzone
   erlaubt und wobei die Datumsangaben in den jüdischen Kalender transformiert
   werden.
   **Deprecated - Wird in Version 12 entfernt! _Nutzen sie stattdessen den neuen
-  Viewhelper `timer:format.calendarDate`_**
+  Viewhelper `timer:format.calendarDate`_**~~
 - timer:format.calendarDate - funktioniert umfassender als `f:format.date`, weil
   er neben der Berücksichtigung der Zeitzone auch die Auswahl der verschiedenen
   von PHP unterstützten Kalender
@@ -838,8 +852,8 @@ Es gibt fünf Viewhelper:
   ICU-Formatierungssprache verwendet werden.
   Ein bekanntes Manko ist, dass die Umrechnung vom chinesischen Mondkalender in
   den gregorianischen (westlichen) Sonnenkalender mit einem Fehler behaftet ist,
-  der im PHP zu suchen ist. Der Timer macht den
-  Viewhelper ``timer:format.jewishDate`` überflüssig.
+  der im PHP zu suchen ist. (entfernt in 12.2.0) ~~Der Timer macht den
+  Viewhelper ``timer:format.jewishDate`` überflüssig.~~
 
 
 #### timer:format.calendarDate - Attribute

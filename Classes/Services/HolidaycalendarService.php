@@ -25,6 +25,7 @@ namespace Porthd\Timer\Services;
 
 use DateInterval;
 use DateTime;
+use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\StrangerCode\MoonPhase\Solaris\MoonPhase;
 use Porthd\Timer\CustomTimer\StrangerCode\Season\Season;
@@ -44,6 +45,7 @@ class HolidaycalendarService
     protected const ATTR_ARG_TYPE_FIXEDMULTI = 'fixedmultiyear';
     protected const ATTR_ARG_TYPE_FIXEDSHIFTING = 'fixedshifting';
     protected const ATTR_ARG_TYPE_FIXEDRELATED = 'fixedrelated';
+    protected const ATTR_ARG_TYPE_XMASRELATED = 'xmasrelated';
     protected const ATTR_ARG_TYPE_SEASON = 'season';
     protected const ATTR_ARG_TYPE_SEASONSHIFTING = 'seasonshifting';
     protected const ATTR_ARG_TYPE_EASTERLY = 'easterly';
@@ -55,6 +57,7 @@ class HolidaycalendarService
         self::ATTR_ARG_TYPE_FIXEDSHIFTING,
         self::ATTR_ARG_TYPE_FIXEDMULTI,
         self::ATTR_ARG_TYPE_FIXEDRELATED,
+        self::ATTR_ARG_TYPE_XMASRELATED,
         self::ATTR_ARG_TYPE_SEASON,
         self::ATTR_ARG_TYPE_SEASONSHIFTING,
         self::ATTR_ARG_TYPE_EASTERLY,
@@ -122,7 +125,7 @@ class HolidaycalendarService
         return ((array_key_exists(self::ATTR_ARG, $holidayItem)) &&
             (is_array($holidayItem[self::ATTR_ARG])) &&
             (array_key_exists(self::ATTR_ARG_CALENDAR, $holidayItem[self::ATTR_ARG])) &&
-            ($holidayItem[self::ATTR_ARG][self::ATTR_ARG_CALENDAR] === 'chinese')
+            (in_array($holidayItem[self::ATTR_ARG][self::ATTR_ARG_CALENDAR], ConvertDateUtility::DEFECT_INTL_DATE_FORMATTER_LIST))
         );
     }
 
@@ -134,14 +137,23 @@ class HolidaycalendarService
      */
     public function nextHoliday(string $locale, DateTime $startDate, array $holidayItem): TimerStartStopRange
     {
+        if (!array_key_exists(self::ATTR_ARG, $holidayItem)) {
+            throw new TimerException(
+                'The argument are not correctly defined for the next holiday. ' .
+                'The array with the timerdefinition must have the key `' . self::ATTR_ARG . '`: ' .
+                print_r($holidayItem, true),
+                1696146852
+            );
+        }
+
         $holidayArg = $holidayItem[self::ATTR_ARG];
         $addYear = 0;
-        $timerRange = $this->getGregorianDateForHoliday($locale, $startDate, $holidayArg, $addYear);
+        $timerRange = $this->getHolidayDateForHoliday($locale, $startDate, $holidayArg, $addYear);
         if ($timerRange->getBeginning() > $startDate) {
             return $timerRange;
         }
         $addYear++;
-        return $this->getGregorianDateForHoliday($locale, $startDate, $holidayArg, $addYear);
+        return $this->getHolidayDateForHoliday($locale, $startDate, $holidayArg, $addYear);
     }
 
     /**
@@ -153,14 +165,23 @@ class HolidaycalendarService
      */
     public function prevHoliday(string $locale, DateTime $stopDate, array $holidayItem): TimerStartStopRange
     {
+        if (!array_key_exists(self::ATTR_ARG, $holidayItem)) {
+            throw new TimerException(
+                'The argument are not correctly defined for the previous holiday. ' .
+                'The array with the timerdefinition must have the key `' . self::ATTR_ARG . '`: ' .
+                print_r($holidayItem, true),
+                1696146852
+            );
+        }
+
         $holidayArg = $holidayItem[self::ATTR_ARG];
         $addYear = 0;
-        $timerRange = $this->getGregorianDateForHoliday($locale, $stopDate, $holidayArg, $addYear);
-        if ($timerRange->getEnding() < $stopDate) {
+        $timerRange = $this->getHolidayDateForHoliday($locale, $stopDate, $holidayArg, $addYear);
+        if ($timerRange->getBeginning() < $stopDate) {
             return $timerRange;
         }
         $addYear--;
-        return $this->getGregorianDateForHoliday($locale, $stopDate, $holidayArg, $addYear);
+        return $this->getHolidayDateForHoliday($locale, $stopDate, $holidayArg, $addYear);
     }
 
     /**
@@ -171,8 +192,16 @@ class HolidaycalendarService
      */
     public function currentHoliday(string $locale, DateTime $startDate, array $holidayItem): TimerStartStopRange
     {
+        if (!array_key_exists(self::ATTR_ARG, $holidayItem)) {
+            throw new TimerException(
+                'The argument are not correctly defined for the current holiday. ' .
+                'The array with the timerdefinition must have the key `' . self::ATTR_ARG . '`: ' .
+                print_r($holidayItem, true),
+                1696146850
+            );
+        }
         $holidayArg = $holidayItem[self::ATTR_ARG];
-        return $this->getGregorianDateForHoliday($locale, $startDate, $holidayArg, 0);
+        return $this->getHolidayDateForHoliday($locale, $startDate, $holidayArg, 0);
     }
 
     /**
@@ -182,7 +211,7 @@ class HolidaycalendarService
      * @param int $addYear
      * @return TimerStartStopRange
      */
-    protected function getGregorianDateForHoliday(
+    protected function getHolidayDateForHoliday(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
@@ -191,40 +220,41 @@ class HolidaycalendarService
     {
         switch ($holidayArg[self::ATTR_ARG_TYPE]) {
             case self::ATTR_ARG_TYPE_FIXED:
-                $timerRange = $this->getGregorianDateForFixedType($locale, $startDate, $holidayArg, $addYear);
+                $timerRange = $this->getHolidayDateForFixedType($locale, $startDate, $holidayArg, $addYear);
                 break;
             case self::ATTR_ARG_TYPE_FIXEDSHIFTING:
-                $timerRange = $this->getGregorianDateForFixedShiftingType($locale, $startDate, $holidayArg,
+                $timerRange = $this->getHolidayDateForFixedShiftingType($locale, $startDate, $holidayArg,
                     $addYear);
                 break;
             case self::ATTR_ARG_TYPE_FIXEDMULTI:
-                $timerRange = $this->getGregorianDateForFixedMultiType($locale, $startDate, $holidayArg,
+                $timerRange = $this->getHolidayDateForFixedMultiType($locale, $startDate, $holidayArg,
                     $addYear);
                 break;
             case self::ATTR_ARG_TYPE_FIXEDRELATED:
-                $timerRange = $this->getGregorianDateForFixedRelatedType($locale, $startDate, $holidayArg,
+            case self::ATTR_ARG_TYPE_XMASRELATED:
+                $timerRange = $this->getHolidayDateForFixedRelatedType($locale, $startDate, $holidayArg,
                     $addYear);
                 break;
             case self::ATTR_ARG_TYPE_SEASON:
-                $timerRange = $this->getGregorianDateForSeasonType($locale, $startDate, $holidayArg,
+                $timerRange = $this->getHolidayDateForSeasonType($locale, $startDate, $holidayArg,
                     $addYear);
                 break;
             case self::ATTR_ARG_TYPE_SEASONSHIFTING:
-                $timerRange = $this->getGregorianDateForSeasonShiftingType($locale, $startDate, $holidayArg,
+                $timerRange = $this->getHolidayDateForSeasonShiftingType($locale, $startDate, $holidayArg,
                     $addYear);
                 break;
             case self::ATTR_ARG_TYPE_EASTERLY:
-                $timerRange = $this->getGregorianDateForEasterlyType($locale, $startDate, $holidayArg, $addYear);
+                $timerRange = $this->getHolidayDateForEasterlyType($locale, $startDate, $holidayArg, $addYear);
                 break;
             case self::ATTR_ARG_TYPE_WEEKDAYLY:
-                $timerRange = $this->getGregorianDateForWeekdaylyType($locale, $startDate, $holidayArg, $addYear);
+                $timerRange = $this->getHolidayDateForWeekdaylyType($locale, $startDate, $holidayArg, $addYear);
                 break;
             case self::ATTR_ARG_TYPE_MOONINMONTH:
-                $timerRange = $this->getGregorianDateForMoonInMonthType($locale, $startDate, $holidayArg,
+                $timerRange = $this->getHolidayDateForMoonInMonthType($locale, $startDate, $holidayArg,
                     $addYear);
                 break;
             case self::ATTR_ARG_TYPE_MATARIKI:
-                $timerRange = $this->getGregorianDateForMatarikiType($startDate, $addYear);
+                $timerRange = $this->getHolidayDateForMatarikiType($startDate, $addYear);
                 break;
             default :
                 /** @var ListOfTimerService $listOfTimerSevice */
@@ -250,7 +280,7 @@ class HolidaycalendarService
 
     /**
      * tested: 20230219 (without $flag)
-     * tested: (with Flag see test for `getGregorianDateForFixedShiftingType`)
+     * tested: (with Flag see test for `getHolidayDateForFixedShiftingType`)
      * 20230225 => function not fully tested for the hebrew-calendar
      *
      * The method determines the year of the corresponding calendar system from a Gregorian date. The year is used
@@ -266,7 +296,7 @@ class HolidaycalendarService
      * @return TimerStartStopRange
      * @throws TimerException
      */
-    protected function getGregorianDateForFixedType(
+    protected function getHolidayDateForFixedType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
@@ -391,14 +421,14 @@ class HolidaycalendarService
      * @param int $addYear
      * @return TimerStartStopRange
      */
-    protected function getGregorianDateForFixedShiftingType(
+    protected function getHolidayDateForFixedShiftingType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
         int    $addYear
     ): TimerStartStopRange
     {
-        return $this->getGregorianDateForFixedType($locale, $startDate, $holidayArg, $addYear, true);
+        return $this->getHolidayDateForFixedType($locale, $startDate, $holidayArg, $addYear, true);
     }
 
     /**
@@ -414,14 +444,14 @@ class HolidaycalendarService
      * @param int $addYear
      * @return TimerStartStopRange
      */
-    protected function getGregorianDateForFixedMultiType(
+    protected function getHolidayDateForFixedMultiType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
         int    $addYear
     ): TimerStartStopRange
     {
-        return $this->getGregorianDateForFixedType($locale, $startDate, $holidayArg, $addYear, false, true);
+        return $this->getHolidayDateForFixedType($locale, $startDate, $holidayArg, $addYear, false, true);
     }
 
     /**
@@ -438,14 +468,14 @@ class HolidaycalendarService
      * @param int $addYear
      * @return TimerStartStopRange
      */
-    protected function getGregorianDateForFixedRelatedType(
+    protected function getHolidayDateForFixedRelatedType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
         int    $addYear
     ): TimerStartStopRange
     {
-        $resultRange = $this->getGregorianDateForFixedType($locale, $startDate, $holidayArg, $addYear);
+        $resultRange = $this->getHolidayDateForFixedType($locale, $startDate, $holidayArg, $addYear);
         if ($resultRange->hasResultExist()) {
             $currentDate = $resultRange->getBeginning();
             $currentWeekday = (int)$currentDate->format('w');
@@ -496,7 +526,7 @@ class HolidaycalendarService
      * @return TimerStartStopRange
      * @throws TimerException
      */
-    protected function getGregorianDateForSeasonType(
+    protected function getHolidayDateForSeasonType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
@@ -566,14 +596,14 @@ class HolidaycalendarService
      * @return TimerStartStopRange
      * @throws TimerException
      */
-    protected function getGregorianDateForSeasonShiftingType(
+    protected function getHolidayDateForSeasonShiftingType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
         int    $addYear
     ): TimerStartStopRange
     {
-        return $this->getGregorianDateForSeasonType(
+        return $this->getHolidayDateForSeasonType(
             $locale,
             $startDate,
             $holidayArg,
@@ -591,7 +621,7 @@ class HolidaycalendarService
      * @param int $addYear
      * @return TimerStartStopRange
      */
-    protected function getGregorianDateForEasterlyType(
+    protected function getHolidayDateForEasterlyType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
@@ -617,8 +647,11 @@ class HolidaycalendarService
                     1676823965
                 );
         }
-        $result = clone $startDate;
-        $result->setTimestamp($easterStamp);
+        $result = new DateTime('@' . $easterStamp, new DateTimeZone('UTC'));
+
+        $result->setTimezone($startDate->getTimezone());
+        $gap = $result->getTimezone()->getOffset($result);
+        $result->setTimestamp($result->getTimestamp() - $gap);
         if ((isset($holidayArg[self::ATTR_ARG_STATUSCOUNT])) && (!empty($holidayArg[self::ATTR_ARG_STATUSCOUNT]))) {
             $days = (int)$holidayArg[self::ATTR_ARG_STATUSCOUNT];
             if ($days > 0) {
@@ -662,7 +695,7 @@ class HolidaycalendarService
      * @param int $addYear
      * @return TimerStartStopRange
      */
-    protected function getGregorianDateForWeekdaylyType(
+    protected function getHolidayDateForWeekdaylyType(
         string   $locale,
         DateTime $startDate,
         array    $holidayArg,
@@ -777,7 +810,7 @@ class HolidaycalendarService
      * @return TimerStartStopRange
      * @throws TimerException
      */
-    protected function getGregorianDateForMoonInMonthType(
+    protected function getHolidayDateForMoonInMonthType(
         string $locale,
         DateTime $startDate,
         array  $holidayArg,
@@ -940,7 +973,7 @@ class HolidaycalendarService
      * @param int $addYear
      * @return TimerStartStopRange
      */
-    protected function getGregorianDateForMatarikiType(
+    protected function getHolidayDateForMatarikiType(
         DateTime $startDate,
         int $addYear
     ): TimerStartStopRange
@@ -949,8 +982,10 @@ class HolidaycalendarService
         $timeRange = new TimerStartStopRange();
         $checkYear = (string)((int)$startDate->format('Y') + $addYear);
         if (array_key_exists($checkYear, self::MATARIKI)) {
-            $holidayDate = date_create_from_format('Y-m-d', self::MATARIKI[$checkYear]);
-            $holidayDate->setTime(0, 0, 0);
+            $holidayDate = date_create_from_format('Y-m-d H:i:s', self::MATARIKI[$checkYear] . ' 00:00:00');
+            $holidayDate->setTimezone($startDate->getTimezone());
+            $gap = $holidayDate->getTimezone()->getOffset($holidayDate);
+            $holidayDate->setTimestamp($holidayDate->getTimestamp() - $gap);
             $this->setBeginnengAndEndingInTimeRange($timeRange, $holidayDate);
         } else {
             $timeRange->setBeginning($startDate);

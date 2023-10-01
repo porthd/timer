@@ -332,21 +332,17 @@
 				<target>Die aktive Zeit endet %s vor dem %s (%s) und hat %s gedauert.</target>
 			</trans-unit>
 
-			<trans-unit id="content.timersimul.viewhelper.formatJewishDate.aspect.unixtimestamp">
-				<source>(All subsequent dates, converted to the Jewish calendar, refer to the selected Unix timestamp `1600000000s`. The time specification in the past means the seconds that have passed since January 1st, 1970. On average, one billion seconds corresponds to almost 31.7 years.)</source>
-				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf den jüdischen Kalender, beziehen sich auf den gewählten Unix-Timestamp `1600000000s`. Die in der Vergangenheit liegende Zeitangabe meint die Sekunden, die seit dem 1.1.1970 vergangen sind. Eine Milliarde Sekunden entsprechen im Mittel knapp 31,7 Jahren.)</target>
-			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.unixtimestamp">
 				<source>(All subsequent dates, converted to the various calendars, refer to the selected Unix timestamp `1600000000s`. The time specification in the past means the seconds that have passed since January 1st, 1970. On average, one billion seconds corresponds to almost 31 ,7 years. In the first sub-block, the various formatting variants are tested as examples. The inline variant is tested, which generates the foreign date in the fixed format in the second sub-block, in order to do this with the three formatting variants ICU, PHP-dateTime and PHP-strftime to generate an identical date as above. The last sub-block converts the foreign date into the Persian calendar to show that you can convert between the calendars at will. Only the Chinese calendar is problematic, probably because of a bug in PHP.)</source>
 				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf die verschiedenen Kalender, beziehen sich auf den gewählten Unix-Timestamp `1600000000s`. Die in der Vergangenheit liegende Zeitangabe meint die Sekunden, die seit dem 1.1.1970 vergangen sind. Eine Milliarde Sekunden entsprechen im Mittel knapp 31,7 Jahren. Im ersten Teilblock werden die verschiedenen Formatierungsvarianten exemplarisch erprobt. Auf wird die Inline-Variante erprobt, die im zweiten Teilblock das fremde Datum im fixierten Format generiert, um so mit den drei Formatierungsvarianten ICU, PHP-dateTime und PHP-strftime das identische Datum wie oben zu erzeugen. der letzte Teilblock konvertiert das fremde Datum in den persischen Kalender, um so zu zeigen, dass man zwischen den Kalender beliebig konvertieren kann. Problematisch ist nur der chinesische Kalender, vermutlich wegen eines Bugs im PHP.)</target>
 			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.conversionionGregorianGregorian">
+				<source>Attention: The php extension intl_date_formater seems to have problems converting a date from the Gregorian calendar to the Gregorian calendar. The exact cause is not clear. Within the extension, the DateTime mode is automatically switched to if Gregorian is specified as the input calendar type in the CalendarDateViewhelper.</source>
+				<target>Achtung: Die php-Extension intl_date_formater scheint Probleme mit der Konvertierung eines Datum von gregorianischen Kalender in den gregorianischen Kalender zu haben. Die genaue Ursache ist nicht klar. Innerhalb der Extension wird deshalb dafür automatisch in den Modus DateTime gewechselt, wenn im CalendarDateViewhelper als Input-Kalendertype der Gregorianische angegeben wird.</target>
+			</trans-unit>
 			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.current">
 				<source>(All subsequent dates, converted to the various calendars, refer to the current system date.)</source>
 				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf die verschiedenen Kalender, beziehen sich auf das aktuelle Systemdatum.)</target>
-			</trans-unit>
-			<trans-unit id="content.timersimul.viewhelper.formatJewishDate.aspect.format.strftime">
-				<source>(In contrast to the TYPO3 view helper `f:format.date`, this view helper `timer:format.jewishDate` does not support the format parameters of the php function `strftime`.)</source>
-				<target>(Im Gegensatz zum TYPO3-Viewhelper `f:format.date` werden von diesem Viewhelper `timer:format.jewishDate` die Format-Parameter der php-Funktion `strftime` nicht unterstützt.)</target>
 			</trans-unit>
 
 			<trans-unit id="timer.mapping.strftime.make-locale-H.i.s">

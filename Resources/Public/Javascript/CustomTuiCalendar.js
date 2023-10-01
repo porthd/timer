@@ -19,6 +19,7 @@
     ;
     // var datePicker, selectedCalendar;
     cal = new Calendar('#' + idTuiCalendar, {
+        usageStatistics: false,
         defaultView: 'month',
         useDetailPopup: useDetailPopup,
         calendars: CalendarList,

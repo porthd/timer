@@ -110,7 +110,15 @@ Here is the lean JavaScript framework by Jack
 Ducasse ([https://github.com/jackducasse/caleandar](https://github.com/jackducasse/caleandar))
 used. In principle, you can of course also use any other calendar framework.
 
+In order to be able to use the plugin, you must integrate the TypoScript for the
+content element starting from version 12.2. (The previously necessary
+integration via extension constants has been removed.)
+
 #### Content element `holidaycalendar` for holiday
+
+Remark: In order to be able to use the plugin, you must integrate the TypoScript
+for the content element starting from version 12.2. (The previously necessary
+integration via extension constants has been removed.)
 
 Most do not want to maintain appointments in a confusing TYPO3 backend because
 you quickly lose track there.
@@ -297,6 +305,10 @@ Production environments should hide them for editors. It will be removed when
 the extension reaches `beta` status
 reached.
 
+In order to be able to use the plugin, you must integrate the TypoScript for the
+content element starting from version 12.2. (The previously necessary
+integration via extension constants has been removed.)
+
 ### Use of the periodic timer (Customtimer)
 
 The extension currently comes with several periodic timers. Two of the timers
@@ -384,8 +396,8 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   didn't feel like making a correction at this point. The Jewish calendar is not
   that important for me. For the same reason, the tests were only carried out
   using Yom Kippur as an example._
-  **Recommendation** _Use the new more general timer `calendarDateRelTimer`_**
-  instead
+  **Recommendation** _Use the new more general timer `calendarDateRelTimer` or
+  the `holidayTimer` (which can process lists of various holidays)._** instead
 * MoonphaseRelTimer - Periods starting relative to a moon phase for a specified
   time period
 * MoonriseRelTimer - Periods relative to moonrise or moonset for a specified
@@ -460,9 +472,9 @@ currently supported, which must be specified in the CSV file in the `arg.type`:
   0,1,2,0,3,2,1' a public holiday would be shifted by three days (5th entry) if
   it falls on a Friday (5th day of the week).
   Technically, the mechanics work in the same way as `_fixed_`.
-- _fixedrelated_: The fourth Advent example shows that there are holidays that
-  are celebrated on certain days of the week relative to a fixed date (the first
-  day of Christmas in Advent).
+- _fixedrelated_ or better _xmasrelated_: The fourth Advent example shows that
+  there are holidays that are celebrated on certain days of the week relative to
+  a fixed date (the first day of Christmas in Advent).
   With the numbers 1 = Monday to 7 = Sunday you define the day of the week
   in `arg.status` that must precede the fixed date of the target holiday.
   In `arg.statusCount` you then define how many weeks before the day must take
@@ -848,11 +860,11 @@ There are five view helpers:
 - timer:format.date - works like `f:format.date`, with the addition of
   outputting times for a specific time zone
   permitted.
-- timer:format.jewishDate - works similarly to `f:format.date`, outputting times
-  for a specific time zone
+- (removed in 12.2.0) ~~timer:format.jewishDate - works similarly
+  to `f:format.date`, outputting times for a specific time zone
   allowed and whereby the dates are transformed into the Jewish calendar.
   **Deprecated - Will be removed in version
-  12! _Use the new view helper `timer:format.calendarDate`_**
+  12! _Use the new view helper `timer:format.calendarDate`_**~~
 - timer:format.calendarDate - works more comprehensively than `f:format.date`
   because in addition to taking into account the time zone, it also allows you
   to choose from the various calendars supported by PHP
@@ -862,8 +874,8 @@ There are five view helpers:
   also be used.
   A well-known shortcoming is that the conversion from the Chinese lunar
   calendar to the Gregorian (western) solar calendar has an error that is to be
-  found in PHP. The timer makes the view helper ``timer:format.jewishDate``
-  superfluous.
+  found in PHP. (Removed in 12.2.0) ~~The timer makes the view
+  helper ``timer:format.jewishDate`` superfluous~~.
 
 #### timer:format.calendarDate - Attributes
 

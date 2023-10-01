@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /***************************************************************
  *
@@ -36,7 +37,7 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Dr. Dieter Porth',
     'author_email' => 'info@mobger.de',
     'state' => 'beta',
-    'version' => '12.1.1',
+    'version' => '12.2.0',
     'constraints' => [
         'depends' => [
             'typo3' => '12.4.0-12.4.99',

@@ -340,7 +340,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
             $processorConfiguration,
             ConvertDateUtility::DEFAULT_CALENDAR
         );
-        if (in_array($holidayInfo->calendar, ConvertDateUtility::DEFAULT_LIST_DEFECTIVE_CALENDAR, true)) {
+        if (in_array($holidayInfo->calendar, ConvertDateUtility::DEFECT_INTL_DATE_FORMATTER_LIST, true)) {
             throw new TimerException(
                 'The IntlDateFormatter has a bug, which micalulate the gregorian date starting with ' .
                 'a chinese date. I hope the bug will be fixed in a former PHP-version. Please support the bug-report ' .

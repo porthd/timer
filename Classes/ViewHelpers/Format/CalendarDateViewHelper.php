@@ -205,15 +205,13 @@ class CalendarDateViewHelper extends AbstractViewHelper
         $dateRaw = $renderChildrenClosure();
         [$fromCalendar, $toCalendar, $locale, $flagFormat, $format, $timezone, $base, $date, $calendarString] =
             self::readArguments($arguments, $dateRaw);
-
         // @todo check against PHP-versions, until the bug is fixed
-        if (in_array($fromCalendar, ConvertDateUtility::DEFAULT_LIST_DEFECTIVE_CALENDAR)) {
+        if (in_array($fromCalendar, ConvertDateUtility::DEFECT_INTL_DATE_FORMATTER_LIST)) {
             return LocalizationUtility::translate(
                 'calendarDateViewHelper.php.error',
                 TimerConst::EXTENSION_NAME
             );
         }
-
         if ((empty($calendarString)) ||
             ($dateRaw instanceof DateTimeInterface) ||
             ($fromCalendar === ConvertDateUtility::DEFAULT_CALENDAR)
