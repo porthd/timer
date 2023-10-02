@@ -332,19 +332,20 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
 
 ### Predefined Timer - Overview
 
-* CalendarDateRelTimer - (In preparation) Most religious, historical, political,
-  economic or other holidays are fixed on a date in a calendar. The powerful
-  want to avoid mentally overwhelming the common people (so that every Dölmer
-  also appreciates the festival at the right time). In the course of human
-  history, many different calendar systems have been developed and there are
-  many regionally different important festivals. The timer wants to take this
-  variability into account by allowing the consideration of different calendar
-  systems.
+* (not realized 12.2.1) ~~CalendarDateRelTimer - (In preparation) Most
+  religious, historical, political, economic or other holidays are fixed on a
+  date in a calendar. The powerful want to avoid mentally overwhelming the
+  common people (so that every Dölmer also appreciates the festival at the right
+  time). In the course of human history, many different calendar systems have
+  been developed and there are many regionally different important festivals.
+  The timer wants to take this variability into account by allowing the
+  consideration of different calendar systems.
   (Example 5760 minutes (=2 days) after Ramadan (1.9.; Islamic calendar) for 720
   minutes (=6 hours)). At the same time, this timer can also be used to output
   lists of appointments. The workflow is supported to define the appointment
   lists - i.e. public holiday list as well as timer definitions in an Excel
-  table and to provide the timer with the list as a CSV file.
+  table and to provide the timer with the list as a CSV file.~~ _(use
+  HolidayTimer instead)_
 * DailyTimer - Daily recurring active times for a few minutes
   (daily from 10:00 a.m. for 120 minutes)
 * DatePeriodTimer - Active times recurring periodically for a few minutes
@@ -396,8 +397,8 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   didn't feel like making a correction at this point. The Jewish calendar is not
   that important for me. For the same reason, the tests were only carried out
   using Yom Kippur as an example._
-  **Recommendation** _Use the new more general timer `calendarDateRelTimer` or
-  the `holidayTimer` (which can process lists of various holidays)._** instead
+  **Recommendation** _Use the new more general timer `holidayTimer` (which can
+  process lists of various holidays)._** instead
 * MoonphaseRelTimer - Periods starting relative to a moon phase for a specified
   time period
 * MoonriseRelTimer - Periods relative to moonrise or moonset for a specified
@@ -420,7 +421,7 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   Example: Every Monday or
   Thursday)
 
-#### Notes on the CalendarDateRelTimer workflow
+#### Notes on the _HolidayTimer_ workflow
 ##### Challenge
 
 The assessment of which public holidays an editor can/should use will certainly
@@ -440,7 +441,7 @@ or `calc` and save the data in a CSV file.
 The CSV file is uploaded to the server via FTP and the path to the CSV file is
 specified in the settings for the extension configurations.
 After deleting the cache you have the new list available in the
-timer `CalendarDateRelTimer`.
+timer `HolidayTimer`.
 ##### supported holiday calculations (currently not working and tested 2023-02-25)
 
 Like any man-made system, the calculation is simple in principle; but in detail
@@ -863,8 +864,8 @@ There are five view helpers:
 - (removed in 12.2.0) ~~timer:format.jewishDate - works similarly
   to `f:format.date`, outputting times for a specific time zone
   allowed and whereby the dates are transformed into the Jewish calendar.
-  **Deprecated - Will be removed in version
-  12! _Use the new view helper `timer:format.calendarDate`_**~~
+  **Deprecated - Will be removed in version 12!~~ _Use the new view
+  helper `timer:format.calendarDate`_**
 - timer:format.calendarDate - works more comprehensively than `f:format.date`
   because in addition to taking into account the time zone, it also allows you
   to choose from the various calendars supported by PHP

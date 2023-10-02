@@ -1,5 +1,5 @@
 # cat=timer/internalTimer; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.selectInternatTimer
-useInternalTimer = 16383
+useInternalTimer = 8191
 # cat=timer/timerBasic; type=string; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.flag.baseTimeZone
 baseTimeZone = Europe/Berlin
 # cat=timer/timerBasic; type=string; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:extension.configuration.template.file.yamlHolidayList

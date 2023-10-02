@@ -320,21 +320,21 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
 
 ### vordefinierte Timer - Übersicht
 
-* CalendarDateRelTimer - (In Vorbereitung) Die allermeisten religiösen,
-  historischen, politischen, ökonmischen oder sonstigen Feiertage sind über ein
-  Datum fest in einem Kalender fixiert. Die Mächtigen wollen vermeiden, dass sie
-  das gemeine Volk mental überfordern (damit auch jeder Dölmer das Fest auch zum
-  richtigen Zeitpunkt würdigt). Im Laufe der Menschheitgeschichte wurden viel
-  verschiedene Kalendersysteme entwicklet und es gibt viele regional
-  unterschiedlich wichtige Festtatge. Dieser Variablilität will der Timer
-  Rechnung tragen, indem er die Berücksichtigung von verschiedene
-  Kalendersysteme erlaubt.
+* ~~(nicht realisiert 12.2.1) CalendarDateRelTimer - (In Vorbereitung) Die
+  allermeisten religiösen, historischen, politischen, ökonmischen oder sonstigen
+  Feiertage sind über ein Datum fest in einem Kalender fixiert. Die Mächtigen
+  wollen vermeiden, dass sie das gemeine Volk mental überfordern (damit auch
+  jeder Dölmer das Fest auch zum richtigen Zeitpunkt würdigt). Im Laufe der
+  Menschheitgeschichte wurden viel verschiedene Kalendersysteme entwicklet und
+  es gibt viele regional unterschiedlich wichtige Festtatge. Dieser
+  Variablilität will der Timer Rechnung tragen, indem er die Berücksichtigung
+  von verschiedene Kalendersysteme erlaubt.
   (Beispiel 5760 Minuten (=2 Tage) nach Ramadan (1.9.; islamischer Kalender) für
   720 Minuten (=6 Stunden)). Gleichzeitig lassen sich über diesen Timer auch
   Listen von Terminen ausgeben. Es wird dabei der Workflow unterstützt, die
   Terminlisten - also Feiertagsliste wie auch Timer-Definitionen in einer
   Exceltabelle zu definieren und dem Timer selbst die Liste als CSV-Datei zur
-  Verfügung zu stellen.
+  Verfügung zu stellen.~~ _(Nutze HolidayTimer stattdessen)_
 * DailyTimer - Tägliche für einige Minuten wiederkehrende aktive Zeiten
   (täglich ab 10:00 für 120 Minuten)
 * DatePeriodTimer - Periodisch für einige Minuten wiederkehrende aktive Zeiten
@@ -390,8 +390,8 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   Grund wurden die Tests nur exemplarisch am Beispiel vom Yom Kippur
   durchgeführt._
   **Empfehlung:** _Nutzen sie stattdessen den allgemeineren
-  Timer `calendarDateRelTimer` oder den `holidayTimer` (der Listen von
-  verschiedensten Feiertagen verarbeiten kann)._**
+  Timer `holidayTimer` (der Listen von verschiedensten Feiertagen verarbeiten
+  kann)._**
 * MoonphaseRelTimer - Perioden startend relativ zu einer Mondphase für einen
   bestimmten Zeitraum
 * MoonriseRelTimer - Perioden relative zum Mondaufgang oder Monduntergang für
@@ -415,7 +415,7 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   zu bestimmten Wochentagen. (Beispiel: Jeden Montag oder
   Donnerstag)
 
-#### Anmerkungen zum Workflow beim CalendarDateRelTimer
+#### Anmerkungen zum Workflow beim _HolidayTimer_
 ##### Herausforderung
 
 Die Einschätzung, welche Feiertage ein Redakteur benutzen können darf/soll,
@@ -435,8 +435,8 @@ Man verwaltet die Liste der Feiertage in einer Tabellenkalulation wie `Excel`
 oder `calc` und speichert die Daten in einer CSV-Datei.
 Die CSV-Datei lädt man per FTP auf dem Server hoch und gibt den Pfad zur
 CSV-Datei bei den Settings für die Extension-Konfigurationen an.
-Nach dem Löschen des Caches hat man dann die neue Liste im
-Timer `CalendarDateRelTimer` verfügbar.
+Nach dem Löschen des Caches hat man dann die neue Liste im Timer `HolidayTimer`
+verfügbar.
 ##### unterstützte Feiertagsberechnungen (aktuell nicht funktionsfähig und nicht getestet 2023-02-25)
 
 Die Berechnug ist wie jedes menschengemachte System im Grundsatz einfach; aber

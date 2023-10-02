@@ -89,9 +89,9 @@ call_user_func(
             ->get(TimerConst::EXTENSION_NAME);
 
         // disallow usage of timer from the extension via the configuration
-        $addTimerFlags = (int)((empty($timerConfig['useInternalTimer'])) ? 16383 : $timerConfig['useInternalTimer']);
+        $addTimerFlags = (int)((empty($timerConfig['useInternalTimer'])) ? 8191 : $timerConfig['useInternalTimer']);
         if ($addTimerFlags >= 1) {
-            // Sum as Defaultvalue => 16383 = 1+ 2 + 4+ 8+ ... +4096 +8192;
+            // Sum as Defaultvalue => 8191 = 1+ 2 + 4+ 8+ ... +4096;
             $listOfTimerClasses = [
                 DailyTimer::class, // => 1
                 DatePeriodTimer::class, // => 2
@@ -105,8 +105,7 @@ call_user_func(
                 WeekdayInMonthTimer::class, // => 512
                 WeekdaylyTimer::class, // => 1024
                 JewishHolidayTimer::class, // => 2048
-                CalendarDateRelTimer::class, // => 4096
-                HolidayTimer::class, // => 8192
+                HolidayTimer::class, // => 4096
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
 
