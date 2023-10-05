@@ -16,3 +16,57 @@ services:
 
     Porthd\Timer\Services\HolidaycalendarService:
         public: true
+
+    cache.timer_dataprocessor:
+        class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+        factory: [ '@TYPO3\CMS\Core\Cache\CacheManager', 'getCache' ]
+        arguments: [ 'timer_dataprocessor' ]
+
+    cache.timer_manager:
+        class: \TYPO3\CMS\Extbase\Service\CacheService
+
+    cache.timer_contentdataprocessor:
+        class: TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor
+
+    cache.timer_periodlisttimer:
+        class: Porthd\Timer\CustomTimer\PeriodListTimer
+
+    cache.timer_yamlfileloader:
+        class: TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader
+
+    Porthd\Timer\DataProcessing\HolidaycalendarProcessor:
+        arguments:
+            $cache: '@cache.timer_dataprocessor'
+            $cacheManager: '@cache.timer_manager'
+            $yamlFileLoader: '@cache.timer_yamlfileloader'
+
+    Porthd\Timer\DataProcessing\PeriodlistProcessor:
+        arguments:
+            $cache: '@cache.timer_dataprocessor'
+            $cacheManager: '@cache.timer_manager'
+            $periodListTimer: '@cache.timer_periodlisttimer'
+            $yamlFileLoader: '@cache.timer_yamlfileloader'
+
+    Porthd\Timer\DataProcessing\RangeListQueryProcessor:
+        arguments:
+            $cache: '@cache.timer_dataprocessor'
+            $cacheManager: '@cache.timer_manager'
+            $contentDataProcessor: '@cache.timer_contentdataprocessor'
+
+    Porthd\Timer\DataProcessing\FlexToArrayProcessor:
+        arguments:
+            $cache: '@cache.timer_dataprocessor'
+            $cacheManager: '@cache.timer_manager'
+            $contentDataProcessor: '@cache.timer_contentdataprocessor'
+
+    Porthd\Timer\DataProcessing\BetterMappingProcessor:
+        arguments:
+            $cache: '@cache.timer_dataprocessor'
+            $cacheManager: '@cache.timer_manager'
+            $contentDataProcessor: '@cache.timer_contentdataprocessor'
+
+    Porthd\Timer\DataProcessing\SortListQueryProcessor:
+        arguments:
+            $cache: '@cache.timer_dataprocessor'
+            $cacheManager: '@cache.timer_manager'
+            $contentDataProcessor: '@cache.timer_contentdataprocessor'

@@ -22,6 +22,10 @@ namespace Porthd\Timer\DataProcessing;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use DateInterval;
 use DateTime;
@@ -38,6 +42,7 @@ use stdClass;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
@@ -50,11 +55,14 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *
  *
  */
-class HolidaycalendarProcessor implements DataProcessorInterface
+class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
+
+    use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
 
     protected const YAML_HOLIDAY_CALENDAR_PROCESSOR = 'holidayCalendarProcessor';
+    protected const ATTR_CACHE = 'cache';
     protected const ATTR_START_DOT = 'start.';
     protected const ATTR_STOP_DOT = 'stop.';
     protected const ATTR_YEAR = 'year';
@@ -67,15 +75,15 @@ class HolidaycalendarProcessor implements DataProcessorInterface
 
     protected const ATTR_ALIAS_PATH = 'aliasPath';
     protected const ATTR_ALIAS_CONFIG = 'aliasConfig';
+    protected const ATTR_ALIAS_CONFIG_DOT = 'aliasConfig.';
     protected const ATTR_HOLIDAY_PATH = 'holidayPath';
     protected const ATTR_HOLIDAY_CONFIG = 'holidayConfig';
+    protected const ATTR_HOLIDAY_CONFIG_DOT = 'holidayConfig.';
     protected const ATTR_FLEX_DB_FIELD = 'flexDbField';
     protected const ATTR_PATH_FLEX_FIELD = 'pathFlexField';
     protected const ATTR_PATH_FAL_FIELD = 'falFlexField';
     protected const ATTR_AS = 'as';
-    protected const ATTR_TIME_ADD = 'timeAdd';
 
-//
     protected const DEFAULT_AS = 'holidayList';
     protected const DEFAULT_TIME_ADD = 'P1D';
     protected const YAML_HOLIDAY_TITLE = 'title';
@@ -96,18 +104,36 @@ class HolidaycalendarProcessor implements DataProcessorInterface
      */
     protected $holidaycalendarService;
 
+    /**
+     * @var FrontendInterface
+     */
+    protected $cache;
 
     /**
-     * @param HolidaycalendarService|null $holidaycalendarService
+     * @var CacheService
      */
-    public function __construct(?HolidaycalendarService $holidaycalendarService = null)
-    {
-        if ($holidaycalendarService === null) {
-            $this->holidaycalendarService = GeneralUtility::makeInstance(HolidaycalendarService::class);
-        } else {
-            $this->holidaycalendarService = $holidaycalendarService;
-        }
+    protected $cacheManager;
 
+    /**
+     * @var YamlFileLoader
+     */
+    protected $yamlFileLoader;
+
+    /**
+     * @param FrontendInterface $cache
+     * @param CacheService $cacheManager
+     * @param HolidaycalendarService $holidaycalendarService
+     */
+    public function __construct(FrontendInterface      $cache,
+                                CacheService           $cacheManager,
+                                HolidaycalendarService $holidaycalendarService,
+                                YamlFileLoader         $yamlFileLoader
+    )
+    {
+        $this->cache = $cache;
+        $this->cacheManager = $cacheManager;
+        $this->holidaycalendarService = $holidaycalendarService;
+        $this->yamlFileLoader = $yamlFileLoader;
     }
 
     /**
@@ -125,111 +151,154 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ) {
-        $timeRangeInfo = $this->getTimeRangeInformations($processorConfiguration, $cObj);
-        $aliasPath = $this->getAliasForCalendarYaml($processorConfiguration, $cObj, $processedData);
-        //  in the holidayPath is not defined, an exception will be thrown
-        $holidayPath = $this->getHolidayForCalendarYaml($processorConfiguration, $cObj, $processedData);
-        if (array_key_exists(self::ATTR_AS, $processorConfiguration)) {
-            $as = $cObj->stdWrapValue(self::ATTR_AS, $processorConfiguration, false);
-        } else {
-            $as = self::DEFAULT_AS;
-        }
-        if (array_key_exists(self::ATTR_TIME_ADD, $processorConfiguration)) {
-            $timeAddInterval = $cObj->stdWrapValue(self::ATTR_TIME_ADD, $processorConfiguration, false);
-        } else {
-            $timeAddInterval = self::DEFAULT_TIME_ADD;
+    )
+    {
+        // Reasons to stop this dataprocessor
+        if ((array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration)) &&
+            (!$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT]))
+        ) {
+            return $processedData;
         }
 
-        // Read the Yamle-Parts fram a separated aliasfile
-        $aliasArray = [];
-        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
-        // exetract the holiday- and alias-parts from the current holiday-File
-        if (!empty($aliasPath)) {
-            $aliasArray = CustomTimerUtility::readListFromFileOrUrl($aliasPath, $yamlFileLoader);
-            if (array_key_exists(self::YAML_HOLIDAY_CALENDAR_PROCESSOR, $aliasArray)) {
-                $aliasArray = $aliasArray[self::YAML_HOLIDAY_CALENDAR_PROCESSOR];
-            } // else  $aliasArray without yaml-help-layer
-        }
-        if (empty($holidayPath)) {
-            throw new TimerException(
-                ' The yaml-list with the holidays is not found. There may be an error in the typoscript.  ' .
-                'Make a screenshot and inform the webmaster.',
-                1677394183
-            );
-        }
-
-        $holidayArray = CustomTimerUtility::readListFromFileOrUrl($holidayPath, $yamlFileLoader);
-        if (array_key_exists(self::YAML_HOLIDAY_CALENDAR_PROCESSOR, $holidayArray)) {
-            $holidayArray = $holidayArray[self::YAML_HOLIDAY_CALENDAR_PROCESSOR];
-        } // else $holidayArray without yaml-help-layer
-
-        // merge the alias-dateinto the array of the holidays
-        // mark empty rows and merge the both alias-parts and the merge them into the holiday-List
-        $emptyRow = [];
-        foreach ($holidayArray as $key => &$item) {
-            //  empty rows should already be removed, if the input was an csv-file
-            // a row is empty, if the columns `identifier` and/or `title` are empty
-            if ((empty($item[self::YAML_HOLIDAY_IDENTIFIER])) ||
-                (empty($item[self::YAML_HOLIDAY_TITLE]))
-            ) {
-                $emptyRow[] = $key;
+        // prepare caching
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        $myResult = $this->cache->get($cacheIdentifier);
+        if ($myResult === false) {
+            /** @var Context $dataProcessorContext */
+            $dataProcessorContext = GeneralUtility::makeInstance(Context::class);
+            // need configuration `cache`
+            [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
+            // needs configuration `start.(year|month|day)`, `stop.(year|month|day)`, `calendar`, `timezone`, `locale`
+            $context = GeneralUtility::makeInstance(Context::class);
+            $timeRangeInfo = $this->getTimeRangeInformations($processorConfiguration, $cObj, $dataProcessorContext);
+            // needs `aliasConfig.(flexDbField|pathFlexField|falFlexField)` or `aliasPath` in the configuration or nothing
+            $aliasPath = $this->getAliasForCalendarYaml($processorConfiguration, $cObj, $processedData);
+            //  in the holidayPath is not defined, an exception will be thrown
+            // needs `holidayConfig.(flexDbField|pathFlexField)` or `holidayPath` in the configuration or nothing
+            $holidayPath = $this->getHolidayForCalendarYaml($processorConfiguration, $cObj, $processedData);
+            // params `as`,
+            if (array_key_exists(TimerConst::ARGUMENT_AS, $processorConfiguration)) {
+                $as = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, self::DEFAULT_AS);
+            } else {
+                $as = self::DEFAULT_AS;
             }
-            if ((!empty($aliasArray)) &&
-                (isset($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
-                (!empty($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
-                (!empty($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]]))
-            ) {
-                $item[self::YAML_HOLIDAY_ADD] = array_merge($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]],
-                    $item[self::YAML_HOLIDAY_ADD]);
+
+            // Read the Yamle-Parts fram a separated aliasfile
+            $aliasArray = [];
+            // exetract the holiday- and alias-parts from the current holiday-File
+            if (!empty($aliasPath)) {
+                $aliasArray = CustomTimerUtility::readListFromFileOrUrl($aliasPath, $this->yamlFileLoader);
+                if (array_key_exists(self::YAML_HOLIDAY_CALENDAR_PROCESSOR, $aliasArray)) {
+                    $aliasArray = $aliasArray[self::YAML_HOLIDAY_CALENDAR_PROCESSOR];
+                } // else  $aliasArray without yaml-help-layer
             }
-        }
-        unset($item);
-        // remove other empty rows in holidayArray
-        foreach ($emptyRow as $key) {
-            unset($holidayArray[$key]);
-        }
-
-
-        // Generate the list of holidays for the range
-        $holidayList = [];
-        $startDateGregorianOrig = $this->detectGregorianDate($timeRangeInfo);
-        $stopDateGregorian = $this->detectGregorianDate($timeRangeInfo, true);
-        foreach ($holidayArray as $holiday) {
-            $startDateGregorian = $startDateGregorianOrig;
-            if (!$this->holidaycalendarService->forbiddenCalendar($holiday)) {
-                /** @var $timerGregorian TimerStartStopRange */
-                do {
-                    $timerRange = $this->holidaycalendarService->nextHoliday(
-                        $timeRangeInfo->locale,
-                        $startDateGregorian,
-                        $holiday
-                    );
-                    if ((!$timerRange->hasResultExist()) ||
-                        ($stopDateGregorian < $timerRange->getEnding())
-                    ) {
-                        break;
-                    }
-                    // is the holiyday allowed by the restrictions
-                    $myItem = [
-                        self::RESULT_HOLIDAY_DATE_START => $timerRange->getBeginning(),
-                        self::RESULT_HOLIDAY_DATE_END => $timerRange->getEnding(),
-                        self::RESULT_HOLIDAY_CALENDAR => $holiday,
-                    ];
-                    // @todo allow custom manipulation of the DataFormat (PSR-14 [I did not understood that concept]? or Hook)
-
-                    $holidayList[] = $myItem;
-                    // try to get one new holiday or event
-                    $startDateGregorian = clone $timerRange->getBeginning();
-                    $startDateGregorian->add(new DateInterval($timeAddInterval));
-                } while (true);
+            if (empty($holidayPath)) {
+                throw new TimerException(
+                    ' The yaml-list with the holidays is not found. There may be an error in the typoscript.  ' .
+                    'Make a screenshot and inform the webmaster.',
+                    1677394183
+                );
             }
+
+            $holidayArray = CustomTimerUtility::readListFromFileOrUrl($holidayPath, $this->yamlFileLoader);
+            if (array_key_exists(self::YAML_HOLIDAY_CALENDAR_PROCESSOR, $holidayArray)) {
+                $holidayArray = $holidayArray[self::YAML_HOLIDAY_CALENDAR_PROCESSOR];
+            } // else $holidayArray without yaml-help-layer
+
+            // merge the alias-dateinto the array of the holidays
+            // mark empty rows and merge the both alias-parts and the merge them into the holiday-List
+            $emptyRow = [];
+            foreach ($holidayArray as $key => &$item) {
+                //  empty rows should already be removed, if the input was an csv-file
+                // a row is empty, if the columns `identifier` and/or `title` are empty
+                if ((empty($item[self::YAML_HOLIDAY_IDENTIFIER])) ||
+                    (empty($item[self::YAML_HOLIDAY_TITLE]))
+                ) {
+                    $emptyRow[] = $key;
+                }
+                if ((!empty($aliasArray)) &&
+                    (isset($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
+                    (!empty($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
+                    (!empty($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]]))
+                ) {
+                    $item[self::YAML_HOLIDAY_ADD] = array_merge($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]],
+                        $item[self::YAML_HOLIDAY_ADD]);
+                }
+            }
+            unset($item);
+            // remove other empty rows in holidayArray
+            foreach ($emptyRow as $key) {
+                unset($holidayArray[$key]);
+            }
+
+
+            // Generate the list of holidays for the range
+            $holidayList = [];
+            $startDateGregorianOrig = $this->detectGregorianDate($timeRangeInfo);
+            $stopDateGregorian = $this->detectGregorianDate($timeRangeInfo, true);
+            $minStopGregorian = clone $stopDateGregorian;
+
+            $currentTimestamp = (int)$dataProcessorContext->getPropertyFromAspect('date', 'timestamp');
+            foreach ($holidayArray as $holiday) {
+                $startDateGregorian = $startDateGregorianOrig;
+                if (!$this->holidaycalendarService->forbiddenCalendar($holiday)) {
+                    /** @var $timerGregorian TimerStartStopRange */
+                    do {
+                        $timerRange = $this->holidaycalendarService->nextHoliday(
+                            $timeRangeInfo->locale,
+                            $startDateGregorian,
+                            $holiday
+                        );
+                        if ((!$timerRange->hasResultExist()) ||
+                            ($stopDateGregorian < $timerRange->getEnding())
+                        ) {
+                            break;
+                        }
+                        // is the holiyday allowed by the restrictions
+                        $myItem = [
+                            self::RESULT_HOLIDAY_DATE_START => $timerRange->getBeginning(),
+                            self::RESULT_HOLIDAY_DATE_END => $timerRange->getEnding(),
+                            self::RESULT_HOLIDAY_CALENDAR => $holiday,
+                        ];
+                        if (($timerRange->getEnding() <= $minStopGregorian) &&
+                            ($timerRange->getEnding()->getTimestamp() > $currentTimestamp)
+                        ) {
+                            $minStopGregorian = clone $timerRange->getEnding();
+                        }
+                        // @todo allow custom manipulation of the DataFormat (PSR-14 [I did not understood that concept]? or Hook)
+                        $holidayList[] = $myItem;
+                        // try to get one new holiday or event
+                        $startDateGregorian = clone $timerRange->getBeginning();
+                        $startDateGregorian->add(new DateInterval(self::DEFAULT_TIME_ADD));
+                    } while (true);
+                }
+            }
+
+
+            // null = defaultvalue for cachetime
+            $myLifeTime = $this->calculateSimpleTimeDependedCacheTime($cacheTime, $cacheCalc, $minStopGregorian, $currentTimestamp);
+            if ($myLifeTime !== null) {
+                $myTags = [
+                    'pages_' . $pageUid,
+                    'pages',
+                    'holidaycalendar_' . $pageContentOrElementUid,
+                    'holidaycalendar',
+                ];
+                $myResult = [
+                    'as' => $as,
+                    'holidayList' => $holidayList,
+                ];
+                // clear page-cache
+                // todo build a singleton, to call this only once in a request
+                $this->cacheManager->clearPageCache([$pageUid]);
+                $this->cache->set($cacheIdentifier, $myResult, $myTags, $myLifeTime);
+            }
+
         }
-        // @todo allow custom sorting by date or by custom function (PSR-14 [I did not understood that concept]? or Hook)
-
-        // The result in the holiday-list should not be deleted or schould have priority.
-        $processedData[$as] = $holidayList;
-
+        if (!empty($myResult)) {
+            // The result in the holiday-list should not be deleted or schould have priority.
+            $processedData[$myResult['as']] = $myResult['holidayList'];
+        }
         return $processedData;
     }
 
@@ -288,11 +357,13 @@ class HolidaycalendarProcessor implements DataProcessorInterface
      * @return stdClass
      * @throws AspectNotFoundException
      */
-    protected function getTimeRangeInformations(array $processorConfiguration, ContentObjectRenderer $cObj): stdClass
+    protected function getTimeRangeInformations(
+        array                 $processorConfiguration,
+        ContentObjectRenderer $cObj,
+        Context               $dataProcessorContext): stdClass
     {
         $holidayInfo = new stdClass();
-        $context = GeneralUtility::makeInstance(Context::class);
-        $systemDate = $context->getPropertyFromAspect('date', 'full');
+        $systemDate = $dataProcessorContext->getPropertyFromAspect('date', 'full');
         if (array_key_exists(self::ATTR_START_DOT, $processorConfiguration)) {
             $holidayInfo->startYear = (int)$cObj->stdWrapValue(self::ATTR_YEAR,
                 $processorConfiguration[self::ATTR_START_DOT],
@@ -351,7 +422,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface
 
         $holidayInfo->timezone = (string)$cObj->stdWrapValue(self::ATTR_TIMEZONE,
             $processorConfiguration,
-            $context->getPropertyFromAspect('date', 'timezone')
+            $dataProcessorContext->getPropertyFromAspect('date', 'timezone')
         );
 
         $defaultLocale = (explode('.', $this->getSystemLocale(), 2))[0];
@@ -400,7 +471,8 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         string $fieldName = 'pi_flexform',
         string $flexFormFieldName = 'aliasPath'
 
-    ): string {
+    ): string
+    {
         $flexFormString = $processedData[$fieldName];
         if (empty($flexFormString)) {
             throw new TimerException(
@@ -435,50 +507,88 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         array $processorConfiguration,
         ContentObjectRenderer $cObj,
         array $processedData
-    ) {
-        if (array_key_exists(self::ATTR_ALIAS_CONFIG, $processorConfiguration)) {
-            if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration)) {
-                $flagError = false;
-                $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
-                    $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
-            } else {
-                $flagError = true;
-            }
-            $pathInFlexformField = '';
-            if (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration)) {
-                $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
-                    $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
-            }
-            if (($flagError) &&
-                (array_key_exists(self::ATTR_PATH_FAL_FIELD, $processorConfiguration))
-            ) {
-                $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FAL_FIELD,
-                    $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
-            }
-            if (($flagError) ||
-                (empty($pathInFlexformField))
-            ) {
-                throw new TimerException(
-                    'There must have at least the parameter `' . self::ATTR_ALIAS_PATH .
-                    '` or the parameter `' . self::ATTR_ALIAS_CONFIG . '` in the typoscript. ' .
-                    'the last parameter will include the parameter `' . self::ATTR_FLEX_DB_FIELD .
-                    '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. Please check your typoscript. ' .
-                    'If everything seems to be okay, then make a screenshot and inform the webmaster.',
-                    1676702644
-                );
-            }
-            $aliasPath = $this->getPathForCalendarFromFlexform(
-                $processedData,
-                $fieldWithFlexform,
-                $pathInFlexformField
-            );
+    )
+    {
+        if (array_key_exists(self::ATTR_ALIAS_PATH, $processorConfiguration)) {
+            $aliasPath = $cObj->stdWrapValue(self::ATTR_ALIAS_PATH, $processorConfiguration, false);
         } else {
-            if (array_key_exists(self::ATTR_ALIAS_PATH, $processorConfiguration)) {
-                $aliasPath = $cObj->stdWrapValue(self::ATTR_ALIAS_PATH, $processorConfiguration, false);
+            if (array_key_exists(self::ATTR_ALIAS_CONFIG, $processorConfiguration)) {
+                if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration)) {
+                    $flagError = false;
+                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
+                } else {
+                    $flagError = true;
+                }
+                $pathInFlexformField = '';
+                if (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration)) {
+                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
+                }
+                if (($flagError) &&
+                    (array_key_exists(self::ATTR_PATH_FAL_FIELD, $processorConfiguration))
+                ) {
+                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FAL_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
+                }
+                if (($flagError) ||
+                    (empty($pathInFlexformField))
+                ) {
+                    throw new TimerException(
+                        'There must have at least the parameter `' . self::ATTR_ALIAS_PATH .
+                        '` or the parameter `' . self::ATTR_ALIAS_CONFIG . '`/`' .
+                        self::ATTR_ALIAS_CONFIG_DOT . '` in the typoscript. ' .
+                        'the last parameter will include the parameter `' . self::ATTR_FLEX_DB_FIELD .
+                        '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. Please check your typoscript. ' .
+                        'If everything seems to be okay, then make a screenshot and inform the webmaster.',
+                        1676702644
+                    );
+                }
+                $aliasPath = $this->getPathForCalendarFromFlexform(
+                    $processedData,
+                    $fieldWithFlexform,
+                    $pathInFlexformField
+                );
+            } else if (array_key_exists(self::ATTR_ALIAS_CONFIG_DOT, $processorConfiguration)) {
+                if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration)) {
+                    $flagError = false;
+                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT], false);
+                } else {
+                    $flagError = true;
+                }
+                $pathInFlexformField = '';
+                if (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration)) {
+                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT], false);
+                }
+                if (($flagError) &&
+                    (array_key_exists(self::ATTR_PATH_FAL_FIELD, $processorConfiguration))
+                ) {
+                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FAL_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT], false);
+                }
+                if (($flagError) ||
+                    (empty($pathInFlexformField))
+                ) {
+                    throw new TimerException(
+                        'There must have at least the parameter `' . self::ATTR_ALIAS_PATH .
+                        '` or the parameter `' . self::ATTR_ALIAS_CONFIG . '`/`' .
+                        self::ATTR_ALIAS_CONFIG_DOT . '` in the typoscript. ' .
+                        'the last parameter will include the parameter `' . self::ATTR_FLEX_DB_FIELD .
+                        '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. Please check your typoscript. ' .
+                        'If everything seems to be okay, then make a screenshot and inform the webmaster.',
+                        1676703754
+                    );
+                }
+                $aliasPath = $this->getPathForCalendarFromFlexform(
+                    $processedData,
+                    $fieldWithFlexform,
+                    $pathInFlexformField
+                );
             } else {
                 $aliasPath = '';
             }
-
         }
         return $aliasPath;
     }
@@ -494,52 +604,82 @@ class HolidaycalendarProcessor implements DataProcessorInterface
         array $processorConfiguration,
         ContentObjectRenderer $cObj,
         array $processedData
-    ) {
-
-        if (array_key_exists(self::ATTR_HOLIDAY_CONFIG, $processorConfiguration)) {
-            $flagError = true;
-            if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration)) {
-
-                $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
-                    $processorConfiguration[self::ATTR_HOLIDAY_CONFIG], false);
-            } else {
-                $flagError = false;
-            }
-            if (($flagError) &&
-                (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration))
-            ) {
-                $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
-                    $processorConfiguration[self::ATTR_HOLIDAY_CONFIG], false);
-            } else {
-                throw new TimerException(
-                    'There must have at least the parameter `' . self::ATTR_HOLIDAY_PATH .
-                    '` or the parameter `' . self::ATTR_HOLIDAY_CONFIG . '` in the typoscript. ' .
-                    'the last parameter will include the parameter `' . self::ATTR_FLEX_DB_FIELD .
-                    '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. Please check your typoscript. ' .
-                    'If everything seems to be okay, then make a screenshot and inform the webmaster.',
-                    1676702658
-                );
-            }
-            $holidayYamlListPath = $this->getPathForCalendarFromFlexform(
-                $processedData,
-                $fieldWithFlexform,
-                $pathInFlexformField
-            );
+    )
+    {
+        if (array_key_exists(self::ATTR_HOLIDAY_PATH, $processorConfiguration)) {
+            $holidayYamlListPath = $cObj->stdWrapValue(self::ATTR_HOLIDAY_PATH, $processorConfiguration, false);
         } else {
-            if (array_key_exists(self::ATTR_HOLIDAY_PATH, $processorConfiguration)) {
-                $holidayYamlListPath = $cObj->stdWrapValue(self::ATTR_HOLIDAY_PATH, $processorConfiguration, false);
+
+            if (array_key_exists(self::ATTR_HOLIDAY_CONFIG, $processorConfiguration)) {
+                $flagError = true;
+                if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG])) {
+
+                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG], false);
+                } else {
+                    $flagError = false;
+                }
+                if (($flagError) ||
+                    (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG]))
+                ) {
+                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG], false);
+                } else {
+                    throw new TimerException(
+                        'There must have at least the parameter `' . self::ATTR_HOLIDAY_PATH .
+                        '` or the parameter `' . self::ATTR_HOLIDAY_CONFIG . '` in the typoscript. ' .
+                        'the last parameter will include the parameter `' . self::ATTR_FLEX_DB_FIELD .
+                        '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. Please check your typoscript. ' .
+                        'If everything seems to be okay, then make a screenshot and inform the webmaster.',
+                        1676702658
+                    );
+
+                }
+                $holidayYamlListPath = $this->getPathForCalendarFromFlexform(
+                    $processedData,
+                    $fieldWithFlexform,
+                    $pathInFlexformField
+                );
+            } else if (array_key_exists(self::ATTR_HOLIDAY_CONFIG_DOT, $processorConfiguration)) {
+                $flagError = true;
+                if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT])) {
+                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT], false);
+                } else {
+                    $flagError = false;
+                }
+                if (($flagError) ||
+                    (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT]))
+                ) {
+                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT], false);
+                } else {
+                    throw new TimerException(
+                        'There must have at least the parameter `' . self::ATTR_HOLIDAY_PATH .
+                        '` or the parameter `' . self::ATTR_HOLIDAY_CONFIG . '`/`' .
+                        self::ATTR_HOLIDAY_CONFIG_DOT . '` in the typoscript. ' .
+                        'the last parameter will include the parameter `' . self::ATTR_FLEX_DB_FIELD .
+                        '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. Please check your typoscript. ' .
+                        'If everything seems to be okay, then make a screenshot and inform the webmaster.',
+                        1676813758
+                    );
+                }
+                $holidayYamlListPath = $this->getPathForCalendarFromFlexform(
+                    $processedData,
+                    $fieldWithFlexform,
+                    $pathInFlexformField
+                );
             } else {
                 throw new TimerException(
                     'There must have at least a path to a file with the list of holidays defined. ' .
                     'Nothing is found. Please check your typoscript. perhaps there is a misspelling in the parameter ' .
                     '`' . self::ATTR_HOLIDAY_PATH . '`or in the parameter `' . self::ATTR_HOLIDAY_CONFIG .
-                    '` including `' . self::ATTR_FLEX_DB_FIELD . '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. ' .
+                    '`/`' . self::ATTR_HOLIDAY_CONFIG_DOT . '` including `' . self::ATTR_FLEX_DB_FIELD .
+                    '` and `' . self::ATTR_PATH_FLEX_FIELD . '`. ' .
                     'If everything seems to be okay, then make a screenshot and inform the webmaster.',
                     1676702658
                 );
-
             }
-
         }
         return $holidayYamlListPath;
     }

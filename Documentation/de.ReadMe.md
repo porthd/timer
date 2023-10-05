@@ -46,7 +46,10 @@ Eine Grundidee von der Timer-Extension ist, die Aufgabe in zwei Teilaufgaben auf
 Zeitmanagement und in die Aufgabe zur Steuerung der Startzeit. Über einen Task im Scheduler (Cronjob) kann die Seite
 regelmäßig aktualisiert werden. Über Viewhelper kann das Einbinden von Informationen innerhalb von Templates gesteuert
 werden, wobei der Entwickler sich dann auch Gedanken über das Caching des Frontends machen muss. Über Dataprozessoren
-sollen leicht einfache Listen zusammenstellbar sein, die im Frontend ausgebar sind. Die Informationen aus den
+sollen leicht einfache Listen zusammenstellbar sein, die im Frontend ausgebar
+sind. Die Berechnungen in den Dataprozessoren werden gecacht und einge der
+Dataprozessoren löschen automatisch den Cache der korrospondierenden Seite. Die
+Informationen aus den
 Flexform-Feldern können in den Templates mit Viewhelpern aufbereite werden.
 
 ## Installation der Extension
@@ -258,7 +261,8 @@ Kalender dargestellt werden.
 
 #### Dataprozessoren für diesen Timer
 
-Damit die Daten eingelesen werden können, wurden drei Datenprozessoren
+Damit die Daten eingelesen bzw. konvertiert werden können, wurden sechs
+Datenprozessoren
 definiert.
 
 Der `FlexToArrayProcessor` erlaubt es, Flexform-Felder auszulesen und in
@@ -272,6 +276,25 @@ definiert ist. Neben den eigentlichen Feldern generiert der Datenprozessor für
 die Start- und Endzeit
 der Termine auch die entsprechenden DatTime-Objekte und berechnet die Anzahl der
 Tage (24Stunden = 1 Tag) zwischen den Terminen.
+
+Der DataProcessor 'RangeListQueryProcessor' erlaubt das Auslesen von
+Terminlisten,
+wobei der Dataprozessor auch Verbotslisten berücksichtigt. Damit kann man zum
+Beispiel
+Terminserien vom Typ "Jeden Dienstag nur nicht in den Schulferien" realisieren.
+Genauere Informationen finden sich weiter unten.
+
+Der DataProcessor 'HolidaycalendarProcessor' erlaubt das Einlesen von
+Feiertagsterminen per CSV-Datei.
+Wenn es denn unbedingt sein muss, kann man dafür auch eine YAML-Datei verwenden.
+Genauere Informationen zur Definition der Feiertage finden sich weiter unten.
+
+Der DataProcessor 'SortListQueryProcessor' erlaubt das Sortieren von
+Objektlisten,
+die Timer-Definitionen enthalten. Darüber kann man zum Beispiel die Ausgabe
+von Fotos aus einer Galerie oder
+die zeitlich gesteuerte Ausgabe von Bildern aus einer Sammlung steuern.
+Genauere Informationen finden sich weiter unten.
 
 ~~Der dritte Datenprozessor `MappingProcessor` ist nötig, um die Termindaten als
 JSON-String an das Fluid-Template zu übergeben.
@@ -904,8 +927,25 @@ Es gibt fünf Viewhelper:
 ### Dataprozessoren
 
 Da die Ergebnisse der Datenprozessoren gecacht werden, muss sich der User
-überlegen, was ein sinnvoller
-Caching-Zeitraum ist und dies entsprechend definieren.
+überlegen, was ein sinnvoller Caching-Zeitraum ist und dies entsprechend
+definieren.
+Alle Dataprocessoren kennen zur Definition der Cache-Zeit den
+Parameter ``cache``.
+Ein fehlender Wert führt zum Defaultfall.
+Bei den Dataprozessoren, die die Timerfunktionalitäten nutzen,
+wird bei der Berechnung der Daten automatisch der Frontend-Cache gelöscht.
+
+Alle Parameter werden über `stdWrap` ausgewertet.
+Das heißt, statt explizieter Werte kann immer auch Typscript zur dynamischen
+Definition der
+Werte verwendet werden.
+
+Es ist prüfen, ob die Dynamisierung der Parameter zu Konflikten mit dem Caching
+führt.
+Im Zweifel deaktivert man das Caching mit ``cache = none``.
+Auch erlaubt sind dafür die Ausdrücke `0`, `` ``, ``none``, ``no``
+oder ``null``.
+Explizit den Defaultfall für das Caching triggert man mit ``cache = default``.
 
 Grundsätzlich sollte im Sourcecode der jeweiligen DataProcessoren als Kommentar
 ein Beispiel für die Anwendung desselben zu finden sein.
@@ -931,16 +971,15 @@ tt_content.timer_timersimul {
     dataProcessing.10 {
         table = tx_timer_domain_model_event
 
-        # get the date, which are defined on the pages, declared in the fielld `pages`
-        pidInList.stdWrap.cObject = TEXT
-        pidInList.stdWrap.cObject.field = pages
-        recursive = 1
-
         # sort in reverse order
         #            reverse = false
 
         # name of output-object
         as = examplelist
+
+         # deactivate the caching of the rangelist-processor
+         # the frontend-cache of the current page will be cleared every time
+         cache = none
     }
 }
 
@@ -950,31 +989,52 @@ Siehe auch Beispiel in exemplarischen Contentelement ``timersimul``
 
 ##### _Parameter für den Dataprocessor `RangeListQueryProcessor`_
 Wegen der Wiederholung von Perioden kann in der Liste ein Datensatz mehrfach aufgezählt werden. Deshalb sind immer auch ein Start-Zeitpunkt und ein End-Zeitpunkt zu definieren.
+Bei jeder Neuberechnung der Liste wird auch der Frontend-Cache der
+entsprechenden Seite gelöscht.
 
-| Parameter      | Default                                                                                                                                | Beschreibung
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------
-|                | **_Datensätze_**                                                                                                                       |
-| if             | true                                                                                                                                   | Wenn der wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
-| table          | tx_timer_domain_model_event                                                                                                            | Diese Tabelle wird verwendet, um nach allen verfügbaren Datensätzen mit Timer-Informationen zu suchen.
-| pidInList      |                                                                                                                                        | Komma-separierte Liste von numerischen IDs für Seiten, die Datensätze für die Bestimmung der Liste mit Timer-Event enthalten können.
-| as             | records                                                                                                                                | Komma-separierte Liste von numerischen IDs für Seiten, die Datensätze für die Bestimmung der Liste mit Timer-Event enthalten können.
-|                | **_Start und Allgemeines_**                                                                                                            |
-| datetimeFormat | Y-m-d H:i:s                                                                                                                            | Definiert das Format, in welchem das Datum angegeben wird. Es gelten die Zeichen, die im PHP definiert sind (siehe [Liste](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
-| datetimeStart  | &lt;jetzt&gt;                                                                                                                          | Definiert den Zeitpunkt, mit welchem die Liste beginnen soll. Bei `reverse = false` ist es der früheste Zeitpunkt, und bei `reverse = true` ist es der späteste Zeitpunkt.
-| timezone       | &lt;definiert im PHP-System&gt;                                                                                                        | Definiert die Timezone, die bei den Datumswerten verwendet werden soll.
-| reverse        | false                                                                                                                                  | Definiert, ob die Liste der aktiven Bereiche absteigend oder aufsteigend sortiert ist. Bei `reverse = true` ist jeweils das Ende der aktiven Bereiche maßgeblich; Beim Defaultfall `reverse = true` ist es entsprechen der Anfang der aktiven Zeit.
-|                | **_Limit der Periode_**                                                                                                                |
-| maxCount       | 25                                                                                                                                     | Begrenzt der Liste über die maximale Anzahl der Listenelemente
-| maxLate        | &lt;sieben Tage relativ zum Startdaum&gt;                                                                                              | Begrenzt die Liste über ein Stop-Datum, dass nie erreicht werden kann.
-| maxGap         | P7D                                                                                                                                    | Begrenzt die Liste, indem aus dem Startzeitpunkt der entsprechende Stopzeitpunkt berechnet wird. Für die Angabe der zeitlichen Differenz ist die PHP-Notation für Zeitintervalle zu verwenden (siehe [Übersicht](https://www.php.net/manual/en/class.dateinterval.php)).
-|                | **_Spezielles_**                                                                                                                       |
-|    userRangeCompare            | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` oder `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Für die Bestimmung der Reihenfolge werden nur die Datumswerte verwendet. Der Nutzer könnte auch andere Sortierungskriterien berücksichtigen. Zum Beispiel könnte man eine Liste haben wollen, die zuerst nach dem Startdatum und bei gleichem Startdatum nach der Dauer der aktiven Bereiche sortiert wäre.
+Für die Berechnung der Seiten verwendet der DataProzessor die getRecords-Methode
+des ContentObjektRenderers, welcher seinerseits die Parameter
+``pidInList``,
+``uidInList``,
+``languageField``,
+``selectFields``,
+``max``,
+``begin``,
+``groupBy``,
+``orderBy``,
+``join``,
+``leftjoin``,
+``rightjoin``,
+``recursive`` und
+``where`` interpretiert (
+Siehe [TypoScript>CONTENT>select](https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Functions/Select.html)
+für weitere Informationen).
+
+| Parameter        | Default                                                                                                                                | Beschreibung
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------
+|                  | **_Datensätze_**                                                                                                                       |
+| if               | true                                                                                                                                   | Wenn der wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
+| table            | tx_timer_domain_model_event                                                                                                            | Diese Tabelle wird verwendet, um nach allen verfügbaren Datensätzen mit Timer-Informationen zu suchen.
+| as               | records                                                                                                                                | Name der Outputvariablen, die z.B. im Fluid-template genutzt wird
+|                  | **_Start und Allgemeines_**                                                                                                            |
+| datetimeFormat   | Y-m-d H:i:s                                                                                                                            | Definiert das Format, in welchem das Datum angegeben wird. Es gelten die Zeichen, die im PHP definiert sind (siehe [Liste](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
+| datetimeStart    | &lt;jetzt&gt;                                                                                                                          | Definiert den Zeitpunkt, mit welchem die Liste beginnen soll. Bei `reverse = false` ist es der früheste Zeitpunkt, und bei `reverse = true` ist es der späteste Zeitpunkt.
+| timezone         | &lt;definiert im PHP-System&gt;                                                                                                        | Definiert die Timezone, die bei den Datumswerten verwendet werden soll.
+| reverse          | false                                                                                                                                  | Definiert, ob die Liste der aktiven Bereiche absteigend oder aufsteigend sortiert ist. Bei `reverse = true` ist jeweils das Ende der aktiven Bereiche maßgeblich; Beim Defaultfall `reverse = true` ist es entsprechen der Anfang der aktiven Zeit.
+| cache            | default                                                                                                                                | Definiert das Cache-Verhalten. Im Defaultfall wird die Cachingzeit  basierte auf der Timerliste berechnet. Eine Zahlenangabe übersteuert die berechnete Caching-Zeit durch einen statische Wert. Die Parameter ``0``,`` ``,``no``,``none``, oder ``null`` führen dazu, dass der Dataprozessor jedesmal neu die Daten berechnet.
+|                  | **_Limit der Periode_**                                                                                                                |
+| maxCount         | 25                                                                                                                                     | Begrenzt der Liste über die maximale Anzahl der Listenelemente
+| maxLate          | &lt;sieben Tage relativ zum Startdaum&gt;                                                                                              | Begrenzt die Liste über ein Stop-Datum, dass nie erreicht werden kann.
+| maxGap           | P7D                                                                                                                                    | Begrenzt die Liste, indem aus dem Startzeitpunkt der entsprechende Stopzeitpunkt berechnet wird. Für die Angabe der zeitlichen Differenz ist die PHP-Notation für Zeitintervalle zu verwenden (siehe [Übersicht](https://www.php.net/manual/en/class.dateinterval.php)).
+|                  | **_Spezielles_**                                                                                                                       |
+| userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` oder `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Für die Bestimmung der Reihenfolge werden nur die Datumswerte verwendet. Der Nutzer könnte auch andere Sortierungskriterien berücksichtigen. Zum Beispiel könnte man eine Liste haben wollen, die zuerst nach dem Startdatum und bei gleichem Startdatum nach der Dauer der aktiven Bereiche sortiert wäre.
 
 #### SortListQueryProcessor
 
 Die Tabelle `sys_file_reference` unterstützt nicht die Felder `starttime` und `endtime`. Um trotzdem zeitliche
 variierende Bilder zu erreichen, kann man die per Datenprozessor erhalten Medien in einen nach Periodizität sortierte
 Liste überführen lassen und umwandeln lassen und im Template entsprechend nutzen.
+
 
 ##### _Beispiel in TypoScript_
 ```
@@ -1012,22 +1072,31 @@ Beachten sie, dass FLUIDTEMPLATE gecacht wird. Deshalb:
 ```
 
 ##### _Parameter für den Dataprocessor `SortListQueryProcessor`_
-Wegen der Wiederholung von Perioden kann in der Liste ein Datensatz mehrfach aufgezählt werden. Deshalb sind immer auch ein Start-Zeitpunkt und ein End-Zeitpunkt zu definieren.
+
+Wegen der Wiederholung von Perioden kann in der Liste ein Datensatz mehrfach
+aufgezählt werden.
+Deshalb sind immer auch ein Start-Zeitpunkt und ein End-Zeitpunkt zu definieren.
+Bei jeder Neuberechnung der Liste wird auch der Frontend-Cache der
+entsprechenden Seite gelöscht.
 
 Im Gegensatz zum `RangeListQueryProcessor` nutzt der `SortListQueryProcessor` Daten, die von einem  vorherigen oder übergeordneten Dataprozessor-Prozeß erzeugt wurden.
-Die Parameter `table` plus `pidInList` entfallen deshalb und der Parameter `fieldName` kommt neu hinzu.
+Die Parameter sind ähnlich wie beim `RangeListQueryProcessor`.
+Da der Dataprocessor aber für die Weiterverarbeitung von Timerliste verwendet
+wird, wird die Methode getContent nicht mehr verwendet.
+Deshalb wird die Parameter `table` durch den Parameter `fieldName` ersetzt.
 
 | Parameter        | Default                                                                                                                                | Beschreibung
-|------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |                  | **_Datensätze_**                                                                                                                       |
 | if               | true                                                                                                                                   | Wenn der wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
 | fieldName        | myrecords                                                                                                                              | Diese Tabelle wird verwendet, um nach allen verfügbaren Datensätzen mit Timer-Informationen zu suchen.
-| as               | sortedrecords                                                                                                                          | Name des Objekts, welches die einzelnen Events enthält und ans Fluid-Template übergeben wird. Die Genaue Struktur schaue man sich `&lt;f:debug>{sortedrecords}</f:debug>` an.
+| as               | records                                                                                                                                | Name der Outputvariablen, die z.B. im Fluid-template genutzt wird
 |                  | **_Start und Allgemeines_**                                                                                                            |
 | datetimeFormat   | Y-m-d H:i:s                                                                                                                            | Definiert das Format, in welchem das Datum angegeben wird. Es gelten die Zeichen, die im PHP definiert sind (siehe [Liste](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
 | datetimeStart    | &lt;jetzt&gt;                                                                                                                          | Definiert den Zeitpunkt, mit welchem die Liste beginnen soll. Bei `reverse = false` ist es der früheste Zeitpunkt, und bei `reverse = true` ist es der späteste Zeitpunkt.
 | timezone         | &lt;definiert im PHP-System&gt;                                                                                                        | Definiert die Timezone, die bei den Datumswerten verwendet werden soll.
 | reverse          | false                                                                                                                                  | Definiert, ob die Liste der aktiven Bereiche absteigend oder aufsteigend sortiert ist. Bei `reverse = true` ist jeweils das Ende der aktiven Bereiche maßgeblich; Beim Defaultfall `reverse = true` ist es entsprechen der Anfang der aktiven Zeit.
+| cache            | default                                                                                                                                | Definiert das Cache-Verhalten. Im Defaultfall wird die Cachingzeit  basierte auf der Timerliste berechnet. Eine Zahlenangabe übersteuert die berechnete Caching-Zeit durch einen statische Wert. Die Parameter ``0``,`` ``,``no``,``none``, oder ``null`` führen dazu, dass der Dataprozessor jedesmal neu die Daten berechnet.
 |                  | **_Limit der Periode_**                                                                                                                |
 | maxCount         | 25                                                                                                                                     | Begrenzt der Liste über die maximale Anzahl der Listenelemente
 | maxLate          | &lt;sieben Tage relativ zum Startdaum&gt;                                                                                              | Begrenzt die Liste über ein Stop-Datum, dass nie erreicht werden kann.
@@ -1060,72 +1129,52 @@ Auf diese Weise könnten die kalenderspezifischen Ressourcen einfach für das In
 
 ```
 
-#### MappingProcessor (deprecated)
-Der Datenprozessor `MappingProcessor` erlaubt das Mappen/Abbilden von Arrays in neue Arrays oder in einen JSON-String.
+##### Parameter für den FlexToArrayProcessor
+
+| Parameter   | Default                           | Beschreibung
+|-------------|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| if          | true                              | Wenn der Wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
+| field       | tx_timer_timer                    | Der Name des Feldes, welcher den Flexform-String enthält.
+| flattenkeys | data,general,timer,sDEF,lDEF,vDEF | Diese Tabelle wird verwendet, um nach allen verfügbaren Datensätzen mit Timer-Informationen zu suchen.
+| as          | flattenflex                       | Name der Outputvariablen, die z.B. im Fluid-template genutzt wird
+| cache       | default                           | Definiert das Cache-Verhalten. Im Defaultfall wird die Cachingzeit  basierte auf der Timerliste berechnet. Eine Zahlenangabe übersteuert die berechnete Caching-Zeit durch einen statische Wert. Die Parameter ``0``,`` ``,``no``,``none``, oder ``null`` führen dazu, dass der Dataprozessor jedesmal neu die Daten berechnet.
+
+#### (removed in 12.3.0)  ~~MappingProcessor (deprecated)~~
+
+(removed in 12.3.0) ~~Der Datenprozessor `MappingProcessor` erlaubt das
+Mappen/Abbilden von Arrays in neue Arrays oder in einen JSON-String.
 So können die Daten leicht HTML-Attribute dem JavaScript zur Verfügung gestellt werden.
 Der Datenprozessor kennt einfache generische Funktionen, um zum Beispiel Events eindeutige IDs zuzuordnen.
-Weiter erlaubt er das Mappen/Abbilden von Feldinhalten und das Anlegen von neuen Feldern mit konstanten Daten.
+Weiter erlaubt er das Mappen/Abbilden von Feldinhalten und das Anlegen von neuen
+Feldern mit konstanten Daten.~~
 
-```
-
-        20 = Porthd\Timer\DataProcessing\MappingProcessor
-        20 {
-
-            # reguläre if-Syntax
-            #if.isTrue.field = record
-
-            # Name des Feldes mit einem Array, das von einem früheren Datenprozessor generiert wurde
-            inputfield = periodlist
-
-            # Jedes Feld muss Teil der Periodenliste sein
-            # Jeder Eintrag muss formal sein
-            generic {
-                # Definieren Sie einen Index, z. B. `event1holiday` im Feld `id`
-                'id' {
-                    pretext = event
-                    posttext = holiday
-                    Typ = index
-                }
-                # Definiere eine Konstante, z. B. `cal1` im Feld `calendarId`
-                calendarID {
-                    pretext = cal1
-                    posttext =
-                    Typ = constant
-                }
-            }
-
-            mapping {
-                # sourceFieldName in Periodenliste (siehe Eingabefeld) => targetFieldName
-                # Bei der Zuordnung wird zwischen Groß- und Kleinschreibung unterschieden.
-                title = Titel
-                startJson = date
-                diffDaysDatetime = days
-            }
-
-            # Ausgabeformat hat die Werte `array`,`json`
-            # Wenn das Ausgabeformat unbekannt ist, ist json der Standardwert
-            outputFormat = json
-
-            # Ausgabevariable mit der resultierenden Liste
-            # Standardwert ist `periodlist`
-            asString = periodListJson
-
-        }
-
-```
+~~removed code-exampe for typoscript~~
 
 #### BetterMappingProcessor
 
+Manchmal nutzt man ein JavaScript-Framework wie zum Beisüpiel ein
+Kalender-Framework im Frontend,
+welches eine Liste von Daten in einem definierten Datenformat als JSON-String
+benötigt.
+Das Problem ist, dass TYPO3 die Daten zwar kennt aber in anderer Form
+gespeichert hat.
+Der BetterMappingProcessor hilft, vorhandene Datenlisten in leicht abgewandeltes
+Datenlisten zu übersetzen.
+
+!!!Sobald man den BetterMappingProcessor einsetzt, sollte man sich immer fragen,
+ob es nicht eine bessere Lösung gibt, was sehr wahrscheinlich ist.
+
 Der Datenprozessor `BetterMappingProcessor` erlaubt das Mappen/Abbilden von
-Arrays in neue Arrays oder in einen JSON-String.
+Arrays mit Unterarrays bzw. Array von Datenobjekten in neue assoziative Arrays
+oder in einen JSON-String.
 Die Logik ist zum Mapping-Dataprocessor leicht abgewandelt, jetzt die Input- und
 Outputfelder direkt definiert werden müssen.
 Durch die Punkt-Notation ist es möglich, bei assoziativen Array mit mehreren
 Ebenen die Daten aus den tieferen Ebenen einzulesen bzw. für die Ausgabe einen
 assoziativen Array mit mehreren Ebenen zu erzeugen.
 Der Generic-Bereich wurde um zwei Varianten erweitert.
-Es ist für die Zukunft geplant, den Dataprozessor mit einer Schnittstelle für
-eine User-Funktion zu erweitern.
+~~Es ist für die Zukunft geplant, den Dataprozessor mit einer Schnittstelle für
+eine User-Funktion zu erweitern.~~
 Wie bisher erlaubt der Dataprocessor das Mappen/Abbilden von Feldinhalten, von
 Datumswerten und auch das Anlegen von neuen Feldern
 mit konstanten Daten.
@@ -1160,7 +1209,7 @@ mit konstanten Daten.
             #                start {
             #                    pretext = date
             #                    posttext = Y-m-d
-            #                    type = constant
+            #                    type = datetime
             #                }
             #            }
             generic {
@@ -1193,6 +1242,15 @@ mit konstanten Daten.
                     outField = title
                     type = translate
                 }
+               50 {
+                    inField = cal.add.freelocale
+                    outField = class
+                    type = userfunc
+                    # two parameter for customfunc(parameter, $betterMappingProcessorObject)
+                    #    where parameter is the associative array with the keys
+                    #    `params`, `mapKey`,`mapItem` and `start`
+                    userfunc =  Vendor\Namespace\CustomClass->customFunc
+                }
 
             }
 
@@ -1209,16 +1267,8 @@ mit konstanten Daten.
                     inField = cal.tag
                     outField = calendarId
                 }
-#
-#                @todo 2023-03-12: allow custom function
-#               40 {
-#                    inField = cal.add.freelocale
-#                    outField = class
-#                    type = userfunc
-#                    userfunc =
-#                }
-            }
 
+            }
 
             # outputformat has the values `array`,`json`, `yaml`
             # if the outputformat is unknown/undifined, `json` will be used by default
@@ -1235,6 +1285,40 @@ mit konstanten Daten.
         }
 
 ```
+
+##### Parameter für den BetterMappingProcessor
+
+Hinweis: Das Definieren des Mappings wird einfacher, wenn man xdebug/var_dump
+nutzt, um sich die Struktur der Transformation zu veranschaulichen.
+
+| Parameter    | Default                                                      | Beschreibung
+|--------------|--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|              | **_Hauptebene_**                                             |
+| if           | true                                                         | Wenn der Wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
+| generic.     | &lt;Array mit Definitionen&gt;                               | Erzeuge eine Anzahl von Daten basierend auf dem Index der zu mappenden Liste oder auf konstanten Werten (``stdWrap``-Affin).
+| mapping.     | &lt;Array mit Umwandlungsanweisungen&gt;                     | Erzeugt aus den Unterfeld (`inField`) einer Liste einen Eintrag in die Resultatliste mit einem neuen assoziativen Index (`outField`). Neben Standardumwandlungen sind auch Nutzer-definierte Funktionen zuläassig.
+| as           | flattenflex                                                  | Name der Outputvariablen, die z.B. im Fluid-template genutzt wird.
+| outputFormat | &lt;Exception&;                                              | Diese Angabe ist Pflicht. Es gibt Ausgabeformat für den gemappten assoziativen Array. Erlaubt sind die Werte `json`, `array` und `yaml`.
+| yamlStartKey |                                                              | Wenn das Ausgabeformat `yaml` ist, dann kann die List mit einem Oberbegriff versehen werden. (Hilfreichen, wenn man in einer Datei mehrere assoziative Arrays zusammenführen möchte.)
+| cache        | default                                                      | Definiert das Cache-Verhalten. Im Defaultfall wird die Cachingzeit  basierte auf der Timerliste berechnet. Eine Zahlenangabe übersteuert die berechnete Caching-Zeit durch einen statische Wert. Die Parameter ``0``,`` ``,``no``,``none``, oder ``null`` führen dazu, dass der Dataprozessor jedesmal neu die Daten berechnet.
+|              | **_Unterebene `mapping.`_**                                  | _einfaches Mapping_
+| inField      |                                                              | Pfad zum Datum im benannten Feld im Datensatz aus der Datenliste, wobei die Punktnotation bei den Namen den Zugriff auf tieferen Ebenen in dem assoziativen Datenarray erlaubt. (Achtung: Wenn das Datum im Datenarray seinerseits ein Array ist, wird nur der erste Eintrag des Arrays übertragen, sofern dies ein Skalar - also int, float, boll oder string - ist.)
+| outField     |                                                              | Pfad für die Daten im neu generierten Datensatz im assoziativen Ergebnisarray, der mit dem Dataprozessor generiert wird, wobei die Punktnotation bei den Namen auch die Erzeugung von tieferen Ebenen im assoziativen Ergebnisarray erlaubt. (Kein Check gegen Überschreibungen während des Generierungsprozesses)
+|              | **_generelle Inputfelder in der Unterebene `generic.`_**     | _einfach-generisches Mapping_
+| inField      |                                                              | Pfad zum Datum im benannten Feld im Datensatz aus der Datenliste, wobei die Punktnotation bei den Namen den Zugriff auf tieferen Ebenen in dem assoziativen Datenarray erlaubt.
+| outField     |                                                              | Pfad für die Daten im neu generierten Datensatz im assoziativen Ergebnisarray, der mit dem Dataprozessor generiert wird, wobei die Punktnotation bei den Namen auch die Erzeugung von tieferen Ebenen im assoziativen Ergebnisarray erlaubt. (Kein Check gegen Überschreibungen während des Generierungsprozesses)
+| pretext      |                                                              | Definiert einen konstanten voranzustellenden Ausdruck, der auch per Typoscript erzeugt werden kann. (Parameter einwelsen per `stdWrap`-Methode; statt statische Ausdrücke kann man für Übersetzungen auch `LLL:EXT:...`-Werte verwenden)
+| posttext     |                                                              | Definiert einen konstanten nachzustellenen Ausdruck, der auch per Typoscript erzeugt werden kann. (Parameter einwelsen per `stdWrap`-Methode; statt statische Ausdrücke kann man für Übersetzungen auch `LLL:EXT:...`-Werte verwenden)
+| type         |                                                              | Definiert die generische Methode der generischen Erzeugung. Definiert sind die im Nachfolgenden genannten Varianten: ... .
+|              | **_`generic.type=constant`_**                                | Ignoriert jegliche Input-Information aus aktuellen Datensatz.
+|              | **_`generic.type=index` oder `generic.type=includeindex` _** | Nutzt den Wert des aktuellen Indexes des ausgewählten Datensatzes aus der Datenliste (meist einen Nummer; nur im assoziativen Array oder iterativen Objekt ein String).
+|              | **_`generic.type=value` oder `generic.type=includevalue` _** | Nutzt den skalaren Wert des aktuell über `inField` definierten Feldes des ausgewählten Datensatzes aus der Datenliste.
+|              | **_`generic.type=translate`_**                               | Interpretiert den skalaren Wert des aktuell über `inField` definierten Feldes des ausgewählten Datensatzes aus der Datenliste als Schlüssel bzw. als Schlüsselpfad für einen Wert in einer `xlf`-Übersetzungsdatei. (Solange man nicht mit `LLL:EXT:...` einen expliziten key-Pfad defniniert, wird per Default die `localconf.xlf`-Datei der Timer-Extension verwendet, die man [auch von externen Extensions aus um eigenen Schlüssel per 'override' erweitern](https://docs.typo3.org/p/lochmueller/autoloader/7.4/en-us/Loader/LanguageOverride.html) kann.)
+|              | **_`generic.type=datetime`_**                                | Konvertiert das DateTime-Objekt aus dem über `inField` definierten Feldes des ausgewählten Datensatzes aus der Datenliste in ein in 'format' definiertes Datumformat.
+| format       |                                                              | Definiert das Augabeformat für den DateTime-Wert, der erzeugt werden soll. Wenn keinen Angabe gemacht wurde, wird per Default das Format `Y-m-d\TH:i:s` verwendet. Die [Parameter zur Defintion des DateTime-Formats](https://www.php.net/manual/en/datetime.format.php) findet man im php-Manual.
+|              | **_`generic.type=userfunc`_**                                |
+| userfunc     | &lt;Vendor\Extension\PfadZuKlasse->userFunctionName&gt;      | Definition der User-Funktion, die zwei Parameter übergeben bekommt: erstens den Parameterarray mit der aktuellen userfunc-Konfiguration (`params`), dem Key des Datensatze (`mapKey`), dem gesamten Datensatz (`mapItem`) und dem skalaren `inField`-Wert (`start`) sowie zweitens das Objekt des aktuellen BetterMapping-Prozessors.
+| 'beliebig'   | &lt;bleibige Werte&gt;                                       | In dem Unterfeld (`params`), das als Parameter übergeben wird, finden sich auch belibig definierte Parameter, die hier neben dem Methodenpfad in disem Abschnitt für die `userfunc` definiert worden sind. (Der Nutzer ist also frei, für seine Userfunktion eigenen Steuer-Parameter zu definieren.)
 
 #### PeriodlistProcessor
 
@@ -1299,10 +1383,52 @@ berechnet die Anzahl der Tage (24Stunden = 1 Tag) zwischen den Terminen.
         }
 
 ```
-#### HolidaycalendarProcessor (buggy)
+
+##### Parameter für den PeriodlistProcessor
+
+Der Dataprozessor Periodlist erlaubt die sortierte Ausgabe von verschiedenen
+Zeitbereichen, die explizit auch mehrtägig sein dürfen, die immer durch jeweils
+ein Start- bzw. Enddatum gekennzeichnet sind und die definitiv nicht periodisch
+sind.
+Diese Art der Darstellung eignet sich zum Beispiel für Listen mit Terminen für
+Schulferien der verschiedenen Bundesländer oder für Listen mit Tourneedaten
+verschiedener Künstler.
+
+Die Struktur der YAML-Dateien ist weiter-Oben beim PeriodlistTimer beschrieben
+worden.
+Oder sie finden eine beispielhafte Datei auch
+in `timer\Resources\Public\Yaml\Example_PeriodListTimerBremen.yaml`.
+Beachten sie, dass sie auch weitere Attribute einfügen können, wenn sie
+zusätzliche strukturierte Informationen für die Ausgabe im Frontend benötigen.
+Diese Attribute bzw. die dazugehörigen statischen Informationen werden leicht
+durchgeschleift.
+
+| Parameter      | Default                         | Beschreibung
+|----------------|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                | **_Hauptebene_**                |
+| if             | true                            | Wenn der Wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
+| field          | tx_timer_timer                  | Name des Feldes, welches den String mit den Flexforminformationen enthält. In den Flexforminformationen ist entweder der YAML-Pfad enthalten oder die Verweise auf Referenezen zu YAML-Dateien oder zu CSV-Dateien. Beachten sie, dass YAML-Dateien ihrerseites über die `import`-Anweisung weitere yaml-Dateien inkludieren können.
+| selectorfield  | tx_timer_selector               | Das Prüffeld definiert den Name des Feldes, welches die Variante der Flexform-Auswahl bestimmt. Dies muss den Wert `txTimerPeriodList` haben.
+| tablename      | tt_content                      | Der Tabellenname ist wichtig, wenn der Dataprocessor im Fluidtemplate auf Daten basiert, die nicht aus der Tabelle `tt_content` oder der Tabelle `pages` kommen.
+| limit.         |                                 | Definiert einen TypoScript-Array für die Intervallgrenzen für die Liste, die aus den Listen mit periodischen Daten erzeugt werden.
+| flagStart      | true                            | Definiert, ob die verschiedenen Termine nach der oberen Grenze (false \| 0 \| '') oder nach der unteren Grenze (true) sortiert werden.
+| maxCount       | 25                              | Maximale Anzahl an Terminen, die in die Liste überführt werden. Dies ist eine Pflichtangabe, die gegebenenfalls auch die Intervalgrenzen von `limit.` übersteuert. Es gibt keinen Wert für 'unendlich'.
+| &lt;start&gt;. | &lt;definiert im TypoScript&gt; | Der Name definiert das Outputfeld für den Startwert eines Termins in der neuen Terminliste. Der kann so benannt werden, wie man es später zum Beispiel in einem JSON-String braucht.
+| &lt;end&gt;.   | &lt;definiert im TypoScript&gt; | Der Name definiert das Outputfeld für den Endwert eines Termins in der neuen Terminliste. Der kann so benannt werden, wie man es später zum Beispiel in einem JSON-String braucht.
+|                | **_Unterebene `limit.`_**       | _Definiert den Bereich der Ausgaben durch zwei Datumswerte_
+| lower          |                                 | Definiert die untere Datumsgrenze, ab welcher Termine gesucht werden. [flagStart legt fest, ob es sich um den Wert in `start` (true) oder in `stop` (false) handelt.]
+| upper          |                                 | Definiert die obere Datumsgrenze, bis zu welchem Termine gesucht werden. [flagStart legt fest, ob es sich um den Wert in `start` (true) oder in `stop` (false) handelt.]
+|                | **_Unterebene `start.`_**       | _Definiert die Untere Grenze des Terminbereichs, der hier `start` heißt_
+| format         |                                 | Definiert das Ausgabeformat für den Datumswert.
+| source         |                                 | Name des Feldes in der Inputliste, die abweichen kann vom Index-Namen im assoziativen Array für die Ausgabe.
+|                | **_Unterebene `end.`_**         | _Definiert die Untere Grenze des Terminbereichs, der hier `end` heißt_
+| format         |                                 | Definiert das Ausgabeformat für den Datumswert.
+| source         |                                 | Name des Feldes in der Inputliste, die abweichen kann vom Index-Namen im assoziativen Array für die Ausgabe.
+
+#### HolidaycalendarProcessor
 
 Der Dataprozessor dient der Auswertung von dev CSV-Dateien mit den
-Feiertagsterminen. (2023-03-16 - Die Berechnung ist noch buggy.)
+Feiertagsterminen.
 ```
         10 = Porthd\Timer\DataProcessing\HolidaycalendarProcessor
         10 {
@@ -1394,16 +1520,43 @@ Feiertagsterminen. (2023-03-16 - Die Berechnung ist noch buggy.)
                 falFlexField = holidayFalRelation
             }
 
-            # `timeAdd` define the minimal needed distance between two events of the same holiday or custom.
-            # The syntax is defined by the PHP-dateInterval https://www.php.net/manual/en/dateinterval.construct.php
-            # !!! Remark: The interval-definition must begin with a `P`. The char `T` divides in the interval
-            #          the date-part from the time-part. In this way:
-            #         - `P1M` means the interval of one month.
-            #         - `PT1M` means the interval of one minute
-            # The default value for `timeAdd` is one day.
-            #timeAdd = P1D
-
             # name of output-variable
             as = holidayList
         }
 ```
+
+##### Parameter für den HolidaycalendarProcessor
+
+Der Dataprozessor produziert einen Liste von Feiertagen für eine bestimmtes
+zeitliches Interval aus einer Liste von Feiertagen.
+
+| Parameter      | Default                                         | Beschreibung
+|----------------|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                | **_Hauptebene_**                                |
+| if             | true                                            | Wenn der Wert oder der Typoscript-Ausdruck falsch ergeben, wird der Dataprocessor nicht ausgeführt.
+| aliasPath      |                                                 | Definiert explizit im Typoscript einen Pfad zu einer Datei im CSV oder YAML-Format, welchen Konfigurationen für verschiedene Aliase enthält, welche ihrerseits die Konfigurationen von Feiertagen in den Feiertragslisten ergänzen können. (Übersteuert jede `aliasConfig.`-Definition.)
+| alias.         | &lt;Array mit Referenzen zu alias-Listen&gt;    | (2023/10/04 - To Do: muss noch überarbeitet werden.) Definiert die Referenz zu einen FAL-Eintrag oder zu einem Flexform-Feld, in welcher YAML- oder CSV-Daten mit den Listen der Alias-Definitionen zu finden sind.
+| holidayPath    |                                                 | Definiert  explizit im Typoscript einen Pfad zu einer Datei im CSV- oder YAML-Format, welchen Konfigurationen für verschiedenen Feiertage enthält. (Übersteuert jede `holidayConfig.`-Definition.)
+| holidayConfig. | &lt;Array mit Referenzen zu Feiertagslisten&gt; | (2023/10/04 - To Do: muss noch überarbeitet werden.) Erzeugt die Referenz zu einen FAL-Eintrag oder zu einem Flexform-Feld, in welcher YAML- oder CSV-Daten mit den Listen der Feiertags-Definitionen zu finden sind.
+| as             | holidayList                                     | Name der Outputvariablen, die z.B. im Fluid-template genutzt wird.
+| cache          | default                                         | Definiert das Cache-Verhalten. Im Defaultfall wird die Cachingzeit  basierte auf der Timerliste berechnet. Eine Zahlenangabe übersteuert die berechnete Caching-Zeit durch einen statische Wert. Die Parameter ``0``,`` ``,``no``,``none``, oder ``null`` führen dazu, dass der Dataprozessor jedesmal neu die Daten berechnet.
+| calendar       | gregorian                                       | (2023/10/04: nicht wirklich getestet) Als Basiskalender wird der Gregorianische verwendet. Es kann aber auch ein alternativer Kalender verwendet werden, wenn dieser von der PHP-Extension 'IntlDateFormatter' unterstützt wird und nicht offensichtlich - aktuell die Kalender `dangi`, `chinese` - fehlerbehaftet ist. Wenn solche Kalender genutzt werden sollen, dann wird intern im gregorianischen Kalender das  Ergebnis berechnet, welches dann abschließend in den definierten Kalender zurückgerechnet wird. So ist es möglich, die Feiertage auch in nicht-gregorischnischen Kalender-Systemen darzustellen. (Es gibt jedoch meines Wissen kaum Kalender-Frameworks in JavaScript, die auch nichtgregorianische Kalendersysteme unterstützen.)
+| timezone       | &lt;TYPO3 localconfiguration.php&gt;            | (2023/10/04: nicht wirklich getestet) Definiert die zugrundeliegenen Zeitzone. Per Default wird die in den TYPO3-Settings definierte Zeitzone verwendet. Diese kann aber auch überstuert werden.
+| locale         | en_GB                                           | (2023/10/04: nicht wirklich getestet) Definiert das zugrundeliegenen kalender-System basierend auf der nationalen Lokalisierung.
+|                | **_Unterebene `start.`_**                       | _Definiert die Untere Grenze des Terminbereichs._
+| year           |                                                 | Jahreszahl. Sie ist abhängig vom Kalender (locale).
+| month          |                                                 | Monatszahl. Sie ist abhängig vom Kalender (locale).
+| day            |                                                 | Tag im Monat. Der Wert ist Kalenderabhängig (locale).
+|                | **_Unterebene `stop.`_**                        | _Definiert die Untere Grenze des Terminbereichs._
+| year           |                                                 | Jahreszahl. Sie ist abhängig vom Kalender (locale).
+| month          |                                                 | Monatszahl. Sie ist abhängig vom Kalender (locale).
+| day            |                                                 | Tag im Monat. Der Wert ist Kalenderabhängig (locale).
+|                | **_`holidayConfig.`_**                          | _Referenz zu Daten für die Feiertags-Definitionen_
+| flexDbField    |                                                 | (2023/10/04: nicht wirklich getestet) Definiert den Namen des Feldes, welches im Data-Datensatz den Flexformstring enthält.
+| pathFlexField  |                                                 | (2023/10/04: nicht wirklich getestet) Definiert den Namen des Feldes innerhalb der Flexform, welches die Pfadangabe enthält.
+| falFlexField   |                                                 | (2023/10/04: nicht wirklich getestet) Definiert den Namen einen FAL-Feldesin einer Flexform-Definition.
+|                | **_`aliasConfig.`_**                            | _Referenz zu Daten für ergänzenden Alias-Defintion, die in Feiertags-Definitionen verwendet werden können_
+| flexDbField    |                                                 | (2023/10/04: nicht wirklich getestet) Definiert den Namen des Feldes, welches im Data-Datensatz den Flexformstring enthält.
+| pathFlexField  |                                                 | (2023/10/04: nicht wirklich getestet) Definiert den Namen des Feldes innerhalb der Flexform, welches die Pfadangabe enthält.
+| falFlexField   |                                                 | (2023/10/04: nicht wirklich getestet) Definiert den Namen einen FAL-Feldesin einer Flexform-Definition.
+

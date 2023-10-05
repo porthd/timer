@@ -80,10 +80,11 @@ class TimerConst
     ];
 
     // for constants for some classes
-    // - dataprocessor `RangeListQueryProcessor`
-    // - dataprocessor `SortListQueryProcessor`
+    // - varoius dataprocessor in this extension
     // - viewhelper `ìsActiveViewHelper
     // - helperservice `listOfEventsService`
+    public const ARGUMENT_IF_DOT = 'if.';
+    public const ARGUMENT_CACHE = 'cache';
     public const ARGUMENT_FIELDNAME = 'fieldName';
     public const ARGUMENT_AS = 'as';
     public const ARGUMENT_DATETIME_FORMAT = 'datetimeFormat';

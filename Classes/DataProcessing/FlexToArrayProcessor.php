@@ -25,9 +25,15 @@ namespace Porthd\Timer\DataProcessing;
 
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\PeriodListTimer;
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\TcaUtility;
+use Psr\Log\LoggerAwareTrait;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -67,24 +73,49 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *     }
  *
  */
-class FlexToArrayProcessor implements DataProcessorInterface
+class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
+
+    use GeneralDataProcessorTrait;
+    use LoggerAwareTrait;
+
+
     protected const ATTR_FLEX_FIELD = 'field';
     protected const DEFAULT_FLEX_FIELD = TimerConst::TIMER_FIELD_FLEX_ACTIVE;
-    protected const ATTR_IF_DOT = 'if.';
     protected const OUTPUT_ARG_DATA = 'data';
     protected const ATTR_RESULT_VARIABLE_NAME = 'as';
     protected const DEFAULT_RESULT_VARIABLE_NAME = 'flattenflex';
     protected const ATTR_FLATTENKEYS = 'flattenkeys';
     protected const DEFAULT_FLATTENKEYS = 'data,general,timer,sDEF,lDEF,vDEF';
+
+
     /**
      * @var ContentDataProcessor
      */
     protected $contentDataProcessor;
 
-    public function __construct()
+    /**
+     * @var FrontendInterface
+     */
+    protected $cache;
+
+    /**
+     * @var CacheService
+     */
+    protected $cacheManager;
+
+    /**
+     * @param FrontendInterface $cache
+     * @param CacheService $cacheManager
+     * @param ContentDataProcessor $contentDataProcessor
+     */
+    public function __construct(FrontendInterface    $cache,
+                                CacheService         $cacheManager,
+                                ContentDataProcessor $contentDataProcessor)
     {
-        $this->contentDataProcessor = GeneralUtility::makeInstance(ContentDataProcessor::class);
+        $this->cache = $cache;
+        $this->cacheManager = $cacheManager;
+        $this->contentDataProcessor = $contentDataProcessor;
     }
 
 
@@ -103,54 +134,88 @@ class FlexToArrayProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ) {
-        if (array_key_exists(self::ATTR_FLEX_FIELD, $processorConfiguration)) {
-            $flexFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_FIELD, $processorConfiguration, false);
-        } else {
-            $flexFieldName = self::DEFAULT_FLEX_FIELD;
-        }
-        if (
-            (array_key_exists(self::ATTR_IF_DOT, $processorConfiguration)) &&
-            (!$cObj->checkIf($processorConfiguration[self::ATTR_IF_DOT]))
+    )
+    {
+        // Reasons to stop this dataprocessor
+        if ((array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration)) &&
+            (!$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT]))
         ) {
             return $processedData;
         }
-        $singleElement = null;
-        if (!empty($processedData[self::OUTPUT_ARG_DATA][$flexFieldName])) {
-            $flexString = $processedData[self::OUTPUT_ARG_DATA][$flexFieldName];
-            $stringFlatKeys = $cObj->stdWrapValue(
-                self::ATTR_FLATTENKEYS,
-                $processorConfiguration,
-                self::DEFAULT_FLATTENKEYS
-            );
-            $singleElementRaw = GeneralUtility::xml2array($flexString);
-            if ((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) {
-                throw new TimerException(
-                    'The flexform-string in the field `' . $flexFieldName . '` could not be resolved.' .
-                    ' Check the reason for the incorrect flexform-string: `' . $flexString . '`',
-                    1668690059
-                );
-            }
-            $listFlatKeys = array_filter(
-                array_map(
-                    'trim',
-                    explode(',', $stringFlatKeys)
-                )
-            );
-            if (empty($listFlatKeys)) {
-                $singleElement= $singleElementRaw;
+
+        // prepare caching
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        $myResult = $this->cache->get($cacheIdentifier);
+        if ($myResult === false) {
+            [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
+
+            if (array_key_exists(self::ATTR_FLEX_FIELD, $processorConfiguration)) {
+                $flexFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_FIELD, $processorConfiguration, self::DEFAULT_FLEX_FIELD);
             } else {
-                $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
+                $flexFieldName = self::DEFAULT_FLEX_FIELD;
+            }
+
+            $singleElement = null;
+            if (!empty($processedData[self::OUTPUT_ARG_DATA][$flexFieldName])) {
+                $flexString = $processedData[self::OUTPUT_ARG_DATA][$flexFieldName];
+                $stringFlatKeys = $cObj->stdWrapValue(
+                    self::ATTR_FLATTENKEYS,
+                    $processorConfiguration,
+                    self::DEFAULT_FLATTENKEYS
+                );
+                $singleElementRaw = GeneralUtility::xml2array($flexString);
+                if ((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) {
+                    throw new TimerException(
+                        'The flexform-string in the field `' . $flexFieldName . '` could not be resolved.' .
+                        ' Check the reason for the incorrect flexform-string: `' . $flexString . '`',
+                        1668690059
+                    );
+                }
+                $listFlatKeys = array_filter(
+                    array_map(
+                        'trim',
+                        explode(',', $stringFlatKeys)
+                    )
+                );
+                if (empty($listFlatKeys)) {
+                    $singleElement = $singleElementRaw;
+                } else {
+                    $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
+                }
+            }
+
+            $targetVariableName = $cObj->stdWrapValue(
+                self::ATTR_RESULT_VARIABLE_NAME,
+                $processorConfiguration,
+                self::DEFAULT_RESULT_VARIABLE_NAME
+            );
+
+            // the caching-times is defined or depends on default-value
+            if (($cacheCalc !== false) ||
+                ($cacheTime > 0)
+            ) {
+                $myTags = [
+                    'pages_' . $pageUid,
+                    'pages',
+                    'flexToArray_' . $pageContentOrElementUid,
+                    'flexToArray',
+                ];
+                $myResult = [
+                    'as' => $targetVariableName,
+                    'flexToArray' => $singleElement,
+                ];
+                // clear page-cache
+                // todo build a singleton, to call this only once in a request
+                $this->cacheManager->clearPageCache([$pageUid]);
+                if ($cacheTime > 0) {
+                    $this->cache->set($cacheIdentifier, $myResult, $myTags, $cacheTime);
+                } else {
+                    $this->cache->set($cacheIdentifier, $myResult, $myTags);
+                }
             }
         }
 
-        $targetVariableName = $cObj->stdWrapValue(
-            self::ATTR_RESULT_VARIABLE_NAME,
-            $processorConfiguration,
-            self::DEFAULT_RESULT_VARIABLE_NAME
-        );
-
-        $processedData[$targetVariableName] = $singleElement;
+        $processedData[$myResult['as']] = $myResult['flexToArray'];
 
         return $processedData;
     }

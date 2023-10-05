@@ -140,6 +140,22 @@ call_user_func(
             "@import 'EXT:timer/Configuration/TypoScript/constants.typoscript'"
         );
 
+        // define the caching for timer
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['timer_dataprocessor']
+            ??= [];
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['timer_dataprocessor'] = array_merge(
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['timer_dataprocessor'],
+            [
+                'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
+                'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
+                'options' => [
+                    'defaultLifetime' => 864000, // 10 days
+//                    'compression' => true,
+                ],
+                'groups' => ['pages'],
+            ],
+        );
+
     }
 
 

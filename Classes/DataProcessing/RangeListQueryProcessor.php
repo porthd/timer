@@ -26,13 +26,20 @@ namespace Porthd\Timer\DataProcessing;
 use DateTime;
 use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Services\HolidaycalendarService;
 use Porthd\Timer\Services\ListOfEventsService;
 use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\TcaUtility;
+use Psr\Log\LoggerAwareTrait;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -80,7 +87,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *         # All properties from .select :ref:`select` can be used directly
  *         # + stdWrap
  *         orderBy = sorting
- *         pidInList = 13,14
  *
  *         # The target variable to be handed to the ContentObject again, can
  *         # be used in Fluid e.g. to iterate over the objects. defaults to
@@ -91,8 +97,12 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *     }
  *
  */
-class RangeListQueryProcessor implements DataProcessorInterface
+class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
+
+    use GeneralDataProcessorTrait;
+    use LoggerAwareTrait;
+
     protected const PARAMETER_TABLE = 'table';
 
     /**
@@ -100,9 +110,28 @@ class RangeListQueryProcessor implements DataProcessorInterface
      */
     protected $contentDataProcessor;
 
-    public function __construct()
+    /**
+     * @var FrontendInterface
+     */
+    protected $cache;
+
+    /**
+     * @var CacheService
+     */
+    protected $cacheManager;
+
+    /**
+     * @param FrontendInterface $cache
+     * @param CacheService $cacheManager
+     * @param ContentDataProcessor $contentDataProcessor
+     */
+    public function __construct(FrontendInterface    $cache,
+                                CacheService         $cacheManager,
+                                ContentDataProcessor $contentDataProcessor)
     {
-        $this->contentDataProcessor = GeneralUtility::makeInstance(ContentDataProcessor::class);
+        $this->cache = $cache;
+        $this->cacheManager = $cacheManager;
+        $this->contentDataProcessor = $contentDataProcessor;
     }
 
     /**
@@ -120,62 +149,109 @@ class RangeListQueryProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ): array {
-        if (array_key_exists('if.', $processorConfiguration) && !$cObj->checkIf($processorConfiguration['if.'])) {
-            return $processedData;
-        }
-
-        // the table to query, if none given, exit
+    ): array
+    {
+        // Reasons to stop this dataprocessor
         $tableName = $cObj->stdWrapValue(self::PARAMETER_TABLE, $processorConfiguration);
-        if (empty($tableName)) {
+        if ((empty($tableName)) ||
+            (
+                (array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration)) &&
+                (!$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT]))
+            )
+        ) {
             return $processedData;
         }
-        if (array_key_exists(self::PARAMETER_TABLE . '.', $processorConfiguration)) {
-            unset($processorConfiguration[self::PARAMETER_TABLE . '.']);
-        }
-        if (array_key_exists(self::PARAMETER_TABLE, $processorConfiguration)) {
-            unset($processorConfiguration[self::PARAMETER_TABLE]);
-        }
 
-        // The variable to be used within the result
-        $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'records');
+        // prepare caching
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        $myResult = $this->cache->get($cacheIdentifier);
+        if ($myResult === false) {
+            [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
+            // Reading the current data instead of $GLOBALS['EXEC_TIME']
+            $currentTimestamp = (int)(GeneralUtility::makeInstance(Context::class))
+                ->getPropertyFromAspect('date', 'timestamp');
 
-        // Execute a SQL statement to fetch the records
-        $records = $cObj->getRecords($tableName, $processorConfiguration);
+            if (array_key_exists(self::PARAMETER_TABLE . '.', $processorConfiguration)) {
+                unset($processorConfiguration[self::PARAMETER_TABLE . '.']);
+            }
+            if (array_key_exists(self::PARAMETER_TABLE, $processorConfiguration)) {
+                unset($processorConfiguration[self::PARAMETER_TABLE]);
+            }
 
-        $eventsTimerList = $records;
-        /** @var LoopLimiter $loopLimiter */
-        $loopLimiter = new LoopLimiter();
-        ListOfEventsService::getDatetimeRestrictions($cObj, $processorConfiguration, $loopLimiter);
-        $timerEventZone = self::validateInternArguments(
-            $cObj,
-            $processorConfiguration,
-            $loopLimiter->getDatetimeFormat()
-        );
-        ListOfEventsService::getListRestrictions($cObj, $processorConfiguration, $loopLimiter, $timerEventZone);
+            // The variable to be used within the result
+            $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'records');
 
-        $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
-            $eventsTimerList,
-            $timerEventZone,
-            $loopLimiter
-        );
+            // Execute a SQL statement to fetch the records
+            $records = $cObj->getRecords($tableName, $processorConfiguration);
 
-
-        $processedRecordVariables = [];
-        foreach ($listOfEvents as $key => $record) {
-            /** @var ContentObjectRenderer $recordContentObjectRenderer */
-            $recordContentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-            $recordContentObjectRenderer->start($record, $tableName);
-            $processedRecordVariables[$key] = ['data' => $record];
-            $processedRecordVariables[$key] = $this->contentDataProcessor->process(
-                $recordContentObjectRenderer,
+            $eventsTimerList = $records;
+            /** @var LoopLimiter $loopLimiter */
+            $loopLimiter = new LoopLimiter();
+            // use parameter datetimeFormat && reverse
+            ListOfEventsService::getDatetimeRestrictions($cObj, $processorConfiguration, $loopLimiter);
+            $timerEventZone = $this->validateInternArguments(
+                $cObj,
                 $processorConfiguration,
-                $processedRecordVariables[$key]
+                $loopLimiter->getDatetimeFormat()
             );
+            // use paremeter maxCount, maxGap maxLate
+            ListOfEventsService::getListRestrictions($cObj, $processorConfiguration, $loopLimiter, $timerEventZone);
+
+            $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
+                $eventsTimerList,
+                $timerEventZone,
+                $loopLimiter
+            );
+
+
+            $processedRecordVariables = [];
+            $flagStopTimer = false;
+            $dateTimeStopCase = new DateTime('@' . $currentTimestamp);
+            foreach ($listOfEvents as $key => $record) {
+                $processedRecordVariables[$key] = ['data' => $record];
+                // check for more dataProcessor to act.
+                $processedRecordVariables[$key] = $this->contentDataProcessor->process(
+                    $cObj,
+                    $processorConfiguration,
+                    $processedRecordVariables[$key]
+                );
+                if ($record['range']->getBeginning()->getTimestamp() > $currentTimestamp) {
+                    if ($flagStopTimer) {
+                        if ($dateTimeStopCase > $record['range']->getBeginning()) {
+                            $dateTimeStopCase = clone $record['range']->getBeginning();
+                        }
+                    } else {
+                        $dateTimeStopCase = clone $record['range']->getBeginning();
+                        $flagStopTimer = true;
+                    }
+                }
+
+            }
+
+            // the caching-times depend on the next change in the future
+            // null = defaultvalue for cachetime
+            $myLifeTime = $this->calculateSimpleTimeDependedCacheTime($cacheTime, $cacheCalc, $dateTimeStopCase, $currentTimestamp);
+            if ($myLifeTime !== null) {
+                $myTags = [
+                    'pages_' . $pageUid,
+                    'pages',
+                    'rangeListQuery_' . $pageContentOrElementUid,
+                    'rangeListQuery',
+                ];
+                $myResult = [
+                    'as' => $targetVariableName,
+                    'rangeListQuery' => $processedRecordVariables,
+                ];
+                // clear page-cache
+                // todo build a singleton, to call this only once in a request
+                $this->cacheManager->clearPageCache([$pageUid]);
+                $this->cache->set($cacheIdentifier, $myResult, $myTags, $myLifeTime);
+            }
         }
-
-        $processedData[$targetVariableName] = $processedRecordVariables;
-
+        // The result in the holiday-list should not be deleted or schould have priority.
+        if (!empty($myResult)) {
+            $processedData[$myResult['as']] = $myResult['rangeListQuery'];
+        }
         return $processedData;
     }
 
@@ -186,11 +262,12 @@ class RangeListQueryProcessor implements DataProcessorInterface
      * @return DateTime
      * @throws TimerException
      */
-    protected static function validateInternArguments(
+    protected function validateInternArguments(
         ContentObjectRenderer $cObj,
-        array $arguments,
+        array  $arguments,
         string $timeFormat = TimerInterface::TIMER_FORMAT_DATETIME
-    ): DateTime {
+    ): DateTime
+    {
         $timeZone = ((array_key_exists(TimerConst::ARGUMENT_ACTIVEZONE, $arguments)) ?: date_default_timezone_get());
         if (!TcaUtility::isTimeZoneInList($timeZone)) {
             throw new TimerException(
@@ -201,11 +278,11 @@ class RangeListQueryProcessor implements DataProcessorInterface
         if (array_key_exists(TimerConst::ARGUMENT_DATETIME_START, $arguments)) {
             if (
                 (
-                    $frontendDateTime = DateTime::createFromFormat(
-                        $timeFormat,
-                        $arguments[TimerConst::ARGUMENT_DATETIME_START],
-                        new DateTimeZone($timeZone)
-                    )
+                $frontendDateTime = DateTime::createFromFormat(
+                    $timeFormat,
+                    $arguments[TimerConst::ARGUMENT_DATETIME_START],
+                    new DateTimeZone($timeZone)
+                )
                 ) === false
             ) {
                 throw new TimerException(

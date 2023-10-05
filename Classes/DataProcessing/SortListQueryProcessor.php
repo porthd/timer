@@ -26,13 +26,19 @@ namespace Porthd\Timer\DataProcessing;
 use DateTime;
 use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
+use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Services\ListOfEventsService;
 use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\TcaUtility;
+use Psr\Log\LoggerAwareTrait;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -100,16 +106,39 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  * }
  *
  */
-class SortListQueryProcessor implements DataProcessorInterface
+class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
+
+    use GeneralDataProcessorTrait;
+    use LoggerAwareTrait;
+
     /**
      * @var ContentDataProcessor
      */
     protected $contentDataProcessor;
 
-    public function __construct()
+    /**
+     * @var FrontendInterface
+     */
+    protected $cache;
+
+    /**
+     * @var CacheService
+     */
+    protected $cacheManager;
+
+    /**
+     * @param FrontendInterface $cache
+     * @param CacheService $cacheManager
+     * @param ContentDataProcessor $contentDataProcessor
+     */
+    public function __construct(FrontendInterface    $cache,
+                                CacheService         $cacheManager,
+                                ContentDataProcessor $contentDataProcessor)
     {
-        $this->contentDataProcessor = GeneralUtility::makeInstance(ContentDataProcessor::class);
+        $this->cache = $cache;
+        $this->cacheManager = $cacheManager;
+        $this->contentDataProcessor = $contentDataProcessor;
     }
 
     /**
@@ -127,43 +156,98 @@ class SortListQueryProcessor implements DataProcessorInterface
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ): array {
-        if (array_key_exists('if.', $processorConfiguration) && !$cObj->checkIf($processorConfiguration['if.'])) {
-            return $processedData;
-        }
-
-        // If the field is not given, exit
+    ): array
+    {
+        // Reasons to stop this dataprocessor
         $fieldName = $cObj->stdWrapValue(TimerConst::ARGUMENT_FIELDNAME, $processorConfiguration, 'myrecords');
-        if ((empty($fieldName)) || (empty($processedData[$fieldName]))) {
+        if ((empty($fieldName)) ||
+            (empty($processedData[$fieldName])) ||
+            (
+                (array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration)) &&
+                (!$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT]))
+            )
+        ) {
             return $processedData;
         }
 
-        // The variable to be used within the result
-        $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'sortedrecords');
-
-        // get recordlist from former processed datas
-        $periodTimerDefList = $processedData[$fieldName];
-
-        /** @var LoopLimiter $loopLimiter */
-        $loopLimiter = new LoopLimiter();
-        ListOfEventsService::getDatetimeRestrictions($cObj, $processorConfiguration, $loopLimiter);
-        $timerEventZone = self::validateInternArguments($cObj, $processorConfiguration, $loopLimiter->getDatetimeFormat());
-        ListOfEventsService::getListRestrictions($cObj, $processorConfiguration, $loopLimiter, $timerEventZone);
-
-        $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
-            $periodTimerDefList,
-            $timerEventZone,
-            $loopLimiter
-        );
+        // prepare caching
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        $myResult = $this->cache->get($cacheIdentifier);
+        if ($myResult === false) {
+            [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
+            // Reading the current data instead of $GLOBALS['EXEC_TIME']
+            $currentTimestamp = (int)(GeneralUtility::makeInstance(Context::class))
+                ->getPropertyFromAspect('date', 'timestamp');
 
 
-        $processedRecordVariables = [];
-        foreach ($listOfEvents as $key => $record) {
-            $processedRecordVariables[$key] = ['data' => $record];
+            // The variable to be used within the result
+            $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'sortedrecords');
+
+            // get recordlist from former processed datas
+            $periodTimerDefList = $processedData[$fieldName];
+
+            /** @var LoopLimiter $loopLimiter */
+            $loopLimiter = new LoopLimiter();
+            // use parameter datetimeFormat && reverse
+            ListOfEventsService::getDatetimeRestrictions($cObj, $processorConfiguration, $loopLimiter);
+            $timerEventZone = self::validateInternArguments($cObj, $processorConfiguration, $loopLimiter->getDatetimeFormat());
+            // use paremeter maxCount, maxGap maxLate
+            ListOfEventsService::getListRestrictions($cObj, $processorConfiguration, $loopLimiter, $timerEventZone);
+
+            $listOfEvents = ListOfEventsService::generateEventsListFromTimerList(
+                $periodTimerDefList,
+                $timerEventZone,
+                $loopLimiter
+            );
+            $dateTimeStopCaseOne = new DateTime('@' . $currentTimestamp);
+            $dateTimeStopCaseTwo = clone $dateTimeStopCaseOne;
+            if ($loopLimiter->isFlagReserve()) {
+                $dateTimeStopCaseOne = $listOfEvents[array_key_first($listOfEvents)]['range']->getBeginning();
+            } else {
+                $dateTimeStopCaseOne = $listOfEvents[array_key_first($listOfEvents)]['range']->getEnding();
+            }
+
+            $dateTimeStopCaseTwo = ListOfEventsService::detectNextChangeListFromTimerList(
+                $periodTimerDefList,
+                $timerEventZone,
+                $loopLimiter
+            );
+
+            $processedRecordVariables = [];
+            foreach ($listOfEvents as $key => $record) {
+                $processedRecordVariables[$key] = ['data' => $record];
+            }
+            // the caching-times depend on the next change in the future
+            // null = defaultvalue for cachetime
+            $myLifeTime = null;
+            $myLifeTimeOne = $this->calculateSimpleTimeDependedCacheTime($cacheTime, $cacheCalc, $dateTimeStopCaseOne, $currentTimestamp);
+            $myLifeTimeTwo = $this->calculateSimpleTimeDependedCacheTime($cacheTime, $cacheCalc, $dateTimeStopCaseTwo, $currentTimestamp);
+            if (($myLifeTimeOne !== null) && ($myLifeTimeTwo !== null)) {
+                $myLifeTime = min(abs($myLifeTimeOne), abs($myLifeTimeTwo));
+                $myLifeTime = ($myLifeTime > 0) ? $myLifeTime : null;
+            }
+            if ($myLifeTime !== null) {
+                $myTags = [
+                    'pages_' . $pageUid,
+                    'pages',
+                    'sortListQuery' . $pageContentOrElementUid,
+                    'sortListQuery',
+                ];
+                $myResult = [
+                    'as' => $targetVariableName,
+                    'sortList' => $processedRecordVariables,
+                ];
+                // clear page-cache
+                // todo build a singleton, to call this only once in a request
+                $this->cacheManager->clearPageCache([$pageUid]);
+                $this->cache->set($cacheIdentifier, $myResult, $myTags, $myLifeTime);
+            }
         }
 
-        $processedData[$targetVariableName] = $processedRecordVariables;
-
+        if (!empty($myResult)) {
+            // The result in the holiday-list should not be deleted or schould have priority.
+            $processedData[$myResult['as']] = $myResult['sortList'];
+        }
         return $processedData;
     }
 
@@ -174,9 +258,10 @@ class SortListQueryProcessor implements DataProcessorInterface
      */
     protected static function validateInternArguments(
         ContentObjectRenderer $cObj,
-        array $arguments,
+        array  $arguments,
         string $timeFormat = TimerInterface::TIMER_FORMAT_DATETIME
-    ): DateTime {
+    ): DateTime
+    {
         $timeZone = $cObj->stdWrapValue(TimerConst::ARGUMENT_ACTIVEZONE, $arguments, date_default_timezone_get());
         if (!TcaUtility::isTimeZoneInList($timeZone)) {
             throw new TimerException(
@@ -187,23 +272,23 @@ class SortListQueryProcessor implements DataProcessorInterface
 
         $flagDateStarttime = (
             array_key_exists(TimerConst::ARGUMENT_DATETIME_START, $arguments) ||
-            (array_key_exists(TimerConst::ARGUMENT_DATETIME_START.'.', $arguments))
+            (array_key_exists(TimerConst::ARGUMENT_DATETIME_START . '.', $arguments))
         );
 
         if ($flagDateStarttime) {
             $startTimeString = $cObj->stdWrapValue(TimerConst::ARGUMENT_DATETIME_START, $arguments);
             if (
                 (
-                    $frontendDateTime = DateTime::createFromFormat(
-                        $timeFormat,
-                        $startTimeString,
-                        new DateTimeZone($timeZone)
-                    )
+                $frontendDateTime = DateTime::createFromFormat(
+                    $timeFormat,
+                    $startTimeString,
+                    new DateTimeZone($timeZone)
+                )
                 ) === false
             ) {
                 throw new TimerException(
                     'The date-string `' . $arguments[TimerConst::ARGUMENT_DATETIME_START] . '` could not converted to a datetime-Object. ' .
-                    'Check your format `' . $timeFormat . '` for datetime in the typoscript of the '.
+                    'Check your format `' . $timeFormat . '` for datetime in the typoscript of the ' .
                     'dataprocessor `SortListQueryProcessor` and your datetime-zone `' . $timeZone . '`. ',
                     1673162866
                 );

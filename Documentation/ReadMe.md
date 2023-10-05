@@ -64,9 +64,11 @@ Time management and the start time control task. Via a task in the scheduler (
 cron job), the page
 be updated regularly. The integration of information within templates can be
 controlled via Viewhelper
-where the developer then has to think about the caching of the frontend. About
-data processors
-It should be easy to compile simple lists that can be displayed in the frontend.
+where the developer then has to think about the caching of the frontend. The
+data processors should easily help to compile simple lists that can be displayed
+in the frontend.
+The results in the dataprocessors will be cached und some of the dataprocessors
+will clear the caches of its corrosponding page.
 The information from the
 Flexform fields can be processed in the templates with view helpers.
 
@@ -269,7 +271,8 @@ that the school holidays for Lower Saxony and Bremen from the year 2022 are
 shown in a calendar.
 
 #### Data processors for this timer
-Three data processors have been defined so that the data can be read.
+
+Six data processors were defined so that the data can be read in or converted.
 
 The `FlexToArrayProcessor` allows reading Flexform fields and converting them
 into simple arrays.
@@ -282,6 +285,26 @@ is defined. In addition to the actual fields, the data processor generates the
 start and end times
 of the appointments also the corresponding DatTime objects and calculates the
 number of days (24 hours = 1 day) between the appointments.
+
+The DataProcessor 'RangeListQueryProcessor' allows appointment lists to be read
+out,
+whereby the data processor also takes prohibited lists into account.
+This can be used, for example, to create series of appointments of the type
+“Every Tuesday,
+except during school holidays”. More detailed information can be found below.
+
+The DataProcessor 'HolidaycalendarProcessor' allows holiday dates to be read in
+via CSV file.
+If you absolutely have to, you can also use a YAML file for this.
+More detailed information on the definition of public holidays can be found
+below.
+
+The DataProcessor 'SortListQueryProcessor' allows sorting object lists
+that contain timer definitions. For example, you can control the output of
+photos
+from a gallery or you can controll the time-controlled output of images from a
+collection.
+More detailed information can be found below.
 
 ~~The third data processor `MappingProcessor` is required to transfer the
 appointment data to the Fluid template as a JSON string.
@@ -922,9 +945,23 @@ There are five view helpers:
 
 ### Data Processors
 
-Since the results of the data processors are cached, the user has to think about
-what makes more sense
-caching period and define it accordingly.
+Since the results of the data processors are cached, the user must consider
+what a sensible caching period is and define this accordingly.
+All data processors use the ``cache`` parameter to define the cache time.
+A missing value leads to the default case. For data processors that use the
+timer functionality,
+the frontend cache is automatically deleted when the data is calculated.
+
+All parameters are evaluated via `stdWrap`. That means,
+Instead of explicit values, typescript can always be used to dynamically define
+the values.
+
+It must be checked whether the dynamization of the parameters leads to conflicts
+with caching.
+If in doubt, deactivate caching with ``cache = none``.
+The expressions `0`, `` ``, ``none``, ``no`` or ``null`` are also permitted.
+You can explicitly trigger the default case for caching
+with ``cache = default``.
 
 In principle, an example for the application of the same should be found as a
 comment in the source code of the respective DataProcessors.
@@ -960,6 +997,10 @@ tt_content.timer_timersimul {
 
          # name of output object
          as = examplelist
+
+         # deactivate the caching of the rangelist-processor
+         # the frontend-cache of the current page will be cleared every time
+         cache = none
      }
 }
 
@@ -971,46 +1012,46 @@ See also example in example content element ``timersimul``
 
 Due to the repetition of periods, a data record can be listed several times.
 Therefore, a start time and an end time must always be defined.
+Each time the list is recalculated, the frontend cache of the corresponding page
+is also deleted.
 
-| Parameters | Default | Description
-|----------------|-------------------------------- -------------------------------------------------- -------------------------------------------------- ----|--------------
-| | **_Records_** |
-| if | true | If the value or the typescript expression evaluates to false, the
-data processor is not executed.
-| tables | tx_timer_domain_model_event | This table is used to search for all
-available records with timer information.
-| pidInList | | Comma-separated list of numeric IDs for pages that may contain
-records for determining the list of timer events.
-| as | records | Comma-separated list of numeric IDs for pages that may contain
-records for determining the list of timer events.
-| | **_Start and General_** |
-| datetimeFormat | Y-m-d H:i:s | Defines the format in which the date is given.
-The characters defined in PHP apply (
-see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
-| datetimeStart | &lt;now&gt; | Defines the point in time at which the list
-should start. If `reverse = false` it is the earliest time, and
-if `reverse = true` it is the latest time.
-| time zone | &lt;defined in PHP system&gt; | Defines the time zone to be used
-with the date values.
-| reverse | false | Defines whether the list of active areas is sorted in
-descending or ascending order. With `reverse = true` the end of the active areas
-is decisive; In the default case `reverse = true` it is the beginning of the
-active time.
-| | **_Limit of the period_** |
-| maxCount | 25 | Limits the list to the maximum number of list items
-| maxLate | &lt;seven days relative to start date&gt; | Delimits the list via a
-stop date that can never be reached.
-| maxGap | P7D | Limits the list by calculating the corresponding stop time from
-the start time. The PHP notation for time intervals is to be used to specify the
-time difference (
-see [Overview](https://www.php.net/manual/en/class.dateinterval.php)).
-| | **_Special_** |
-|
-userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList`
-or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the
-date values are used to determine the order. The user could also consider other
-sorting criteria. For example, one might want a list sorted first by start date
-and then by duration of active areas if the start date is the same.
+To calculate the pages, the DataProcessor uses the getRecords method of the
+ContentObjectRenderer, which in turn uses the parameters
+``pidInList``,
+``uidInList``,
+``languageField``,
+``selectFields``,
+``max``,
+``begin``,
+``groupBy``,
+``orderBy``,
+``join``,
+``leftjoin``,
+``rightjoin``,
+``recursive`` and
+``where`` interpreted (
+See [TypoScript>CONTENT>select](https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Functions/Select.html)
+for more information) .
+
+| Parameter        | Default                                                                                                                              | description
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                  | **_Records_**                                                                                                                        |
+| if               | true                                                                                                                                 | If the value or the typescript expression evaluates to false, the data processor is not executed.
+| table            | tx_timer_domain_model_event                                                                                                          | This table is used to search for all available records with timer information.
+| as               | records                                                                                                                              | Name of the output variable that is used, for example, in the fluid template
+|                  | **_Start and General_**                                                                                                              |
+| datetimeFormat   | Y-m-d H:i:s                                                                                                                          | Defines the format in which the date is given. The characters defined in PHP apply (see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
+| datetimeStart    | &lt;now&gt;                                                                                                                          | Defines the point in time at which the list should start. If `reverse = false` it is the earliest time, and if `reverse = true` it is the latest time.
+| timezone         | &lt;defined in PHP&gt;                                                                                                               | Defines the time zone to be used with the date values.
+| reverse          | false                                                                                                                                | Defines whether the list of active areas is sorted in descending or ascending order. With `reverse = true` the end of the active areas is decisive; In the default case `reverse = true` it is the beginning of the active time.
+| cache            | default                                                                                                                              | Defines cache behavior. In the default case, the caching time is calculated based on the timer list. A numerical specification overrides the calculated caching time with a static value. The parameters ``0``,`` ``,``no``,``none``, or ``null`` cause the data processor to recalculate the data each time.
+|                  | **_Limit of the period_**                                                                                                            |
+| maxCount         | 25                                                                                                                                   | Limits the list to the maximum number of list items
+| maxLate          | &lt;seven days relative to start date&gt;                                                                                            | Delimits the list via a stop date that can never be reached.
+| maxGap           | P7D                                                                                                                                  | Limits the list by calculating the corresponding stop time from the start time. The PHP notation for time intervals is to be used to specify the time difference (see [Overview](https://www.php.net/manual/en/class.dateinterval.php)).
+|                  | **_Special_**                                                                                                                        |
+| userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the date values are used to determine the order. The user could also consider other sorting criteria. For example, one might want a list sorted first by start date and then by duration of active areas if the start date is the same.
+
 
 #### SortListQueryProcessor
 
@@ -1059,50 +1100,38 @@ Note that FLUIDTEMPLATE is cached. For this reason:
 
 Due to the repetition of periods, a data record can be listed several times.
 Therefore, a start time and an end time must always be defined.
+Each time the list is recalculated, the frontend cache of the corresponding page
+is also deleted.
 
 In contrast to the `RangeListQueryProcessor`, the `SortListQueryProcessor` uses
 data generated by a previous or parent data processor process.
-The parameters `table` plus `pidInList` are therefore omitted and the
-parameter `fieldName` is added.
 
-| Parameters | Default | Description
-|-------------------------------|------------------------------ -------------------------------------------------- -------------------------------------------------- ------|--------------
-| | **_Records_** |
-| if | true | If the value or the typescript expression evaluates to false, the
-data processor is not executed.
-| fieldName | myrecords | This table is used to search for all available records
-with timer information.
-| as | sortedrecords | Name of the object that contains the individual events
-and is transferred to the Fluid template. Look
-at `&lt;f:debug>{sortedrecords}</f:debug>` for the exact structure.
-| | **_Start and General_** |
-| datetimeFormat | Y-m-d H:i:s | Defines the format in which the date is given.
-The characters defined in PHP apply (
-see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
-| datetimeStart | &lt;now&gt; | Defines the point in time at which the list
-should start. If `reverse = false` it is the earliest time, and
-if `reverse = true` it is the latest time.
-| time zone | &lt;defined in PHP system&gt; | Defines the time zone to be used
-with the date values.
-| reverse | false | Defines whether the list of active areas is sorted in
-descending or ascending order. With `reverse = true` the end of the active areas
-is decisive; In the default case `reverse = true` it is the beginning of the
-active time.
-| | **_Limit of the period_** |
-| maxCount | 25 | Limits the list to the maximum number of list items
-| maxLate | &lt;seven days relative to start date&gt; | Delimits the list via a
-stop date that can never be reached.
-| maxGap | P7D | Limits the list by calculating the corresponding stop time from
-the start time. The PHP notation for time intervals is to be used to specify the
-time difference (
-see [Overview](https://www.php.net/manual/en/class.dateinterval.php)).
-| | **_Special_** |
-|
-userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList`
-or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the
-date values are used to determine the order. The user could also consider other
-sorting criteria. For example, one might want a list sorted first by start date
-and then by duration of active areas if the start date is the same.
+In contrast to the `RangeListQueryProcessor`, the `SortListQueryProcessor` uses
+data generated by a previous or higher-level data processor process.
+The parameters are similar to the `RangeListQueryProcessor`.
+However, since the data processor is used for further processing of timer lists,
+the getContent method is no longer used.
+Therefore, the `table` parameter is replaced by the `fieldName` parameter.
+
+| Parameter        | Default                                                                                                                              | description
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                  | **_Records_**                                                                                                                        |
+| if               | true                                                                                                                                 | If the value or the typescript expression evaluates to false, the data processor is not executed.
+| fieldname        | myrecords                                                                                                                            | This table is used to search for all available records with timer information.
+| as               | records                                                                                                                              | Name of the output variable that is used, for example, in the fluid template
+|                  | **_Start and General_**                                                                                                              |
+| datetimeFormat   | Y-m-d H:i:s                                                                                                                          | Defines the format in which the date is given. The characters defined in PHP apply (see [List](https://www.php.net/manual/en/datetimeimmutable.createfromformat.php)).
+| datetimeStart    | &lt;now&gt;                                                                                                                          | Defines the point in time at which the list should start. If `reverse = false` it is the earliest time, and if `reverse = true` it is the latest time.
+| timezone         | &lt;defined in PHP&gt;                                                                                                               | Defines the time zone to be used with the date values.
+| reverse          | false                                                                                                                                | Defines whether the list of active areas is sorted in descending or ascending order. With `reverse = true` the end of the active areas is decisive; In the default case `reverse = true` it is the beginning of the active time.
+| cache            | default                                                                                                                              | Defines cache behavior. In the default case, the caching time is calculated based on the timer list. A numerical specification overrides the calculated caching time with a static value. The parameters ``0``,`` ``,``no``,``none``, or ``null`` cause the data processor to recalculate the data each time.
+|                  | **_Limit of the period_**                                                                                                            |
+| maxCount         | 25                                                                                                                                   | Limits the list to the maximum number of list items
+| maxLate          | &lt;seven days relative to start date&gt;                                                                                            | Delimits the list via a stop date that can never be reached.
+| maxGap           | P7D                                                                                                                                  | Limits the list by calculating the corresponding stop time from the start time. The PHP notation for time intervals is to be used to specify the time difference (see [Overview](https://www.php.net/manual/en/class.dateinterval.php)).
+|                  | **_Special_**                                                                                                                        |
+| userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the date values are used to determine the order. The user could also consider other sorting criteria. For example, one might want a list sorted first by start date and then by duration of active areas if the start date is the same.
+
 
 #### FlexToArrayProcessor
 
@@ -1131,66 +1160,40 @@ the `periodlist` content element.
 
 ```
 
-#### MappingProcessor (deprecated)
+##### Parameters for the FlexToArrayProcessor
 
-The data processor `MappingProcessor` allows mapping of arrays into new arrays
+| Parameters  | Default                           | Description
+|-------------|-----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| if          | true                              | If the value or typescript expression is false, the dataprocessor will not run.
+| field       | tx_timer_timer                    | The name of the field that contains the Flexform string.
+| flattenkeys | data,general,timer,sDEF,lDEF,vDEF | This table is used to search for all available records containing timer information.
+| as          | flattenflex                       | Name of the output variable that is used, for example, in the fluid template
+| cache       | default                           | Defines cache behavior. In the default case, the caching time is calculated based on the timer list. A numerical specification overrides the calculated caching time with a static value. The parameters ``0``,`` ``,``no``,``none``, or ``null`` cause the data processor to recalculate the data each time.
+
+#### (removed since 12.3.0) ~~MappingProcessor (deprecated)~~
+
+~~The data processor `MappingProcessor` allows mapping of arrays into new arrays
 or into a JSON string.
 In this way, the data can easily be made available to the JavaScript using HTML
 attributes.
 The data processor knows simple generic functions, for example to assign unique
 IDs to events.
 It also allows the mapping/mapping of field contents and the creation of new
-fields with constant data.
+fields with constant data.~~
 
-```
-
-         20 = Porthd\Timer\DataProcessing\MappingProcessor
-         20 {
-
-             # regular if syntax
-             #if.isTrue.field = record
-
-             # Name of the field containing an array generated by a previous data processor
-             inputfield = periodlist
-
-             # Each field must be part of the period list
-             # Each entry must be formal
-             generic {
-                 # Define an index, e.g. `event1holiday` in the `id` field
-                 'id' {
-                     pretext = event
-                     post text = holiday
-                     type = index
-                 }
-                 # Define a constant, e.g. `cal1` in the `calendarId` field
-                 calendarID {
-                     pretext = cal1
-                     post text =
-                     type = constant
-                 }
-             }
-
-             mapping {
-                 # sourceFieldName in period list (see input field) => targetFieldName
-                 # The assignment is case-sensitive.
-                 title = title
-                 startJson = date
-                 diffDaysDatetime = days
-             }
-
-             # Output format has the values `array`,`json`
-             # If the output format is unknown, json is the default
-             outputFormat = json
-
-             # Output variable with the resulting list
-             # Default is `periodlist`
-             asString = periodListJson
-
-         }
-
-```
+~~removed code-exampe for typoscript~~
 
 #### BetterMappingProcessor
+
+Sometimes you use a JavaScript framework such as a calendar framework in
+frontend,
+which requires a list of data in a defined data format as a JSON string.
+The problem is that TYPO3 knows the data but has saved it in a different form.
+The BetterMappingProcessor helps to translate existing data lists into slightly
+modified data lists.
+
+!!!As soon as you use the BetterMappingProcessor, you should always ask yourself
+whether there isn't a better solution, which is very likely.
 
 The data processor `BetterMappingProcessor` allows mapping of arrays into new
 arrays or into a JSON string.
@@ -1207,110 +1210,145 @@ contents, date values and the creation of new fields
 with constant data.
 
 ```
-         20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
-         20 {
+        20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
+        20 {
 
-             # regular if syntax
-             #if.isTrue.field = record
+            # regular if syntax
+            #if.isTrue.field = record
 
-             # The default value for the input field is 'holidayList';
-             inputfield = holidayList
-             # Each field must be part of holiday calendar
-             # allowed types are
-             # `constant`(=pretext.posttext),
-             # `index`(=pretext.<indexOfDataRow>.posttext)
-             # `datetime` (=dateTimeObject->format(posttext); dateTimeObject is in the Field, which is declared be pretext)
-             # every entry must be some formal
-             # generic {
-             # id {
-             # pretext = event
-             # post text = holiday
-             # type = index
-             # }
-             #
-             # calendarId {
-             # pretext = cal1
-             # post text =
-             # type = constant
-             # }
-             #                begin {
-             # pretext = date
-             # posttext = Y-m-d
-             # type = constant
-             # }
-             # }
-             generic {
-                 10 {
-                     # the input field may be missing
-                     inField =
-                     # if the output field is missing or the key has a type error, an exception will occur.
-                     outField = category
-                     pretext = everyday
-                     post text =
-                     # allowed types are `constant`, `includevalue`, `includeindex`, `datetime`
-                     # if the inField is missing for type `includevalue`, an empty string will be used
-                     type = constant
-                 }
-                 20 {
-                     inField = dateStart
-                     # the output field must contain a DateTime object
-                     outField = start
-                     format = Y-m-d
-                     type = datetime
-                 }
-                 30 {
-                     inField = dateEnd
-                     outField = end
-                     format = Y-m-d
-                     type = datetime
-                 }
-                 40 {
-                     inField = cal.eventtitle
-                     outField = title
-                     type = translate
-                 }
+            # The defaultvalue for the inputfield is 'holidayList';
+            inputfield = holidayList
+            # Each field must part of holidaycalendar
+            # allowed types are
+            #    `constant`(=pretext.posttext),
+            #    `index`(=pretext.<indexOfDataRow>.posttext)
+            #    `datetime` (=dateTimeObject->format(posttext); dateTimeObject is in the Field, which is declared be pretext)
+            # every entry must be some formal
+            #            generic {
+            #                id {
+            #                    pretext = event
+            #                    posttext = holiday
+            #                    type = index
+            #                }
+            #
+            #                calendarId {
+            #                    pretext = cal1
+            #                    posttext =
+            #                    type = constant
+            #                }
+            #                start {
+            #                    pretext = date
+            #                    posttext = Y-m-d
+            #                    type = datetime
+            #                }
+            #            }
+            generic {
+                10 {
+                    # the inputfield may missing
+                    inField =
+                    # if the outputfield is missing or the key has an typeerror, an exception will occur.
+                    outField = category
+                    pretext = allday
+                    posttext =
+                    # allowed types are `constant`, `includevalue`, `includeindex`, `datetime`
+                    # if the inField is missing for type `includevalue`, a empty string will be used
+                    type = constant
+                }
+                20 {
+                    inField = dateStart
+                    # the outputfield must contain a DateTime-Object
+                    outField = start
+                    format = Y-m-d
+                    type = datetime
+                }
+                30 {
+                    inField = dateEnd
+                    outField = end
+                    format = Y-m-d
+                    type = datetime
+                }
+                40 {
+                    inField = cal.eventtitle
+                    outField = title
+                    type = translate
+                }
 
-             }
+            }
 
-             mapping {
-                 10 {
-                     inField = cal.identifier
-                     outField = id
-                 }
-                 20 {
-                     inField = cal.title
-                     outField = basetitle
-                 }
-                 30 {
-                     inField = cal.tag
-                     outField = calendarId
-                 }
-#
-# @todo 2023-03-12: allow custom function
-#40 {
-# inField = cal.add.freelocale
-# outField = class
-# type = userfunc
-# userfunc =
-# }
-             }
+            mapping {
+                10 {
+                    inField = cal.identifier
+                    outField = id
+                }
+                20 {
+                    inField = cal.title
+                    outField = basetitle
+                }
+                30 {
+                    inField = cal.tag
+                    outField = calendarId
+                }
 
+               40 {
+                    inField = cal.add.freelocale
+                    outField = class
+                    type = userfunc
+                    # two parameter for customfunc(parameter, $betterMappingProcessorObject)
+                    #    where parameter is the associative array with the keys
+                    #    `params`, `mapKey`,`mapItem` and `start`
+                    userfunc =  Vendor\Namespace\CustomClass->customFunc
+                }
+            }
 
-             # output format has the values `array`,`json`, `yaml`
-             # if the output format is unknown/undifned, `json` will be used by default
-             outputFormat = json
+            # outputformat has the values `array`,`json`, `yaml`
+            # if the outputformat is unknown/undifined, `json` will be used by default
+            outputFormat = json
 
-             # if the output-format is yaml, then `yamlStartKey` will define a starting-key for your result-array.
-             # the default is an empty string, which emans no starting-key for your array in a simplified yaml format
-             #yamlStartKey = holydayList
+            # if the output-format is yaml, then `yamlStartKey` will define a starting-key for your result-array.
+            # the default is an empty string, which emans no starting-key for your array in a simplified yaml-format
+            #yamlStartKey = holydayList
 
-             # output variable with the resulting list
-             # default value is `holidayListJson`
-             as = holidaycalendarJson
+            # output variable with the resulting list
+            # default-value is `holidayListJson`
+            as = holidaycalendarJson
 
-         }
+        }
 
 ```
+
+##### Parameters for the BetterMappingProcessor
+
+Note: Defining the mapping becomes easier if you use xdebug/var_dump to
+visualize the structure of the transformation.
+
+| Parameters   | Default                                                      | Description
+|--------------|--------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|              | **_main level_**                                             |
+| if           | true                                                         | If the value or typescript expression is false, the dataprocessor will not run.
+| generic.     | &lt;Array with definitions&gt;                               | Generate a count of data based on the index of the list to be mapped or on constant values (``stdWrap`` affine)
+| mapping.     | &lt;Array of conversion instructions&gt;                     | Creates an entry in the result list from the subfield (`inField`) of a list with a new associative index (`outField`). In addition to standard conversions, user-defined functions are also permitted.
+| as           | betterMappingJson                                            | Name of the output variable that is used, for example, in the fluid template.
+| outputFormat | &lt;Exception&;                                              | This information is mandatory. There is output format for the mapped associative array. The allowed values are `json`, `array` and `yaml`.
+| yamlStartKey |                                                              | If the output format is `yaml`, then the list can be given a generic term. (Helpful if you want to merge multiple associative arrays into one file.)
+| cache        | default                                                      | Defines cache behavior. In the default case, the caching time is calculated based on the timer list. A numerical specification overrides the calculated caching time with a static value. The parameters ``0``,`` ``,``no``,``none``, or ``null`` cause the data processor to recalculate the data each time.
+|              | **_sub level `mapping.`_**                                   | _simple mapping_
+| inField      |                                                              | Path to the date in the named field in the record from the data list, where the dot notation in the names allows access to deeper levels in the associative data array. (Attention: If the date in the data array itself is an array, only the first entry of the array will be transferred if it is a scalar - i.e. int, float, boll or string.)
+| outField     |                                                              | Path for the data in the newly generated data set in the associative results array, which is generated with the data processor, where the dot notation in the names also allows the creation of deeper levels in the associative results array. (No check against overwriting during the generation process)
+|              | **_general input fields in the sublevel `generic.`_**        | _simple-generic mapping_
+| inField      |                                                              | Path to the date in the named field in the record from the data list, where the dot notation in the names allows access to deeper levels in the associative data array.
+| outField     |                                                              | Path for the data in the newly generated data set in the associative results array, which is generated with the data processor, where the dot notation in the names also allows the creation of deeper levels in the associative results array. (No check against overwriting during the generation process)
+| pretext      |                                                              | Defines a constant expression to be prefixed, which can also be created using Typescript. (Insert parameters using the `stdWrap` method; instead of static expressions you can also use `LLL:EXT:...` values for translations)
+| posttext     |                                                              | Defines a constant trailing expression that can also be created using Typescript. (Insert parameters using the `stdWrap` method; instead of static expressions you can also use `LLL:EXT:...` values for translations)
+| type         |                                                              | Defines the generic method of generic creation. The following variants are defined: ... .
+|              | **_`generic.type=constant`_**                                | Ignores any input information from the current data set.
+|              | **_`generic.type=index` oder `generic.type=includeindex` _** | Uses the value of the current index of the selected data record from the data list (usually a number; only in the associative array or iterative object a string)
+|              | **_`generic.type=value` oder `generic.type=includevalue` _** | Uses the scalar value of the field of the selected data record from the data list that is currently defined via `inField`.
+|              | **_`generic.type=translate`_**                               | Interprets the scalar value of the field currently defined via `inField` of the selected data record from the data list as a key or as a key path for a value in an `xlf` translation file. (As long as you don't define an explicit key path with `LLL:EXT:...`, the `localconf.xlf` file of the timer extension is used by default, which you can also use from external extensions to get your own key via extend 'override'](https://docs.typo3.org/p/lochmueller/autoloader/7.4/en-us/Loader/LanguageOverride.html) can.)
+|              | **_`generic.type=datetime`_**                                | Converts the DateTime object from the field of the selected record defined via `inField` from the data list to a date format defined in 'format'.
+| format       |                                                              | Defines the output format for the DateTime value to be generated. If nothing is specified, the format `Y-m-d\TH:i:s` is used by default. The [Parameters for defining the DateTime format](https://www.php.net/manual/en/datetime.format.php) can be found in the php manual.
+|              | **_`generic.type=userfunc`_**                                |
+| userfunc     | &lt;Vendor\Extension\PfadZuKlasse->userFunctionName&gt;      | Definition of the user function that receives two parameters: firstly, the parameter array with the current userfunc configuration (`params`), the key of the data set (`mapKey`), the entire data set (`mapItem`) and the scalar `inField ` value (`start`) and secondly the object of the current BetterMapping processor.
+| 'any'        | &lt;any values&gt;                                           | In the subfield (`params`), which is passed as a parameter, there are also any defined parameters that have been defined here in addition to the method path in this section for the `userfunc`. (The user is therefore free to define his own control parameters for his user function.)
 
 #### PeriodlistProcessor
 
@@ -1375,4 +1413,177 @@ appointments.
              #flagStart = false
          }
 
-```~~
+```
+
+##### Parameters for the PeriodlistProcessor
+
+The data processor Periodlist allows the sorted output of different time ranges,
+which can explicitly be multi-day, which are always marked by a start or end
+date and which are definitely not periodic.
+This type of display is suitable, for example, for lists of school holiday dates
+in different federal states or for lists of tour dates for various artists.
+
+The structure of the YAML files has been described above for the
+PeriodlistTimer.
+Or you can find an example file
+in `timer\Resources\Public\Yaml\Example_PeriodListTimerBremen.yaml`.
+Please note that you can also insert additional attributes if you need
+additional structured information for output in the frontend.
+These attributes or the associated static information are easily looped through.
+
+| Parameter      | Default                       | Beschreibung
+|----------------|-------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                | **_main level_**              |
+| if             | true                          | If the value or typescript expression is false, the dataprocessor will not run.
+| field          | tx_timer_timer                | Name of the field that contains the string with the flexform information. The Flexform information contains either the YAML path or references to references to YAML files or CSV files. Note that YAML files can include additional YAML files via the `import` statement.
+| selectorfield  | tx_timer_selector             | The check field defines the name of the field that determines the variant of the Flexform selection. This must have the value `txTimerPeriodList`.
+| tablename      | tt_content                    | The table name is important if the data processor in the fluid template is based on data that does not come from the `tt_content` table or the `pages` table.
+| limit.         |                               | Defines a TypoScript array for the interval boundaries for the list, which are generated from the lists of periodic data.
+| flagStart      | true                          | Defines whether the different appointments are sorted according to the upper limit (false \| 0 \| '') or according to the lower limit (true).
+| maxCount       | 25                            | Maximum number of appointments that are transferred to the list. This is a mandatory entry, which may also override the interval limits of `limit.`. There is no value for 'infinity'.
+| &lt;start&gt;. | &lt;defined in TypoScript&gt; | The name defines the output field for the start value of an appointment in the new appointment list. It can be named as you need it later, for example in a JSON string.
+| &lt;end&gt;.   | &lt;defined in TypoScript&gt; | The name defines the output field for the end value of an appointment in the new appointment list. It can be named as you need it later, for example in a JSON string.
+|                | **_sub level `limit.`_**      | _Defines the range of expenses by two date values_
+| lower          |                               | Defines the lower date limit from which dates are searched. [flagStart specifies whether the value is in `start` (true) or in `stop` (false).]
+| upper          |                               | Defines the upper date limit up to which dates are searched. [flagStart specifies whether the value is in `start` (true) or in `stop` (false).]
+|                | **_sub level `start.`_**      | _Defines the lower limit of the appointment range, which is called `start` here_
+| format         |                               | Defines the output format for the date value.
+| source         |                               | Name of the field in the input list, which may differ from the index name in the associative array for the output.
+|                | **_sub level `end.`_**        | _Defines the lower limit of the date range, which is called `end` here_
+| format         |                               | Defines the output format for the date value.
+| source         |                               | Name of the field in the input list, which may differ from the index name in the associative array for the output.
+
+#### HolidaycalendarProcessor
+
+The data processor is used to evaluate dev CSV files with the holiday dates.
+
+```
+        10 = Porthd\Timer\DataProcessing\HolidaycalendarProcessor
+        10 {
+
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            #!!! every parameter will support the typoscript-functionality `stdWrap` !!!
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            #!!! The chinese-calendar is not supported yet, because the php is buggy !!!
+            #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            # regular if syntax
+            #if.isTrue.field = record
+
+            # This definition will override the system-definition and take this locale for the definition of locales.
+            # You should normally not use this, becuse the locale should be defined in your LocalConfiguration.php.
+            # The value will be seen in see GLOBALS['TYPO3_CONF_VAR']['SYS']['systemLocale'].
+            # if there is no information and if this definition is missing, the locale 'en_GB.utf-8' will be used.
+            locale = de_DE.utf-8
+            # default is `gregorian`. Allowed are all calendars, which your intlDateFormatter in your php can handle,
+            #    and the julian calendar
+            calendar = gregorian
+            # default is the timezone of your TYPO3-System (normally defined in the LocalConfiguration.php or
+            #   see GLOBALS['TYPO3_CONF_VAR']['SYS']['phpTimeZone']
+            timezone = Europe/Berlin
+            start {
+                # last year
+                year.stdWrap.cObject = TEXT
+                year.stdWrap.cObject {
+                    value.stdWrap.cObject = TEXT
+                    value.stdWrap.cObject {
+                        data = date:Y
+                        intval = 1
+                        wrap = |
+                    }
+
+                    prioriCalc = 1
+                }
+
+                # inclusive monthnumber,  if missing, then it is equal to current month
+                month = 1
+                # inclusive daynumber,  if missing, then it is equal to current day
+                day = 1
+            }
+
+            stop {
+                # second next year
+                year.stdWrap.cObject = TEXT
+                year.stdWrap.cObject {
+                    value.stdWrap.cObject = TEXT
+                    value.stdWrap.cObject {
+                        data = date:Y
+                        intval = 1
+                        wrap = |+2
+                    }
+
+                    prioriCalc = 1
+                }
+
+                # inclusive monthnumber,  if missing, then it is equal to startmonth
+                month = 1
+                # inclusive daynumber,  if missing, then it is equal to the startday
+                day = 1
+                # if `daybefore` is unequal to 0, then the date will be decremented by one day. So you can detect one year in a
+                #   foreign calendar without knowing the number of days in the last month.
+                # if `daybefore` is zero or if the value is missing, nothing will happen.
+                daybefore = 1
+            }
+
+            # the alias-file contain a list of alias-phrases, which are merged nondestructive to the `add` part of each related holiday-definition,  under the attribute `aliasDateRel`.
+            # this parameterblock is optional
+            # direct path, EXT:Path or URL to the file with the alias-definition
+            # the definition of `aliasConfig` will overrule the definition of `aliasPath`.
+            #            aliasPath = directPath
+            #            aliasConfig {
+            #                flexDbField = pi_flexform
+            #                pathFlexField = aliasPath
+            #                falFlexField = aliasPath
+            #            }
+
+            # the holiday file can contain a list of alias-phrases, which are merged nondestructive to the `add` part of each related holiday-definition, under the attribute `aliasDateRel`
+            # the holiday file has a list of holiday- or eventday-definition under the attribute 'calendarDateRel'
+            # the definition of `holidayConfig` will overrule the definition of `holidayPath`.
+            # the missing of both (`holidayPath` and `holidayConfig`) will cause an exception.
+            # direct path, EXT:Path or URL to the file with the holiday-definition
+            holidayPath = EXT:timer/Resources/Public/Csv/ExcelLikeListForHolidays.csv
+            holidayConfig {
+                flexDbField = pi_flexform
+                pathFlexField = holidayFilePath
+                falFlexField = holidayFalRelation
+            }
+
+            # name of output-variable
+            as = holidayList
+        }
+```
+
+##### Parameters for the HolidaycalendarProcessor
+
+The data processor produces a list of holidays for a specific time interval from
+a list of holidays.
+
+| parameters     | default                                              | description
+|----------------|------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                | **_main level_**                                     |
+| if             | true                                                 | If the value or typescript expression is false, the dataprocessor will not run.
+| aliasPath      |                                                      | Explicitly defines in Typescript a path to a file in CSV or YAML format, which contains configurations for various aliases, which in turn can supplement the configurations of holidays in the holiday lists. (Overrides any `aliasConfig.` definition.)
+| alias.         | &lt;array with references to alias lists&gt;         | (2023/10/04 - To Do: still needs to be revised.) Defines the reference to a FAL entry or to a Flexform field in which YAML or CSV data with the lists of alias definitions can be found.
+| holidayPath    |                                                      | Explicitly defines in Typescript a path to a file in CSV or YAML format that contains configurations for various holidays. (Overrides any `holidayConfig.` definition.)
+| holidayConfig. | &lt;array containing references to holiday lists&gt; | (2023/10/04 - To Do: still needs to be revised.) Creates the reference to a FAL entry or to a Flexform field in which YAML or CSV data with the lists of holiday definitions can be found.
+| as             | holidayList                                          | Name of the output variable that is used, for example, in the fluid template.
+| cache          | default                                              | Defines cache behavior. In the default case, the caching time is calculated based on the timer list. A numerical specification overrides the calculated caching time with a static value. The parameters ``0``,`` ``,``no``,``none``, or ``null`` cause the data processor to recalculate the data each time.
+| calendar       | gregorian                                            | (2023/10/04: not really tested) The Gregorian calendar is used as the base calendar. However, an alternative calendar can also be used if it is supported by the PHP extension 'IntlDateFormatter' and is not obviously error-prone - currently the calendars `dangi`, `chinese`. If such calendars are to be used, the result is calculated internally in the Gregorian calendar, which is then finally calculated back into the defined calendar. This makes it possible to display the holidays in non-Gregorian calendar systems. (However, as far as I know, there are hardly any calendar frameworks in JavaScript that also support non-Gregorian calendar systems.)
+| timezone       | &lt;TYPO3 localconfiguration.php&gt;                 | (2023/10/04: not really tested) Defines the underlying time zone. By default, the time zone defined in the TYPO3 settings is used. But this can also be overstated.
+| locale         | en_GB                                                | (2023/10/04: not really tested) Defines the underlying calendar system based on national localization.
+|                | **_sub level `start.`_**                             | _Defines the lower limit of the appointment range._
+| year           |                                                      | year. It depends on the calendar (locale).
+| month          |                                                      | Month number. It depends on the calendar (locale).
+| day            |                                                      | day of the month. The value is calendar dependent (locale).
+|                | **_sub level `stop.`_**                              | _Defines the lower limit of the appointment range._
+| year           |                                                      | year. It depends on the calendar (locale).
+| month          |                                                      | Month number. It depends on the calendar (locale).
+| day            |                                                      | day of the month. The value is calendar dependent (locale).
+|                | **_`holidayConfig.`_**                               | _Reference to dates for holiday definitions_
+| flexDbField    |                                                      | (2023/10/04: not really tested) Defines the name of the field that contains the flexform string in the data record.
+| pathFlexField  |                                                      | (2023/10/04: not really tested) Defines the name of the field within the Flexform that contains the path information.
+| falFlexField   |                                                      | (2023/10/04: not really tested) Defines the name of a FAL field in a Flexform definition.
+|                | **_`aliasConfig.`_**                                 | _Reference to supplemental alias definition data that can be used in holiday definitions_
+| flexDbField    |                                                      | (2023/10/04: not really tested) Defines the name of the field that contains the flexform string in the data record.
+| pathFlexField  |                                                      | (2023/10/04: not really tested) Defines the name of the field within the Flexform that contains the path information.
+| falFlexField   |                                                      | (2023/10/04: not really tested) Defines the name of a FAL field in a Flexform definition.

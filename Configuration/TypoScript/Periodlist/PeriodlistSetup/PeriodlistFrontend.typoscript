@@ -52,7 +52,8 @@ tt_content.timer_periodlist {
             ## default is `flagStart = 0`,  => that the upper and lower limit use the attribute `stop` as reference for the list
             #flagStart = false
         }
-        20 = Porthd\Timer\DataProcessing\MappingProcessor
+
+        20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
         20 {
 
             # regular if syntax
@@ -62,22 +63,40 @@ tt_content.timer_periodlist {
             # Each field must part of periodlist
             # every entry must be some formal
             generic {
-                id {
+                10 {
+                    inField =
+                    outField = id
                     pretext = event
                     posttext = holiday
                     type = index
                 }
-                calendarId {
+
+                20 {
+                    inField =
+                    outField = calendarId
                     pretext = cal1
                     posttext =
                     type = constant
                 }
             }
             mapping {
-                # sourceFieldName in periodlist(see inputfield) => targetFieldName
-                title = Title
-                startJson = Date
-                diffDaysDatetime = days
+                10 {
+                    inField = title
+                    outField = Title
+
+                }
+
+                20 {
+                    inField = startJson
+                    outField = Date
+
+                }
+
+                30 {
+                    inField = diffDaysDatetime
+                    outField = days
+
+                }
             }
             # outputformat has the values `array`,`json`
             # if the outputformat is unknown, json will be the default

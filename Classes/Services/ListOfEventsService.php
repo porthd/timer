@@ -60,6 +60,37 @@ class ListOfEventsService
      * @return array<mixed>
      * @throws TimerException
      */
+    public static function detectNextChangeListFromTimerList(
+        array       $eventsTimerList,
+        DateTime    $timerEventZone,
+        LoopLimiter $loopLimiter
+    ): DateTime
+    {
+        /** @var ListOfTimerService $timerResolver */
+        $timerResolver = GeneralUtility::makeInstance(ListOfTimerService::class);
+        if ($loopLimiter->isFlagReserve()) {
+            return self::nextStartTimeForListOfEventsBelowStartTime(
+                $timerEventZone,
+                $eventsTimerList,
+                $timerResolver,
+                $loopLimiter
+            );
+        }
+        return self::nextStartTimeForListOfEventsAboveStartTime(
+            $timerEventZone,
+            $eventsTimerList,
+            $timerResolver,
+            $loopLimiter
+        );
+    }
+
+    /**
+     * @param array<mixed> $eventsTimerList
+     * @param DateTime $timerEventZone
+     * @param LoopLimiter $loopLimiter
+     * @return array<mixed>
+     * @throws TimerException
+     */
     public static function generateEventsListFromTimerList(
         array $eventsTimerList,
         DateTime $timerEventZone,
@@ -138,6 +169,61 @@ class ListOfEventsService
      * @param ListOfTimerService $timerResolver
      * @return array<mixed>
      */
+    protected static function timerListNextToBelowStartDate(
+        DateTime           $timerEventZone,
+        array              $eventsTimerList,
+        ListOfTimerService $timerResolver
+    ): array
+    {
+        $listOfTimers = [];
+        [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
+        foreach ($eventsTimerList as $key => $item) {
+            [$timerSelectName, $timerFlexParameter] = self::extractSelectorAndTimer(
+                $item,
+                $getterSelectName,
+                $getterFlexParameter
+            );
+
+            /** @var TimerStartStopRange $range */
+            $rawRange = $timerResolver->prevActive(
+                $timerSelectName,
+                $timerEventZone,
+                $timerFlexParameter
+            );
+            /** @var TimerStartStopRange $range */
+            $range = $timerResolver->nextActive(
+                $timerSelectName,
+                $rawRange->getEnding(),
+                $timerFlexParameter
+            );
+
+            $flagAllowed = $timerResolver->isAllowedInRange(
+                $timerSelectName,
+                $timerEventZone,
+                $timerFlexParameter
+            );
+            if (($range->hasResultExist()) &&
+                ($flagAllowed)
+            ) {
+                $timerItem[self::KEY_EVENT_LIST_TIMER] = $item;
+                $timerItem[self::KEY_EVENT_LIST_RANGE] = clone $range;
+                $timerItem[self::KEY_EVENT_LIST_GAP] = ceil(
+                    abs(
+                        ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
+                    )
+                );
+                $listOfTimers[$key] = $timerItem;
+            }
+        }
+        return $listOfTimers;
+    }
+
+    /**
+     * @param DateTime $timerEventZone
+     * @param array<mixed> $eventsTimerList
+     * @param ListOfTimerService $timerResolver
+     * @return array<mixed>
+     */
     protected static function timerListAboveStartDate(
         DateTime $timerEventZone,
         array $eventsTimerList,
@@ -166,6 +252,61 @@ class ListOfEventsService
             if (($range->hasResultExist()) &&
                 ($range->getBeginning() >= $timerEventZone) &&
                 ($range->getBeginning() < $range->getEnding()) &&
+                ($flagAllowed)
+            ) {
+                $timerItem[self::KEY_EVENT_LIST_TIMER] = $item;
+                $timerItem[self::KEY_EVENT_LIST_RANGE] = clone $range;
+                $timerItem[self::KEY_EVENT_LIST_GAP] = ceil(
+                    abs(
+                        ($range->getBeginning()->getTimestamp() - $range->getEnding()->getTimestamp()) / 60
+                    )
+                );
+                $listOfTimers[$key] = $timerItem;
+                unset($range);
+            }
+        }
+        return $listOfTimers;
+    }
+
+    /**
+     * @param DateTime $timerEventZone
+     * @param array<mixed> $eventsTimerList
+     * @param ListOfTimerService $timerResolver
+     * @return array<mixed>
+     */
+    protected static function timerListPrevToAboveStartDate(
+        DateTime           $timerEventZone,
+        array              $eventsTimerList,
+        ListOfTimerService $timerResolver
+    ): array
+    {
+        $listOfTimers = [];
+        [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
+        foreach ($eventsTimerList as $key => $item) {
+            [$timerSelectName, $timerFlexParameterList] = self::extractSelectorAndTimer(
+                $item,
+                $getterSelectName,
+                $getterFlexParameter
+            );
+            /** @var TimerStartStopRange $range */
+            $rawRange = $timerResolver->nextActive(
+                $timerSelectName,
+                $timerEventZone,
+                $timerFlexParameterList
+            );
+            /** @var TimerStartStopRange $range */
+            $range = $timerResolver->prevActive(
+                $timerSelectName,
+                $rawRange->getBeginning(),
+                $timerFlexParameterList
+            );
+            $flagAllowed = $timerResolver->isAllowedInRange(
+                $timerSelectName,
+                $timerEventZone,
+                $timerFlexParameterList
+            );
+
+            if (($range->hasResultExist()) &&
                 ($flagAllowed)
             ) {
                 $timerItem[self::KEY_EVENT_LIST_TIMER] = $item;
@@ -298,6 +439,84 @@ class ListOfEventsService
             }
         }
         return $listOfEvents;
+    }
+
+    /**
+     * @param DateTime $timerEventZone
+     * @param array<mixed> $eventsTimerList
+     * @param ListOfTimerService $timerResolver
+     * @param LoopLimiter $loopLimiter
+     * @return array<mixed>
+     */
+    protected static function nextStartTimeForListOfEventsBelowStartTime(
+        DateTime           $timerEventZone,
+        array              $eventsTimerList,
+        ListOfTimerService $timerResolver,
+        LoopLimiter        $loopLimiter
+    ): DateTime
+    {
+        $listOfTimers = self::timerListNextToBelowStartDate(
+            $timerEventZone,
+            $eventsTimerList,
+            $timerResolver
+        );
+        if (empty($listOfTimers)) {
+            return $timerEventZone;
+        }
+        $result = clone $timerEventZone;
+        $flag = true;
+        foreach ($listOfTimers as $key => $timerItem) {
+            $beginning = $timerItem['range']->getBeginning();
+            if ($beginning > $timerEventZone) {
+                if ($flag) {
+                    $result = $beginning;
+                } else {
+                    if ($beginning < $result) {
+                        $result = $beginning;
+                    }
+                }
+            }
+        }
+        return clone $result;
+    }
+
+    /**
+     * @param DateTime $timerEventZone
+     * @param array<mixed> $eventsTimerList
+     * @param ListOfTimerService $timerResolver
+     * @param LoopLimiter $loopLimiter
+     * @return array<mixed>
+     */
+    protected static function nextStartTimeForListOfEventsAboveStartTime(
+        DateTime           $timerEventZone,
+        array              $eventsTimerList,
+        ListOfTimerService $timerResolver,
+        LoopLimiter        $loopLimiter
+    ): DateTime
+    {
+        $listOfTimers = self::timerListPrevToAboveStartDate(
+            $timerEventZone,
+            $eventsTimerList,
+            $timerResolver
+        );
+        if (empty($listOfTimers)) {
+            return $timerEventZone;
+        }
+        $result = clone $timerEventZone;
+        $flag = true;
+        foreach ($listOfTimers as $key => $timerItem) {
+            $ending = $timerItem['range']->getEnding();
+            if ($ending < $timerEventZone) {
+                if ($flag) {
+                    $result = $ending;
+                } else {
+                    if ($ending > $result) {
+                        $result = $ending;
+                    }
+                }
+            }
+        }
+        return clone $result;
     }
 
     /**
