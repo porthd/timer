@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Services;
@@ -13,7 +14,6 @@ use ReflectionClass;
 
 class HolidaycalendarServiceTest extends TestCase
 {
-
     /**
      * @var HolidaycalendarService
      */
@@ -169,8 +169,10 @@ class HolidaycalendarServiceTest extends TestCase
 
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedType');
 
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
 
@@ -252,8 +254,10 @@ class HolidaycalendarServiceTest extends TestCase
 
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedShiftingType');
 
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
 
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
@@ -323,15 +327,20 @@ class HolidaycalendarServiceTest extends TestCase
 
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedMultiType');
             /** @var TimerStartStopRange $result */
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
             if ($expects['result'] === false) {
 
                 $this->assertFalse($result->hasResultExist(), $message); // whatever your assertion is
             } else {
 
-                $this->assertEquals($expects['result'], $result->getBeginning(),
-                    $message); // whatever your assertion is
+                $this->assertEquals(
+                    $expects['result'],
+                    $result->getBeginning(),
+                    $message
+                ); // whatever your assertion is
             }
         }
 
@@ -416,8 +425,10 @@ class HolidaycalendarServiceTest extends TestCase
         } else {
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForFixedRelatedType');
             /** @var TimerStartStopRange $result */
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
     }
@@ -426,11 +437,11 @@ class HolidaycalendarServiceTest extends TestCase
     {
         $result = [];
 
-//        spring  20.3.2023
-//        summer 21.6.2023
-//        autumn 23.9.2023
-//        winter 22.12.2023
-//
+        //        spring  20.3.2023
+        //        summer 21.6.2023
+        //        autumn 23.9.2023
+        //        winter 22.12.2023
+        //
         $generalResult = date_create_from_format('Y-m-d', '2023-1-2');
         $generalResult->setTime(0, 0, 0);
         foreach ([
@@ -491,8 +502,10 @@ class HolidaycalendarServiceTest extends TestCase
         } else {
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForSeasonType');
             /** @var TimerStartStopRange $result */
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
 
@@ -501,9 +514,9 @@ class HolidaycalendarServiceTest extends TestCase
     public function dataProviderGetHolidayDateForEasterlyTypeBySelectedExamples()
     {
         $result = [];
-//        Ostern 9.4.2023
-//    28.5.2023 pfingsten
-//
+        //        Ostern 9.4.2023
+        //    28.5.2023 pfingsten
+        //
         $generalResult = date_create_from_format('Y-m-d', '2023-1-2');
         $generalResult->setTime(0, 0, 0);
         foreach ([
@@ -564,8 +577,10 @@ class HolidaycalendarServiceTest extends TestCase
         } else {
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForEasterlyType');
             /** @var TimerStartStopRange $result */
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
 
@@ -574,12 +589,12 @@ class HolidaycalendarServiceTest extends TestCase
     public function dataProviderGetHolidayDateForWeekdaylyTypeBySelectedExamples()
     {
         $result = [];
-//        3.3.2023 friday
-//        10.3.2023 friday
-//        17.3.2023 friday
-//        24.3.2023 friday
-//        31.3.2023 friday
-//
+        //        3.3.2023 friday
+        //        10.3.2023 friday
+        //        17.3.2023 friday
+        //        24.3.2023 friday
+        //        31.3.2023 friday
+        //
         // march 1.3.2023 is a wednesday
         // march the 31.3.2023 is a Saturday
         $generalResult = date_create_from_format('Y-m-d', '2023-1-2');
@@ -666,8 +681,10 @@ class HolidaycalendarServiceTest extends TestCase
         } else {
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForWeekdaylyType');
             /** @var TimerStartStopRange $result */
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
 
@@ -676,7 +693,7 @@ class HolidaycalendarServiceTest extends TestCase
     public function dataProviderGetHolidayDateForMatarikiTypeBySelectedExamples()
     {
         $result = [];
-//        Matariki at         '2023' => '2023-7-14', or         '2027' => '2027-6-25',
+        //        Matariki at         '2023' => '2023-7-14', or         '2027' => '2027-6-25',
 
         $generalResult = date_create_from_format('Y-m-d', '2023-1-2');
         $generalResult->setTime(0, 0, 0);
@@ -734,11 +751,13 @@ class HolidaycalendarServiceTest extends TestCase
         } else {
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForMatarikiType');
             /** @var TimerStartStopRange $result */
-            $result = $method->invokeArgs($this->subject,
-                [$params['startDate'], $params['addYear']]);
-//            Coderefactoring by phpstan 20230923 old code
-//            $result = $method->invokeArgs($this->subject,
-//                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['startDate'], $params['addYear']]
+            );
+            //            Coderefactoring by phpstan 20230923 old code
+            //            $result = $method->invokeArgs($this->subject,
+            //                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
 
@@ -754,7 +773,7 @@ class HolidaycalendarServiceTest extends TestCase
         //16.05.2026 	Neumond Mai 2026 	Deutschland
         //31.05.2026 	2. Vollmond Mai 2026 (Blue Moon) 	Deutschland
         //15.06.2026 	Neumond Juni 2026 	Deutschland
-//        Matariki at         '2023' => '2023-7-14', or         '2027' => '2027-6-25',
+        //        Matariki at         '2023' => '2023-7-14', or         '2027' => '2027-6-25',
 
         $generalResult = date_create_from_format('Y-m-d', '2023-1-2');
         $generalResult->setTime(0, 0, 0);
@@ -820,8 +839,10 @@ class HolidaycalendarServiceTest extends TestCase
         } else {
             $method = self::getPrivateMethod($this->subject, 'getHolidayDateForMoonInMonthType');
             /** @var TimerStartStopRange $result */
-            $result = $method->invokeArgs($this->subject,
-                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]);
+            $result = $method->invokeArgs(
+                $this->subject,
+                [$params['locale'], $params['startDate'], $params['holidayArg'], $params['addYear']]
+            );
             $this->assertEquals($expects['result'], $result->getBeginning(), $message); // whatever your assertion is
         }
 

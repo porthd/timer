@@ -326,38 +326,38 @@ class CalendarDateRelTimer implements TimerInterface
     public function isActive(DateTime $dateLikeEventZone, $params = []): bool
     {
         return true;
-//        if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
-//            $result = new TimerStartStopRange();
-//            $result->failAllActive($dateLikeEventZone);
-//            $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
-//            return $result->getResultExist();
-//        }
-//
-//        $testRanges = $this->calcDefinedRangesByStartDateTime($dateLikeEventZone, $params);
-//
-//        $flag = false;
-//        $start = clone $dateLikeEventZone;
-//        $start->sub(new DateInterval('PT30S'));
-//        $stop = clone $dateLikeEventZone;
-//        $stop->add(new DateInterval('PT30S'));
-//        $flagFirst = true;
-//        foreach ([2, 1, 0, -1, -2,] as $index) {
-//            if ($testRanges[$index]['begin'] <= $dateLikeEventZone) {
-//                if ($flagFirst) {
-//                    $start = clone $testRanges[$index]['begin'];
-//                    $stop = clone $testRanges[$index]['end'];
-//                    $flagFirst = false;
-//                }
-//                if ($dateLikeEventZone <= $testRanges[$index]['end']) {
-//                    $flag = true;
-//                    $start = clone $testRanges[$index]['begin'];
-//                    $stop = clone $testRanges[$index]['end'];
-//                    break;
-//                }
-//            }
-//        }
-//        $this->setIsActiveResult($start, $stop, $flag, $dateLikeEventZone, $params);
-//        return $this->lastIsActiveResult->getResultExist();
+        //        if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
+        //            $result = new TimerStartStopRange();
+        //            $result->failAllActive($dateLikeEventZone);
+        //            $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
+        //            return $result->getResultExist();
+        //        }
+        //
+        //        $testRanges = $this->calcDefinedRangesByStartDateTime($dateLikeEventZone, $params);
+        //
+        //        $flag = false;
+        //        $start = clone $dateLikeEventZone;
+        //        $start->sub(new DateInterval('PT30S'));
+        //        $stop = clone $dateLikeEventZone;
+        //        $stop->add(new DateInterval('PT30S'));
+        //        $flagFirst = true;
+        //        foreach ([2, 1, 0, -1, -2,] as $index) {
+        //            if ($testRanges[$index]['begin'] <= $dateLikeEventZone) {
+        //                if ($flagFirst) {
+        //                    $start = clone $testRanges[$index]['begin'];
+        //                    $stop = clone $testRanges[$index]['end'];
+        //                    $flagFirst = false;
+        //                }
+        //                if ($dateLikeEventZone <= $testRanges[$index]['end']) {
+        //                    $flag = true;
+        //                    $start = clone $testRanges[$index]['begin'];
+        //                    $stop = clone $testRanges[$index]['end'];
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //        $this->setIsActiveResult($start, $stop, $flag, $dateLikeEventZone, $params);
+        //        return $this->lastIsActiveResult->getResultExist();
     }
 
     /**
@@ -383,53 +383,53 @@ class CalendarDateRelTimer implements TimerInterface
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
-//        $result->failAllActive($dateLikeEventZone);
+        //        $result->failAllActive($dateLikeEventZone);
         return $result;
-//
-//        $relToDateMin = (int)(
-//        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
-//            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
-//            0
-//        );
-//        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
-//        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-//        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-//        $methodId = $this->detectCalendar($params);
-//        $testDay = clone $dateLikeEventZone;
-//        $yearInterval = new DateInterval(('P1Y'));
-//        $testDay->sub($yearInterval);
-//        $testDay->sub($yearInterval);
-//        $testDay->sub($yearInterval);
-//        $flagRebuild = false;
-//        for ($i = 0; $i < 7; $i++) {
-//            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
-//            if ($relToDateMin >= 0) {
-//                $checkday->add($relInterval);
-//            } else {
-//                $checkday->sub($relInterval);
-//            }
-//            if ($durationMin >= 0) {
-//                if ($dateLikeEventZone <= $checkday) {
-//                    $flagRebuild = true;
-//                    break;
-//                }
-//            } else {
-//                $checkday->sub($durInterval);
-//                if ($dateLikeEventZone <= $checkday) {
-//                    $flagRebuild = true;
-//                    break;
-//                }
-//            }
-//            $testDay->add($yearInterval);
-//        }
-//        if ($flagRebuild === true) {
-//            $result->setBeginning($checkday);
-//            $checkday->add($durInterval);
-//            $result->setEnding($checkday);
-//            $result->setResultExist(true);
-//        }
-//
-//        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
+        //
+        //        $relToDateMin = (int)(
+        //        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+        //            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
+        //            0
+        //        );
+        //        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
+        //        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
+        //        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
+        //        $methodId = $this->detectCalendar($params);
+        //        $testDay = clone $dateLikeEventZone;
+        //        $yearInterval = new DateInterval(('P1Y'));
+        //        $testDay->sub($yearInterval);
+        //        $testDay->sub($yearInterval);
+        //        $testDay->sub($yearInterval);
+        //        $flagRebuild = false;
+        //        for ($i = 0; $i < 7; $i++) {
+        //            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
+        //            if ($relToDateMin >= 0) {
+        //                $checkday->add($relInterval);
+        //            } else {
+        //                $checkday->sub($relInterval);
+        //            }
+        //            if ($durationMin >= 0) {
+        //                if ($dateLikeEventZone <= $checkday) {
+        //                    $flagRebuild = true;
+        //                    break;
+        //                }
+        //            } else {
+        //                $checkday->sub($durInterval);
+        //                if ($dateLikeEventZone <= $checkday) {
+        //                    $flagRebuild = true;
+        //                    break;
+        //                }
+        //            }
+        //            $testDay->add($yearInterval);
+        //        }
+        //        if ($flagRebuild === true) {
+        //            $result->setBeginning($checkday);
+        //            $checkday->add($durInterval);
+        //            $result->setEnding($checkday);
+        //            $result->setResultExist(true);
+        //        }
+        //
+        //        return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -446,48 +446,48 @@ class CalendarDateRelTimer implements TimerInterface
         $result->failAllActive($dateLikeEventZone);
         return $result;
 
-//        $relToDateMin = (int)(
-//        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
-//            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
-//            0
-//        );
-//        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
-//        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-//        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
-//        $methodId = $this->detectCalendar($params);
-//        $testDay = clone $dateLikeEventZone;
-//        $yearInterval = new DateInterval(('P1Y'));
-//        $testDay->add($yearInterval);
-//        $testDay->add($yearInterval);
-//        $testDay->add($yearInterval);
-//        $flagRebuild = false;
-//        for ($i = 0; $i < 7; $i++) {
-//            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
-//            if ($relToDateMin >= 0) {
-//                $checkday->add($relInterval);
-//            } else {
-//                $checkday->sub($relInterval);
-//            }
-//            if ($checkday < $dateLikeEventZone) {
-//                if ($durationMin < 0) {
-//                    $flagRebuild = true;
-//                    break;
-//                }
-//                $checkday->add($durInterval);
-//                if ($checkday < $dateLikeEventZone) { // $checkday mark now the end of the range
-//                    $flagRebuild = true;
-//                    break;
-//                }
-//            }
-//            $testDay->sub($yearInterval);
-//        }
-//        if ($flagRebuild === true) {
-//            $result->setEnding($checkday);  // datetime object will be cloned in internal variable
-//            $checkday->sub($durInterval);
-//            $result->setBeginning($checkday);
-//            $result->setResultExist(true);
-//        }
-//        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
+        //        $relToDateMin = (int)(
+        //        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+        //            $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
+        //            0
+        //        );
+        //        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
+        //        $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
+        //        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
+        //        $methodId = $this->detectCalendar($params);
+        //        $testDay = clone $dateLikeEventZone;
+        //        $yearInterval = new DateInterval(('P1Y'));
+        //        $testDay->add($yearInterval);
+        //        $testDay->add($yearInterval);
+        //        $testDay->add($yearInterval);
+        //        $flagRebuild = false;
+        //        for ($i = 0; $i < 7; $i++) {
+        //            $checkday = $this->detectDefinedDayInYear($testDay, $params[self::ARG_NAMED_DATE_MIDNIGHT], $methodId);
+        //            if ($relToDateMin >= 0) {
+        //                $checkday->add($relInterval);
+        //            } else {
+        //                $checkday->sub($relInterval);
+        //            }
+        //            if ($checkday < $dateLikeEventZone) {
+        //                if ($durationMin < 0) {
+        //                    $flagRebuild = true;
+        //                    break;
+        //                }
+        //                $checkday->add($durInterval);
+        //                if ($checkday < $dateLikeEventZone) { // $checkday mark now the end of the range
+        //                    $flagRebuild = true;
+        //                    break;
+        //                }
+        //            }
+        //            $testDay->sub($yearInterval);
+        //        }
+        //        if ($flagRebuild === true) {
+        //            $result->setEnding($checkday);  // datetime object will be cloned in internal variable
+        //            $checkday->sub($durInterval);
+        //            $result->setBeginning($checkday);
+        //            $result->setResultExist(true);
+        //        }
+        //        return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
     /**
@@ -543,7 +543,7 @@ class CalendarDateRelTimer implements TimerInterface
                 $result->sub(new DateInterval('P2D'));
                 break;
             case self::ARG_NAMED_DATE_EASTER:
-//                $result = $easter;
+                //                $result = $easter;
                 break;
             case self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST:
                 $result->add(new DateInterval('P39D'));
@@ -578,7 +578,7 @@ class CalendarDateRelTimer implements TimerInterface
                 $result->sub(new DateInterval('P48D'));
                 break;
             default:
-//                $result = $easter;
+                //                $result = $easter;
                 break;
         }
         return $result;

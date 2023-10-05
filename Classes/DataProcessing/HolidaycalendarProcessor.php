@@ -57,7 +57,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
-
     use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
 
@@ -80,6 +79,8 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
     protected const ATTR_HOLIDAY_CONFIG = 'holidayConfig';
     protected const ATTR_HOLIDAY_CONFIG_DOT = 'holidayConfig.';
     protected const ATTR_FLEX_DB_FIELD = 'flexDbField';
+    protected const DEFAULT_FLEX_DB_FIELD_TIMER = 'tx_timer_timer';
+
     protected const ATTR_PATH_FLEX_FIELD = 'pathFlexField';
     protected const ATTR_PATH_FAL_FIELD = 'falFlexField';
     protected const ATTR_AS = 'as';
@@ -95,9 +96,9 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
     protected const RESULT_HOLIDAY_CALENDAR = 'cal';
 
     protected const LOCALE_EN_GB_UTF = 'en_GB.utf-8';
-    const DEFAULT_START_STOP_MONTH = 1;
-    const DEFAULT_START_STOP_DAY = 1;
-    const DEFAULT_START_STOP_FLAG = true;
+    public const DEFAULT_START_STOP_MONTH = 1;
+    public const DEFAULT_START_STOP_DAY = 1;
+    public const DEFAULT_START_STOP_FLAG = true;
 
     /**
      * @var HolidaycalendarService
@@ -124,10 +125,11 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
      * @param CacheService $cacheManager
      * @param HolidaycalendarService $holidaycalendarService
      */
-    public function __construct(FrontendInterface      $cache,
-                                CacheService           $cacheManager,
-                                HolidaycalendarService $holidaycalendarService,
-                                YamlFileLoader         $yamlFileLoader
+    public function __construct(
+        FrontendInterface      $cache,
+        CacheService           $cacheManager,
+        HolidaycalendarService $holidaycalendarService,
+        YamlFileLoader         $yamlFileLoader
     )
     {
         $this->cache = $cache;
@@ -221,8 +223,10 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
                     (!empty($item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS])) &&
                     (!empty($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]]))
                 ) {
-                    $item[self::YAML_HOLIDAY_ADD] = array_merge($aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]],
-                        $item[self::YAML_HOLIDAY_ADD]);
+                    $item[self::YAML_HOLIDAY_ADD] = array_merge(
+                        $aliasArray[$item[self::YAML_HOLIDAY_ADD][self::YAML_HOLIDAY_ADD_ALIAS]],
+                        $item[self::YAML_HOLIDAY_ADD]
+                    );
                 }
             }
             unset($item);
@@ -360,20 +364,24 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
     protected function getTimeRangeInformations(
         array                 $processorConfiguration,
         ContentObjectRenderer $cObj,
-        Context               $dataProcessorContext): stdClass
+        Context $dataProcessorContext
+    ): stdClass
     {
         $holidayInfo = new stdClass();
         $systemDate = $dataProcessorContext->getPropertyFromAspect('date', 'full');
         if (array_key_exists(self::ATTR_START_DOT, $processorConfiguration)) {
-            $holidayInfo->startYear = (int)$cObj->stdWrapValue(self::ATTR_YEAR,
+            $holidayInfo->startYear = (int)$cObj->stdWrapValue(
+                self::ATTR_YEAR,
                 $processorConfiguration[self::ATTR_START_DOT],
                 $systemDate->format('Y')
             );
-            $holidayInfo->startMonth = (int)$cObj->stdWrapValue(self::ATTR_MONTH,
+            $holidayInfo->startMonth = (int)$cObj->stdWrapValue(
+                self::ATTR_MONTH,
                 $processorConfiguration[self::ATTR_START_DOT],
                 self::DEFAULT_START_STOP_MONTH
             );
-            $holidayInfo->startDay = (int)$cObj->stdWrapValue(self::ATTR_DAY,
+            $holidayInfo->startDay = (int)$cObj->stdWrapValue(
+                self::ATTR_DAY,
                 $processorConfiguration[self::ATTR_START_DOT],
                 self::DEFAULT_START_STOP_DAY
             );
@@ -384,19 +392,23 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
         }
 
         if (array_key_exists(self::ATTR_STOP_DOT, $processorConfiguration)) {
-            $holidayInfo->stopYear = (int)$cObj->stdWrapValue(self::ATTR_YEAR,
+            $holidayInfo->stopYear = (int)$cObj->stdWrapValue(
+                self::ATTR_YEAR,
                 $processorConfiguration[self::ATTR_STOP_DOT],
                 $systemDate->format('Y') + 2
             );
-            $holidayInfo->stopMonth = (int)$cObj->stdWrapValue(self::ATTR_MONTH,
+            $holidayInfo->stopMonth = (int)$cObj->stdWrapValue(
+                self::ATTR_MONTH,
                 $processorConfiguration[self::ATTR_STOP_DOT],
                 self::DEFAULT_START_STOP_MONTH
             );
-            $holidayInfo->stopDay = (int)$cObj->stdWrapValue(self::ATTR_DAY,
+            $holidayInfo->stopDay = (int)$cObj->stdWrapValue(
+                self::ATTR_DAY,
                 $processorConfiguration[self::ATTR_STOP_DOT],
                 self::DEFAULT_START_STOP_DAY
             );
-            $holidayInfo->flagStopDayBefore = (bool)$cObj->stdWrapValue(self::ATTR_DAY_BEFORE,
+            $holidayInfo->flagStopDayBefore = (bool)$cObj->stdWrapValue(
+                self::ATTR_DAY_BEFORE,
                 $processorConfiguration[self::ATTR_STOP_DOT],
                 self::DEFAULT_START_STOP_FLAG
             );
@@ -407,7 +419,8 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
             $holidayInfo->flagStopDayBefore = self::DEFAULT_START_STOP_FLAG;
         }
 
-        $holidayInfo->calendar = (string)$cObj->stdWrapValue(self::ATTR_CALENDAR,
+        $holidayInfo->calendar = (string)$cObj->stdWrapValue(
+            self::ATTR_CALENDAR,
             $processorConfiguration,
             ConvertDateUtility::DEFAULT_CALENDAR
         );
@@ -420,13 +433,15 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
             );
         }
 
-        $holidayInfo->timezone = (string)$cObj->stdWrapValue(self::ATTR_TIMEZONE,
+        $holidayInfo->timezone = (string)$cObj->stdWrapValue(
+            self::ATTR_TIMEZONE,
             $processorConfiguration,
             $dataProcessorContext->getPropertyFromAspect('date', 'timezone')
         );
 
         $defaultLocale = (explode('.', $this->getSystemLocale(), 2))[0];
-        $holidayInfo->locale = (string)$cObj->stdWrapValue(self::ATTR_LOCALE,
+        $holidayInfo->locale = (string)$cObj->stdWrapValue(
+            self::ATTR_LOCALE,
             $processorConfiguration,
             $defaultLocale
         );
@@ -467,10 +482,9 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
      * @throws TimerException
      */
     protected function getPathForCalendarFromFlexform(
-        array $processedData,
+        array  $processedData,
         string $fieldName = 'pi_flexform',
         string $flexFormFieldName = 'aliasPath'
-
     ): string
     {
         $flexFormString = $processedData[$fieldName];
@@ -515,21 +529,30 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
             if (array_key_exists(self::ATTR_ALIAS_CONFIG, $processorConfiguration)) {
                 if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration)) {
                     $flagError = false;
-                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
-                        $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
+                    $fieldWithFlexform = $cObj->stdWrapValue(
+                        self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG],
+                        false
+                    );
                 } else {
                     $flagError = true;
                 }
                 $pathInFlexformField = '';
                 if (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration)) {
-                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
-                        $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
+                    $pathInFlexformField = $cObj->stdWrapValue(
+                        self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG],
+                        false
+                    );
                 }
                 if (($flagError) &&
                     (array_key_exists(self::ATTR_PATH_FAL_FIELD, $processorConfiguration))
                 ) {
-                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FAL_FIELD,
-                        $processorConfiguration[self::ATTR_ALIAS_CONFIG], false);
+                    $pathInFlexformField = $cObj->stdWrapValue(
+                        self::ATTR_PATH_FAL_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG],
+                        false
+                    );
                 }
                 if (($flagError) ||
                     (empty($pathInFlexformField))
@@ -549,24 +572,33 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
                     $fieldWithFlexform,
                     $pathInFlexformField
                 );
-            } else if (array_key_exists(self::ATTR_ALIAS_CONFIG_DOT, $processorConfiguration)) {
+            } elseif (array_key_exists(self::ATTR_ALIAS_CONFIG_DOT, $processorConfiguration)) {
                 if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration)) {
                     $flagError = false;
-                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
-                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT], false);
+                    $fieldWithFlexform = $cObj->stdWrapValue(
+                        self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT],
+                        false
+                    );
                 } else {
                     $flagError = true;
                 }
                 $pathInFlexformField = '';
                 if (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration)) {
-                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
-                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT], false);
+                    $pathInFlexformField = $cObj->stdWrapValue(
+                        self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT],
+                        false
+                    );
                 }
                 if (($flagError) &&
                     (array_key_exists(self::ATTR_PATH_FAL_FIELD, $processorConfiguration))
                 ) {
-                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FAL_FIELD,
-                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT], false);
+                    $pathInFlexformField = $cObj->stdWrapValue(
+                        self::ATTR_PATH_FAL_FIELD,
+                        $processorConfiguration[self::ATTR_ALIAS_CONFIG_DOT],
+                        false
+                    );
                 }
                 if (($flagError) ||
                     (empty($pathInFlexformField))
@@ -614,16 +646,23 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
                 $flagError = true;
                 if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG])) {
 
-                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
-                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG], false);
+                    $fieldWithFlexform = $cObj->stdWrapValue(
+                        self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG],
+                        self::DEFAULT_FLEX_DB_FIELD_TIMER
+                    );
                 } else {
+                    $fieldWithFlexform = self::DEFAULT_FLEX_DB_FIELD_TIMER;
                     $flagError = false;
                 }
                 if (($flagError) ||
                     (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG]))
                 ) {
-                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
-                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG], false);
+                    $pathInFlexformField = $cObj->stdWrapValue(
+                        self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG],
+                        ''
+                    );
                 } else {
                     throw new TimerException(
                         'There must have at least the parameter `' . self::ATTR_HOLIDAY_PATH .
@@ -640,19 +679,26 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
                     $fieldWithFlexform,
                     $pathInFlexformField
                 );
-            } else if (array_key_exists(self::ATTR_HOLIDAY_CONFIG_DOT, $processorConfiguration)) {
+            } elseif (array_key_exists(self::ATTR_HOLIDAY_CONFIG_DOT, $processorConfiguration)) {
                 $flagError = true;
                 if (array_key_exists(self::ATTR_FLEX_DB_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT])) {
-                    $fieldWithFlexform = $cObj->stdWrapValue(self::ATTR_FLEX_DB_FIELD,
-                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT], false);
+                    $fieldWithFlexform = $cObj->stdWrapValue(
+                        self::ATTR_FLEX_DB_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT],
+                        self::DEFAULT_FLEX_DB_FIELD_TIMER
+                    );
                 } else {
+                    $fieldWithFlexform = self::DEFAULT_FLEX_DB_FIELD_TIMER;
                     $flagError = false;
                 }
                 if (($flagError) ||
                     (array_key_exists(self::ATTR_PATH_FLEX_FIELD, $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT]))
                 ) {
-                    $pathInFlexformField = $cObj->stdWrapValue(self::ATTR_PATH_FLEX_FIELD,
-                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT], false);
+                    $pathInFlexformField = $cObj->stdWrapValue(
+                        self::ATTR_PATH_FLEX_FIELD,
+                        $processorConfiguration[self::ATTR_HOLIDAY_CONFIG_DOT],
+                        ''
+                    );
                 } else {
                     throw new TimerException(
                         'There must have at least the parameter `' . self::ATTR_HOLIDAY_PATH .

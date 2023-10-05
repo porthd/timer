@@ -271,7 +271,6 @@ that the school holidays for Lower Saxony and Bremen from the year 2022 are
 shown in a calendar.
 
 #### Data processors for this timer
-
 Six data processors were defined so that the data can be read in or converted.
 
 The `FlexToArrayProcessor` allows reading Flexform fields and converting them
@@ -1431,6 +1430,7 @@ Please note that you can also insert additional attributes if you need
 additional structured information for output in the frontend.
 These attributes or the associated static information are easily looped through.
 
+
 | Parameter      | Default                       | Beschreibung
 |----------------|-------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |                | **_main level_**              |
@@ -1552,7 +1552,6 @@ The data processor is used to evaluate dev CSV files with the holiday dates.
             as = holidayList
         }
 ```
-
 ##### Parameters for the HolidaycalendarProcessor
 
 The data processor produces a list of holidays for a specific time interval from

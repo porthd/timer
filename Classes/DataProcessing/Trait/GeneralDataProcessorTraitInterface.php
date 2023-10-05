@@ -38,17 +38,16 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 interface GeneralDataProcessorTraitInterface
 {
-
     /**
-     * @param array $processedData
-     * @return array
+     * @param array<mixed> $processedData
+     * @return array<mixed>
      */
     public function generateCacheIdentifier(array &$processedData): array;
 
     /**
      * @param ContentObjectRenderer $cObj
-     * @param array $processorConfiguration
-     * @return array
+     * @param array<mixed> $processorConfiguration
+     * @return array<mixed>
      */
     public function detectCacheTimeSet(ContentObjectRenderer $cObj, array $processorConfiguration): array;
 
@@ -58,11 +57,12 @@ interface GeneralDataProcessorTraitInterface
      * @param DateTime $dateTimeStopCase
      * @param int $currentTimestamp
      * @return int|null
+     *
      */
     public function calculateSimpleTimeDependedCacheTime(
         int      $cacheTime,
         bool     $cacheCalc,
         DateTime $dateTimeStopCase,
         int      $currentTimestamp
-    ): mixed;
+    );
 }

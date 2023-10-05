@@ -1,4 +1,5 @@
 <?php
+
 namespace Porthd\Timer\CustomTimer\StrangerCode\Season;
 
 /**
@@ -13,7 +14,6 @@ namespace Porthd\Timer\CustomTimer\StrangerCode\Season;
  */
 class Season
 {
-
     /**
      * @var int
      */
@@ -50,10 +50,11 @@ class Season
 
     protected function trunc($x)
     {
-        if ($x > 0.0)
+        if ($x > 0.0) {
             return floor($x);
-        else
+        } else {
             return ceil($x);
+        }
     }
 
     protected function JJDATEJ()
@@ -66,23 +67,25 @@ class Season
         $D = $this->trunc(365.25 * $C);
         $E = $this->trunc(($B - $D) / 30.6001);
         $this->TAG = $this->trunc($B - $D - $this->trunc(30.6001 * $E));
-        if ($E < 13.5)
+        if ($E < 13.5) {
             $this->MONAT = $this->trunc($E - 1);
-        else
+        } else {
             $this->MONAT = $this->trunc($E - 13);
-        if ($this->MONAT >= 3)
+        }
+        if ($this->MONAT >= 3) {
             $this->JAHR = $this->trunc($C - 4716);
-        else
+        } else {
             $this->JAHR = $this->trunc($C - 4715);
+        }
     }
 
     protected function JJDATE()
     {
         $Z1 = $this->JJD + 0.5;
         $Z = $this->trunc($Z1);
-        if ($Z < 2299161)
+        if ($Z < 2299161) {
             $A = $Z;
-        else {
+        } else {
             $ALPHA = $this->trunc(($Z - 1867216.25) / 36524.25);
             $A = $Z + 1 + $ALPHA - $this->trunc($ALPHA / 4);
         }
@@ -91,14 +94,16 @@ class Season
         $D = $this->trunc(365.25 * $C);
         $E = $this->trunc(($B - $D) / 30.6001);
         $this->TAG = $this->trunc($B - $D - $this->trunc(30.6001 * $E));
-        if ($E < 13.5)
+        if ($E < 13.5) {
             $this->MONAT = $this->trunc($E - 1);
-        else
+        } else {
             $this->MONAT = $this->trunc($E - 13);
-        if ($this->MONAT >= 3)
+        }
+        if ($this->MONAT >= 3) {
             $this->JAHR = $this->trunc($C - 4716);
-        else
+        } else {
             $this->JAHR = $this->trunc($C - 4715);
+        }
     }
 
     protected function affsai($n)
@@ -176,12 +181,14 @@ class Season
             $JJD -= $TETUJ;
             $JJD += 0.0003472222e0;
             $this->JJD = $JJD;
-            if ($JJD < 2299160.5e0)
+            if ($JJD < 2299160.5e0) {
                 $this->JJDATEJ();
-            else
+            } else {
                 $this->JJDATE();
-            if ($this->JAHR == $CODE1)
+            }
+            if ($this->JAHR == $CODE1) {
                 $this->affsai($nn);
+            }
         }
         return $this->JZ;
     }

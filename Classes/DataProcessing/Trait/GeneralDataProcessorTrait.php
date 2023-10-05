@@ -39,10 +39,9 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 trait GeneralDataProcessorTrait
 {
-
     /**
-     * @param array $processedData
-     * @return array
+     * @param array<mixed> $processedData
+     * @return array<mixed>
      */
     public function generateCacheIdentifier(array &$processedData): array
     {
@@ -50,7 +49,8 @@ trait GeneralDataProcessorTrait
         $flagPage = isset($processedData['data']['doktype'], $processedData['data']['is_siteroot']);
         $flagContent = isset($processedData['data']['CType'], $processedData['data']['list_type']);
         $flagData = (!($flagPage || $flagContent));
-        $pageUid = (($flagPage) ?
+        $pageUid = (
+        ($flagPage) ?
             $processedData['data']['pid'] :
             $processedData['data']['uid']
         );
@@ -68,17 +68,20 @@ trait GeneralDataProcessorTrait
             } else {
                 $add = 'data';
                 $pageContentOrElementUid = $processedData['data']['uid'];
-                $cType = ((isset($processedData['data']['crdate'])) ?
+                $cType = (
+                (isset($processedData['data']['crdate'])) ?
                     $processedData['data']['crdate'] :
                     'noCrdate'
                 );
-                $listType = ((isset($processedData['data']['tstamp'])) ?
+                $listType = (
+                (isset($processedData['data']['tstamp'])) ?
                     $processedData['data']['tstamp'] :
                     'noTStamp'
                 );
             }
         }
-        $languageUid = ((isset($processedData['data']['sys_language_uid'])) ?
+        $languageUid = (
+        (isset($processedData['data']['sys_language_uid'])) ?
             $processedData['data']['sys_language_uid'] :
             '_upsLang'
         );
@@ -88,15 +91,16 @@ trait GeneralDataProcessorTrait
 
     /**
      * @param ContentObjectRenderer $cObj
-     * @param array $processorConfiguration
-     * @return array
+     * @param array<mixed> $processorConfiguration
+     * @return array<mixed>
      */
     public function detectCacheTimeSet(
         ContentObjectRenderer $cObj,
         array                 $processorConfiguration
     ): array
     {
-        $cacheValue = (string)$cObj->stdWrapValue(TimerConst::ARGUMENT_CACHE,
+        $cacheValue = (string)$cObj->stdWrapValue(
+            TimerConst::ARGUMENT_CACHE,
             $processorConfiguration,
             'default'
         );
@@ -134,7 +138,7 @@ trait GeneralDataProcessorTrait
         bool     $cacheCalc,
         DateTime $dateTimeStopCase,
         int      $currentTimestamp
-    ): mixed
+    )
     {
         $myLifeTime = null;
         if ($cacheCalc) {

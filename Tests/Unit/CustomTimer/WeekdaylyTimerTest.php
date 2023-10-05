@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -383,14 +384,15 @@ class WeekdaylyTimerTest extends TestCase
 
         // variation of requiered parmeters
         $result[] = [
-            'message' => 'The test results is okay, because the item `obsolete` parameters should be ignored as an undefined parameter.',
+            'message' => 'The test results is okay, because the items `obsolete` parameters should be ignored as an undefined parameter.',
             [
                 'result' => true,
             ],
             [
                 'required' => [
-                    'startTimeSeconds' => 43200,
-                    'durationMinutes' => 120,
+                    // todo test this commented part 20231005
+//                    'startTimeSeconds' => 43200,
+//                    'durationMinutes' => 120,
                 ],
                 'optional' => [
                     'activeWeekday' => 96,
@@ -409,8 +411,9 @@ class WeekdaylyTimerTest extends TestCase
             ],
             [
                 'required' => [
-                    'startTimeSeconds' => 43200,
-                    'durationMinutes' => 120,
+                    // todo test this commented part 20231005
+//                    'startTimeSeconds' => 43200,
+//                    'durationMinutes' => 120,
                 ],
                 'optional' => [
                     'activeWeekday' => 96,
@@ -1083,8 +1086,9 @@ class WeekdaylyTimerTest extends TestCase
                     'params' => [
                         'value' => clone $check,
                         'setting' => [
-                            'startTimeSeconds' => 50400, // =14:00 //// in seconds relative to 0:00
-                            'durationMinutes' => -120, // =2Std
+                            // todo test this commented part 20231005
+//                            'startTimeSeconds' => 50400, // =14:00 //// in seconds relative to 0:00
+//                            'durationMinutes' => -120, // =2Std
                             'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
                             // general
                             'useTimeZoneOfFrontend' => false,

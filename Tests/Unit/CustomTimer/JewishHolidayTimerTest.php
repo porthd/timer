@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -923,7 +924,7 @@ class JewishHolidayTimerTest extends TestCase
                         'result' => true,
                     ],
                     'params' => [
-                        'value' =>$otherBorder,
+                        'value' => $otherBorder,
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00 AM
@@ -943,7 +944,7 @@ class JewishHolidayTimerTest extends TestCase
                         'result' => false,
                     ],
                     'params' => [
-                        'value' =>$failBorder,
+                        'value' => $failBorder,
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00 AM
@@ -963,7 +964,7 @@ class JewishHolidayTimerTest extends TestCase
                         'result' => false,
                     ],
                     'params' => [
-                        'value' =>$failOtherBorder,
+                        'value' => $failOtherBorder,
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00 AM
@@ -1022,7 +1023,7 @@ class JewishHolidayTimerTest extends TestCase
                         'result' => true,
                     ],
                     'params' => [
-                        'value' =>$otherBorder,
+                        'value' => $otherBorder,
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => $relToYomKippur, // 720 min = 12:00 AM
@@ -1042,7 +1043,7 @@ class JewishHolidayTimerTest extends TestCase
                         'result' => false,
                     ],
                     'params' => [
-                        'value' =>$failBorder,
+                        'value' => $failBorder,
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00 AM
@@ -1062,7 +1063,7 @@ class JewishHolidayTimerTest extends TestCase
                         'result' => false,
                     ],
                     'params' => [
-                        'value' =>$failOtherBorder,
+                        'value' => $failOtherBorder,
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00 AM

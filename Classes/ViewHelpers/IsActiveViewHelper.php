@@ -127,7 +127,7 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
             $flagAnalyse = false;
             if ($timerList->validate($selector, $params)) {
                 $flagAnalyse = true;
-                $timestamp = $arguments[self::ARGUMENT_REF_TIMESTAMP]??'';
+                $timestamp = $arguments[self::ARGUMENT_REF_TIMESTAMP] ?? '';
                 if (MathUtility::canBeInterpretedAsInteger($timestamp)) {
                     $dateValue = new DateTime('@' . $timestamp);
                     $dateValue->setTimezone(new DateTimeZone($activeZone));

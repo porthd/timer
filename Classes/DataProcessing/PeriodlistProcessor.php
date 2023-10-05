@@ -101,7 +101,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
-
     use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
 
@@ -146,13 +145,25 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
     protected $cacheManager;
 
     /**
+     * @var YamlFileLoader
+     */
+    protected $yamlFileLoader;
+
+    /**
+     * @var PeriodListTimer
+     */
+    protected $periodListTimer;
+
+    /**
      * @param FrontendInterface $cache
      * @param CacheService $cacheManager
      */
-    public function __construct(FrontendInterface $cache,
-                                CacheService      $cacheManager,
-                                PeriodListTimer   $periodListTimer,
-                                YamlFileLoader    $yamlFileLoader)
+    public function __construct(
+        FrontendInterface $cache,
+        CacheService      $cacheManager,
+        PeriodListTimer   $periodListTimer,
+        YamlFileLoader    $yamlFileLoader
+    )
     {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
@@ -219,7 +230,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
             // Make FAL in timer usable by defining the corresponding table and uid
             if (isset($processedData['data']['doktype'], $processedData['data']['is_siteroot'])) {
                 $paramList[TimerConst::TIMER_RELATION_TABLE] = 'pages';
-            } else if (isset($processedData['data']['CType'], $processedData['data']['list_type'])) {
+            } elseif (isset($processedData['data']['CType'], $processedData['data']['list_type'])) {
                 $paramList[TimerConst::TIMER_RELATION_TABLE] = 'tt_content';
             } else {
                 if (array_key_exists(self::ATTR_TABLENAME, $processorConfiguration)) {
@@ -242,7 +253,8 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
                     $yamlFile,
                     $this->yamlFileLoader,
                     $this->periodListTimer,
-                    $this->logger);
+                    $this->logger
+                );
                 if (array_key_exists(PeriodListTimer::YAML_MAIN_KEY_PERIODLIST, $rawResultFile)) {
                     $rawResultFile = $rawResultFile[PeriodListTimer::YAML_MAIN_KEY_PERIODLIST];
                 } // else $rawResultFile without yaml-help-layer}
@@ -366,7 +378,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
 
             if (array_key_exists(self::ATTR_DATE_TO_STRING_DOT, $processorConfiguration)) {
                 $myHelp = $processorConfiguration[self::ATTR_DATE_TO_STRING_DOT];
-            } else if (array_key_exists(self::ATTR_DATE_TO_STRING, $processorConfiguration)) {
+            } elseif (array_key_exists(self::ATTR_DATE_TO_STRING, $processorConfiguration)) {
                 $myHelp = $processorConfiguration[self::ATTR_DATE_TO_STRING];
 
             } else {

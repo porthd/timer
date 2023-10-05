@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
@@ -105,10 +106,7 @@ return [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'datetime',
-                'readOnly' => 0,
                 'default' => 0,
-                'nullable' => true,
-                'dbType' => 'datetime',
             ],
         ],
         'endtime' => [
@@ -116,10 +114,7 @@ return [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'datetime',
-                'readOnly' => 0,
                 'default' => 0,
-                'nullable' => true,
-                'dbType' => 'datetime',
             ],
         ],
 

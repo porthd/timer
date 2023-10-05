@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\GlobalUtilities;
@@ -135,7 +136,7 @@ class ConfigurationUtilityTest extends TestCase
                 [
                     'global' => [
                         'y' => ['z' => []],
-                        'a' => ['b'=>[]],
+                        'a' => ['b' => []],
                     ],
                     'rest' => [
                         ['a', 'b', 'c', 'd', 'e',], // 'nestList' =>

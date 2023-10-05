@@ -52,7 +52,6 @@ tt_content.timer_periodlist {
             ## default is `flagStart = 0`,  => that the upper and lower limit use the attribute `stop` as reference for the list
             #flagStart = false
         }
-
         20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
         20 {
 
@@ -70,7 +69,6 @@ tt_content.timer_periodlist {
                     posttext = holiday
                     type = index
                 }
-
                 20 {
                     inField =
                     outField = calendarId
@@ -85,13 +83,11 @@ tt_content.timer_periodlist {
                     outField = Title
 
                 }
-
                 20 {
                     inField = startJson
                     outField = Date
 
                 }
-
                 30 {
                     inField = diffDaysDatetime
                     outField = days

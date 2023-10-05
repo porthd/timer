@@ -34,6 +34,7 @@ use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 class DatePeriodTimer implements TimerInterface
 {
@@ -177,8 +178,8 @@ class DatePeriodTimer implements TimerInterface
     {
         return ((array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) ||
             (array_key_exists(self::ARG_REQ_START_TIME, $params))
-//            ((array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (!array_key_exists(self::ARG_REQ_START_TIME, $params))) ||
-//            ((!array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (array_key_exists(self::ARG_REQ_START_TIME, $params)))
+            //            ((array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (!array_key_exists(self::ARG_REQ_START_TIME, $params))) ||
+            //            ((!array_key_exists(self::ARG_REQ_OLDSTART_TIME, $params)) && (array_key_exists(self::ARG_REQ_START_TIME, $params)))
         );
     }
 
@@ -484,11 +485,17 @@ class DatePeriodTimer implements TimerInterface
         $delayMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
 
         $timeString = empty($params[self::ARG_REQ_START_TIME]) ? $params[self::ARG_REQ_OLDSTART_TIME] : $params[self::ARG_REQ_START_TIME];
-        $startTime = DateTime::createFromFormat(
-            'Y-m-d H:i:s',
-            $timeString,
-            $timeZone
-        );
+        if (MathUtility::canBeInterpretedAsInteger($timeString)) {
+            $startTime = new DateTime('@' . $timeString);
+            $startTime->setTimezone($timeZone);
+        } else {
+
+            $startTime = DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $timeString,
+                $timeZone
+            );
+        }
         $unitValue = (int)$params[self::ARG_REQ_PERIOD_LENGTH];
         $unitValue = abs($unitValue);
 
@@ -570,70 +577,70 @@ class DatePeriodTimer implements TimerInterface
     }
 
 
-//
-//    /**
-//     * @param DateTime $startTime
-//     * @param string $unitPrefix
-//     * @param int $unitValue
-//     * @param string $unit
-//     * @param int $delayMin
-//     * @param DateTime $dateLikeEventZone
-//     * @return TimerStartStopRange
-//     * @throws \Exception
-//     */
-//    protected function prevFittingPeriodRange($startTime, $unitPrefix, $unitValue, $unit, $delayMin, DateTime $dateLikeEventZone): TimerStartStopRange
-//    {
-//        $flag = false;
-//        $timeUnitCode = (($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
-//        if ($unitValue > 0) {
-//            $periodsBelow = DateTimeUtility::diffPeriod($startTime, $dateLikeEventZone, $unitValue, $timeUnitCode) - 2;  // I think, `-1` should although work.
-//        } else {
-//            $periodsBelow = 0; // event hapens only once
-//        }
-//        if ($periodsBelow > 0) {
-//            // find arange near actual starttime
-//            $startTime->add(new \DateInterval('P' . $unitPrefix .
-//                ($periodsBelow * $unitValue) . $unit));
-//        } else {
-//            $startTime->sub(new \DateInterval('P' . $unitPrefix .
-//                (abs($periodsBelow) * $unitValue) . $unit));
-//        }
-//        $flowCout =0;
-//        do {
-//            if ($flag) {
-//                $startTime->add(new \DateInterval('P' . $unitPrefix .
-//                    $unitValue . $unit));
-//            }
-//            $dateBorder = clone $startTime;
-//            if ($delayMin >= 0) {
-//                $startLimit = clone $dateBorder;
-//                $stopLimit = clone $dateBorder;
-//                $stopLimit->add(new DateInterval('PT' . abs($delayMin) . 'M'));
-//            } else {
-//                $startLimit = clone $dateBorder;
-//                $stopLimit = clone $dateBorder;
-//                $startLimit->sub(new DateInterval('PT' . abs($delayMin) . 'M'));
-//            }
-//            if (($startLimit >= $dateLikeEventZone) ||
-//                ($stopLimit >= $dateLikeEventZone)
-//            ) {
-//                break;
-//            }
-//            $oldStartLimit = $startLimit;
-//            $oldStopLimit = $stopLimit;
-//            $flowCout++;
-//            $flag = true;
-//        } while (
-//            ($unitValue > 0) &&
-//            ($flowCout < 5)
-//        );
-//
-//        /** @var TimerStartStopRange $result */
-//        $result = new TimerStartStopRange();
-//        $result->setBeginning((isset($oldStartLimit)?$oldStartLimit:$startLimit));
-//        $result->setEnding((isset($oldStopLimit)?$oldStopLimit: $stopLimit));
-//        return $result;
-//    }
+    //
+    //    /**
+    //     * @param DateTime $startTime
+    //     * @param string $unitPrefix
+    //     * @param int $unitValue
+    //     * @param string $unit
+    //     * @param int $delayMin
+    //     * @param DateTime $dateLikeEventZone
+    //     * @return TimerStartStopRange
+    //     * @throws \Exception
+    //     */
+    //    protected function prevFittingPeriodRange($startTime, $unitPrefix, $unitValue, $unit, $delayMin, DateTime $dateLikeEventZone): TimerStartStopRange
+    //    {
+    //        $flag = false;
+    //        $timeUnitCode = (($unitPrefix === self::KEY_PREFIX_TIME) ? self::KEY_PREFIX_TIME : self::KEY_PREFIX_DATE) . $unit;
+    //        if ($unitValue > 0) {
+    //            $periodsBelow = DateTimeUtility::diffPeriod($startTime, $dateLikeEventZone, $unitValue, $timeUnitCode) - 2;  // I think, `-1` should although work.
+    //        } else {
+    //            $periodsBelow = 0; // event hapens only once
+    //        }
+    //        if ($periodsBelow > 0) {
+    //            // find arange near actual starttime
+    //            $startTime->add(new \DateInterval('P' . $unitPrefix .
+    //                ($periodsBelow * $unitValue) . $unit));
+    //        } else {
+    //            $startTime->sub(new \DateInterval('P' . $unitPrefix .
+    //                (abs($periodsBelow) * $unitValue) . $unit));
+    //        }
+    //        $flowCout =0;
+    //        do {
+    //            if ($flag) {
+    //                $startTime->add(new \DateInterval('P' . $unitPrefix .
+    //                    $unitValue . $unit));
+    //            }
+    //            $dateBorder = clone $startTime;
+    //            if ($delayMin >= 0) {
+    //                $startLimit = clone $dateBorder;
+    //                $stopLimit = clone $dateBorder;
+    //                $stopLimit->add(new DateInterval('PT' . abs($delayMin) . 'M'));
+    //            } else {
+    //                $startLimit = clone $dateBorder;
+    //                $stopLimit = clone $dateBorder;
+    //                $startLimit->sub(new DateInterval('PT' . abs($delayMin) . 'M'));
+    //            }
+    //            if (($startLimit >= $dateLikeEventZone) ||
+    //                ($stopLimit >= $dateLikeEventZone)
+    //            ) {
+    //                break;
+    //            }
+    //            $oldStartLimit = $startLimit;
+    //            $oldStopLimit = $stopLimit;
+    //            $flowCout++;
+    //            $flag = true;
+    //        } while (
+    //            ($unitValue > 0) &&
+    //            ($flowCout < 5)
+    //        );
+    //
+    //        /** @var TimerStartStopRange $result */
+    //        $result = new TimerStartStopRange();
+    //        $result->setBeginning((isset($oldStartLimit)?$oldStartLimit:$startLimit));
+    //        $result->setEnding((isset($oldStopLimit)?$oldStopLimit: $stopLimit));
+    //        return $result;
+    //    }
 
 
     /**

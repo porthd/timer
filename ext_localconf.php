@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
@@ -157,6 +158,4 @@ call_user_func(
         );
 
     }
-
-
 );

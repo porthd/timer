@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -1144,9 +1145,9 @@ class MoonphaseRelTimerTest extends TestCase
     public static function dataProviderNextActive()
     {
         $result = [];
-//        '2022-06-16 13:51:00' => false,
-//                     '2022-06-16 13:52:00' => true, // calc:.:  	Tue Jun 14 2022 13:52:37 Europe/berlin
-//                     '2022-06-16 13:53:00' => true,
+        //        '2022-06-16 13:51:00' => false,
+        //                     '2022-06-16 13:52:00' => true, // calc:.:  	Tue Jun 14 2022 13:52:37 Europe/berlin
+        //                     '2022-06-16 13:53:00' => true,
         $result[] = [
             'message' => 'The nextRange in this example is correctly detected, because the active Range is one meute below the next active range.',
             'expects' => [
@@ -1253,9 +1254,9 @@ class MoonphaseRelTimerTest extends TestCase
     public static function dataProviderPrevActive()
     {
         $result = [];
-//        '2022-06-16 13:51:00' => false,
-//                     '2022-06-16 13:52:00' => true, // calc:.:  	Tue Jun 14 2022 13:52:37 Europe/berlin
-//                     '2022-06-16 13:53:00' => true,
+        //        '2022-06-16 13:51:00' => false,
+        //                     '2022-06-16 13:52:00' => true, // calc:.:  	Tue Jun 14 2022 13:52:37 Europe/berlin
+        //                     '2022-06-16 13:53:00' => true,
         $result[] = [
             'message' => 'The prevRange in this example is correctly detected, because the startdate ist part of the an active range. ',
             'expects' => [

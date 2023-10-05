@@ -36,7 +36,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class HolidaycalendarService
 {
-
     protected const ATTR_ARG = 'arg';
     protected const ATTR_ARG_CALENDAR = 'calendar';
     protected const ATTR_ARG_TYPE = 'type';
@@ -223,25 +222,45 @@ class HolidaycalendarService
                 $timerRange = $this->getHolidayDateForFixedType($locale, $startDate, $holidayArg, $addYear);
                 break;
             case self::ATTR_ARG_TYPE_FIXEDSHIFTING:
-                $timerRange = $this->getHolidayDateForFixedShiftingType($locale, $startDate, $holidayArg,
-                    $addYear);
+                $timerRange = $this->getHolidayDateForFixedShiftingType(
+                    $locale,
+                    $startDate,
+                    $holidayArg,
+                    $addYear
+                );
                 break;
             case self::ATTR_ARG_TYPE_FIXEDMULTI:
-                $timerRange = $this->getHolidayDateForFixedMultiType($locale, $startDate, $holidayArg,
-                    $addYear);
+                $timerRange = $this->getHolidayDateForFixedMultiType(
+                    $locale,
+                    $startDate,
+                    $holidayArg,
+                    $addYear
+                );
                 break;
             case self::ATTR_ARG_TYPE_FIXEDRELATED:
             case self::ATTR_ARG_TYPE_XMASRELATED:
-                $timerRange = $this->getHolidayDateForFixedRelatedType($locale, $startDate, $holidayArg,
-                    $addYear);
+            $timerRange = $this->getHolidayDateForFixedRelatedType(
+                $locale,
+                $startDate,
+                $holidayArg,
+                $addYear
+            );
                 break;
             case self::ATTR_ARG_TYPE_SEASON:
-                $timerRange = $this->getHolidayDateForSeasonType($locale, $startDate, $holidayArg,
-                    $addYear);
+                $timerRange = $this->getHolidayDateForSeasonType(
+                    $locale,
+                    $startDate,
+                    $holidayArg,
+                    $addYear
+                );
                 break;
             case self::ATTR_ARG_TYPE_SEASONSHIFTING:
-                $timerRange = $this->getHolidayDateForSeasonShiftingType($locale, $startDate, $holidayArg,
-                    $addYear);
+                $timerRange = $this->getHolidayDateForSeasonShiftingType(
+                    $locale,
+                    $startDate,
+                    $holidayArg,
+                    $addYear
+                );
                 break;
             case self::ATTR_ARG_TYPE_EASTERLY:
                 $timerRange = $this->getHolidayDateForEasterlyType($locale, $startDate, $holidayArg, $addYear);
@@ -250,20 +269,27 @@ class HolidaycalendarService
                 $timerRange = $this->getHolidayDateForWeekdaylyType($locale, $startDate, $holidayArg, $addYear);
                 break;
             case self::ATTR_ARG_TYPE_MOONINMONTH:
-                $timerRange = $this->getHolidayDateForMoonInMonthType($locale, $startDate, $holidayArg,
-                    $addYear);
+                $timerRange = $this->getHolidayDateForMoonInMonthType(
+                    $locale,
+                    $startDate,
+                    $holidayArg,
+                    $addYear
+                );
                 break;
             case self::ATTR_ARG_TYPE_MATARIKI:
                 $timerRange = $this->getHolidayDateForMatarikiType($startDate, $addYear);
                 break;
-            default :
+            default:
                 /** @var ListOfTimerService $listOfTimerSevice */
                 $listOfTimerSevice = GeneralUtility::makeInstance(ListOfTimerService::class);
                 $flagTimer = $listOfTimerSevice->validateSelector($holidayArg[self::ATTR_ARG_TYPE]);
                 if ($flagTimer) {
                     /** @var TimerStartStopRange $timerRange */
-                    $timerRange = $listOfTimerSevice->nextActive($holidayArg[self::ATTR_ARG_TYPE], $startDate,
-                        $holidayArg[self::ATTR_ARG_TIMER]);
+                    $timerRange = $listOfTimerSevice->nextActive(
+                        $holidayArg[self::ATTR_ARG_TYPE],
+                        $startDate,
+                        $holidayArg[self::ATTR_ARG_TIMER]
+                    );
                 } else {
                     throw new TimerException(
                         'The type of the holiday calculation (`' . $holidayArg[self::ATTR_ARG_TYPE] .
@@ -345,11 +371,11 @@ class HolidaycalendarService
                             $myMonth--;
                         }
                         // @todo I trust my comment, but test this: untested former version
-//                        if (($myMonth === 6) &&
-//                            (!empty($holidayArg[self::ATTR_ARG_STATUS]))
-//                        ) {
-//                            $myMonth--;
-//                        }
+                        //                        if (($myMonth === 6) &&
+                        //                            (!empty($holidayArg[self::ATTR_ARG_STATUS]))
+                        //                        ) {
+                        //                            $myMonth--;
+                        //                        }
                     }
                     $fixedDateCalendar = str_pad($setYearString, 4, '0', STR_PAD_LEFT) . '/'
                         . str_pad(((string)$myMonth), 2, '0', STR_PAD_LEFT) . '/'
@@ -484,14 +510,16 @@ class HolidaycalendarService
             $dayGap = (int)$holidayArg[self::ATTR_ARG_SECDAYCOUNT];
             $daysOfWeeks = (abs($counts) - 1) * 7;
             if ($counts > 0) {
-                $daysToFirst = (($weekday === $currentWeekday) ?
+                $daysToFirst = (
+                ($weekday === $currentWeekday) ?
                     7 :
                     (7 - $currentWeekday + $weekday) % 7
                 );
                 $days = $daysOfWeeks + $daysToFirst + $dayGap;
 
             } else {
-                $daysToFirst = (($weekday === $currentWeekday) ?
+                $daysToFirst = (
+                ($weekday === $currentWeekday) ?
                     7 :
                     (7 - $weekday + $currentWeekday) % 7
                 );
@@ -703,8 +731,10 @@ class HolidaycalendarService
     ): TimerStartStopRange
     {
         $wishedCountWeekday = (int)(
-        ((array_key_exists(self::ATTR_ARG_STATUSCOUNT,
-                $holidayArg)) && (empty($holidayArg[self::ATTR_ARG_STATUSCOUNT]))) ?
+        ((array_key_exists(
+                self::ATTR_ARG_STATUSCOUNT,
+                $holidayArg
+            )) && (empty($holidayArg[self::ATTR_ARG_STATUSCOUNT]))) ?
             1 :
             $holidayArg[self::ATTR_ARG_STATUSCOUNT]
         );
@@ -947,11 +977,11 @@ class HolidaycalendarService
                             $monthNumber--;
                         }
                         // @todo I trust my comment, but test this: untested former version
-//                        if (($monthNumber === 6) &&
-//                            (!empty($holidayArg[self::ATTR_ARG_SECDAYCOUNT]))
-//                        ) {
-//                            $monthNumber--;
-//                        }
+                        //                        if (($monthNumber === 6) &&
+                        //                            (!empty($holidayArg[self::ATTR_ARG_SECDAYCOUNT]))
+                        //                        ) {
+                        //                            $monthNumber--;
+                        //                        }
                     }
                 }
                 if ($monthNumber === (int)$calendarList[1]) {

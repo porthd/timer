@@ -53,7 +53,6 @@ use TYPO3\CMS\Core\Utility\StringUtility;
  */
 class DurationMinutesFieldElement extends AbstractFormElement
 {
-
     /**
      * @return array<mixed>
      */
@@ -62,51 +61,63 @@ class DurationMinutesFieldElement extends AbstractFormElement
         // todo default-value
         $row = $this->data['databaseRow'];
         $parameterArray = $this->data['parameterArray'];
-        $flagWarningZero = ((isset($parameterArray['fieldConf']['config']['parameters']['warningZero'])) ?
+        $flagWarningZero = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['warningZero'])) ?
             $parameterArray['fieldConf']['config']['parameters']['warningZero'] :
             1
         );
-        $defaultMinutes = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['default'])) ?
+        $defaultMinutes = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['default'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['default'] :
             0
         );
-        $minMinutes = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['lower'])) ?
+        $minMinutes = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['lower'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['lower'] :
             -59
         );
-        $maxMinutes = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['upper'])) ?
+        $maxMinutes = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['upper'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['upper'] :
             +59
         );
-        $flagHours = ((isset($parameterArray['fieldConf']['config']['parameters']['flagHours'])) ?
+        $flagHours = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['flagHours'])) ?
             (!empty($parameterArray['fieldConf']['config']['parameters']['flagHours'])) :
             false
         );
-        $flagDays = ((isset($parameterArray['fieldConf']['config']['parameters']['flagDays'])) ?
+        $flagDays = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['flagDays'])) ?
             (!empty($parameterArray['fieldConf']['config']['parameters']['flagDays'])) :
             false
         );
-        $minHours = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
+        $minHours = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'] :
             -23
         );
-        $maxHours = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
+        $maxHours = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'] :
             23
         );
-        $defaultHours = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['default'])) ?
+        $defaultHours = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['default'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['default'] :
             0
         );
-        $minDays = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
+        $minDays = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'] :
             -10
         );
-        $maxDays = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
+        $maxDays = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'] :
             10
         );
-        $defaultDays = ((isset($parameterArray['fieldConf']['config']['parameters']['rangeDays']['default'])) ?
+        $defaultDays = (
+        (isset($parameterArray['fieldConf']['config']['parameters']['rangeDays']['default'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeDays']['default'] :
             0
         );

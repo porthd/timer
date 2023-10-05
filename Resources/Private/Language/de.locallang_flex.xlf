@@ -726,7 +726,7 @@
 
 			<!-- General for all timer txTimerGeneral  -->
 			<trans-unit id="flexform.timer.txTimerGeneral.sheet.title">
-				<source>Generalities</source>
+				<source>General</source>
 				<target>Allgemeines</target>
 			</trans-unit>
 			<trans-unit id="flexform.timer.txTimerGeneral.sheet.shortDescr">

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
@@ -58,10 +59,7 @@ call_user_func(function () {
             'l10n_mode' => 'exclude',
             'config' => [
                 'type' => 'datetime',
-                'readOnly' => 0,
                 'default' => 0,
-                'nullable' => true,
-                'dbType' => 'datetime',
             ],
         ],
         'endtime' => [
@@ -71,10 +69,7 @@ call_user_func(function () {
             'l10n_mode' => 'exclude',
             'config' => [
                 'type' => 'datetime',
-                'readOnly' => 0,
                 'default' => 0,
-                'nullable' => true,
-                'dbType' => 'datetime',
             ],
         ],
     ];

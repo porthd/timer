@@ -99,7 +99,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
-
     use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
 
@@ -125,9 +124,11 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
      * @param CacheService $cacheManager
      * @param ContentDataProcessor $contentDataProcessor
      */
-    public function __construct(FrontendInterface    $cache,
-                                CacheService         $cacheManager,
-                                ContentDataProcessor $contentDataProcessor)
+    public function __construct(
+        FrontendInterface    $cache,
+        CacheService         $cacheManager,
+        ContentDataProcessor $contentDataProcessor
+    )
     {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;

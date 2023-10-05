@@ -312,7 +312,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         $relMin = (int)($params[self::ARG_REL_MIN_TO_EVENT] ?? 0);
         if ($relMin > 0) {
             $startDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
-        } else if ($relMin < 0) {
+        } elseif ($relMin < 0) {
             $startDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
         }
         if ($durationMin > 0) {
@@ -373,7 +373,9 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
             $result->getBeginning(),
             $result->getEnding(),
             ($flag && $result->getResultExist()),
-            $dateLikeEventZone, $params);
+            $dateLikeEventZone,
+            $params
+        );
         return $flag;
     }
 
@@ -423,7 +425,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         $relMin = (int)($params[self::ARG_REL_MIN_TO_EVENT] ?? 0);
         if ($relMin > 0) {
             $startDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
-        } else if ($relMin < 0) {
+        } elseif ($relMin < 0) {
             $startDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
         }
         if ($durationMin > 0) {
@@ -473,7 +475,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
             $refStartDate = $result->getBeginning();
             if ($relMin > 0) {
                 $refStartDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
-            } else if ($relMin < 0) {
+            } elseif ($relMin < 0) {
                 $refStartDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
             }
             if ($durationMin < 0) {
@@ -522,7 +524,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         $relMin = (int)($params[self::ARG_REL_MIN_TO_EVENT] ?? 0);
         if ($relMin > 0) {
             $startDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
-        } else if ($relMin < 0) {
+        } elseif ($relMin < 0) {
             $startDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
         }
         if ($durationMin > 0) {
@@ -571,7 +573,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
             $refStartDate = $result->getBeginning();
             if ($relMin > 0) {
                 $refStartDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
-            } else if ($relMin < 0) {
+            } elseif ($relMin < 0) {
                 $refStartDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
             }
             if ($durationMin < 0) {

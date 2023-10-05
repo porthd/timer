@@ -82,7 +82,7 @@ class LoopLimiter
      *
      * @var string
      */
-    protected $userCompareFunction ='';
+    protected $userCompareFunction = '';
 
     /**
      * Define current Time by TYPO3-Variable or PHP-Systeme

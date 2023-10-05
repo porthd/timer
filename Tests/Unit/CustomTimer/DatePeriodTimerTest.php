@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -792,7 +793,7 @@ class DatePeriodTimerTest extends TestCase
                      'P8WT2H' => true,
                      'P8WT3H1S' => false,
                  ] as $diff => $expects) {
-//        foreach (['P7DT2H' => true, 'P14DT2H' => true, 'P8WT2H' => true, 'P8WT3H1S' => false,] as $diff => $expects)  {
+            //        foreach (['P7DT2H' => true, 'P14DT2H' => true, 'P8WT2H' => true, 'P8WT3H1S' => false,] as $diff => $expects)  {
 
             $check = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,

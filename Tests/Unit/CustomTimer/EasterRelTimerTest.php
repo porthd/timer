@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -720,7 +721,7 @@ class EasterRelTimerTest extends TestCase
     public static function dataProviderIsActive()
     {
         $result = [];
-//         random active
+        //         random active
         $result[] = [
             'message' => 'The selected date is christmas between 12:00 and 14:00  `. It is active.',
             'expects' => [

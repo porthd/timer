@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -148,8 +149,8 @@ class PeriodListTimerTest extends TestCase
         parent::setUp();
         $this->initializeEnvoiroment();
         $this->initializeCachingConfiguration();
-//        $myCacheInstance->flushCaches(); // flush caches to create them
-//        $myCacheInstance->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
+        //        $myCacheInstance->flushCaches(); // flush caches to create them
+        //        $myCacheInstance->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
         $this->simulatePartOfGlobalsTypo3Array();
         /** @var ListingRepository $listingRepository */
         $yamlFileLoader = new YamlFileLoader();
@@ -798,27 +799,27 @@ class PeriodListTimerTest extends TestCase
             'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
         ];
 
-//                -
-//                title: 'Sommerferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-07-14 00:00:00'
-//            stop: '2022-08-24 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Herbstferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-10-17 00:00:00'
-//            stop: '2022-10-28 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Weihnachtsferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-12-23 00:00:00'
-//            stop: '2023-01-06 23:59:59'
-//            zone: 'Europe/Berlin'
+        //                -
+        //                title: 'Sommerferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-07-14 00:00:00'
+        //            stop: '2022-08-24 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Herbstferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-10-17 00:00:00'
+        //            stop: '2022-10-28 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Weihnachtsferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-12-23 00:00:00'
+        //            stop: '2023-01-06 23:59:59'
+        //            zone: 'Europe/Berlin'
 
         $result = [];
         /* test allowed random (minimal) structure */
@@ -913,33 +914,33 @@ class PeriodListTimerTest extends TestCase
 
         $result = [];
         //                -
-//                title: 'Sommerferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-07-14 00:00:00'
-//            stop: '2022-08-24 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Herbstferien Nidersachsen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-10-17 00:00:00'
-//            stop: '2022-10-28 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Herbstferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-10-17 00:00:00'
-//            stop: '2022-10-28 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Weihnachtsferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-12-23 00:00:00'
-//            stop: '2023-01-06 23:59:59'
-//            zone: 'Europe/Berlin'
+        //                title: 'Sommerferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-07-14 00:00:00'
+        //            stop: '2022-08-24 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Herbstferien Nidersachsen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-10-17 00:00:00'
+        //            stop: '2022-10-28 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Herbstferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-10-17 00:00:00'
+        //            stop: '2022-10-28 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Weihnachtsferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-12-23 00:00:00'
+        //            stop: '2023-01-06 23:59:59'
+        //            zone: 'Europe/Berlin'
 
         foreach ([
                      ['date' => '2022-07-13 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
@@ -1022,33 +1023,33 @@ class PeriodListTimerTest extends TestCase
 
         $result = [];
         //                -
-//                title: 'Sommerferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-07-14 00:00:00'
-//            stop: '2022-08-24 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Herbstferien Nidersachsen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-10-17 00:00:00'
-//            stop: '2022-10-28 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Herbstferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-10-17 00:00:00'
-//            stop: '2022-10-28 23:59:59'
-//            zone: 'Europe/Berlin'
-//            -
-//            title: 'Weihnachtsferien Bremen'
-//            data:
-//              description: '- free to fill and free to add new attributes -'
-//            start: '2022-12-23 00:00:00'
-//            stop: '2023-01-06 23:59:59'
-//            zone: 'Europe/Berlin'
+        //                title: 'Sommerferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-07-14 00:00:00'
+        //            stop: '2022-08-24 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Herbstferien Nidersachsen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-10-17 00:00:00'
+        //            stop: '2022-10-28 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Herbstferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-10-17 00:00:00'
+        //            stop: '2022-10-28 23:59:59'
+        //            zone: 'Europe/Berlin'
+        //            -
+        //            title: 'Weihnachtsferien Bremen'
+        //            data:
+        //              description: '- free to fill and free to add new attributes -'
+        //            start: '2022-12-23 00:00:00'
+        //            stop: '2023-01-06 23:59:59'
+        //            zone: 'Europe/Berlin'
 
         foreach ([
                      ['date' => '2023-01-07 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],

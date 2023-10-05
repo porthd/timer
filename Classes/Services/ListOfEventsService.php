@@ -57,8 +57,7 @@ class ListOfEventsService
      * @param array<mixed> $eventsTimerList
      * @param DateTime $timerEventZone
      * @param LoopLimiter $loopLimiter
-     * @return array<mixed>
-     * @throws TimerException
+     * @return DateTime
      */
     public static function detectNextChangeListFromTimerList(
         array       $eventsTimerList,
@@ -92,7 +91,7 @@ class ListOfEventsService
      * @throws TimerException
      */
     public static function generateEventsListFromTimerList(
-        array $eventsTimerList,
+        array    $eventsTimerList,
         DateTime $timerEventZone,
         LoopLimiter $loopLimiter
     ): array {
@@ -122,7 +121,7 @@ class ListOfEventsService
      */
     protected static function timerListBelowStartDate(
         DateTime $timerEventZone,
-        array $eventsTimerList,
+        array    $eventsTimerList,
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
@@ -226,7 +225,7 @@ class ListOfEventsService
      */
     protected static function timerListAboveStartDate(
         DateTime $timerEventZone,
-        array $eventsTimerList,
+        array    $eventsTimerList,
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
@@ -331,8 +330,8 @@ class ListOfEventsService
      * @return array<mixed>
      */
     protected static function listOfEventsBelowStartTime(
-        DateTime $timerEventZone,
-        array $eventsTimerList,
+        DateTime    $timerEventZone,
+        array       $eventsTimerList,
         ListOfTimerService $timerResolver,
         LoopLimiter $loopLimiter
     ): array {
@@ -444,9 +443,9 @@ class ListOfEventsService
     /**
      * @param DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
-     * @param ListOfTimerService $timerResolver
+     * @param \Porthd\Timer\Services\ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
-     * @return array<mixed>
+     * @return DateTime
      */
     protected static function nextStartTimeForListOfEventsBelowStartTime(
         DateTime           $timerEventZone,
@@ -470,6 +469,7 @@ class ListOfEventsService
             if ($beginning > $timerEventZone) {
                 if ($flag) {
                     $result = $beginning;
+                    $flag = false;
                 } else {
                     if ($beginning < $result) {
                         $result = $beginning;
@@ -483,9 +483,9 @@ class ListOfEventsService
     /**
      * @param DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
-     * @param ListOfTimerService $timerResolver
+     * @param \Porthd\Timer\Services\ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
-     * @return array<mixed>
+     * @return DateTime
      */
     protected static function nextStartTimeForListOfEventsAboveStartTime(
         DateTime           $timerEventZone,
@@ -502,13 +502,14 @@ class ListOfEventsService
         if (empty($listOfTimers)) {
             return $timerEventZone;
         }
-        $result = clone $timerEventZone;
+        $result = $timerEventZone;
         $flag = true;
         foreach ($listOfTimers as $key => $timerItem) {
             $ending = $timerItem['range']->getEnding();
             if ($ending < $timerEventZone) {
                 if ($flag) {
                     $result = $ending;
+                    $flag = false;
                 } else {
                     if ($ending > $result) {
                         $result = $ending;
@@ -527,8 +528,8 @@ class ListOfEventsService
      * @return array<mixed>
      */
     protected static function listOfEventsAboveStartTime(
-        DateTime $timerEventZone,
-        array $eventsTimerList,
+        DateTime    $timerEventZone,
+        array       $eventsTimerList,
         ListOfTimerService $timerResolver,
         LoopLimiter $loopLimiter
     ): array {
@@ -644,7 +645,7 @@ class ListOfEventsService
      */
     public static function getDatetimeRestrictions(
         ContentObjectRenderer $cObj,
-        array $arguments,
+        array       $arguments,
         LoopLimiter $loopLimiter
     ) {
         $dateTimeFormat = $cObj->stdWrapValue(
@@ -667,9 +668,9 @@ class ListOfEventsService
      */
     public static function getListRestrictions(
         ContentObjectRenderer $cObj,
-        array $arguments,
+        array       $arguments,
         LoopLimiter $loopLimiter,
-        DateTime $basicDateTime
+        DateTime    $basicDateTime
     ): LoopLimiter {
         /**
          * 1. detect the existence of the three variable
@@ -792,9 +793,9 @@ class ListOfEventsService
      */
     protected static function limitsAllowOneMoreLoop(
         LoopLimiter $loopLimiter,
-        int $count,
+        int      $count,
         DateTime $baseDate,
-        bool $flagAbove
+        bool     $flagAbove
     ): bool {
         if ($loopLimiter->isFlagMaxType()) {
             return ($count < $loopLimiter->getMaxCount());

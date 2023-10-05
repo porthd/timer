@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -145,8 +146,8 @@ class HolidayTimerTest extends TestCase
         parent::setUp();
         $this->initializeEnvoiroment();
         $this->initializeCachingConfiguration();
-////        $myCacheInstance->flushCaches(); // flush caches to create them~
-////        $myCacheInstance->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
+        ////        $myCacheInstance->flushCaches(); // flush caches to create them~
+        ////        $myCacheInstance->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
         $this->simulatePartOfGlobalsTypo3Array();
         /** @var ListingRepository $listingRepository */
         $yamlFileLoader = new YamlFileLoader();
@@ -578,7 +579,7 @@ class HolidayTimerTest extends TestCase
             unset($item['params']['general'][$unsetParam]);
             $result[] = $item;
         }
-//         Variation for useTimeZoneOfFrontend
+        //         Variation for useTimeZoneOfFrontend
         foreach ([
                      [null, false],
                      [false, true],

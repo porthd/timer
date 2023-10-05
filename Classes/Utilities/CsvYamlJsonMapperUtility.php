@@ -26,7 +26,6 @@ use Porthd\Timer\Exception\TimerException;
  ***************************************************************/
 class CsvYamlJsonMapperUtility
 {
-
     protected const INDENT = "    ";
     protected const NEW_LINE = "\n";
     protected const COLON = ': ';
@@ -239,7 +238,8 @@ class CsvYamlJsonMapperUtility
         if (empty($ary)) {
             return '';
         }
-        $yaml = ((empty($startAttribute)) ?
+        $yaml = (
+        (empty($startAttribute)) ?
             '' :
             $startAttribute . self::COLON_NL
         );

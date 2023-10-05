@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
@@ -68,7 +69,7 @@ class PagesTest extends TestCase
     public function setTxTimerTimerForStringSetsTxTimerTimer()
     {
         $this->subject->setTxTimerTimer('Conceived at T3CON10');
-        $result =$this->subject->getTxTimerTimer();
+        $result = $this->subject->getTxTimerTimer();
 
         self::assertSame(
             'Conceived at T3CON10',
@@ -76,7 +77,7 @@ class PagesTest extends TestCase
             'the getter will start working correctly.'
         );
         $this->subject->setTxTimerTimer('Conceived at T3CON10 - test 2');
-        $result =$this->subject->getTxTimerTimer();
+        $result = $this->subject->getTxTimerTimer();
 
         self::assertSame(
             'Conceived at T3CON10 - test 2',

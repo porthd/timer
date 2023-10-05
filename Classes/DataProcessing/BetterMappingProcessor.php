@@ -39,7 +39,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
-
 /**
  * Fetch records from the database, using the default .select syntax from TypoScript.
  *
@@ -50,7 +49,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
-
     use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
 
@@ -111,9 +109,11 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
      * @param CacheService $cacheManager
      * @param ContentDataProcessor $contentDataProcessor
      */
-    public function __construct(FrontendInterface    $cache,
-                                CacheService         $cacheManager,
-                                ContentDataProcessor $contentDataProcessor)
+    public function __construct(
+        FrontendInterface    $cache,
+        CacheService         $cacheManager,
+        ContentDataProcessor $contentDataProcessor
+    )
     {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
@@ -156,6 +156,7 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
         // prepare caching
         [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
         $myResult = $this->cache->get($cacheIdentifier);
+        $yamlStartKey = '';
         if ($myResult === false) {
             [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
 
@@ -178,8 +179,6 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
             }
             if (array_key_exists(self::ATTR_FLEX_YAMLSTARTKEY, $processorConfiguration)) {
                 $yamlStartKey = $cObj->stdWrapValue(self::ATTR_FLEX_YAMLSTARTKEY, $processorConfiguration, '');
-            } else {
-                $yamlStartKey = '';
             }
 
             // Define the mapping-process

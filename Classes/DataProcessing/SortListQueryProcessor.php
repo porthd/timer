@@ -108,7 +108,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  */
 class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
-
     use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
 
@@ -132,9 +131,11 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
      * @param CacheService $cacheManager
      * @param ContentDataProcessor $contentDataProcessor
      */
-    public function __construct(FrontendInterface    $cache,
-                                CacheService         $cacheManager,
-                                ContentDataProcessor $contentDataProcessor)
+    public function __construct(
+        FrontendInterface    $cache,
+        CacheService         $cacheManager,
+        ContentDataProcessor $contentDataProcessor
+    )
     {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;

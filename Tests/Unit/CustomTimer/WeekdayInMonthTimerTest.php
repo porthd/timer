@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\CustomTimer;
@@ -36,7 +37,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class WeekdayInMonthTimerTest extends TestCase
 {
     protected const ARG_EVER_TIME_ZONE_OF_EVENT = TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT;
-    protected const ARG_USE_ACTIVE_TIMEZONE =TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
+    protected const ARG_USE_ACTIVE_TIMEZONE = TimerInterface::ARG_USE_ACTIVE_TIMEZONE;
     protected const ARG_ULTIMATE_RANGE_BEGINN = TimerInterface::ARG_ULTIMATE_RANGE_BEGINN;
     protected const ARG_ULTIMATE_RANGE_END = TimerInterface::ARG_ULTIMATE_RANGE_END;
     protected const NAME_TIMER = 'txTimerWeekdayInMonth';
@@ -1174,7 +1175,7 @@ class WeekdayInMonthTimerTest extends TestCase
                             // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
                             'startTimeSeconds' => 50400,
                             // 14:00 = 43200+7200 // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
-                            'activeMonth' => (64+128), // july and august
+                            'activeMonth' => (64 + 128), // july and august
                             // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
                             'durationMinutes' => '120',
                             // Minutes!!!!
@@ -1210,9 +1211,9 @@ class WeekdayInMonthTimerTest extends TestCase
             $dateFailEnd = clone $dateOkayEnd;
             $dateFailEnd->add(new DateInterval('PT1M'));
             foreach ([
-                [$dateOkayStart, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist'=>true,],],
-                         [$dateOkayEnd, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist'=>true,],],
-                         [$dateFailEnd, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist'=>true,],],
+                         [$dateOkayStart, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist' => true,],],
+                         [$dateOkayEnd, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist' => true,],],
+                         [$dateFailEnd, ['beginning' => '2022-11-05 14:00:00', 'ending' => '2022-11-05 16:00:00', 'exist' => true,],],
                          ]
                      as $helper) {
                 $result[] = [
@@ -1227,7 +1228,7 @@ class WeekdayInMonthTimerTest extends TestCase
                     'params' => [
                         'value' => $helper[0],
                         'setting' => [
-                            'nthWeekdayInMonth' => abs($nthDay)+$dateStringOkayStart[1],
+                            'nthWeekdayInMonth' => abs($nthDay) + $dateStringOkayStart[1],
                             // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
                             'activeWeekday' => '64',
                             // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
@@ -1591,7 +1592,7 @@ class WeekdayInMonthTimerTest extends TestCase
                             // boolean: true = count the nTh weekday from the start of the month, false = count the nTh weekday from the end of the month,
                             'startTimeSeconds' => 50400,
                             // 14:00 = 43200+7200 // Delay from midnight in SECONDS (not minutes) Number between 0 and 86399
-                            'activeMonth' => (32+64+128), // july and august
+                            'activeMonth' => (32 + 64 + 128), // july and august
                             // jan, feb, mar = 7 //  additional/bitwise => 1 = january, 2 = february, 4 = march, ... , 2048 = december
                             'durationMinutes' => '120',
                             // Minutes!!!!
@@ -1628,9 +1629,9 @@ class WeekdayInMonthTimerTest extends TestCase
             $dateFailEnd = clone $dateOkayEnd;
             $dateFailEnd->sub(new DateInterval('PT1M'));
             foreach ([
-                [$dateOkayStart, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist'=>true,],],
-                         [$dateOkayEnd, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist'=>true,],],
-                         [$dateFailEnd, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist'=>true,],],
+                         [$dateOkayStart, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist' => true,],],
+                         [$dateOkayEnd, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist' => true,],],
+                         [$dateFailEnd, ['beginning' => '2022-09-30 14:00:00', 'ending' => '2022-09-30 16:00:00', 'exist' => true,],],
                          ]
                      as $helper) {
                 $result[] = [
@@ -1645,7 +1646,7 @@ class WeekdayInMonthTimerTest extends TestCase
                     'params' => [
                         'value' => $helper[0],
                         'setting' => [
-                            'nthWeekdayInMonth' => abs($nthDay)+$dateStringOkayStart[1],
+                            'nthWeekdayInMonth' => abs($nthDay) + $dateStringOkayStart[1],
                             // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
                             'activeWeekday' => '32', // 64 = saturday
                             // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
@@ -1732,7 +1733,7 @@ class WeekdayInMonthTimerTest extends TestCase
                         'params' => [
                             'value' => $helper[0],
                             'setting' => [
-                                'nthWeekdayInMonth' => (2 ** (3-$subWeek)) + (2 ** (3-$subWeek - 1)),
+                                'nthWeekdayInMonth' => (2 ** (3 - $subWeek)) + (2 ** (3 - $subWeek - 1)),
                                 // first or second //  additional/bitwise => 1 = first, 2 = second, 4 = third, 8 = forth, 16 = fifth, if it exist for the month. All is in combination with StartCountAtEnd
                                 'activeWeekday' => $activeDay,
                                 // 97 = friday, Saturday or sunday // additional/bitwise => 1 = sunday, 2 = monday, 4= tuesday, ... , 64 = saturday.
@@ -1799,7 +1800,7 @@ class WeekdayInMonthTimerTest extends TestCase
             $prevYearStart = clone $dateOkayStart;
             //            calculate the date for the 1 saturday in the month a year before
             $prevYearStart->sub(new DateInterval('P1Y'));
-            if ($dateOkayStart->format('d') <7) {
+            if ($dateOkayStart->format('d') < 7) {
                 $prevYearStart->add(new DateInterval('P1D'));
             } else {
                 $prevYearStart->sub(new DateInterval('P6D'));

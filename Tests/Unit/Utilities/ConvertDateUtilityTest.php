@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Utilities;
@@ -293,7 +294,6 @@ class ConvertDateUtilityTest extends TestCase
                 $params['tzDateTime'],
                 true,
                 ConvertDateUtility::INTL_DATE_FORMATTER_DEFAULT_PATTERN
-
             );
             $dateTime = ConvertDateUtility::convertFromCalendarToDateTime(
                 $params['locale'],

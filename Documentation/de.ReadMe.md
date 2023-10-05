@@ -1010,6 +1010,7 @@ des ContentObjektRenderers, welcher seinerseits die Parameter
 Siehe [TypoScript>CONTENT>select](https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/Functions/Select.html)
 für weitere Informationen).
 
+
 | Parameter        | Default                                                                                                                                | Beschreibung
 |------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------
 |                  | **_Datensätze_**                                                                                                                       |
@@ -1403,6 +1404,7 @@ zusätzliche strukturierte Informationen für die Ausgabe im Frontend benötigen
 Diese Attribute bzw. die dazugehörigen statischen Informationen werden leicht
 durchgeschleift.
 
+
 | Parameter      | Default                         | Beschreibung
 |----------------|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |                | **_Hauptebene_**                |
@@ -1424,6 +1426,7 @@ durchgeschleift.
 |                | **_Unterebene `end.`_**         | _Definiert die Untere Grenze des Terminbereichs, der hier `end` heißt_
 | format         |                                 | Definiert das Ausgabeformat für den Datumswert.
 | source         |                                 | Name des Feldes in der Inputliste, die abweichen kann vom Index-Namen im assoziativen Array für die Ausgabe.
+
 
 #### HolidaycalendarProcessor
 
@@ -1529,6 +1532,7 @@ Feiertagsterminen.
 
 Der Dataprozessor produziert einen Liste von Feiertagen für eine bestimmtes
 zeitliches Interval aus einer Liste von Feiertagen.
+
 
 | Parameter      | Default                                         | Beschreibung
 |----------------|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

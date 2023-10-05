@@ -320,9 +320,9 @@ class CalendarDateViewHelper extends AbstractViewHelper
         );
 
         if (empty($arguments[self::ARG_TIMEZONE])) {
-//            $context = GeneralUtility::makeInstance(Context::class);
-//            // Reading the current data instead of $GLOBALS
-//            $timezone = $context->getPropertyFromAspect('date', self::self::ARG_TIMEZONE);
+            //            $context = GeneralUtility::makeInstance(Context::class);
+            //            // Reading the current data instead of $GLOBALS
+            //            $timezone = $context->getPropertyFromAspect('date', self::self::ARG_TIMEZONE);
             $timezone = date_default_timezone_get();
         } else {
             $timezone = $arguments[self::ARG_TIMEZONE];

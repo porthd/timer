@@ -189,7 +189,7 @@ class ListOfTimerService implements SingletonInterface
     public function getLastIsActiveRangeResult(
         string $selector,
         DateTime $checkDate,
-        array $params = []
+        array  $params = []
     ): TimerStartStopRange {
         if (!array_key_exists($selector, $this->list)) {
             $failAll = new TimerStartStopRange();
@@ -289,10 +289,9 @@ class ListOfTimerService implements SingletonInterface
                 foreach ($configTimers[TimerConst::GLOBALS_SUBKEY_CUSTOMTIMER] as $className) {
                     $classInterface = class_implements($className);
                     if (in_array(TimerInterface::class, $classInterface)) {
-                        /** @var TimerInterface $classObject */
-                        $classObject = GeneralUtility::makeInstance($className);
+                        $myKey = $className::selfName();
+                        $this->list[$myKey] = GeneralUtility::makeInstance($className);
                         /** @phpstan-ignore-line */
-                        $this->list[$classObject::selfName()] = $classObject;
                     } else {
                         throw new TimerException(
                             'The class did not implement the TimerInterface for the included timeractions. Something in the configuration went wrong. Check you ext_localconf.php.',
@@ -306,11 +305,9 @@ class ListOfTimerService implements SingletonInterface
                     foreach ($configTimers[TimerConst::GLOBALS_SUBKEY_EXCLUDE] as $className) {
                         $classInterface = class_implements($className);
                         if (in_array(TimerInterface::class, $classInterface)) {
-                            /** @var TimerInterface $classObject */
-                            $classObject = GeneralUtility::makeInstance($className);
-                            /** @phpstan-ignore-line */
-                            if (array_key_exists($classObject::selfName(), $this->list)) {
-                                unset($this->list[$classObject::selfName()]);
+                            $myKey = $className::selfName();
+                            if (array_key_exists($myKey, $this->list)) {
+                                unset($this->list[$myKey]);
                             }
                         } else {
                             throw new TimerException(

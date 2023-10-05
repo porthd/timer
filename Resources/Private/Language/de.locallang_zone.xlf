@@ -1,0 +1,2433 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z"
+	product-name="timer">
+		<header />
+		<body>
+			<trans-unit id="timer.flexform.array.detail.timezone.">
+				<source>Europe/Berlin</source>
+				<target>Europe/Berlin</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.">
+				<source>0000001</source>
+				<target>0000001</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Berlin">
+				<source>Europe/Berlin</source>
+				<target>Europe/Berlin</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Berlin">
+				<source>0000001</source>
+				<target>0000001</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Amsterdam">
+				<source>Europe/Amsterdam</source>
+				<target>Europe/Amsterdam</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Amsterdam">
+				<source>0001</source>
+				<target>0001</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Andorra">
+				<source>Europe/Andorra</source>
+				<target>Europe/Andorra</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Andorra">
+				<source>0002</source>
+				<target>0002</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Athens">
+				<source>Europe/Athens</source>
+				<target>Europe/Athens</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Athens">
+				<source>0003</source>
+				<target>0003</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Belgrade">
+				<source>Europe/Belgrade</source>
+				<target>Europe/Belgrade</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Belgrade">
+				<source>0004</source>
+				<target>0004</target>
+			</trans-unit>
+		<!--            <trans-unit id="timer.flexform.array.detail.timezone.Europe/Berlin">-->
+		<!--                <source>Europe/Berlin</source>-->
+		<!--                <target>Europe/Berlin</source>-->
+		<!--            </trans-unit>-->
+		<!--            <trans-unit id="timer.flexform.array.key.timezone.Europe/Berlin">-->
+		<!--                <source>00041</source>-->
+		<!--                <target>00041</source>-->
+		<!--            </trans-unit>-->
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Bratislava">
+				<source>Europe/Bratislava</source>
+				<target>Europe/Bratislava</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Bratislava">
+				<source>0005</source>
+				<target>0005</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Brussels">
+				<source>Europe/Brussels</source>
+				<target>Europe/Brussels</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Brussels">
+				<source>0006</source>
+				<target>0006</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Bucharest">
+				<source>Europe/Bucharest</source>
+				<target>Europe/Bucharest</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Bucharest">
+				<source>0007</source>
+				<target>0007</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Budapest">
+				<source>Europe/Budapest</source>
+				<target>Europe/Budapest</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Budapest">
+				<source>0008</source>
+				<target>0008</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Busingen">
+				<source>Europe/Busingen</source>
+				<target>Europe/Busingen</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Busingen">
+				<source>0009</source>
+				<target>0009</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Chisinau">
+				<source>Europe/Chisinau</source>
+				<target>Europe/Chisinau</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Chisinau">
+				<source>0010</source>
+				<target>0010</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Copenhagen">
+				<source>Europe/Copenhagen</source>
+				<target>Europe/Copenhagen</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Copenhagen">
+				<source>0011</source>
+				<target>0011</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Dublin">
+				<source>Europe/Dublin</source>
+				<target>Europe/Dublin</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Dublin">
+				<source>0012</source>
+				<target>0012</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Gibraltar">
+				<source>Europe/Gibraltar</source>
+				<target>Europe/Gibraltar</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Gibraltar">
+				<source>0013</source>
+				<target>0013</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Guernsey">
+				<source>Europe/Guernsey</source>
+				<target>Europe/Guernsey</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Guernsey">
+				<source>0014</source>
+				<target>0014</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Helsinki">
+				<source>Europe/Helsinki</source>
+				<target>Europe/Helsinki</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Helsinki">
+				<source>0015</source>
+				<target>0015</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Isle_of_Man">
+				<source>Europe/Isle_of_Man</source>
+				<target>Europe/Isle_of_Man</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Isle_of_Man">
+				<source>0016</source>
+				<target>0016</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Istanbul">
+				<source>Europe/Istanbul</source>
+				<target>Europe/Istanbul</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Istanbul">
+				<source>0017</source>
+				<target>0017</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Jersey">
+				<source>Europe/Jersey</source>
+				<target>Europe/Jersey</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Jersey">
+				<source>0018</source>
+				<target>0018</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Kaliningrad">
+				<source>Europe/Kaliningrad</source>
+				<target>Europe/Kaliningrad</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Kaliningrad">
+				<source>0019</source>
+				<target>0019</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Kiev">
+				<source>Europe/Kiev</source>
+				<target>Europe/Kiev</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Kiev">
+				<source>0020</source>
+				<target>0020</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Lisbon">
+				<source>Europe/Lisbon</source>
+				<target>Europe/Lisbon</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Lisbon">
+				<source>0021</source>
+				<target>0021</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Ljubljana">
+				<source>Europe/Ljubljana</source>
+				<target>Europe/Ljubljana</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Ljubljana">
+				<source>0022</source>
+				<target>0022</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/London">
+				<source>Europe/London</source>
+				<target>Europe/London</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/London">
+				<source>0023</source>
+				<target>0023</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Luxembourg">
+				<source>Europe/Luxembourg</source>
+				<target>Europe/Luxembourg</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Luxembourg">
+				<source>0024</source>
+				<target>0024</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Madrid">
+				<source>Europe/Madrid</source>
+				<target>Europe/Madrid</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Madrid">
+				<source>0025</source>
+				<target>0025</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Malta">
+				<source>Europe/Malta</source>
+				<target>Europe/Malta</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Malta">
+				<source>0026</source>
+				<target>0026</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Mariehamn">
+				<source>Europe/Mariehamn</source>
+				<target>Europe/Mariehamn</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Mariehamn">
+				<source>0027</source>
+				<target>0027</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Minsk">
+				<source>Europe/Minsk</source>
+				<target>Europe/Minsk</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Minsk">
+				<source>0028</source>
+				<target>0028</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Monaco">
+				<source>Europe/Monaco</source>
+				<target>Europe/Monaco</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Monaco">
+				<source>0029</source>
+				<target>0029</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Moscow">
+				<source>Europe/Moscow</source>
+				<target>Europe/Moscow</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Moscow">
+				<source>0030</source>
+				<target>0030</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Oslo">
+				<source>Europe/Oslo</source>
+				<target>Europe/Oslo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Oslo">
+				<source>0031</source>
+				<target>0031</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Paris">
+				<source>Europe/Paris</source>
+				<target>Europe/Paris</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Paris">
+				<source>0032</source>
+				<target>0032</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Podgorica">
+				<source>Europe/Podgorica</source>
+				<target>Europe/Podgorica</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Podgorica">
+				<source>0033</source>
+				<target>0033</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Prague">
+				<source>Europe/Prague</source>
+				<target>Europe/Prague</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Prague">
+				<source>0034</source>
+				<target>0034</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Riga">
+				<source>Europe/Riga</source>
+				<target>Europe/Riga</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Riga">
+				<source>0035</source>
+				<target>0035</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Rome">
+				<source>Europe/Rome</source>
+				<target>Europe/Rome</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Rome">
+				<source>0036</source>
+				<target>0036</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/San_Marino">
+				<source>Europe/San_Marino</source>
+				<target>Europe/San_Marino</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/San_Marino">
+				<source>0037</source>
+				<target>0037</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Sarajevo">
+				<source>Europe/Sarajevo</source>
+				<target>Europe/Sarajevo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Sarajevo">
+				<source>0038</source>
+				<target>0038</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Simferopol">
+				<source>Europe/Simferopol</source>
+				<target>Europe/Simferopol</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Simferopol">
+				<source>0039</source>
+				<target>0039</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Skopje">
+				<source>Europe/Skopje</source>
+				<target>Europe/Skopje</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Skopje">
+				<source>0040</source>
+				<target>0040</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Sofia">
+				<source>Europe/Sofia</source>
+				<target>Europe/Sofia</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Sofia">
+				<source>0041</source>
+				<target>0041</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Stockholm">
+				<source>Europe/Stockholm</source>
+				<target>Europe/Stockholm</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Stockholm">
+				<source>0042</source>
+				<target>0042</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Tallinn">
+				<source>Europe/Tallinn</source>
+				<target>Europe/Tallinn</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Tallinn">
+				<source>0043</source>
+				<target>0043</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Tirane">
+				<source>Europe/Tirane</source>
+				<target>Europe/Tirane</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Tirane">
+				<source>0044</source>
+				<target>0044</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Uzhgorod">
+				<source>Europe/Uzhgorod</source>
+				<target>Europe/Uzhgorod</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Uzhgorod">
+				<source>0045</source>
+				<target>0045</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Vaduz">
+				<source>Europe/Vaduz</source>
+				<target>Europe/Vaduz</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Vaduz">
+				<source>0046</source>
+				<target>0046</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Vatican">
+				<source>Europe/Vatican</source>
+				<target>Europe/Vatican</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Vatican">
+				<source>0047</source>
+				<target>0047</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Vienna">
+				<source>Europe/Vienna</source>
+				<target>Europe/Vienna</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Vienna">
+				<source>0048</source>
+				<target>0048</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Vilnius">
+				<source>Europe/Vilnius</source>
+				<target>Europe/Vilnius</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Vilnius">
+				<source>0049</source>
+				<target>0049</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Warsaw">
+				<source>Europe/Warsaw</source>
+				<target>Europe/Warsaw</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Warsaw">
+				<source>0050</source>
+				<target>0050</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Zagreb">
+				<source>Europe/Zagreb</source>
+				<target>Europe/Zagreb</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Zagreb">
+				<source>0051</source>
+				<target>0051</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Zaporozhye">
+				<source>Europe/Zaporozhye</source>
+				<target>Europe/Zaporozhye</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Zaporozhye">
+				<source>0052</source>
+				<target>0052</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Zurich">
+				<source>Europe/Zurich</source>
+				<target>Europe/Zurich</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Europe/Zurich">
+				<source>0053</source>
+				<target>0053</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Abidjan">
+				<source>Africa/Abidjan</source>
+				<target>Africa/Abidjan</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Abidjan">
+				<source>0055</source>
+				<target>0055</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Accra">
+				<source>Africa/Accra</source>
+				<target>Africa/Accra</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Accra">
+				<source>0056</source>
+				<target>0056</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Addis_Ababa">
+				<source>Africa/Addis_Ababa</source>
+				<target>Africa/Addis_Ababa</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Addis_Ababa">
+				<source>0057</source>
+				<target>0057</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Algiers">
+				<source>Africa/Algiers</source>
+				<target>Africa/Algiers</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Algiers">
+				<source>0058</source>
+				<target>0058</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Asmara">
+				<source>Africa/Asmara</source>
+				<target>Africa/Asmara</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Asmara">
+				<source>0059</source>
+				<target>0059</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Bamako">
+				<source>Africa/Bamako</source>
+				<target>Africa/Bamako</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Bamako">
+				<source>0060</source>
+				<target>0060</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Bangui">
+				<source>Africa/Bangui</source>
+				<target>Africa/Bangui</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Bangui">
+				<source>0061</source>
+				<target>0061</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Banjul">
+				<source>Africa/Banjul</source>
+				<target>Africa/Banjul</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Banjul">
+				<source>0062</source>
+				<target>0062</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Bissau">
+				<source>Africa/Bissau</source>
+				<target>Africa/Bissau</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Bissau">
+				<source>0063</source>
+				<target>0063</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Blantyre">
+				<source>Africa/Blantyre</source>
+				<target>Africa/Blantyre</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Blantyre">
+				<source>0064</source>
+				<target>0064</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Brazzaville">
+				<source>Africa/Brazzaville</source>
+				<target>Africa/Brazzaville</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Brazzaville">
+				<source>0065</source>
+				<target>0065</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Bujumbura">
+				<source>Africa/Bujumbura</source>
+				<target>Africa/Bujumbura</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Bujumbura">
+				<source>0066</source>
+				<target>0066</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Cairo">
+				<source>Africa/Cairo</source>
+				<target>Africa/Cairo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Cairo">
+				<source>0067</source>
+				<target>0067</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Ceuta">
+				<source>Africa/Ceuta</source>
+				<target>Africa/Ceuta</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Ceuta">
+				<source>0068</source>
+				<target>0068</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Conakry">
+				<source>Africa/Conakry</source>
+				<target>Africa/Conakry</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Conakry">
+				<source>0069</source>
+				<target>0069</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Dakar">
+				<source>Africa/Dakar</source>
+				<target>Africa/Dakar</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Dakar">
+				<source>0070</source>
+				<target>0070</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Dar_es_Salaam">
+				<source>Africa/Dar_es_Salaam</source>
+				<target>Africa/Dar_es_Salaam</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Dar_es_Salaam">
+				<source>0071</source>
+				<target>0071</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Djibouti">
+				<source>Africa/Djibouti</source>
+				<target>Africa/Djibouti</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Djibouti">
+				<source>0072</source>
+				<target>0072</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Douala">
+				<source>Africa/Douala</source>
+				<target>Africa/Douala</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Douala">
+				<source>0073</source>
+				<target>0073</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Freetown">
+				<source>Africa/Freetown</source>
+				<target>Africa/Freetown</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Freetown">
+				<source>0074</source>
+				<target>0074</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Gaborone">
+				<source>Africa/Gaborone</source>
+				<target>Africa/Gaborone</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Gaborone">
+				<source>0075</source>
+				<target>0075</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Harare">
+				<source>Africa/Harare</source>
+				<target>Africa/Harare</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Harare">
+				<source>0076</source>
+				<target>0076</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Johannesburg">
+				<source>Africa/Johannesburg</source>
+				<target>Africa/Johannesburg</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Johannesburg">
+				<source>0077</source>
+				<target>0077</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Juba">
+				<source>Africa/Juba</source>
+				<target>Africa/Juba</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Juba">
+				<source>0078</source>
+				<target>0078</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Kampala">
+				<source>Africa/Kampala</source>
+				<target>Africa/Kampala</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Kampala">
+				<source>0079</source>
+				<target>0079</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Khartoum">
+				<source>Africa/Khartoum</source>
+				<target>Africa/Khartoum</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Khartoum">
+				<source>0080</source>
+				<target>0080</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Kigali">
+				<source>Africa/Kigali</source>
+				<target>Africa/Kigali</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Kigali">
+				<source>0081</source>
+				<target>0081</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Kinshasa">
+				<source>Africa/Kinshasa</source>
+				<target>Africa/Kinshasa</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Kinshasa">
+				<source>0082</source>
+				<target>0082</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Lagos">
+				<source>Africa/Lagos</source>
+				<target>Africa/Lagos</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Lagos">
+				<source>0083</source>
+				<target>0083</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Libreville">
+				<source>Africa/Libreville</source>
+				<target>Africa/Libreville</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Libreville">
+				<source>0084</source>
+				<target>0084</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Lome">
+				<source>Africa/Lome</source>
+				<target>Africa/Lome</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Lome">
+				<source>0085</source>
+				<target>0085</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Luanda">
+				<source>Africa/Luanda</source>
+				<target>Africa/Luanda</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Luanda">
+				<source>0086</source>
+				<target>0086</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Lubumbashi">
+				<source>Africa/Lubumbashi</source>
+				<target>Africa/Lubumbashi</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Lubumbashi">
+				<source>0087</source>
+				<target>0087</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Lusaka">
+				<source>Africa/Lusaka</source>
+				<target>Africa/Lusaka</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Lusaka">
+				<source>0088</source>
+				<target>0088</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Malabo">
+				<source>Africa/Malabo</source>
+				<target>Africa/Malabo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Malabo">
+				<source>0089</source>
+				<target>0089</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Maputo">
+				<source>Africa/Maputo</source>
+				<target>Africa/Maputo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Maputo">
+				<source>0090</source>
+				<target>0090</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Maseru">
+				<source>Africa/Maseru</source>
+				<target>Africa/Maseru</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Maseru">
+				<source>0091</source>
+				<target>0091</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Mbabane">
+				<source>Africa/Mbabane</source>
+				<target>Africa/Mbabane</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Mbabane">
+				<source>0092</source>
+				<target>0092</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Mogadishu">
+				<source>Africa/Mogadishu</source>
+				<target>Africa/Mogadishu</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Mogadishu">
+				<source>0093</source>
+				<target>0093</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Monrovia">
+				<source>Africa/Monrovia</source>
+				<target>Africa/Monrovia</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Monrovia">
+				<source>0094</source>
+				<target>0094</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Nairobi">
+				<source>Africa/Nairobi</source>
+				<target>Africa/Nairobi</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Nairobi">
+				<source>0095</source>
+				<target>0095</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Ndjamena">
+				<source>Africa/Ndjamena</source>
+				<target>Africa/Ndjamena</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Ndjamena">
+				<source>0096</source>
+				<target>0096</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Niamey">
+				<source>Africa/Niamey</source>
+				<target>Africa/Niamey</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Niamey">
+				<source>0097</source>
+				<target>0097</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Nouakchott">
+				<source>Africa/Nouakchott</source>
+				<target>Africa/Nouakchott</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Nouakchott">
+				<source>0098</source>
+				<target>0098</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Ouagadougou">
+				<source>Africa/Ouagadougou</source>
+				<target>Africa/Ouagadougou</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Ouagadougou">
+				<source>0099</source>
+				<target>0099</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Porto-Novo">
+				<source>Africa/Porto-Novo</source>
+				<target>Africa/Porto-Novo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Porto-Novo">
+				<source>0100</source>
+				<target>0100</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Sao_Tome">
+				<source>Africa/Sao_Tome</source>
+				<target>Africa/Sao_Tome</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Sao_Tome">
+				<source>0101</source>
+				<target>0101</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Tripoli">
+				<source>Africa/Tripoli</source>
+				<target>Africa/Tripoli</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Tripoli">
+				<source>0102</source>
+				<target>0102</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Tunis">
+				<source>Africa/Tunis</source>
+				<target>Africa/Tunis</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Tunis">
+				<source>0103</source>
+				<target>0103</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Africa/Windhoek">
+				<source>Africa/Windhoek</source>
+				<target>Africa/Windhoek</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Africa/Windhoek">
+				<source>0104</source>
+				<target>0104</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Adak">
+				<source>America/Adak</source>
+				<target>America/Adak</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Adak">
+				<source>0105</source>
+				<target>0105</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Anchorage">
+				<source>America/Anchorage</source>
+				<target>America/Anchorage</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Anchorage">
+				<source>0106</source>
+				<target>0106</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Anguilla">
+				<source>America/Anguilla</source>
+				<target>America/Anguilla</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Anguilla">
+				<source>0107</source>
+				<target>0107</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Antigua">
+				<source>America/Antigua</source>
+				<target>America/Antigua</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Antigua">
+				<source>0108</source>
+				<target>0108</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Buenos_Aires">
+				<source>America/Argentina/Buenos_Aires</source>
+				<target>America/Argentina/Buenos_Aires</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Buenos_Aires">
+				<source>0109</source>
+				<target>0109</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Catamarca">
+				<source>America/Argentina/Catamarca</source>
+				<target>America/Argentina/Catamarca</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Catamarca">
+				<source>0110</source>
+				<target>0110</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Cordoba">
+				<source>America/Argentina/Cordoba</source>
+				<target>America/Argentina/Cordoba</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Cordoba">
+				<source>0111</source>
+				<target>0111</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Jujuy">
+				<source>America/Argentina/Jujuy</source>
+				<target>America/Argentina/Jujuy</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Jujuy">
+				<source>0112</source>
+				<target>0112</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/La_Rioja">
+				<source>America/Argentina/La_Rioja</source>
+				<target>America/Argentina/La_Rioja</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/La_Rioja">
+				<source>0113</source>
+				<target>0113</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Mendoza">
+				<source>America/Argentina/Mendoza</source>
+				<target>America/Argentina/Mendoza</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Mendoza">
+				<source>0114</source>
+				<target>0114</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Rio_Gallegos">
+				<source>America/Argentina/Rio_Gallegos</source>
+				<target>America/Argentina/Rio_Gallegos</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Rio_Gallegos">
+				<source>0115</source>
+				<target>0115</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Salta">
+				<source>America/Argentina/Salta</source>
+				<target>America/Argentina/Salta</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Salta">
+				<source>0116</source>
+				<target>0116</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/San_Juan">
+				<source>America/Argentina/San_Juan</source>
+				<target>America/Argentina/San_Juan</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/San_Juan">
+				<source>0117</source>
+				<target>0117</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/San_Luis">
+				<source>America/Argentina/San_Luis</source>
+				<target>America/Argentina/San_Luis</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/San_Luis">
+				<source>0118</source>
+				<target>0118</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Tucuman">
+				<source>America/Argentina/Tucuman</source>
+				<target>America/Argentina/Tucuman</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Tucuman">
+				<source>0119</source>
+				<target>0119</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Argentina/Ushuaia">
+				<source>America/Argentina/Ushuaia</source>
+				<target>America/Argentina/Ushuaia</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Argentina/Ushuaia">
+				<source>0120</source>
+				<target>0120</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Aruba">
+				<source>America/Aruba</source>
+				<target>America/Aruba</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Aruba">
+				<source>0121</source>
+				<target>0121</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Asuncion">
+				<source>America/Asuncion</source>
+				<target>America/Asuncion</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Asuncion">
+				<source>0122</source>
+				<target>0122</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Atikokan">
+				<source>America/Atikokan</source>
+				<target>America/Atikokan</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Atikokan">
+				<source>0123</source>
+				<target>0123</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Bahia_Banderas">
+				<source>America/Bahia_Banderas</source>
+				<target>America/Bahia_Banderas</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Bahia_Banderas">
+				<source>0124</source>
+				<target>0124</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Barbados">
+				<source>America/Barbados</source>
+				<target>America/Barbados</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Barbados">
+				<source>0125</source>
+				<target>0125</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Belize">
+				<source>America/Belize</source>
+				<target>America/Belize</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Belize">
+				<source>0126</source>
+				<target>0126</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Blanc-Sablon">
+				<source>America/Blanc-Sablon</source>
+				<target>America/Blanc-Sablon</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Blanc-Sablon">
+				<source>0127</source>
+				<target>0127</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Bogota">
+				<source>America/Bogota</source>
+				<target>America/Bogota</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Bogota">
+				<source>0128</source>
+				<target>0128</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Boise">
+				<source>America/Boise</source>
+				<target>America/Boise</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Boise">
+				<source>0129</source>
+				<target>0129</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Cambridge_Bay">
+				<source>America/Cambridge_Bay</source>
+				<target>America/Cambridge_Bay</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Cambridge_Bay">
+				<source>0130</source>
+				<target>0130</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Cancun">
+				<source>America/Cancun</source>
+				<target>America/Cancun</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Cancun">
+				<source>0131</source>
+				<target>0131</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Caracas">
+				<source>America/Caracas</source>
+				<target>America/Caracas</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Caracas">
+				<source>0132</source>
+				<target>0132</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Cayman">
+				<source>America/Cayman</source>
+				<target>America/Cayman</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Cayman">
+				<source>0133</source>
+				<target>0133</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Chicago">
+				<source>America/Chicago</source>
+				<target>America/Chicago</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Chicago">
+				<source>0134</source>
+				<target>0134</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Chihuahua">
+				<source>America/Chihuahua</source>
+				<target>America/Chihuahua</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Chihuahua">
+				<source>0135</source>
+				<target>0135</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Costa_Rica">
+				<source>America/Costa_Rica</source>
+				<target>America/Costa_Rica</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Costa_Rica">
+				<source>0136</source>
+				<target>0136</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Creston">
+				<source>America/Creston</source>
+				<target>America/Creston</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Creston">
+				<source>0137</source>
+				<target>0137</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Curacao">
+				<source>America/Curacao</source>
+				<target>America/Curacao</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Curacao">
+				<source>0138</source>
+				<target>0138</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Danmarkshavn">
+				<source>America/Danmarkshavn</source>
+				<target>America/Danmarkshavn</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Danmarkshavn">
+				<source>0139</source>
+				<target>0139</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Dawson">
+				<source>America/Dawson</source>
+				<target>America/Dawson</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Dawson">
+				<source>0140</source>
+				<target>0140</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Dawson_Creek">
+				<source>America/Dawson_Creek</source>
+				<target>America/Dawson_Creek</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Dawson_Creek">
+				<source>0141</source>
+				<target>0141</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Denver">
+				<source>America/Denver</source>
+				<target>America/Denver</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Denver">
+				<source>0142</source>
+				<target>0142</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Detroit">
+				<source>America/Detroit</source>
+				<target>America/Detroit</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Detroit">
+				<source>0143</source>
+				<target>0143</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Dominica">
+				<source>America/Dominica</source>
+				<target>America/Dominica</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Dominica">
+				<source>0144</source>
+				<target>0144</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Edmonton">
+				<source>America/Edmonton</source>
+				<target>America/Edmonton</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Edmonton">
+				<source>0145</source>
+				<target>0145</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/El_Salvador">
+				<source>America/El_Salvador</source>
+				<target>America/El_Salvador</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/El_Salvador">
+				<source>0146</source>
+				<target>0146</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Fort_Nelson">
+				<source>America/Fort_Nelson</source>
+				<target>America/Fort_Nelson</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Fort_Nelson">
+				<source>0147</source>
+				<target>0147</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Glace_Bay">
+				<source>America/Glace_Bay</source>
+				<target>America/Glace_Bay</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Glace_Bay">
+				<source>0148</source>
+				<target>0148</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Goose_Bay">
+				<source>America/Goose_Bay</source>
+				<target>America/Goose_Bay</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Goose_Bay">
+				<source>0149</source>
+				<target>0149</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Grand_Turk">
+				<source>America/Grand_Turk</source>
+				<target>America/Grand_Turk</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Grand_Turk">
+				<source>0150</source>
+				<target>0150</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Grenada">
+				<source>America/Grenada</source>
+				<target>America/Grenada</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Grenada">
+				<source>0151</source>
+				<target>0151</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Guadeloupe">
+				<source>America/Guadeloupe</source>
+				<target>America/Guadeloupe</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Guadeloupe">
+				<source>0152</source>
+				<target>0152</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Guatemala">
+				<source>America/Guatemala</source>
+				<target>America/Guatemala</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Guatemala">
+				<source>0153</source>
+				<target>0153</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Guayaquil">
+				<source>America/Guayaquil</source>
+				<target>America/Guayaquil</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Guayaquil">
+				<source>0154</source>
+				<target>0154</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Halifax">
+				<source>America/Halifax</source>
+				<target>America/Halifax</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Halifax">
+				<source>0155</source>
+				<target>0155</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Havana">
+				<source>America/Havana</source>
+				<target>America/Havana</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Havana">
+				<source>0156</source>
+				<target>0156</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Hermosillo">
+				<source>America/Hermosillo</source>
+				<target>America/Hermosillo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Hermosillo">
+				<source>0157</source>
+				<target>0157</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Indianapolis">
+				<source>America/Indiana/Indianapolis</source>
+				<target>America/Indiana/Indianapolis</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Indianapolis">
+				<source>0158</source>
+				<target>0158</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Knox">
+				<source>America/Indiana/Knox</source>
+				<target>America/Indiana/Knox</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Knox">
+				<source>0159</source>
+				<target>0159</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Marengo">
+				<source>America/Indiana/Marengo</source>
+				<target>America/Indiana/Marengo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Marengo">
+				<source>0160</source>
+				<target>0160</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Petersburg">
+				<source>America/Indiana/Petersburg</source>
+				<target>America/Indiana/Petersburg</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Petersburg">
+				<source>0161</source>
+				<target>0161</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Tell_City">
+				<source>America/Indiana/Tell_City</source>
+				<target>America/Indiana/Tell_City</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Tell_City">
+				<source>0162</source>
+				<target>0162</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Vevay">
+				<source>America/Indiana/Vevay</source>
+				<target>America/Indiana/Vevay</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Vevay">
+				<source>0163</source>
+				<target>0163</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Vincennes">
+				<source>America/Indiana/Vincennes</source>
+				<target>America/Indiana/Vincennes</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Vincennes">
+				<source>0164</source>
+				<target>0164</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Indiana/Winamac">
+				<source>America/Indiana/Winamac</source>
+				<target>America/Indiana/Winamac</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Indiana/Winamac">
+				<source>0165</source>
+				<target>0165</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Inuvik">
+				<source>America/Inuvik</source>
+				<target>America/Inuvik</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Inuvik">
+				<source>0166</source>
+				<target>0166</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Iqaluit">
+				<source>America/Iqaluit</source>
+				<target>America/Iqaluit</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Iqaluit">
+				<source>0167</source>
+				<target>0167</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Jamaica">
+				<source>America/Jamaica</source>
+				<target>America/Jamaica</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Jamaica">
+				<source>0168</source>
+				<target>0168</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Juneau">
+				<source>America/Juneau</source>
+				<target>America/Juneau</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Juneau">
+				<source>0169</source>
+				<target>0169</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Kentucky/Louisville">
+				<source>America/Kentucky/Louisville</source>
+				<target>America/Kentucky/Louisville</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Kentucky/Louisville">
+				<source>0170</source>
+				<target>0170</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Kentucky/Monticello">
+				<source>America/Kentucky/Monticello</source>
+				<target>America/Kentucky/Monticello</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Kentucky/Monticello">
+				<source>0171</source>
+				<target>0171</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Kralendijk">
+				<source>America/Kralendijk</source>
+				<target>America/Kralendijk</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Kralendijk">
+				<source>0172</source>
+				<target>0172</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/La_Paz">
+				<source>America/La_Paz</source>
+				<target>America/La_Paz</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/La_Paz">
+				<source>0173</source>
+				<target>0173</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Los_Angeles">
+				<source>America/Los_Angeles</source>
+				<target>America/Los_Angeles</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Los_Angeles">
+				<source>0174</source>
+				<target>0174</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Lower_Princes">
+				<source>America/Lower_Princes</source>
+				<target>America/Lower_Princes</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Lower_Princes">
+				<source>0175</source>
+				<target>0175</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Managua">
+				<source>America/Managua</source>
+				<target>America/Managua</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Managua">
+				<source>0176</source>
+				<target>0176</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Marigot">
+				<source>America/Marigot</source>
+				<target>America/Marigot</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Marigot">
+				<source>0177</source>
+				<target>0177</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Martinique">
+				<source>America/Martinique</source>
+				<target>America/Martinique</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Martinique">
+				<source>0178</source>
+				<target>0178</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Matamoros">
+				<source>America/Matamoros</source>
+				<target>America/Matamoros</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Matamoros">
+				<source>0179</source>
+				<target>0179</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Mazatlan">
+				<source>America/Mazatlan</source>
+				<target>America/Mazatlan</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Mazatlan">
+				<source>0180</source>
+				<target>0180</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Menominee">
+				<source>America/Menominee</source>
+				<target>America/Menominee</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Menominee">
+				<source>0181</source>
+				<target>0181</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Merida">
+				<source>America/Merida</source>
+				<target>America/Merida</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Merida">
+				<source>0182</source>
+				<target>0182</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Metlakatla">
+				<source>America/Metlakatla</source>
+				<target>America/Metlakatla</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Metlakatla">
+				<source>0183</source>
+				<target>0183</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Mexico_City">
+				<source>America/Mexico_City</source>
+				<target>America/Mexico_City</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Mexico_City">
+				<source>0184</source>
+				<target>0184</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Miquelon">
+				<source>America/Miquelon</source>
+				<target>America/Miquelon</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Miquelon">
+				<source>0185</source>
+				<target>0185</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Moncton">
+				<source>America/Moncton</source>
+				<target>America/Moncton</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Moncton">
+				<source>0186</source>
+				<target>0186</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Monterrey">
+				<source>America/Monterrey</source>
+				<target>America/Monterrey</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Monterrey">
+				<source>0187</source>
+				<target>0187</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Montevideo">
+				<source>America/Montevideo</source>
+				<target>America/Montevideo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Montevideo">
+				<source>0188</source>
+				<target>0188</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Montserrat">
+				<source>America/Montserrat</source>
+				<target>America/Montserrat</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Montserrat">
+				<source>0189</source>
+				<target>0189</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Nassau">
+				<source>America/Nassau</source>
+				<target>America/Nassau</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Nassau">
+				<source>0190</source>
+				<target>0190</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/New_York">
+				<source>America/New_York</source>
+				<target>America/New_York</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/New_York">
+				<source>0191</source>
+				<target>0191</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Nipigon">
+				<source>America/Nipigon</source>
+				<target>America/Nipigon</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Nipigon">
+				<source>0192</source>
+				<target>0192</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Nome">
+				<source>America/Nome</source>
+				<target>America/Nome</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Nome">
+				<source>0193</source>
+				<target>0193</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/North_Dakota/Beulah">
+				<source>America/North_Dakota/Beulah</source>
+				<target>America/North_Dakota/Beulah</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/North_Dakota/Beulah">
+				<source>0194</source>
+				<target>0194</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/North_Dakota/Center">
+				<source>America/North_Dakota/Center</source>
+				<target>America/North_Dakota/Center</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/North_Dakota/Center">
+				<source>0195</source>
+				<target>0195</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/North_Dakota/New_Salem">
+				<source>America/North_Dakota/New_Salem</source>
+				<target>America/North_Dakota/New_Salem</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/North_Dakota/New_Salem">
+				<source>0196</source>
+				<target>0196</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Ojinaga">
+				<source>America/Ojinaga</source>
+				<target>America/Ojinaga</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Ojinaga">
+				<source>0197</source>
+				<target>0197</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Panama">
+				<source>America/Panama</source>
+				<target>America/Panama</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Panama">
+				<source>0198</source>
+				<target>0198</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Pangnirtung">
+				<source>America/Pangnirtung</source>
+				<target>America/Pangnirtung</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Pangnirtung">
+				<source>0199</source>
+				<target>0199</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Paramaribo">
+				<source>America/Paramaribo</source>
+				<target>America/Paramaribo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Paramaribo">
+				<source>0200</source>
+				<target>0200</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Phoenix">
+				<source>America/Phoenix</source>
+				<target>America/Phoenix</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Phoenix">
+				<source>0201</source>
+				<target>0201</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Port-au-Prince">
+				<source>America/Port-au-Prince</source>
+				<target>America/Port-au-Prince</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Port-au-Prince">
+				<source>0202</source>
+				<target>0202</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Port_of_Spain">
+				<source>America/Port_of_Spain</source>
+				<target>America/Port_of_Spain</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Port_of_Spain">
+				<source>0203</source>
+				<target>0203</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Puerto_Rico">
+				<source>America/Puerto_Rico</source>
+				<target>America/Puerto_Rico</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Puerto_Rico">
+				<source>0204</source>
+				<target>0204</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Punta_Arenas">
+				<source>America/Punta_Arenas</source>
+				<target>America/Punta_Arenas</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Punta_Arenas">
+				<source>0205</source>
+				<target>0205</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Rainy_River">
+				<source>America/Rainy_River</source>
+				<target>America/Rainy_River</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Rainy_River">
+				<source>0206</source>
+				<target>0206</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Rankin_Inlet">
+				<source>America/Rankin_Inlet</source>
+				<target>America/Rankin_Inlet</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Rankin_Inlet">
+				<source>0207</source>
+				<target>0207</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Regina">
+				<source>America/Regina</source>
+				<target>America/Regina</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Regina">
+				<source>0208</source>
+				<target>0208</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Resolute">
+				<source>America/Resolute</source>
+				<target>America/Resolute</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Resolute">
+				<source>0209</source>
+				<target>0209</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Santiago">
+				<source>America/Santiago</source>
+				<target>America/Santiago</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Santiago">
+				<source>0210</source>
+				<target>0210</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Santo_Domingo">
+				<source>America/Santo_Domingo</source>
+				<target>America/Santo_Domingo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Santo_Domingo">
+				<source>0211</source>
+				<target>0211</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Sitka">
+				<source>America/Sitka</source>
+				<target>America/Sitka</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Sitka">
+				<source>0212</source>
+				<target>0212</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/St_Barthelemy">
+				<source>America/St_Barthelemy</source>
+				<target>America/St_Barthelemy</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/St_Barthelemy">
+				<source>0213</source>
+				<target>0213</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/St_Johns">
+				<source>America/St_Johns</source>
+				<target>America/St_Johns</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/St_Johns">
+				<source>0214</source>
+				<target>0214</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/St_Kitts">
+				<source>America/St_Kitts</source>
+				<target>America/St_Kitts</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/St_Kitts">
+				<source>0215</source>
+				<target>0215</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/St_Lucia">
+				<source>America/St_Lucia</source>
+				<target>America/St_Lucia</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/St_Lucia">
+				<source>0216</source>
+				<target>0216</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/St_Thomas">
+				<source>America/St_Thomas</source>
+				<target>America/St_Thomas</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/St_Thomas">
+				<source>0217</source>
+				<target>0217</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/St_Vincent">
+				<source>America/St_Vincent</source>
+				<target>America/St_Vincent</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/St_Vincent">
+				<source>0218</source>
+				<target>0218</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Swift_Current">
+				<source>America/Swift_Current</source>
+				<target>America/Swift_Current</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Swift_Current">
+				<source>0219</source>
+				<target>0219</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Tegucigalpa">
+				<source>America/Tegucigalpa</source>
+				<target>America/Tegucigalpa</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Tegucigalpa">
+				<source>0220</source>
+				<target>0220</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Thule">
+				<source>America/Thule</source>
+				<target>America/Thule</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Thule">
+				<source>0221</source>
+				<target>0221</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Thunder_Bay">
+				<source>America/Thunder_Bay</source>
+				<target>America/Thunder_Bay</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Thunder_Bay">
+				<source>0222</source>
+				<target>0222</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Tijuana">
+				<source>America/Tijuana</source>
+				<target>America/Tijuana</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Tijuana">
+				<source>0223</source>
+				<target>0223</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Toronto">
+				<source>America/Toronto</source>
+				<target>America/Toronto</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Toronto">
+				<source>0224</source>
+				<target>0224</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Tortola">
+				<source>America/Tortola</source>
+				<target>America/Tortola</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Tortola">
+				<source>0225</source>
+				<target>0225</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Vancouver">
+				<source>America/Vancouver</source>
+				<target>America/Vancouver</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Vancouver">
+				<source>0226</source>
+				<target>0226</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Whitehorse">
+				<source>America/Whitehorse</source>
+				<target>America/Whitehorse</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Whitehorse">
+				<source>0227</source>
+				<target>0227</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Winnipeg">
+				<source>America/Winnipeg</source>
+				<target>America/Winnipeg</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Winnipeg">
+				<source>0228</source>
+				<target>0228</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Yakutat">
+				<source>America/Yakutat</source>
+				<target>America/Yakutat</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Yakutat">
+				<source>0229</source>
+				<target>0229</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.America/Yellowknife">
+				<source>America/Yellowknife</source>
+				<target>America/Yellowknife</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.America/Yellowknife">
+				<source>0230</source>
+				<target>0230</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Antarctica/Macquarie">
+				<source>Antarctica/Macquarie</source>
+				<target>Antarctica/Macquarie</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Antarctica/Macquarie">
+				<source>0231</source>
+				<target>0231</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Antarctica/McMurdo">
+				<source>Antarctica/McMurdo</source>
+				<target>Antarctica/McMurdo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Antarctica/McMurdo">
+				<source>0232</source>
+				<target>0232</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Arctic/Longyearbyen">
+				<source>Arctic/Longyearbyen</source>
+				<target>Arctic/Longyearbyen</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Arctic/Longyearbyen">
+				<source>0233</source>
+				<target>0233</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Amman">
+				<source>Asia/Amman</source>
+				<target>Asia/Amman</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Amman">
+				<source>0234</source>
+				<target>0234</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Baghdad">
+				<source>Asia/Baghdad</source>
+				<target>Asia/Baghdad</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Baghdad">
+				<source>0235</source>
+				<target>0235</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Bangkok">
+				<source>Asia/Bangkok</source>
+				<target>Asia/Bangkok</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Bangkok">
+				<source>0236</source>
+				<target>0236</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Beirut">
+				<source>Asia/Beirut</source>
+				<target>Asia/Beirut</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Beirut">
+				<source>0237</source>
+				<target>0237</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Colombo">
+				<source>Asia/Colombo</source>
+				<target>Asia/Colombo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Colombo">
+				<source>0238</source>
+				<target>0238</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Damascus">
+				<source>Asia/Damascus</source>
+				<target>Asia/Damascus</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Damascus">
+				<source>0239</source>
+				<target>0239</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Dhaka">
+				<source>Asia/Dhaka</source>
+				<target>Asia/Dhaka</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Dhaka">
+				<source>0240</source>
+				<target>0240</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Famagusta">
+				<source>Asia/Famagusta</source>
+				<target>Asia/Famagusta</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Famagusta">
+				<source>0241</source>
+				<target>0241</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Gaza">
+				<source>Asia/Gaza</source>
+				<target>Asia/Gaza</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Gaza">
+				<source>0242</source>
+				<target>0242</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Hebron">
+				<source>Asia/Hebron</source>
+				<target>Asia/Hebron</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Hebron">
+				<source>0243</source>
+				<target>0243</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Ho_Chi_Minh">
+				<source>Asia/Ho_Chi_Minh</source>
+				<target>Asia/Ho_Chi_Minh</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Ho_Chi_Minh">
+				<source>0244</source>
+				<target>0244</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Hong_Kong">
+				<source>Asia/Hong_Kong</source>
+				<target>Asia/Hong_Kong</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Hong_Kong">
+				<source>0245</source>
+				<target>0245</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Irkutsk">
+				<source>Asia/Irkutsk</source>
+				<target>Asia/Irkutsk</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Irkutsk">
+				<source>0246</source>
+				<target>0246</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Jakarta">
+				<source>Asia/Jakarta</source>
+				<target>Asia/Jakarta</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Jakarta">
+				<source>0247</source>
+				<target>0247</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Jayapura">
+				<source>Asia/Jayapura</source>
+				<target>Asia/Jayapura</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Jayapura">
+				<source>0248</source>
+				<target>0248</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Jerusalem">
+				<source>Asia/Jerusalem</source>
+				<target>Asia/Jerusalem</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Jerusalem">
+				<source>0249</source>
+				<target>0249</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Karachi">
+				<source>Asia/Karachi</source>
+				<target>Asia/Karachi</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Karachi">
+				<source>0250</source>
+				<target>0250</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Kolkata">
+				<source>Asia/Kolkata</source>
+				<target>Asia/Kolkata</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Kolkata">
+				<source>0251</source>
+				<target>0251</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Kuala_Lumpur">
+				<source>Asia/Kuala_Lumpur</source>
+				<target>Asia/Kuala_Lumpur</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Kuala_Lumpur">
+				<source>0252</source>
+				<target>0252</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Macau">
+				<source>Asia/Macau</source>
+				<target>Asia/Macau</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Macau">
+				<source>0253</source>
+				<target>0253</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Makassar">
+				<source>Asia/Makassar</source>
+				<target>Asia/Makassar</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Makassar">
+				<source>0254</source>
+				<target>0254</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Manila">
+				<source>Asia/Manila</source>
+				<target>Asia/Manila</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Manila">
+				<source>0255</source>
+				<target>0255</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Nicosia">
+				<source>Asia/Nicosia</source>
+				<target>Asia/Nicosia</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Nicosia">
+				<source>0256</source>
+				<target>0256</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Phnom_Penh">
+				<source>Asia/Phnom_Penh</source>
+				<target>Asia/Phnom_Penh</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Phnom_Penh">
+				<source>0257</source>
+				<target>0257</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Pontianak">
+				<source>Asia/Pontianak</source>
+				<target>Asia/Pontianak</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Pontianak">
+				<source>0258</source>
+				<target>0258</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Pyongyang">
+				<source>Asia/Pyongyang</source>
+				<target>Asia/Pyongyang</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Pyongyang">
+				<source>0259</source>
+				<target>0259</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Seoul">
+				<source>Asia/Seoul</source>
+				<target>Asia/Seoul</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Seoul">
+				<source>0260</source>
+				<target>0260</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Shanghai">
+				<source>Asia/Shanghai</source>
+				<target>Asia/Shanghai</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Shanghai">
+				<source>0261</source>
+				<target>0261</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Singapore">
+				<source>Asia/Singapore</source>
+				<target>Asia/Singapore</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Singapore">
+				<source>0262</source>
+				<target>0262</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Taipei">
+				<source>Asia/Taipei</source>
+				<target>Asia/Taipei</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Taipei">
+				<source>0263</source>
+				<target>0263</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Tbilisi">
+				<source>Asia/Tbilisi</source>
+				<target>Asia/Tbilisi</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Tbilisi">
+				<source>0264</source>
+				<target>0264</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Tehran">
+				<source>Asia/Tehran</source>
+				<target>Asia/Tehran</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Tehran">
+				<source>0265</source>
+				<target>0265</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Tokyo">
+				<source>Asia/Tokyo</source>
+				<target>Asia/Tokyo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Tokyo">
+				<source>0266</source>
+				<target>0266</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Vientiane">
+				<source>Asia/Vientiane</source>
+				<target>Asia/Vientiane</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Vientiane">
+				<source>0267</source>
+				<target>0267</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Yangon">
+				<source>Asia/Yangon</source>
+				<target>Asia/Yangon</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Yangon">
+				<source>0268</source>
+				<target>0268</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Asia/Yekaterinburg">
+				<source>Asia/Yekaterinburg</source>
+				<target>Asia/Yekaterinburg</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Asia/Yekaterinburg">
+				<source>0269</source>
+				<target>0269</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/Azores">
+				<source>Atlantic/Azores</source>
+				<target>Atlantic/Azores</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/Azores">
+				<source>0270</source>
+				<target>0270</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/Bermuda">
+				<source>Atlantic/Bermuda</source>
+				<target>Atlantic/Bermuda</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/Bermuda">
+				<source>0271</source>
+				<target>0271</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/Canary">
+				<source>Atlantic/Canary</source>
+				<target>Atlantic/Canary</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/Canary">
+				<source>0272</source>
+				<target>0272</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/Faroe">
+				<source>Atlantic/Faroe</source>
+				<target>Atlantic/Faroe</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/Faroe">
+				<source>0273</source>
+				<target>0273</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/Madeira">
+				<source>Atlantic/Madeira</source>
+				<target>Atlantic/Madeira</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/Madeira">
+				<source>0274</source>
+				<target>0274</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/Reykjavik">
+				<source>Atlantic/Reykjavik</source>
+				<target>Atlantic/Reykjavik</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/Reykjavik">
+				<source>0275</source>
+				<target>0275</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/St_Helena">
+				<source>Atlantic/St_Helena</source>
+				<target>Atlantic/St_Helena</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/St_Helena">
+				<source>0276</source>
+				<target>0276</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Atlantic/Stanley">
+				<source>Atlantic/Stanley</source>
+				<target>Atlantic/Stanley</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Atlantic/Stanley">
+				<source>0277</source>
+				<target>0277</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Adelaide">
+				<source>Australia/Adelaide</source>
+				<target>Australia/Adelaide</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Adelaide">
+				<source>0278</source>
+				<target>0278</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Brisbane">
+				<source>Australia/Brisbane</source>
+				<target>Australia/Brisbane</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Brisbane">
+				<source>0279</source>
+				<target>0279</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Broken_Hill">
+				<source>Australia/Broken_Hill</source>
+				<target>Australia/Broken_Hill</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Broken_Hill">
+				<source>0280</source>
+				<target>0280</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Currie">
+				<source>Australia/Currie</source>
+				<target>Australia/Currie</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Currie">
+				<source>0281</source>
+				<target>0281</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Darwin">
+				<source>Australia/Darwin</source>
+				<target>Australia/Darwin</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Darwin">
+				<source>0282</source>
+				<target>0282</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Hobart">
+				<source>Australia/Hobart</source>
+				<target>Australia/Hobart</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Hobart">
+				<source>0283</source>
+				<target>0283</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Lindeman">
+				<source>Australia/Lindeman</source>
+				<target>Australia/Lindeman</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Lindeman">
+				<source>0284</source>
+				<target>0284</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Lord_Howe">
+				<source>Australia/Lord_Howe</source>
+				<target>Australia/Lord_Howe</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Lord_Howe">
+				<source>0285</source>
+				<target>0285</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Melbourne">
+				<source>Australia/Melbourne</source>
+				<target>Australia/Melbourne</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Melbourne">
+				<source>0286</source>
+				<target>0286</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Perth">
+				<source>Australia/Perth</source>
+				<target>Australia/Perth</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Perth">
+				<source>0287</source>
+				<target>0287</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Australia/Sydney">
+				<source>Australia/Sydney</source>
+				<target>Australia/Sydney</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Australia/Sydney">
+				<source>0288</source>
+				<target>0288</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Indian/Antananarivo">
+				<source>Indian/Antananarivo</source>
+				<target>Indian/Antananarivo</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Indian/Antananarivo">
+				<source>0289</source>
+				<target>0289</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Indian/Comoro">
+				<source>Indian/Comoro</source>
+				<target>Indian/Comoro</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Indian/Comoro">
+				<source>0290</source>
+				<target>0290</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Indian/Maldives">
+				<source>Indian/Maldives</source>
+				<target>Indian/Maldives</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Indian/Maldives">
+				<source>0291</source>
+				<target>0291</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Indian/Mayotte">
+				<source>Indian/Mayotte</source>
+				<target>Indian/Mayotte</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Indian/Mayotte">
+				<source>0292</source>
+				<target>0292</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Pacific/Auckland">
+				<source>Pacific/Auckland</source>
+				<target>Pacific/Auckland</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Pacific/Auckland">
+				<source>0293</source>
+				<target>0293</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Pacific/Easter">
+				<source>Pacific/Easter</source>
+				<target>Pacific/Easter</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Pacific/Easter">
+				<source>0294</source>
+				<target>0294</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Pacific/Guam">
+				<source>Pacific/Guam</source>
+				<target>Pacific/Guam</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Pacific/Guam">
+				<source>0295</source>
+				<target>0295</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Pacific/Honolulu">
+				<source>Pacific/Honolulu</source>
+				<target>Pacific/Honolulu</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Pacific/Honolulu">
+				<source>0296</source>
+				<target>0296</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Pacific/Midway">
+				<source>Pacific/Midway</source>
+				<target>Pacific/Midway</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Pacific/Midway">
+				<source>0297</source>
+				<target>0297</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Pacific/Pago_Pago">
+				<source>Pacific/Pago_Pago</source>
+				<target>Pacific/Pago_Pago</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Pacific/Pago_Pago">
+				<source>0298</source>
+				<target>0298</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.Pacific/Saipan">
+				<source>Pacific/Saipan</source>
+				<target>Pacific/Saipan</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.Pacific/Saipan">
+				<source>0299</source>
+				<target>0299</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.UTC">
+				<source>UTC</source>
+				<target>UTC</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.UTC">
+				<source>0300</source>
+				<target>0300</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.detail.timezone.utc">
+				<source>UTC</source>
+				<target>UTC</target>
+			</trans-unit>
+			<trans-unit id="timer.flexform.array.key.timezone.utc">
+				<source>0301</source>
+				<target>0301</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

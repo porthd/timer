@@ -25,20 +25,12 @@
                     </label>
                     <config>
                         <type>datetime</type>
-                        <readOnly>0</readOnly>
-                        <default>0</default>
-                        <dbType>time</dbType>
                         <format>time</format>
-                        <nullable>1</nullable>
+                        <eval>int</eval>
+                        <default>0</default>
                     </config>
                 </TCEforms>
             </startTimeSeconds>
-            <test>
-                <label>nummer</label>
-                <config>
-                    <type>number</type>
-                </config>
-            </test>
             <durationMinutes>
                 <TCEforms>
                     <label>

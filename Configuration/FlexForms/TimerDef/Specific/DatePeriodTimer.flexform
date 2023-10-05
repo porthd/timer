@@ -25,10 +25,9 @@
                     </label>
                     <config>
                         <type>datetime</type>
-                        <readOnly>0</readOnly>
                         <default>1970-01-01T23:01:00</default>
-                        <dbType>datetime</dbType>
-                        <nullable>1</nullable>
+                        <format>datetime</format>
+                        <nullable>0</nullable>
                     </config>
                 </TCEforms>
             </startDateTime>

@@ -37,7 +37,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 final class ResolveLocales
 {
-
     protected const ICU_NATIONCODES = [
         'af' => [
             'lllnation' => 'LLL:EXT:timer/Resources/Private/Language/de.locallang_cal.xlf:locale.icu.nation.afg',

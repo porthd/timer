@@ -48,6 +48,7 @@
                         <renderType>selectSingle</renderType>
                         <minitems>1</minitems>
                         <maxitems>1</maxitems>
+                        <default>Europe/Berlin</default>
                     </config>
                 </TCEforms>
             </timeZoneOfEvent>

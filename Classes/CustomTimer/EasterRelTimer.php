@@ -505,7 +505,7 @@ class EasterRelTimer implements TimerInterface
                 $result->sub(new DateInterval('P2D'));
                 break;
             case self::ARG_NAMED_DATE_EASTER:
-//                $result = $easter;
+                //                $result = $easter;
                 break;
             case self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST:
                 $result->add(new DateInterval('P39D'));
@@ -540,7 +540,7 @@ class EasterRelTimer implements TimerInterface
                 $result->sub(new DateInterval('P48D'));
                 break;
             default:
-//                $result = $easter;
+                //                $result = $easter;
                 break;
         }
         return $result;
