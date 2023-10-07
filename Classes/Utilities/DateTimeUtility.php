@@ -159,6 +159,68 @@ class DateTimeUtility
     {
         return GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ?: time();
     }
+//
+//    /**
+//     * @param DateTime $destDateTime
+//     * @param DateTime $startTime
+//     * @param int $periodLength
+//     * @param string $periodUnit
+//     * @return int
+//     * @throws TimerException
+//     */
+//    public static function diffPeriod(DateTime $destDateTime, DateTime $startTime, int $periodLength, string $periodUnit): int
+//    {
+//        $calcDateTime = clone $destDateTime;
+//        $differenz = $calcDateTime->diff($startTime);
+//        switch ($periodUnit) {
+//            case self::KEY_UNIT_MINUTE:
+//                $rawCount = floor(
+//                    (($differenz->days ?: 0) * 1440 + (($differenz->h ?: 0) * 60) + ($differenz->i ?: 0)) / abs($periodLength)
+//                );
+//                break;
+//            case self::KEY_UNIT_HOUR:
+//                $rawCount = floor(
+//                    (($differenz->days ?: 0) * 24 + $differenz->h) / abs($periodLength)
+//                );
+//                break;
+//            case self::KEY_UNIT_DAY:
+//                $rawCount = floor(
+//                    ($differenz->days ?: 0) / abs($periodLength)
+//                );
+//
+//                break;
+//            case self::KEY_UNIT_WEEK:
+//                $rawCount = floor(
+//                    ($differenz->days ?: 0) / abs(7 * $periodLength)
+//                );
+//                break;
+//            case self::KEY_UNIT_MONTH:
+//                $rawCount = floor(
+//                    (($differenz->m ?: 0) + ($differenz->y ?: 0) * 12) / abs($periodLength)
+//                );
+//                break;
+//            case self::KEY_UNIT_YEAR:
+//                $rawCount = floor(
+//                    ($differenz->y ?: 0) / abs($periodLength)
+//                );
+//                break;
+//            default:
+//                throw new TimerException(
+//                    'The period-Unit is not defined by this extension `' .
+//                    TimerConst::EXTENSION_NAME . '`.' . ' Check your spelling and the definitions in the flexforms. ' .
+//                    'Allowed are `' . self::KEY_UNIT_MINUTE . '`,`' . self::KEY_UNIT_HOUR . '`,`' .
+//                    self::KEY_UNIT_DAY . '`,`' . self::KEY_UNIT_MONTH . '` and `' .
+//                    self::KEY_UNIT_YEAR . '`.',
+//                    1601984604
+//                );
+//        }
+//        if ($differenz->invert) {
+//            $toZeroCountPeriod = -$rawCount + 1;
+//        } else {
+//            $toZeroCountPeriod = $rawCount;
+//        }
+//        return (int)$toZeroCountPeriod;
+//    }
 
     /**
      * @param DateTime $destDateTime
@@ -172,37 +234,37 @@ class DateTimeUtility
     {
         $calcDateTime = clone $destDateTime;
         $differenz = $calcDateTime->diff($startTime);
+        $diffSeconds = $calcDateTime->getTimestamp() - $startTime->getTimestamp();
+        $flagSeconds = true;
+        // detect the periods, which are between the calc-date and dest-date
         switch ($periodUnit) {
             case self::KEY_UNIT_MINUTE:
-                $rawCount = floor(
-                    (($differenz->days ?: 0) * 1440 + (($differenz->h ?: 0) * 60) + ($differenz->i ?: 0)) / abs($periodLength)
-                );
+                $diffMinutes = floor($diffSeconds / 60);
+                $rawCount = floor($diffMinutes / abs($periodLength));
                 break;
             case self::KEY_UNIT_HOUR:
-                $rawCount = floor(
-                    (($differenz->days ?: 0) * 24 + $differenz->h) / abs($periodLength)
-                );
+                $diffHours = floor($diffSeconds / 3600);
+                $rawCount = floor($diffHours / abs($periodLength));
                 break;
             case self::KEY_UNIT_DAY:
-                $rawCount = floor(
-                    ($differenz->days ?: 0) / abs($periodLength)
-                );
-
+                $days = floor($diffSeconds / 86400);
+                $rawCount = floor($days / abs($periodLength));
                 break;
             case self::KEY_UNIT_WEEK:
-                $rawCount = floor(
-                    ($differenz->days ?: 0) / abs(7 * $periodLength)
-                );
+                $weeks = floor($diffSeconds / 604800);
+                $rawCount = floor($weeks / abs($periodLength));
                 break;
             case self::KEY_UNIT_MONTH:
                 $rawCount = floor(
                     (($differenz->m ?: 0) + ($differenz->y ?: 0) * 12) / abs($periodLength)
                 );
+                $flagSeconds = false;
                 break;
             case self::KEY_UNIT_YEAR:
                 $rawCount = floor(
                     ($differenz->y ?: 0) / abs($periodLength)
                 );
+                $flagSeconds = false;
                 break;
             default:
                 throw new TimerException(
@@ -214,10 +276,19 @@ class DateTimeUtility
                     1601984604
                 );
         }
-        if ($differenz->invert) {
-            $toZeroCountPeriod = -$rawCount + 1;
+        if ($flagSeconds) {
+            if ($rawCount < 0) {
+                $toZeroCountPeriod = -$rawCount + 1;
+            } else {
+                $toZeroCountPeriod = $rawCount;
+            }
+
         } else {
-            $toZeroCountPeriod = $rawCount;
+            if ($differenz->invert) {
+                $toZeroCountPeriod = -$rawCount + 1;
+            } else {
+                $toZeroCountPeriod = $rawCount;
+            }
         }
         return (int)$toZeroCountPeriod;
     }

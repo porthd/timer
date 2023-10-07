@@ -137,6 +137,12 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
         array $processedData
     )
     {
+        $targetVariableName = $cObj->stdWrapValue(
+            TimerConst::ARGUMENT_AS,
+            $processorConfiguration,
+            self::DEFAULT_RESULT_VARIABLE_NAME
+        );
+
         // Reasons to stop this dataprocessor
         if ((array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration)) &&
             (!$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT]))
@@ -145,13 +151,20 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
         }
 
         // prepare caching
-        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier(
+            $processedData,
+            $targetVariableName
+        );
         $myResult = $this->cache->get($cacheIdentifier);
         if ($myResult === false) {
             [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
 
             if (array_key_exists(self::ATTR_FLEX_FIELD, $processorConfiguration)) {
-                $flexFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_FIELD, $processorConfiguration, self::DEFAULT_FLEX_FIELD);
+                $flexFieldName = $cObj->stdWrapValue(
+                    self::ATTR_FLEX_FIELD,
+                    $processorConfiguration,
+                    self::DEFAULT_FLEX_FIELD
+                );
             } else {
                 $flexFieldName = self::DEFAULT_FLEX_FIELD;
             }
@@ -165,7 +178,9 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
                     self::DEFAULT_FLATTENKEYS
                 );
                 $singleElementRaw = GeneralUtility::xml2array($flexString);
-                if ((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) {
+                if ((is_string($singleElementRaw)) &&
+                    (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')
+                ) {
                     throw new TimerException(
                         'The flexform-string in the field `' . $flexFieldName . '` could not be resolved.' .
                         ' Check the reason for the incorrect flexform-string: `' . $flexString . '`',
@@ -185,11 +200,6 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
                 }
             }
 
-            $targetVariableName = $cObj->stdWrapValue(
-                self::ATTR_RESULT_VARIABLE_NAME,
-                $processorConfiguration,
-                self::DEFAULT_RESULT_VARIABLE_NAME
-            );
 
             // the caching-times is defined or depends on default-value
             if (($cacheCalc !== false) ||

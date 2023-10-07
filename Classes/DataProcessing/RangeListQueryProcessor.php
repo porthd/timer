@@ -152,6 +152,13 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
         array $processedData
     ): array
     {
+        // The variable to be used within the result
+        $targetVariableName = $cObj->stdWrapValue(
+            TimerConst::ARGUMENT_AS,
+            $processorConfiguration,
+            'records'
+        );
+
         // Reasons to stop this dataprocessor
         $tableName = $cObj->stdWrapValue(self::PARAMETER_TABLE, $processorConfiguration);
         if ((empty($tableName)) ||
@@ -164,7 +171,10 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
         }
 
         // prepare caching
-        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier(
+            $processedData,
+            $targetVariableName
+        );
         $myResult = $this->cache->get($cacheIdentifier);
         if ($myResult === false) {
             [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
@@ -179,8 +189,6 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
                 unset($processorConfiguration[self::PARAMETER_TABLE]);
             }
 
-            // The variable to be used within the result
-            $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'records');
 
             // Execute a SQL statement to fetch the records
             $records = $cObj->getRecords($tableName, $processorConfiguration);

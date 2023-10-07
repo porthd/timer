@@ -189,34 +189,47 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
         array $processedData
     )
     {
-        // configuration cache = 'field'(tx_timer_timer)
-        // configuration cache = 'selectorfield'(tx_timer_selector)
-        // configuration cache = 'if'
-        // configuration cache = 'cache'
-        // configuration pflicht = 'yamlPeriodFilePath'
-        // configuration Optional = 'yamlPeriodFalRelation'
+        $targetVariableName = $cObj->stdWrapValue(
+            TimerConst::ARGUMENT_AS,
+            $processorConfiguration,
+            self::DEFAULT_RESULT_VARIABLE_NAME
+        );
 
         // Reasons to stop this dataprocessor
         if (array_key_exists(self::ATTR_FLEX_FIELD, $processorConfiguration)) {
-            $flexFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_FIELD, $processorConfiguration, TimerConst::TIMER_FIELD_FLEX_ACTIVE);
+            $flexFieldName = $cObj->stdWrapValue(
+                self::ATTR_FLEX_FIELD,
+                $processorConfiguration,
+                TimerConst::TIMER_FIELD_FLEX_ACTIVE
+            );
         } else {
             $flexFieldName = TimerConst::TIMER_FIELD_FLEX_ACTIVE;
         }
         if (array_key_exists(self::ATTR_FLEX_SELECTORFIELD, $processorConfiguration)) {
-            $selectorFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_SELECTORFIELD, $processorConfiguration, TimerConst::TIMER_FIELD_SELECTOR);
+            $selectorFieldName = $cObj->stdWrapValue(
+                self::ATTR_FLEX_SELECTORFIELD,
+                $processorConfiguration,
+                TimerConst::TIMER_FIELD_SELECTOR
+            );
         } else {
             $selectorFieldName = TimerConst::TIMER_FIELD_SELECTOR;
         }
-        if ((array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration) && !$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT])) ||
-            (!array_key_exists($selectorFieldName, $processedData[self::OUTPUT_KEY_DATA])) ||
+        if ((!array_key_exists($selectorFieldName, $processedData[self::OUTPUT_KEY_DATA])) ||
             (empty($processedData[self::OUTPUT_KEY_DATA][$flexFieldName])) ||
+            (
+                (array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration)) &&
+                (!$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT]))
+            ) ||
             (trim($processedData[self::OUTPUT_KEY_DATA][$selectorFieldName]) !== PeriodListTimer::TIMER_NAME)
         ) {
             return $processedData;
         }
 
         // prepare caching
-        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier(
+            $processedData,
+            $targetVariableName
+        );
         $myResult = $this->cache->get($cacheIdentifier);
         if ($myResult === false) {
             [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
@@ -322,11 +335,6 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
             }
             // The variable to be used within the result
             $maxCount = (int)$cObj->stdWrapValue(self::ATTR_MAX_COUNT, $processorConfiguration, self::DEFAULT_MAX_COUNT);
-            $targetVariableName = $cObj->stdWrapValue(
-                TimerConst::ARGUMENT_AS,
-                $processorConfiguration,
-                self::DEFAULT_RESULT_VARIABLE_NAME
-            );
 
             // sortiere $rawResult
             $referenceKey = (

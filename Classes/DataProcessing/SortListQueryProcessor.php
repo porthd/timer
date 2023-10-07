@@ -159,6 +159,8 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
         array $processedData
     ): array
     {
+        // The variable to be used within the result
+        $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'sortedrecords');
         // Reasons to stop this dataprocessor
         $fieldName = $cObj->stdWrapValue(TimerConst::ARGUMENT_FIELDNAME, $processorConfiguration, 'myrecords');
         if ((empty($fieldName)) ||
@@ -172,17 +174,17 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
         }
 
         // prepare caching
-        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier(
+            $processedData,
+            $targetVariableName
+        );
         $myResult = $this->cache->get($cacheIdentifier);
+        // todo remove true in condition for use of cacheing
         if ($myResult === false) {
             [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
             // Reading the current data instead of $GLOBALS['EXEC_TIME']
             $currentTimestamp = (int)(GeneralUtility::makeInstance(Context::class))
                 ->getPropertyFromAspect('date', 'timestamp');
-
-
-            // The variable to be used within the result
-            $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'sortedrecords');
 
             // get recordlist from former processed datas
             $periodTimerDefList = $processedData[$fieldName];

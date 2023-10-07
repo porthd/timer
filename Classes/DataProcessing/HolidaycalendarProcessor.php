@@ -161,9 +161,20 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
         ) {
             return $processedData;
         }
+        if (array_key_exists(TimerConst::ARGUMENT_AS, $processorConfiguration)) {
+            $as = $cObj->stdWrapValue(
+                TimerConst::ARGUMENT_AS,
+                $processorConfiguration,
+                self::DEFAULT_AS);
+        } else {
+            $as = self::DEFAULT_AS;
+        }
 
         // prepare caching
-        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier(
+            $processedData,
+            $as
+        );
         $myResult = $this->cache->get($cacheIdentifier);
         if ($myResult === false) {
             /** @var Context $dataProcessorContext */
@@ -171,7 +182,6 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
             // need configuration `cache`
             [$cacheTime, $cacheCalc] = $this->detectCacheTimeSet($cObj, $processorConfiguration);
             // needs configuration `start.(year|month|day)`, `stop.(year|month|day)`, `calendar`, `timezone`, `locale`
-            $context = GeneralUtility::makeInstance(Context::class);
             $timeRangeInfo = $this->getTimeRangeInformations($processorConfiguration, $cObj, $dataProcessorContext);
             // needs `aliasConfig.(flexDbField|pathFlexField|falFlexField)` or `aliasPath` in the configuration or nothing
             $aliasPath = $this->getAliasForCalendarYaml($processorConfiguration, $cObj, $processedData);
@@ -179,11 +189,6 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
             // needs `holidayConfig.(flexDbField|pathFlexField)` or `holidayPath` in the configuration or nothing
             $holidayPath = $this->getHolidayForCalendarYaml($processorConfiguration, $cObj, $processedData);
             // params `as`,
-            if (array_key_exists(TimerConst::ARGUMENT_AS, $processorConfiguration)) {
-                $as = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, self::DEFAULT_AS);
-            } else {
-                $as = self::DEFAULT_AS;
-            }
 
             // Read the Yamle-Parts fram a separated aliasfile
             $aliasArray = [];

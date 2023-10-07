@@ -40,10 +40,11 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 trait GeneralDataProcessorTrait
 {
     /**
-     * @param array<mixed> $processedData
-     * @return array<mixed>
+     * @param array $processedData
+     * @param string $fieldname
+     * @return array
      */
-    public function generateCacheIdentifier(array &$processedData): array
+    public function generateCacheIdentifier(array &$processedData, string $fieldname): array
     {
         // detect type of data
         $flagPage = isset($processedData['data']['doktype'], $processedData['data']['is_siteroot']);
@@ -85,7 +86,7 @@ trait GeneralDataProcessorTrait
             $processedData['data']['sys_language_uid'] :
             '_upsLang'
         );
-        $cacheIdentifier = md5(__CLASS__ . "#$pageUid#$cType#$listType#$languageUid#" . __LINE__) . $add . $pageContentOrElementUid;
+        $cacheIdentifier = md5(__CLASS__ . "#$pageUid#$cType#$listType#$languageUid#$fieldname#" . __LINE__) . $add . $pageContentOrElementUid;
         return [$pageUid, $pageContentOrElementUid, $cacheIdentifier];
     }
 

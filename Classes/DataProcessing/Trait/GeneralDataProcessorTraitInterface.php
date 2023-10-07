@@ -40,9 +40,10 @@ interface GeneralDataProcessorTraitInterface
 {
     /**
      * @param array<mixed> $processedData
+     * @param string $fieldname
      * @return array<mixed>
      */
-    public function generateCacheIdentifier(array &$processedData): array;
+    public function generateCacheIdentifier(array &$processedData, string $fieldname): array;
 
     /**
      * @param ContentObjectRenderer $cObj

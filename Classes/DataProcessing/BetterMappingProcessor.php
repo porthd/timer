@@ -86,7 +86,6 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
     protected const VAL_OUTPUT_FORMAT_ARRAY = 'array';
     protected const DEFAULT_OUTPUT_FORMAT = self::VAL_OUTPUT_FORMAT_JSON;
     protected const ATTR_FLEX_YAMLSTARTKEY = 'yamlStartKey';
-    protected const ATTR_FLEX_OUTPUTFIELD = 'as';
     protected const DEFAULT_OUTPUTFIELD = 'betterMappingJson';
 
     /**
@@ -143,6 +142,15 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
         } else {
             $inputFieldName = self::DEFAULT_FLEX_FIELD;
         }
+        if (array_key_exists(TimerConst::ARGUMENT_AS, $processorConfiguration)) {
+            $outputFieldName = $cObj->stdWrapValue(
+                TimerConst::ARGUMENT_AS,
+                $processorConfiguration,
+                self::DEFAULT_OUTPUTFIELD
+            );
+        } else {
+            $outputFieldName = self::DEFAULT_OUTPUTFIELD;
+        }
         if ((empty($processedData[$inputFieldName])) ||
             (!is_array($processedData[$inputFieldName])) ||
             (
@@ -154,7 +162,10 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
         }
 
         // prepare caching
-        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier($processedData);
+        [$pageUid, $pageContentOrElementUid, $cacheIdentifier] = $this->generateCacheIdentifier(
+            $processedData,
+            $outputFieldName
+        );
         $myResult = $this->cache->get($cacheIdentifier);
         $yamlStartKey = '';
         if ($myResult === false) {
@@ -164,11 +175,6 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
                 $outputFormat = $cObj->stdWrapValue(self::ATTR_OUTPUT_FORMAT, $processorConfiguration, self::DEFAULT_OUTPUT_FORMAT);
             } else {
                 $outputFormat = self::DEFAULT_OUTPUT_FORMAT;
-            }
-            if (array_key_exists(self::ATTR_FLEX_OUTPUTFIELD, $processorConfiguration)) {
-                $outputFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_OUTPUTFIELD, $processorConfiguration, self::DEFAULT_OUTPUTFIELD);
-            } else {
-                $outputFieldName = self::DEFAULT_OUTPUTFIELD;
             }
             if (array_key_exists($outputFieldName, $processedData)) {
                 throw new TimerException(
