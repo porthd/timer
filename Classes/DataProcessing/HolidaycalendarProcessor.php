@@ -165,7 +165,8 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
             $as = $cObj->stdWrapValue(
                 TimerConst::ARGUMENT_AS,
                 $processorConfiguration,
-                self::DEFAULT_AS);
+                self::DEFAULT_AS
+            );
         } else {
             $as = self::DEFAULT_AS;
         }

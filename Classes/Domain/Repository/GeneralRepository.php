@@ -58,7 +58,7 @@ class GeneralRepository implements TimerRepositoryInterface
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName)
                 ->createQueryBuilder();
             $queryBuilder->count(self::GENERAL_ROW_IDENTIFIER)->from($tableName);
-            return ($queryBuilder->executeQuery()->fetchOne());
+            return (bool)($queryBuilder->executeQuery()->fetchOne());
         } catch (Exception $e) {
             // We got an exception == table not found
             return false;
@@ -90,7 +90,7 @@ class GeneralRepository implements TimerRepositoryInterface
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
             ->add(GeneralUtility::makeInstance(HiddenRestriction::class));
         $contraints = [
-            $queryBuilder->expr()->neq(TimerConst::TIMER_FIELD_SCHEDULER, 0),
+            $queryBuilder->expr()->eq(TimerConst::TIMER_FIELD_SCHEDULER, 1),
             $queryBuilder->expr()->neq(
                 TimerConst::TIMER_FIELD_FLEX_ACTIVE,
                 '""'
@@ -121,7 +121,7 @@ class GeneralRepository implements TimerRepositoryInterface
         $queryBuilder->select(...$listOfFields)
             ->from($genericTable)
             ->where(...$contraints);
-        return $queryBuilder->execute()
+        return $queryBuilder->executeQuery()
             ->fetchAllAssociative();
     }
 

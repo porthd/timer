@@ -58,12 +58,15 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     use LogDataTrait;
     use LoggerAwareTrait;
 
+    public const YAML_SUBGROUP_WHERE = 'where';
+    public const YAML_SUBWHERE_FIELD = 'field';
+    public const YAML_SUBWHERE_TYPE = 'type';
+    public const YAML_SUBWHERE_VALUE = 'type';
+    public const YAML_SUBWHERE_COMPARE = 'compare';
 
-    protected const SIGNAL_MODIFY_DATA_BEFORE_DATAHANDLER = 'modifyDataBeforeDatahandler';
 
     protected const ARGUMENT_YAML_TABLE_LIST = 'yamlfile';
-    public const FAILURE = 1;
-    public const SUCCESS = 0;
+
     protected const LANG_PATH = 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:';
 
     protected const YAML_MAINGROUP_TABLELIST = 'tablelist';
@@ -77,11 +80,6 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     protected const YAML_SUBGROUP_REPOSITORY = 'repository';
     protected const YAML_SUBGROUP_LIST_ROOTLINE = 'rootlinePid';
     protected const YAML_SUBGROUP_TEXT_TABLE = 'table';
-    public const YAML_SUBGROUP_WHERE = 'where';
-    public const YAML_SUBWHERE_FIELD = 'field';
-    public const YAML_SUBWHERE_TYPE = 'type';
-    public const YAML_SUBWHERE_VALUE = 'type';
-    public const YAML_SUBWHERE_COMPARE = 'compare';
 
     /** @var DataHandler $dataHandler */
     private DataHandler $dataHandler;
@@ -177,22 +175,20 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             $output->writeln(
                 $e->getMessage()
             );
-            return self::FAILURE;
+            return Command::FAILURE;
         }
         // @todo use flashmessages, to make infos on the scheduler
         if ($flagSuccessGeneral) {
-            return self::SUCCESS;
+            return Command::SUCCESS;
         }
         if (!empty($flagSuccessTable)) {
             foreach ($flagSuccessTable as $key => $flag) {
                 if (!empty($flag)) {
                     $message = LocalizationUtility::translate(
-                        self::LANG_PATH . 'task.timer.warning.yamlNotAllUpdated.3',
+                        self::LANG_PATH . 'task.timer.warning.yamlNotAllUpdated.1',
                         TimerConst::EXTENSION_NAME,
                         [
-                            $key,
-                            $flag[self::YAML_SUBGROUP_TEXT_TABLE],
-                            $flag[self::YAML_SUBGROUP_LIST_ROOTLINE],
+                            $flag,
                         ]
                     );
 
@@ -202,7 +198,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                 }
             }
         }
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     /**
@@ -258,7 +254,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         $flagSuccess = [];
         $refDateTime = new DateTime('now');
         foreach ($yamlConfig as $key => $tableConfig) {
-            $this->validateYamlDefinition($tableConfig, $key);
+            $this->validateYamlDefinition($tableConfig, (string)$key);
             $listPids = [];
             if (array_key_exists(self::YAML_SUBGROUP_LIST_ROOTLINE, $tableConfig)) {
                 $listPids = $this->allowedPids($tableConfig[self::YAML_SUBGROUP_LIST_ROOTLINE]);
@@ -306,7 +302,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         /** @var TimerRepositoryInterface $repository */
         $repository = GeneralUtility::makeInstance($className);
         if (!$repository->tableExists($yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE])) {
-            return self::FAILURE;
+            return Command::FAILURE;
         }
 
         $listOfFields = TimerConst::TIMER_NEEDED_FIELDS;
@@ -328,7 +324,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             $whereInfos
         );
         if ((!is_array($listOfRows)) || (empty($listOfRows))) {
-            return self::FAILURE;
+            return Command::FAILURE;
         }
         $firstKey = array_key_first($listOfRows);
         if ((!array_key_exists(TimerConst::TIMER_FIELD_SELECTOR, $listOfRows[$firstKey])) ||
@@ -355,7 +351,13 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         foreach ($listOfRows as $timerUpRow) {
             $xmlParam = GeneralUtility::xml2array($timerUpRow[TimerConst::TIMER_FIELD_FLEX_ACTIVE]);
             $normParams = TcaUtility::flexformArrayFlatten($xmlParam);
-            // include informations abour the relations for FAL-files in Flexform-Array for each timer
+            if ((!is_array($normParams)) ||
+                (!is_array($yamlTableConfig))
+            ) {
+                $hello = 'ups';
+                continue;
+            }
+            // include informations about the relations for FAL-files in Flexform-Array for each timer
             $normParams[TimerConst::TIMER_RELATION_TABLE] = $yamlTableConfig[self::YAML_SUBGROUP_TEXT_TABLE];
             $normParams[TimerConst::TIMER_RELATION_UID] = $timerUpRow[TimerConst::TIMER_FIELD_UID];
 
@@ -399,7 +401,8 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             }
             $count++;
         }
-        return (($count > 0) ? self::SUCCESS : self::FAILURE); // @phpstan-ignore-line
+
+        return (($count > 0) ? Command::SUCCESS : Command::FAILURE);
     }
 
     /**

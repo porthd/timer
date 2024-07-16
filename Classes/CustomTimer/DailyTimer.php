@@ -31,6 +31,7 @@ use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * @package DailyTimer

@@ -194,17 +194,25 @@ class DatePeriodTimer implements TimerInterface
             if (empty($params[self::ARG_REQ_OLDSTART_TIME])) {
                 return false;
             }
+            $startTimeString = $params[self::ARG_REQ_OLDSTART_TIME];
+            if (MathUtility::canBeInterpretedAsInteger($startTimeString)) {
+                $startTimeString = (new DateTime())->setTimestamp((int)$startTimeString)->format(self::TIMER_FORMAT_DATETIME);
+            }
             return ((
                 DateTime::createFromFormat(
                     self::TIMER_FORMAT_DATETIME,
-                    $params[self::ARG_REQ_OLDSTART_TIME]
+                    $startTimeString
                 )
                 ) !== false
             );
         }
+        $startTimeString = $params[self::ARG_REQ_START_TIME];
+        if (MathUtility::canBeInterpretedAsInteger($startTimeString)) {
+            $startTimeString = (new DateTime())->setTimestamp((int)$startTimeString)->format(self::TIMER_FORMAT_DATETIME);
+        }
         return (DateTime::createFromFormat(
                 self::TIMER_FORMAT_DATETIME,
-                $params[self::ARG_REQ_START_TIME]
+                $startTimeString
             ) !== false
         );
     }

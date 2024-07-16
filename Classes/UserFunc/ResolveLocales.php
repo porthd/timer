@@ -2033,43 +2033,95 @@ final class ResolveLocales
     ];
 
     protected const FLAG_TEMPLATE = '<span class="fi fi-%s"></span>';
+    protected const DEFAULT_IMPLODE_TEXT = '<span class="fi fi-%s"></span>';
 
     /**
-     * @param array<mixed> $conf
-     * @param mixed $reference
+     * @param array<mixed> $rawList
+     * @param string $spacer
+     * @param string $pretext
+     * @param string $posttext
      * @return string
      */
-    public function reduceLocalesToNations(array $conf, $reference): string
+    public function reduceLocalesToNationsListImplode(
+        array  $rawList = [],
+        string $spacer = self::DEFAULT_IMPLODE_TEXT,
+        string $pretext = self::DEFAULT_IMPLODE_TEXT,
+        string $posttext = self::DEFAULT_IMPLODE_TEXT
+    ): string
     {
-        $pretext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['pretext'] ?? ' ');
-        $posttext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['posttext'] ?? ' ');
-        $spacer = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['spacer'] ?? ' ');
-        $rawList = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_START] ?? '');
         if (empty($rawList)) {
             return '';
         }
-        $list = array_unique(
-            array_filter(
-                array_map(
-                    function ($item) {
-                        $item = trim($item);
-                        $list = explode('_', $item, 2);
-                        $nation = strtolower($list[1] ?? '');;
-                        $flag = sprintf(self::FLAG_TEMPLATE, $nation);
-                        if (array_key_exists($nation, self::ICU_NATIONCODES)) {
-                            $lllNationName = self::ICU_NATIONCODES[$nation]['lllnation'];
-                            $nationName = LocalizationUtility::translate(
-                                $lllNationName,
-                                TimerConst::EXTENSION_NAME
-                            );
-                            return $nationName . ' ' . $flag;
-                        }
-                        return '';
-                    },
-                    $rawList
-                )
-            )
-        );
+        $list = [];
+        foreach ($rawList as $item) {
+            $list[] = $this->reduceSingleLocaleToNationItem($item);
+        }
         return trim($pretext . implode($spacer, $list) . $posttext);
+    }
+
+    /**
+     *
+     *
+     * @param array<mixed> $conf
+     * @param mixed $reference
+     * @return string
+     *
+     * @deprecated will be removed in version 13
+     */
+    public function reduceLocalesToNations(array $conf, $reference): string
+    {
+        $rawList = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_START] ?? []);
+        if (empty($rawList)) {
+            return '';
+        }
+
+        $pretext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['pretext'] ?? ' ');
+        $posttext = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['posttext'] ?? ' ');
+        $spacer = ($conf[BetterMappingProcessor::ATTR_PARAM_USERFUNC_INTERNAL]['spacer'] ?? ' ');
+
+        $list = [];
+        foreach ($rawList as $item) {
+            $list[] = $this->reduceSingleLocaleToNationItem($item);
+        }
+        return trim($pretext . implode($spacer, $list) . $posttext);
+    }
+
+    /**
+     * @param string $item
+     * @return string
+     */
+    protected function reduceSingleLocaleToNationItem(string $item): string
+    {
+        $item = trim($item);
+        $list = explode('_', $item, 2);
+        $nation = strtolower($list[1] ?? '');;
+        $flag = sprintf(self::FLAG_TEMPLATE, $nation);
+        if (array_key_exists($nation, self::ICU_NATIONCODES)) {
+            $lllNationName = self::ICU_NATIONCODES[$nation]['lllnation'];
+            $nationName = LocalizationUtility::translate(
+                $lllNationName,
+                TimerConst::EXTENSION_NAME
+            );
+            return $nationName . ' ' . $flag;
+        }
+        return '';
+
+    }
+
+    public function reduceSingleLocaleToNation(string $nationCode): string
+    {
+        $nationCode = trim($nationCode);
+        $list = explode('_', $nationCode, 2);
+        $nation = strtolower($list[1] ?? '');
+        $nationName = '';
+        $flag = sprintf(self::FLAG_TEMPLATE, $nation);
+        if (array_key_exists($nation, self::ICU_NATIONCODES)) {
+            $lllNationName = self::ICU_NATIONCODES[$nation]['lllnation'];
+            $nationName = LocalizationUtility::translate(
+                $lllNationName,
+                TimerConst::EXTENSION_NAME
+            );
+        }
+        return trim($nationName . ' ' . $flag);
     }
 }

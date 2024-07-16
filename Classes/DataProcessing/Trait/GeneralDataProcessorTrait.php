@@ -40,16 +40,15 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 trait GeneralDataProcessorTrait
 {
     /**
-     * @param array $processedData
+     * @param array<mixed> $processedData
      * @param string $fieldname
-     * @return array
+     * @return array<mixed>
      */
     public function generateCacheIdentifier(array &$processedData, string $fieldname): array
     {
         // detect type of data
         $flagPage = isset($processedData['data']['doktype'], $processedData['data']['is_siteroot']);
         $flagContent = isset($processedData['data']['CType'], $processedData['data']['list_type']);
-        $flagData = (!($flagPage || $flagContent));
         $pageUid = (
         ($flagPage) ?
             $processedData['data']['pid'] :

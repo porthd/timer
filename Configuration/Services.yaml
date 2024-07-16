@@ -65,6 +65,11 @@ services:
             $cacheManager: '@cache.timer_manager'
             $contentDataProcessor: '@cache.timer_contentdataprocessor'
 
+    Porthd\Timer\DataProcessing\PhpMappingProcessor:
+        arguments:
+            $cache: '@cache.timer_dataprocessor'
+            $yamlFileLoader: '@cache.timer_yamlfileloader'
+
     Porthd\Timer\DataProcessing\SortListQueryProcessor:
         arguments:
             $cache: '@cache.timer_dataprocessor'

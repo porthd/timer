@@ -20,7 +20,7 @@ $tmp_timer_columns = [
             'renderType' => 'checkboxToggle',
             'items' => [
                 [
-                    'invertStateDisplay' => true,
+                    'invertStateDisplay' => false,
                     TimerConst::TCA_ITEMS_LABEL => '',
                 ]
             ],

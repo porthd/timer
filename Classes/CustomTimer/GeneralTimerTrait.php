@@ -12,7 +12,6 @@ use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 /***************************************************************
@@ -66,22 +65,25 @@ trait GeneralTimerTrait
     protected function validateUltimate(array $params = []): bool
     {
         $flag = (!empty($params[TimerInterface::ARG_ULTIMATE_RANGE_BEGINN]));
-        $flag = (
-            $flag && (
-                false !== date_create_from_format(
-                    TimerInterface::TIMER_FORMAT_DATETIME,
-                    $params[TimerInterface::ARG_ULTIMATE_RANGE_BEGINN]
-                )
-            )
-        );
         $flag = $flag && (!empty($params[TimerInterface::ARG_ULTIMATE_RANGE_END]));
-        return ($flag && (
-                false !== date_create_from_format(
-                    TimerInterface::TIMER_FORMAT_DATETIME,
-                    $params[TimerInterface::ARG_ULTIMATE_RANGE_END]
+        if ($flag) {
+            [$ultimateBeginn, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
+            $flag = (
+                (
+                    false !== date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $ultimateBeginn
+                    )
+                ) &&
+                (
+                    false !== date_create_from_format(
+                        TimerInterface::TIMER_FORMAT_DATETIME,
+                        $ultimateEnd
+                    )
                 )
-            )
-        );
+            );
+        }
+        return $flag;
     }
 
     /**
@@ -129,6 +131,7 @@ trait GeneralTimerTrait
         DateTime $dateBelowNextActive
     ): TimerStartStopRange
     {
+        [$ultimateBeginn, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
         if ((!$this->isAllowedInRange($nextRange->getBeginning(), $params)) ||
             (!$this->isAllowedInRange($nextRange->getEnding(), $params))
         ) {
@@ -143,39 +146,39 @@ trait GeneralTimerTrait
             $nextEndingFormat = $nextRange->getEnding()->format(self::TIMER_FORMAT_DATETIME);
             $nextBeginningFormat = $nextRange->getBeginning()->format(self::TIMER_FORMAT_DATETIME);
             if (
-                ($nextBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_END]) || // case 0
+                ($nextBeginningFormat >= $ultimateEnd) || // case 0
                 (
                     (
-                        ($nextBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
-                        ($nextEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
+                        ($nextBeginningFormat <= $ultimateBeginn) &&
+                        ($nextEndingFormat > $ultimateEnd)
                     ) ||
                     (
-                        ($nextBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
-                        ($nextEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_END])
+                        ($nextBeginningFormat < $ultimateBeginn) &&
+                        ($nextEndingFormat >= $ultimateEnd)
                     )
                 ) || // case 2.a, 2.b, 2
                 (
-                    ($nextBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
-                    ($nextBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_END]) &&
-                    ($nextEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
+                    ($nextBeginningFormat >= $ultimateBeginn) &&
+                    ($nextBeginningFormat <= $ultimateEnd) &&
+                    ($nextEndingFormat > $ultimateEnd)
                 ) // case 1
             ) {
                 $nextRange->failOnlyPrevActive($dateBelowNextActive);
             } else {
                 if (
-                    ($nextEndingFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) // case 1
+                    ($nextEndingFormat <= $ultimateBeginn) // case 1
                 ) { // case 4
                     $testBegin = DateTime::createFromFormat(
                         self::TIMER_FORMAT_DATETIME,
-                        $params[self::ARG_ULTIMATE_RANGE_BEGINN]
+                        $ultimateBeginn
                     );
                     $testBegin->sub(new DateInterval('PT1S'));
                     $nextRange = $this->nextActive($testBegin, $params);
                 } else {
                     if (
-                        ($nextBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
-                        ($nextEndingFormat < $params[self::ARG_ULTIMATE_RANGE_END]) &&
-                        ($nextEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN])
+                        ($nextBeginningFormat < $ultimateBeginn) &&
+                        ($nextEndingFormat < $ultimateEnd) &&
+                        ($nextEndingFormat >= $ultimateBeginn)
                     ) { // case 3
                         $testNextRange = $this->nextActive($nextRange->getEnding(), $params);
                         if (!$testNextRange->hasResultExist()) { // correct the recursive result
@@ -203,6 +206,7 @@ trait GeneralTimerTrait
         DateTime $dateAbovePrevActive
     ): TimerStartStopRange
     {
+        [$ultimateBeginn, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
         // `isAllowedInRange` is part of the interface for the timer
         if ((!$this->isAllowedInRange($prevRange->getBeginning(), $params)) ||
             (!$this->isAllowedInRange($prevRange->getEnding(), $params))
@@ -218,40 +222,40 @@ trait GeneralTimerTrait
             $prevEndingFormat = $prevRange->getEnding()->format(self::TIMER_FORMAT_DATETIME);
             $prevBeginningFormat = $prevRange->getBeginning()->format(self::TIMER_FORMAT_DATETIME);
             if (
-                ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) || // case 4
+                ($prevEndingFormat >= $ultimateBeginn) || // case 4
                 (
                     (
-                        ($prevBeginningFormat <= $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
-                        ($prevEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END])
+                        ($prevBeginningFormat <= $ultimateBeginn) &&
+                        ($prevEndingFormat > $ultimateEnd)
                     ) ||
                     (
-                        ($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
-                        ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_END])
+                        ($prevBeginningFormat < $ultimateBeginn) &&
+                        ($prevEndingFormat >= $ultimateEnd)
                     )
                 ) || // case 2.a, 2.b, 2
                 (
-                    ($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_BEGINN]) &&
-                    ($prevEndingFormat <= $params[self::ARG_ULTIMATE_RANGE_END]) &&
-                    ($prevEndingFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN])
+                    ($prevBeginningFormat < $ultimateBeginn) &&
+                    ($prevEndingFormat <= $ultimateEnd) &&
+                    ($prevEndingFormat >= $ultimateBeginn)
                 ) // case 3
             ) {
                 $prevRange->failOnlyNextActive($dateAbovePrevActive);
             } else {
                 if (
-                    ($prevBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_END]) // case 1
+                    ($prevBeginningFormat >= $ultimateEnd) // case 1
                 ) { // case 0
                     $testBegin = DateTime::createFromFormat(
                         self::TIMER_FORMAT_DATETIME,
-                        $params[self::ARG_ULTIMATE_RANGE_END]
+                        $ultimateEnd
                     );
                     $testBegin->add(new DateInterval('PT1S'));
                     // `prevActive` is part of the interface for the timer
                     $prevRange = $this->prevActive($testBegin, $params);
                 } else {
                     if (
-                        ($prevEndingFormat > $params[self::ARG_ULTIMATE_RANGE_END]) &&
-                        ($prevBeginningFormat < $params[self::ARG_ULTIMATE_RANGE_END]) &&
-                        ($prevBeginningFormat >= $params[self::ARG_ULTIMATE_RANGE_BEGINN])
+                        ($prevEndingFormat > $ultimateEnd) &&
+                        ($prevBeginningFormat < $ultimateEnd) &&
+                        ($prevBeginningFormat >= $ultimateBeginn)
                     ) { // case 1
                         // `prevActive` is part of the interface for the timer
                         $testPrevRange = $this->prevActive($prevRange->getBeginning(), $params);
@@ -277,18 +281,7 @@ trait GeneralTimerTrait
     protected function generalIsAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
     {
         // change in the flex-formdefinition in version-change 11 -> 12
-        if (MathUtility::canBeInterpretedAsInteger($params[self::ARG_ULTIMATE_RANGE_BEGINN])) {
-            $myDate = new DateTime('@' . $params[self::ARG_ULTIMATE_RANGE_BEGINN]);
-            $ultimateBegin = $myDate->format(TimerInterface::TIMER_FORMAT_DATETIME);
-        } else {
-            $ultimateBegin = $params[self::ARG_ULTIMATE_RANGE_BEGINN];
-        }
-        if (MathUtility::canBeInterpretedAsInteger($params[self::ARG_ULTIMATE_RANGE_END])) {
-            $myDate = new DateTime('@' . $params[self::ARG_ULTIMATE_RANGE_END]);
-            $ultimateEnd = $myDate->format(TimerInterface::TIMER_FORMAT_DATETIME);
-        } else {
-            $ultimateEnd = $params[self::ARG_ULTIMATE_RANGE_END];
-        }
+        [$ultimateBegin, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
         return ($ultimateBegin <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
             ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $ultimateEnd);
     }
@@ -367,6 +360,23 @@ trait GeneralTimerTrait
     protected function getExtentionPathByEnviroment(): string
     {
         return Environment::getExtensionsPath();
+    }
+
+    /**
+     * @param array<string,int> $params
+     * @return string[]
+     */
+    protected function normalizeUltimateBeginnEnd(array $params): array
+    {
+        $ultimateBeginn = $params[self::ARG_ULTIMATE_RANGE_BEGINN];
+        if (MathUtility::canBeInterpretedAsInteger($ultimateBeginn)) {
+            $ultimateBeginn = (new DateTime())->setTimestamp((int)$ultimateBeginn)->format(self::TIMER_FORMAT_DATETIME);
+        }
+        $ultimateEnd = $params[self::ARG_ULTIMATE_RANGE_END];
+        if (MathUtility::canBeInterpretedAsInteger($ultimateEnd)) {
+            $ultimateEnd = (new DateTime())->setTimestamp((int)$ultimateEnd)->format(self::TIMER_FORMAT_DATETIME);
+        }
+        return [$ultimateBeginn, $ultimateEnd];
     }
 
 }

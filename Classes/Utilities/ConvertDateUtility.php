@@ -183,7 +183,7 @@ class ConvertDateUtility
         if (empty(self::$locales)) {
             /** @var ResourceBundle $bundle */
             $bundle = new ResourceBundle('', 'ICUDATA');
-            self::$locales = $bundle->getLocales('');
+            self::$locales = $bundle::getLocales('');
         }
         return self::$locales;
     }
@@ -214,6 +214,7 @@ class ConvertDateUtility
         }
 
     }
+
     /**
      * @param string $locale
      * @param string $calendar
@@ -308,7 +309,7 @@ class ConvertDateUtility
         string $locale,
         string $calendar,
         DateTime $dateTime,
-        bool $flagFormat = true,
+        bool   $flagFormat = true,
         string $icuFormat = self::INTL_DATE_FORMATTER_DEFAULT_PATTERN
     ): string {
         $myDate = clone $dateTime;
@@ -540,23 +541,15 @@ class ConvertDateUtility
                     $text = $text . $firstChar;
                 }
             } else {
-                if ($firstChar === '') {
-                    if (!empty($text)) {
-                        $format = $format . "'" . $text . "'";
-                        $text = '';
-                    }
-                    $format = $format . $firstChar;
-                } else {
-                    if (!in_array($firstChar, self::MAP_TRANSFORM_PHP_FORMAT_TO_EMPTY)) {
-                        if (($key = array_search($firstChar, self::MAP_TRANSFORM_ICU_FORMAT_TO_PHP_FORMAT)) !== false) {
-                            if (!empty($text)) {
-                                $format = $format . "'" . $text . "'";
-                                $text = '';
-                            }
-                            $format = $format . $key;
-                        } else {
-                            $text = $text . $firstChar;
+                if (!in_array($firstChar, self::MAP_TRANSFORM_PHP_FORMAT_TO_EMPTY)) {
+                    if (($key = array_search($firstChar, self::MAP_TRANSFORM_ICU_FORMAT_TO_PHP_FORMAT)) !== false) {
+                        if (!empty($text)) {
+                            $format = $format . "'" . $text . "'";
+                            $text = '';
                         }
+                        $format = $format . $key;
+                    } else {
+                        $text = $text . $firstChar;
                     }
                 }
             }

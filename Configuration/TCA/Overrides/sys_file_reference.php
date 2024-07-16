@@ -17,7 +17,7 @@ call_user_func(function () {
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        'invertStateDisplay' => true,
+                        'invertStateDisplay' => false,
                         TimerConst::TCA_ITEMS_LABEL => '',
                     ]
                 ],

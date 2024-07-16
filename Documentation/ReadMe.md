@@ -312,12 +312,22 @@ an HTML attribute.~~
 `MappingProcessor` is deprecated and will be removed in version 12 because it
 doesn't support multilevel arrays.
 
-In the future, `BetterMappingProcessor` will be used as the third data processor
+~~In the future, `BetterMappingProcessor` will be used as the third data
+processor
 for the mapping.
 It can help to pass an appropriate JSON string to the Fluid template.
 The data can easily be made available to the TuiCalendar framework or another
-calendar framework via an HTML attribute.
+calendar framework via an HTML attribute.~~
+The data processor `BetterMappingProcessor` was an interim solution.
 
+In the future, `PhpMappingProcessor` will be used as a third data processor for
+mapping.
+In contrast to `BetterMappingProcessor`, this is easier to configure and follows
+a target structure-oriented approach.
+It can help to pass a suitable JSON string to the Fluid template.
+This means that the data can easily be made available to the TuiCalendar
+framework or
+another calendar framework via an HTML attribute.
 
 ### Content element `timersimul` as an example
 
@@ -1348,6 +1358,113 @@ visualize the structure of the transformation.
 |              | **_`generic.type=userfunc`_**                                |
 | userfunc     | &lt;Vendor\Extension\PfadZuKlasse->userFunctionName&gt;      | Definition of the user function that receives two parameters: firstly, the parameter array with the current userfunc configuration (`params`), the key of the data set (`mapKey`), the entire data set (`mapItem`) and the scalar `inField ` value (`start`) and secondly the object of the current BetterMapping processor.
 | 'any'        | &lt;any values&gt;                                           | In the subfield (`params`), which is passed as a parameter, there are also any defined parameters that have been defined here in addition to the method path in this section for the `userfunc`. (The user is therefore free to define his own control parameters for his user function.)
+
+#### PhpMappingProcessor
+
+Sometimes you use a JavaScript framework such as a calendar framework in the
+frontend,
+which requires a list of data in a defined data format as a JSON string.
+The problem is that in TYPO3 the data is only stored in a different data
+structure.
+The ``PhpMappingProcessor`` is intended to help overcome such structural
+deviations.
+The basic principle of the ``PhpMappingProcessor`` is simple. Depending on the
+input structure, you can generate a
+target record or an array of target records. In TypoScript, you recreate the
+target structure of the desired record(s) using the key terms below the `output`
+attribute in TypoScript style. You can assign constants, data references or
+functions to the target terms. The parameters of the functions are resolved
+recursively.
+This provides clarity and the greatest possible flexibility. On the input side,
+the data must be available either via an associative array, via a stdClass
+object or via a getter object.
+
+##### Example TypoScript
+
+````
+        15 = Porthd\Timer\DataProcessing\PhpMappingProcessor
+        15 {
+
+            outputformat = json
+            as = holidaycalendarJson
+
+            limiter {
+                inputPart = '.'
+                output {
+                    path = @
+                    part = .
+                    params = ,
+                    default = #
+                }
+            }
+
+            # The parent-variable contain an array i.e. data. The datamapper will use it only once.
+            # It can although use a part of a dataset.
+            # if you use the parameter `_all`, you can use the whole array of processed data `$processedData`.
+            inputOrigin = holidayList
+            # The parent-variable contain an array with multiplerows. The datamapper will iterate through all rows
+            # and generate a list of converted rows.
+            # two values allowed 'rows' oder 'static'
+            inputType = rows
+
+            # You can define the mapping a separate file instead of using  typoscript.
+            # The filename should have the ending .yaml,.yml,.csv or .json
+            # Be aware that .csv-files could only contain simple array.
+            # dataFile =  EXT:FilePath/FileName.json
+            output {
+                # A string without the brackets "(" ")" will be interpreted as a data-containing string.
+                # A string with the brackets "(" and the ending ")" will be interpreted as a userfunction.
+                # The part outside the brackets does not contain any space oder colons.
+                # A userfunction has thisway one of the three structures:
+                #    methodName(<parameterlist>) (pure php method)
+                #    Namespace/Of/Class->methodName(<parameterlist>) (every time the class will newly be instanciated)
+                #    Namespace/Of/Class::methodName(<parameterlist>) (static method: recommended)
+                # The parameter separated by a comma by default. The comma can be escaped by `\,`.
+                # Unknown methods, missing/wrong parameters will cause an exception.
+                # Call of methods in the parameter-list are allowed.
+                # The attributes under rows only for Security-reasons
+                # The type of output of @datatPath@ is not defined. It depends on the the structure of the origin.
+                # If you need a specific type like an integer a flaot, then you should use floatval(@datatPath@) or
+                # intval(@datatPath@). The custum function must always handle all types - unwished types with an exception.
+
+                category = allday
+                # Remark: starting the namespace of the custom method with `\` will cause an error
+                start = Porthd\Timer\UserFunc\MyDateTime->formatDateTime(@dateStart@,'Y-m-d','Europe/Berlin')
+                        # (new dateTime(@dateStart@))->format('Y-m-d')
+                end = Porthd\Timer\UserFunc\MyDateTime->formatDateTime(@dateEnd@,'Y-m-d','Europe/Berlin')
+                        # (new dateTime(@dateEnd@))->format('Y-m-d')
+                title = @cal.eventtitle@
+                body = Porthd\Timer\UserFunc\ResolveLocales->reduceSingleLocaleToNation(@cal.add.freelocale@)
+                id = @cal.identifier@
+                basetitle = @cal.title@
+                calendarId = @cal.tag@
+            }
+        }
+
+````
+
+##### Parameter
+
+| Parameter    | Default          | Description
+|--------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|              | **_Main level_** |
+| configFile   |                  | Instead of the configuration in TypoScript, a YAML file with all configuration instructions can also be created.
+| inputOrigin  | _all             | Path to the variable area for the data created in the previous DataProcessor flow. `_all` means the entire array.
+| inputType    | _all             | It has the two values `rows` and `static`. `rows` expects an array and applies `output` line by line to `rows`, creating an array of records. `static` applies `output` to `rows` only once, creating a single record.
+| as           | json             | Name of the variable, as it can be used later in Fluid for the output
+| outputformat | json             | Type of data format. `json` (string), `array` (PHP array), `yaml` (string)
+| output       | **_Main level_** | Is the starting point for the record definition (replication of the expected associative array for the data)
+| */...        |                  | The sub-points define the target structure of the desired data record. The syntax of Typoscript is used to recreate the nesting structure. For a YAML file, the YAML syntax is of course used.
+| limiter      | **_Main level_** | By default, the syntax for resolving the paths contains different separators. These separators can be overridden.
+| */path       | @                | This limiter is used to separate a data reference from the text in the string. This makes it easy to add strings, such as in "We welcome @user@ to the test."
+| */part       | .                | A data reference describes a hierarchically structured path in the input structure, similar to a folder structure on the hard drive. The separator delimits the keywords for the levels from each other.
+| */defpart    | #                | It may be that a string is to be entered as a default value for a non-existent date. The default value is to be specified directly in the path. Example of a path specification: @Path#Defaultvalue@
+| */params     | ,                | The separator is used to delimit the parameters of a function from each other. This is analogous to the syntax in many programming languages.
+| */start      | (                | To separate the function name from the parameters, the first bracket in the string is used as a separator.
+| */end        | )                | If a function is used, it must end with this delimiter. This also applies if a function is used recursively as a parameter.
+| */escape     | \\               | It may happen that one of the delimiter characters is used as a character in a string. With the preceding escape character, the following character is recognized as a text character.
+| */dynfunc    | ->               | In addition to normal PHP functions, you can also use user-defined functions from classes. If an instantiation of the function is necessary, the namespace of the class must be separated from the function name using this separator '->'. The mapping first instantiates the class again before the method is called. It is not recommended to change this delimiter.
+| */statfunc   | ::               | In addition to normal PHP functions, you can also use user-defined functions from classes. If a static function is used, the namespace of the class must be separated from the function name using this separator '::'. It is not recommended to change this delimiter. It is recommended to use mindless static functions in the mapping.
 
 #### PeriodlistProcessor
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
 	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z"
-	product-name="timer">
-		<header />
+		  product-name="timer">
+		<header/>
 		<body>
 			<trans-unit id="timer.flexform.array.detail.timezone.">
 				<source>Europe/Berlin</source>
@@ -52,14 +52,14 @@
 				<source>0004</source>
 				<target>0004</target>
 			</trans-unit>
-		<!--            <trans-unit id="timer.flexform.array.detail.timezone.Europe/Berlin">-->
-		<!--                <source>Europe/Berlin</source>-->
-		<!--                <target>Europe/Berlin</source>-->
-		<!--            </trans-unit>-->
-		<!--            <trans-unit id="timer.flexform.array.key.timezone.Europe/Berlin">-->
-		<!--                <source>00041</source>-->
-		<!--                <target>00041</source>-->
-		<!--            </trans-unit>-->
+			<!--            <trans-unit id="timer.flexform.array.detail.timezone.Europe/Berlin">-->
+			<!--                <source>Europe/Berlin</source>-->
+			<!--                <target>Europe/Berlin</source>-->
+			<!--            </trans-unit>-->
+			<!--            <trans-unit id="timer.flexform.array.key.timezone.Europe/Berlin">-->
+			<!--                <source>00041</source>-->
+			<!--                <target>00041</source>-->
+			<!--            </trans-unit>-->
 			<trans-unit id="timer.flexform.array.detail.timezone.Europe/Bratislava">
 				<source>Europe/Bratislava</source>
 				<target>Europe/Bratislava</target>

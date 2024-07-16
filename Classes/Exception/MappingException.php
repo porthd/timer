@@ -29,7 +29,7 @@ use Throwable;
 /**
  * An exception thrown if the return value type of a signal is not the expected one.
  */
-class TimerException extends Exception
+class MappingException extends Exception
 {
     /**
      * add some defaulttext to every erxception in this extension

@@ -54,11 +54,11 @@
             </trans-unit>
 <!--            <trans-unit id="timer.flexform.array.detail.timezone.Europe/Berlin">-->
 <!--                <source>Europe/Berlin</source>-->
-		<!--                <target>Europe/Berlin</source>-->
+			<!--                <target>Europe/Berlin</source>-->
 <!--            </trans-unit>-->
 <!--            <trans-unit id="timer.flexform.array.key.timezone.Europe/Berlin">-->
 <!--                <source>00041</source>-->
-		<!--                <target>00041</source>-->
+			<!--                <target>00041</source>-->
 <!--            </trans-unit>-->
             <trans-unit id="timer.flexform.array.detail.timezone.Europe/Bratislava">
                 <source>Europe/Bratislava</source>
