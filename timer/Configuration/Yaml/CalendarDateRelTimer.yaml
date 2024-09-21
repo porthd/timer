@@ -1,0 +1,353 @@
+# example for yaml, which you can call in your task of UpdateTimesCommand
+#
+aliasDateRel:
+    mainchristian:
+        locales:
+            - '_all'
+        freelocales:
+            - 'de_DE'
+            - 'de_AT'
+calendarDateRel:
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmas'
+        identifier: 'gre-christmas'
+        arg:
+            type: 'calendar-fixed'
+            day: '25'
+            month: '12'
+            calendar: 'gregorian'
+        add:
+            category:
+                - 'christian'
+            alias:
+                - 'mainchristian'
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+            rank: 5
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.buddh.indean.vesakh'
+        identifier: 'greg-vesakh'
+        arg:
+            type: 'moon-related'
+            statusCount: 1
+            status: 'fullmoon'
+            month: '2'
+            calendar: 'indian'
+        add:
+            category: 'buddhist'
+            # list of localized events
+            locales:
+                - '_all'
+            freelocales:
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+            rank: 5
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.easter'
+        identifier: 'greg-easter'
+        arg:
+            type: 'easter-related'
+            statusCount: 0
+            status: 'easter'
+            calendar: 'gregorian'
+        add:
+            category:
+                - 'christian'
+            alias:
+                - 'mainchristian'
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+            rank: 5
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.pentecost'
+        identifier: 'greg-easter'
+        arg:
+            type: 'easter-related'
+            statusCount: 49
+            status: 'easter'
+            calendar: 'gregorian'
+        add:
+            category:
+                - 'christian'
+            alias:
+                - 'mainchristian'
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+            rank: 5
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.goodfriday'
+        identifier: 'greg-easter'
+        arg:
+            type: 'easter-related'
+            statusCount: -2
+            status: 'easter'
+            calendar: 'gregorian'
+        add:
+            category:
+                - 'christian'
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+            rank: 5
+            alias:
+                - 'mainchristian'
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.rosemonday'
+        identifier: 'greg-easter'
+        arg:
+            type: 'easter-related'
+            statusCount: -48
+            status: 'easter'
+            calendar: 'gregorian'
+        add:
+            category:
+                - 'christian'
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent  rank: 5
+            locales:
+                - '_all'
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.newyear'
+        identifier: 'gre-newyear'
+        add:
+            type: 'calendar-fixed'
+            category:
+            freelocales:
+                - 'de_DE'
+            rank: 5
+        arg:
+            day: '1'
+            month: '1'
+            calendar: 'gregorian'
+        # tag = religion, politics, culture, historical, economics
+        tag: 'culture'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.chin.newyear'
+        identifier: 'chin-newyear'
+        add:
+            type: 'calendar-fixed'
+            category:
+                - 'christian'
+            freelocales:
+            rank: 5
+        arg:
+            day: '1'
+            month: '1'
+            calendar: 'chinese'
+        # tag = religion, politics, culture, historical, economics
+        tag: 'culture'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.firstAdvent'
+        identifier: 'greg-firstadvent'
+        add:
+            type: 'calendar-fixed'
+            category:
+                - 'christian'
+            freelocales:
+            rank: 2
+        arg:
+            day: '25'
+            month: '12'
+            status: 'sunday'
+            statusCount: -4
+            calendar: 'greg'
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.dayOfPrayerAndRepentance'
+        identifier: 'greg-prayerandrepentance'
+        add:
+            type: 'calendar-fixed'
+            category:
+                - 'christian'
+            freelocales:
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+            rank: 2
+        arg:
+            day: '25'
+            month: '12'
+            status: 'sunday'
+            statusCount: -5
+            secDayCount: -4
+            calendar: 'greg'
+        # tag = religion, politics, culture, historical, economics
+        tag: 'religion'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.newyear'
+        identifier: 'gre-newyear'
+        add:
+            type: 'calendar-fixed'
+            category:
+                - 'christian'
+            # rank = Number between the highest 5 and the lowest 1, missing or 0 ranks the event as indifferent
+            rank: 5
+            locale:
+                - 'de_DE'
+        arg:
+            day: '1'
+            month: '1'
+            calendar: 'gregorian'
+        # tag = religion, politics, culture, historical, economics
+        tag: 'culture'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.silvester'
+        identifier: 'gre-silvester'
+        arg:
+            type: 'calendar-fixed'
+            day: '31'
+            month: '12'
+            calendar: 'gregorian'
+        tag: 'culture'
+        add:
+            rank: 4
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.eco.greg.valentinsday'
+        identifier: 'gre-valentinsday'
+        arg:
+            type: 'calendar-fixed'
+            day: '14'
+            month: '2'
+            calendar: 'gregorian'
+        tag: 'economics'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.towlday'
+        identifier: 'gre-towlday'
+        arg:
+            type: 'calendar-fixed'
+            day: '25'
+            month: '5'
+            calendar: 'gregorian'
+        tag: 'historical'
+        add:
+            rank: 1
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.pol.greg.labourday'
+        identifier: 'gre-labourday'
+        arg:
+            type: 'calendar-fixed'
+            day: '1'
+            month: '5'
+            calendar: 'gregorian'
+        tag: 'political'
+        add:
+            rank: 5
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.germanunity'
+        identifier: 'gre-germanunity'
+        arg:
+            type: 'calendar-fixed'
+            day: '3'
+            month: '10'
+            calendar: 'gregorian'
+        tag: 'political'
+        add:
+            rank: 5
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.lailatAlBaraa'
+        identifier: 'isl-lailatAlBaraa'
+        arg:
+            type: 'calendar-fixed'
+            day: '14'
+            month: '8'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.ramadan'
+        identifier: 'isl-ramadan'
+        arg:
+            type: 'calendar-fixed'
+            day: '1'
+            month: '9'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.laylatulQadr'
+        identifier: 'isl-laylatulqadr'
+        arg:
+            type: 'calendar-fixed'
+            day: '27'
+            month: '9'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidAlFitr'
+        identifier: 'isl-eidalfitr'
+        arg:
+            type: 'calendar-fixed'
+            day: '1'
+            month: '10'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidUlAdha'
+        identifier: 'isl-eiduladha'
+        arg:
+            type: 'calendar-fixed'
+            day: '10'
+            month: '12'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidUlAdha'
+        identifier: 'isl-eiduladha'
+        arg:
+            type: 'calendar-fixed'
+            day: '1'
+            month: '1'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidUlAdha'
+        identifier: 'isl-eiduladha'
+        arg:
+            type: 'calendar-fixed'
+            day: '10'
+            month: '1'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.mawlidAnNabiSunnits'
+        identifier: 'isl-mawlidannabisunnits'
+        arg:
+            type: 'calendar-fixed'
+            day: '12'
+            month: '3'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'
+    -   eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.mawlidAnNabiSchiits'
+        identifier: 'isl-mawlidannabischiits'
+        arg:
+            type: 'calendar-fixed'
+            day: '17'
+            month: '3'
+            calendar: 'islamic'
+        tag: 'religion'
+        add:
+            rank: 2
+            locale:
+                - 'de_DE'

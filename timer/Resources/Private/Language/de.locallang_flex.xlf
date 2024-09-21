@@ -1,0 +1,1701 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z"
+		  product-name="flexformtimer">
+		<header/>
+		<body>
+			<!-- Names for the backend associated to flexform -->
+			<trans-unit id="tca.txTimerSelector.txTimerCalendarDateRel.select.name">
+				<source>(not working; in preparation) Period relativ to calendar-fixed events related to different
+					calendars
+				</source>
+				<target>(nicht funktionsfähig; in Vorbereitung) Zeitraum relativ zu kalender-fixierten Feiertage
+					relative zu verschiedenen Kalendern
+				</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerDaily.select.name">
+				<source>time on daily every selected weekday</source>
+				<target>Uhrzeit täglich an jedem ausgewählten Wochentag</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerDatePeriod.select.name">
+				<source>Period around date every year</source>
+				<target>Zeitraum um Datum jedes Jahr</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerDefault.select.name">
+				<source>
+				</source>
+				<target>
+				</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerEasterRel.select.name">
+				<source>Period relativ to Easter and other christian Holydays</source>
+				<target>Zeitraum relativ zu Ostern und anderen christlichen Feiertagen</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerHoliday.select.name">
+				<source>Period relativ to an defined holiday</source>
+				<target>Zeitraum relativ zu ausgewählten Feiertagen</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerJewishHoliday.select.name">
+				<source>Period relativ to jewish holydays</source>
+				<target>Zeitraum relativ zu jüdischen Feiertagen</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerMoonphaseRel.select.name">
+				<source>Timer relativ to the phase of moon</source>
+				<target>Timer relativ zur Mondphase</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerMoonriseRel.select.name">
+				<source>Timer relativ to calculated moonrise or moonset on referred day</source>
+				<target>Timer relativ zum berechneten Mondaufgang oder Monduntergang beim Bezugstag</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerPeriodList.select.name">
+				<source>date-list of timespan in yaml-file and helping infos for calendar-representation</source>
+				<target>Terminliste von Zeitspannen in yaml-Datei und Hilfinfos zur Darstellung in Kalenderform</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerRangeList.select.name">
+				<source>merged list of timer in yaml</source>
+				<target>Zusammengeführte Liste von Timern in yaml</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerSunriseRel.select.name">
+				<source>period around some sunpositions every day</source>
+				<target>Zeitraum um einige Sonnenstände jeden Tag</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerWeekdayInMonth.select.name">
+				<source>Active areas filtered by weekday(s), month position(s) and month(s)</source>
+				<target>Aktive Bereiche gefilter über Wochentag(e), Monatsposition(en) und Monat(e)</target>
+			</trans-unit>
+			<trans-unit id="tca.txTimerSelector.txTimerWeekdayly.select.name">
+				<source>daily for weekdays</source>
+				<target>täglich für Wochentage</target>
+			</trans-unit>
+
+			<!-- txTimerHoliday -->
+			<trans-unit id="tca.txTimerSelector.txTimerPeriodList.select.name">
+				<source>appointment list of holidays in csv file</source>
+				<target>Terminliste von Feiertagen in csv-Datei</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerHoliday.sheet.title">
+				<source>relative to midnight on public holidays</source>
+				<target>relativ zur Mitternacht von Feiertagen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerHoliday.sheet.shortDescr">
+				<source>Shows relative to selected holidays for a specified duration</source>
+				<target>Zeigt relativ zu ausgewählten Feiertagen für eine bestimmten Dauer</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerHoliday.sheet.description">
+				<source>Example: You want to display a content item starting at 6:00 am [21600s =
+					relMinToSelectedTimerEvent] for 8 hours [480 = durationMinutes] on each named holiday of the
+					specified CSV [activeWeekday].
+				</source>
+				<target>Beispiel: Sie möchten ein Inhaltselement ab 6:00 morgens [21600s = relMinToSelectedTimerEvent]
+					für 8 Stunden [480 = durationMinutes] an jeden genannten Feiertag der angegebenen CSV
+					[activeWeekday] anzeigen lassen.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerHoliday.field.durationMinutes">
+				<source>time span between -250.000 and +250.000 minutes</source>
+				<target>Zeitspanne zwischen -250.000 und +250.000 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerHoliday.field.relMinToSelectedTimerEvent">
+				<source>starttime defined by the distance between -275.600 and +275.600 minutes relative to the
+					beginning of each selected holiday
+				</source>
+				<target>Startzeitpunkt definiert durch den Abstand zwischen -275.600 und +275.600 Minuten relativ zum
+					Beginn der jeweils nächten Feiertages
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.holidayListTimer.field.timerHolidaysFilePath.label">
+				<source>Local path or link to file in CSV format with list of public holidays in CSV format(, =
+					separator; "" = string)
+				</source>
+				<target>Lokaler Pfad oder Link zur Datei im CSV-Format mit der Liste der Feiertage im CSV-Format(, =
+					Trenner; "" = String)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.holidayListTimer.field.timerHolidaysFilePath.description">
+				<source>The local path can be defined relatively or it is defined in the TYPO3-specific EXT: notation. A
+					link must begin with `http://` or `https://`. If the server is protected by a password, then the
+					user name and password must be stored in the same way as in the following example:
+					`MyUsername:MyPassword:http://mein-link.de/MeinePeriodList.csv`.
+				</source>
+				<target>Der lokale Pfad kann relativ definiert sein oder er wird in der TYPO3-spezifischen EXT:-Notation
+					definiert. Ein Link muss mit `http://` oder `https://` beginnen. Wenn der Server durch ein Passwort
+					geschützt ist, dann sind Usernamen und Passwort in analoger Form wie im folgenden Beispiel zu
+					hinterlegen: `MeinUsername:MeinPasswort:http://mein-link.de/MeinePeriodList.csv`.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.holidayListTimer.field.timerHolidaysFalRelation.label">
+				<source>Files with lists of public holidays in CSV format with list of public holidays in CSV format(, =
+					separator; "" = string; FAL in TYPO3)
+				</source>
+				<target>Dateien mit der Listen der Feiertage im CSV-Format mit der Liste der Feiertage im CSV-Format(, =
+					Trenner; "" = String; FAL in TYPO3)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.holidayListTimer.field.timerHolidaysFalRelation.description">
+				<source>The CSV files can be uploaded in the regular way in the TYPO3 backend and linked here. If
+					several files are uploaded, the CSV tables with the same structure are merged; otherwise exception.
+					A further check, for example correct syntax, does not (!!!) take place.
+				</source>
+				<target>Die CSV-Dateien können ganz regulärer Weise im TYPO3-Backend hochgeladen werden und hier
+					verlinkt werden. Werden mehrere Dateien hochgeladen, so werden die CSV-Tabellen gleicher Struktur
+					gemergt; sonst Exception. Eine weitergehende Kontrolle, zum Beispiel auch korrekte Syntax, findet
+					nicht(!!!) statt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.holidayListTimer.field.timerHolidaysFalRelation.bottomAdd">
+				<source>Load CSV file</source>
+				<target>Lade CSV-Datei</target>
+			</trans-unit>
+
+			<!-- txTimerDaily -->
+			<trans-unit id="flexform.timer.txTimerDaily.sheet.title">
+				<source>daily repeat</source>
+				<target>Täglich wiederholen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.sheet.shortDescr">
+				<source>Show on selected days of the week for a specific duration at a defined start or end time
+				</source>
+				<target>Zeige an ausgewählten Wochentagen für eine bestimmten Dauer zu einer definierten Start oder
+					End-Zeit
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.sheet.description">
+				<source>Example: You want to display a content item starting at 12:00 [startTimeSeconds] for 120 minutes
+					[durationMinutes] on every day of the week except Saturday and Sunday [activeWeekday].
+				</source>
+				<target>Beispiel: Sie möchten ein Inhaltselement ab 12:00 [startTimeSeconds] für 120 Minuten
+					[durationMinutes] an jedem Wochentag außer Samstag und Sonntag [activeWeekday] anzeigen lassen.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.field.startTimeSeconds">
+				<source>Reference time for active period</source>
+				<target>Bezugszeitpunkt für aktiven Zeitspanne</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDefault.field.nothing.title">
+				<source>nothing</source>
+				<target>nichts</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.field.durationMinutes">
+				<source>time span between -1439 and +1439 minutes</source>
+				<target>Zeitspanne zwischen -1439 und +1439 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDaily.field.activeWeekday">
+				<source>active weekday</source>
+				<target>aktiver Wochentag</target>
+			</trans-unit>
+
+			<!-- txTimerJewishHoliday -->
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.sheet.title">
+				<source>jedish dates related</source>
+				<target>auf jüdischen Daten bezogen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.sheet.shortDescr">
+				<source>Define an active area relative to important jewdish dates such as Yom Kippur or Pesach</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu wichtigen jüdischen Terminen wie Yom Kippur oder
+					Pesach
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.sheet.description">
+				<source>Example: From the beginning of the Yom Kippur festival [namedDateMidnight], exactly 14400
+					minutes (10 days) [relMinToSelectedTimerEvent] away, a content element is active for a period of
+					1440 minutes (= 1 day) [durationMinutes].
+				</source>
+				<target>Beispiel: Vom Beginn des Yom Kippur-Festes [namedDateMidnight], genau 14400 Minuten (10 Tage)
+					[relMinToSelectedTimerEvent] entfernt, ist für die Zeit von 1440 Minuten (= 1 Tag) [durationMinutes]
+					ein Inhaltselement aktiv.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.field.namedDate.title">
+				<source>selection of named dates like Yom Kippur</source>
+				<target>Auswahl benannter Feiertage wie Yom Kippur</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevRoshHashanah">
+				<source>Erev Rosh Hashanah</source>
+				<target>Erev Rosh Hashanah</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahI">
+				<source>Rosh Hashanah I</source>
+				<target>Rosh Hashanah I</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.RoshHashanahII">
+				<source>Rosh Hashanah II</source>
+				<target>Rosh Hashanah II</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TzomGedaliah">
+				<source>Tzom Gedaliah</source>
+				<target>Tzom Gedaliah</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevYomKippur">
+				<source>Erev Yom Kippur</source>
+				<target>Erev Yom Kippur</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomKippur">
+				<source>Yom Kippur</source>
+				<target>Yom Kippur</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevSukkot">
+				<source>Erev Sukkot</source>
+				<target>Erev Sukkot</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotI">
+				<source>Sukkot I</source>
+				<target>Sukkot I</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SukkotII_DiasporOnly">
+				<source>Sukkot II (Diaspora only)</source>
+				<target>Sukkot II (Diaspora only)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inIsraelInDiaspora">
+				<source>Hol Hamoed Sukkot (in Israel 16./in Diaspora 17.)</source>
+				<target>Hol Hamoed Sukkot (in Israel 16./in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inIsrael">
+				<source>Hol Hamoed Sukkot (in Israel 16.)</source>
+				<target>Hol Hamoed Sukkot (in Israel 16.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedSukkot_inDiaspora">
+				<source>Hol Hamoed Sukkot (in Diaspora 17.)</source>
+				<target>Hol Hamoed Sukkot (in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HoshanaRabbah">
+				<source>Hoshana Rabbah</source>
+				<target>Hoshana Rabbah</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeret_inDiaspora">
+				<source>Shemini Azeret (in Diaspora)</source>
+				<target>Shemini Azeret (in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SheminiAzeretSimchatTorah_inIsrael">
+				<source>Shemini Azeret/Simchat Torah (in Israel)</source>
+				<target>Shemini Azeret/Simchat Torah (in Israel)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.SimchatTorah_inDiaspora">
+				<source>Simchat Torah (in Diaspora)</source>
+				<target>Simchat Torah (in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inIsrael">
+				<source>Isru Chag (23 Tishri, in Israel)</source>
+				<target>Isru Chag (23 Tishri, in Israel)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagTishri_inDiaspora">
+				<source>Isru Chag (24 Tishri, in Diaspora)</source>
+				<target>Isru Chag (24 Tishri, in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahI">
+				<source>Hanukkah I</source>
+				<target>Hanukkah I</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahII">
+				<source>Hanukkah II</source>
+				<target>Hanukkah II</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahIII">
+				<source>Hanukkah III</source>
+				<target>Hanukkah III</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahIV">
+				<source>Hanukkah IV</source>
+				<target>Hanukkah IV</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahV">
+				<source>Hanukkah V</source>
+				<target>Hanukkah V</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVI">
+				<source>Hanukkah VI</source>
+				<target>Hanukkah VI</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVII">
+				<source>Hanukkah VII</source>
+				<target>Hanukkah VII</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HanukkahVIII">
+				<source>Hanukkah VIII</source>
+				<target>Hanukkah VIII</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTevet">
+				<source>Tzom Tevet</source>
+				<target>Tzom Tevet</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TuBShevat">
+				<source>Tu B'Shevat</source>
+				<target>Tu B'Shevat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PurimKatan">
+				<source>Purim Katan</source>
+				<target>Purim Katan</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimKatan">
+				<source>Shushan Purim Katan</source>
+				<target>Shushan Purim Katan</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TaAnithEsther">
+				<source>Ta'anith Esther</source>
+				<target>Ta'anith Esther</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.Purim">
+				<source>Purim</source>
+				<target>Purim</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurim">
+				<source>Shushan Purim</source>
+				<target>Shushan Purim</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPost">
+				<source>Shushan Purim (postpone with one day, if the date will meet saturday)</source>
+				<target>Shushan Purim (Verschiebe um einen Tag, wenn er auf Samstag fällt)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShushanPurimPur">
+				<source>Shushan Purim (on saturday too)</source>
+				<target>Shushan Purim (auch am Samstag)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShabbatHagadol">
+				<source>Shabbat Hagadol</source>
+				<target>Shabbat Hagadol</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevPesach">
+				<source>Erev Pesach</source>
+				<target>Erev Pesach</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachI">
+				<source>Pesach I</source>
+				<target>Pesach I</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachII_DiasporOnly">
+				<source>Pesach II (Diaspora only)</source>
+				<target>Pesach II (Diaspora only)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inIsraelInDiaspora">
+				<source>Hol Hamoed Pesach (in Israel 16./in Diaspora 17.)</source>
+				<target>Hol Hamoed Pesach (in Israel 16./in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inIsrael">
+				<source>Hol Hamoed Pesach (in Israel 16.)</source>
+				<target>Hol Hamoed Pesach (in Israel 16.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.HolHamoedPesach_inDiaspora">
+				<source>Hol Hamoed Pesach (in Diaspora 17.)</source>
+				<target>Hol Hamoed Pesach (in Diaspora 17.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVII">
+				<source>Pesach VII</source>
+				<target>Pesach VII</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachVIII_DiasporOnly">
+				<source>Pesach VIII (Diaspora only)</source>
+				<target>Pesach VIII (Diaspora only)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inIsrael">
+				<source>Isru Chag (22 Nisan, in Israel)</source>
+				<target>Isru Chag (22 Nisan, in Israel)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagNisan_inDiaspora">
+				<source>Isru Chag (23 Nisan, in Diaspora)</source>
+				<target>Isru Chag (23 Nisan, in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomHashoah">
+				<source>Yom Hashoah</source>
+				<target>Yom Hashoah</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomHazikaron">
+				<source>Yom Hazikaron</source>
+				<target>Yom Hazikaron</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomHaAtzmaut">
+				<source>Yom Ha'Atzmaut</source>
+				<target>Yom Ha'Atzmaut</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.PesachSheini">
+				<source>Pesach Sheini</source>
+				<target>Pesach Sheini</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.LagBOmer">
+				<source>Lag B'Omer</source>
+				<target>Lag B'Omer</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.YomYerushalayim">
+				<source>Yom Yerushalayim</source>
+				<target>Yom Yerushalayim</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ErevShavuot">
+				<source>Erev Shavuot</source>
+				<target>Erev Shavuot</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShavuotI">
+				<source>Shavuot I</source>
+				<target>Shavuot I</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.ShavuotII_DiasporOnly">
+				<source>Shavuot II (Diaspora only)</source>
+				<target>Shavuot II (Diaspora only)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inIsrael">
+				<source>Isru Chag (7 Sivan, in Israel)</source>
+				<target>Isru Chag (7 Sivan, in Israel)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.IsruChagSivan_inDiaspora">
+				<source>Isru Chag (8 Sivan, in Diaspora)</source>
+				<target>Isru Chag (8 Sivan, in Diaspora)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TzomTammuz">
+				<source>Tzom Tammuz</source>
+				<target>Tzom Tammuz</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TishaBAv">
+				<source>Tisha B'Av</source>
+				<target>Tisha B'Av</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.select.namedDate.TuBAv">
+				<source>Tu B'Av</source>
+				<target>Tu B'Av</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.field.relMinToSelectedTimerEvent">
+				<source>minutes relative to the selected named date</source>
+				<target>Minuten relativ zum ausgewählten benannten Datum</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerJewishHoliday.field.durationMinutes">
+				<source>active time span relative to startpoint in minutes</source>
+				<target>Aktive Zeitspanne relativ zum Periodenstart in Minuten</target>
+			</trans-unit>
+
+			<!-- txTimerDatePeriod -->
+			<trans-unit id="flexform.timer.txTimerDatePeriod.sheet.title">
+				<source>active datetime-range</source>
+				<target>aktiver Datums-Zeit-Bereich</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.sheet.shortDescr">
+				<source>Active range relative to a start date time with an adjustable period length</source>
+				<target>Aktiver Bereich relativ zu einer Start-Datum-Uhrzeit mit einstellbarer Periodenlänge</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.sheet.description">
+				<source>Example: From 1/23/2015 12:35 p.m. [startTimeSeconds] for 120 minutes [durationMinutes] every 5
+					[periodLength] days [periodUnit]
+				</source>
+				<target>Beispiel: Ab dem 23.1.2015 12:35 [startTimeSeconds] für 120 Minuten [durationMinutes] alle 5
+					[periodLength] Tage [periodUnit]
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.startDateTime">
+				<source>start of period</source>
+				<target>Beginn der Periode</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.durationMinutes">
+				<source>active time span relative to startpoint in minutes</source>
+				<target>Aktive Zeitspanne relativ zum Periodenstart in Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.periodLength">
+				<source>period length</source>
+				<target>Periodenlänge</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.field.periodUnit">
+				<source>period unit</source>
+				<target>Zeitraum Einheit</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.minute">
+				<source>minute</source>
+				<target>Minute</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.hour">
+				<source>hour</source>
+				<target>Stunde</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.day">
+				<source>day</source>
+				<target>Tag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.week">
+				<source>week</source>
+				<target>Woche</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.month">
+				<source>month (31. may +1M (!= 30 Jun) = 1. Jul)</source>
+				<target>Monat (31. Mai +1M (!= 30. Jun) = 1. Jul)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDatePeriod.selectPeriodUnit.year">
+				<source>year</source>
+				<target>Jahr</target>
+			</trans-unit>
+
+			<!-- defaultTimer -->
+			<trans-unit id="flexform.timer.txTimerDefault.sheet.title">
+				<source>no timer [default]</source>
+				<target>kein Timer [Standard]</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDefault.sheet.shortDescr">
+				<source>Example: no period; always active</source>
+				<target>Beispiel: keine Periode; immer aktiv</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDefault.sheet.description">
+				<source>There ist no timer defined and the timer indicates every time as part of an active range. The
+					starttime and endtime won't be change by the timer-extension.
+				</source>
+				<target>Es ist kein Timer definiert und der Timer indiziert jeden Zeitpunkt als aktive Zeit. Die Start-
+					und Endzeit wird durch die Timer-Erweiterung nicht verändert.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerDefault.field.defaultTimer">
+				<source>[there are no parameter needed]</source>
+				<target>[es werden keine Parameter benötigt]</target>
+			</trans-unit>
+
+			<!-- easterRelTimer -->
+			<trans-unit id="flexform.timer.txTimerEasterRel.sheet.title">
+				<source>christian dates related</source>
+				<target>christliche Daten bezogen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.sheet.shortDescr">
+				<source>Define an active area relative to important Christian dates such as Christmas or Easter Sunday
+				</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu wichtigen christlichen Terminen wie Weihnachten
+					oder Ostersonntag
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.sheet.description">
+				<source>Example: Exactly 14400 minutes (10 days) [relMinToSelectedTimerEvent] from the beginning of
+					Easter Sunday [namedDateMidnight], according to the Gregorian calendar [calendarUse], a content
+					element is active for a period of 1440 minutes (= 1 day) [durationMinutes].
+				</source>
+				<target>Beispiel: Vom Beginn des Ostersonntags [namedDateMidnight] genau 14400 Minuten (10 Tage)
+					[relMinToSelectedTimerEvent] entfernt ist gemäß des Gregorianischen Kalenders [calendarUse] für die
+					Zeit von 1440 Minuten (= 1 Tag) [durationMinutes] ein Inhaltselement aktiv.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.namedDate.title">
+				<source>selection of named dates like easter</source>
+				<target>Auswahl benannter Feiertage wie Ostern</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.goodFriday">
+				<source>good friday (*)</source>
+				<target>Karfreitag (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.stupidday">
+				<source>world day of stupidity (16. apr.)</source>
+				<target>Welttag der Dummheit (16. Apr.)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.easter">
+				<source>easter (*)</source>
+				<target>Ostern (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.ascensionOfChrist">
+				<source>ascension of Christ (*)</source>
+				<target>Christi Himmelfahrt (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.pentecost">
+				<source>pentecost (*)</source>
+				<target>Pfingsten (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.firstAdvent">
+				<source>first advent</source>
+				<target>erste Advent</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.christmas">
+				<source>christmas</source>
+				<target>Weihnachten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.roseMonday">
+				<source>rose monday (*)</source>
+				<target>Rosenmontag (*)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.namedDate.towlday">
+				<source>towl-day</source>
+				<target>Welthandtuchtag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relative to the selected named date</source>
+				<target>Minuten relativ zum ausgewählten benannten Datum</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.durationMinutes">
+				<source>time span between -444444 and +444444 minutes</source>
+				<target>Zeitspanne zwischen -444444 und +444444 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.field.calendarUse.title">
+				<source>Use of Calendar for easter</source>
+				<target>Verwendung des Kalenders für Ostern</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_default">
+				<source>cal_easter_default (julian for &lt; 1753; gregorian otherwise)</source>
+				<target>cal_easter_default (julianisch für &lt; 1753; sonst gregorianisch)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_roman">
+				<source>cal_easter_roman (julian for &lt; 1583; gregorian otherwise)</source>
+				<target>cal_easter_roman (julianisch für &lt; 1583; ansonsten gregorianisch)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_always_gregorian">
+				<source>cal_easter_always_gregorian (proleptic gregorian for ever)</source>
+				<target>cal_easter_always_gregorian (proleptischer Gregorianer für immer)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerEasterRel.select.calendarUse.cal_easter_always_julian">
+				<source>cal_easter_always_julian (proleptic gregorian for ever)</source>
+				<target>cal_easter_always_julian (proleptischer Gregorianer für immer)</target>
+			</trans-unit>
+
+			<!-- calendarDateRelTimer -->
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.sheet.title">
+				<source>calendar related dates</source>
+				<target>kalendarische Daten bezogen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.sheet.shortDescr">
+				<source>Define an active area relative to an important religious, cultural, or political holiday that
+					has a specific date on a selected calendar.
+				</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu einem wichtigen religiösen, kulturelln oder
+					politischen Feiertag, der in einem ausgewählten Kalender ein spezifisches Datum hat.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.sheet.description">
+				<source>Example: From the beginning of the Lailat al-Barā'a [namedDateMidnight], i.e. from 14.8. from
+					0:00 in the Islamic calendar, exactly 14400 minutes (10 days) [relMinToSelectedTimerEvent] away,
+					according to the Islamic calendar [calendarUse], a content element is active for a period of 1440
+					minutes (= 1 day) [durationMinutes].
+				</source>
+				<target>Beispiel: Vom Beginn des Lailat al-Barā'a [namedDateMidnight], also vom 14.8. ab 0:00 im
+					islamischen Kalender, genau 14400 Minuten (10 Tage) [relMinToSelectedTimerEvent] entfernt ist gemäß
+					des Islamischen Kalenders [calendarUse] für die Zeit von 1440 Minuten (= 1 Tag) [durationMinutes]
+					ein Inhaltselement aktiv.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.namedDate.title">
+				<source>Selection of calendar-fixed holidays such as Labor Day (May 1; Gregorian), Christmas (December
+					25; Gregorian) or Lailat al-Barā'a (August 14; Islamic) [overrides flexform definition]
+				</source>
+				<target>Auswahl kalender-fixierter Feiertage wie Tag-der-Arbeit(1.5.; gregorianisch), Weihnachten
+					(25.12.; gregorianisch) oder Lailat al-Barā'a (14.8.; islamisch) [übersteuert Flexform-Definition]
+				</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.religion">
+				<source>religious motivated calendar</source>
+				<target>religiöse motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.politics">
+				<source>political motivated calendar</source>
+				<target>politisch motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.culture">
+				<source>cultural motivated calendar</source>
+				<target>kulturell motivierter kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.history">
+				<source>historical motivated calendar</source>
+				<target>Historisch motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.economics">
+				<source>economical motivated calendar</source>
+				<target>wirtschaftlich motivierter Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.tag.other">
+				<source>other motivation</source>
+				<target>andere Motivation</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.julian">
+				<source>julian calendar</source>
+				<target>Julianischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.customSelected">
+				<source>custom-selected calendar-based event</source>
+				<target>Kalender-basierte Ergeignis Selbt gewählt</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.buddhist">
+				<source>buddhist calendar</source>
+				<target>Buddhistischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.chinese">
+				<source>chinese calendar</source>
+				<target>Chinesischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.coptic">
+				<source>coptic calendar</source>
+				<target>Koptischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.dangi">
+				<source>dangi calendar (corean calender)</source>
+				<target>Koreanischer Kalender (dangi)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.ethiopic">
+				<source>general ethiopic calendar</source>
+				<target>Gemeiner Äthiopischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.ethiopicAmeteAlem">
+				<source>ethiopic calendar (amete alem)</source>
+				<target>Äthiopischer Kalender (amete alem)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.gregorian">
+				<source>gregorian calendar</source>
+				<target>Gregorianischer Kalender (westlicher Kalender)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.hebrew">
+				<source>hebrew calendar</source>
+				<target>Hebräischer Kalender (Jüdischer Kalender)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.indian">
+				<source>indian calendar</source>
+				<target>Indischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamic">
+				<source>islamic calendar</source>
+				<target>Gemeiner islamischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicCivil">
+				<source>islamic-civil calendar</source>
+				<target>Ziviler islamischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicRgsa">
+				<source>islamic-rgsa calendar</source>
+				<target>Islamischer (rgsa) Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicTbla">
+				<source>islamic-tbla calendar</source>
+				<target>Islamischer (tbla) Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.islamicUmalqura">
+				<source>islamic-umalqura calendar</source>
+				<target>Islamischer (umalqura) Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.japanese">
+				<source>japanese calendar</source>
+				<target>Japanischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.persian">
+				<source>persian calendar</source>
+				<target>Persicher Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.calendar.roc">
+				<source>calender for the republic of china (Taiwan)</source>
+				<target>Kalender der Republik von China (Taiwan)</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.namedDate.undefined">
+				<source>--self defined--</source>
+				<target>--selbstdefiniert--</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relative to the selected named date</source>
+				<target>Minuten relativ zum ausgewählten benannten Datum</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.durationMinutes">
+				<source>time span between -444444 and +444444 minutes</source>
+				<target>Zeitspanne zwischen -444444 und +444444 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.calendar.title">
+				<source>Choose the calendar</source>
+				<target>Wähle den Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.day.title">
+				<source>Choose the day of the month for the holiday</source>
+				<target>Wähle den Tag im Monat für den Feiertag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.month.title">
+				<source>Choose the month for the holiday</source>
+				<target>Wähle den Monat für den Feiertag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.eventtitle.title">
+				<source>Choose the name or the language-alias &lt;LLL:key&gt; for the holiday</source>
+				<target>Wähle den Namen oder den Fremdsprachen-Alias &lt;LLL:key&gt; für den Feiertag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.tag.title">
+				<source>Choose the category-tag for the event (optional)</source>
+				<target>Wähle den Kategoriewert für das Ereignis (optional)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.rank.title">
+				<source>rank or importance of the event day</source>
+				<target>Rank bzw. Wichtigkeit des Eventtages</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.field.locale.title">
+				<source>select the locales for the event day (optional)</source>
+				<target>Wähle die Region für den Eventtages (optional)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerCalendarDateRel.select.namedDate.undefined">
+				<source>---</source>
+				<target>---</target>
+			</trans-unit>
+
+			<!-- General for all timer txTimerGeneral  -->
+			<trans-unit id="flexform.timer.txTimerGeneral.sheet.title">
+				<source>General</source>
+				<target>Allgemeines</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.sheet.shortDescr">
+				<source>Absolute scope and time zone usage</source>
+				<target>Absoluter Gültigkeitsbereich und Zeitzonenverwendung</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.sheet.description">
+				<source>Define the absolute scope of your timer by start and end time. Further define the time zone and
+					its use. Define the general area of activity. Note the following: Before 1583, only the Julian
+					calendar was in use. Britain has only been using the Gregorian calendar since 1752. You need to know
+					what you are doing when using dates before 1752.
+				</source>
+				<target>Definieren sie den absoluten Gültigkeitsbereich ihres Timers durch Start und Endzeit. Definieren
+					Sie weiter die Zeitzone und ihre Verwendung. Definieren Sie den allgemeinen Aktivitätsbereich.
+					Beachten Sie Folgendes: Vor 1583 war nur der Julianische Kalender in Gebrauch. Britannien verwendet
+					den gregorianischen Kalender erst seit 1752. Sie müssen wissen, was Sie tun, wenn Sie Daten vor 1752
+					verwenden.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.timeZoneOfEvent">
+				<source>time-zone of event</source>
+				<target>Zeitzone des Ereignisses</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.useTimeZoneOfFrontend">
+				<source>fixed timezone</source>
+				<target>feste Zeitzone</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.useTimeZoneOfFrontend.toggle">
+				<source>off=fixed timezone for event, on=timezone everytime defined by frontend user</source>
+				<target>aus=fest definierte Zeitzone für Ereignis, an=Zeitzone wird dynamisch definiert durch
+					Frontend-Nutzer
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.toggle.frontendRelated">
+				<source>no, defined by frontend</source>
+				<target>Nein, definiert durch Frontend</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.toggle.fixedByFlexform">
+				<source>yes, defined in field `timeZoneOfEvent`</source>
+				<target>ja, definiert im Feld `timeZoneOfEvent`</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.ultimateBeginningTimer">
+				<source>Beginning of the period for calculations of the timer periods</source>
+				<target>Beginn des Zeitraums für Berechnungen der Perioden des Timers</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.field.ultimateEndingTimer">
+				<source>Ending of the period for calculations of the timer periods</source>
+				<target>Ende des Zeitraums für Berechnungen der Perioden des Timers</target>
+			</trans-unit>
+			<!-- helpful stuff txTimerGeneral -->
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.monday">
+				<source>monday</source>
+				<target>Montag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.tuesday">
+				<source>tuesday</source>
+				<target>Dienstag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.wednesday">
+				<source>wednesday</source>
+				<target>Mittwoch</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.thursday">
+				<source>thursday</source>
+				<target>Donnerstag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.friday">
+				<source>friday</source>
+				<target>Freitag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.saturday">
+				<source>saturday</source>
+				<target>Samstag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerGeneral.select.activeWeekday.sunday">
+				<source>sunday</source>
+				<target>Sonntag</target>
+			</trans-unit>
+
+
+			<!-- txTimerMoonriseRel -->
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.sheet.title">
+				<source>moonrise</source>
+				<target>Mondaufgang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.sheet.shortDescr">
+				<source>Define an active area with a specific time offset relative to moonrise or moonset</source>
+				<target>Definieren Sie einen aktiven Bereich mit einem bestimmten Zeitabstand relativ zum Mondaufgang
+					oder zum Monduntergang
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.sheet.description">
+				<source>Example: 300 minutes (5 hours) [relMinToSelectedTimerEvent] after the moonrise [moonStatus] in
+					Bremen, defined by longitude [longitude] and latitude [latitude], the content element is active for
+					420 minutes (7 hours) [durationMinutes].
+				</source>
+				<target>Beispiel: 300 Minuten (5 Stunden) [relMinToSelectedTimerEvent] nach dem Monaufgang [moonStatus]
+					in Bremen, definiert durch Längengrad [longitude] und Breitengrad [latitude], ist das Inhaltelement
+					für 420 Minuten (7 Stunden) [durationMinutes] aktiv.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.moonStatus.title">
+				<source>status of moon</source>
+				<target>Status des Mondes</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.select.moonStatus.moonrise">
+				<source>moonrise</source>
+				<target>Mondaufgang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.select.moonStatus.moonset">
+				<source>moonset</source>
+				<target>Monduntergang</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relativ to the selected moon-status</source>
+				<target>Minuten relativ zum gewählten Mondstand</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.durationMinutes">
+				<source>time span between -1439 and +1439 minutes</source>
+				<target>Zeitspanne zwischen -1439 und +1439 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.latitude.title">
+				<source>latitude</source>
+				<target>Breite</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonriseRel.field.longitude.title">
+				<source>longitude</source>
+				<target>Längengrad</target>
+			</trans-unit>
+
+			<!-- txTimerMoonphaseRel -->
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.sheet.title">
+				<source>Moonphase</source>
+				<target>Mond Phase</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.sheet.shortDescr">
+				<source>Define the active period of time, starting relative to 12:00 am of the day when the moon phases
+					(full moon, waning crescent, new moon, waxing crescent) occur.
+				</source>
+				<target>Definieren Sie die aktive Zeitspanne, die relativ zu 0:00 Uhr des Tages startet, an welchen die
+					Mondphasen (Vollmon, abnehmender Halbmond, Neumond, zunehmender Halbmond) stattfindet.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.sheet.description">
+				<source>Example: Exactly 3600 minutes (two days and twelve hours) [relMinToSelectedTimerEvent] after the
+					beginning of each day with the waning crescent moon [moonPhase], the content item is active for 200
+					minutes (three hours and 20 minutes) [durationMinutes].
+				</source>
+				<target>Beispiel: Genau 3600 Minuten (zwei Tage und zwölf Stunden) [relMinToSelectedTimerEvent] nach
+					Beginn jeden Tages mit dem abnehmenden Halbmond [moonPhase] ist das Inhaltselement für 200 Minuten
+					(drei Stunden und 20 Minuten) [durationMinutes] aktiv.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.field.moonPhase.title">
+				<source>moonphase</source>
+				<target>Mond Phase</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.newMoon">
+				<source>new moon</source>
+				<target>Neumond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.firstQuarter">
+				<source>half filled moon</source>
+				<target>zunehmender Halbmond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.fullMoon">
+				<source>full moon</source>
+				<target>Vollmond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.select.moonPhase.thirdQuarter">
+				<source>half emptied moon</source>
+				<target>abnehmender Halbmond</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.field.relMinToSelectedTimerEvent">
+				<source>starttime defined by the distance in minutes relative to the beginning of the day with the
+					selected moon phase
+				</source>
+				<target>Startzeitpunkt definiert durch den Abstand in Minuten relativ zum Beginn des Tages mit der
+					gewählten Mondphase
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerMoonphaseRel.field.durationMinutes">
+				<source>time span between -14400 and +14400 minutes</source>
+				<target>Zeitspanne zwischen -14400 und +14400 Minuten</target>
+			</trans-unit>
+
+			<!-- txTimerPeriodList -->
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFilePath.label">
+				<source>local path or link to the file with list of timers in yaml-format</source>
+				<target>Lokaler Pfad oder Link zur Datei mit der Lister der Termine im YAML-Format</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFilePath.description">
+				<source>The local path can be defined relatively or it is defined in the TYPO3-specific EXT: notation. A
+					link must begin with `http://` or `https://`. If the server is protected by a password, then the
+					username and password must be stored in the same way as in the following example:
+					`MyUsername:MyPassword:http://my-link.de/MyPeriodList.yaml`. (The yaml import command does not work
+					for a link to a yaml file.)
+				</source>
+				<target>Der lokale Pfad kann relativ definiert sein oder er wird in der TYPO3-spezifischen EXT:-Notation
+					definiert. Ein Link muss mit `http://` oder `https://` beginnen. Wenn der Server durch ein Passwort
+					geschützt ist, dann sind Usernamen und Passwort in analoger Form wie im folgenden Beispiel zu
+					hinterlegen: `MeinUsername:MeinPasswort:http://mein-link.de/MeinePeriodList.yaml`. (Bei einem Link
+					zu einer Yaml-Datei funktioniert der Yaml-Import-Befehl nicht.)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFalRelation.label">
+				<source>files with lists of dates in yaml format (FAL)</source>
+				<target>Dateien mit der Listen der Termine im YAML-Format (FAL)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFalRelation.description">
+				<source>The Yaml files can be uploaded to the TYPO3 backend in the regular way and linked here. If
+					several files are uploaded, the lists are combined. There is no (!!!) check for overlapping or
+					duplication of appointments.
+				</source>
+				<target>Die Yaml-Dateien können ganz regulärer Weise im TYPO3-Backend hochgeladen werden und hier
+					verlinkt werden. Werden mehrere Dateien hochgeladen, so werden die Listen zusammengefasst. Eine
+					Kontrolle auf Überschneidungen oder Doppelungen bei den Terminen findet nicht(!!!) statt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.yamlPeriodFalRelation.bottomAdd">
+				<source>add yaml-file</source>
+				<target>Lade YAML-Datei</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarJsFilePath.label">
+				<source>javascript path to calendar-framework</source>
+				<target>Javascript-Pfad zum Kalender-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarJsFilePath.description">
+				<source>Path to the javascript framework that can be used to display a list of dates in the form of a
+					calendar (optional)
+				</source>
+				<target>Pfad zum Javascript-Framework, mit dem eine Datumsliste in Form eines Kalenders dargestellt
+					werden kann (optional)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.customCalendarJsFilePath">
+				<source>Path to the custom javascript that can be used to display a list of dates in the form of a
+					calendar (optional)
+				</source>
+				<target>Pfad zum benutzerdefinierten Javascript, mit dem eine Datumsliste in Form eines Kalenders
+					dargestellt werden kann (optional)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarCssFilePath.label">
+				<source>Path to CSS of the calendar-framework</source>
+				<target>Pfad zum CSS/Stylesheets des Kalenderdarstellung-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.calendarCssFilePath.description">
+				<source>Many JavaScript frameworks for the calendar display of appointment lists come with their own CSS
+					file, which can be integrated here by specifying the path - if necessary also in the `EXT:`
+					notation.
+				</source>
+				<target>Viele JavaScript-Frameworks zur Kalender-Darstellung von Terminlisten bringen eine eigene
+					CSS-Datei mit, die gegebenenfalls hier über die Angabe des Pfade - ggfls auch in der `EXT:`-Notation
+					- eingebunden werden kann.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.periodListTimer.field.customCalendarCssFilePath">
+				<source>Path to the css-file with additional customized stylesheets</source>
+				<target>Pfad zur CSS-Datei mit zusätzlichen benutzerdefinierten Stylesheets</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerPeriodList.sheet.title">
+				<source>list of single timegaps from Yaml-files (not working yet)</source>
+				<target>Liste mit Einzelbereichen aus Yaml-Dateien (not working yet)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerPeriodList.sheet.shortDescr">
+				<source>A list of dates in a yaml file is used as a setlist for displaying the content item.</source>
+				<target>Eine Liste mit Terminen in einer yaml-Datei wird als Setliste für die Anzeige des
+					Inhaltselements genutzt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerPeriodList.sheet.description">
+				<source>Example: In a file [yamlPeriodFilePath] in YAML format, the list of active time periods is
+					defined by defining a start time, an end time, a title and the time zone. In order to output the
+					list in calendar format, you can use the Java script framework [calendarJsFilePath] and the
+					associated style sheets [calendarCssFilePath] to be defined in the content element `periodList` and
+					add your own JavaScript [customCalendarJsFilePath] and style sheets [customCalendarCssFilePath].
+				</source>
+				<target>Beispiel: In einer Datei [yamlPeriodFilePath] im YAML-Format wird die Liste der aktiven
+					Zeitbereiche definiert, indem man eine Startzeit, eine Endzeit, einen Titem und die Zeitzone
+					definiert. Um die Liste im Kalenderformat auszugeben, kann man im Content-Element `periodList` das
+					zu definierende Javaskript-Framework [calendarJsFilePath] und die dazugehörigen Stylesheets
+					[calendarCssFilePath] nutzen und mit eigenen JavaScript [customCalendarJsFilePath] und Stylesheets
+					[customCalendarCssFilePath] ergänzen.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.recursiveLoopLimit">
+				<source>Max Count of recursion for determination of the overlappings of the ranges</source>
+				<target>Maximale Anzahl von Recursionen bei Bestimmung der Überschneidungen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlPeriodFilePath">
+				<source>yaml-file with list of active periods</source>
+				<target>yaml-Datei mit Liste der aktiven Perioden</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlTextField.placeholder">
+				<source># example YAML-structure (remove #)
+					#periodList:
+					# -
+					# title: 'winter holidays Bremen'
+					# configuration:
+					# description: '- free to fill -'
+					# start: '2022-01-31 00:00:00'
+					# stop: '2022-02-01 23:59:59'
+					# zone: 'Europe/Berlin'
+				</source>
+				<target># Beispiel YAML-Struktur (entferne #)
+					#periodList:
+					# -
+					# title: 'Winterferien Bremen'
+					# configuration:
+					# description: '- für freie Texteingabe nutzbar -'
+					# start: '2022-01-31 00:00:00'
+					# stop: '2022-02-01 23:59:59'
+					# zone: 'Europe/Berlin'
+				</target>
+			</trans-unit>
+
+			<!-- txTimerRangeList -->
+			<trans-unit id="flexform.timer.txTimerRangeList.sheet.title">
+				<source>rangelist from yaml-definitions</source>
+				<target>Bereichslisten aus Yaml-Definitionen</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerRangeList.sheet.shortDescr">
+				<source>Match a list of active timer definitions with forbidden timer definitions such as holidays. The
+					timer lists can each be defined in a yaml file and/or in a database table.
+				</source>
+				<target>Verrechne eine Liste mit aktiven Timer-Definitionen mit verbotenen Timer-Definitionen wie zum
+					Beispiel Feiertagen. Die Timerlisten können jeweils in einer Yaml-Datei und/oder in einer
+					Datenbanktabelle definiert werden.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerRangeList.sheet.description">
+				<source>The active list consists of information in a Yaml file [yamlActiveFilePath] and/or in a list of
+					database references [databaseActiveRangeList]. The resulting ranges are reduced and, if necessary,
+					subdivided by the list of forbidden ranges defined in a Yamle file [yamlForbiddenFilePath] or in a
+					list of database references [databaseForbiddenRangeList]. Example: Every Friday (defined in
+					[yamlActiveFilePath]) except during holidays and public holidays (defined in
+					[yamlForbiddenFilePath]).
+				</source>
+				<target>Die aktiven Liste setzt sich zusammen aus Angaben in einer Yaml-Datei [yamlActiveFilePath]
+					und/oder in einer Liste von Datenbankreferenzen [databaseActiveRangeList]. Die daraus resultierenden
+					Bereichen werden verkleinert und gegebenenfalls unterteilt durch die Liste der verbotenen Bereiche,
+					die in einer Yaml-Datei [yamlForbiddenFilePath] oder in einer Liste von Datenbankreferenzen
+					[databaseForbiddenRangeList] definiert sind. Beispiel: Jeden Freitag (definiert in
+					[yamlActiveFilePath]) außer in den Ferien und an Feriertagen (definiert in [yamlForbiddenFilePath]).
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlActiveFilePath">
+				<source>file-path of yaml-definitions with list of active periods</source>
+				<target>Dateipfad der Yaml-Definitionen mit Liste der aktiven Perioden</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.yamlForbiddenFilePath">
+				<source>file-path of yaml-definitions with list of forbidden periods</source>
+				<target>Dateipfad der Yaml-Definitionen mit Liste verbotener Zeiträume</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.databaseActiveRangeList">
+				<source>list of rows in the database with definitions for active periods</source>
+				<target>Liste der Zeilen in der Datenbank mit Definitionen für aktive Zeiträume</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.rangeListTimer.field.databaseForbiddenRangeList">
+				<source>list of rows in the database with definitions for forbidden periods</source>
+				<target>Liste der Zeilen in der Datenbank mit Definitionen für verbotene Zeiträume</target>
+			</trans-unit>
+
+			<!-- txTimerSunriseRel -->
+			<trans-unit id="flexform.timer.txTimerSunriseRel.sheet.title">
+				<source>sunrise and more</source>
+				<target>Sonnenaufgang und weiteres</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.sheet.shortDescr">
+				<source>Define an active area relative to different sun positions (sunrise, sunset, ...)</source>
+				<target>Definieren Sie einen aktiven Bereich relativ zu verschiedenen Sonnenständen (Sonnenaufgang,
+					Sonnenuntergang, ...)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.sheet.description">
+				<source>Example: Exactly 300 minutes (5 hours) [relMinToSelectedTimerEvent] after sunrise [sunPosition]
+					at the anus of the world, determined by latitude [latitude] and longitude [longitude], the content
+					item is shown for 420 minutes (seven hours) [durationMinutes]. If the time is defined by sunrise
+					[sunPosition] and sunset [durationNatural], then this specification overrides the previous duration
+					definition [durationMinutes].
+				</source>
+				<target>Beispiel: Genau 300 Minuten (5 Stunden) [relMinToSelectedTimerEvent] nach dem Sonnenaufgang
+					[sunPosition] am Anus der Welt, bestimmt durch Breitengrad [latitude] und Längengrad [longitude],
+					wird das Inhaltselement für 420 Minuten (sieben Stunden) [durationMinutes] gezeigt. Wenn die Zeit
+					durch Sonnenaufgang [sunPosition] und Sonnenuntergang [durationNatural] definiert ist, dann
+					übersteuert diese Angabe die vorherige Zeitdauerdefinition [durationMinutes].
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.latitude.title">
+				<source>latitude</source>
+				<target>Breite</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.longitude.title">
+				<source>longitude</source>
+				<target>Längengrad</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.sunPosition.title">
+				<source>relative sunposition timer</source>
+				<target>Relativer Sonnenstand-Timer</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.defined">
+				<source>Active time defined by minute interval and time duration</source>
+				<target>Aktive Zeit definiert durch Minutenabstand und Zeitdauer</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.sunrise">
+				<source>sunrise (= 90°35')</source>
+				<target>Sonnenaufgang (= 90°35')</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.sunset">
+				<source>sunset (= 90°35')</source>
+				<target>Sonnenuntergang (= 90°35')</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.transit">
+				<source>time of highest sun (transition time differ to 12:00)</source>
+				<target>Zeitpunkt der höchsten Sonne (Übergangszeit abweichend von 12:00)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.civilTwilightBegin">
+				<source>Civil Twilight Begin (= 96°)</source>
+				<target>Bürgerlicher Dämmerungsbeginn (= 96°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.civilTwilightEnd">
+				<source>Civil Twilight End (= -96°)</source>
+				<target>Ende der zivilen Dämmerung (= -96°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.nauticalTwilightBegin">
+				<source>Nautical Twilight Beginn (= 102°)</source>
+				<target>Nautischer Dämmerungsbeginn (= 102°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.nauticalTwilightEnd">
+				<source>Nautical Twilight End (= -102°)</source>
+				<target>Nautisches Dämmerungsende (= -102°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.astronomicalTwilightBegin">
+				<source>Astromical Twilight Beginn (= 108°)</source>
+				<target>Astromischer Zwielichtbeginn (= 108°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.select.sunPosition.astronomicalTwilightEnd">
+				<source>Astromical Twilight End (= -108°)</source>
+				<target>Astromisches Zwielichtende (= -108°)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.relMinToSelectedTimerEvent">
+				<source>minutes relativ to the selected time-marker</source>
+				<target>Minuten relativ zum ausgewählten Zeitmarker</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.durationMinutes">
+				<source>time span between -1340 and +1340 minutes</source>
+				<target>Zeitspanne zwischen -1340 und +1340 Minuten</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerSunriseRel.field.durationNatural">
+				<source>Active duration defined by fixed times or by the distance to the next position of the sun
+					specified here (respect natural order)
+				</source>
+				<target>Aktive Zeitdauer definiert durch feste Zeiten oder durch den Abstand zu nächsten hier
+					festgelegten Sonnenstand (natürliche Reihenfolge beachten)
+				</target>
+			</trans-unit>
+
+			<!-- weekdayInMonth -->
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.sheet.title">
+				<source>weekday in Month</source>
+				<target>Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.sheet.shortDescr">
+				<source>Defines an active range on specific days of the week within selected months</source>
+				<target>Definiert einen aktiven Bereich an bestimmten Wochentagen innerhalb ausgewählter Monate</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.sheet.description">
+				<source>Example: On every third last [nthWeekdayInMonth + startCountAtEnd] Friday [activeWeekday] in the
+					months of February, May, August and November [activeMonth], the content element is displayed for 120
+					minutes (2 hours) [negative durationMinutes] until 12:00 (43200 seconds) [startTimeSeconds].
+				</source>
+				<target>Beispiel: An jeden drittletzten [nthWeekdayInMonth + startCountAtEnd] Freitag [activeWeekday] in
+					den Monaten Februar, May, August und November [activeMonth] wird für 120 Minuten (2
+					Stunden)[negative durationMinutes] bis zum Zeitpunkt 12:00 (43200 Sekunden) [startTimeSeconds] das
+					Inhaltselement angezeigt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startTimeSeconds">
+				<source>starttime</source>
+				<target>Startzeitpunkt</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.nthWeekdayInMonth">
+				<source>position of weekday in the month</source>
+				<target>Position des Wochentages innerhalb des Monats</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.first">
+				<source>first weekday of the month</source>
+				<target>erster Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.second">
+				<source>second weekday of the month</source>
+				<target>zweiter Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.third">
+				<source>third weekday of the month</source>
+				<target>dritter Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.forth">
+				<source>forth weekday of the month</source>
+				<target>vierten Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.nthDay.fifth">
+				<source>fifth weekday of the month</source>
+				<target>fünfter Wochentag im Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startCountAtEnd">
+				<source>Switch ON, if the active weekday(s) should be counted from the end of the month</source>
+				<target>Schalte ON, wenn der(die) aktive(n) Wochentag(e) vom Monatsende her gezählt werden soll(en)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startCountAtEnd.startToEnd">
+				<source>norm</source>
+				<target>Norm</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.startCountAtEnd.endToStart">
+				<source>anti</source>
+				<target>Anti</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.activeWeekday">
+				<source>active weekday</source>
+				<target>aktiver Wochentag</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.activeMonth">
+				<source>active month</source>
+				<target>aktiver Monat</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.january">
+				<source>january</source>
+				<target>Januar</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.february">
+				<source>february</source>
+				<target>Februar</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.march">
+				<source>march</source>
+				<target>Marsch</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.april">
+				<source>april</source>
+				<target>April</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.may">
+				<source>may</source>
+				<target>kann</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.june">
+				<source>june</source>
+				<target>Juni</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.july">
+				<source>july</source>
+				<target>Juli</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.august">
+				<source>august</source>
+				<target>August</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.september">
+				<source>september</source>
+				<target>September</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.october">
+				<source>october</source>
+				<target>Oktober</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.november">
+				<source>november</source>
+				<target>November</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.select.activeMonth.december">
+				<source>december</source>
+				<target>Dezember</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayInMonth.field.durationMinutes">
+				<source>time span between -1439 and +1439 minutes</source>
+				<target>Zeitspanne zwischen -1439 und +1439 Minuten</target>
+			</trans-unit>
+
+			<!-- weekdayly -->
+			<trans-unit id="flexform.timer.txTimerWeekdayly.sheet.title">
+				<source>active weekdays</source>
+				<target>Aktive Wochentage</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayly.sheet.shortDescr">
+				<source>Defines a whole weekday or several whole weekdays as active</source>
+				<target>Definiert einen ganzen Wochentag oder mehrere ganze Wochentage als aktiv</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayly.sheet.description">
+				<source>Example: The content item is activated every Friday (Black Friday) [activeWeekday].</source>
+				<target>Beispiel: An jedem Freitag (Black-Friday) [activeWeekday] wird das Inhaltselement aktiviert.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.txTimerWeekdayly.field.activeWeekday">
+				<source>select active weekday(s)</source>
+				<target>Wähle aktive Wochentag oder -tage</target>
+			</trans-unit>
+
+			<!-- contentPeriodList -->
+			<trans-unit id="flexform.timer.contentPeriodList.field.yamlPeriodFilePath.label">
+				<source>local path or link to the file with list of timers in yaml-format</source>
+				<target>Lokaler Pfad oder Link zur Datei mit der Lister der Termine im YAML-Format</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.yamlPeriodFilePath.description">
+				<source>The local path can be defined relatively or it is defined in the TYPO3-specific EXT: notation. A
+					link must begin with `http://` or `https://`. If the server is protected by a password, then the
+					username and password must be stored in the same way as in the following example:
+					`MyUsername:MyPassword:http://my-link.de/MyPeriodList.yaml`. (The yaml import command does not work
+					for a link to a yaml file.)
+				</source>
+				<target>Der lokale Pfad kann relativ definiert sein oder er wird in der TYPO3-spezifischen EXT:-Notation
+					definiert. Ein Link muss mit `http://` oder `https://` beginnen. Wenn der Server durch ein Passwort
+					geschützt ist, dann sind Usernamen und Passwort in analoger Form wie im folgenden Beispiel zu
+					hinterlegen: `MeinUsername:MeinPasswort:http://mein-link.de/MeinePeriodList.yaml`. (Bei einem Link
+					zu einer Yaml-Datei funktioniert der Yaml-Import-Befehl nicht.)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.yamlPeriodFalRelation.label">
+				<source>files with lists of dates in yaml format (FAL)</source>
+				<target>Dateien mit der Listen der Termine im YAML-Format (FAL)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.yamlPeriodFalRelation.description">
+				<source>The Yaml files can be uploaded to the TYPO3 backend in the regular way and linked here. If
+					several files are uploaded, the lists are combined. There is no (!!!) check for overlapping or
+					duplication of appointments.
+				</source>
+				<target>Die Yaml-Dateien können ganz regulärer Weise im TYPO3-Backend hochgeladen werden und hier
+					verlinkt werden. Werden mehrere Dateien hochgeladen, so werden die Listen zusammengefasst. Eine
+					Kontrolle auf Überschneidungen oder Doppelungen bei den Terminen findet nicht(!!!) statt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.yamlPeriodFalRelation.bottomAdd">
+				<source>add yaml-file</source>
+				<target>Lade YAML-Datei</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.calendarJsFilePath.label">
+				<source>javascript path to calendar-framework</source>
+				<target>Javascript-Pfad zum Kalender-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.calendarJsFilePath.description">
+				<source>Path to the javascript framework that can be used to display a list of dates in the form of a
+					calendar (optional)
+				</source>
+				<target>Pfad zum Javascript-Framework, mit dem eine Datumsliste in Form eines Kalenders dargestellt
+					werden kann (optional)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.calendarAddJsFilePath.label">
+				<source>javascript path to additional Javascript for the calendar-framework</source>
+				<target>Javascript-Pfad zu Zusatz-Javascript für das Kalender-Framework</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.timer.contentPeriodList.field.calendarAddJsFilePath.description">
+				<source>Path to the additional javascript that can be used to display a list of dates in the form of a
+					calendar (optional)
+				</source>
+				<target>Pfad zum zusätzlichen Javascript, mit dem eine Datumsliste in Form eines Kalenders dargestellt
+					werden kann (optional)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.customCalendarJsFilePath">
+				<source>Path to the custom javascript that can be used to display a list of dates in the form of a
+					calendar (optional)
+				</source>
+				<target>Pfad zum benutzerdefinierten Javascript, mit dem eine Datumsliste in Form eines Kalenders
+					dargestellt werden kann (optional)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.calendarCssFilePath.label">
+				<source>Path to CSS of the calendar-framework</source>
+				<target>Pfad zum CSS/Stylesheets des Kalenderdarstellung-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.calendarCssFilePath.description">
+				<source>Many JavaScript frameworks for the calendar display of appointment lists come with their own CSS
+					file, which can be integrated here by specifying the path - if necessary also in the `EXT:`
+					notation.
+				</source>
+				<target>Viele JavaScript-Frameworks zur Kalender-Darstellung von Terminlisten bringen eine eigene
+					CSS-Datei mit, die gegebenenfalls hier über die Angabe des Pfade - ggfls auch in der `EXT:`-Notation
+					- eingebunden werden kann.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentPeriodList.field.customCalendarCssFilePath">
+				<source>Path to the css-file with additional customized stylesheets</source>
+				<target>Pfad zur CSS-Datei mit zusätzlichen benutzerdefinierten Stylesheets</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentElement.periodList.sheet.title">
+				<source>list of single timegaps from Yaml-files (not working yet)</source>
+				<target>Liste mit Einzelbereichen aus Yaml-Dateien (not working yet)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentElement.periodList.sheet.shortDescr">
+				<source>A list of dates in a yaml file is used as a setlist for displaying the content item.</source>
+				<target>Eine Liste mit Terminen in einer yaml-Datei wird als Setliste für die Anzeige des
+					Inhaltselements genutzt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentElement.periodList.sheet.description">
+				<source>Example: In a file [yamlPeriodFilePath] in YAML format, the list of active time periods is
+					defined by defining a start time, an end time, a title and the time zone. In order to output the
+					list in calendar format, you can use the Java script framework [calendarJsFilePath] and the
+					associated style sheets [calendarCssFilePath] to be defined in the content element `periodList` and
+					add your own JavaScript [customCalendarJsFilePath] and style sheets [customCalendarCssFilePath].
+				</source>
+				<target>Beispiel: In einer Datei [yamlPeriodFilePath] im YAML-Format wird die Liste der aktiven
+					Zeitbereiche definiert, indem man eine Startzeit, eine Endzeit, einen Titem und die Zeitzone
+					definiert. Um die Liste im Kalenderformat auszugeben, kann man im Content-Element `periodList` das
+					zu definierende Javaskript-Framework [calendarJsFilePath] und die dazugehörigen Stylesheets
+					[calendarCssFilePath] nutzen und mit eigenen JavaScript [customCalendarJsFilePath] und Stylesheets
+					[customCalendarCssFilePath] ergänzen.
+				</target>
+			</trans-unit>
+
+			<!-- contentHolidaycalendar -->
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.aliasFilePath.label">
+				<source>local path or link to the file with a list of alias-definition for the holidays in yaml-, csv-
+					or json-format
+				</source>
+				<target>Lokaler Pfad oder Link zur Datei mit einer List der Alias-Definitkionen für die Feiertage im
+					Yaml-, csv- oder json-Format
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.aliasFilePath.description">
+				<source>The local path can be defined relatively or it is defined in the TYPO3-specific EXT: notation. A
+					link must begin with `http://` or `https://`. If the server is protected by a password, then the
+					username and password must be stored in the same way as in the following example:
+					`MyUsername:MyPassword:http://my-link.de/MyPeriodList#scv`. (You can mark the importformat after the
+					hash. Allowed are the formats yaml, csv and json. If the hash is missing, the format yaml will be
+					tried to use. Think about this: The yaml import command does not work for a link to a yaml file.)
+				</source>
+				<target>Der lokale Pfad kann relativ definiert sein oder er wird in der TYPO3-spezifischen EXT:-Notation
+					definiert. Ein Link muss mit `http://` oder `https://` beginnen. Wenn der Server durch ein Passwort
+					geschützt ist, dann sind Usernamen und Passwort in analoger Form wie im folgenden Beispiel zu
+					hinterlegen: `MeinUsername:MeinPasswort:http://mein-link.de/MeinePeriodList#csv`. (Mit einem Hash
+					geben sie an, in welchen Format die Datei herunterzuladen ist. Zulässig sind csv, yaml und json.
+					Wenn nichts angegeben ist, wird ein yaml-Format unterstellt. Beachten Sie: Bei einem Link zu einer
+					Yaml-Datei funktioniert der Yaml-Import-Befehl nicht.)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.holidayFilePath.label">
+				<source>local path or link to the file with a list of holiday-definition in yaml-, csv- or json-format
+				</source>
+				<target>Lokaler Pfad oder Link zur Datei mit einer List der Feiertage im Yaml-, csv- oder json-Format
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.holidayFilePath.description">
+				<source>The local path can be defined relatively or it is defined in the TYPO3-specific EXT: notation. A
+					link must begin with `http://` or `https://`. If the server is protected by a password, then the
+					username and password must be stored in the same way as in the following example:
+					`MyUsername:MyPassword:http://my-link.de/MyPeriodList#scv`. (You can mark the importformat after the
+					hash. Allowed are the formats yaml, csv and json. If the hash is missing, the format yaml will be
+					tried to use. Think about this: The yaml import command does not work for a link to a yaml file.)
+				</source>
+				<target>Der lokale Pfad kann relativ definiert sein oder er wird in der TYPO3-spezifischen EXT:-Notation
+					definiert. Ein Link muss mit `http://` oder `https://` beginnen. Wenn der Server durch ein Passwort
+					geschützt ist, dann sind Usernamen und Passwort in analoger Form wie im folgenden Beispiel zu
+					hinterlegen: `MeinUsername:MeinPasswort:http://mein-link.de/MeinePeriodList#csv`. (Mit einem Hash
+					geben sie an, in welchen Format die Datei herunterzuladen ist. Zulässig sind csv, yaml und json.
+					Wenn nichts angegeben ist, wird ein yaml-Format unterstellt. Beachten Sie: Bei einem Link zu einer
+					Yaml-Datei funktioniert der Yaml-Import-Befehl nicht.)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.aliasFilePath.label">
+				<source>local path or link to the file with list of timers in yaml-format</source>
+				<target>Lokaler Pfad oder Link zur Datei mit der Lister der Termine im YAML-Format</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.aliasFilePath.description">
+				<source>The local path can be defined relatively or it is defined in the TYPO3-specific EXT: notation. A
+					link must begin with `http://` or `https://`. If the server is protected by a password, then the
+					username and password must be stored in the same way as in the following example:
+					`MyUsername:MyPassword:http://my-link.de/MyPeriodList.yaml`. (The yaml import command does not work
+					for a link to a yaml file.)
+				</source>
+				<target>Der lokale Pfad kann relativ definiert sein oder er wird in der TYPO3-spezifischen EXT:-Notation
+					definiert. Ein Link muss mit `http://` oder `https://` beginnen. Wenn der Server durch ein Passwort
+					geschützt ist, dann sind Usernamen und Passwort in analoger Form wie im folgenden Beispiel zu
+					hinterlegen: `MeinUsername:MeinPasswort:http://mein-link.de/MeinePeriodList.yaml`. (Bei einem Link
+					zu einer Yaml-Datei funktioniert der Yaml-Import-Befehl nicht.)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.yamlPeriodFalRelation.label">
+				<source>files with lists of dates in yaml format (FAL)</source>
+				<target>Dateien mit der Listen der Termine im YAML-Format (FAL)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.yamlPeriodFalRelation.description">
+				<source>The Yaml files can be uploaded to the TYPO3 backend in the regular way and linked here. If
+					several files are uploaded, the lists are combined. There is no (!!!) check for overlapping or
+					duplication of appointments.
+				</source>
+				<target>Die Yaml-Dateien können ganz regulärer Weise im TYPO3-Backend hochgeladen werden und hier
+					verlinkt werden. Werden mehrere Dateien hochgeladen, so werden die Listen zusammengefasst. Eine
+					Kontrolle auf Überschneidungen oder Doppelungen bei den Terminen findet nicht(!!!) statt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.yamlPeriodFalRelation.bottomAdd">
+				<source>add yaml-file</source>
+				<target>Lade YAML-Datei</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarJsFilePath.label">
+				<source>comma-separated list of javascript pathes to calendar-framework</source>
+				<target>Komma-separierte Liste der Javascript-Pfade zum Kalender-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarJsFilePath.description">
+				<source>comma-separated list of javascript pathes that can be used to display a list of dates in the
+					form of a calendar (optional)
+				</source>
+				<target>Komma-separierte Liste zu den Javascript-Pfaden des Javascript-Frameworks, mit dem eine
+					Datumsliste in Form eines Kalenders dargestellt werden kann (optional)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.customCalendarJsFilePath">
+				<source>comma-separated list of pathes to the custom javascript that can be used to display a list of
+					dates in the form of a calendar (optional, individual for each content-element)
+				</source>
+				<target>Komma-separierte Liste der Pfade zum benutzerdefinierten Javascript, mit dem eine Datumsliste in
+					Form eines Kalenders dargestellt werden kann (optional, individuell für jedes Content-Element)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarCssFilePath.label">
+				<source>comma-separated list of pathes to CSS of the calendar-framework</source>
+				<target>Komma-separierte Liste der Pfade zum CSS/Stylesheets des Kalenderdarstellung-Framework</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.calendarCssFilePath.description">
+				<source>Many JavaScript frameworks for the calendar display of appointment lists come with their own CSS
+					file or CSS files, which can be integrated here by specifying the path - if necessary also in the
+					`EXT:` notation.
+				</source>
+				<target>Viele JavaScript-Frameworks zur Kalender-Darstellung von Terminlisten bringen eine eigene
+					CSS-Datei oder Dateien mit, die gegebenenfalls hier über die Angabe des Pfade - ggfls auch in der
+					`EXT:`-Notation - eingebunden werden kann.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentHolidaycalendar.field.customCalendarCssFilePath">
+				<source>comma-separated list of pathes to the css-file(s) with additional customized stylesheets
+					(optional, individual for each content-element)
+				</source>
+				<target>Komma-separierte Liste der Pfade zu CSS-Datei(en) mit zusätzlichen benutzerdefinierten
+					Stylesheets (optional, individuell für jedes Content-Element)
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentElement.holidaycalendar.sheet.title">
+				<source>list of single timegaps from Yaml-files (not working yet)</source>
+				<target>Liste mit Einzelbereichen aus Yaml-Dateien (not working yet)</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentElement.holidaycalendar.sheet.shortDescr">
+				<source>A list of dates in a yaml file is used as a setlist for displaying the content item.</source>
+				<target>Eine Liste mit Terminen in einer yaml-Datei wird als Setliste für die Anzeige des
+					Inhaltselements genutzt.
+				</target>
+			</trans-unit>
+			<trans-unit id="flexform.timer.contentElement.holidaycalendar.sheet.description">
+				<source>Example: In a file [yamlPeriodFilePath] in YAML format, the list of active time periods is
+					defined by defining a start time, an end time, a title and the time zone. In order to output the
+					list in calendar format, you can use the Java script framework [calendarJsFilePath] and the
+					associated style sheets [calendarCssFilePath] to be defined in the content element `holidaycalendar`
+					and add your own JavaScript [customCalendarJsFilePath] and style sheets [customCalendarCssFilePath].
+				</source>
+				<target>Beispiel: In einer Datei [yamlPeriodFilePath] im YAML-Format wird die Liste der aktiven
+					Zeitbereiche definiert, indem man eine Startzeit, eine Endzeit, einen Titem und die Zeitzone
+					definiert. Um die Liste im Kalenderformat auszugeben, kann man im Content-Element `holidaycalendar`
+					das zu definierende Javaskript-Framework [calendarJsFilePath] und die dazugehörigen Stylesheets
+					[calendarCssFilePath] nutzen und mit eigenen JavaScript [customCalendarJsFilePath] und Stylesheets
+					[customCalendarCssFilePath] ergänzen.
+				</target>
+			</trans-unit>
+
+			<trans-unit id="module.backend.flexform.field.durationMinutes.minutes">
+				<source>minutes</source>
+				<target>Minuten</target>
+			</trans-unit>
+			<trans-unit id="module.backend.flexform.field.durationMinutes.hours">
+				<source>hours</source>
+				<target>Stunden</target>
+			</trans-unit>
+			<trans-unit id="module.backend.flexform.field.durationMinutes.days">
+				<source>days</source>
+				<target>Tage</target>
+			</trans-unit>
+			<trans-unit id="module.backend.flexform.field.durationMinutes.main">
+				<source>calculated minutes</source>
+				<target>berechnete Minuten</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,14 @@
+mod.wizards.newContentElement.wizardItems.common {
+    elements {
+        timer_timersimul {
+            iconIdentifier = tx_timer_timersimul
+            title = LLL:EXT:timer/Resources/Private/Language/locallang_db_new_content_el.xlf:wizards.newContentElement.timersimul_title
+            description = LLL:EXT:timer/Resources/Private/Language/locallang_db_new_content_el.xlf:wizards.newContentElement.timersimul_description
+            tt_content_defValues {
+                CType = timer_timersimul
+            }
+        }
+    }
+
+    show := addToList(timer_timersimul)
+}

@@ -1,0 +1,62 @@
+{
+	"name": "porthd/timer",
+	"description": "The extension allow the usage of periodical timer for files, content-elements and pages. A cronjob will update the start- and endtime of the elements. The list of timer-definitions is expandable.",
+	"type": "typo3-cms-extension",
+	"license": "GPL-3.0-or-later",
+	"homepage": "https://www.düddelei.de/",
+	"keywords": [
+		"TYPO3 CMS",
+		"Frontendhelper",
+		"webcomponents",
+		"Extension"
+	],
+	"authors": [
+		{
+			"name": "Dr. Dieter Porth",
+			"role": "Developer",
+			"email": "info@mobger.de"
+		}
+	],
+	"replace": {
+		"typo3-ter/timer": "self.version"
+	},
+	"require": {
+		"php": ">=8.2.0 <=8.3.99",
+		"ext-pdo": "*",
+		"ext-dom": "*",
+		"ext-xml": "*",
+		"ext-json": "*",
+		"ext-calendar": "*",
+		"ext-intl": "*",
+		"typo3/cms-core": "^12.4",
+		"typo3/cms-extbase": "^12.4",
+		"typo3/cms-fluid": "^12.4"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^11.0.0",
+		"phpstan/phpstan": "^1.11"
+	},
+	"autoload": {
+		"psr-4": {
+			"Porthd\\Timer\\": "Classes/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Porthd\\Timer\\Tests\\": "Tests/"
+		}
+	},
+	"config": {
+		"vendor-dir": ".Build/vendor"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "12.0.x-dev"
+		},
+		"typo3/cms": {
+			"extension-key": "timer",
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"web-dir": ".Build/public"
+		}
+	}
+}

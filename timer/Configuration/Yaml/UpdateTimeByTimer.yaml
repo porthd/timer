@@ -1,0 +1,35 @@
+# example for yaml, which you can call in your task of UpdateTimesCommand
+#
+tablelist:
+    -   table: 'tt_content'
+        repository: 'Porthd\Timer\Domain\Repository\GeneralRepository'
+        rootlinePid:
+            - 1
+    -   table: 'pages'
+        repository: 'Porthd\Timer\Domain\Repository\GeneralRepository'
+        rootlinePid:
+            - 1
+#    #!!!!remark from 2022-10-30: This configuration may fail, because i havn't tested it
+#    where:
+#      -
+##        required
+#         field: 'field_name'
+##        required
+#         value: 'fieldvalue as string %'
+##        # lt gt eq neq like lte gte isNull isNotNull notLike - default: eq
+#         compare: 'eq'
+##        # string, int - default string
+#         type: 'int'
+#  -
+#    repository: 'Porthd\Timer\Domain\Repository\GeneralRepository'
+#    #!!!!!REMEMBER: there is no core-use for starttime an endtime in sys_file_reference
+#    table: 'sys_file_reference'
+#    rootlinePid:
+#      - 1
+cachecmd:
+    - 'pages'
+# example for other commands
+#   - 'all'
+#   - 'pages'
+#   - '<pageId>'
+#   - 'customTags'

@@ -1,0 +1,36 @@
+#tt_content.timer_periodlist = FLUIDTEMPLATE
+lib.periodlist.fluidContent < lib.contentElement
+lib.periodlist.fluidContent {
+    templateRootPaths {
+        349 = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+    }
+
+    partialRootPaths {
+        349 = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+    }
+
+    layoutRootPaths {
+        349 = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.fluidContent} = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+    }
+}
+
+lib.periodlist.contentElement < lib.contentElement
+lib.periodlist.contentElement {
+    templateRootPaths {
+        349 = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.templateRootPath}
+    }
+
+    partialRootPaths {
+        349 = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.partialRootPath}
+    }
+
+    layoutRootPaths {
+        349 = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+        #{$contentElement.tx_timer_periodlist.pathSlotNumber.contentElement} = {$contentElement.tx_timer_periodlist.view.layoutRootPath}
+    }
+}

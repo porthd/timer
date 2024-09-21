@@ -1,0 +1,20 @@
+contentElement.tx_timer_holidaycalendar {
+    pathSlotNumber {
+        # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_holidaycalendar.const.pathesFor.libFLuidContent
+        contentElement = 351
+        # cat=contentElement.timer//config; type=int; label=LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:newContentElement.tx_timer_holidaycalendar.const.pathesFor.libContentElement
+        contentElement = 351
+    }
+
+    backendView {
+        templateRootPath = EXT:timer/Resources/Private/Backend/Templates/Content/
+        partialRootPath = EXT:timer/Resources/Private/Backend/Partials/Content/
+        layoutRootPath = EXT:timer/Resources/Private/Backend/Layouts/
+    }
+
+    view {
+        templateRootPath = EXT:timer/Resources/Private/Templates/Content/
+        partialRootPath = EXT:timer/Resources/Private/Partials/Content/
+        layoutRootPath = EXT:timer/Resources/Private/Layouts/
+    }
+}

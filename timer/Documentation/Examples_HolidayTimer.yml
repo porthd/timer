@@ -1,0 +1,324 @@
+---
+-   helping:
+    title: Heiligabend
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmasEve
+    identifier: greg-christmasEve
+    arg.type: fixed
+    arg.day: 24
+    arg.month: 12
+    arg.calendar: gregorian
+    arg.status:
+    arg.statusCount:
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: christian
+    add.rank: 3
+    add.locale.COMMA: de_DE,lv_LV,de_LI
+    add.freelocale.COMMA: lv_LV,de_LI
+    add.freespecial..COMMA: de_DE
+-   helping:
+    title: Weihnachten oder nachfolgender Montag
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmasWeekend
+    identifier: greg-christmas
+    arg.type: fixedshifting
+    arg.day: 25
+    arg.month: 12
+    arg.calendar: gregorian
+    arg.status:
+    arg.statusCount: 0,0,0,0,0,2,2
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: christian
+    add.rank: 5
+    add.locale.COMMA: en_GB,en_NZ
+    add.freelocale.COMMA: en_GB,en_NZ
+    add.freespecial..COMMA:
+-   helping:
+    title: Tag der Erwachsenen
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.jpDayOfAdultsNew
+    identifier: greg-jpDayOfAdultsNew
+    arg.type: weekdayly
+    arg.day:
+    arg.month: 1
+    arg.calendar: gregorian
+    arg.status: 1
+    arg.statusCount: 2
+    arg.secDayCount:
+    arg.startYear: 2000
+    arg.stopYear:
+    tag: political
+    add.category.COMMA:
+    add.rank: 5
+    add.locale.COMMA: ja_JP
+    add.freelocale.COMMA: ja_JP
+    add.freespecial..COMMA:
+-   helping:
+    title: Rosenmontag
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.rosemonday
+    identifier: greg-roseMonday
+    arg.type: easterly
+    arg.day:
+    arg.month:
+    arg.calendar: gregorian
+    arg.status:
+    arg.statusCount: -48
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: culture
+    add.category.COMMA:
+    add.rank: 3
+    add.locale.COMMA: de_DE
+    add.freelocale.COMMA:
+    add.freespecial..COMMA:
+-   helping:
+    title: Frühlingsanfang
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.spring
+    identifier: greg-spring
+    arg.type: season
+    arg.day:
+    arg.month:
+    arg.calendar: gregorian
+    arg.status: 1
+    arg.statusCount:
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: culture
+    add.category.COMMA:
+    add.rank: 5
+    add.locale.COMMA: ja_JP
+    add.freelocale.COMMA: ja_JP
+    add.freespecial..COMMA:
+-   helping:
+    title: Matakiri (geschätzt, Neumond nach Aufgang der Plejaden; Neuseeland)
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.nzMatakiri
+    identifier: greg-nzMatakiri
+    arg.type: matariki
+    arg.day:
+    arg.month:
+    arg.calendar: gregorian
+    arg.status:
+    arg.statusCount:
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: culture
+    add.category.COMMA:
+    add.rank: 5
+    add.locale.COMMA: en_NZ
+    add.freelocale.COMMA: en_NZ
+    add.freespecial..COMMA:
+-   helping:
+    title: Herbstsanfang
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.autumn
+    identifier: greg-autumn
+    arg.type: seasonshifting
+    arg.day:
+    arg.month:
+    arg.calendar: gregorian
+    arg.status: 3
+    arg.statusCount: 0,0,0,0,0,0,1
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: culture
+    add.category.COMMA:
+    add.rank: 5
+    add.locale.COMMA: ja_JP
+    add.freelocale.COMMA: ja_JP
+    add.freespecial..COMMA:
+-   helping:
+    title: Allerheiligen (+)
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.muAllSaintsDay
+    identifier: greg-muAllSaintsDay
+    arg.type: fixedmultiyear
+    arg.day: 1
+    arg.month: 11
+    arg.calendar: gregorian
+    arg.status: 2023
+    arg.statusCount: 2
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: christian, catholics
+    add.rank: 3
+    add.locale.COMMA: en_MU,mfe_MU
+    add.freelocale.COMMA: en_MU,mfe_MU
+    add.freespecial..COMMA:
+-   helping:
+    title: Buß und Betttag
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.dayOfPrayerAndRepentance
+    identifier: greg-prayerAndRepentance
+    arg.type: fixedrelated
+    arg.day: 25
+    arg.month: 12
+    arg.calendar: gregorian
+    arg.status: 7
+    arg.statusCount: -5
+    arg.secDayCount: -4
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: christian, lutherans, calvians
+    add.rank: 5
+    add.locale.COMMA: de_DE
+    add.freelocale.COMMA:
+    add.freespecial..COMMA: de_DE
+-   helping:
+    title: Totensonntag
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.deadSunday
+    identifier: greg-deadSunday
+    arg.type: fixedrelated
+    arg.day: 25
+    arg.month: 12
+    arg.calendar: gregorian
+    arg.status: 7
+    arg.statusCount: -5
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: christian
+    add.rank: 5
+    add.locale.COMMA: de_DE,fr_FR
+    add.freelocale.COMMA: de_DE,fr_FR
+    add.freespecial..COMMA:
+-   helping:
+    title: Präsident Tubman’s Geburtstag (Liberia)
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.lrPresidentTubmansBirthday
+    identifier: greg-lrPresidentTubmansBirthday
+    arg.type: fixed
+    arg.day: 29
+    arg.month: 11
+    arg.calendar: gregorian
+    arg.status:
+    arg.statusCount:
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: political
+    add.category.COMMA:
+    add.rank: 5
+    add.locale.COMMA: en_LR,vai_Latn_LR
+    add.freelocale.COMMA: en_LR,vai_Latn_LR
+    add.freespecial..COMMA:
+-   helping:
+    title: St Andrew Day
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.sanktAndrewDay
+    identifier: greg-sanktAndrewDay
+    arg.type: fixedshifting
+    arg.day: 30
+    arg.month: 11
+    arg.calendar: gregorian
+    arg.status:
+    arg.statusCount: 0,0,0,0,0,2,1
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: culture
+    add.category.COMMA:
+    add.rank: 3
+    add.locale.COMMA: en_GB
+    add.freelocale.COMMA:
+    add.freespecial..COMMA: en_GB
+-   helping:
+    title: 1. Advent
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.firstAdvent
+    identifier: greg-firstAdvent
+    arg.type: fixedrelated
+    arg.day: 25
+    arg.month: 12
+    arg.calendar: gregorian
+    arg.status: 7
+    arg.statusCount: -4
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: christian
+    add.rank: 5
+    add.locale.COMMA: de_DE,fr_FR
+    add.freelocale.COMMA:
+    add.freespecial..COMMA:
+-   helping: not allowed(bug in php)
+    title: Chin. Neujahr
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.chin.newyear
+    identifier: chin-newYear
+    arg.type: fixed
+    arg.day: 1
+    arg.month: 1
+    arg.calendar: chinese
+    arg.status:
+    arg.statusCount:
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: culture
+    add.category.COMMA:
+    add.rank: 5
+    add.locale.COMMA: en_MU,mfe_MU
+    add.freelocale.COMMA: en_MU,mfe_MU
+    add.freespecial..COMMA:
+-   helping:
+    title: Vesakh
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.buddh.indean.vesakh
+    identifier: ind-vesakh
+    arg.type: mooninmonth
+    arg.day:
+    arg.month: 5
+    arg.calendar: gregorian
+    arg.status: 2
+    arg.statusCount: 1
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: buddhist
+    add.rank: 5
+    add.locale.COMMA:
+    add.freelocale.COMMA:
+    add.freespecial..COMMA:
+-   helping:
+    title: Ramadan (Beginn der Fastenzeit)
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.ramadan
+    identifier: isl-ramadan
+    arg.type: fixed
+    arg.day: 1
+    arg.month: 9
+    arg.calendar: islamic
+    arg.status:
+    arg.statusCount:
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: religion
+    add.category.COMMA: islamic, sunnits, schiits
+    add.rank: 5
+    add.locale.COMMA:
+    add.freelocale.COMMA:
+    add.freespecial..COMMA:
+-   helping:
+    title: Jüd. Neujahrsfest (Rosch Haschana)
+    eventtitle: LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.roschHaschana
+    identifier: hebr-roschHaschana
+    arg.type: fixed
+    arg.day: 1
+    arg.month: 1
+    arg.calendar: hebrew
+    arg.status:
+    arg.statusCount:
+    arg.secDayCount:
+    arg.startYear:
+    arg.stopYear:
+    tag: culture
+    add.category.COMMA: jewish
+    add.rank: 3
+    add.locale.COMMA: he_IL
+    add.freelocale.COMMA:
+    add.freespecial..COMMA:

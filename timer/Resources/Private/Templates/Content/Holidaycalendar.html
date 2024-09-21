@@ -1,0 +1,136 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:timer="http://www.mobger.de/2019/timer"
+      data-namespace-typo3-fluid="true"
+>
+<head>
+    <f:comment>
+        <!--***************************************************************
+        *
+        *  Copyright notice
+        *
+        *  (c) 2023 Dr. Dieter Porth <info@mobger.de>
+        *
+        *  All rights reserved
+        *
+        *  This script is free software; you can redistribute it and/or modify
+        *  it under the terms of the GNU General Public License as published by
+        *  the Free Software Foundation; either version 3 of the License, or
+        *  (at your option) any later version.
+        *
+        *  The GNU General Public License can be found at
+        *  http://www.gnu.org/copyleft/gpl.html.
+        *
+        *  This copyright notice MUST APPEAR in all copies of the script!
+        *************************************************************** -->
+    </f:comment>
+</head>
+<body>
+
+<f:layout name="Typo3Default"/>
+<f:section name="Header">
+    <f:if condition="{gallery.position.noWrap} != 1">
+        <f:render partial="Header/All" arguments="{_all}"/>
+    </f:if>
+
+</f:section>
+<f:section name="Main">
+    <f:comment>
+        <!--
+            Example inspired by https://github.com/nhn/tui.calendar/issues/620
+            => https://github.com/nhn/tui.calendar/blob/master/examples/example00-basic.html
+            => https://github.com/nhn/tui.calendar/blob/master/examples/js/app.js
+
+            The documentation of ToastUiCalendar seems to be really spartanic. It is similiar to the TYPO3 documentation at version 6.
+            I am missing some explained examples. the xeample-code didn`t easily lead to the main points of structure.
+        -->
+    </f:comment>
+    <f:if condition="{holidaycalendarJson}">
+        <f:comment>
+            <f:render partial="HolidayCalendar/PreMenu"
+                      section="Main"
+                      arguments="{holidaycalendarJson:holidaycalendarJson}"
+            />
+        </f:comment>
+        <div>
+            <f:render partial="HolidayCalendar/Menu"
+                      section="Main"
+                      arguments="{holidaycalendarJson:holidaycalendarJson}"
+            />
+            <f:render partial="HolidayCalendar/Main"
+                      section="Main"
+                      arguments="{holidaycalendarJson:holidaycalendarJson}"
+            />
+        </div>
+        <f:if condition="{holidayflexlist.calendarJsFilePath}">
+            <timer:forCommaList each="{holidayflexlist.calendarJsFilePath}"
+                                as="jsFilePath" key="key"
+                                trim="1"
+            >
+                <f:asset.script identifier="myHolidaycalendarFrame{key}" src="{jsFilePath}"/>
+            </timer:forCommaList>
+        </f:if>
+        <f:if condition="{holidayflexlist.customCalendarJsFilePath}">
+            <timer:forCommaList each="{holidayflexlist.customCalendarJsFilePath}"
+                                as="jsFilePath" key="key"
+            >
+                <f:asset.script identifier="myHolidaycalendarCustomJs{data.uid}-{key}" src="{jsFilePath}"/>
+            </timer:forCommaList>
+        </f:if>
+        <f:if condition="{holidayflexlist.calendarCssFilePath}">
+            <timer:forCommaList each="{holidayflexlist.calendarCssFilePath}"
+                                as="cssFilePath" key="key"
+            >
+                <f:asset.css identifier="myHolidaycalendarFrame{key}" href="{cssFilePath}"/>
+            </timer:forCommaList>
+        </f:if>
+        <f:if condition="{holidayflexlist.customCalendarCssFilePath}">
+            <timer:forCommaList each="{holidayflexlist.calendarCssFilePath}"
+                                as="cssFilePath" key="key"
+            >
+                <f:asset.css identifier="myHolidaycalendarCustom{data.uid}-{key}" href="{cssFilePath}"/>
+            </timer:forCommaList>
+        </f:if>
+    </f:if>
+
+    <div
+        class="ce-textpic ce-{gallery.position.horizontal} ce-{gallery.position.vertical}{f:if(condition: gallery.position.noWrap, then: ' ce-nowrap')}">
+        <f:if condition="{gallery.position.vertical} != 'below'">
+            <f:render partial="Media/Gallery" arguments="{_all}"/>
+        </f:if>
+
+        <f:if condition="{data.bodytext}">
+            <f:then>
+                <div class="ce-bodytext">
+                    <f:if condition="{gallery.position.noWrap}">
+                        <f:render partial="Header/All" arguments="{_all}"/>
+                    </f:if>
+                    <f:format.html>{data.bodytext}</f:format.html>
+                </div>
+            </f:then>
+            <f:else>
+                <f:if condition="{gallery.position.noWrap}">
+                    <f:if condition="{data.header}">
+                        <div class="ce-bodytext">
+                            <f:render partial="Header/All" arguments="{_all}"/>
+                        </div>
+                    </f:if>
+                </f:if>
+            </f:else>
+        </f:if>
+
+        <f:if condition="{HolidaycalendarList}">
+            <f:render partial="Periodlist"
+                      section="Main"
+                      arguments="{periodlist:periodlist}"
+            />
+        </f:if>
+
+        <f:if condition="{gallery.position.vertical} == 'below'">
+            <f:render partial="Media/Gallery" arguments="{_all}"/>
+        </f:if>
+    </div>
+
+</f:section>
+</body>
+</html>
+

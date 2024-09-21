@@ -1,0 +1,76 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:timer="http://www.mobger.de/2019/timer"
+      data-namespace-typo3-fluid="true"
+>
+<head>
+    <f:comment>
+        <!--***************************************************************
+        *
+        *  Copyright notice
+        *
+        *  (c) 2023 Dr. Dieter Porth <info@mobger.de>
+        *
+        *  All rights reserved
+        *
+        *  This script is free software; you can redistribute it and/or modify
+        *  it under the terms of the GNU General Public License as published by
+        *  the Free Software Foundation; either version 3 of the License, or
+        *  (at your option) any later version.
+        *
+        *  The GNU General Public License can be found at
+        *  http://www.gnu.org/copyleft/gpl.html.
+        *
+        *  This copyright notice MUST APPEAR in all copies of the script!
+        *************************************************************** -->
+    </f:comment>
+</head>
+<body>
+
+<f:section name="Main">
+
+    <f:for each="{periodlist}" as="perioditem">
+        <div>
+            <h3>{perioditem.title}</h3>
+            <div>
+                <timer:format.date format="d.m.Y" timezone="{perioditem.zone}">{perioditem.startDatetime}
+                </timer:format.date>
+            </div>
+            <div>
+                <timer:format.date format="d.m.Y" timezone="{perioditem.zone}">{perioditem.stopDatetime}
+                </timer:format.date>
+            </div>
+            <f:if condition="{perioditem.zone}">
+                <div>{perioditem.zone}</div>
+            </f:if>
+            <f:if condition="{perioditem.data}">
+
+                <table>
+                    <tr>
+                        <th>
+                            <f:translate key="content.perioditem.dataprocessed.header.flex.key"
+                                         extensionName="timer"
+                            />
+                        </th>
+                        <th>
+                            <f:translate key="content.perioditem.dataprocessed.header.flex.value"
+                                         extensionName="timer"
+                            />
+                        </th>
+                    </tr>
+                    <f:for each="{perioditem.data}" as="value" key="key">
+                        <tr>
+                            <td>{key}</td>
+                            <td>{value}</td>
+                        </tr>
+                    </f:for>
+                </table>
+                <br/>
+            </f:if>
+        </div>
+
+    </f:for>
+
+</f:section>
+</body>
+</html>
+

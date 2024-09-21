@@ -1,0 +1,46 @@
+#/***************************************************************
+#*
+#*  Copyright notice
+#*
+#*  (c) 2022 Dr. Dieter Porth <info@mobger.de>
+#*
+#*  All rights reserved
+#*
+#*  This script is free software; you can redistribute it and/or modify
+#*  it under the terms of the GNU General Public License as published by
+#*  the Free Software Foundation; either version 3 of the License, or
+#*  (at your option) any later version.
+#*
+#*  The GNU General Public License can be found at
+#*  http://www.gnu.org/copyleft/gpl.html.
+#*
+#*  This copyright notice MUST APPEAR in all copies of the script!
+#***************************************************************/
+
+config.tx_extbase {
+    persistence {
+        classes {
+
+            Porthd\Timer\Domain\Model\Pages {
+                mapping {
+                    tableName = pages
+                    recordType = Tx_Timer_Pages
+                }
+            }
+
+            Porthd\Timer\Domain\Model\SysFileReference {
+                mapping {
+                    tableName = sys_file_reference
+                    recordType = Tx_Timer_SysFileReference
+                }
+            }
+
+            Porthd\Timer\Domain\Model\TtContent {
+                mapping {
+                    tableName = tt_content
+                    recordType = Tx_Timer_TtContent
+                }
+            }
+        }
+    }
+}

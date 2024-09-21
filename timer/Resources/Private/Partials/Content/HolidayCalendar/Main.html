@@ -1,0 +1,60 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:timer="http://www.mobger.de/2019/timer"
+      data-namespace-typo3-fluid="true"
+>
+<head>
+    <f:comment>
+        <!--***************************************************************
+        *
+        *  Copyright notice
+        *
+        *  (c) 2023 Dr. Dieter Porth <info@mobger.de>
+        *
+        *  All rights reserved
+        *
+        *  This script is free software; you can redistribute it and/or modify
+        *  it under the terms of the GNU General Public License as published by
+        *  the Free Software Foundation; either version 3 of the License, or
+        *  (at your option) any later version.
+        *
+        *  The GNU General Public License can be found at
+        *  http://www.gnu.org/copyleft/gpl.html.
+        *
+        *  This copyright notice MUST APPEAR in all copies of the script!
+        *************************************************************** -->
+    </f:comment>
+</head>
+<body>
+<f:section name="Main">
+    <f:comment>
+        <!--
+            Example inspired by https://github.com/nhn/tui.calendar/issues/620
+            => https://github.com/nhn/tui.calendar/blob/master/examples/example00-basic.html
+            => https://github.com/nhn/tui.calendar/blob/master/examples/js/app.js
+
+            The documentation of ToastUiCalendar seems to be really spartanic. It is similiar to the TYPO3 documentation at version 6.
+            I am missing some explained examples. the xeample-code didn`t easily lead to the main points of structure.
+        -->
+    </f:comment>
+    <f:alias map="{
+        sun:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.sun\',extensionName:\'timer\')}',
+        mon:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.mon\',extensionName:\'timer\')}',
+        tue:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.tue\',extensionName:\'timer\')}',
+        wed:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.wed\',extensionName:\'timer\')}',
+        thu:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.thu\',extensionName:\'timer\')}',
+        fri:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.fri\',extensionName:\'timer\')}',
+        sat:'{f:translate(key:\'contentElement.holidayCalendar.tuicalendar.sat\',extensionName:\'timer\')}'
+    }">
+        <div id="tuicalendar"
+             style="height: 600px;"
+             data-events='{holidaycalendarJson}'
+             data-milestone="{f:translate(key:'contentElement.holidayCalendar.tuicalendar.milestone',extensionName:'timer')}"
+             data-task="{f:translate(key:'contentElement.holidayCalendar.tuicalendar.task',extensionName:'timer')}"
+             data-allday="{f:translate(key:'contentElement.holidayCalendar.tuicalendar.allday',extensionName:'timer')}"
+             data-weekdays='["{sun}","{mon}","{tue}","{wed}","{thu}","{fri}","{sat}"]'
+        ></div>
+    </f:alias>
+</f:section>
+</body>
+</html>
+

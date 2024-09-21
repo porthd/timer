@@ -1,0 +1,120 @@
+<svg
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/2000/svg"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:cc="http://creativecommons.org/ns#"
+    xmlns="http://www.w3.org/2000/svg"
+    width="64"
+    height="64"
+    id="svg4136"
+    version="1.1"
+    viewBox="0 0 64 64">
+    <defs>
+        <linearGradient>
+            <stop
+                style="stop-color:#000000;stop-opacity:1;"
+                offset="0"
+                id="stop4694"
+            />
+        </linearGradient>
+        <filter
+            style="color-interpolation-filters:sRGB"
+            id="filter4788"
+            x="-0.025332392"
+            width="1.0506648"
+            y="-0.022800762"
+            height="1.0456015">
+            <feGaussianBlur
+                stdDeviation="0.1311243"
+                id="feGaussianBlur4790"
+            />
+        </filter>
+
+    </defs>
+    <metadata>
+        <rdf:RDF>
+            <cc:Work>
+                <dc:format>image/svg+xml</dc:format>
+                <dc:title>Icon of TYPO3-Extrsion timer</dc:title>
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
+    <g>
+        <path
+            style="opacity:1;fill:#006600;fill-opacity:0;stroke:#006600;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+            d="M 21.34,9.39 A 25.02,25.00 0 0 1 51.87,16.80 25.02,25.00 0 0 1 51.07,48.20 25.01,25.00 0 0 1 20.19,54.03 25.02,25.00 0 0 1 7.97,25.10"
+        />
+        <path
+            style="fill:#99ccff;fill-rule:evenodd;stroke:#006600;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+            d="m 21.26,9.67 c 1.86,4.89 4.31,7.73 3.91,6.78"
+        />
+        <path
+            style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+            d="m 36.75,35.625 0.5,0"
+        />
+        <path
+            style="fill:#ff8f00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0"
+            d="m 28.91,35.53 c 2.85,2.04 5.86,1.57 7.87,-1.97 0.09,-2.56 -2.47,-3.79 -3.19,-4.58 -9.88,-1.01 -11.03,-1.99 -21.63,-3.35 6.73,3.85 7.04,5.35 16.89,9.90 z"
+        />
+        <path
+            style="opacity:1;fill:#660019;fill-opacity:0.0044643;stroke:#19edff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+            d="M 9.71,20.76 A 25.02,25.00 0 0 1 16.84,12.24"
+        />
+        <path
+            style="opacity:1;fill:#006600;fill-opacity:0;stroke:#fffc02;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+            d="M 17.38,52.28 A 25.02,25.00 0 0 1 7.65,37.72"
+        />
+        <path
+            style="opacity:1;fill:#006600;fill-opacity:0;stroke:#fffc02;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter4788)"
+            d="M 43.08,9.59 A 25.02,25.00 0 0 1 55.50,23.40"
+        />
+        <path
+            style="opacity:1;fill:#006600;fill-opacity:0;stroke:#fffc02;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+            d="M 54.11,43.84 A 25.02,25.00 0 0 1 38.78,56.03"
+        />
+        <g style="opacity:0.7;">
+            <path transform="translate(11 2)" id="globe" d="M23.4,19.8c4.5-4.5,4.5-11.9,0-16.4
+				c-4.5-4.5-11.9-4.5-16.4,0c-4.5,4.5-4.5,11.9,0,16.4
+				C11.5,24.4,18.9,24.4,23.4,19.8z M7.5,5.0l2.4,2.4c-.7,.8-1.4,1.6-1.9,2.4
+				L5.8,7.8C6.2,6.8,6.8,5.8,7.5,5.0z M11.3,2.2l2.1,2.1
+				c-.8,.5-1.6,1.2-2.4,1.9L8.6,3.9C9.4,3.2,10.3,2.6,11.3,2.2z M22.9,18.2
+				l-2.4-2.4c.7-.8,1.4-1.6,1.9-2.4l2.1,2.1C24.2,16.5,23.6,17.4,22.9,18.2z
+				 M19.0,21.0l-2.1-2.1c.8-.5,1.6-1.2,2.4-1.9l2.4,2.4
+				C21.0,20.0,20.0,20.6,19.0,21.0z M8.6,19.2l3.2-3.2l2.5,2.5
+				C12.1,19.6,10.0,20.0,8.6,19.2z M12.9,14.9l2.2-2.2l3.0,3.0
+				c-.8,.7-1.6,1.4-2.5,1.9L12.9,14.9z M19.3,14.7l-3.0-3.0l2.2-2.2l2.8,2.8
+				C20.8,13.0,20.1,13.9,19.3,14.7z M19.5,8.3l3.2-3.2c.7,1.3,.4,3.5-.7,5.7
+				L19.5,8.3z M21.8,4.0l-3.2,3.2L16.0,4.7c1.4-.7,2.8-1.1,4.0-1.1
+				C20.7,3.6,21.3,3.7,21.8,4.0z M17.4,8.3l-2.2,2.2l-3.0-3.0
+				c.8-.7,1.6-1.4,2.5-1.9L17.4,8.3z M11.0,8.5l3.0,3.0l-2.2,2.2l-2.8-2.8
+				C9.6,10.2,10.3,9.3,11.0,8.5z M10.8,14.9l-3.2,3.2c-.7-1.3-.4-3.5,.7-5.7
+				L10.8,14.9z M11.5,21.1c1.2-.1,2.6-.6,4.0-1.4l1.8,1.8
+				C15.4,22.0,13.4,21.8,11.5,21.1z M25.1,13.8l-1.8-1.8c.7-1.4,1.2-2.7,1.4-4.0
+				C25.4,9.8,25.5,11.9,25.1,13.8z M18.9,2.2c-1.2,.1-2.6,.6-4.0,1.4l-1.8-1.8
+				C14.9,1.3,17.0,1.4,18.9,2.2z M5.3,9.4l1.8,1.8c-.7,1.4-1.2,2.7-1.4,4.0
+				C5.0,13.4,4.8,11.3,5.3,9.4z"
+            />
+            <rect x="40" y="12" width="22" height="21" fill="#C73C3C"/>
+            <text x="40" y="28" style="fill:#fff; font-size:16; border:hidden; font-family:sans-serif;">
+                <tspan>&#x262A;</tspan>
+            </text>
+            <rect x="0" y="26" width="22" height="21" fill="#1E1EA9"/>
+            <text x="0" y="42" style="fill:#fff;font-size:16; border:hidden; font-family:sans-serif;">
+                <tspan>&#x2721;</tspan>
+            </text>
+            <rect x="15" y="40" width="22" height="21" fill="darkorange"/>
+            <text x="15" y="56" style="fill:#fff;font-size:16; border:hidden; font-family:sans-serif;">
+                <tspan>&#x1F549;</tspan>
+            </text>
+            <rect x="42" y="39" width="22" height="21" fill="#760A76"/>
+            <text x="42" y="55" style="fill:#fff;font-size:16; border:hidden; font-family:sans-serif;">
+                <tspan>&#x271D;</tspan>
+            </text>
+        </g>
+        <rect x="25" y="21" width="22" height="21" fill="darkgreen"/>
+        <text x="25" y="37" style="fill:#fff; font-size:16; border:hidden; font-family:sans-serif;">
+            <tspan>&#x262E;</tspan>
+        </text>
+    </g>
+</svg>

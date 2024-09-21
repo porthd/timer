@@ -1,0 +1,1785 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<!-- I use <target> in this default-language-file, because englisch is not my native language. TYPO3 won`t use this target-definition. -->
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2023-01-31T12:51:00Z"
+		  product-name="timer">
+		<header/>
+		<body>
+			<trans-unit id="calendarDate.christ.greg.testCutomTimerForTimer">
+				<source>my test for customtimer, which is defined by this extension</source>
+				<target>Mein Test für einen Nutzer-definierten Timer, der durch die Extension bereitgestellt wird
+				</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.christmasEve">
+				<source>christmas eve</source>
+				<target>Heiligabend</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.christmasWeekend">
+				<source>Christmas or following Monday</source>
+				<target>Weihnachten oder nachfolgender Montag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.boxingdayWeekend">
+				<source>Christmas (2nd day) or following Monday</source>
+				<target>Weihnachten (2. Tag) oder nachfolgender Montag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.christmas">
+				<source>Christmas</source>
+				<target>Weihnachten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.christmasSecondDay">
+				<source>Christmas (Day 2)</source>
+				<target>Weihnachten (2. Tag)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.silvester">
+				<source>New Year's Eve</source>
+				<target>Silvester</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.newyear">
+				<source>New Year or following Monday</source>
+				<target>Neujahr oder nachfolgender Montag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.newyear">
+				<source>New Year</source>
+				<target>Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.holyThreeKings">
+				<source>Holy Three Kings</source>
+				<target>Heilige drei Könige</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mariapregnant">
+				<source>Candlemas</source>
+				<target>Mariä Lichtmeß</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.eco.greg.valentinsday">
+				<source>valentines day</source>
+				<target>Valentinstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.eco.greg.WomensShrovetide">
+				<source>Women's Shrovetide</source>
+				<target>Weiberfastnacht</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.rosemonday">
+				<source>Shrove Monday</source>
+				<target>Rosenmontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.carnival">
+				<source>carnival</source>
+				<target>Fasching</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.worldwomenday">
+				<source>International Women's Day</source>
+				<target>Weltfrauentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.sanktpatrickday">
+				<source>St Patrick Day</source>
+				<target>St. Patrick Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.greenthursday">
+				<source>Green Thursday</source>
+				<target>Grüner Donnerstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.goodfriday">
+				<source>Good Friday</source>
+				<target>Karfreitag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.easter">
+				<source>Easter</source>
+				<target>Ostern</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.eastermonday">
+				<source>easter monday</source>
+				<target>Ostermontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.orthoEaster">
+				<source>Easter</source>
+				<target>Ostern</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.orthoEasterMonday">
+				<source>easter monday</source>
+				<target>Ostermontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.stupidity">
+				<source>World Stupid Day</source>
+				<target>Welttag der Dummheit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.walpurgis">
+				<source>Walpurgis Night</source>
+				<target>Walpurgisnacht</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.labourday">
+				<source>Labor Day</source>
+				<target>Tag der Arbeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.earlyMayBankHoliday">
+				<source>Early May bank holiday</source>
+				<target>Early May bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.freeByAllierts">
+				<source>à l'occasion de la fête de la liberation allée</source>
+				<target>à l'occasion de la fête de la libération alliée</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mothersday">
+				<source>Mother's Day</source>
+				<target>Muttertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.towlday">
+				<source>World Towel Day</source>
+				<target>Welthandtuchtag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.springBankHoliday">
+				<source>Spring bank holiday</source>
+				<target>Spring bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ascension">
+				<source>Ascension Day</source>
+				<target>Christi Himmerlfahrt</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.pentecost">
+				<source>Pentecost</source>
+				<target>Pfingsten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.pentecostmonday">
+				<source>White Monday</source>
+				<target>Pfingstmontag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.julian.orthoPentecost">
+				<source>Pentecost (orthodox)</source>
+				<target>Pfingsten (orthodox)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.julian.orthoPentecostMonday">
+				<source>White Monday (orthodox)</source>
+				<target>Pfingstmontag (orthodox)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.happycadaver">
+				<source>Corpus Christi</source>
+				<target>Fronleichnam</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.revolte17june">
+				<source>Uprising of June 17th</source>
+				<target>Aufstand des 17. Juni</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.peterandpaul">
+				<source>peter and paul</source>
+				<target>Peter und Paul</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.orangemenSDay">
+				<source>Battle of the Boyne (Orangemen's Day)</source>
+				<target>Battle of the Boyne (Orangemen’s Day)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.grandNationfrance">
+				<source>National Day France</source>
+				<target>Nationalfeiertag Frankreich</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.augsburgepeacefete">
+				<source>Augsburg Peace Festival</source>
+				<target>Augsburger Friedensfest</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mariaascension">
+				<source>Assumption Day</source>
+				<target>Maria Himmelfahrt</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.springBankHoliday">
+				<source>Spring bank holiday</source>
+				<target>Spring bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.worldchildrenday">
+				<source>World Children's Day</source>
+				<target>Welt Kindertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.germanunity">
+				<source>Day of German unity</source>
+				<target>Tag der Deutschen Einheit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.haloween">
+				<source>Halloween</source>
+				<target>Haloween</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.reformationDay">
+				<source>Reformation Day</source>
+				<target>Reformationstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.allSaintsDay">
+				<source>all saints day</source>
+				<target>Allerheiligen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.fallOfTheWall">
+				<source>fall of the wall</source>
+				<target>Mauerfall</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.armistice1918">
+				<source>armistice; on the occasion of the armistice of 1918</source>
+				<target>Armistice; anlässlich des Waffenstillstands 1918</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.startcarneval">
+				<source>Beginning of the carnival season</source>
+				<target>Beginn der Karnevalszeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.sanktAndrewDay">
+				<source>Saint Andrew Day</source>
+				<target>St Andrew Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.dayOfPrayerAndRepentance">
+				<source>repentance and bed day</source>
+				<target>Buß und Betttag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.deadSunday">
+				<source>dead sunday</source>
+				<target>Totensonntag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.firstAdvent">
+				<source>1 Advent</source>
+				<target>1. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.nobelprice">
+				<source>Nobel Prize Ceremony</source>
+				<target>Nobelpreisverleihung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.secondAdvent">
+				<source>2nd Advent</source>
+				<target>2. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.thirdAdvent">
+				<source>3rd Advent</source>
+				<target>3. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.forthAdvent">
+				<source>4th Advent</source>
+				<target>4. Advent</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.chin.newyear">
+				<source>Chinese New Year</source>
+				<target>Chin. Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.buddh.indean.vesakh">
+				<source>Vesakh</source>
+				<target>Vesakh</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.buddh.indean.vesakhother">
+				<source>Vesakh (other)</source>
+				<target>Vesakh (other)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.lailatAlBaraa">
+				<source>Laylat Al Baraat (Night of Forgiveness)</source>
+				<target>Laylat Al Baraat (Nacht der Vergebung)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.ramadan">
+				<source>Ramadan (beginning of Lent)</source>
+				<target>Ramadan (Beginn der Fastenzeit)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.laylatulQadr">
+				<source>Laylat al-Qadr (Night of Destiny)</source>
+				<target>Laylat al-Qadr (Nacht der Bestimmung)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.eidAlFitr">
+				<source>Eid al-Fitr (Day of Breaking the Fast)</source>
+				<target>Eid al-Fitr (Tag des Fastenbrechens)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.eidUlAdha">
+				<source>Eid ul-Adha (Feast of Sacrifice)</source>
+				<target>Eid ul-Adha (Opferfest)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.aschura">
+				<source>Ashura</source>
+				<target>Aschura</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.newYear">
+				<source>Islamic New Year</source>
+				<target>Isl. Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.sunnit.MaulidAnNabi">
+				<source>Sunnis: Birthday of the Prophet (Maulid an-Nabī)</source>
+				<target>Sunniten: Geburtstag des Propheten (Maulid an-Nabī)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.isl.schiit.MaulidAnNabi">
+				<source>Shias: Birthday of the Prophet (Maulid an-Nabī)</source>
+				<target>Schiiten: Geburtstag des Propheten (Maulid an-Nabī)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.ch.dayOfThanksPrayerAndRepentance">
+				<source>Federal Day of Thanksgiving, Repentance and Prayer</source>
+				<target>Eidgenössischer Dank-, Buss- und Bettag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.ch.genfPrayer">
+				<source>Geneva bed day</source>
+				<target>Genfer Betttag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.roschHaschana">
+				<source>Jewish New Year (Rosh Hashanah)</source>
+				<target>Jüd. Neujahrsfest (Rosch Haschana)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.roschHaschanaIi">
+				<source>Jewish Lunar New Year Day 2 (Rosh Hashanah II)</source>
+				<target>Jüd. Neujahrsfest 2. Tag (Rosch Haschana II)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomKippur">
+				<source>Day of Atonement (Yom Kippur)</source>
+				<target>Versöhnungstag (Jom Kippur)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.sukkot">
+				<source>Feast of Tabernacles (Sukkot)</source>
+				<target>Laubhüttenfest (Sukkot)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.scheminiAzeret">
+				<source>Closing Festival (Shemini Atzeret)</source>
+				<target>Schlussfest (Schemini Azeret)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.simchatTora">
+				<source>Torah joy festival (Simchat Torah)</source>
+				<target>Torafreudenfest (Simchat Tora)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.chanukka">
+				<source>Temple dedication (Hanukkah)</source>
+				<target>Tempelweihfest (Chanukka)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.tuBischwat">
+				<source>New Year Festival of Trees (Tu Bishvat)</source>
+				<target>Neujahrsfest der Bäume (Tu Bischwat)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.purim">
+				<source>Salvation of the Jews in Persia (Purim)</source>
+				<target>Errettung der Juden in Persien (Purim)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.pessach">
+				<source>Beginning of the 1st pilgrimage festival (Pessach / crossing)</source>
+				<target>Beginn des 1. Wallfahrtfestes (Pessach / Überschreitung)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.firstSchawuot">
+				<source>1st day of the Feast of Weeks (Shavuot)</source>
+				<target>1. Tag des Wochenfests (Schawuot)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.secondSchawuot">
+				<source>2nd day of the Feast of Weeks (Shavuot)</source>
+				<target>2. Tag des Wochenfests (Schawuot)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomHaschoa">
+				<source>Memorial Day for the Victims of the Shoah (Yom Hashoah)</source>
+				<target>Gedenktag an die Opfer der Schoa (Jom Haschoa)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomHaAzmaUt">
+				<source>Independence Day (Yom Ha'azma'ut)</source>
+				<target>Unabhängigkeitstag (Jom Ha’azma’ut)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.rel.hebr.jomJeruschalajim">
+				<source>Jerusalem Day (Yom Yerushalayim)</source>
+				<target>Jerusalemtag (Jom Jeruschalajim)</target>
+			</trans-unit>
+
+			<trans-unit id="calendarDate.cult.greg.jpNewYear">
+				<source>New Year (Japan)</source>
+				<target>Neujahr (Japan)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfDemocracy">
+				<source>Cape Verde: Democracy Day</source>
+				<target>Kap Verde: Tag der Demokratie</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfAdults">
+				<source>adult day</source>
+				<target>Tag der Erwachsenen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfAdultsNew">
+				<source>adult day</source>
+				<target>Tag der Erwachsenen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfHeros">
+				<source>Cape Verde: National Heroes Day</source>
+				<target>Kap Verde: Nationaler Heldentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpFirstFebruary">
+				<source>Bank Holiday February</source>
+				<target>Bankholiday February</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpStateFoundation">
+				<source>Japan Founding Day</source>
+				<target>Japan Tag der Staatsgründung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpTennoBirthday">
+				<source>Japan Emperor's Birthday</source>
+				<target>Japan Geburtstag des Kaisers</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.spring">
+				<source>beginning of spring</source>
+				<target>Frühlingsanfang</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crJuanSantaMaria">
+				<source>Costa Rica: Juan Santamaria Day</source>
+				<target>Costa Rica: Juan Santamaría Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfShowa">
+				<source>Day of the Showa era</source>
+				<target>Tag der Showa-Ära</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfGroundLaw">
+				<source>Japan: Constitution Day</source>
+				<target>Japan: Tag derVerfassung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfGreenings">
+				<source>Japan: Green Day</source>
+				<target>Japan: Tag des Grüns</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfChildren">
+				<source>Japan: Children's Day</source>
+				<target>Japan: Tag der Kinder</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfChildren">
+				<source>Cape Verde: Children's Day</source>
+				<target>Kap Verde: Kindertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.earlyjunebankholiday">
+				<source>Early June bank holiday</source>
+				<target>Early June bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.cvDayOfIndependency">
+				<source>Cape Verde: Independence Day</source>
+				<target>Kap Verde: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfOcean">
+				<source>Japan: Sea Day</source>
+				<target>Japan: Tag des Meeres</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfSport">
+				<source>Japan: Sports Day</source>
+				<target>Japan: Tag des Sports</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crAnexionDelPartidoDeNicoyaGuanacaste">
+				<source>Annex del Partido de Nicoya / Guanacaste</source>
+				<target>Anexión del Partido de Nicoya / Guanacaste</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crVirgenDeLosÁngeles">
+				<source>Day of the Virgin of the Angels</source>
+				<target>Tag der Jungfrau der Engel</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfMountain">
+				<source>Japan: Mountain Day</source>
+				<target>Japan: Tag des Berges</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaMadre">
+				<source>Costa Rica: Mother's Day/Día de la Madre</source>
+				<target>Costa Rica: Muttertag/Día de la Madre</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaPersonaNegra">
+				<source>Dia de la Persona Negra</source>
+				<target>Día de la Persona Negra</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaIndependencia">
+				<source>Catsa Rica's Independence Day</source>
+				<target>Catsa Ricas Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.autumn">
+				<source>beginning of autumn</source>
+				<target>Herbstsanfang</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.ieLatestOctoberBankholiday">
+				<source>Latest October bank holiday</source>
+				<target>Latest October bank holiday</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfCulture">
+				<source>Japan: Culture Day</source>
+				<target>Japan: Tag der Kultur</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpDayOfThanksForLabour">
+				<source>Japan: Labor Thanksgiving Day</source>
+				<target>Japan: Tag des Dankes für die Arbeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.crDiaAbolicionEjercito">
+				<source>Army Abolition Day (Costa Rica)</source>
+				<target>Tag der Abschaffung der Armee (Costa Rica)</target>
+			</trans-unit>
+
+			<trans-unit id="calendarDate.cult.greg.muNewyearSecondDay">
+				<source>Mauritius: New Year Second Day</source>
+				<target>Mauritius: Neujahr Zweiter Tag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liBertoldsDay">
+				<source>Bertolds day/second new year day</source>
+				<target>Bertoldstag/zweiter Neujahrstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mcSainteDevota">
+				<source>Monaco:Sainte Devota (Patron of Monaco)</source>
+				<target>Monaco:Sainte Devota (Patron of Monaco)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mxConstituationLayOfMexico">
+				<source>Mexican Constitution Day</source>
+				<target>Tag der mexikanischen Verfassung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.muAbolitionOfSlavery">
+				<source>Mauritius: Abolition of Slavery</source>
+				<target>Mauritius: Abschaffung der Sklaverei</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzHerosDay">
+				<source>Mozambique: Heroes' Day</source>
+				<target>Mosambik: Heldentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrArmedForceDay">
+				<source>Liberia: Army Day</source>
+				<target>Liberia: Tag der Armee</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.muNationalHoliday">
+				<source>Mauritius: National Day</source>
+				<target>Mauritius: Nationalfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrDecorationDay">
+				<source>Liberia: Days of Embellishment</source>
+				<target>Liberia: Tage der Ausschmückung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrJJRobertsBirthday">
+				<source>Liberia: J.J. Roberts' birthday</source>
+				<target>Liberia: J. J. Roberts’ Geburtstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liJosefi">
+				<source>joseph</source>
+				<target>Josefi</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mxBirthdayOfBenitoJuarez">
+				<source>Mexico: Birthday of Benito Juárez</source>
+				<target>Mexico: Geburtstag von Benito Juárez</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrFastPrayerDay">
+				<source>Liberia: Fasting and Prayer</source>
+				<target>Liberia: Fasten und Beten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtFreedomDay">
+				<source>Malta: Freedom Day</source>
+				<target>Malta: Freiheitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzWomenDay">
+				<source>Mozambique: Women's Day</source>
+				<target>Mosambik: Frauentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDayOfGroundlaw">
+				<source>Latvia: Convening of the Latvian Constitutional Committee, Labor Day</source>
+				<target>Lettland: Einberufung des lettischen Verfassungsausschusses, Tag der Arbeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDayOfNewIndependence">
+				<source>Latvia: Renewal of IndependenceConvening of Latvian Constitutional Committee, Labor Day</source>
+				<target>Lettland: Erneuerung der Unabhängigkeit / Einberufung des lettischen Verfassungsausschusses, Tag
+					der Arbeit
+				</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrNationalUnificationDay">
+				<source>Liberia: National Unification Day</source>
+				<target>Liberia: Tag der nationalen Vereinigung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrNationHoliday">
+				<source>State holiday Croatia</source>
+				<target>Staatsfeiertag Kroatien</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtSetteGiugno">
+				<source>Malta: Sette Giugno</source>
+				<target>Malta: Sette Giugno</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrDayOfAntifashismFights">
+				<source>Croatia: Day of Antifascist Struggle</source>
+				<target>Kroation:Tag des antifaschistischen Kampfes</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDayOfJohanni">
+				<source>Latvia: Midsummer Day</source>
+				<target>Lettland: Johannisfest</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvJaeni">
+				<source>Latvia: Jan</source>
+				<target>Lettland: Jäni</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzIndependenceDay">
+				<source>Mozambique: Independence Day</source>
+				<target>Mosambik: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrIndependenceDay">
+				<source>Liberia: Independence Day</source>
+				<target>Liberia: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrDayOfWinAndThanks">
+				<source>Croatia: Day of Victory and Homeland Gratitude</source>
+				<target>Kroation: Tag des Sieges und der heimatlichen Dankbarkeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liMariabirthday">
+				<source>Birth of Mary</source>
+				<target>Maria Geburt</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrFlagDay">
+				<source>Liberia: Flag Day</source>
+				<target>Liberia: Flaggentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzVictoryDay">
+				<source>Mozambique: Victory Day</source>
+				<target>Mosambik: Siegestag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtVictoriaDay">
+				<source>Malta: Victory Day</source>
+				<target>Malta: Siegestag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mxDiaIndependencia">
+				<source>Mexico's Independence Day</source>
+				<target>Mexikos Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtIndependenceDay">
+				<source>Malta: Independence Day</source>
+				<target>Malta: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzArmedForcesDay">
+				<source>Mozambique: Army Day</source>
+				<target>Mosambik: Tag der Armee</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mzPeaceAndReconciliationDay">
+				<source>Mozambique: Day of Peace and Reconciliation</source>
+				<target>Mosambik: Tag des Friedens und der Versöhnung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.muAllSaintsDay">
+				<source>Mauritius: All Saints' Day</source>
+				<target>Mauritius: Allerheiligen</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.muArrivalOfIndenturedLabourers">
+				<source>Mauritius: Arrival of the Indian workers</source>
+				<target>Mauritius: Ankunft der indischen Arbeiter</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrThanksGivingDay">
+				<source>Liberia: Thanksgiving Day</source>
+				<target>Liberia: Thanksgiving Day (Erntedankfest)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.hrDayOfVictimsOfHomewar">
+				<source>Croatia: Memorial Day for the victims of the Homeland War and Vukovar and Škabrnja</source>
+				<target>Kroation: Gedenktag für die Opfer des Heimatkrieges und von Vukovar und Škabrnja</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.lvDateOfStateFoundation">
+				<source>Latvia: Proclamation of the Republic of Latvia 1918 (National Day)</source>
+				<target>Lettland: Proklamierung der Republik Lettland 1918 (Nationalfeiertag)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mcNationHoliday">
+				<source>Monaco: National Day</source>
+				<target>Monaco: Nationalfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mxNovemberRevolution">
+				<source>Commemorating the November 20th - Anniversary of the Mexican Revolution</source>
+				<target>Gedenken an den 20 November - Jahrestag der mexikanischen Revolution</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.lrPresidentTubmansBirthday">
+				<source>Liberia: President Tubman's birthday</source>
+				<target>Liberia: Präsident Tubman’s Geburtstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.sanktAndrewDay">
+				<source>Mexico: handover of power to the new president</source>
+				<target>Mexiko: Machtübergabe an den neuen Präsidenten</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liNikolaus">
+				<source>Nicholas</source>
+				<target>Nikolaus</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.liMariaPregnancy">
+				<source>Conception</source>
+				<target>Mariä Empfangnis</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mtRepublicDay">
+				<source>Malta: Republic Day</source>
+				<target>Malta: Tag der Republic</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.worldanticorruptionday">
+				<source>World Anti-Corruption Day</source>
+				<target>Weltantikorruptionstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.earlyAugustBankholiday">
+				<source>early August bank holiday</source>
+				<target>Früher August-Bankfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpHonorForElderPeople">
+				<source>Day of Homage to Age</source>
+				<target>Tag der Ehrerbietung vor dem Alter</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.jpNewYear">
+				<source>New Year</source>
+				<target>Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzPostNewYear">
+				<source>Post New Year</source>
+				<target>Post-Neujahr</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzWaitangiDay">
+				<source>Waitangi Day</source>
+				<target>Waitangi Day</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzAnzacDay">
+				<source>Anzac Day (New Zealand)</source>
+				<target>Anzac Day (Neuseeland)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzKingsBirthday">
+				<source>King's Birthday (New Zealand)</source>
+				<target>Kings Birthday (Neuseeland)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzMatakiri">
+				<source>Matakiri (estimated, new moon after rising of the Pleiades; New Zealand)</source>
+				<target>Matakiri (geschätzt, Neumond nach Aufgang der Plejaden; Neuseeland)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.nzLabourDay">
+				<source>Labor Day(New Zealand)</source>
+				<target>Tag der Arbeit(Neuseeland)</target>
+			</trans-unit>
+
+
+			<trans-unit id="locale.icu.nation.afg">
+				<source>Afghanistan</source>
+				<target>Afghanistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.alb">
+				<source>Albania</source>
+				<target>Albanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dza">
+				<source>Algeria</source>
+				<target>Algerien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.asm">
+				<source>American Samoa</source>
+				<target>Amerikanischen Samoa-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.and">
+				<source>Andorra</source>
+				<target>Andorra</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ago">
+				<source>Angola</source>
+				<target>Angola</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aia">
+				<source>Anguilla</source>
+				<target>Anguilla</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ata">
+				<source>Antarctica</source>
+				<target>Antarktis</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.atg">
+				<source>Antigua and Barbuda</source>
+				<target>Antigua und Barbuda</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.arg">
+				<source>Argentina</source>
+				<target>Argentinien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.arm">
+				<source>Armenia</source>
+				<target>Armenien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.abw">
+				<source>Aruba</source>
+				<target>Aruba</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aus">
+				<source>Australia</source>
+				<target>Australien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aut">
+				<source>Austria</source>
+				<target>Österreich</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.aze">
+				<source>Azerbaijan</source>
+				<target>Aserbaidschan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bhs">
+				<source>Bahamas</source>
+				<target>Bahamas</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bhr">
+				<source>Bahrain</source>
+				<target>Bahrein</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bgd">
+				<source>Bangladesh</source>
+				<target>Bangladesch</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.brb">
+				<source>Barbados</source>
+				<target>Barbados</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.blr">
+				<source>Belarus</source>
+				<target>Weißrussland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bel">
+				<source>Belgium</source>
+				<target>Belgien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.blz">
+				<source>Belize</source>
+				<target>Belize</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ben">
+				<source>Benin</source>
+				<target>Benin</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bmu">
+				<source>Bermuda</source>
+				<target>Bermudas</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.btn">
+				<source>Bhutan</source>
+				<target>Bhutan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bol">
+				<source>Bolivia (Plurinational State of)</source>
+				<target>Bolivien (plurinationaler Staat)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bes">
+				<source>Bonaire, Sint Eustatius and Saba</source>
+				<target>Bonaire, Sint Eustatius und Saba</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bih">
+				<source>Bosnia and Herzegovina</source>
+				<target>Bosnien und Herzegowina</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bwa">
+				<source>Botswana</source>
+				<target>Botswana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bvt">
+				<source>Bouvet Island</source>
+				<target>Bouvet-Insel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bra">
+				<source>Brazil</source>
+				<target>Brasilien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.iot">
+				<source>British Indian Ocean Territory</source>
+				<target>Britisches Territorium im Indischen Ozean (das)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.brn">
+				<source>Brunei Darussalam</source>
+				<target>Brunei Darussalam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bgr">
+				<source>Bulgaria</source>
+				<target>Bulgarien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bfa">
+				<source>Burkina Faso</source>
+				<target>Burkina Faso</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.bdi">
+				<source>Burundi</source>
+				<target>Burundi</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cpv">
+				<source>Cabo Verde</source>
+				<target>Cabo Verde</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.khm">
+				<source>Cambodia</source>
+				<target>Kambodscha</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cmr">
+				<source>Cameroon</source>
+				<target>Kamerun</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.can">
+				<source>Canada</source>
+				<target>Kanada</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cym">
+				<source>Cayman Islands</source>
+				<target>Kaimaninseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.caf">
+				<source>Central African Republic</source>
+				<target>Zentralafrikanische Republik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tcd">
+				<source>Chad</source>
+				<target>Tschad</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.chl">
+				<source>Chile</source>
+				<target>Chile</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.chn">
+				<source>China</source>
+				<target>China</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cxr">
+				<source>Christmas Island</source>
+				<target>Weihnachtsinsel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cck">
+				<source>Cocos (Keeling) Islands</source>
+				<target>Kokos-(Keeling-)Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.col">
+				<source>Colombia</source>
+				<target>Kolumbien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.com">
+				<source>Comoros</source>
+				<target>Komoren (die)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cod">
+				<source>Congo (the Democratic Republic of the)</source>
+				<target>Kongo (die Demokratische Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cog">
+				<source>Congo</source>
+				<target>Kongo</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cok">
+				<source>Cook Islands</source>
+				<target>Cookinseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cri">
+				<source>Costa Rica</source>
+				<target>Costa Rica</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hrv">
+				<source>Croatia</source>
+				<target>Kroatien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cub">
+				<source>Cuba</source>
+				<target>Kuba</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cuw">
+				<source>Curaçao</source>
+				<target>Curacao</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cyp">
+				<source>Cyprus</source>
+				<target>Zypern</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.cze">
+				<source>Czechia</source>
+				<target>Tschechien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.civ">
+				<source>Côte d`Ivoire</source>
+				<target>Elfenbeinküste</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dnk">
+				<source>Denmark</source>
+				<target>Dänemark</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dji">
+				<source>Djibouti</source>
+				<target>Dschibuti</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dma">
+				<source>Dominica</source>
+				<target>Dominika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.dom">
+				<source>Dominican Republic</source>
+				<target>Dominikanische Republik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ecu">
+				<source>Ecuador</source>
+				<target>Ecuador</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.egy">
+				<source>Egypt</source>
+				<target>Ägypten</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.slv">
+				<source>El Salvador</source>
+				<target>El Salvador</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gnq">
+				<source>Equatorial Guinea</source>
+				<target>Äquatorialguinea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.eri">
+				<source>Eritrea</source>
+				<target>Eritrea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.est">
+				<source>Estonia</source>
+				<target>Estland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.swz">
+				<source>Eswatini</source>
+				<target>Eswatini</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.eth">
+				<source>Ethiopia</source>
+				<target>Äthiopien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.flk">
+				<source>Falkland Islands [Malvinas]</source>
+				<target>Falklandinseln [Malvinas]</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fro">
+				<source>Faroe Islands</source>
+				<target>Färöer (die)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fji">
+				<source>Fiji</source>
+				<target>Fidschi</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fin">
+				<source>Finland</source>
+				<target>Finnland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fra">
+				<source>France</source>
+				<target>Frankreich</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.guf">
+				<source>French Guiana</source>
+				<target>Französisch-Guayana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pyf">
+				<source>French Polynesia</source>
+				<target>Französisch Polynesien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.atf">
+				<source>French Southern Territories</source>
+				<target>Französische Südgebiete</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gab">
+				<source>Gabon</source>
+				<target>Gabun</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gmb">
+				<source>Gambia</source>
+				<target>Gambia (das)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.geo">
+				<source>Georgia</source>
+				<target>Georgia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.deu">
+				<source>Germany</source>
+				<target>Deutschland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gha">
+				<source>Ghana</source>
+				<target>Ghana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gib">
+				<source>Gibraltar</source>
+				<target>Gibraltar</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.grc">
+				<source>Greece</source>
+				<target>Griechenland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.grl">
+				<source>Greenland</source>
+				<target>Grönland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.grd">
+				<source>Grenada</source>
+				<target>Grenada</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.glp">
+				<source>Guadeloupe</source>
+				<target>Guadeloupe</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gum">
+				<source>Guam</source>
+				<target>Guam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gtm">
+				<source>Guatemala</source>
+				<target>Guatemala</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ggy">
+				<source>Guernsey</source>
+				<target>Guernsey</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gin">
+				<source>Guinea</source>
+				<target>Guinea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gnb">
+				<source>Guinea-Bissau</source>
+				<target>Guinea-Bissau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.guy">
+				<source>Guyana</source>
+				<target>Guyana</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hti">
+				<source>Haiti</source>
+				<target>Haiti</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hmd">
+				<source>Heard Island and McDonald Islands</source>
+				<target>Heard-Insel und McDonald-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vat">
+				<source>Holy See</source>
+				<target>Heiliger Stuhl</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hnd">
+				<source>Honduras</source>
+				<target>Honduras</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hkg">
+				<source>Hong Kong</source>
+				<target>Hongkong</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.hun">
+				<source>Hungary</source>
+				<target>Ungarn</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.isl">
+				<source>Iceland</source>
+				<target>Island</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ind">
+				<source>India</source>
+				<target>Indien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.idn">
+				<source>Indonesia</source>
+				<target>Indonesien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.irn">
+				<source>Iran (Islamic Republic of)</source>
+				<target>Iran (Islamische Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.irq">
+				<source>Iraq</source>
+				<target>Irak</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.irl">
+				<source>Ireland</source>
+				<target>Irland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.imn">
+				<source>Isle of Man</source>
+				<target>Isle of Man</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.isr">
+				<source>Israel</source>
+				<target>Israel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ita">
+				<source>Italy</source>
+				<target>Italien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jam">
+				<source>Jamaica</source>
+				<target>Jamaika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jpn">
+				<source>Japan</source>
+				<target>Japan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jey">
+				<source>Jersey</source>
+				<target>Jersey</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.jor">
+				<source>Jordan</source>
+				<target>Jordanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kaz">
+				<source>Kazakhstan</source>
+				<target>Kasachstan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ken">
+				<source>Kenya</source>
+				<target>Kenia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kir">
+				<source>Kiribati</source>
+				<target>Kiribati</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.prk">
+				<source>Korea (the Democratic People`s Republic of)</source>
+				<target>Korea (Demokratische Volksrepublik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kor">
+				<source>Korea (the Republic of)</source>
+				<target>Korea (Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kwt">
+				<source>Kuwait</source>
+				<target>Kuwait</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kgz">
+				<source>Kyrgyzstan</source>
+				<target>Kirgistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lao">
+				<source>Lao People`s Democratic Republic</source>
+				<target>Demokratische Volksrepublik Laos</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lva">
+				<source>Latvia</source>
+				<target>Lettland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lbn">
+				<source>Lebanon</source>
+				<target>Libanon</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lso">
+				<source>Lesotho</source>
+				<target>Lesotho</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lbr">
+				<source>Liberia</source>
+				<target>Liberia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lby">
+				<source>Libya</source>
+				<target>Libyen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lie">
+				<source>Liechtenstein</source>
+				<target>Liechtenstein</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ltu">
+				<source>Lithuania</source>
+				<target>Litauen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lux">
+				<source>Luxembourg</source>
+				<target>Luxemburg</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mac">
+				<source>Macao</source>
+				<target>Macau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mdg">
+				<source>Madagascar</source>
+				<target>Madagaskar</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mwi">
+				<source>Malawi</source>
+				<target>Malawi</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mys">
+				<source>Malaysia</source>
+				<target>Malaysia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mdv">
+				<source>Maldives</source>
+				<target>Malediven</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mli">
+				<source>Mali</source>
+				<target>Mali</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mlt">
+				<source>Malta</source>
+				<target>Malta</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mhl">
+				<source>Marshall Islands</source>
+				<target>Marshallinseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mtq">
+				<source>Martinique</source>
+				<target>Martinique</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mrt">
+				<source>Mauritania</source>
+				<target>Mauretanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mus">
+				<source>Mauritius</source>
+				<target>Mauritius</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.myt">
+				<source>Mayotte</source>
+				<target>Mayotte</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mex">
+				<source>Mexico</source>
+				<target>Mexiko</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.fsm">
+				<source>Micronesia (Federated States of)</source>
+				<target>Mikronesien (Föderierte Staaten von)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mda">
+				<source>Moldova (the Republic of)</source>
+				<target>Moldawien (Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mco">
+				<source>Monaco</source>
+				<target>Monaco</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mng">
+				<source>Mongolia</source>
+				<target>Mongolei</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mne">
+				<source>Montenegro</source>
+				<target>Montenegro</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.msr">
+				<source>Montserrat</source>
+				<target>Montserrat</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mar">
+				<source>Morocco</source>
+				<target>Marokko</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.moz">
+				<source>Mozambique</source>
+				<target>Mosambik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mmr">
+				<source>Myanmar</source>
+				<target>Burma</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nam">
+				<source>Namibia</source>
+				<target>Namibia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nru">
+				<source>Nauru</source>
+				<target>Nauru</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.npl">
+				<source>Nepal</source>
+				<target>Nepal</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nld">
+				<source>Netherlands</source>
+				<target>Niederlande</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ncl">
+				<source>New Caledonia</source>
+				<target>Neu-Kaledonien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nzl">
+				<source>New Zealand</source>
+				<target>Neuseeland</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nic">
+				<source>Nicaragua</source>
+				<target>Nicaragua</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ner">
+				<source>Niger</source>
+				<target>Niger</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nga">
+				<source>Nigeria</source>
+				<target>Nigeria</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.niu">
+				<source>Niue</source>
+				<target>Niue</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nfk">
+				<source>Norfolk Island</source>
+				<target>Norfolkinsel</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mkd">
+				<source>North Macedonia</source>
+				<target>Nordmazedonien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.mnp">
+				<source>Northern Mariana Islands</source>
+				<target>Nördliche Marianen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.nor">
+				<source>Norway</source>
+				<target>Norwegen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.omn">
+				<source>Oman</source>
+				<target>Oman</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pak">
+				<source>Pakistan</source>
+				<target>Pakistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.plw">
+				<source>Palau</source>
+				<target>Palau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pse">
+				<source>Palestine, State of</source>
+				<target>Palästina, Bundesstaat</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pan">
+				<source>Panama</source>
+				<target>Panama</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.png">
+				<source>Papua New Guinea</source>
+				<target>Papua Neu-Guinea</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pry">
+				<source>Paraguay</source>
+				<target>Paraguay</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.per">
+				<source>Peru</source>
+				<target>Peru</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.phl">
+				<source>Philippines</source>
+				<target>Philippinen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pcn">
+				<source>Pitcairn</source>
+				<target>Pitcairn</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pol">
+				<source>Poland</source>
+				<target>Polen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.prt">
+				<source>Portugal</source>
+				<target>Portugal</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.pri">
+				<source>Puerto Rico</source>
+				<target>Puerto Rico</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.qat">
+				<source>Qatar</source>
+				<target>Katar</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.rou">
+				<source>Romania</source>
+				<target>Rumänien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.rus">
+				<source>Russian Federation</source>
+				<target>Russische Föderation</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.rwa">
+				<source>Rwanda</source>
+				<target>Ruanda</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.reu">
+				<source>Réunion</source>
+				<target>Réunion</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.blm">
+				<source>Saint Barthélemy</source>
+				<target>Sankt Barthélemy</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.shn">
+				<source>Saint Helena, Ascension and Tristan da Cunha</source>
+				<target>St. Helena, Himmelfahrt und Tristan da Cunha</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.kna">
+				<source>Saint Kitts and Nevis</source>
+				<target>St. Kitts und Nevis</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lca">
+				<source>Saint Lucia</source>
+				<target>St. Lucia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.maf">
+				<source>Saint Martin (French part)</source>
+				<target>Saint Martin (französischer Teil)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.spm">
+				<source>Saint Pierre and Miquelon</source>
+				<target>St. Pierre und Miquelon</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vct">
+				<source>Saint Vincent and the Grenadines</source>
+				<target>St. Vincent und die Grenadinen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.wsm">
+				<source>Samoa</source>
+				<target>Samoa</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.smr">
+				<source>San Marino</source>
+				<target>San Marino</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.stp">
+				<source>Sao Tome and Principe</source>
+				<target>Sao Tome und Principe</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sau">
+				<source>Saudi Arabia</source>
+				<target>Saudi-Arabien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sen">
+				<source>Senegal</source>
+				<target>Senegal</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.srb">
+				<source>Serbia</source>
+				<target>Serbien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.syc">
+				<source>Seychelles</source>
+				<target>Seychellen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sle">
+				<source>Sierra Leone</source>
+				<target>Sierra Leone</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sgp">
+				<source>Singapore</source>
+				<target>Singapur</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sxm">
+				<source>Sint Maarten (Dutch part)</source>
+				<target>Sint Maarten (niederländischer Teil)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.svk">
+				<source>Slovakia</source>
+				<target>Slowakei</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.svn">
+				<source>Slovenia</source>
+				<target>Slowenien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.slb">
+				<source>Solomon Islands</source>
+				<target>Salomon-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.som">
+				<source>Somalia</source>
+				<target>Somalia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.zaf">
+				<source>South Africa</source>
+				<target>Südafrika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sgs">
+				<source>South Georgia and the South Sandwich Islands</source>
+				<target>Süd-Georgien und die südlichen Sandwich-Inseln</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ssd">
+				<source>South Sudan</source>
+				<target>Südsudan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.esp">
+				<source>Spain</source>
+				<target>Spanien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.lka">
+				<source>Sri Lanka</source>
+				<target>Sri Lanka</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sdn">
+				<source>Sudan</source>
+				<target>Sudan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sur">
+				<source>Suriname</source>
+				<target>Surinam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.sjm">
+				<source>Svalbard and Jan Mayen</source>
+				<target>Spitzbergen und Jan Mayen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.swe">
+				<source>Sweden</source>
+				<target>Schweden</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.che">
+				<source>Switzerland</source>
+				<target>Schweiz</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.syr">
+				<source>Syrian Arab Republic</source>
+				<target>Arabische Republik Syrien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.twn">
+				<source>Taiwan (Province of China)</source>
+				<target>Taiwan, Provinz Chinas)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tjk">
+				<source>Tajikistan</source>
+				<target>Tadschikistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tza">
+				<source>Tanzania, the United Republic of</source>
+				<target>Tansania, Vereinigte Republik</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tha">
+				<source>Thailand</source>
+				<target>Thailand</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tls">
+				<source>Timor-Leste</source>
+				<target>Timor-Leste</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tgo">
+				<source>Togo</source>
+				<target>Gehen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tkl">
+				<source>Tokelau</source>
+				<target>Tokelau</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ton">
+				<source>Tonga</source>
+				<target>Tonga</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tto">
+				<source>Trinidad and Tobago</source>
+				<target>Trinidad und Tobago</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tun">
+				<source>Tunisia</source>
+				<target>Tunesien</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tkm">
+				<source>Turkmenistan</source>
+				<target>Turkmenistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tca">
+				<source>Turks and Caicos Islands</source>
+				<target>Turks- und Caicosinseln)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tuv">
+				<source>Tuvalu</source>
+				<target>Tuvalu</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.tur">
+				<source>Türkiye</source>
+				<target>Türkiye</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.uga">
+				<source>Uganda</source>
+				<target>Uganda</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ukr">
+				<source>Ukraine</source>
+				<target>Ukraine</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.are">
+				<source>United Arab Emirates</source>
+				<target>Vereinigte Arabische Emirate</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.gbr">
+				<source>United Kingdom of Great Britain and Northern Ireland</source>
+				<target>Vereinigtes Königreich Großbritannien und Nordirland (das)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.umi">
+				<source>United States Minor Outlying Islands</source>
+				<target>Kleinere abgelegene Inseln der Vereinigten Staaten</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.usa">
+				<source>United States of America</source>
+				<target>Vereinigte Staaten von Amerika</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ury">
+				<source>Uruguay</source>
+				<target>Uruguay</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.uzb">
+				<source>Uzbekistan</source>
+				<target>Usbekistan</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vut">
+				<source>Vanuatu</source>
+				<target>Vanuatu</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ven">
+				<source>Venezuela (Bolivarian Republic of)</source>
+				<target>Venezuela (Bolivarianische Republik)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vnm">
+				<source>Viet Nam</source>
+				<target>Vietnam</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vgb">
+				<source>Virgin Islands (British)</source>
+				<target>Virgin Inseln, Britisch)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.vir">
+				<source>Virgin Islands (U.S.)</source>
+				<target>Jungferninseln (USA)</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.wlf">
+				<source>Wallis and Futuna</source>
+				<target>Wallis und Futuna</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.esh">
+				<source>Western Sahara*</source>
+				<target>Westsahara*</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.yem">
+				<source>Yemen</source>
+				<target>Jemen</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.zmb">
+				<source>Zambia</source>
+				<target>Sambia</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.zwe">
+				<source>Zimbabwe</source>
+				<target>Zimbabwe</target>
+			</trans-unit>
+			<trans-unit id="locale.icu.nation.ala">
+				<source>Åland Islands</source>
+				<target>Åland-Inseln</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.noConstitutionDay">
+				<source>Constitution Day</source>
+				<target>Tag der Verfassung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.roSanktAndreas">
+				<source>Saint Andrew's Day</source>
+				<target>Tag des heiligen Andreas</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.christ.greg.roNationalHoliday">
+				<source>Romanian National Day</source>
+				<target>rumänischer Nationalfeiertag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.jul.christmas">
+				<source>Christmas (Orthodox)</source>
+				<target>Weihnachten (orthodox)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruThirdNewYear">
+				<source>Third New Year's Day</source>
+				<target>Dritter Neujahrstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruForthNewYear">
+				<source>Fourth New Year's Day</source>
+				<target>Vierter Neujahrstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruFifthNewYear">
+				<source>Fifth New Year's Day</source>
+				<target>Fünfter Neujahrstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwNationalHeroDay">
+				<source>Rwanda: National Heroes Day</source>
+				<target>Ruanda: Nationaler Heldentag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruDayOfDefendingOfNation">
+				<source>Russia: Defender of the Fatherland Day</source>
+				<target>Russland: Tag des Verteidigers des Vaterlandes</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwGenocideAgainstTheTutsiMemorialDay">
+				<source>Rwanda: Remembrance Day for the Genocide of the Tutsis</source>
+				<target>Ruanda: Gendenktag zum Genozid an den Tutsis</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.mdVictorySecWorldWar">
+				<source>Victory Day (Moldova)</source>
+				<target>Tag des Sieges (Moldavien)</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruDayOfRussia">
+				<source>Day of Russia</source>
+				<target>Tag Russlands</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwIndependenceDay">
+				<source>Rwanda: Independence Day</source>
+				<target>Ruanda: Tag der Unabhängigkeit</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwLiberationDay">
+				<source>Rwanda: Liberation Day</source>
+				<target>Ruanda: Tag der Befreiung</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.rwUmuganuraDay">
+				<source>Rwanda: Umuganura Day</source>
+				<target>Ruanda: Umuganura Tag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mdIndependenceDay">
+				<source>Moldova: Independence Day</source>
+				<target>Moldavien: Unabhängigkeitstag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.cult.greg.mdNationalLanguageDay">
+				<source>Moldova: National Languages Day</source>
+				<target>Moldavien: Nationaler Sprachen Tag</target>
+			</trans-unit>
+			<trans-unit id="calendarDate.hist.greg.ruDayOfTheUnityOfThePeople">
+				<source>Russia: People's Unity Day</source>
+				<target>Russland: Tag der Einheit des Volkes</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

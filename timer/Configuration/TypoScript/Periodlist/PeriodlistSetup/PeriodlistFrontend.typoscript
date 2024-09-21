@@ -1,0 +1,136 @@
+tt_content.timer_periodlist >
+tt_content.timer_periodlist < lib.periodlist.contentElement
+tt_content.timer_periodlist {
+
+    templateName = Periodlist
+
+    dataProcessing {
+        10 = Porthd\Timer\DataProcessing\PeriodlistProcessor
+        10 {
+
+            # regular if syntax
+            #if.isTrue.field = record
+
+            #            limit {
+            #                lower = TEXT
+            #                lower {
+            #                    data = date:U
+            #                    strftime = %Y-%m-%d %H:%M:%S
+            #
+            #                }
+            #
+            #                #upper = TEXT
+            #                #upper {
+            #                #    data = date:U
+            #                #    strftime = %Y-%m-%d %H:%M:%S#
+            #                #}
+            #            }
+
+            dateToString {
+                # startJson is the targetfieldName in the following dataprocessor mappingProcessor
+                startJson {
+                    # use the format-parameter defined in https://www.php.net/manual/en/datetime.format.php
+                    # escaping of named parameters with the backslash in example \T
+                    format = Y-m-d
+                    # allowed are only `diffDaysDatetime`, `startDatetime` und `endDatetime`,because these are automatically created datetime-Object for the list
+                    #   These fields are datetime-object and they are generated from the estimated fields `start`and `stop` by this dataprocessor
+                    source = startDatetime
+                }
+
+                #     endJson {
+                #         format = Y-m-d
+                #         source = stopDatetime
+                #     }
+            }
+
+            # define the list by length
+            maxCount = 100
+
+            # output variable with the resulting list
+            # default-value is `periodlist`
+            as = periodlist
+
+            ## default is `flagStart = 1`,  => that the upper and lower limit use the attribute `start` as reference for the list
+            ## default is `flagStart = 0`,  => that the upper and lower limit use the attribute `stop` as reference for the list
+            #flagStart = false
+        }
+
+        20 = Porthd\Timer\DataProcessing\BetterMappingProcessor
+        20 {
+
+            # regular if syntax
+            #if.isTrue.field = record
+
+            inputfield = periodlist
+            # Each field must part of periodlist
+            # every entry must be some formal
+            generic {
+                10 {
+                    inField =
+                    outField = id
+                    pretext = event
+                    posttext = holiday
+                    type = index
+                }
+
+                20 {
+                    inField =
+                    outField = calendarId
+                    pretext = cal1
+                    posttext =
+                    type = constant
+                }
+            }
+
+            mapping {
+                10 {
+                    inField = title
+                    outField = Title
+
+                }
+
+                20 {
+                    inField = startJson
+                    outField = Date
+
+                }
+
+                30 {
+                    inField = diffDaysDatetime
+                    outField = days
+
+                }
+            }
+
+            # outputformat has the values `array`,`json`
+            # if the outputformat is unknown, json will be the default
+            outputFormat = json
+            # output variable with the resulting list
+            # default-value is `periodlist`
+            asString = periodListJson
+
+        }
+
+        30 = Porthd\Timer\DataProcessing\FlexToArrayProcessor
+        30 {
+            # regular if syntax
+            #if.isTrue.field = record
+
+            # field with flexform-array
+            # default is `tx_timer_timer`
+            field = pi_flexform
+
+            # A definition of flattenkeys will override the default definition.
+            #   the attributes `timer` and `general` are used as sheet-names in my customTimer-flexforms
+            #   The following defintion is the default: `data,general,timer,sDEF,lDEF,vDEF`
+            flattenkeys = data,general,timer,sDEF,lDEF,vDEF
+
+            # output variable with the resulting list
+            as = flexlist
+        }
+    }
+}
+
+lib.periodlist.main = TEXT
+lib.periodlist.main.current = 1
+lib.periodlist.main.dataWrap = {field:tx_timer_timer}

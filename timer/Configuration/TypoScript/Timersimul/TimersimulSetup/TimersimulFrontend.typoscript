@@ -1,0 +1,24 @@
+tt_content.timer_timersimul >
+tt_content.timer_timersimul < lib.timersimul.contentElement
+tt_content.timer_timersimul {
+
+    templateName = Timersimul
+
+    dataProcessing.10 = Porthd\Timer\DataProcessing\RangeListQueryProcessor
+    dataProcessing.10 {
+        # regular if syntax
+        #if.isTrue.field = record
+
+        # the table name from which the data is fetched from
+        table = tx_timer_domain_model_event
+
+        # defines, the page-id of the current page
+        pidInList.stdWrap.cObject = TEXT
+        pidInList.stdWrap.cObject.field = uid
+        recursive = 1
+
+        # output variable with the resulting list
+        as = examplelist
+
+    }
+}

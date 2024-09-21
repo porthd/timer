@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<!-- I use <target> in this default-language-file, because englisch is not my native language. TYPO3 won`t use this target-definition. -->
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-11-23T11:31:00Z"
+		  product-name="timer">
+		<header/>
+		<body>
+			<trans-unit id="content.timersimul.prolog.title.default">
+				<source>Test for Timer</source>
+				<target>Test für Timer</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.prolog.bodytext.default">
+				<source>This extension show some examples. It shows a simple examples how to use the extension. You can
+					see the viewhelper in action. I hope, that the format.date will soon avaiable in the TYPO3-core.
+				</source>
+				<target>Diese Erweiterung zeigt einige Beispiele. Es zeigt ein einfaches Beispiel zur Verwendung der
+					Erweiterung. Sie können den Viewhelper in Aktion sehen. Ich hoffe, dass das format.date bald im
+					TYPO3-Kern verfügbar sein wird.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.title.default">
+				<source>Showcase Viewhelper</source>
+				<target>Showcase Viewhelper</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.events.title.default">
+				<source>Showcase Eventlist as test for the RangeListQueryDataprocessor</source>
+				<target>Showcase-Eventliste zum Test vom RangeListQueryDataprocessor</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.main.default">
+				<source>The extension includes three view helpers to optimize templating with Fluid and the Timer
+					extension. The first view helper is &gt;timer:flex&lt;. TYPO3 has included the flex field since
+					version 9.5. The Viewhelper allows converting a flexform string into a simple array, flattening
+					superfluous levels in the array structure. The second view helper is &gt;timer:isActive&lt;. With
+					this view helper you can check in the template whether data records provided with timer information
+					should be displayed or not. Such an approach is inefficient in most cases. It is therefore
+					recommended that you use the scheduler to generate the correct start and stop times for your
+					element. In this way, unnecessary ballast can be kept away from the rendering of the frontend even
+					when generating the data sets in a cacheable manner. The third view helper is &gt;timer:format.date&lt;.
+					It extends the TYPO3 Fluid Viewhelper &gt;f:format.date&lt; with the `timezone` attribute, thus
+					allowing the output of date displays for other than the default timezone.
+				</source>
+				<target>Die Erweiterung enthält drei Viewhelper, um das Templating mit Fluid und der Timer-Extension zu
+					optimieren. Der erste Viewhelper ist &gt;timer:flex&lt;. TYPO3 enthält seit Version 9.5 das
+					Flex-Feld. Der Viewhelper erlaubt einen Flexformstring in einen einfachen Array umzuwandeln, wobei
+					überflüssige Ebenen in der Array-Struktur eingeebnet werden können. Der zweite Viewhelper ist &gt;timer:isActive&lt;.
+					Mit diesem Viewhelper können sie im Template prüfen, ob mit Timer-Informationen versehene Datensätze
+					angezeigt werden sollen oder nicht. Ein solche Vorgehen ist in den meisten Fällen ineffizient. Es
+					wird deshalb empfohlen, dass Sie den Planer verwenden, um die korrekten Start- und Stoppzeiten für
+					Ihr Element zu generieren. So kann schon bei der cachebaren Generierung der Datensätze unnötiger
+					Ballast vom Rendering des Frontends ferngehalten werden. Der dritte Viewhelper ist &gt;timer:format.date&lt;.
+					Er erweitert den TYPO3-Fluid-Viewhelper &gt;f:format.date&lt; mit dem Attribut `timezone`, um so die
+					Ausgabe von Datumsanzeigen für Andere als die Default-Zeitzone zu erlauben.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.flex">
+				<source>Viewhelper &lt;timer:flex&gt; for content of flex-fields</source>
+				<target>Anzeigehilfe &lt;timer:flex&gt; für den Inhalt von Flex-Feldern</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.prolog.flex">
+				<source>Usage is easy. The flexform string is passed to the view helper as input. This converts the
+					flexform into an associative array and removes the named superfluous levels in this array. Avoid
+					using the same names for fields in Flexforms. In this case, only the value of the field with the
+					same name that appeared last in the array is output.
+				</source>
+				<target>Die Verwendung ist einfach. Der Flexformstring wird als Input dem Viewhelper übergeben. Dieser
+					wandelt die Flexform in einen assoziative Array um und entfernt die benannten überflüssigen Ebenen
+					in diesem Array. Man vermeide gleiche Namen für Felder in Flexforms. In diesem Fall wird nur der
+					Wert des zuletzt im Array auftauchende gleichbenannten Feldes ausgegeben.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.header.flex.key">
+				<source>attribute name</source>
+				<target>Attributename</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.header.flex.value">
+				<source>value</source>
+				<target>Wert</target>
+			</trans-unit>
+			<trans-unit id="content.perioditem.dataprocessed.header.flex.key">
+				<source>attribute name</source>
+				<target>Attributename</target>
+			</trans-unit>
+			<trans-unit id="content.perioditem.dataprocessed.header.flex.value">
+				<source>value</source>
+				<target>Wert</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.isActive">
+				<source>Viewhelper &lt;timer:isActive&gt;</source>
+				<target>Viewhelper &lt;timer:isActive&gt;</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.prolog.isActive">
+				<source>The view helper &lt;timer:isActive&gt; can be used for the individual selection of data records,
+					if the better way via the scheduler task should not or cannot be chosen for some reason. In the
+					following example, the current date value is used to determine whether the `timersimul` plugin is
+					active or not.For testing and understanding purposes, it is useful if you set the timer for the
+					plugin used here, for example with `txTimerDatePeriod`, so that all even hours are active.
+				</source>
+				<target>Der Viewhelper &lt;timer:isActive&gt; kann zur individuellen Selektion von Datensätzen verwendet
+					werden, wenn der bessere Weg über den Scheduler-Task aus irgendwelchen Gründen nicht gewählt werden
+					soll oder kann. Im folgenden Beispiel wird der aktuelle Datumswert zugrundegelegt, um zu bestimmen,
+					ob das plugin `timersimul` aktiv ist oder nicht.Für Test- und Verständniszwecke ist es günstig, wenn
+					sie den Timer für das vorliegend genutzte Plugin zum Beispiel mit `txTimerDatePeriod` so einstellen,
+					dass alle geraden Stunden als aktiv gelten.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.postprolog.isActive">
+				<source>The view helper &lt;timer:isActive&gt; can be used for the individual selection of data records,
+					if the better way via the scheduler task should not or cannot be chosen for some reason. In the
+					following example, the current date value is used to determine whether the `timersimul` plugin is
+					active or not.For testing and understanding purposes, it is useful if you set the timer for the
+					plugin used here, for example with `txTimerDatePeriod`, so that all even hours are active.
+				</source>
+				<target>Der Viewhelper &lt;timer:isActive&gt; kann auch genutzt werden, um für fremde Zeitzonen
+					festzustellen, ob eine bestimmte Zeit auch gültig ist.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.prologresult.isActive.active">
+				<source>An active state has just been reached here.</source>
+				<target>Hier wurde gerade ein aktiver Zustand erreicht.</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.formatDate">
+				<source>Date-Viewhelper</source>
+				<target>Date-Viewhelper</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.formatJewishDate">
+				<source>Date-Viewhelper for Jewish Date</source>
+				<target>Date-Viewhelper for Jewish-Date</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.formatCalendarDate">
+				<source>Generalized date view helper for various PHP supported calendars</source>
+				<target>Generalisierter Datums-Viewhelper für verschiedene, vom PHP unterstützte Kalender</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.prolog.formatDate">
+				<source>The viewhelper &lt;timer:format.date&gt; is similiar to the TYPO3-Viehelper &lt;f:format.date&gt;.
+					The onlydifference is the addional attribute `timezone`. You can define the output of time for a
+					define timezone with it.
+				</source>
+				<target>Der Viewhelper &lt;timer:format.date&gt; ist fast identisch mit dem TYPO3-Viehelper &lt;f:format.date&gt;
+					und kennt das zusätzliche Attribut `timezone`. Dies erlaubt die Formatierung der Zeit-Datumsausgabe
+					für eine definierte Zeitzone.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.prolog.forCommaList">
+				<source>The viewhelper &lt;timer:forCommaList&gt; is similiar to the TYPO3-Viehelper &lt;f:for&gt; and
+					use comma-separated list for its iterations.
+				</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; ist fast identisch mit dem TYPO3-Viehelper &lt;f:for&gt;
+					und nutzt Komma-separierte Listen für das Iterieren.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.forCommaList.foo">
+				<source>The viewhelper &lt;timer:forCommaList&gt; produce the string `1234` from the string `1,2,3,4`.
+				</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; produziert den Zahlenreihe `1234` aus dem String
+					`1,2,3,4`.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.forCommaList.revertNoTrim">
+				<source>The viewhelper &lt;timer:forCommaList&gt; produce a list from `cherry` to `apple` based on
+					`apple ,pear ,banana , cherry `.
+				</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; produziert eine Liste von `cherry` bis `apple` aus
+					`apple ,pear ,banana , cherry `.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.subtitle.forCommaList.limiter">
+				<source>The viewhelper &lt;timer:forCommaList&gt; produce a list with the colon as limiter.</source>
+				<target>Der Viewhelper &lt;timer:forCommaList&gt; porduziert ein Liste, wobei das Semikolon als Limiter
+					fungiert.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.prologresult.isActive.inactive">
+				<source>An inactive state has just been reached here.</source>
+				<target>Hier wurde gerade ein inaktiver Zustand erreicht.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.undefined.2">
+				<source>The periodic-parameters are defined `%s` the datetime of the event `%s`.</source>
+				<target>Die Periodic-Parameter sind definiert als `%s` die Datumszeit des Ereignisses `%s`.</target>
+			</trans-unit>
+
+			<trans-unit id="content.timer.periodMessage.general.undefined.1">
+				<source>The periodic-parameters are shown in the JSON-Format: `%s`.</source>
+				<target>Die periodischen Parameter werden im JSON-Format angezeigt: `%s`.</target>
+			</trans-unit>
+
+			<!-- general definitions for the description of custom timer-definitions -->
+			<trans-unit id="content.timer.periodMessage.general.weekday.mo">
+				<source>Monday</source>
+				<target>Montag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.weekday.tu">
+				<source>Tuesday</source>
+				<target>Dienstag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.weekday.we">
+				<source>Wednesday</source>
+				<target>Mittwoch</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.weekday.th">
+				<source>Thursday</source>
+				<target>Donnerstag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.weekday.fr">
+				<source>Friday</source>
+				<target>Freitag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.weekday.sa">
+				<source>Saturday</source>
+				<target>Samstag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.weekday.su">
+				<source>Sunday</source>
+				<target>Sonntag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.beginEnd.default">
+				<source>The period begins and ends in the respective standard year.</source>
+				<target>Die Periode beginnt und endet im jeweiligen Standardjahr.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.beginEnd.stop.1">
+				<source>The period starts in the default year and ends no later than `%s`.</source>
+				<target>Die Periode beginnt im Standardjahr und endet spätestens am `%s`.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.beginEnd.start.1">
+				<source>The period starts at the earliest on `%s` and ends in the default year.</source>
+				<target>Die Periode beginnt frühestens am `%s` und endet im Standardjahr.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.beginEnd.2">
+				<source>The period starts on `%s` at the earliest and ends on `%s` at the latest.</source>
+				<target>Die Periode beginnt frühestens am `%s` und endet spätestens am `%s`.</target>
+			</trans-unit>
+
+			<trans-unit id="content.timer.periodMessage.general.timeparts.min.many.1">
+				<source>%s minutes</source>
+				<target>%s Minuten</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.hour.many.1">
+				<source>%s hours</source>
+				<target>%s Stunden</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.day.many.1">
+				<source>%s days</source>
+				<target>%s Tage</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.week.many.1">
+				<source>%s weeks</source>
+				<target>%s Wochen</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.min.single">
+				<source>1 minute</source>
+				<target>1 Minute</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.hour.single">
+				<source>1 hour</source>
+				<target>1 Stunde</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.day.single">
+				<source>1 day</source>
+				<target>1 Tag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.week.single">
+				<source>1 week</source>
+				<target>1 Woche</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.combine.2">
+				<source>%s and %s</source>
+				<target>%s und %s</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.general.timeparts.zero">
+				<source>0 minute</source>
+				<target>0 Minuten</target>
+			</trans-unit>
+
+			<!-- sepcial texts for dailyTimer  -->
+			<trans-unit id="content.timer.periodMessage.dailyTimer.weekdayList.more.1">
+				<source>%s or %s</source>
+				<target>%s or %s</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.dailyTimer.weekdayList.one.1">
+				<source>%s</source>
+				<target>%s</target>
+			</trans-unit>
+
+
+			<!-- sepcial texts for dailyPeriod -->
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.zero">
+				<source>It never repeats itself.</source>
+				<target>Es wiederholt sich nie.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.tm.one">
+				<source>It repeats every minute.</source>
+				<target>Es wiederholt sich jede Minute.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.th.one">
+				<source>It repeats every hour.</source>
+				<target>Es wiederholt sich jede Stunde.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dd.one">
+				<source>It repeats itself every day.</source>
+				<target>Es wiederholt sich jeden Tag.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dw.one">
+				<source>It repeats itself every week.</source>
+				<target>Es wiederholt sich jede Woche.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dm.one">
+				<source>It repeats itself every month.</source>
+				<target>Es wiederholt sich jeden Monat.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dy.one">
+				<source>It repeats itself every year.</source>
+				<target>Es wiederholt sich jedes Jahr.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.tm.many.1">
+				<source>It repeats every %s minutes.</source>
+				<target>Es wiederholt sich alle %s Minuten.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.th.many.1">
+				<source>It repeats every %s hours.</source>
+				<target>Es wiederholt sich alle %s Stunden.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dd.many.1">
+				<source>It repeats every %s days.</source>
+				<target>Es wiederholt sich alle %s Tage.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dw.many.1">
+				<source>It repeats every %s weeks.</source>
+				<target>Es wiederholt sich alle %s Wochen.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dm.many.1">
+				<source>It repeats every %s months.</source>
+				<target>Es wiederholt sich alle %s Monate.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.datePeriod.period.dy.many.1">
+				<source>It repeats every %s years.</source>
+				<target>Es wiederholt sich alle %s Jahre.</target>
+			</trans-unit>
+
+			<!-- sepcial texts for easterRel(ative)  -->
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.calendarUse.0">
+				<source>julianisch bi for &lt; 1753; gregorian otherwise)</source>
+				<target>Kalender julianisch bis 1753</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.calendarUse.1">
+				<source>cal_easter_roman (julian for &lt; 1583; gregorian otherwise)</source>
+				<target>Kalender julianisch bis 1583</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.calendarUse.2">
+				<source>cal_easter_always_gregorian (proleptic gregorian for ever)</source>
+				<target>gregorianischer Kalender</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.calendarUse.3">
+				<source>cal_easter_always_julian (proleptic gregorian for ever)</source>
+				<target>julianischer Kanlender</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.namedDate.0">
+				<source>easter</source>
+				<target>Ostersonntag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.namedDate.1">
+				<source>ascension of Christ</source>
+				<target>Christi Himmelfahrt</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.namedDate.2">
+				<source>pentecost</source>
+				<target>Pfingsten</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.namedDate.3">
+				<source>first advent</source>
+				<target>1. Advent</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.namedDate.4">
+				<source>christmas</source>
+				<target>1. Weihnachtstag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.namedDate.5">
+				<source>rose monday</source>
+				<target>Rosenmontag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.namedDate.6">
+				<source>good friday</source>
+				<target>Karfreitag</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.description.zero.plus.3">
+				<source>The active time starts on %s (%s) and lasts %s.</source>
+				<target>Die aktive Zeit startet am %s (%s) und dauert %s.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.description.zero.minus.3">
+				<source>The active time ends on %s (%s) and lasted %s.</source>
+				<target>Die aktive Zeit endet am %s (%s) und hat %s gedauert.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.description.after.plus.4">
+				<source>The active time starts %s after the %s (%s) and lasts %s.</source>
+				<target>Die aktive Zeit startet %s nach dem %s (%s) und dauert %s.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.description.after.minus.4">
+				<source>The active time starts %s before %s (%s) and lasts %s.</source>
+				<target>Die aktive Zeit startet %s vor dem %s (%s) und dauert %s.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.description.before.plus.4">
+				<source>The active time ends %s after the %s (%s) and lasted %s.</source>
+				<target>Die aktive Zeit endet %s nach dem %s (%s) und hat %s gedauert.</target>
+			</trans-unit>
+			<trans-unit id="content.timer.periodMessage.easterRelTimer.description.before.minus.4">
+				<source>Active time ends %s before %s (%s) and lasted %s.</source>
+				<target>Die aktive Zeit endet %s vor dem %s (%s) und hat %s gedauert.</target>
+			</trans-unit>
+
+			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.unixtimestamp">
+				<source>(All subsequent dates, converted to the various calendars, refer to the selected Unix timestamp
+					`1600000000s`. The time specification in the past means the seconds that have passed since January
+					1st, 1970. On average, one billion seconds corresponds to almost 31 ,7 years. In the first
+					sub-block, the various formatting variants are tested as examples. The inline variant is tested,
+					which generates the foreign date in the fixed format in the second sub-block, in order to do this
+					with the three formatting variants ICU, PHP-dateTime and PHP-strftime to generate an identical date
+					as above. The last sub-block converts the foreign date into the Persian calendar to show that you
+					can convert between the calendars at will. Only the Chinese calendar is problematic, probably
+					because of a bug in PHP.)
+				</source>
+				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf die verschiedenen Kalender, beziehen sich auf
+					den gewählten Unix-Timestamp `1600000000s`. Die in der Vergangenheit liegende Zeitangabe meint die
+					Sekunden, die seit dem 1.1.1970 vergangen sind. Eine Milliarde Sekunden entsprechen im Mittel knapp
+					31,7 Jahren. Im ersten Teilblock werden die verschiedenen Formatierungsvarianten exemplarisch
+					erprobt. Auf wird die Inline-Variante erprobt, die im zweiten Teilblock das fremde Datum im
+					fixierten Format generiert, um so mit den drei Formatierungsvarianten ICU, PHP-dateTime und
+					PHP-strftime das identische Datum wie oben zu erzeugen. der letzte Teilblock konvertiert das fremde
+					Datum in den persischen Kalender, um so zu zeigen, dass man zwischen den Kalender beliebig
+					konvertieren kann. Problematisch ist nur der chinesische Kalender, vermutlich wegen eines Bugs im
+					PHP.)
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.conversionionGregorianGregorian">
+				<source>Attention: The php extension intl_date_formater seems to have problems converting a date from
+					the Gregorian calendar to the Gregorian calendar. The exact cause is not clear. Within the
+					extension, the DateTime mode is automatically switched to if Gregorian is specified as the input
+					calendar type in the CalendarDateViewhelper.
+				</source>
+				<target>Achtung: Die php-Extension intl_date_formater scheint Probleme mit der Konvertierung eines Datum
+					von gregorianischen Kalender in den gregorianischen Kalender zu haben. Die genaue Ursache ist nicht
+					klar. Innerhalb der Extension wird deshalb dafür automatisch in den Modus DateTime gewechselt, wenn
+					im CalendarDateViewhelper als Input-Kalendertype der Gregorianische angegeben wird.
+				</target>
+			</trans-unit>
+			<trans-unit id="content.timersimul.viewhelper.formatCalendarDate.aspect.current">
+				<source>(All subsequent dates, converted to the various calendars, refer to the current system date.)
+				</source>
+				<target>(Alle nachfolgenden Datumsangaben, umgerechnet auf die verschiedenen Kalender, beziehen sich auf
+					das aktuelle Systemdatum.)
+				</target>
+			</trans-unit>
+
+			<trans-unit id="timer.mapping.strftime.make-locale-H.i.s">
+				<source>H:i:s</source>
+				<target>H:i:s</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.make-locale-m.d.y_H.i.s">
+				<source>m/d/y H:i:s</source>
+				<target>d.m.y H:i:s</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.make-locale-m.d.y">
+				<source>m/d/y</source>
+				<target>d.m.y</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.01">
+				<source>January</source>
+				<target>Januar</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.02">
+				<source>February</source>
+				<target>Februar</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.03">
+				<source>March</source>
+				<target>März</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.04">
+				<source>April</source>
+				<target>April</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.05">
+				<source>May</source>
+				<target>Mai</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.06">
+				<source>June</source>
+				<target>Juni</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.07">
+				<source>July</source>
+				<target>Juli</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.08">
+				<source>August</source>
+				<target>August</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.09">
+				<source>September</source>
+				<target>September</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.10">
+				<source>October</source>
+				<target>Oktober</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.11">
+				<source>November</source>
+				<target>November</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-fullmonthname.12">
+				<source>December</source>
+				<target>Dezember</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.jan">
+				<source>jan</source>
+				<target>Jan</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.feb">
+				<source>feb</source>
+				<target>Feb</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.mar">
+				<source>mar</source>
+				<target>Mrz</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.apr">
+				<source>apr</source>
+				<target>Apr</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.may">
+				<source>may</source>
+				<target>Mai</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.jun">
+				<source>jun</source>
+				<target>Jun</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.jul">
+				<source>jul</source>
+				<target>Jul</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.aug">
+				<source>aug</source>
+				<target>Aug</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.sep">
+				<source>sep</source>
+				<target>Sep</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.oct">
+				<source>oct</source>
+				<target>Okt</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.nov">
+				<source>nov</source>
+				<target>Nov</target>
+			</trans-unit>
+			<trans-unit id="timer.mapping.strftime.help-locale-shortmonthname.dec">
+				<source>dec</source>
+				<target>Dez</target>
+			</trans-unit>
+
+			<trans-unit id="calendarDateViewHelper.php.error">
+				<source>The poorly documented calendar function IntlDateFormater in PHP seems to have a bug when
+					converting Chinese dates to Gregorian dates. As long as the bug is not fixed, no result for the
+					conversion from the Chinese date to the Gregorian date will be output here. If the bug has been
+					fixed in future PHP versions, this will be taken into account accordingly.
+				</source>
+				<target>Die schlecht-dokumentierte Kalenderfunktion IntlDateFormater in PHP scheint einen Bug bei der
+					Umrechnung des chinesischen Datums in das gregorianische Datum zu haben. Solange der Bug nicht
+					gefixt ist, wird hier kein Ergebnis für die Umrechnung vom chinesischen Datum zum Gregorianischen
+					Datum ausgegeben. Falls in zukünftigen PHP-Versionen der Bug gefixt wurde, wird dies entsprechend
+					mit berücksichtigt.
+				</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.milestone">
+				<source>milestone</source>
+				<source>Meilenstein</source>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.task">
+				<source>task</source>
+				<target>Aufgabe</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.allday">
+				<source>All Day</source>
+				<target>Ganztag</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.sun">
+				<source>Sun</source>
+				<target>So.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.mon">
+				<source>Mon</source>
+				<target>Mo.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.tue">
+				<source>Tue</source>
+				<target>Di.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.wed">
+				<source>Wed</source>
+				<target>Mi.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.thu">
+				<source>Thu</source>
+				<target>Do.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.fri">
+				<source>Fri</source>
+				<target>Fr.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.sat">
+				<source>Sat</source>
+				<target>Sa.</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.daily">
+				<source>day</source>
+				<target>Tag</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.weekly">
+				<source>week</source>
+				<target>Woche</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.monthly">
+				<source>month</source>
+				<target>Monat</target>
+			</trans-unit>
+			<trans-unit id="contentElement.holidayCalendar.tuicalendar.today">
+				<source>today</source>
+				<target>heute</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
+
