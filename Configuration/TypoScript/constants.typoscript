@@ -1,1 +1,1 @@
-@import 'EXT:timer/Configuration/TypoScript/Constants/*.typoscript'
+#@import 'EXT:timer/Configuration/TypoScript/Constants/*.typoscript'

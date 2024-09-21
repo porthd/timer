@@ -27,7 +27,7 @@ return [
             TimerConst::TIMER_FIELD_FLEX_ACTIVE . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ' .
             'teaser_slogan, teaser_infotext,',
         'typeicon_classes' => [
-            'default' => 'tx_timer-timer',
+            'default' => 'tx_timer_timericon',
         ],
         'security' => [
             'ignorePageTypeRestriction' => true,

@@ -34,10 +34,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
 /**
  * Formats an object implementing :php:`\DateTimeInterface`.
@@ -74,7 +71,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderS
  */
 class CalendarDateViewHelper extends AbstractViewHelper
 {
-    use CompileWithContentArgumentAndRenderStatic;
 
     public const ARG_FLAG_ICUFORMAT = 'flagformat';
     public const ARG_FORMAT = 'format';
@@ -189,23 +185,11 @@ class CalendarDateViewHelper extends AbstractViewHelper
         );
     }
 
-    /**
-     * @param array<mixed> $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     *
-     * @return string
-     * @throws Exception
-     */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ) {
-        $dateRaw = $renderChildrenClosure();
+    public function render()
+    {
+        $dateRaw = $this->renderChildren();
         [$fromCalendar, $toCalendar, $locale, $flagFormat, $format, $timezone, $base, $date, $calendarString] =
-            self::readArguments($arguments, $dateRaw);
-        // @todo check against PHP-versions, until the bug is fixed
+            $this->readArguments($dateRaw);
         if (in_array($fromCalendar, ConvertDateUtility::DEFECT_INTL_DATE_FORMATTER_LIST)) {
             return LocalizationUtility::translate(
                 'calendarDateViewHelper.php.error',
@@ -235,11 +219,11 @@ class CalendarDateViewHelper extends AbstractViewHelper
                 }
             }
             $date->setTimezone(new DateTimeZone($timezone));
-            $result = self::switchFormatAndConvertDateToCalendar($flagFormat, $locale, $toCalendar, $date, $format);
+            $result = $this->switchFormatAndConvertDateToCalendar($flagFormat, $locale, $toCalendar, $date, $format);
             return $result;
         }
 
-        self::validCalendarStringOrThrowException($calendarString);
+        $this->validCalendarStringOrThrowException($calendarString);
         $greorgianDateFromForeignCalendar = ConvertDateUtility::convertFromCalendarToDateTime(
             $locale,
             $fromCalendar,
@@ -248,7 +232,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
         if ($toCalendar === ConvertDateUtility::DEFAULT_CALENDAR) {
             // convert date and time from non-gregorian calendar into gregorian calendar
 
-            return self::switchFormatAndConvertCalandarInDateTimeString(
+            return $this->switchFormatAndConvertCalandarInDateTimeString(
                 $flagFormat,
                 $greorgianDateFromForeignCalendar,
                 $locale,
@@ -256,14 +240,14 @@ class CalendarDateViewHelper extends AbstractViewHelper
             );
         }
         // convert date and time from non-gregorian calendar into (other?) non-gregorian calendar
-        $gregorianResult = self::switchFormatAndConvertCalandarInDateTimeString(
+        $gregorianResult = $this->switchFormatAndConvertCalandarInDateTimeString(
             self::FORMAT_ICU_DATETIME,
             $greorgianDateFromForeignCalendar,
             $locale,
             ConvertDateUtility::INTL_DATE_FORMATTER_DEFAULT_PATTERN
         );
         $gregorianDateTime = DateTime::createFromFormat(ConvertDateUtility::PHP_DATE_FORMATTER_DEFAULT_PATTERN, $gregorianResult);
-        return self::switchFormatAndConvertDateToCalendar(
+        return $this->switchFormatAndConvertDateToCalendar(
             $flagFormat,
             $locale,
             $toCalendar,
@@ -273,35 +257,35 @@ class CalendarDateViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @param array<mixed> $arguments
      * @param null|string|int|DateTimeInterface $date
      * @return array<mixed>
      * @throws AspectNotFoundException
+     * @throws TimerException
      */
-    private static function readArguments(array $arguments, $date): array
+    private function readArguments($date): array
     {
         $fromCalendar = (
-        (empty($arguments[self::ARG_FROM_CALENDAR])) ?
+        (empty($this->arguments[self::ARG_FROM_CALENDAR])) ?
             ConvertDateUtility::DEFAULT_CALENDAR :
-            $arguments[self::ARG_FROM_CALENDAR]
+            $this->arguments[self::ARG_FROM_CALENDAR]
         );
         ConvertDateUtility::validateCalendarNameOrThrowException($fromCalendar);
         $toCalendar = (
-        (empty($arguments[self::ARG_TO_CALENDAR])) ?
+        (empty($this->arguments[self::ARG_TO_CALENDAR])) ?
             ConvertDateUtility::DEFAULT_CALENDAR :
-            $arguments[self::ARG_TO_CALENDAR]
+            $this->arguments[self::ARG_TO_CALENDAR]
         );
         ConvertDateUtility::validateCalendarNameOrThrowException($toCalendar);
         $locale = (
-        (empty($arguments[self::ARG_LOCALE])) ?
+        (empty($this->arguments[self::ARG_LOCALE])) ?
             ConvertDateUtility::DEFAULT_LOCALE :
-            $arguments[self::ARG_LOCALE]
+            $this->arguments[self::ARG_LOCALE]
         );
 
         $flagFormat = (
-        (empty($arguments[self::ARG_FLAG_ICUFORMAT])) ?
+        (empty($this->arguments[self::ARG_FLAG_ICUFORMAT])) ?
             0 :
-            (int)$arguments[self::ARG_FLAG_ICUFORMAT]
+            (int)$this->arguments[self::ARG_FLAG_ICUFORMAT]
         );
         $flagFormat = (
         (($flagFormat > 2) || ($flagFormat < 0)) ?
@@ -309,25 +293,25 @@ class CalendarDateViewHelper extends AbstractViewHelper
             $flagFormat
         );
         $format = (
-        (empty($arguments[self::ARG_FORMAT])) ?
+        (empty($this->arguments[self::ARG_FORMAT])) ?
             self::DEFAULT_FORMAT_YMDHIS :
-            $arguments[self::ARG_FORMAT]
+            $this->arguments[self::ARG_FORMAT]
         );
         $calendarString = (
-        (empty($arguments[self::ARG_CALENDAR_STRING])) ?
+        (empty($this->arguments[self::ARG_CALENDAR_STRING])) ?
             '' :
-            $arguments[self::ARG_CALENDAR_STRING]
+            $this->arguments[self::ARG_CALENDAR_STRING]
         );
 
-        if (empty($arguments[self::ARG_TIMEZONE])) {
+        if (empty($this->arguments[self::ARG_TIMEZONE])) {
             //            $context = GeneralUtility::makeInstance(Context::class);
             //            // Reading the current data instead of $GLOBALS
             //            $timezone = $context->getPropertyFromAspect('date', self::self::ARG_TIMEZONE);
             $timezone = date_default_timezone_get();
         } else {
-            $timezone = $arguments[self::ARG_TIMEZONE];
+            $timezone = $this->arguments[self::ARG_TIMEZONE];
         }
-        $base = $arguments[self::ARG_BASE] ?? GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect(
+        $base = $this->arguments[self::ARG_BASE] ?? GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect(
             self::ARG_DATE,
             'timestamp'
         );
@@ -337,9 +321,9 @@ class CalendarDateViewHelper extends AbstractViewHelper
 
         if ($date === null) {
             $date = (
-            (empty($arguments[self::ARG_DATE])) ?
+            (empty($this->arguments[self::ARG_DATE])) ?
                 0 :
-                (string)$arguments[self::ARG_DATE]
+                (string)$this->arguments[self::ARG_DATE]
             );
         }
 
@@ -348,7 +332,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
         }
 
         if ($date === '') {
-            $date = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect(
+            $date = (GeneralUtility::makeInstance(Context::class))->getPropertyFromAspect(
                 self::ARG_DATE,
                 'timestamp',
                 'now'
@@ -364,7 +348,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
      * @return void
      * @throws TimerException
      */
-    protected static function validCalendarStringOrThrowException(string $calendarString): void
+    protected function validCalendarStringOrThrowException(string $calendarString): void
     {
         [$dateString, $timeString] = explode(' ', $calendarString);
         [$fullYear, $month, $day] = array_map(
@@ -402,7 +386,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
      * @return string
      * @throws TimerException
      */
-    protected static function switchFormatAndConvertDateToCalendar(
+    protected function switchFormatAndConvertDateToCalendar(
         int $flagFormat,
         string $locale,
         string $toCalendar,
@@ -451,7 +435,7 @@ class CalendarDateViewHelper extends AbstractViewHelper
      * @return string
      * @throws TimerException
      */
-    protected static function switchFormatAndConvertCalandarInDateTimeString(
+    protected function switchFormatAndConvertCalandarInDateTimeString(
         int $flagFormat,
         DateTime $greorgianDateFromForeignCalendar,
         string $locale,

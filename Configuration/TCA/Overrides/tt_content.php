@@ -61,42 +61,6 @@ call_user_func(function () {
         'after'
     );
 
-    $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['timer_periodlist'] = 'tx_timer_periodlist';
-    $tempTypes = [
-        'timer_periodlist' => [
-            'columnsOverrides' => [
-                'bodytext' => [
-                    'config' => [
-                        'richtextConfiguration' => 'timer_timersimul',
-                        'enableRichtext' => 1,
-                    ],
-                ],
-            ],
-            'showitem' => $GLOBALS['TCA']['tt_content']['types']['textmedia']['showitem'] ?
-                $GLOBALS['TCA']['tt_content']['types']['textmedia']['showitem'] . ',pi_flexform,' :
-                '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, --palette--;;general, pi_flexform, --palette--;;headers, bodytext;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:bodytext_formlabel, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.media, assets, --palette--;;mediaAdjustments, --palette--;;gallerySettings, --palette--;;imagelinks, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance, --palette--;;frames, --palette--;;appearanceLinks, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language, --palette--;;language, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, --palette--;;hidden, --palette--;;access, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories, categories, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes, rowDescription, --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended, --div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.label, ' .
-                TimerConst::TIMER_FIELD_SCHEDULER . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ' . TimerConst::TIMER_FIELD_FLEX_ACTIVE . ', ',
-        ],
-    ];
-    $GLOBALS['TCA']['tt_content']['types'] += $tempTypes;
-    // Adds the content element to the "Type" dropdown
-    ExtensionManagementUtility::addTcaSelectItem(
-        'tt_content',
-        'CType',
-        [
-            'label' => 'LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.element.name.timerPeriodlist',
-            'value' => 'timer_periodlist',
-            'icon' => 'tx_timer_periodlist',
-        ],
-        'textmedia',
-        'after'
-    );
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-        '*',
-        'FILE:EXT:timer/Configuration/FlexForms/ContentElement/PeriodList.flexform',
-        'timer_periodlist'
-    );
-
     $GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['timer_holidaycalendar'] = 'tx_timer_holidaycalendar';
     $tempTypes = [
         'timer_holidaycalendar' => [
@@ -129,7 +93,7 @@ call_user_func(function () {
     );
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
         '*',
-        'FILE:EXT:timer/Configuration/FlexForms/ContentElement/Holidaycalendar.flexform',
+        'FILE:EXT:timer/Configuration/FlexForms/ContentElement/Holidaycalendar.xml',
         'timer_holidaycalendar'
     );
 

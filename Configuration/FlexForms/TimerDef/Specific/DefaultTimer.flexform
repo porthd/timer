@@ -5,33 +5,30 @@
         <langDisable>1</langDisable>
     </meta>
     <ROOT>
-        <TCEforms>
-            <sheetTitle>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.sheet.title
-            </sheetTitle>
-            <sheetShortDescr>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.sheet.shortDescr
-            </sheetShortDescr>
-            <sheetDescription>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.sheet.description
-            </sheetDescription>
-        </TCEforms>
+        y
+        <sheetTitle>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.sheet.title
+        </sheetTitle>
+        <sheetShortDescr>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.sheet.shortDescr
+        </sheetShortDescr>
+        <sheetDescription>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.sheet.description
+        </sheetDescription>
         <type>array</type>
         <el>
             <nothing>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.field.nothing.title
-                    </label>
-                    <config>
-                        <type>input</type>
-                        <size>20</size>
-                        <max>30</max>
-                        <eval>trim</eval>
-                        <readOnly>true</readOnly>
-                        <default>ever</default>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerDefault.field.nothing.title
+                </label>
+                <config>
+                    <type>input</type>
+                    <size>20</size>
+                    <max>30</max>
+                    <eval>trim</eval>
+                    <readOnly>true</readOnly>
+                    <default>ever</default>
+                </config>
             </nothing>
         </el>
     </ROOT>

@@ -5,88 +5,75 @@
         <langDisable>1</langDisable>
     </meta>
     <ROOT>
-        <TCEforms>
-            <sheetTitle>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerRangeList.sheet.title
-            </sheetTitle>
-            <sheetShortDescr>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerRangeList.sheet.shortDescr
-            </sheetShortDescr>
-            <sheetDescription>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerRangeList.sheet.description
-            </sheetDescription>
-        </TCEforms>
+        <sheetTitle>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerRangeList.sheet.title
+        </sheetTitle>
+        <sheetShortDescr>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerRangeList.sheet.shortDescr
+        </sheetShortDescr>
+        <sheetDescription>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerRangeList.sheet.description
+        </sheetDescription>
         <type>array</type>
         <el>
             <recursiveLoopLimit>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.recursiveLoopLimit
-                    </label>
-                    <config>
-                        <type>input</type>
-                        <size>20</size>
-                        <eval>int</eval>
-                        <range>
-                            <lower>1</lower>
-                            <upper>25</upper>
-                        </range>
-                        <default>4</default>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.recursiveLoopLimit
+                </label>
+                <config>
+                    <type>number</type>
+                    <size>10</size>
+                    <range>
+                        <lower>1</lower>
+                        <upper>25</upper>
+                    </range>
+                    <default>4</default>
+                </config>
             </recursiveLoopLimit>
             <yamlActiveFilePath>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.yamlActiveFilePath
-                    </label>
-                    <config>
-                        <type>input</type>
-                        <size>20</size>
-                        <eval>trim</eval>
-                        <default>EXT:timer/Resources/Public/Yaml/Example_RangeListTimer.yaml</default>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.yamlActiveFilePath
+                </label>
+                <config>
+                    <type>input</type>
+                    <size>20</size>
+                    <eval>trim</eval>
+                    <default>EXT:timer/Resources/Public/Yaml/Example_RangeListTimer.yaml</default>
+                </config>
             </yamlActiveFilePath>
             <yamlForbiddenFilePath>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.yamlForbiddenFilePath
-                    </label>
-                    <config>
-                        <type>input</type>
-                        <size>20</size>
-                        <eval>trim</eval>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.yamlForbiddenFilePath
+                </label>
+                <config>
+                    <type>input</type>
+                    <size>20</size>
+                    <eval>trim</eval>
+                </config>
             </yamlForbiddenFilePath>
             <databaseActiveRangeList>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.databaseActiveRangeList
-                    </label>
-                    <config>
-                        <type>select</type>
-                        <renderType>selectMultipleSideBySide</renderType>
-                        <foreign_table>tx_timer_domain_model_listing</foreign_table>
-                        <minitems>0</minitems>
-                        <maxitems>9</maxitems>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.databaseActiveRangeList
+                </label>
+                <config>
+                    <type>select</type>
+                    <renderType>selectMultipleSideBySide</renderType>
+                    <foreign_table>tx_timer_domain_model_listing</foreign_table>
+                    <minitems>0</minitems>
+                    <maxitems>9</maxitems>
+                </config>
             </databaseActiveRangeList>
             <databaseForbiddenRangeList>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.databaseForbiddenRangeList
-                    </label>
-                    <config>
-                        <type>select</type>
-                        <renderType>selectMultipleSideBySide</renderType>
-                        <foreign_table>tx_timer_domain_model_listing</foreign_table>
-                        <minitems>0</minitems>
-                        <maxitems>9</maxitems>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.rangeListTimer.field.databaseForbiddenRangeList
+                </label>
+                <config>
+                    <type>select</type>
+                    <renderType>selectMultipleSideBySide</renderType>
+                    <foreign_table>tx_timer_domain_model_listing</foreign_table>
+                    <minitems>0</minitems>
+                    <maxitems>9</maxitems>
+                </config>
             </databaseForbiddenRangeList>
         </el>
     </ROOT>

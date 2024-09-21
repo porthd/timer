@@ -39,6 +39,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use TYPO3\CMS\Backend\Tree\Repository\PageTreeRepository;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
@@ -85,24 +86,21 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     private DataHandler $dataHandler;
 
     /** @var ListOfTimerService $timerService */
-    private ListOfTimerService $timerService;
+    private $timerService;
 
     /** @var YamlFileLoader $yamlLoader */
-    private YamlFileLoader $yamlLoader;
+    private $yamlLoader;
 
     /** @var PageTreeRepository $pageTreeRepository */
     private PageTreeRepository $pageTreeRepository;
 
-    /**
-     * @param ListOfTimerService $listOfTimerService
-     * @param DataHandler $dataHandler
-     */
     public function __construct(
         ListOfTimerService $listOfTimerService,
-        DataHandler $dataHandler,
+        DataHandler    $dataHandler,
         YamlFileLoader $yamlLoader,
         PageTreeRepository $pageTreeRepository
-    ) {
+    )
+    {
         parent::__construct();
         $this->timerService = $listOfTimerService;
         $this->dataHandler = $dataHandler;
@@ -144,14 +142,14 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return bool|int|void
+     * @return int
      */
     public function execute(
         InputInterface $input,
         OutputInterface $output
-    ) {
+    ): int
+    {
         try {
-            $this->dataHandler->setLogger($this->logger);
 
             $yamlFilePath = $this->getMyArgument($input);
             if (empty($yamlFilePath)) {
@@ -209,7 +207,8 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      */
     protected function getMyArgument(
         InputInterface $input
-    ): string {
+    ): string
+    {
         if (empty($input->hasArgument(self::ARGUMENT_YAML_TABLE_LIST))) {
             throw new TimerException(
                 LocalizationUtility::translate(
@@ -230,7 +229,8 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
 
     protected function allowedPids(
         $pidList
-    ) {
+    )
+    {
         $result = [];
         foreach ($pidList as $pid) {
             $myTree = $this->pageTreeRepository->getTree($pid);
@@ -250,7 +250,8 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      */
     protected function updateTables(
         array $yamlConfig
-    ) {
+    )
+    {
         $flagSuccess = [];
         $refDateTime = new DateTime('now');
         foreach ($yamlConfig as $key => $tableConfig) {
@@ -278,8 +279,9 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     protected function updateTable(
         array $yamlTableConfig,
         DateTime $refDateTime,
-        $listPids = []
-    ): int {
+              $listPids = []
+    ): int
+    {
         if (!class_exists($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY]) ||
             (!in_array(
                 TimerRepositoryInterface::class,
@@ -295,7 +297,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
 
 
         $className = (
-            (!empty($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY])) ?
+        (!empty($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY])) ?
             $yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY] :
             GeneralRepository::class
         );
@@ -309,8 +311,8 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         $whereInfos = $yamlTableConfig[self::YAML_SUBGROUP_WHERE] ?? [];
         if (!method_exists($repository, 'getTxTimerInfos')) {
             throw new TimerException(
-                'The method `getTxTimerInfos` in the class `$className` did not exist. '.
-                'Check the configuration of Classname in your yaml-files and/or in your database-definitions. '.
+                'The method `getTxTimerInfos` in the class `$className` did not exist. ' .
+                'Check the configuration of Classname in your yaml-files and/or in your database-definitions. ' .
                 'Check your php-code of the class and the autoload-file.',
                 1672262471
             );
@@ -416,7 +418,8 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     protected function validateYamlDefinition(
         array $tableConfig,
         string $tableKey
-    ): bool {
+    ): bool
+    {
         if (!array_key_exists(self::YAML_SUBGROUP_TEXT_TABLE, $tableConfig)) {
             throw new TimerException(
                 'The table is not defined in your ' . $tableKey . 'th definition. Please check your yaml-file.',

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\CalendarDateRelTimer;
 use Porthd\Timer\CustomTimer\HolidayTimer;
 use Porthd\Timer\CustomTimer\DailyTimer;
 use Porthd\Timer\CustomTimer\DatePeriodTimer;
@@ -16,7 +17,6 @@ use Porthd\Timer\CustomTimer\SunriseRelTimer;
 use Porthd\Timer\CustomTimer\WeekdayInMonthTimer;
 use Porthd\Timer\CustomTimer\WeekdaylyTimer;
 use Porthd\Timer\CustomTimer\JewishHolidayTimer;
-use Porthd\Timer\CustomTimer\CalendarDateRelTimer;
 use Porthd\Timer\Hooks\Backend\FlexformManipulationHook;
 use Porthd\Timer\Hooks\Backend\StartEndTimerManipulationHook;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
@@ -54,9 +54,6 @@ defined('TYPO3') || die('Access denied in ' . __FILE__ . '.');
 
 call_user_func(
     static function () {
-        // Hook for dynamically generated flexformsfiles
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][] =
-            FlexFormParsingHook::class;
 
         // declare namespace in fluid-taemplates
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['timer'] = ['Porthd\\Timer\\ViewHelpers'];
@@ -66,9 +63,8 @@ call_user_func(
             IconRegistry::class
         );
         foreach ([
-                     'tx_timer-timer' => 'EXT:timer/Resources/Public/Icons/icon_timer.svg',
+                     'tx_timer_timericon' => 'EXT:timer/Resources/Public/Icons/icon_timer.svg',
                      'tx_timer_timersimul' => 'EXT:timer/Resources/Public/Icons/Content/timersimul.svg',
-                     'tx_timer_periodlist' => 'EXT:timer/Resources/Public/Icons/Content/periodlist.svg',
                      'tx_timer_holidaycalendar' => 'EXT:timer/Resources/Public/Icons/Content/holidaycalendar.svg',
                  ] as $name => $path
         ) {
@@ -78,9 +74,6 @@ call_user_func(
                 ['source' => $path]
             );
         }
-        // allow default-values like `now` `+1 day` or similiar as default-Value in Flexforms
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][FlexFormTools::class]['flexParsing'][] =
-            FlexformManipulationHook::class;
         // reset starttime and endtime after changes in tx_timer_select and tx_timer_timer
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
             StartEndTimerManipulationHook::class;
@@ -107,14 +100,10 @@ call_user_func(
                 WeekdaylyTimer::class, // => 1024
                 JewishHolidayTimer::class, // => 2048
                 HolidayTimer::class, // => 4096
+//                CalendarDateRelTimer::class, // 8192 in planing
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
 
-            $tsConfig =
-                "@import 'EXT:timer/Configuration/TsConfig/Page/BackendPreview.tsconfig'" .
-                "\n" .
-                "@import 'EXT:timer/Configuration/TsConfig/Page/RteTimerSimul.tsconfig'";
-            ExtensionManagementUtility::addPageTSConfig($tsConfig);
 
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
             if (!array_key_exists('frontend', $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
@@ -151,7 +140,6 @@ call_user_func(
                 'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
                 'options' => [
                     'defaultLifetime' => 864000, // 10 days
-//                    'compression' => true,
                 ],
                 'groups' => ['pages'],
             ],

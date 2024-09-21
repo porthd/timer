@@ -15,11 +15,6 @@ call_user_func(function () {
     );
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
         'timer',
-        'Configuration/TypoScript/Periodlist',
-        'holidaycalendar - an example for a content-element with a calendar using the periodlist of timer'
-    );
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-        'timer',
         'Configuration/TypoScript/Timersimul',
         'holidaycalendar - an example for a content-element with using the viewhelpers and dataprocessors of timer'
     );

@@ -97,11 +97,28 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
      */
     public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
     {
+        $flagActive = false;
         try {
             if (!empty($arguments[self::ARGUMENT_FLEXFORM_STRING])) {
                 $paramsString = $arguments[self::ARGUMENT_FLEXFORM_STRING];
-                $flexParams = GeneralUtility::xml2array($paramsString);
-                $params = TcaUtility::flexformArrayFlatten($flexParams);
+                $params = [];
+                if ($paramsString !== 'default') {
+                    $flexParams = GeneralUtility::xml2array($paramsString);
+                    $params = TcaUtility::flexformArrayFlatten($flexParams);
+                    // robust against werrto
+                    $flagError = (((is_string($params)) && (substr($params, 0, strlen('Line ')) === 'Line ')) ?
+                        'The string could not decode as xml/flexform. ' :
+                        '');
+                    if (!empty($flagError)) {
+
+                        throw new TimerException(
+                            'The isActive-viewhelper requires a corecctly defined parameter `' .
+                            self::ARGUMENT_FLEXFORM_STRING . '`. Check its definition. ' .
+                            $paramsString,
+                            1701880326
+                        );
+                    }
+                }
             } else {
                 if (array_key_exists(self::ARGUMENT_PARAM_LIST, $arguments)) {
                     $params = $arguments[self::ARGUMENT_PARAM_LIST];
@@ -116,17 +133,16 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
             }
             $selector = $arguments[self::ARGUMENT_SELECTOR];
 
-            $activeZone = (
-                (empty($arguments[self::ARGUMENT_ACTIVEZONE])) ?
+            $activeZone = ((empty($arguments[self::ARGUMENT_ACTIVEZONE])) ?
                 date_default_timezone_get() :
                 $arguments[self::ARGUMENT_ACTIVEZONE]
             );
 
             /** @var ListOfTimerService $timerList */
             $timerList = GeneralUtility::makeInstance(ListOfTimerService::class);
-            $flagAnalyse = false;
-            if ($timerList->validate($selector, $params)) {
-                $flagAnalyse = true;
+            if ((!empty($params)) &&
+                ($timerList->validate($selector, $params))
+            ) {
                 $timestamp = $arguments[self::ARGUMENT_REF_TIMESTAMP] ?? '';
                 if (MathUtility::canBeInterpretedAsInteger($timestamp)) {
                     $dateValue = new DateTime('@' . $timestamp);
@@ -146,15 +162,8 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
                 'The arguments `' . self::ARGUMENT_REF_TIMESTAMP . '`(default: current date) and `' . self::ARGUMENT_ACTIVEZONE .
                 '`(default: value of server). ' .
                 'The wrongly defined arguments or their missing cause this exception. Please check the following values: `' .
-                "\n" . print_r($arguments) . "\n" . '`. Please check although the previous message: ' . $exception->getMessage(),
+                "\n" . '`. Please check although the previous message: ' . $exception->getMessage(),
                 1601990312
-            );
-        }
-        if (!$flagAnalyse) {
-            throw new TimerException(
-                'The parameter `' . print_r($params, true) . '` for the timer `' . $selector . '` is not valid. ' .
-                'Please check your definition in the backend or in the template. ',
-                1600000001
             );
         }
 

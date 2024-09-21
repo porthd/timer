@@ -31,10 +31,8 @@ use Porthd\Timer\Utilities\ConvertDateUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
 /**
  * Formats an object implementing :php:`\DateTimeInterface`. It is similiar to the fluid-viewhelper `f:format.date`.
@@ -125,9 +123,14 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderS
  * ``1980-12-13``
  * Depending on the value of ``{dateObject}``.
  */
+
+/**
+ * @deprecated will be removed in Version 14
+ *   * migration use the TYPO3-viewhelper with the locale-parameter
+ */
 class DateViewHelper extends AbstractViewHelper
 {
-    use CompileWithContentArgumentAndRenderStatic;
+
 
     /**
      * Needed as child node's output can return a DateTime object which can't be escaped
@@ -166,30 +169,24 @@ class DateViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @param array<mixed> $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     *
-     * @return string
-     * @throws Exception
+     * @return mixed|string
+     * @throws \Porthd\Timer\Exception\TimerException
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ) {
-        $format = $arguments['format'] ?? '';
+    public function render()
+    {
+        $format = $this->arguments['format'] ?? '';
 
-        if (empty($arguments['timezone'])) {
+        if (empty($this->arguments['timezone'])) {
             // @todo wait, until the bug in the Context:class is resolved.
             //            $context = GeneralUtility::makeInstance(Context::class);
             //            // Reading the current data instead of $GLOBALS
             //            $timezone = $context->getPropertyFromAspect('date', 'timezone');
             $timezone = date_default_timezone_get();
         } else {
-            $timezone = $arguments['timezone'];
+            $timezone = $this->arguments['timezone'];
         }
-        $base = $arguments['base'] ?? GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect(
+        $base = $this->arguments['base'] ?? GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect(
             'date',
             'timestamp'
         );
@@ -201,7 +198,7 @@ class DateViewHelper extends AbstractViewHelper
             $format = $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] ?: 'Y-m-d';
         }
 
-        $date = $renderChildrenClosure();
+        $date = $this->renderChildren();
         if ($date === null) {
             return '';
         }

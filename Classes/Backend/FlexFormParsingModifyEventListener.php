@@ -2,26 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Porthd\Timer\Hooks\Backend;
+namespace Porthd\Timer\Backend;
 
-/***************************************************************
- *
- *  Copyright notice
- *
- *  (c) 2020 Dr. Dieter Porth <info@mobger.de>
- *
- *  All rights reserved
- *
- *  This script is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
 
 use DateTime;
 use Exception;
@@ -29,14 +11,25 @@ use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\DateTimeUtility;
+use Porthd\Timer\Utilities\TcaUtility;
+use TYPO3\CMS\Core\Configuration\Event\AfterFlexFormDataStructureParsedEvent;
 
-/**
- * see https://github.com/georgringer/news/issues/268 visited 20201006
- *
- * @package Porthd\Timer\Hooks\Backend\FlexformManipulationHook
- */
-class FlexformManipulationHook
+final class FlexFormParsingModifyEventListener
 {
+
+    public function modifyDataStructure(AfterFlexFormDataStructureParsedEvent $event): void
+    {
+        $identifier = $event->getIdentifier();
+
+        if (($identifier['type'] === 'tca') &&
+            ($identifier['fieldName'] === TimerConst::TIMER_FIELD_FLEX_ACTIVE)
+        ) {
+            $parsedDataStructure = $event->getDataStructure();
+            $parsedDataStructure = $this->recursiveDefaultAnalytic($parsedDataStructure);
+            $event->setDataStructure($parsedDataStructure);
+        }
+    }
+
     /**
      * @param array<mixed> $dataStructure
      * @return array<mixed>
@@ -91,18 +84,4 @@ class FlexformManipulationHook
         return $result;
     }
 
-    /**
-     * @param array<mixed> $dataStructure
-     * @param array<mixed> $identifier
-     * @return array<mixed>
-     */
-    public function parseDataStructureByIdentifierPostProcess(array $dataStructure, array $identifier): array
-    {
-        if (($identifier['type'] === 'tca') &&
-            ($identifier['fieldName'] === TimerConst::TIMER_FIELD_FLEX_ACTIVE)
-        ) {
-            $dataStructure = $this->recursiveDefaultAnalytic($dataStructure);
-        }
-        return $dataStructure;
-    }
 }

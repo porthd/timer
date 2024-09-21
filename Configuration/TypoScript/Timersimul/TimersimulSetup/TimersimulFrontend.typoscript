@@ -13,9 +13,9 @@ tt_content.timer_timersimul {
         # the table name from which the data is fetched from
         table = tx_timer_domain_model_event
 
-        # defines, the pages or sysfolders, on which the datas are defined.
+        # defines, the page-id of the current page
         pidInList.stdWrap.cObject = TEXT
-        pidInList.stdWrap.cObject.field = pages
+        pidInList.stdWrap.cObject.field = uid
         recursive = 1
 
         # output variable with the resulting list

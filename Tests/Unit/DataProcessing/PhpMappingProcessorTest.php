@@ -60,12 +60,10 @@ class GetterSetterParentClass
      */
     protected $parent;
     protected $timestamp = CHECK_TSTAMP_TWO;
-
     public function __construct()
     {
         $this->parent = new GetterSetterClass();
     }
-
     public function getParent(): GetterSetterClass
     {
         return $this->parent;
@@ -88,7 +86,6 @@ class GetterSetterParentClass
 
 
 }
-
 class PhpMappingProcessorTest extends TestCase
 {
     /**

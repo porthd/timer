@@ -26,7 +26,7 @@ return [
         'searchFields' => 'title, description, ' .
             TimerConst::TIMER_FIELD_FLEX_ACTIVE . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ',
         'typeicon_classes' => [
-            'default' => 'tx_timer-timer',
+            'default' => 'tx_timer_timericon',
         ],
         'security' => [
             'ignorePageTypeRestriction' => true,

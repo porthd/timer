@@ -11,14 +11,6 @@
 				<source>Simulate the time of the presentation of a page</source>
 				<target>Simulieren Sie den Zeitpunkt der Präsentation einer Seite</target>
 			</trans-unit>
-			<trans-unit id="wizards.newContentElement.periodlist_title">
-				<source>simple periodlist from yaml-file</source>
-				<target>Einfache Liste von singulärer Termine aus Datei im yaml-Format</target>
-			</trans-unit>
-			<trans-unit id="wizards.newContentElement.periodlist_description">
-				<source>Create an appointment list in yaml format and display it in the frontend</source>
-				<target>Erstellen sie eine Terminliste im yaml-Format und geben sie diese im Frontend aus.</target>
-			</trans-unit>
 			<trans-unit id="wizards.newContentElement.holidaycalendar_title">
 				<source>list of holidays from csv-file or yaml-file</source>
 				<target>Liste von Feiertage aus Datei im csv- oder yaml-Format</target>

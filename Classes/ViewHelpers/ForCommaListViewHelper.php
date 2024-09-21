@@ -24,10 +24,7 @@ namespace Porthd\Timer\ViewHelpers;
  ***************************************************************/
 
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3Fluid\Fluid\Core\ViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * CommaList-viewhelper is a loop ViewHelper which can be used to iterate over comma-separated list.
@@ -95,7 +92,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class ForCommaListViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
 
     /**
      * @var bool
@@ -117,28 +113,22 @@ class ForCommaListViewHelper extends AbstractViewHelper
         $this->registerArgument('iteration', 'string', 'The name of the variable to store iteration information (index, cycle, isFirst, isLast, isEven, isOdd)');
     }
 
-    /**
-     * @param array<mixed> $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return string
-     */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    public function render()
     {
-        $templateVariableContainer = $renderingContext->getVariableProvider();
-        $flagTrim = ((!empty($arguments['trim'])) ? true : false);
-        if (!isset($arguments['each']) || empty($arguments['each'])) {
+        $templateVariableContainer = $this->renderingContext->getVariableProvider();
+        $flagTrim = ((!empty($this->arguments['trim'])) ? true : false);
+        if (!isset($this->arguments['each']) || empty($this->arguments['each'])) {
             return '';
         }
-        if (!is_string($arguments['each'])) {
+        if (!is_string($this->arguments['each'])) {
             throw new Exception('CommaListViewHelper only supports list, which are separated by a comma or an other limiter', 1678601258);
         }
-        if (!isset($arguments['limiter']) || empty($arguments['limiter'])) {
+        if (!isset($this->arguments['limiter']) || empty($this->arguments['limiter'])) {
             $limiter = ',';
         } else {
-            $limiter = $arguments['limiter'];
+            $limiter = $this->arguments['limiter'];
         }
-        $myList = explode($limiter, $arguments['each']);
+        $myList = explode($limiter, $this->arguments['each']);
         if ($flagTrim) {
             $myList = array_filter(
                 array_map(
@@ -147,7 +137,7 @@ class ForCommaListViewHelper extends AbstractViewHelper
                 )
             );
         }
-        if ($arguments['reverse'] === true) {
+        if ($this->arguments['reverse'] === true) {
             // array_reverse only supports arrays
             $myList = array_reverse($myList, true);
         }
@@ -159,26 +149,26 @@ class ForCommaListViewHelper extends AbstractViewHelper
 
         $output = '';
         foreach ($myList as $keyValue => $singleElement) {
-            $templateVariableContainer->add($arguments['as'], $singleElement);
-            if (isset($arguments['key'])) {
-                $templateVariableContainer->add($arguments['key'], $keyValue);
+            $templateVariableContainer->add($this->arguments['as'], $singleElement);
+            if (isset($this->arguments['key'])) {
+                $templateVariableContainer->add($this->arguments['key'], $keyValue);
             }
-            if (isset($arguments['iteration'])) {
+            if (isset($this->arguments['iteration'])) {
                 $iterationData['isFirst'] = $iterationData['cycle'] === 1;
                 $iterationData['isLast'] = $iterationData['cycle'] === $iterationData['total'];
                 $iterationData['isEven'] = $iterationData['cycle'] % 2 === 0;
                 $iterationData['isOdd'] = !$iterationData['isEven'];
-                $templateVariableContainer->add($arguments['iteration'], $iterationData);
+                $templateVariableContainer->add($this->arguments['iteration'], $iterationData);
                 $iterationData['index']++;
                 $iterationData['cycle']++;
             }
-            $output .= $renderChildrenClosure();
-            $templateVariableContainer->remove($arguments['as']);
-            if (isset($arguments['key'])) {
-                $templateVariableContainer->remove($arguments['key']);
+            $output .= $this->renderChildren();
+            $templateVariableContainer->remove($this->arguments['as']);
+            if (isset($this->arguments['key'])) {
+                $templateVariableContainer->remove($this->arguments['key']);
             }
-            if (isset($arguments['iteration'])) {
-                $templateVariableContainer->remove($arguments['iteration']);
+            if (isset($this->arguments['iteration'])) {
+                $templateVariableContainer->remove($this->arguments['iteration']);
             }
         }
         return $output;

@@ -41,7 +41,7 @@ class TimerException extends Exception
     public function __construct(
         string $message = "",
         int    $code = 0,
-               $previous = null
+        $previous = null
     )
     {
         $message .= ' Make a Screenshot, write a short report of your last actions and inform the webmaster via email.';

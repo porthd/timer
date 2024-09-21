@@ -24,6 +24,8 @@ namespace Porthd\Timer\Domain\Repository;
  ***************************************************************/
 
 use DateTime;
+use Ddeboer\Imap\Connection;
+use Doctrine\DBAL\ParameterType;
 use Exception;
 use Porthd\Timer\Domain\Repository\TimerRepositoryInterface;
 use PDO;
@@ -55,7 +57,7 @@ class GeneralRepository implements TimerRepositoryInterface
         // Run it in try/catch in case PDO is in ERRMODE_EXCEPTION.
         try {
             /** @var QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName)
+            $queryBuilder = (GeneralUtility::makeInstance(ConnectionPool::class))->getConnectionForTable($tableName)
                 ->createQueryBuilder();
             $queryBuilder->count(self::GENERAL_ROW_IDENTIFIER)->from($tableName);
             return (bool)($queryBuilder->executeQuery()->fetchOne());
@@ -82,7 +84,7 @@ class GeneralRepository implements TimerRepositoryInterface
         array $whereInfos = []
     ): array {
         /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+        $queryBuilder = (GeneralUtility::makeInstance(ConnectionPool::class))
             ->getQueryBuilderForTable($genericTable);
         $queryBuilder
             ->getRestrictions()
@@ -103,11 +105,11 @@ class GeneralRepository implements TimerRepositoryInterface
             ),
             $queryBuilder->expr()->lte(
                 TimerConst::TIMER_FIELD_STARTTIME,
-                $queryBuilder->createNamedParameter($refTime->getTimestamp(), PDO::PARAM_INT)
+                $queryBuilder->createNamedParameter($refTime->getTimestamp(), ParameterType::INTEGER)
             ),
             $queryBuilder->expr()->lte(
                 TimerConst::TIMER_FIELD_ENDTIME,
-                $queryBuilder->createNamedParameter($refTime->getTimestamp(), PDO::PARAM_INT)
+                $queryBuilder->createNamedParameter($refTime->getTimestamp(), ParameterType::INTEGER)
             ),
         ];
 
@@ -133,11 +135,11 @@ class GeneralRepository implements TimerRepositoryInterface
     public static function listAllInTable(string $tableName, array $listOfFields)
     {
         /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName)
+        $queryBuilder = (GeneralUtility::makeInstance(ConnectionPool::class))->getConnectionForTable($tableName)
             ->createQueryBuilder();
         $queryBuilder->select(...$listOfFields)
             ->from($tableName);
-        return $queryBuilder->execute()->fetchAllAssociative();
+        return $queryBuilder->executeQuery()->fetchAllAssociative();
     }
 
 
@@ -155,9 +157,9 @@ class GeneralRepository implements TimerRepositoryInterface
                 if (array_key_exists(UpdateTimerCommand::YAML_SUBWHERE_TYPE, $condition) &&
                     ($condition[UpdateTimerCommand::YAML_SUBWHERE_TYPE] === 'int')
                 ) {
-                    $type = PDO::PARAM_INT;
+                    $type = ParameterType::INTEGER;
                 } else {
-                    $type = PDO::PARAM_STR;
+                    $type = ParameterType::STRING;
                 }
                 $queryBuilder->expr()->$compare(
                     $field,

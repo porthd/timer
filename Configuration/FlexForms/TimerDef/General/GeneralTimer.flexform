@@ -5,7 +5,6 @@
         <langDisable>1</langDisable>
     </meta>
     <ROOT>
-        <TCEforms>
             <sheetTitle>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.sheet.title
             </sheetTitle>
@@ -15,11 +14,9 @@
             <sheetDescription>
                 LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.sheet.description
             </sheetDescription>
-        </TCEforms>
         <type>array</type>
         <el>
             <useTimeZoneOfFrontend>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.field.useTimeZoneOfFrontend
                     </label>
@@ -35,10 +32,8 @@
                             </numIndex>
                         </items>
                     </config>
-                </TCEforms>
             </useTimeZoneOfFrontend>
             <timeZoneOfEvent>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.field.timeZoneOfEvent
                     </label>
@@ -50,10 +45,8 @@
                         <maxitems>1</maxitems>
                         <default>Europe/Berlin</default>
                     </config>
-                </TCEforms>
             </timeZoneOfEvent>
             <ultimateBeginningTimer>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.field.ultimateBeginningTimer
                     </label>
@@ -63,10 +56,8 @@
                         <default>-2208992400</default>
                         <nullable>0</nullable>
                     </config>
-                </TCEforms>
             </ultimateBeginningTimer>
             <ultimateEndingTimer>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerGeneral.field.ultimateEndingTimer
                     </label>
@@ -76,7 +67,6 @@
                         <default>32535212340</default>
                         <nullable>0</nullable>
                     </config>
-                </TCEforms>
             </ultimateEndingTimer>
         </el>
     </ROOT>

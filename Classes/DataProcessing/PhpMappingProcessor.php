@@ -23,7 +23,7 @@ namespace Porthd\Timer\DataProcessing;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use In2code\Luxletter\Utility\LocalizationUtility;
+
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Exception\MappingException;
@@ -33,6 +33,7 @@ use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 

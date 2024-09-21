@@ -5,125 +5,120 @@
         <langDisable>1</langDisable>
     </meta>
     <ROOT>
-        <TCEforms>
-            <sheetTitle>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.sheet.title
-            </sheetTitle>
-            <sheetShortDescr>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.sheet.shortDescr
-            </sheetShortDescr>
-            <sheetDescription>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.sheet.description
-            </sheetDescription>
-        </TCEforms>
+        <sheetTitle>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.sheet.title
+        </sheetTitle>
+        <sheetShortDescr>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.sheet.shortDescr
+        </sheetShortDescr>
+        <sheetDescription>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.sheet.description
+        </sheetDescription>
         <type>array</type>
         <el>
             <moonPhase>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.field.moonPhase.title
-                    </label>
-                    <config>
-                        <type>select</type>
-                        <renderType>selectSingleBox</renderType>
-                        <allowNonIdValues>1</allowNonIdValues>
-                        <items type="array">
-                            <numIndex index="0" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.newMoon
-                                </numIndex>
-                                <numIndex index="1">new_moon</numIndex>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.field.moonPhase.title
+                </label>
+                <description>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.field.moonPhase.title
+                </description>
+                <config>
+                    <type>select</type>
+                    <renderType>selectSingleBox</renderType>
+                    <allowNonIdValues>1</allowNonIdValues>
+                    <items type="array">
+                        <numIndex index="0" type="array">
+                            <numIndex index="0">
+                                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.newMoon
                             </numIndex>
-                            <numIndex index="1" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.firstQuarter
-                                </numIndex>
-                                <numIndex index="1">first_quarter</numIndex>
+                            <numIndex index="1">new_moon</numIndex>
+                        </numIndex>
+                        <numIndex index="1" type="array">
+                            <numIndex index="0">
+                                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.firstQuarter
                             </numIndex>
-                            <numIndex index="2" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.fullMoon
-                                </numIndex>
-                                <numIndex index="1">full_moon</numIndex>
+                            <numIndex index="1">first_quarter</numIndex>
+                        </numIndex>
+                        <numIndex index="2" type="array">
+                            <numIndex index="0">
+                                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.fullMoon
                             </numIndex>
-                            <numIndex index="3" type="array">
-                                <numIndex index="0">
-                                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.thirdQuarter
-                                </numIndex>
-                                <numIndex index="1">last_quarter</numIndex>
+                            <numIndex index="1">full_moon</numIndex>
+                        </numIndex>
+                        <numIndex index="3" type="array">
+                            <numIndex index="0">
+                                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.select.moonPhase.thirdQuarter
                             </numIndex>
-                        </items>
-                        <minitems>1</minitems>
-                        <maxitems>1</maxitems>
-                        <size>3</size>
-                        <default>new_moon</default>
-                    </config>
-                </TCEforms>
+                            <numIndex index="1">last_quarter</numIndex>
+                        </numIndex>
+                    </items>
+                    <minitems>1</minitems>
+                    <maxitems>1</maxitems>
+                    <size>3</size>
+                    <default>new_moon</default>
+                </config>
             </moonPhase>
             <relMinToSelectedTimerEvent>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.field.relMinToSelectedTimerEvent
-                    </label>
-                    <config>
-                        <type>user</type>
-                        <renderType>durationMinutesField</renderType>
-                        <required>1</required>
-                        <default>720</default>
-                        <parameters>
-                            <warningZero>0</warningZero>
-                            <flagHours>1</flagHours>
-                            <flagDays>1</flagDays>
-                            <rangeMinutes>
-                                <lower>-59</lower>
-                                <upper>59</upper>
-                                <default>0</default>
-                            </rangeMinutes>
-                            <rangeHours>
-                                <lower>-23</lower>
-                                <upper>23</upper>
-                                <default>0</default>
-                            </rangeHours>
-                            <rangeDays>
-                                <lower>-25</lower>
-                                <upper>25</upper>
-                                <default>0</default>
-                            </rangeDays>
-                        </parameters>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.field.relMinToSelectedTimerEvent
+                </label>
+                <config>
+                    <type>user</type>
+                    <renderType>durationMinutesField</renderType>
+                    <required>1</required>
+                    <default>720</default>
+                    <parameters>
+                        <warningZero>0</warningZero>
+                        <flagHours>1</flagHours>
+                        <flagDays>1</flagDays>
+                        <rangeMinutes>
+                            <lower>-59</lower>
+                            <upper>59</upper>
+                            <default>0</default>
+                        </rangeMinutes>
+                        <rangeHours>
+                            <lower>-23</lower>
+                            <upper>23</upper>
+                            <default>0</default>
+                        </rangeHours>
+                        <rangeDays>
+                            <lower>-25</lower>
+                            <upper>25</upper>
+                            <default>0</default>
+                        </rangeDays>
+                    </parameters>
+                </config>
             </relMinToSelectedTimerEvent>
             <durationMinutes>
-                <TCEforms>
-                    <label>
-                        LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.field.durationMinutes
-                    </label>
-                    <config>
-                        <type>user</type>
-                        <renderType>durationMinutesField</renderType>
-                        <required>1</required>
-                        <default>720</default>
-                        <parameters>
-                            <flagHours>1</flagHours>
-                            <flagDays>1</flagDays>
-                            <rangeMinutes>
-                                <lower>-59</lower>
-                                <upper>59</upper>
-                                <default>0</default>
-                            </rangeMinutes>
-                            <rangeHours>
-                                <lower>-23</lower>
-                                <upper>23</upper>
-                                <default>0</default>
-                            </rangeHours>
-                            <rangeDays>
-                                <lower>-25</lower>
-                                <upper>25</upper>
-                                <default>0</default>
-                            </rangeDays>
-                        </parameters>
-                    </config>
-                </TCEforms>
+                <label>
+                    LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.txTimerMoonphaseRel.field.durationMinutes
+                </label>
+                <config>
+                    <type>user</type>
+                    <renderType>durationMinutesField</renderType>
+                    <required>1</required>
+                    <default>720</default>
+                    <parameters>
+                        <flagHours>1</flagHours>
+                        <flagDays>1</flagDays>
+                        <rangeMinutes>
+                            <lower>-59</lower>
+                            <upper>59</upper>
+                            <default>0</default>
+                        </rangeMinutes>
+                        <rangeHours>
+                            <lower>-23</lower>
+                            <upper>23</upper>
+                            <default>0</default>
+                        </rangeHours>
+                        <rangeDays>
+                            <lower>-25</lower>
+                            <upper>25</upper>
+                            <default>0</default>
+                        </rangeDays>
+                    </parameters>
+                </config>
             </durationMinutes>
         </el>
     </ROOT>

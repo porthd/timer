@@ -100,7 +100,6 @@ tt_content.timer_holidaycalendar {
             # name of output-variable
             as = holidayList
         }
-
         15 = Porthd\Timer\DataProcessing\PhpMappingProcessor
         15 {
 

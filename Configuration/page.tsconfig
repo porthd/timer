@@ -1,0 +1,2 @@
+@import 'EXT:timer/Configuration/TsConfig/Page/BackendPreview.tsconfig'
+@import 'EXT:timer/Configuration/TsConfig/Page/RteTimerSimul.tsconfig'

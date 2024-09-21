@@ -8,14 +8,28 @@ services:
         resource: '../Classes/*'
         exclude: '../Classes/Domain/Model/*'
 
+    Porthd\Timer\Backend\FlexFormParsingModifyEventListener:
+        tags:
+            -   name: event.listener
+                identifier: 'form-framework/modify-data-structure'
+                method: 'modifyDataStructure'
+
     Porthd\Timer\Command\UpdateTimerCommand:
         tags:
             -   name: 'console.command'
                 command: 'timer:updateTimerCommand'
                 description: 'Update starttime and endtime in various tables, where a timer is defined.'
+        arguments:
+            $listOfTimerService: '@cache.timer_listOfTimerService'
+            $dataHandler: '@cache.timer_datahandler'
+            $yamlLoader: '@cache.timer_yamlfileloader'
+            $pageTreeRepository: '@core.pagetree'
 
     Porthd\Timer\Services\HolidaycalendarService:
         public: true
+
+    core.pagetree:
+        class: TYPO3\CMS\Backend\Tree\Repository\PageTreeRepository
 
     cache.timer_dataprocessor:
         class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -23,7 +37,16 @@ services:
         arguments: [ 'timer_dataprocessor' ]
 
     cache.timer_manager:
-        class: \TYPO3\CMS\Extbase\Service\CacheService
+        class: TYPO3\CMS\Extbase\Service\CacheService
+
+    cache.timer_listOfTimerService:
+        class: Porthd\Timer\Services\ListOfTimerService
+
+    cache.timer_pageTreeRepository:
+        class: TYPO3\CMS\Backend\Tree\Repository\PageTreeRepository
+
+    cache.timer_datahandler:
+        class: TYPO3\CMS\Core\DataHandling\DataHandler
 
     cache.timer_contentdataprocessor:
         class: TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor

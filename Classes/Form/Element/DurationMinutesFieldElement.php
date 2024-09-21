@@ -48,6 +48,7 @@ use TYPO3\CMS\Core\Utility\StringUtility;
  *
  *
  */
+
 /**
  * inspired by https://docs.typo3.org/m/typo3/reference-tca/main/en-us/ColumnsConfig/Type/User/Index.html
  */
@@ -147,10 +148,22 @@ class DurationMinutesFieldElement extends AbstractFormElement
         $labelDays = $languageService->sL(
             'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:module.backend.flexform.field.durationMinutes.days'
         );
-        $labelMain = $languageService->sL(
+        if (!empty($parameterArray['fieldConf']['label'])) {
+            $labelMain = $languageService->sL(
+                $parameterArray['fieldConf']['label']
+            );
+        } else {
+            $labelMain = $languageService->sL(
+                'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.general.field.durationMinutes'
+            );
+        }
+        if ($GLOBALS['TYPO3_CONF_VARS']['BE']['debug']) {
+            $fieldName = $this->data['flexFormFieldName'];
+            $labelMain = $labelMain . " <code>[$fieldName]</code>";
+        }
+        $labelField = $languageService->sL(
             'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:module.backend.flexform.field.durationMinutes.main'
         );
-
 
         $attributes['placeholder'] =
             htmlspecialchars(trim($row['tx_timer_timer']['data']['timer']['lDEF']['durationMinutes']['vDEF']));
@@ -163,6 +176,7 @@ class DurationMinutesFieldElement extends AbstractFormElement
             $curMinutes = $defaultMinutes;
             $curHours = $defaultHours;
             $curDays = $defaultDays;
+
 
         } else {
             $value = (int)$itemValue;
@@ -177,9 +191,12 @@ class DurationMinutesFieldElement extends AbstractFormElement
         $html[] = '<div id="' . $internalId . '" class="formengine-field-item t3js-formengine-field-item">';
         $html[] = $fieldInformationHtml;
         $html[] = '<div class="form-wizards-wrap"  >';
+        $html[] = '        <div class="form-control-wrap"  style="margin-left:1rem;">';
+        $html[] = '            <label class="form-label t3js-formengine-label">' . $labelMain . '</label>';
+        $html[] = '        </div>';
         $html[] = '    <div class="form-wizards-element" style="display:flex;">';
         $html[] = '        <div class="form-control-wrap"  style="margin-left:1rem;">';
-        $html[] = '            <label>' . $labelMain . '</label>';
+        $html[] = '            <label >' . $labelField . '</label>';
         $html[] = '            <input type="text" value="' . htmlspecialchars($itemValue, ENT_QUOTES) . '" ';
         $html[] = '                   ' . GeneralUtility::implodeAttributes($attributes, true);
         $html[] = '                   readonly="readonly" size="10" data-id="result" style="background-color:#ddd;" ';

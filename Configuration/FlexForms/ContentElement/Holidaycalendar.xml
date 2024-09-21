@@ -242,13 +242,11 @@
                     <type>input</type>
                     <size>30</size>
                     <eval>trim</eval>
-                    <default>
-                        EXT:timer/Resources/Public/Javascript/CustomTuiCalendarList.js,
+                    <default>EXT:timer/Resources/Public/Javascript/CustomTuiCalendarList.js,
                         EXT:timer/Resources/Public/Javascript/CustomTuiCalendarSchedules.js,
                         EXT:timer/Resources/Public/Javascript/CustomTuiCalendar.js
                     </default>
                 </config>
-
             </customCalendarJsFilePath>
             <calendarCssFilePath>
                 <label>

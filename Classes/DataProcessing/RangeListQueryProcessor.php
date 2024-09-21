@@ -31,7 +31,6 @@ use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
-use Porthd\Timer\Services\HolidaycalendarService;
 use Porthd\Timer\Services\ListOfEventsService;
 use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\TcaUtility;
@@ -182,11 +181,40 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
             $currentTimestamp = (int)(GeneralUtility::makeInstance(Context::class))
                 ->getPropertyFromAspect('date', 'timestamp');
 
+            if (array_key_exists(self::PARAMETER_TABLE, $processorConfiguration)) {
+                unset($processorConfiguration[self::PARAMETER_TABLE]);
+            }
             if (array_key_exists(self::PARAMETER_TABLE . '.', $processorConfiguration)) {
                 unset($processorConfiguration[self::PARAMETER_TABLE . '.']);
             }
-            if (array_key_exists(self::PARAMETER_TABLE, $processorConfiguration)) {
-                unset($processorConfiguration[self::PARAMETER_TABLE]);
+            foreach ([  // defined by typoScript
+                         'pidInList' => $processedData['data']['pid'], // current page
+                         'uidInList' => $processedData['data']['pid'],
+                         'languageField' => null, //
+                         'selectFields' => '*',
+                         'max' => 'total',
+                         'begin' => 'total',
+                         'groupBy' => null, //
+                         'orderBy' => null, //
+                         'join' => null, //
+                         'leftjoin' => null, //
+                         'rightjoin' => null,  //
+                         'recursive' => 0,
+                         'where' => null, //
+                         'markers' => null, //
+                         'includeRecordsWithoutDefaultTranslation' => 0, //
+                     ] as $key => $defaultValue
+            ) {
+                if (array_key_exists($key . '.', $processorConfiguration)) {
+                    $processorConfiguration[$key] = $cObj->stdWrapValue($key, $processorConfiguration);
+                    unset($processorConfiguration[$key . '.']);
+                } else if (array_key_exists($key, $processorConfiguration)) {
+                    $processorConfiguration[$key] = $cObj->stdWrapValue($key, $processorConfiguration);
+                } else {
+                    if ($defaultValue !== null) {
+                        $processorConfiguration[$key] = $defaultValue;
+                    }
+                }
             }
 
 

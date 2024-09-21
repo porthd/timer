@@ -27,9 +27,7 @@ use Closure;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * example for Usage of the viewhelper `flex`
@@ -50,7 +48,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class FlexViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
 
     protected const ATTR_FLEXFORM_STRING = 'flexstring';
     protected const ATTR_RESULT_AS = 'as';
@@ -92,23 +89,17 @@ class FlexViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @param array<mixed> $arguments
-     * @param Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return string
+     * @return mixed|string
      * @throws TimerException
      */
-    public static function renderStatic(
-        array $arguments,
-        Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+    public function render(
     ) {
-        $templateVariableContainer = $renderingContext->getVariableProvider();
-        if (!array_key_exists(self::ATTR_FLEXFORM_STRING, $arguments)) {
+        $templateVariableContainer = $this->renderingContext->getVariableProvider();
+        if (!array_key_exists(self::ATTR_FLEXFORM_STRING, $this->arguments)) {
             return '';
         }
 
-        if (!is_string($arguments[self::ATTR_FLEXFORM_STRING])) {
+        if (!is_string($this->arguments[self::ATTR_FLEXFORM_STRING])) {
             throw new TimerException(
                 'FlexViewHelper only supports flex-fields or JSON-String and transform them to arrays. Your argument is not a string.',
                 1601245879
@@ -116,36 +107,39 @@ class FlexViewHelper extends AbstractViewHelper
         }
 
         $stringFlatKeys = (
-            (!empty($arguments[self::ATTR_FLATTEN_KEYS])) ?
-                $arguments[self::ATTR_FLATTEN_KEYS] :
+        (!empty($this->arguments[self::ATTR_FLATTEN_KEYS])) ?
+            $this->arguments[self::ATTR_FLATTEN_KEYS] :
                 self::DEFAULT_FLATTEN_KEYS
         );
-        $singleElementRaw = GeneralUtility::xml2array($arguments[self::ATTR_FLEXFORM_STRING]);
-        $flagError = (((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) ?
-            'The string could not decode as xml/flexform. ' :
-            '');
-        $listFlatKeys = array_filter(
-            array_map(
-                'trim',
-                explode(',', $stringFlatKeys)
-            )
-        );
-        if (empty($listFlatKeys)) {
-            $singleElement = $singleElementRaw;
-        } else {
-            $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
-        }
-
-        if (!empty($flagError)) {
-            throw new TimerException(
-                'The flexViewHelper failed on the value `' . $arguments[self::ATTR_FLEXFORM_STRING] . '` ' . $flagError .
-                'Is your viewhelper-configuration correct? Check your datas.',
-                1601245979
+        $singleElement = [];
+        if ($this->arguments[self::ATTR_FLEXFORM_STRING] !== 'default') {
+            $singleElementRaw = GeneralUtility::xml2array($this->arguments[self::ATTR_FLEXFORM_STRING]);
+            $flagError = (((is_string($singleElementRaw)) && (substr($singleElementRaw, 0, strlen('Line ')) === 'Line ')) ?
+                'The string could not decode as xml/flexform. ' :
+                '');
+            $listFlatKeys = array_filter(
+                array_map(
+                    'trim',
+                    explode(',', $stringFlatKeys)
+                )
             );
+            if (empty($listFlatKeys)) {
+                $singleElement = $singleElementRaw;
+            } else {
+                $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
+            }
+
+            if (!empty($flagError)) {
+                throw new TimerException(
+                    'The flexViewHelper failed on the value `' . $this->arguments[self::ATTR_FLEXFORM_STRING] . '` ' . $flagError .
+                    'Is your viewhelper-configuration correct? Check your datas.',
+                    1601245979
+                );
+            }
         }
-        $templateVariableContainer->add($arguments[self::ATTR_RESULT_AS], $singleElement);
-        $output = $renderChildrenClosure();
-        $templateVariableContainer->remove($arguments[self::ATTR_RESULT_AS]);
+        $templateVariableContainer->add($this->arguments[self::ATTR_RESULT_AS], $singleElement);
+        $output = $this->renderChildren();
+        $templateVariableContainer->remove($this->arguments[self::ATTR_RESULT_AS]);
         return $output;
     }
 }

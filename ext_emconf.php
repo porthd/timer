@@ -37,10 +37,10 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Dr. Dieter Porth',
     'author_email' => 'info@mobger.de',
     'state' => 'beta',
-    'version' => '12.3.2',
+    'version' => '13.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.4.0-12.4.99',
+            'typo3' => '13.3.0-13.4.99',
             'php' => '8.2.0-8.3.99',
         ],
         'conflicts' => [],
