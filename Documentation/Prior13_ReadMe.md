@@ -184,7 +184,6 @@ the [File (ExcelLikeListForHolidays.ods)](ExcelLikeListForHolidays.ods).
 The file should also read and edit in `excel`.
 You can use the dot notation in the title to control the structure of the array
 in PHP afterwards.
-
 ```
 Title to CSV:
     title
@@ -236,7 +235,6 @@ php:
 are for public holidays. )
 
 #### Remarks
-
 ##### _Note 1_
 
 In order to enable the most flexible integration of appointment lists, there are
@@ -244,7 +242,6 @@ two input fields `yamlPeriodFilePath` and `yamlPeriodFalRelation`.
 The field `yamlPeriodFilePath` has more the integrator in mind and allows four
 variants,
 to specify the location of the YAML file:
-
 1. Absolute path specification if necessary. also with relative path
 2. Path specification with the prefix `EXT:`
 3. Simple URL starting with `http://` or with `https://`
@@ -276,7 +273,6 @@ that the school holidays for Lower Saxony and Bremen from the year 2022 are
 shown in a calendar.
 
 #### Data processors for this timer
-
 Six data processors were defined so that the data can be read in or converted.
 
 The `FlexToArrayProcessor` allows reading Flexform fields and converting them
@@ -460,7 +456,6 @@ in ``ext_localconf.php`` to be added to the timer extension as follows:
   Thursday)
 
 #### Notes on the _HolidayTimer_ workflow
-
 ##### Challenge
 
 The assessment of which public holidays an editor can/should use will certainly
@@ -473,7 +468,6 @@ Furthermore, the developers will have very different wishes as to which
 information should be saved in addition to the public holidays.
 At the same time, you want to be able to manage the list of public holidays as
 clearly as possible.
-
 ##### Workflow for individual lists
 
 You manage the list of public holidays in a spreadsheet such as `Excel`
@@ -482,7 +476,6 @@ The CSV file is uploaded to the server via FTP and the path to the CSV file is
 specified in the settings for the extension configurations.
 After deleting the cache you have the new list available in the
 timer `HolidayTimer`.
-
 ##### supported holiday calculations (currently not working and tested 2023-02-25)
 
 Like any man-made system, the calculation is simple in principle; but in detail
@@ -583,7 +576,6 @@ notation of the titles defines the structure of an associative array with
 several levels.
 The expression 'add.rank' in the title leads to the following array if the
 value `5` is assigned to the column in the corresponding row in the CSV:
-
 ```
 $list = [
      // ...
@@ -602,7 +594,6 @@ automatically converted into an array with trimmed values.
 The expression 'add.locale.COMMA' in the title leads to the following array if
 the value `de_DE, de_CH , de_AT ` is assigned to the column in the corresponding
 line in the CSV:
-
 ```
 $list = [
      // ...
@@ -628,10 +619,8 @@ Efforts are being made to always make the information available in the frontend
 as well.
 
 ##### Explanations of the internal structure of the CSV list
-
 The structure is easiest to explain using the example of the YAML structure.
 The explanations for the individual components are included as comments.
-
 ```
    -
 # Auxiliary title for the overview in the Excel file. The value is not used in the program.
@@ -717,7 +706,6 @@ The explanations for the individual components are included as comments.
 # You don't want to write the same thing over and over again for every holiday. Additional information can be merged into the addlock via an alias. Warning: the alias can also overwrite definitions here.
        alias: ''
 ```
-
 ##### Important columns/column identifiers in the CSV
 
 - _title_: This column designates the holiday and must always contain at least
@@ -777,7 +765,6 @@ The explanations for the individual components are included as comments.
   Prayer)
 
 ##### Different types of holiday calculation
-
 - `fixed`: This type defines the holiday over a specific date in the calendar.
 - `fixedrelated`: This type is best explained by Advent, which is the i.th
   Sunday before December 25th. is. The fixed date is defined here. The number of
@@ -807,7 +794,6 @@ The explanations for the individual components are included as comments.
 - `easterly`: Here the holiday refers to the respective Easter Sunday. These
   holidays refer to either the Julian or the Gregorian calendar.
 - `mooninmonth`: Here a certain moon phase is expected in a certain month.
-
 ##### Definition of parameters for the timer of the extension
 
 The first entry in the sample file indicates how to define timers of the
@@ -1003,7 +989,6 @@ a table. The
 Data processor works similar to `DbQueryProcessor`.
 
 ##### _Example in Typoscript_
-
 ```
 tt_content.timer_timersimul >
 tt_content.timer_timersimul < lib.contentElement
@@ -1082,6 +1067,7 @@ for more information) .
 |                  | **_Special_**                                                                                                                        |
 | userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the date values are used to determine the order. The user could also consider other sorting criteria. For example, one might want a list sorted first by start date and then by duration of active areas if the start date is the same.
 
+
 #### SortListQueryProcessor
 
 The `sys_file_reference` table does not support the `starttime` and `endtime`
@@ -1091,7 +1077,6 @@ sorted according to periodicity
 Have the list transferred and converted and use it accordingly in the template.
 
 ##### _Example in TypoScript_
-
 ```
          dataProcessing {
              ...
@@ -1161,6 +1146,7 @@ Therefore, the `table` parameter is replaced by the `fieldName` parameter.
 | maxGap           | P7D                                                                                                                                  | Limits the list by calculating the corresponding stop time from the start time. The PHP notation for time intervals is to be used to specify the time difference (see [Overview](https://www.php.net/manual/en/class.dateinterval.php)).
 |                  | **_Special_**                                                                                                                        |
 | userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` or `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Only the date values are used to determine the order. The user could also consider other sorting criteria. For example, one might want a list sorted first by start date and then by duration of active areas if the start date is the same.
+
 
 #### FlexToArrayProcessor
 
@@ -1400,7 +1386,6 @@ the data must be available either via an associative array, via a stdClass
 object or via a getter object.
 
 ##### Example TypoScript
-
 ````
         15 = Porthd\Timer\DataProcessing\PhpMappingProcessor
         15 {
@@ -1462,9 +1447,7 @@ object or via a getter object.
         }
 
 ````
-
 ##### Parameter
-
 | Parameter    | Default          | Description
 |--------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |              | **_Main level_** |
@@ -1566,6 +1549,7 @@ in `timer\Resources\Public\Yaml\Example_PeriodListTimerBremen.yaml`.
 Please note that you can also insert additional attributes if you need
 additional structured information for output in the frontend.
 These attributes or the associated static information are easily looped through.
+
 
 | Parameter      | Default                       | Beschreibung
 |----------------|-------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1688,7 +1672,6 @@ The data processor is used to evaluate dev CSV files with the holiday dates.
             as = holidayList
         }
 ```
-
 ##### Parameters for the HolidaycalendarProcessor
 
 The data processor produces a list of holidays for a specific time interval from

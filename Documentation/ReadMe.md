@@ -478,7 +478,6 @@ The developer can develop his own data models, for example to announce certain
 events.
 To use the extension timer, you only need to ensure that the following fields
 with the TCA definitions from the extension are also present in the data model:
-
 - tx_timer_scheduler
 - tx_timer_timer
 - tx_timer_selector

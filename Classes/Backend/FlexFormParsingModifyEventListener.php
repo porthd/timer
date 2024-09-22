@@ -11,7 +11,6 @@ use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\DateTimeUtility;
-use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Configuration\Event\AfterFlexFormDataStructureParsedEvent;
 
 final class FlexFormParsingModifyEventListener
@@ -25,6 +24,9 @@ final class FlexFormParsingModifyEventListener
             ($identifier['fieldName'] === TimerConst::TIMER_FIELD_FLEX_ACTIVE)
         ) {
             $parsedDataStructure = $event->getDataStructure();
+            if (empty($parsedDataStructure['dataStructureKey'])) {
+                $parsedDataStructure['dataStructureKey'] = DefaultTimer::TIMER_NAME;
+            }
             $parsedDataStructure = $this->recursiveDefaultAnalytic($parsedDataStructure);
             $event->setDataStructure($parsedDataStructure);
         }

@@ -193,7 +193,6 @@ wurde.
 Die Datei sollte sich auch in `excel` einlesen und bearbeiten lassen.
 Über die Punktnotation im Titel kann man hinterher die Aufbaustruktur des Arrays
 im PHP steuern.
-
 ```
 Title in CSV:
    title
@@ -245,7 +244,6 @@ php:
 Berechnungsregeln es für Feiertage gibt. )
 
 #### Anmerkungen
-
 ##### _Anmerkung 1_
 
 Um einen möglichst flexible Einbindung von Terminlisten zu ermöglichen, gibt es
@@ -253,7 +251,6 @@ die zwei Eingabefelder `yamlPeriodFilePath` und `yamlPeriodFalRelation`.
 Das Feld `yamlPeriodFilePath` hat eher den Integrator im Blick und erlaubt vier
 Varianten,
 um den Ort der YAML-Datei zu spezifizieren:
-
 1. absolute Pfadangabe ggfls. auch mit relativem Pfad
 2. Pfadangabe mit dem Prefix `EXT:`
 3. einfache URL beginnend mit `http://` oder mit `https://`
@@ -343,6 +340,7 @@ und verfolgt einen Zielstruktur-orientierten Ansatz.
 Er kann helfen, einen geeigneten JSON-String an das Fluid-Template zu übergeben.
 So können die Daten leicht über ein HTML-Attribut dem TuiCalendar-Framework oder
 einem anderen Calendar-Framework zur Verfügung gestellt werden.
+
 
 ### Contentelement `timersimul` als Beispiel
 
@@ -475,7 +473,6 @@ in ``ext_localconf.php`` wie folgt der Timer-extension beigefügt werden:
   Donnerstag)
 
 #### Anmerkungen zum Workflow beim _HolidayTimer_
-
 ##### Herausforderung
 
 Die Einschätzung, welche Feiertage ein Redakteur benutzen können darf/soll,
@@ -489,7 +486,6 @@ welche Informationen zusätzlich zu den Feiertagen noch gespeichert werden
 sollen.
 Gleichzeitig möchte man die Liste der Feiertage möglicht übersichtlich verwalten
 können.
-
 ##### Workflow für individuelle Listen
 
 Man verwaltet die Liste der Feiertage in einer Tabellenkalulation wie `Excel`
@@ -498,7 +494,6 @@ Die CSV-Datei lädt man per FTP auf dem Server hoch und gibt den Pfad zur
 CSV-Datei bei den Settings für die Extension-Konfigurationen an.
 Nach dem Löschen des Caches hat man dann die neue Liste im Timer `HolidayTimer`
 verfügbar.
-
 ##### unterstützte Feiertagsberechnungen (aktuell nicht funktionsfähig und nicht getestet 2023-02-25)
 
 Die Berechnug ist wie jedes menschengemachte System im Grundsatz einfach; aber
@@ -606,7 +601,6 @@ Notation der Titel die Struktur eines assoziativen Arrays mit mehreren Ebenen
 definiert.
 Der Ausdruck 'add.rank' im Titel führt zu folgenden Array, wenn in der
 entsprechenden Zeile in der CSV der Spalte der Wert `5` zugeordnet ist:
-
 ```
 $liste = [
     // ...
@@ -625,7 +619,6 @@ einen Array mit getrimmten Werten umgewandelt wird.
 Der Ausdruck 'add.locale.COMMA' im Titel führt zu folgenden Array, wenn in der
 ensprechenden Zeile in der CSV der Spalte der Wert `de_DE, de_CH , de_AT `
 zugeordnet ist:
-
 ```
 $liste = [
     // ...
@@ -650,11 +643,9 @@ Sie können für eigenen Informationen zusätzliche Spalten einfügen.
 Es wird angestrebt, die Angaben immer auch im Frontend verfügbar zu machen.
 
 ##### Erläuterungen zur internen Struktur der CSV-Liste
-
 Die Struktur lässt sich am leichtesten am Beispiel der YAML-Struktur erläutern.
 Zu den einzelnen Bestandteilen sind die Erläuterungen als Kommentar mit
 angeführt.
-
 ```
   -
 # Hilfstitel für die Übersicht in der Excel-Datei. Der Wert wird im Programm nicht genutzt.
@@ -740,7 +731,6 @@ angeführt.
 # Man möchte nicht für jeden Feiertag immer wieder das Gleiche schreiben. Über einen Alias kann man in den Addlock weitere Informationen hineinmergen. Achtung: das Alias kann auch hier stehende Definitionen überschreiben.
       alias: ''
 ```
-
 ##### Wichtige Spalten/Spaltenbezeichner in der CSV
 
 - _title_: Diese Spalte bezeichnet den Feiertag und muss immer mit mindestens
@@ -802,7 +792,6 @@ angeführt.
   oder `fixedrelated`. Er definiert den Abstand in Tage relativ zum ausgewählten
   Wochentag. (Sonderdefinition für den Schweizer bzw. Eidgenössischen Dank-,
   Buss- und Bettag )
-
 ##### Verschiedene Typen der Feiertagsberechnung
 
 - `fixed`: Dieser Type definiert den Feiertag über ein bestimmtes Datum im
@@ -837,7 +826,6 @@ angeführt.
   gregorianischen Kalender.
 - `mooninmonth`: Hier wird eine bestimmte Mondphase in einem bestimmten Monat
   erwartet.
-
 ##### Definition von Parameter für Timer der Extension
 
 Der erste Eintrag in der Beispieldatei deutet an, wie man Timer der Funktion in
@@ -928,6 +916,7 @@ Es gibt fünf Viewhelper:
   der im PHP zu suchen ist. (entfernt in 12.2.0) ~~Der Timer macht den
   Viewhelper ``timer:format.jewishDate`` überflüssig.~~
 
+
 #### timer:format.calendarDate - Attribute
 
 - **flagformat** bestimmt, welche Formtierungsregeln benutzt werden sollen:
@@ -1010,7 +999,6 @@ Tabelle eine Liste von Terminen. Der
 Datenprozessor funktioniert ähnlich wie der `DbQueryProcessor`.
 
 ##### _Beispiel in Typoscript_
-
 ```
 tt_content.timer_timersimul >
 tt_content.timer_timersimul < lib.contentElement
@@ -1046,8 +1034,8 @@ End-Zeitpunkt zu definieren.
 Bei jeder Neuberechnung der Liste wird auch der Frontend-Cache der
 entsprechenden Seite gelöscht.
 
-##### _Example in Typoscript_
 
+##### _Example in Typoscript_
 ```
 tt_content.timer_timersimul >
 tt_content.timer_timersimul < lib.contentElement
@@ -1129,7 +1117,6 @@ Liste überführen lassen und umwandeln lassen und im Template entsprechend
 nutzen.
 
 ##### _Beispiel in TypoScript_
-
 ```
         dataProcessing {
             ...
@@ -1198,6 +1185,7 @@ Deshalb wird die Parameter `table` durch den Parameter `fieldName` ersetzt.
 | maxGap           | P7D                                                                                                                                    | Begrenzt die Liste, indem aus dem Startzeitpunkt der entsprechende Stopzeitpunkt berechnet wird. Für die Angabe der zeitlichen Differenz ist die PHP-Notation für Zeitintervalle zu verwenden (siehe [Übersicht](https://www.php.net/manual/en/class.dateinterval.php)).
 |                  | **_Spezielles_**                                                                                                                       |
 | userRangeCompare | `Porthd\Timer\Services\ListOfEventsService::compareForBelowList` oder `Porthd\Timer\Services\ListOfEventsService::compareForAboveList` | Für die Bestimmung der Reihenfolge werden nur die Datumswerte verwendet. Der Nutzer könnte auch andere Sortierungskriterien berücksichtigen. Zum Beispiel könnte man eine Liste haben wollen, die zuerst nach dem Startdatum und bei gleichem Startdatum nach der Dauer der aktiven Bereiche sortiert wäre.
+
 
 #### FlexToArrayProcessor
 
@@ -1443,8 +1431,8 @@ geliefert.
 Auf der Input-Seite müssen die Daten entweder über einem assoziativen Array,
 über einem stdClass-Object oder über ein Getter-Objekt verfügbar sein.
 
-##### Beispielhaftes TypoScript
 
+##### Beispielhaftes TypoScript
 ````
         15 = Porthd\Timer\DataProcessing\PhpMappingProcessor
         15 {
@@ -1506,9 +1494,7 @@ Auf der Input-Seite müssen die Daten entweder über einem assoziativen Array,
         }
 
 ````
-
 ##### Parameter
-
 | Parameter    | Default          | Beschreibung
 |--------------|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |              | **_Hauptebene_** |
@@ -1639,7 +1625,6 @@ durchgeschleift.
 
 Der Dataprozessor dient der Auswertung von dev CSV-Dateien mit den
 Feiertagsterminen.
-
 ```
         10 = Porthd\Timer\DataProcessing\HolidaycalendarProcessor
         10 {

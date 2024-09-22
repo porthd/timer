@@ -125,7 +125,6 @@ Beispiel: Jeden Wochentag außer Sonntags (Checkboxes bei `aktiver Wochentag`) a
 Berechnungsfeld `Zeitspanne zwischen -1439 und +1439 Minuten`).
 
 ##### _Wiederholungen relativ zu Fixtagen in nicht-gregorianischen
-
 Kalendern [CalendarDateRelTimer.php](..%2FClasses%2FCustomTimer%2FCalendarDateRelTimer.php)_
 
 _In Planung. Sponsoren gesucht._
@@ -478,7 +477,6 @@ Event anzukündigen.
 Für die Verwendung der Extension Timer muss nur sichergestellt werden, dass im
 Datenmodell auch die folgenden Felder mit den TCA-Definitionen aus der Extension
 vorliegen:
-
 - tx_timer_scheduler
 - tx_timer_timer
 - tx_timer_selector

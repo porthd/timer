@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\Upgrade;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
-#[UpgradeWizard('timer_defaultValueForTimerTimerUpgrade')]
-final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
+#[UpgradeWizard('timer_updateFlexFormEntriesUpgrade')]
+final class UpdateFlexFormEntriesUpgrade implements UpgradeWizardInterface
 {
-    private const TYPO3_VERSION_ALLOWED = 12;
+    private const TYPO3_VERSION_ALLOWED = 13;
+
     private QueryBuilder $pages;
     private QueryBuilder $ttContent;
     private QueryBuilder $sysFileReference;
@@ -36,7 +38,7 @@ final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
      */
     public function getTitle(): string
     {
-        return 'EXT timer: Set `default` in empty field `tx_timer_selector`';
+        return 'EXT timer: Update current flexform-definitions in field `tx_timer_timer`';
     }
 
     /**
@@ -44,8 +46,7 @@ final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
      */
     public function getDescription(): string
     {
-        return 'TYPO3 ' . self::TYPO3_VERSION_ALLOWED . ' will cause an exception, if the selectorfield for a flex-field is empty. ' .
-            'Empty field will be filled with the identfier of the `default`-timer.';
+        return 'TYPO3 ' . self::TYPO3_VERSION_ALLOWED . ' will cause an error after update, if the flexform-field `tx_timer_timer` contains the superfluid tag <TCEFORM>.';
     }
 
     /**
@@ -54,27 +55,48 @@ final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
      */
     public function executeUpdate(): bool
     {
+        /**
+         * @var  string $table
+         * @var  QueryBuilder $queryBuilder
+         */
+        $success = true;
         foreach (['tt_content' => $this->ttContent,
                      'pages' => $this->pages,
                      'sys_file_reference' => $this->sysFileReference,
                      'tx_timer_domain_model_listing' => $this->txTimerDomainModelListing,
                      'tx_timer_domain_model_event' => $this->txTimerDomainModelEvent,
                  ] as $table => $queryBuilder) {
-
-            $queryBuilder
-                ->update($table)
-                ->set('tx_timer_selector', 'default')
+            $queryBuilder->select('uid', 'tx_timer_timer')
+                ->from($table)
                 ->where(
-                    $queryBuilder->expr()->isNotNull('tx_timer_selector'),
-                    $queryBuilder->expr()->notLike(
-                        'tx_timer_selector',
+                    $queryBuilder->expr()->isNotNull('tx_timer_timer'),
+                    $queryBuilder->expr()->like(
+                        'tx_timer_timer',
                         '""'
                     )
                 );
-            $queryBuilder
-                ->executeQuery();
+            $list = $queryBuilder->executeQuery()->fetchAllAssociative();
+            if (!empty($list)) {
+                foreach ($list as [$uid, $flexformString]) {
+                    $helpQuery = (GeneralUtility::makeInstance(ConnectionPool::class))
+                        ->getQueryBuilderForTable($table);
+                    $help = preg_replace('/\<TCEFORM>/i', '', $flexformString);
+                    $newFlexformString = preg_replace('/\</TCEFORM>/i', '', $help);
+                    $helpQuery->update($table)
+                        ->set('tx_timer_timer', $newFlexformString)
+                        ->where(
+                            $helpQuery->expr()->eq(
+                                'uid',
+                                $helpQuery->createNamedParameter($uid, Connection::PARAM_INT)
+                            )
+                        );
+                    $success = $success && ($helpQuery->executeStatement() > 0);
+                    unset($helpQuery);
+                }
+            }
+            unset($queryBuilder);
         }
-        return true;
+        return $success;
     }
 
     /**
