@@ -23,13 +23,12 @@ namespace Porthd\Timer\Utilities;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 
 class GeneralTimerUtility
 {
     /**
-     *
      * @param string $activeZoneName
      * @param array<mixed> $params
      * @return string
@@ -46,7 +45,7 @@ class GeneralTimerUtility
             (($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT] - (int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]) === 0)
         ) {
             $paramTimeZoneName = timezone_name_from_abbr(
-                "",
+                '',
                 ((int)$params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT]),
                 0
             );
@@ -65,10 +64,10 @@ class GeneralTimerUtility
                 134456897
             );
         }
-        return ((array_key_exists(TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT, $params)) &&
+        return array_key_exists(TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT, $params) &&
         (is_string($params[TimerInterface::ARG_EVER_TIME_ZONE_OF_EVENT])) ?
             $paramTimeZoneName :
             $activeZoneName
-        );
+        ;
     }
 }

@@ -24,7 +24,7 @@ namespace Porthd\Timer\DataProcessing;
  ***************************************************************/
 
 use DateTime;
-use DateTimeZone;
+use Porthd\Timer\Cache\PageCacheFlusher;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
@@ -38,7 +38,6 @@ use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -104,7 +103,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *         }
  *     }
  * }
- *
  */
 class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
@@ -122,21 +120,20 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
     protected $cache;
 
     /**
-     * @var CacheService
+     * @var PageCacheFlusher
      */
     protected $cacheManager;
 
     /**
      * @param FrontendInterface $cache
-     * @param CacheService $cacheManager
+     * @param PageCacheFlusher $cacheManager
      * @param ContentDataProcessor $contentDataProcessor
      */
     public function __construct(
-        FrontendInterface    $cache,
-        CacheService         $cacheManager,
+        FrontendInterface $cache,
+        PageCacheFlusher $cacheManager,
         ContentDataProcessor $contentDataProcessor
-    )
-    {
+    ) {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
         $this->contentDataProcessor = $contentDataProcessor;
@@ -157,8 +154,7 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ): array
-    {
+    ): array {
         // The variable to be used within the result
         $targetVariableName = $cObj->stdWrapValue(TimerConst::ARGUMENT_AS, $processorConfiguration, 'sortedrecords');
         // Reasons to stop this dataprocessor
@@ -202,7 +198,7 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
                 $timerEventZone,
                 $loopLimiter
             );
-            $dateTimeStopCaseOne = new DateTime('@' . $currentTimestamp);
+            $dateTimeStopCaseOne = new \DateTime('@' . $currentTimestamp);
             $dateTimeStopCaseTwo = clone $dateTimeStopCaseOne;
             if ($loopLimiter->isFlagReserve()) {
                 $dateTimeStopCaseOne = $listOfEvents[array_key_first($listOfEvents)]['range']->getBeginning();
@@ -256,15 +252,14 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
 
     /**
      * @param array<mixed> $arguments
-     * @return DateTime
+     * @return \DateTime
      * @throws TimerException
      */
     protected static function validateInternArguments(
         ContentObjectRenderer $cObj,
-        array  $arguments,
+        array $arguments,
         string $timeFormat = TimerInterface::TIMER_FORMAT_DATETIME
-    ): DateTime
-    {
+    ): \DateTime {
         $timeZone = $cObj->stdWrapValue(TimerConst::ARGUMENT_ACTIVEZONE, $arguments, date_default_timezone_get());
         if (!TcaUtility::isTimeZoneInList($timeZone)) {
             throw new TimerException(
@@ -282,11 +277,11 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
             $startTimeString = $cObj->stdWrapValue(TimerConst::ARGUMENT_DATETIME_START, $arguments);
             if (
                 (
-                $frontendDateTime = DateTime::createFromFormat(
-                    $timeFormat,
-                    $startTimeString,
-                    new DateTimeZone($timeZone)
-                )
+                    $frontendDateTime = \DateTime::createFromFormat(
+                        $timeFormat,
+                        $startTimeString,
+                        new \DateTimeZone($timeZone)
+                    )
                 ) === false
             ) {
                 throw new TimerException(
@@ -299,8 +294,8 @@ class SortListQueryProcessor implements DataProcessorInterface, GeneralDataProce
             return $frontendDateTime;
         }
         $utcTime = DateTimeUtility::getCurrentTime();
-        $frontendDateTime = new DateTime('@' . $utcTime);
-        $frontendDateTime->setTimezone(new DateTimeZone($timeZone));
+        $frontendDateTime = new \DateTime('@' . $utcTime);
+        $frontendDateTime->setTimezone(new \DateTimeZone($timeZone));
         return $frontendDateTime;
     }
 }

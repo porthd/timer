@@ -23,14 +23,10 @@ namespace Porthd\Timer\DataProcessing;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Porthd\Timer\Cache\PageCacheFlusher;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
-use DateInterval;
-use DateTime;
-use DateTimeZone;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\HolidaycalendarService;
@@ -38,11 +34,11 @@ use Porthd\Timer\Utilities\ConvertDateUtility;
 use Porthd\Timer\Utilities\CustomTimerUtility;
 use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareTrait;
-use stdClass;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
@@ -52,8 +48,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
  * Example TypoScript configuration:
- *
- *
  */
 class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
@@ -111,7 +105,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
     protected $cache;
 
     /**
-     * @var CacheService
+     * @var PageCacheFlusher
      */
     protected $cacheManager;
 
@@ -122,16 +116,15 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
 
     /**
      * @param FrontendInterface $cache
-     * @param CacheService $cacheManager
+     * @param PageCacheFlusher $cacheManager
      * @param HolidaycalendarService $holidaycalendarService
      */
     public function __construct(
-        FrontendInterface      $cache,
-        CacheService           $cacheManager,
+        FrontendInterface $cache,
+        PageCacheFlusher $cacheManager,
         HolidaycalendarService $holidaycalendarService,
-        YamlFileLoader         $yamlFileLoader
-    )
-    {
+        YamlFileLoader $yamlFileLoader
+    ) {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
         $this->holidaycalendarService = $holidaycalendarService;
@@ -153,8 +146,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    )
-    {
+    ) {
         // Reasons to stop this dataprocessor
         if ((array_key_exists(TimerConst::ARGUMENT_IF_DOT, $processorConfiguration)) &&
             (!$cObj->checkIf($processorConfiguration[TimerConst::ARGUMENT_IF_DOT]))
@@ -241,7 +233,6 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
                 unset($holidayArray[$key]);
             }
 
-
             // Generate the list of holidays for the range
             $holidayList = [];
             $startDateGregorianOrig = $this->detectGregorianDate($timeRangeInfo);
@@ -279,11 +270,10 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
                         $holidayList[] = $myItem;
                         // try to get one new holiday or event
                         $startDateGregorian = clone $timerRange->getBeginning();
-                        $startDateGregorian->add(new DateInterval(self::DEFAULT_TIME_ADD));
+                        $startDateGregorian->add(new \DateInterval(self::DEFAULT_TIME_ADD));
                     } while (true);
                 }
             }
-
 
             // null = defaultvalue for cachetime
             $myLifeTime = $this->calculateSimpleTimeDependedCacheTime($cacheTime, $cacheCalc, $minStopGregorian, $currentTimestamp);
@@ -313,17 +303,17 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
     }
 
     /**
-     * @param stdClass $timeRangeInfo
+     * @param \stdClass $timeRangeInfo
      * @param bool $stopTime
-     * @return DateTime
+     * @return \DateTime
      * @throws TimerException
      */
-    protected function detectGregorianDate(stdClass $timeRangeInfo, bool $stopTime = false)
+    protected function detectGregorianDate(\stdClass $timeRangeInfo, bool $stopTime = false)
     {
         if ($stopTime) {
             if ($timeRangeInfo->calendar === ConvertDateUtility::DEFAULT_CALENDAR) {
-                $result = new DateTime();
-                $result->setTimezone(new DateTimeZone($timeRangeInfo->timezone));
+                $result = new \DateTime();
+                $result->setTimezone(new \DateTimeZone($timeRangeInfo->timezone));
                 $result->setTime(0, 0, 0);
                 $result->setDate($timeRangeInfo->stopYear, $timeRangeInfo->stopMonth, $timeRangeInfo->stopDay);
             } else {
@@ -338,12 +328,12 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
                 );
             }
             if ($timeRangeInfo->flagStopDayBefore) {
-                $result->sub(new DateInterval('P1D'));
+                $result->sub(new \DateInterval('P1D'));
             }
         } else {
             if ($timeRangeInfo->calendar === ConvertDateUtility::DEFAULT_CALENDAR) {
-                $result = new DateTime();
-                $result->setTimezone(new DateTimeZone($timeRangeInfo->timezone));
+                $result = new \DateTime();
+                $result->setTimezone(new \DateTimeZone($timeRangeInfo->timezone));
                 $result->setTime(0, 0, 0);
                 $result->setDate($timeRangeInfo->startYear, $timeRangeInfo->startMonth, $timeRangeInfo->startDay);
             } else {
@@ -364,16 +354,15 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
     /**
      * @param array<mixed> $processorConfiguration
      * @param ContentObjectRenderer $cObj
-     * @return stdClass
+     * @return \stdClass
      * @throws AspectNotFoundException
      */
     protected function getTimeRangeInformations(
-        array                 $processorConfiguration,
+        array $processorConfiguration,
         ContentObjectRenderer $cObj,
         Context $dataProcessorContext
-    ): stdClass
-    {
-        $holidayInfo = new stdClass();
+    ): \stdClass {
+        $holidayInfo = new \stdClass();
         $systemDate = $dataProcessorContext->getPropertyFromAspect('date', 'full');
         if (array_key_exists(self::ATTR_START_DOT, $processorConfiguration)) {
             $holidayInfo->startYear = (int)$cObj->stdWrapValue(
@@ -452,7 +441,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
             $defaultLocale
         );
         $testLocale = $holidayInfo->locale;
-        if (strpos($testLocale, '.') !== false) {
+        if (str_contains($testLocale, '.')) {
             $testLocale = substr(
                 $testLocale,
                 0,
@@ -488,11 +477,10 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
      * @throws TimerException
      */
     protected function getPathForCalendarFromFlexform(
-        array  $processedData,
+        array $processedData,
         string $fieldName = 'pi_flexform',
         string $flexFormFieldName = 'aliasPath'
-    ): string
-    {
+    ): string {
         $flexFormString = $processedData[$fieldName];
         if (empty($flexFormString)) {
             throw new TimerException(
@@ -527,8 +515,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
         array $processorConfiguration,
         ContentObjectRenderer $cObj,
         array $processedData
-    )
-    {
+    ) {
         if (array_key_exists(self::ATTR_ALIAS_PATH, $processorConfiguration)) {
             $aliasPath = $cObj->stdWrapValue(self::ATTR_ALIAS_PATH, $processorConfiguration, false);
         } else {
@@ -642,8 +629,7 @@ class HolidaycalendarProcessor implements DataProcessorInterface, GeneralDataPro
         array $processorConfiguration,
         ContentObjectRenderer $cObj,
         array $processedData
-    )
-    {
+    ) {
         if (array_key_exists(self::ATTR_HOLIDAY_PATH, $processorConfiguration)) {
             $holidayYamlListPath = $cObj->stdWrapValue(self::ATTR_HOLIDAY_PATH, $processorConfiguration, false);
         } else {

@@ -23,18 +23,12 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'searchFields' => 'title, description, ' .
-            TimerConst::TIMER_FIELD_FLEX_ACTIVE . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ',
         'typeicon_classes' => [
             'default' => 'tx_timer_timericon',
         ],
         'security' => [
             'ignorePageTypeRestriction' => true,
         ],
-    ],
-    'interface' => [
-        'maxDBListItems' => 50,
-        'maxSingleDBListItems' => 200
     ],
     'types' => [
         '1' => ['showitem' => '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_domain_model_listing.tab.single,' .
@@ -85,6 +79,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'max' => 255,
+                'searchable' => false,
             ],
         ],
         'hidden' => [
@@ -107,6 +102,7 @@ return [
             'config' => [
                 'type' => 'datetime',
                 'default' => 0,
+                'searchable' => false,
             ],
         ],
         'endtime' => [
@@ -115,6 +111,7 @@ return [
             'config' => [
                 'type' => 'datetime',
                 'default' => 0,
+                'searchable' => false,
             ],
         ],
 
@@ -146,6 +143,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
+                'searchable' => false,
             ],
         ],
         'teaser_infotext' => [
@@ -156,6 +154,7 @@ return [
                 'cols' => 40,
                 'rows' => 15,
                 'enableRichtext' => true,
+                'searchable' => false,
             ],
         ],
 
@@ -184,7 +183,7 @@ return [
                     [
                         'invertStateDisplay' => false,
                         TimerConst::TCA_ITEMS_LABEL => '',
-                    ]
+                    ],
                 ],
             ],
         ],

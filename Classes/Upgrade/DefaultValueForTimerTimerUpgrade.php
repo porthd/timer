@@ -8,12 +8,9 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
-#[UpgradeWizard('timer_defaultValueForTimerTimerUpgrade')]
-final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
+#[\TYPO3\CMS\Core\Attribute\UpgradeWizard('timer_defaultValueForTimerTimerUpgrade')]
+final class DefaultValueForTimerTimerUpgrade implements \TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface
 {
     private const TYPO3_VERSION_ALLOWED = 12;
     private QueryBuilder $pages;
@@ -50,16 +47,15 @@ final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
 
     /**
      * define default-Values
-     *
      */
     public function executeUpdate(): bool
     {
         foreach (['tt_content' => $this->ttContent,
-                     'pages' => $this->pages,
-                     'sys_file_reference' => $this->sysFileReference,
-                     'tx_timer_domain_model_listing' => $this->txTimerDomainModelListing,
-                     'tx_timer_domain_model_event' => $this->txTimerDomainModelEvent,
-                 ] as $table => $queryBuilder) {
+            'pages' => $this->pages,
+            'sys_file_reference' => $this->sysFileReference,
+            'tx_timer_domain_model_listing' => $this->txTimerDomainModelListing,
+            'tx_timer_domain_model_event' => $this->txTimerDomainModelEvent,
+        ] as $table => $queryBuilder) {
 
             $queryBuilder
                 ->update($table)
@@ -88,7 +84,7 @@ final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
     {
         /** @var Typo3Version $typo3Version */
         $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-        return ((int)$typo3Version->getMajorVersion() === self::TYPO3_VERSION_ALLOWED);
+        return (int)$typo3Version->getMajorVersion() === self::TYPO3_VERSION_ALLOWED;
     }
 
     /**
@@ -102,7 +98,7 @@ final class DefaultValueForTimerTimerUpgrade implements UpgradeWizardInterface
     public function getPrerequisites(): array
     {
         return [
-            DatabaseUpdatedPrerequisite::class,
+            \TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite::class,
         ];
     }
 }

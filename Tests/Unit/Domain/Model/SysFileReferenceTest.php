@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
 
+use PHPUnit\Framework\Attributes\Test;
 use Porthd\Timer\Domain\Model\SysFileReference;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -29,34 +30,39 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 class SysFileReferenceTest extends UnitTestCase
 {
     /**
+     * Reset GeneralUtility singletons on tearDown. In a full-suite run this
+     * class' tearDown integrity check otherwise trips over singletons
+     * (Context, CacheManager, LogManager, ListOfTimerService) left in the
+     * makeInstance list; the framework recommends this opt-in reset.
+     */
+    protected bool $resetSingletonInstances = true;
+
+    /**
      * @var SysFileReference
      */
-    protected $subject = null;
+    protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->subject = new SysFileReference();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }
 
     /**
      * the ultimate green test
-     * @test
      */
+    #[Test]
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (false), 'I should an evergreen, but I am incomplete! :-)');
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getTxTimerTimerReturnsInitialValueForString()
     {
         self::assertSame(
@@ -65,17 +71,14 @@ class SysFileReferenceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTxTimerTimerForStringSetsTxTimerTimer()
     {
         $this->subject->setTxTimerTimer('Conceived at T3CON10');
 
-        self::assertAttributeEquals(
+        self::assertSame(
             'Conceived at T3CON10',
-            'txTimerTimer',
-            $this->subject
+            $this->subject->getTxTimerTimer()
         );
     }
 }

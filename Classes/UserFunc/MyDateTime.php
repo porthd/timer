@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Porthd\Timer\UserFunc;
 
 use DateTime;
-use DateTimeZone;
 use Porthd\Timer\Exception\MappingException;
-use TYPO3\CMS\Core\Utility\MathUtility;
 
 /***************************************************************
  *
@@ -34,27 +32,26 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
  * Example TypoScript configuration:
- *
  */
 final class MyDateTime
 {
     protected const GERMAN_TIME_FORMAT = 'd.m.Y H:i:s';
 
     /**
-     * @param DateTime $dateTime
+     * @param \DateTime $dateTime
      * @param string $format
      * @param string $timeZoneId
      * @return string
      * @throws MappingException
      */
-    public function formatDateTime(DateTime $dateTime, string $format = self::GERMAN_TIME_FORMAT, string $timeZoneId = ''): string
+    public function formatDateTime(\DateTime $dateTime, string $format = self::GERMAN_TIME_FORMAT, string $timeZoneId = ''): string
     {
 
         // fix the dateTime for the current timezone
         if (!empty($timeZoneId)) {
 
             try {
-                $timeZone = new DateTimeZone($timeZoneId);
+                $timeZone = new \DateTimeZone($timeZoneId);
             } catch (\Exception $e) {
                 throw new MappingException(
                     'The timezone identifier `' . $timeZoneId . '` is unknown in the PHP-System. ' . "\n" .

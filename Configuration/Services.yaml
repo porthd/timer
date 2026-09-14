@@ -14,6 +14,15 @@ services:
                 identifier: 'form-framework/modify-data-structure'
                 method: 'modifyDataStructure'
 
+    Porthd\Timer\EventListener\FlexFormDsPointerResolver:
+        tags:
+            -   name: event.listener
+                identifier: 'timer/flexform-ds-pointer-identifier'
+                method: 'resolveIdentifier'
+            -   name: event.listener
+                identifier: 'timer/flexform-ds-pointer-parse'
+                method: 'provideDataStructure'
+
     Porthd\Timer\Command\UpdateTimerCommand:
         tags:
             -   name: 'console.command'
@@ -37,7 +46,7 @@ services:
         arguments: [ 'timer_dataprocessor' ]
 
     cache.timer_manager:
-        class: TYPO3\CMS\Extbase\Service\CacheService
+        class: Porthd\Timer\Cache\PageCacheFlusher
 
     cache.timer_listOfTimerService:
         class: Porthd\Timer\Services\ListOfTimerService

@@ -73,7 +73,6 @@ class Listing extends AbstractEntity implements TimerModellInterface
      * Sets the title
      *
      * @param string $title
-     * @return void
      */
     public function setTitle($title)
     {
@@ -94,7 +93,6 @@ class Listing extends AbstractEntity implements TimerModellInterface
      * Sets the description
      *
      * @param string $description
-     * @return void
      */
     public function setDescription($description)
     {
@@ -115,7 +113,6 @@ class Listing extends AbstractEntity implements TimerModellInterface
      * Sets the txTimerSelector
      *
      * @param string $txTimerSelector
-     * @return void
      */
     public function setTxTimerSelector($txTimerSelector)
     {
@@ -136,7 +133,6 @@ class Listing extends AbstractEntity implements TimerModellInterface
      * Sets the txTimerTimer
      *
      * @param string $txTimerTimer
-     * @return void
      */
     public function setTxTimerTimer($txTimerTimer)
     {

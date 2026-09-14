@@ -5,21 +5,18 @@
         <langDisable>1</langDisable>
     </meta>
     <ROOT>
-        <TCEforms>
-            <sheetTitle>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentElement.periodList.sheet.title
-            </sheetTitle>
-            <sheetShortDescr>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentElement.periodList.sheet.shortDescr
-            </sheetShortDescr>
-            <sheetDescription>
-                LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentElement.periodList.sheet.description
-            </sheetDescription>
-        </TCEforms>
+        <sheetTitle>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentElement.periodList.sheet.title
+        </sheetTitle>
+        <sheetShortDescr>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentElement.periodList.sheet.shortDescr
+        </sheetShortDescr>
+        <sheetDescription>
+            LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentElement.periodList.sheet.description
+        </sheetDescription>
         <type>array</type>
         <el>
             <yamlPeriodFilePath>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentPeriodList.field.yamlPeriodFilePath.label
                     </label>
@@ -32,10 +29,8 @@
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml</default>
                     </config>
-                </TCEforms>
             </yamlPeriodFilePath>
             <yamlPeriodFalRelation>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentPeriodList.field.yamlPeriodFalRelation.label
                     </label>
@@ -112,10 +107,8 @@
                             </types>
                         </overrideChildTca>
                     </config>
-                </TCEforms>
             </yamlPeriodFalRelation>
             <calendarJsFilePath>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentPeriodList.field.calendarJsFilePath.label
                     </label>
@@ -128,10 +121,8 @@
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js</default>
                     </config>
-                </TCEforms>
             </calendarJsFilePath>
             <calendarAddJsFilePath>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentPeriodList.field.calendarAddJsFilePath.label
                     </label>
@@ -144,10 +135,8 @@
                         <eval>trim</eval>
                         <default></default>
                     </config>
-                </TCEforms>
             </calendarAddJsFilePath>
             <customCalendarJsFilePath>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentPeriodList.field.customCalendarJsFilePath
                     </label>
@@ -158,10 +147,8 @@
                         <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.js</default>
                     </config>
 
-                </TCEforms>
             </customCalendarJsFilePath>
             <calendarCssFilePath>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentPeriodList.field.calendarCssFilePath.label
                     </label>
@@ -174,10 +161,8 @@
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Javascript/caleandar-master/css/theme1.css</default>
                     </config>
-                </TCEforms>
             </calendarCssFilePath>
             <customCalendarCssFilePath>
-                <TCEforms>
                     <label>
                         LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.contentPeriodList.field.customCalendarCssFilePath
                     </label>
@@ -187,7 +172,6 @@
                         <eval>trim</eval>
                         <default>EXT:timer/Resources/Public/Javascript/CustomCalendar.css</default>
                     </config>
-                </TCEforms>
             </customCalendarCssFilePath>
         </el>
     </ROOT>

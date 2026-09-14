@@ -23,10 +23,8 @@ namespace Porthd\Timer\Constants;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Class for extension-wide constants
- *
  */
 class JewishHolidayConst
 {
@@ -167,7 +165,6 @@ class JewishHolidayConst
     protected const FRIDAY = 5;
     protected const SATURDAY = 6;
 
-
     protected const TISHRI = 1;
     protected const HESHVAN = 2;
     protected const KISLEV = 3;
@@ -183,35 +180,34 @@ class JewishHolidayConst
     protected const ELUL = 13;
     protected const ADAR_I = 6;
 
-
     protected const JEWISH_MONTH_NAMES_LEAP = [
-        self::TISHRI => "Tishri",
-        self::HESHVAN => "Heshvan",
-        self::KISLEV => "Kislev",
-        self::TEVET => "Tevet",
-        self::SHEVAT => "Shevat",
-        self::ADAR_I => "Adar I",
-        self::ADAR_II => "Adar II",
-        self::NISAN => "Nisan",
-        self::IYAR => "Iyar",
-        self::SIVAN => "Sivan",
-        self::TAMMUZ => "Tammuz",
-        self::AV => "Av",
-        self::ELUL => "Elul",
+        self::TISHRI => 'Tishri',
+        self::HESHVAN => 'Heshvan',
+        self::KISLEV => 'Kislev',
+        self::TEVET => 'Tevet',
+        self::SHEVAT => 'Shevat',
+        self::ADAR_I => 'Adar I',
+        self::ADAR_II => 'Adar II',
+        self::NISAN => 'Nisan',
+        self::IYAR => 'Iyar',
+        self::SIVAN => 'Sivan',
+        self::TAMMUZ => 'Tammuz',
+        self::AV => 'Av',
+        self::ELUL => 'Elul',
     ];
     protected const JEWISH_MONTH_NAMES_NON_LEAP = [
-        self::TISHRI => "Tishri",
-        self::HESHVAN => "Heshvan",
-        self::KISLEV => "Kislev",
-        self::TEVET => "Tevet",
-        self::SHEVAT => "Shevat",
-        self::ADAR => "Adar",
-        self::ADAR_II => "Adar",
-        self::NISAN => "Nisan",
-        self::IYAR => "Iyar",
-        self::SIVAN => "Sivan",
-        self::TAMMUZ => "Tammuz",
-        self::AV => "Av",
-        self::ELUL => "Elul",
+        self::TISHRI => 'Tishri',
+        self::HESHVAN => 'Heshvan',
+        self::KISLEV => 'Kislev',
+        self::TEVET => 'Tevet',
+        self::SHEVAT => 'Shevat',
+        self::ADAR => 'Adar',
+        self::ADAR_II => 'Adar',
+        self::NISAN => 'Nisan',
+        self::IYAR => 'Iyar',
+        self::SIVAN => 'Sivan',
+        self::TAMMUZ => 'Tammuz',
+        self::AV => 'Av',
+        self::ELUL => 'Elul',
     ];
 }

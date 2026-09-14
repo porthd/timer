@@ -23,13 +23,10 @@ namespace Porthd\Timer\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateTime;
-use Ddeboer\Imap\Connection;
+use Doctrine\DBAL\Exception as DbalException;
 use Doctrine\DBAL\ParameterType;
 use Exception;
-use Porthd\Timer\Domain\Repository\TimerRepositoryInterface;
 use PDO;
-use Doctrine\DBAL\Exception as DbalException;
 use Porthd\Timer\Command\UpdateTimerCommand;
 use Porthd\Timer\Constants\TimerConst;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -46,7 +43,6 @@ class GeneralRepository implements TimerRepositoryInterface
     public const GENERAL_ROW_IDENTIFIER = 'uid';
     public const GENERAL_PARENT_IDENTIFIER = 'pid';
 
-
     /**
      * @param string $tableName
      * @return bool
@@ -61,7 +57,7 @@ class GeneralRepository implements TimerRepositoryInterface
                 ->createQueryBuilder();
             $queryBuilder->count(self::GENERAL_ROW_IDENTIFIER)->from($tableName);
             return (bool)($queryBuilder->executeQuery()->fetchOne());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // We got an exception == table not found
             return false;
         }
@@ -70,7 +66,7 @@ class GeneralRepository implements TimerRepositoryInterface
     /**
      * @param array<mixed> $listOfFields
      * @param string $genericTable
-     * @param DateTime $refTime
+     * @param \DateTime $refTime
      * @param array<mixed> $pidList
      * @param array<mixed> $whereInfos
      * @return array<mixed>
@@ -79,7 +75,7 @@ class GeneralRepository implements TimerRepositoryInterface
     public function getTxTimerInfos(
         array $listOfFields,
         string $genericTable,
-        DateTime $refTime,
+        \DateTime $refTime,
         array $pidList = [],
         array $whereInfos = []
     ): array {
@@ -141,7 +137,6 @@ class GeneralRepository implements TimerRepositoryInterface
             ->from($tableName);
         return $queryBuilder->executeQuery()->fetchAllAssociative();
     }
-
 
     /**
      * @param array<mixed> $whereInfos

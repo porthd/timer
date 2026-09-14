@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\CalendarDateRelTimer;
-use Porthd\Timer\CustomTimer\HolidayTimer;
 use Porthd\Timer\CustomTimer\DailyTimer;
 use Porthd\Timer\CustomTimer\DatePeriodTimer;
 use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\CustomTimer\EasterRelTimer;
+use Porthd\Timer\CustomTimer\HolidayTimer;
+use Porthd\Timer\CustomTimer\JewishHolidayTimer;
 use Porthd\Timer\CustomTimer\MoonphaseRelTimer;
 use Porthd\Timer\CustomTimer\MoonriseRelTimer;
 use Porthd\Timer\CustomTimer\PeriodListTimer;
@@ -16,18 +17,11 @@ use Porthd\Timer\CustomTimer\RangeListTimer;
 use Porthd\Timer\CustomTimer\SunriseRelTimer;
 use Porthd\Timer\CustomTimer\WeekdayInMonthTimer;
 use Porthd\Timer\CustomTimer\WeekdaylyTimer;
-use Porthd\Timer\CustomTimer\JewishHolidayTimer;
-use Porthd\Timer\Hooks\Backend\FlexformManipulationHook;
 use Porthd\Timer\Hooks\Backend\StartEndTimerManipulationHook;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
-
-use Porthd\Timer\Hooks\FlexFormParsingHook;
 use Porthd\Timer\Utilities\ConfigurationUtility;
+
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
-use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
-use TYPO3\CMS\Core\Imaging\IconRegistry;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 defined('TYPO3') || die('Access denied in ' . __FILE__ . '.');
@@ -51,29 +45,14 @@ defined('TYPO3') || die('Access denied in ' . __FILE__ . '.');
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 call_user_func(
     static function () {
 
         // declare namespace in fluid-taemplates
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['timer'] = ['Porthd\\Timer\\ViewHelpers'];
 
-        // the icons for the content-element and for the extension  of the extension icon
-        $iconRegistry = GeneralUtility::makeInstance(
-            IconRegistry::class
-        );
-        foreach ([
-                     'tx_timer_timericon' => 'EXT:timer/Resources/Public/Icons/icon_timer.svg',
-                     'tx_timer_timersimul' => 'EXT:timer/Resources/Public/Icons/Content/timersimul.svg',
-                     'tx_timer_holidaycalendar' => 'EXT:timer/Resources/Public/Icons/Content/holidaycalendar.svg',
-                 ] as $name => $path
-        ) {
-            $iconRegistry->registerIcon(
-                $name, // Icon-Identifier, e.g. tx-myext-action-preview
-                SvgIconProvider::class,
-                ['source' => $path]
-            );
-        }
+        // icons moved to Configuration/Icons.php (TYPO3 14: IconRegistry in ext_localconf.php forbidden)
+
         // reset starttime and endtime after changes in tx_timer_select and tx_timer_timer
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
             StartEndTimerManipulationHook::class;
@@ -100,10 +79,9 @@ call_user_func(
                 WeekdaylyTimer::class, // => 1024
                 JewishHolidayTimer::class, // => 2048
                 HolidayTimer::class, // => 4096
-//                CalendarDateRelTimer::class, // 8192 in planing
+                //                CalendarDateRelTimer::class, // 8192 in planing
             ];
             ConfigurationUtility::addExtLocalconfTimerAdding($addTimerFlags, $listOfTimerClasses);
-
 
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
             if (!array_key_exists('frontend', $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST])) {
@@ -117,7 +95,6 @@ call_user_func(
             'priority' => 1,
             'class' => \Porthd\Timer\Form\Element\DurationMinutesFieldElement::class,
         ];
-
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
             'timer',

@@ -23,7 +23,6 @@ namespace Porthd\Timer\Utilities;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Services\ListOfTimerService;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -52,8 +51,6 @@ class TcaUtility
 
     // predefined list of obsolete XML-tags in flexform, which can be removed in flattened flexform-arrays.
     // flattened flexform-arrays are easier to handle in the frontend.
-
-
 
     /**
      * Beginn the list with the null-element
@@ -86,7 +83,6 @@ class TcaUtility
      *
      * @param array<mixed> $params TCA-Array
      * @param mixed $confUnused not in use, but definde by the structure of the hook
-     * @return void
      */
     public static function listBaseZoneItemsFlexform(&$params, $confUnused): void
     {
@@ -133,7 +129,7 @@ class TcaUtility
     public static function getListOfTimezones(): array
     {
         if (empty(self::$listOfTimezones)) {
-            self::$listOfTimezones = DateTimeZone::listIdentifiers();
+            self::$listOfTimezones = \DateTimeZone::listIdentifiers();
         }
         return self::$listOfTimezones;
     }
@@ -146,7 +142,7 @@ class TcaUtility
         if (!empty($listOfTimezones)) {
             self::$listOfTimezones = $listOfTimezones;
         } else {
-            self::$listOfTimezones = [TimerConst::INTERNAL_TIMEZONE,];
+            self::$listOfTimezones = [TimerConst::INTERNAL_TIMEZONE];
         }
     }
 

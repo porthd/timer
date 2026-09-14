@@ -1,0 +1,397 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Strict comparison using \!\=\= between DateTime and false will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: Classes/Backend/FlexFormParsingModifyEventListener.php
+
+		-
+			message: '#^Call to function is_array\(\) with non\-empty\-array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/Command/UpdateTimerCommand.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/CalendarDateRelTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/DailyTimer.php
+
+		-
+			message: '#^Call to function is_int\(\) with int will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/CustomTimer/DatePeriodTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/DatePeriodTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/EasterRelTimer.php
+
+		-
+			message: '#^Call to function is_int\(\) with int will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/CustomTimer/HolidayTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/HolidayTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/JewishHolidayTimer.php
+
+		-
+			message: '#^Call to function is_int\(\) with int will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/CustomTimer/MoonphaseRelTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/MoonphaseRelTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/MoonriseRelTimer.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between Porthd\\Timer\\Domain\\Model\\Interfaces\\TimerStartStopRange and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: Classes/CustomTimer/MoonriseRelTimer.php
+
+		-
+			message: '#^Call to function array_key_exists\(\) with ''start'' and non\-empty\-array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/CustomTimer/PeriodListTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/PeriodListTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/RangeListTimer.php
+
+		-
+			message: '#^Call to function is_float\(\) with float will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/SunriseRelTimer.php
+
+		-
+			message: '#^Call to function is_int\(\) with int will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/CustomTimer/SunriseRelTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/SunriseRelTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/WeekdayInMonthTimer.php
+
+		-
+			message: '#^Call to static method TYPO3\\CMS\\Core\\Utility\\MathUtility\:\:canBeInterpretedAsInteger\(\) with int will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: Classes/CustomTimer/WeekdaylyTimer.php
+
+		-
+			message: '#^Call to function is_scalar\(\) with int\<1, max\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/DataProcessing/BetterMappingProcessor.php
+
+		-
+			message: '#^Method Porthd\\Timer\\DataProcessing\\BetterMappingProcessor\:\:setOutFieldValueByReference\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/DataProcessing/BetterMappingProcessor.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$timerGregorian TimerStartStopRange\)\: Unexpected token "\$timerGregorian", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: Classes/DataProcessing/HolidaycalendarProcessor.php
+
+		-
+			message: '#^Call to function is_callable\(\) with callable\-string&non\-falsy\-string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: Classes/DataProcessing/PhpMappingProcessor.php
+
+		-
+			message: '#^Method Porthd\\Timer\\DataProcessing\\PhpMappingProcessor\:\:setParameter\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/DataProcessing/PhpMappingProcessor.php
+
+		-
+			message: '#^Method Porthd\\Timer\\DataProcessing\\PhpMappingProcessor\:\:updateLimiter\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/DataProcessing/PhpMappingProcessor.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Event\:\:setDescription\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Event.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Event\:\:setTeaserInfotext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Event.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Event\:\:setTeaserSlogan\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Event.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Event\:\:setTitle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Event.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Event\:\:setTxTimerSelector\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Event.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Event\:\:setTxTimerTimer\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Event.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Interfaces\\TimerModellInterface\:\:setTxTimerSelector\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Interfaces/TimerModellInterface.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Interfaces\\TimerModellInterface\:\:setTxTimerTimer\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Interfaces/TimerModellInterface.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Interfaces\\TimerStartStopRange\:\:setBeginning\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Interfaces/TimerStartStopRange.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Interfaces\\TimerStartStopRange\:\:setEnding\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Interfaces/TimerStartStopRange.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Interfaces\\TimerStartStopRange\:\:setResultExist\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Interfaces/TimerStartStopRange.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\InternalFlow\\LoopLimiter\:\:setDatetimeFormat\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/InternalFlow/LoopLimiter.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\InternalFlow\\LoopLimiter\:\:setFlagMaxCount\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/InternalFlow/LoopLimiter.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\InternalFlow\\LoopLimiter\:\:setFlagMaxType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/InternalFlow/LoopLimiter.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\InternalFlow\\LoopLimiter\:\:setFlagReserve\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/InternalFlow/LoopLimiter.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\InternalFlow\\LoopLimiter\:\:setMaxCount\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/InternalFlow/LoopLimiter.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\InternalFlow\\LoopLimiter\:\:setMaxLate\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/InternalFlow/LoopLimiter.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\InternalFlow\\LoopLimiter\:\:setUserCompareFunction\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/InternalFlow/LoopLimiter.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Listing\:\:setDescription\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Listing.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Listing\:\:setTitle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Listing.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Listing\:\:setTxTimerSelector\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Listing.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Listing\:\:setTxTimerTimer\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Listing.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Pages\:\:setTxTimerSelector\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Pages.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\Pages\:\:setTxTimerTimer\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/Pages.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\SysFileReference\:\:setTxTimerSelector\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/SysFileReference.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\SysFileReference\:\:setTxTimerTimer\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/SysFileReference.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\TtContent\:\:setTxTimerSelector\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/TtContent.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Domain\\Model\\TtContent\:\:setTxTimerTimer\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Domain/Model/TtContent.php
+
+		-
+			message: '#^Call to an undefined method TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder\:\:execute\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Classes/Domain/Repository/ListingRepository.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between DateTime and false will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: Classes/Hooks/Backend/FlexformManipulationHook.php
+
+		-
+			message: '#^Parameter \#1 \$array \(array\{''new_moon'', ''first_quarter'', ''full_moon'', ''last_quarter''\}\) of array_values is already a list, call has no effect\.$#'
+			identifier: arrayValues.list
+			count: 1
+			path: Classes/Services/HolidaycalendarService.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Services\\ListOfEventsService\:\:getDatetimeRestrictions\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Services/ListOfEventsService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 5
+			path: Classes/Services/ListOfTimerService.php
+
+		-
+			message: '#^Unable to resolve the template type T in call to static method TYPO3\\CMS\\Core\\Utility\\GeneralUtility\:\:makeInstance\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: Classes/Services/ListOfTimerService.php
+
+		-
+			message: '#^Variable \$queryBuilder in PHPDoc tag @var does not exist\.$#'
+			identifier: varTag.variableNotFound
+			count: 1
+			path: Classes/Upgrade/UpdateFlexFormEntriesUpgrade.php
+
+		-
+			message: '#^Variable \$table in PHPDoc tag @var does not exist\.$#'
+			identifier: varTag.variableNotFound
+			count: 1
+			path: Classes/Upgrade/UpdateFlexFormEntriesUpgrade.php
+
+		-
+			message: '#^Method Porthd\\Timer\\Utilities\\ConvertDateUtility\:\:allowedLocaleCalendarTimezone\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/Utilities/ConvertDateUtility.php
+
+		-
+			message: '#^Method Porthd\\Timer\\ViewHelpers\\ForCommaListViewHelper\:\:initializeArguments\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: Classes/ViewHelpers/ForCommaListViewHelper.php

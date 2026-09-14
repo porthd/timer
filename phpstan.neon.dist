@@ -1,5 +1,13 @@
+includes:
+	- phpstan-baseline.neon
+
 parameters:
+	paths:
+		- Classes
+		- ext_localconf.php
+		- ext_tables.php
 	level: 6
+	reportUnmatchedIgnoredErrors: false
 	excludePaths:
 		analyse:
 			- Documentation

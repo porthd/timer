@@ -23,6 +23,10 @@ namespace Porthd\Timer\Tests\Unit\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\DailyTimer;
 use Porthd\Timer\CustomTimer\DatePeriodTimer;
 use Porthd\Timer\CustomTimer\DefaultTimer;
@@ -34,21 +38,15 @@ use Porthd\Timer\CustomTimer\RangeListTimer;
 use Porthd\Timer\CustomTimer\SunriseRelTimer;
 use Porthd\Timer\CustomTimer\WeekdayInMonthTimer;
 use Porthd\Timer\CustomTimer\WeekdaylyTimer;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use DateInterval;
-use DateTime;
 
-use DateTimeZone;
-use PHPUnit\Framework\TestCase;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Domain\Repository\ListingRepository;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Services\ListOfTimerService;
 use Porthd\Timer\Utilities\ConfigurationUtility;
-use Porthd\Timer\Utilities\GeneralTimerUtility;
+use Psr\Log\NullLogger;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
@@ -67,11 +65,10 @@ class RangeListTimerTest extends TestCase
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
 
-
     /**
      * @var RangeListTimer
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
@@ -132,7 +129,6 @@ class RangeListTimerTest extends TestCase
         );
     }
 
-
     protected function initializeCachingConfiguration(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
@@ -143,16 +139,22 @@ class RangeListTimerTest extends TestCase
         $myCacheInstance->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
     }
 
-
     protected function setUp(): void
     {
         parent::setUp();
+        // RangeListTimer and every sub-timer it instantiates from its YAML list
+        // resolve YamlFileLoader via GeneralUtility::makeInstance() an unbounded
+        // number of times. A one-shot addInstance() cannot cover that, so register
+        // a minimal PSR-11 container that always serves a NullLogger-backed
+        // YamlFileLoader (the TYPO3 13 constructor now requires a logger); any
+        // other class falls through to the normal makeInstance reflection path.
+        GeneralUtility::setContainer($this->buildYamlFileLoaderContainer());
         $this->initializeEnvoiroment();
         $this->initializeCachingConfiguration();
         $this->simulatePartOfGlobalsTypo3Array();
         /** @var ListingRepository $listingRepository */
         $listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
-        $yamlFileLoader = new YamlFileLoader();
+        $yamlFileLoader = new YamlFileLoader(new NullLogger());
         $timerList = new ListOfTimerService();
         $this->subject = GeneralUtility::makeInstance(RangeListTimer::class, ...[null, $listingRepository, $yamlFileLoader, $timerList]);
         $projectPath = '/var/www/html';
@@ -172,107 +174,140 @@ class RangeListTimerTest extends TestCase
 
     protected function tearDown(): void
     {
+        // Restore an empty container so the served YamlFileLoader does not leak
+        // into other test classes (this class extends the plain PHPUnit TestCase,
+        // which has no TYPO3 container reset).
+        GeneralUtility::setContainer(new class () implements \Psr\Container\ContainerInterface {
+            public function get(string $id): mixed
+            {
+                throw new class ('Empty container') extends \RuntimeException implements \Psr\Container\NotFoundExceptionInterface {};
+            }
+            public function has(string $id): bool
+            {
+                return false;
+            }
+        });
         $this->resolveGlobalsTypo3Array();
         parent::tearDown();
     }
 
     /**
-     * the ultimate green test
-     * @test
+     * PURPOSE: Minimal PSR-11 container that serves a single, logger-equipped
+     * YamlFileLoader for every GeneralUtility::makeInstance(YamlFileLoader::class)
+     * call the tested timers make; all other ids report as absent so makeInstance
+     * keeps using its reflection fallback.
      */
-    public function checkIfIAmGreen()
+    private function buildYamlFileLoaderContainer(): \Psr\Container\ContainerInterface
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        return new class (new YamlFileLoader(new NullLogger())) implements \Psr\Container\ContainerInterface {
+            public function __construct(private readonly YamlFileLoader $yamlFileLoader) {}
+
+            public function get(string $id): mixed
+            {
+                if ($id === YamlFileLoader::class) {
+                    return $this->yamlFileLoader;
+                }
+                throw new class ('Container has no entry for ' . $id) extends \RuntimeException implements \Psr\Container\NotFoundExceptionInterface {};
+            }
+
+            public function has(string $id): bool
+            {
+                return $id === YamlFileLoader::class;
+            }
+        };
     }
 
     /**
-     * @test
+     * the ultimate green test
      */
+    #[Test]
+    public function checkIfIAmGreen()
+    {
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+    }
+
+    #[Test]
     public function selfName()
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::NAME_TIMER,
             $this->subject::selfName(),
             'The name musst be defined.'
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSelectorItem()
     {
         $result = $this->subject::getSelectorItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             1,
             count($result),
             'The array  must contain at least two items.'
         );
-        $this->assertIsString(
-            $result[0],
+        self::assertIsString(
+            $result['label'],
             'The first item must be an string.'
         );
-        $this->assertEquals(
-            $result[1],
+        self::assertEquals(
+            $result['value'],
             self::NAME_TIMER,
             'The second term must the name of the timer.'
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             count($result),
             'The array  must contain one Item.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             array_keys($result),
             [self::NAME_TIMER],
             'The key must the name of the timer.'
         );
-        $this->assertIsString(
+        self::assertIsString(
             $result[self::NAME_TIMER],
             'The value must be type of string.'
         );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
-        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+        if (str_starts_with($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
                 );
-        } elseif (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+        } elseif (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                 );
-            $this->assertTrue((false), 'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. ');
+            self::assertTrue((false), 'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue(
+        self::assertTrue(
             $flag,
             'The file with the flexform content exist.'
         );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue(
+        self::assertTrue(
             (!(!$flexArray)),
             'The filecontent is valid xml.'
         );
@@ -280,16 +315,16 @@ class RangeListTimerTest extends TestCase
 
     public static function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new \DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
-        $minusOneSecond->sub(new DateInterval('PT1S'));
+        $minusOneSecond->sub(new \DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
-        $addOneSecond->add(new DateInterval('PT1S'));
+        $addOneSecond->add(new \DateInterval('PT1S'));
         $rest = [];
         $result = [];
 
         $result[] = [
-            'message' => 'The testdate is valid, if the testdate is in the middle of the ultimate range..',
+            'The testdate is valid, if the testdate is in the middle of the ultimate range..',
             'expects' => [
                 'result' => true,
             ],
@@ -304,7 +339,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -319,7 +354,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
+            'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
             'expects' => [
                 'result' => false,
             ],
@@ -334,7 +369,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -349,7 +384,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
+            'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
             'expects' => [
                 'result' => false,
             ],
@@ -366,18 +401,16 @@ class RangeListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProvider_isAllowedInRange
-     * @test
-     */
+    #[DataProvider('dataProvider_isAllowedInRange')]
+    #[Test]
     public function isAllowedInRange($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
@@ -412,7 +445,7 @@ class RangeListTimerTest extends TestCase
         foreach ($list as $unsetParam => $expects
         ) {
             $item = [
-                'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
+                'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -431,13 +464,13 @@ class RangeListTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false], [false, true], ['false', true], [new Datetime(), false],
-                     ['hallo', false],
-                     ['0', true], [0.0, true], ["0.0", false],
-                     ['true', true], ['1', true], [1, true],
-                     [1.0, true], ['1.0', false],] as $value) {
+            [null, false], [false, true], ['false', true], [new \Datetime(), false],
+            ['hallo', false],
+            ['0', true], [0.0, true], ['0.0', false],
+            ['true', true], ['1', true], [1, true],
+            [1.0, true], ['1.0', false], ] as $value) {
             $result[] = [
-                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
+                'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
                     'result' => $value[1],
                 ],
@@ -454,13 +487,13 @@ class RangeListTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     'UTC' => true,
-                     '' => false,
-                     'Europe/Berlin' => true,
-                     'Kumpel/Dumpel' => false,
-                 ] as $zoneVal => $expects) {
+            'UTC' => true,
+            '' => false,
+            'Europe/Berlin' => true,
+            'Kumpel/Dumpel' => false,
+        ] as $zoneVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
@@ -478,13 +511,13 @@ class RangeListTimerTest extends TestCase
         }
         // Variation for ultimateBeginningTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -502,13 +535,13 @@ class RangeListTimerTest extends TestCase
         }
         // Variation for ultimateEndingTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -527,17 +560,15 @@ class RangeListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateGeneralByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateGeneralByVariationArgumentsInParam')]
+    #[Test]
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -560,7 +591,7 @@ class RangeListTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The test randomly is correct.',
+            'The test randomly is correct.',
             'expects' => [
                 'result' => true,
             ],
@@ -582,14 +613,14 @@ class RangeListTimerTest extends TestCase
         ];
         // check for optional
         foreach ([
-                     'recursiveLoopLimit',
-                     'yamlActiveFilePath',
-                     'yamlForbiddenFilePath',
-                     'databaseActiveRangeList',
-                     'databaseForbiddenRangeList',
-                 ] as $myUnset) {
+            'recursiveLoopLimit',
+            'yamlActiveFilePath',
+            'yamlForbiddenFilePath',
+            'databaseActiveRangeList',
+            'databaseForbiddenRangeList',
+        ] as $myUnset) {
             $item = [
-                'message' => 'The test does not fails, because only one parameter `' . $myUnset . '` is missing.The list is already defined.',
+                'The test does not fails, because only one parameter `' . $myUnset . '` is missing.The list is already defined.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -615,25 +646,25 @@ class RangeListTimerTest extends TestCase
 
         // check for the special requirement, that ther is not a correct definition in an active Path
         foreach ([
-                     ['yaml' => '', 'database' => ''],
-                     ['yaml' => 'unset', 'database' => ''],
-                     ['yaml' => '', 'database' => 'unset'],
-                     ['yaml' => 'unset', 'database' => 'unset'],
-                 ] as $myResetArray) {
+            ['yaml' => '', 'database' => ''],
+            ['yaml' => 'unset', 'database' => ''],
+            ['yaml' => '', 'database' => 'unset'],
+            ['yaml' => 'unset', 'database' => 'unset'],
+        ] as $myResetArray) {
             foreach ([
-                         ['yaml' => '', 'database' => ''],
-                         [
-                             'yaml' => 'EXT:timer/Tests/Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                             'database' => '',
-                         ],
-                         ['yaml' => '', 'database' => '1,2'],
-                         [
-                             'yaml' => 'EXT:timer/Tests/Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
-                             'database' => '1,2',
-                         ],
-                     ] as $myForbidden) {
+                ['yaml' => '', 'database' => ''],
+                [
+                    'yaml' => 'EXT:timer/Tests/Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
+                    'database' => '',
+                ],
+                ['yaml' => '', 'database' => '1,2'],
+                [
+                    'yaml' => 'EXT:timer/Tests/Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
+                    'database' => '1,2',
+                ],
+            ] as $myForbidden) {
                 $item = [
-                    'message' => 'The test fails, because there is no active definition for active Timers, ' .
+                    'The test fails, because there is no active definition for active Timers, ' .
                         'because is [`yaml`|`databse`] is defined as ["' . $myResetArray['yaml'] . '"|"' . $myResetArray['database'] . '"]. ' .
                         'The variation of Forbidden definition of  [`yaml`|`databse`] (["' . $myForbidden['yaml'] .
                         '"|"' . $myForbidden['database'] . '"]) has no effect.',
@@ -670,14 +701,12 @@ class RangeListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateSpeciallByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateSpeciallByVariationArgumentsInParam')]
+    #[Test]
     public function validateSpeciallByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $testPath = realpath(__DIR__ . '/../../../../');
 
@@ -687,13 +716,13 @@ class RangeListTimerTest extends TestCase
             $TestIncludeFinder
                 ->expects(self::any())
                 ->method('getExtentionPathByEnviroment')
-                ->will(self::returnValue($testPath));
+                ->willReturn($testPath);
             $TestIncludeFinder
                 ->expects(self::any())
                 ->method('getPublicPathByEnviroment')
-                ->will(self::returnValue($testPath));
+                ->willReturn($testPath);
             $paramTest = array_merge($params['required'], $params['optional'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $TestIncludeFinder->validate($paramTest),
                 $message
@@ -706,7 +735,7 @@ class RangeListTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -718,7 +747,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -730,7 +759,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -743,7 +772,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -756,7 +785,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the Active will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
+            'The timezone of the Active will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -770,7 +799,7 @@ class RangeListTimerTest extends TestCase
         ];
         foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
             $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                'The active timezone will be shown, because the parameter for it is active `' .
                     print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
                 [
                     'result' => 'Lauder/Furz',
@@ -785,7 +814,7 @@ class RangeListTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -798,7 +827,7 @@ class RangeListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -813,27 +842,24 @@ class RangeListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
+    #[DataProvider('dataProviderGetTimeZoneOfEvent')]
+    #[Test]
     public function getTimeZoneOfEvent($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
 
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $result,
                 $message
             );
         }
     }
-
 
     public static function dataProviderIsActive()
     {
@@ -849,7 +875,7 @@ class RangeListTimerTest extends TestCase
         $result = [];
         /* test allowed random (minimal) structure */
         $result[] = [
-            'message' => 'The testValue `2022-12-26 05:59:59` defines  an INACTIVE time. The testvalue is not part of an active interval.',
+            'The testValue `2022-12-26 05:59:59` defines  an INACTIVE time. The testvalue is not part of an active interval.',
             'expects' => [
                 'result' => false,
             ],
@@ -858,7 +884,7 @@ class RangeListTimerTest extends TestCase
                 'testValueObj' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-12-26 05:59:59',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'required' => [
                     'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -911,36 +937,36 @@ class RangeListTimerTest extends TestCase
          * - 18.12.2022 12:01:59   nein    nein
          */
         foreach ([
-                     ['testDateTime' => '2022-12-26 05:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-26 06:00:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-26 11:59:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-26 12:00:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-26 12:01:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-19 05:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-19 06:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 06:00:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 07:00:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 11:59:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 12:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-19 12:00:01', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-25 01:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-25 02:00:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-25 12:00:00', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-25 12:00:01', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-18 01:59:59', 'hiddenActive' => false, 'active' => false,],
-                     ['testDateTime' => '2022-12-18 02:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 03:00:00', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 06:59:59', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:00:00', 'hiddenActive' => false, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:00:01', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:00:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 07:01:59', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 12:00:00', 'hiddenActive' => true, 'active' => true,],
-                     ['testDateTime' => '2022-12-18 12:00:01', 'hiddenActive' => false, 'active' => false,],
-                 ] as $params
+            ['testDateTime' => '2022-12-26 05:59:59', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-26 06:00:59', 'hiddenActive' => false, 'active' => true],
+            ['testDateTime' => '2022-12-26 11:59:59', 'hiddenActive' => false, 'active' => true],
+            ['testDateTime' => '2022-12-26 12:00:59', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-26 12:01:59', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-19 05:59:59', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-19 06:00:00', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-19 06:00:59', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-19 07:00:59', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-19 11:59:59', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-19 12:00:00', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-19 12:00:01', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-25 01:59:59', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-25 02:00:59', 'hiddenActive' => false, 'active' => true],
+            ['testDateTime' => '2022-12-25 12:00:00', 'hiddenActive' => false, 'active' => true],
+            ['testDateTime' => '2022-12-25 12:00:01', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-18 01:59:59', 'hiddenActive' => false, 'active' => false],
+            ['testDateTime' => '2022-12-18 02:00:00', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-18 03:00:00', 'hiddenActive' => false, 'active' => true],
+            ['testDateTime' => '2022-12-18 06:59:59', 'hiddenActive' => false, 'active' => true],
+            ['testDateTime' => '2022-12-18 07:00:00', 'hiddenActive' => false, 'active' => true],
+            ['testDateTime' => '2022-12-18 07:00:01', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-18 07:00:59', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-18 07:01:59', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-18 12:00:00', 'hiddenActive' => true, 'active' => true],
+            ['testDateTime' => '2022-12-18 12:00:01', 'hiddenActive' => false, 'active' => false],
+        ] as $params
         ) {
             $result[] = [
-                'message' => 'The testValue `' . $params['testDateTime'] . '` defines' .
+                'The testValue `' . $params['testDateTime'] . '` defines' .
                     ($params['hiddenActive'] ? ' an active time' : ' an INACTIVE time') . ' for the active-hidden-combination.' .
                     ($params['active'] ? '' : ' The testvalue is not part of an active interval.') .
                     ((($params['hiddenActive'] === false) && ($params['active'] === true)) ? ' The testvalue is at least part of one hidden timeslot and included by an timeslot for active parts.' : ''),
@@ -952,10 +978,10 @@ class RangeListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $params['testDateTime'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'required' => [
-//                        'yamlActiveFilePath' => 'EXT:timer/Tests/Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml', // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
+                        //                        'yamlActiveFilePath' => 'EXT:timer/Tests/Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml', // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
                         // At least one must containa an existing file or can be empty, if `databaseActiveRangeList` is filled
                         'yamlForbiddenFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerForbiddenYaml.yaml',
@@ -971,7 +997,7 @@ class RangeListTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The testValue `' . $params['testDateTime'] . '` defines ' .
+                'The testValue `' . $params['testDateTime'] . '` defines ' .
                     ($params['hiddenActive'] ? ' an active time' : ' an INACTIVE time') . ' for the ONLY ACTIVE combination.' .
                     ($params['active'] ? '' : ' The testvalue is not part of an active interval.') .
                     ((($params['hiddenActive'] === false) && ($params['active'] === true)) ? ' The testvalue is at least part of one hidden timeslot and included by an timeslot for active parts.' : ''),
@@ -983,7 +1009,7 @@ class RangeListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $params['testDateTime'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1005,30 +1031,27 @@ class RangeListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderIsActive
-     * @test
-     */
+    #[DataProvider('dataProviderIsActive')]
+    #[Test]
     public function isActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $configParams = array_merge($params['required'], $params['optional'], $params['general']);
             $value = clone $params['testValueObj'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isActive($value, $configParams),
                 'isActive: ' . $message
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $params['testValueObj'],
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
         }
     }
-
 
     public static function dataProviderNextActive()
     {
@@ -1074,7 +1097,6 @@ class RangeListTimerTest extends TestCase
          * - 18.12.2022 12:00:59   ja      ja
          * - 18.12.2022 12:01:59   nein    nein
          */
-
         $result = [];
         /* test allowed random (minimal) structure */
         $itemList = [];
@@ -1146,7 +1168,7 @@ class RangeListTimerTest extends TestCase
         $addOnly = '. The timerange is only build by active parts';
         foreach ($itemList as $item) {
             $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] . $addOnly . ' in the nextActive-Test.',
+                'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] . $addOnly . ' in the nextActive-Test.',
                 'expects' => [
                     'result' => [
                         'beginning' => $item['beginOnlyActive'],
@@ -1159,7 +1181,7 @@ class RangeListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $item['testValue'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1177,7 +1199,7 @@ class RangeListTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] . $addWith . ' in the nextActive-Test.',
+                'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] . $addWith . ' in the nextActive-Test.',
                 'expects' => [
                     'result' => [
                         'beginning' => $item['beginWithForbidden'],
@@ -1190,7 +1212,7 @@ class RangeListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $item['testValue'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1211,14 +1233,12 @@ class RangeListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderNextActive
-     * @test
-     */
+    #[DataProvider('dataProviderNextActive')]
+    #[Test]
     public function nextActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['required'], $params['optional'], $params['general']);
             $testValue = clone $params['testValueObj'];
@@ -1227,7 +1247,7 @@ class RangeListTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
@@ -1278,7 +1298,6 @@ class RangeListTimerTest extends TestCase
          * - 18.12.2022 12:00:59   ja      ja
          * - 18.12.2022 12:01:59   nein    nein
          */
-
         $result = [];
         /* test allowed random (minimal) structure */
         $itemList = [];
@@ -1404,7 +1423,7 @@ class RangeListTimerTest extends TestCase
         ];
         foreach ($itemList as $item) {
             $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] .
+                'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] .
                     '. The timerange is only build by active parts' .
                     ' in the prevActive-Test.',
                 'expects' => [
@@ -1419,7 +1438,7 @@ class RangeListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $item['testValue'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1437,7 +1456,7 @@ class RangeListTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] .
+                'The testValue `' . $item['testValue'] . '` is ' . $item['msg'] .
                     '. The timerange is build by active and forbidden parts' .
                     ' in the prevActive-Test.',
                 'expects' => [
@@ -1452,7 +1471,7 @@ class RangeListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $item['testValue'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'required' => [
                         'yamlActiveFilePath' => $prefixPath . '/../../Fixture/CustomTimer/RangeListeTimerActiveYaml.yaml',
@@ -1473,14 +1492,12 @@ class RangeListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderPrevActive
-     * @test
-     */
+    #[DataProvider('dataProviderPrevActive')]
+    #[Test]
     public function prevActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['required'], $params['optional'], $params['general']);
             $testValue = clone $params['testValueObj'];
@@ -1489,7 +1506,7 @@ class RangeListTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );

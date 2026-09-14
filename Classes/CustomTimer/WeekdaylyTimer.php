@@ -23,11 +23,8 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-use DateInterval;
 use DateTime;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -111,7 +108,6 @@ class WeekdaylyTimer implements TimerInterface
         ];
     }
 
-
     /**
      * tested special 20221115
      * tested general 20210102
@@ -133,7 +129,6 @@ class WeekdaylyTimer implements TimerInterface
             ($countRequired === count(self::ARG_REQ_LIST)) &&
             (($countOptional >= 0) && ($countOptional <= count(self::ARG_OPT_LIST)));
     }
-
 
     /**
      * This method are introduced for easy build of unittests
@@ -180,11 +175,11 @@ class WeekdaylyTimer implements TimerInterface
     /**
      * tested 20201226
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -195,11 +190,11 @@ class WeekdaylyTimer implements TimerInterface
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone in paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone in paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -222,11 +217,11 @@ class WeekdaylyTimer implements TimerInterface
     /**
      * tested:
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -234,17 +229,17 @@ class WeekdaylyTimer implements TimerInterface
     /**
      * tested 20210102
      *
-     * @param DateTime $dateBelowNextActive lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateBelowNextActive lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateBelowNextActive, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateBelowNextActive, $params = []): TimerStartStopRange
     {
         $bitsOfWeekdays = $this->getParameterActiveWeekday($params);
         $count = 0;
         $testDate = clone $dateBelowNextActive; // the current dat may be part of an active Subb
         do {
-            $testDate->add(new DateInterval('P1D'));
+            $testDate->add(new \DateInterval('P1D'));
             $weekDayNumber = 2 ** ($testDate->format('N') - 1); // MO = 1, ... So = 7
             if ($count++ > 7) {
                 throw new TimerException(
@@ -268,17 +263,17 @@ class WeekdaylyTimer implements TimerInterface
     /**
      * tested 20210116
      *
-     * @param DateTime $dateAbovePrevActive
+     * @param \DateTime $dateAbovePrevActive
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateAbovePrevActive, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateAbovePrevActive, $params = []): TimerStartStopRange
     {
         $bitsOfWeekdays = $this->getParameterActiveWeekday($params);
         $count = 0;
         $testDate = clone $dateAbovePrevActive; // the current dat may be part of an active Subb
         do {
-            $testDate->sub(new DateInterval('P1D'));
+            $testDate->sub(new \DateInterval('P1D'));
             $weekDayNumber = 2 ** ($testDate->format('N') - 1); // MO = 1, ... So = 7
             if ($count++ > 7) {
                 throw new TimerException(
@@ -298,7 +293,6 @@ class WeekdaylyTimer implements TimerInterface
 
         return $this->validateUltimateRangeForPrevRange($prevRange, $params, $dateAbovePrevActive);
     }
-
 
     /**
      * @param array<mixed> $params
@@ -321,18 +315,17 @@ class WeekdaylyTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -346,11 +339,11 @@ class WeekdaylyTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

@@ -23,17 +23,15 @@ namespace Porthd\Timer\DataProcessing;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateTimeInterface;
+use Porthd\Timer\Cache\PageCacheFlusher;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\CsvYamlJsonMapperUtility;
 use Psr\Log\LoggerAwareTrait;
-use ReflectionMethod;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -45,13 +43,11 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
  * Example TypoScript configuration:
- *
  */
 class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
     use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
-
 
     // optional Attribute perhaps with main defaults
     protected const ATTR_FLEX_INPUT_FIELD = 'inputfield';
@@ -99,21 +95,20 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
     protected $cache;
 
     /**
-     * @var CacheService
+     * @var PageCacheFlusher
      */
     protected $cacheManager;
 
     /**
      * @param FrontendInterface $cache
-     * @param CacheService $cacheManager
+     * @param PageCacheFlusher $cacheManager
      * @param ContentDataProcessor $contentDataProcessor
      */
     public function __construct(
-        FrontendInterface    $cache,
-        CacheService         $cacheManager,
+        FrontendInterface $cache,
+        PageCacheFlusher $cacheManager,
         ContentDataProcessor $contentDataProcessor
-    )
-    {
+    ) {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
         $this->contentDataProcessor = $contentDataProcessor;
@@ -134,8 +129,7 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    )
-    {
+    ) {
         // Reasons to stop this dataprocessor
         if (array_key_exists(self::ATTR_FLEX_INPUT_FIELD, $processorConfiguration)) {
             $inputFieldName = $cObj->stdWrapValue(self::ATTR_FLEX_INPUT_FIELD, $processorConfiguration, false);
@@ -208,7 +202,7 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
                 $posttext = ((!empty($genericConfig[self::ATTR_DOT_LEAF_POSTTEXT])) ? $genericConfig[self::ATTR_DOT_LEAF_POSTTEXT] : '');
                 $dateFormat = ((!empty($genericConfig[self::ATTR_DOT_LEAF_FORMAT])) ? $genericConfig[self::ATTR_DOT_LEAF_FORMAT] : self::DEFAULT_DATETIME_FORMAT);
                 // translate the Definitions
-                foreach (['pretext', 'posttext', 'dateFormat',] as $myName) {
+                foreach (['pretext', 'posttext', 'dateFormat'] as $myName) {
                     if (substr($$myName, 0, strlen('LLL:EXT:')) === 'LLL:EXT:') {
                         $$myName = LocalizationUtility::translate($$myName);
                     }
@@ -221,7 +215,7 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
                                 $mapItem,
                                 $genericConfig[self::ATTR_DOT_LEAF_INFIELD],
                             );
-                            if ($help instanceof DateTimeInterface) {
+                            if ($help instanceof \DateTimeInterface) {
                                 $inValue = $pretext . $help->format($dateFormat) . $posttext;
                             } else {
                                 throw new TimerException(
@@ -485,8 +479,9 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
                 }
                 return $this->getInFieldValue($origin->$firstKey, $fieldList);
 
-            } elseif (method_exists($origin, ($methodName = 'get' . ucfirst($firstKey)))) {
-                $reflection = new ReflectionMethod($origin, $methodName);
+            }
+            if (method_exists($origin, ($methodName = 'get' . ucfirst($firstKey)))) {
+                $reflection = new \ReflectionMethod($origin, $methodName);
                 if (!$reflection->isPublic()) {
                     throw new TimerException(
                         'There is a problem with resolving the namepart `' . $firstKey .
@@ -522,15 +517,13 @@ class BetterMappingProcessor implements DataProcessorInterface, GeneralDataProce
      * @param array<mixed> $origin
      * @param mixed $fieldReference
      * @param string|int|bool $stringValue
-     * @return void
      * @throws TimerException
      */
     protected function setOutFieldValueByReference(
         array &$origin,
         $fieldReference,
         $stringValue
-    )
-    {
+    ) {
         if (is_array($fieldReference)) {
             $fieldList = $fieldReference;
         } elseif ((!empty($fieldReference)) && (is_string($fieldReference))) {

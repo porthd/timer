@@ -23,8 +23,6 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-use DateInterval;
 use DateTime;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
@@ -40,6 +38,14 @@ class DefaultTimer implements TimerInterface
         TimerConst::TCA_ITEMS_VALUE => 'default',
     ];
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
+    //
+    // NOTE: Do NOT add an empty-string key (`'' => ...`) here. This array feeds the
+    // flexform `ds` (keyed by `tx_timer_selector`) for pages/tt_content. The selector
+    // field defaults to `default` (see TIMER_NAME), so an empty selector never occurs
+    // at runtime. An empty `` key, however, IS enumerated by FlexFormTools during
+    // cache warmup as an incomplete data-structure identifier (dataStructureKey='')
+    // and throws #1478113471, breaking `cache:warmup` site-wide. Commit 504c5b37
+    // removed the empty entry deliberately; a stale unit test still demanded it.
     public const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/DefaultTimer.flexform',
     ];
@@ -120,17 +126,17 @@ class DefaultTimer implements TimerInterface
     /**
      * tested 20201226
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         $flag = true;
         $start = clone $dateLikeEventZone;
-        $start->sub(new DateInterval('PT30S'));
+        $start->sub(new \DateInterval('PT30S'));
         $stop = clone $dateLikeEventZone;
-        $stop->add(new DateInterval('PT30S'));
+        $stop->add(new \DateInterval('PT30S'));
         $this->setIsActiveResult($start, $stop, $flag, $dateLikeEventZone, $params);
         return $this->lastIsActiveResult->getResultExist();
     }
@@ -140,11 +146,11 @@ class DefaultTimer implements TimerInterface
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -159,11 +165,11 @@ class DefaultTimer implements TimerInterface
     /**
      * tested:
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -171,11 +177,11 @@ class DefaultTimer implements TimerInterface
     /**
      * tested 20201230
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -189,11 +195,11 @@ class DefaultTimer implements TimerInterface
     /**
      * tested 20201230
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -205,10 +211,10 @@ class DefaultTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @return TimerStartStopRange
      */
-    protected function everytimeActive(DateTime $dateLikeEventZone): TimerStartStopRange
+    protected function everytimeActive(\DateTime $dateLikeEventZone): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -217,18 +223,17 @@ class DefaultTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -242,11 +247,11 @@ class DefaultTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

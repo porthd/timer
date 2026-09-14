@@ -23,13 +23,11 @@ namespace Porthd\Timer\Tests\Unit\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Timer\CustomTimer\JewishHolidayTimer;
-use TYPO3\CMS\Core\Context\Context;
-use DateInterval;
-use DateTime;
-use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\JewishHolidayTimer;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -44,11 +42,10 @@ class JewishHolidayTimerTest extends TestCase
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
 
-
     /**
      * @var JewishHolidayTimer
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
@@ -82,92 +79,85 @@ class JewishHolidayTimerTest extends TestCase
 
     /**
      * the ultimate green test
-     * @test
      */
+    #[Test]
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selfName()
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::NAME_TIMER,
             $this->subject::selfName(),
             'The name musst be defined.'
         );
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getSelectorItem()
     {
         $result = $this->subject::getSelectorItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             1,
             count($result),
             'The array  must contain at least two items.'
         );
-        $this->assertIsString(
-            $result[0],
+        self::assertIsString(
+            $result['label'],
             'The first item must be an string.'
         );
-        $this->assertEquals(
-            $result[1],
+        self::assertEquals(
+            $result['value'],
             self::NAME_TIMER,
             'The second term must the name of the timer.'
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             count($result),
             'The array  must contain one Item.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             array_keys($result),
             [self::NAME_TIMER],
             'The key must the name of the timer.'
         );
-        $this->assertIsString(
+        self::assertIsString(
             $result[self::NAME_TIMER],
             'The value must be type of string.'
         );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
-        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+        if (str_starts_with($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
                 );
         } else {
-            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            if (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
                 $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                     substr(
                         $filePath,
                         strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                     );
-                $this->assertTrue(
+                self::assertTrue(
                     (false),
                     'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. '
                 );
@@ -176,35 +166,34 @@ class JewishHolidayTimerTest extends TestCase
             }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue(
+        self::assertTrue(
             $flag,
             'The file with the flexform content exist.'
         );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue(
+        self::assertTrue(
             (!(!$flexArray)),
             'The filecontent is valid xml.'
         );
     }
-
 
     public static function dataProvider_isAllowedInRange()
     {
         $testDate = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
             '2020-12-31 12:00:00',
-            new DateTimeZone('Europe/Berlin')
+            new \DateTimeZone('Europe/Berlin')
         );
         $minusOneSecond = clone $testDate;
-        $minusOneSecond->sub(new DateInterval('PT1S'));
+        $minusOneSecond->sub(new \DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
-        $addOneSecond->add(new DateInterval('PT1S'));
+        $addOneSecond->add(new \DateInterval('PT1S'));
         $rest = [];
         $result = [];
 
         $result[] = [
-            'message' => 'The testdate is valid, if the testdate is in the middle of the ultimate range..',
+            'The testdate is valid, if the testdate is in the middle of the ultimate range..',
             'expects' => [
                 'result' => true,
             ],
@@ -219,7 +208,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -234,7 +223,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
+            'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
             'expects' => [
                 'result' => false,
             ],
@@ -249,7 +238,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -264,7 +253,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
+            'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
             'expects' => [
                 'result' => false,
             ],
@@ -281,25 +270,22 @@ class JewishHolidayTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProvider_isAllowedInRange
-     * @test
-     */
+    #[DataProvider('dataProvider_isAllowedInRange')]
+    #[Test]
     public function isAllowedInRange($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
             );
         }
     }
-
 
     /**
      * @return array[]
@@ -322,7 +308,7 @@ class JewishHolidayTimerTest extends TestCase
         foreach ($list as $unsetParam => $expects
         ) {
             $item = [
-                'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
+                'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -341,22 +327,22 @@ class JewishHolidayTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false],
-                     [false, true],
-                     ['false', true],
-                     [new Datetime(), false],
-                     ['hallo', false],
-                     ['0', true],
-                     [0.0, true],
-                     ["0.0", false],
-                     ['true', true],
-                     ['1', true],
-                     [1, true],
-                     [1.0, true],
-                     ['1.0', false],
-                 ] as $value) {
+            [null, false],
+            [false, true],
+            ['false', true],
+            [new \Datetime(), false],
+            ['hallo', false],
+            ['0', true],
+            [0.0, true],
+            ['0.0', false],
+            ['true', true],
+            ['1', true],
+            [1, true],
+            [1.0, true],
+            ['1.0', false],
+        ] as $value) {
             $result[] = [
-                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
+                'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
                     'result' => $value[1],
                 ],
@@ -373,13 +359,13 @@ class JewishHolidayTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     'UTC' => true,
-                     '' => false,
-                     'Europe/Berlin' => true,
-                     'Kumpel/Dumpel' => false,
-                 ] as $zoneVal => $expects) {
+            'UTC' => true,
+            '' => false,
+            'Europe/Berlin' => true,
+            'Kumpel/Dumpel' => false,
+        ] as $zoneVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
@@ -397,13 +383,13 @@ class JewishHolidayTimerTest extends TestCase
         }
         // Variation for ultimateBeginningTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -421,13 +407,13 @@ class JewishHolidayTimerTest extends TestCase
         }
         // Variation for ultimateEndingTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -446,24 +432,21 @@ class JewishHolidayTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateGeneralByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateGeneralByVariationArgumentsInParam')]
+    #[Test]
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
         }
     }
-
 
     /**
      * @return array[]
@@ -480,7 +463,7 @@ class JewishHolidayTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The test is correct, because all needed arguments are used.',
+            'The test is correct, because all needed arguments are used.',
             [
                 'result' => true,
             ],
@@ -495,70 +478,70 @@ class JewishHolidayTimerTest extends TestCase
         ];
         //        Variation of allowed `namedDateMidnight`
         foreach ([
-                     'ErevRoshHashanah',
-                     'RoshHashanahI',
-                     'RoshHashanahII',
-                     'TzomGedaliah',
-                     'ErevYomKippur',
-                     'YomKippur',
-                     'ErevSukkot',
-                     'SukkotI',
-                     'SukkotII_DiasporOnly',
-                     'HolHamoedSukkot_inIsraelInDiaspora',
-                     'HolHamoedSukkot_inIsrael',
-                     'HolHamoedSukkot_inDiaspora',
-                     'HoshanaRabbah',
-                     'SheminiAzeret_inDiaspora',
-                     'SheminiAzeretSimchatTorah_inIsrael',
-                     'SimchatTorah_inDiaspora',
-                     'IsruChagTishri_inIsrael',
-                     'IsruChagTishri_inDiaspora',
-                     'HanukkahI',
-                     'HanukkahII',
-                     'HanukkahIII',
-                     'HanukkahIV',
-                     'HanukkahV',
-                     'HanukkahVI',
-                     'HanukkahVII',
-                     'HanukkahVIII',
-                     'TzomTevet',
-                     'TuBShevat',
-                     'PurimKatan',
-                     'ShushanPurimKatan',
-                     'TaAnithEsther',
-                     'Purim',
-                     'ShushanPurim',
-                     'ShushanPurimPost',
-                     'ShushanPurimPur',
-                     'ShabbatHagadol',
-                     'ErevPesach',
-                     'PesachI',
-                     'PesachII_DiasporOnly',
-                     'HolHamoedPesach_inIsraelInDiaspora',
-                     'HolHamoedPesach_inIsrael',
-                     'HolHamoedPesach_inDiaspora',
-                     'PesachVII',
-                     'PesachVIII_DiasporOnly',
-                     'IsruChagNisan_inIsrael',
-                     'IsruChagNisan_inDiaspora',
-                     'YomHashoah',
-                     'YomHazikaron',
-                     'YomHaAtzmaut',
-                     'PesachSheini',
-                     'LagBOmer',
-                     'YomYerushalayim',
-                     'ErevShavuot',
-                     'ShavuotI',
-                     'ShavuotII_DiasporOnly',
-                     'IsruChagSivan_inIsrael',
-                     'IsruChagSivan_inDiaspora',
-                     'TzomTammuz',
-                     'TishaBAv',
-                     'TuBAv',
-                 ] as $dateIdentifier) {
+            'ErevRoshHashanah',
+            'RoshHashanahI',
+            'RoshHashanahII',
+            'TzomGedaliah',
+            'ErevYomKippur',
+            'YomKippur',
+            'ErevSukkot',
+            'SukkotI',
+            'SukkotII_DiasporOnly',
+            'HolHamoedSukkot_inIsraelInDiaspora',
+            'HolHamoedSukkot_inIsrael',
+            'HolHamoedSukkot_inDiaspora',
+            'HoshanaRabbah',
+            'SheminiAzeret_inDiaspora',
+            'SheminiAzeretSimchatTorah_inIsrael',
+            'SimchatTorah_inDiaspora',
+            'IsruChagTishri_inIsrael',
+            'IsruChagTishri_inDiaspora',
+            'HanukkahI',
+            'HanukkahII',
+            'HanukkahIII',
+            'HanukkahIV',
+            'HanukkahV',
+            'HanukkahVI',
+            'HanukkahVII',
+            'HanukkahVIII',
+            'TzomTevet',
+            'TuBShevat',
+            'PurimKatan',
+            'ShushanPurimKatan',
+            'TaAnithEsther',
+            'Purim',
+            'ShushanPurim',
+            'ShushanPurimPost',
+            'ShushanPurimPur',
+            'ShabbatHagadol',
+            'ErevPesach',
+            'PesachI',
+            'PesachII_DiasporOnly',
+            'HolHamoedPesach_inIsraelInDiaspora',
+            'HolHamoedPesach_inIsrael',
+            'HolHamoedPesach_inDiaspora',
+            'PesachVII',
+            'PesachVIII_DiasporOnly',
+            'IsruChagNisan_inIsrael',
+            'IsruChagNisan_inDiaspora',
+            'YomHashoah',
+            'YomHazikaron',
+            'YomHaAtzmaut',
+            'PesachSheini',
+            'LagBOmer',
+            'YomYerushalayim',
+            'ErevShavuot',
+            'ShavuotI',
+            'ShavuotII_DiasporOnly',
+            'IsruChagSivan_inIsrael',
+            'IsruChagSivan_inDiaspora',
+            'TzomTammuz',
+            'TishaBAv',
+            'TuBAv',
+        ] as $dateIdentifier) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `namedDateMidnight` is correct by using the id `' . $dateIdentifier . '`.',
+                'The variation of the `namedDateMidnight` is correct by using the id `' . $dateIdentifier . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -574,23 +557,23 @@ class JewishHolidayTimerTest extends TestCase
         }
         //                Variation of unknown `namedDateMidnight`
         foreach ([
-                     null,
-                     7,
-                     -1,
-                     -2,
-                     'kennIchNicht',
-                     'easter',
-                     'ascension',
-                     'pentecost',
-                     'firstadvent',
-                     'christmas',
-                     'rosemonday',
-                     'goodfriday',
-                     'towlday',
-                 ] as $dateIdentifier) {
+            null,
+            7,
+            -1,
+            -2,
+            'kennIchNicht',
+            'easter',
+            'ascension',
+            'pentecost',
+            'firstadvent',
+            'christmas',
+            'rosemonday',
+            'goodfriday',
+            'towlday',
+        ] as $dateIdentifier) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `namedDateMidnight` is NOT correct by using the number `' .
+                'The variation of the `namedDateMidnight` is NOT correct by using the number `' .
                     print_r($dateIdentifier, true) . '`.',
                 'expects' => [
                     'result' => false,
@@ -607,27 +590,27 @@ class JewishHolidayTimerTest extends TestCase
         }
         // variation of `relMinToSelectedTimerEvent`
         foreach ([
-                     null,
-                     '',
-                     -475200,
-                     -10000,
-                     -1000,
-                     '-100',
-                     -10,
-                     -2,
-                     -1,
-                     0,
-                     '0',
-                     1,
-                     2,
-                     10,
-                     100,
-                     100000,
-                     '475200',
-                 ] as $DateNumber) {
+            null,
+            '',
+            -475200,
+            -10000,
+            -1000,
+            '-100',
+            -10,
+            -2,
+            -1,
+            0,
+            '0',
+            1,
+            2,
+            10,
+            100,
+            100000,
+            '475200',
+        ] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `relMinToSelectedTimerEvent` is  correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `relMinToSelectedTimerEvent` is  correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -645,7 +628,7 @@ class JewishHolidayTimerTest extends TestCase
         foreach ([-475201, 475201, -10.1, 10.1, '-10.1', '10.1'] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `relMinToSelectedTimerEvent` is NOT  correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `relMinToSelectedTimerEvent` is NOT  correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -663,7 +646,7 @@ class JewishHolidayTimerTest extends TestCase
         foreach (['475200', 120, 1, -1, '-10', -475200] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `durationMinutes` is correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `durationMinutes` is correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -678,10 +661,10 @@ class JewishHolidayTimerTest extends TestCase
             ];
         }
         //        variation of `durationMinutes`
-        foreach (['', null, 0, '0', -1.2, '-10.1',] as $DateNumber) {
+        foreach (['', null, 0, '0', -1.2, '-10.1'] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `durationMinutes` is NOT correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `durationMinutes` is NOT correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -699,17 +682,15 @@ class JewishHolidayTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateSpeciallByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateSpeciallByVariationArgumentsInParam')]
+    #[Test]
     public function validateSpeciallByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['required'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -722,7 +703,7 @@ class JewishHolidayTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -734,7 +715,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -746,7 +727,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -759,7 +740,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is `0`. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is `0`. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -772,7 +753,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is `1`. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is `1`. The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -786,7 +767,7 @@ class JewishHolidayTimerTest extends TestCase
         ];
         foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
             $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                'The active timezone will be shown, because the parameter for it is active `' .
                     print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
                 [
                     'result' => 'Lauder/Furz',
@@ -801,7 +782,7 @@ class JewishHolidayTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -814,7 +795,7 @@ class JewishHolidayTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -829,20 +810,18 @@ class JewishHolidayTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
+    #[DataProvider('dataProviderGetTimeZoneOfEvent')]
+    #[Test]
     public function getTimeZoneOfEvent($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
 
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $result,
                 $message
@@ -855,7 +834,7 @@ class JewishHolidayTimerTest extends TestCase
         $result = [];
         // random active
         $result[] = [
-            'message' => 'The selected date is Yom Kippur 2022 between 12:00 and 14:00. It is active.',
+            'The selected date is Yom Kippur 2022 between 12:00 and 14:00. It is active.',
             'expects' => [
                 'result' => true,
             ],
@@ -863,7 +842,7 @@ class JewishHolidayTimerTest extends TestCase
                 'value' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-10-05 13:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'setting' => [
                     'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -882,16 +861,16 @@ class JewishHolidayTimerTest extends TestCase
             foreach ([-1, 1] as $factor) {
                 $duration *= $factor;
                 $flag = ($duration > 0);
-                $helpDate =  date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 12:00:00', new DateTimeZone('Europe/Berlin'));
+                $helpDate =  date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 12:00:00', new \DateTimeZone('Europe/Berlin'));
 
                 $result[] = [
-                    'message' => 'The minutes of duration `' . $duration . '` will make it active. The border `'.
-                        $helpDate->format('Y-m-d H:i:s').'` is part of the active range.',
+                    'The minutes of duration `' . $duration . '` will make it active. The border `' .
+                        $helpDate->format('Y-m-d H:i:s') . '` is part of the active range.',
                     'expects' => [
                         'result' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 12:00:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 12:00:00', new \DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00 AM
@@ -907,19 +886,19 @@ class JewishHolidayTimerTest extends TestCase
                 $otherBorder = clone $helpDate;
                 $failBorder = clone $helpDate;
                 if ($flag) {
-                    $failBorder->sub(new DateInterval('PT1S'));
-                    $otherBorder->add(new DateInterval('PT'.abs($duration).'M'));
+                    $failBorder->sub(new \DateInterval('PT1S'));
+                    $otherBorder->add(new \DateInterval('PT' . abs($duration) . 'M'));
                     $failOtherBorder = clone $otherBorder;
-                    $failOtherBorder->add(new DateInterval('PT1S'));
+                    $failOtherBorder->add(new \DateInterval('PT1S'));
                 } else {
-                    $failBorder->add(new DateInterval('PT1S'));
-                    $otherBorder->sub(new DateInterval('PT'.abs($duration).'M'));
+                    $failBorder->add(new \DateInterval('PT1S'));
+                    $otherBorder->sub(new \DateInterval('PT' . abs($duration) . 'M'));
                     $failOtherBorder = clone $otherBorder;
-                    $failOtherBorder->sub(new DateInterval('PT1S'));
+                    $failOtherBorder->sub(new \DateInterval('PT1S'));
                 }
                 $result[] = [
-                    'message' => 'The minutes of duration `' . $duration . '` will make it active. The border `'.
-                        $otherBorder->format('Y-m-d H:i:s').'` is part of the active range.',
+                    'The minutes of duration `' . $duration . '` will make it active. The border `' .
+                        $otherBorder->format('Y-m-d H:i:s') . '` is part of the active range.',
                     'expects' => [
                         'result' => true,
                     ],
@@ -938,8 +917,8 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The minutes of duration `' . $duration . '` will be detected as inactive. The border `'.
-                        $failBorder->format('Y-m-d H:i:s').'` is NOT part of the active range.',
+                    'The minutes of duration `' . $duration . '` will be detected as inactive. The border `' .
+                        $failBorder->format('Y-m-d H:i:s') . '` is NOT part of the active range.',
                     'expects' => [
                         'result' => false,
                     ],
@@ -958,8 +937,8 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The minutes of duration `' . $duration . '` will be detected as inactive. The border `'.
-                        $failOtherBorder->format('Y-m-d H:i:s').'` is NOT part of the active range.',
+                    'The minutes of duration `' . $duration . '` will be detected as inactive. The border `' .
+                        $failOtherBorder->format('Y-m-d H:i:s') . '` is NOT part of the active range.',
                     'expects' => [
                         'result' => false,
                     ],
@@ -984,15 +963,15 @@ class JewishHolidayTimerTest extends TestCase
             foreach ([-1, 1] as $factor) {
                 $relToYomKippur *= $factor;
                 $flag = ($relToYomKippur > 0);
-                $helpDate =  date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 00:00:00', new DateTimeZone('Europe/Berlin'));
+                $helpDate =  date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 00:00:00', new \DateTimeZone('Europe/Berlin'));
                 if ($flag) {
-                    $helpDate->add(new DateInterval('PT'.abs($relToYomKippur).'M'));
+                    $helpDate->add(new \DateInterval('PT' . abs($relToYomKippur) . 'M'));
                 } else {
-                    $helpDate->sub(new DateInterval('PT'.abs($relToYomKippur).'M'));
+                    $helpDate->sub(new \DateInterval('PT' . abs($relToYomKippur) . 'M'));
                 }
                 $result[] = [
-                    'message' => 'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `'.
-                        $helpDate->format('Y-m-d H:i:s').'` is part of the active range.',
+                    'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `' .
+                        $helpDate->format('Y-m-d H:i:s') . '` is part of the active range.',
                     'expects' => [
                         'result' => true,
                     ],
@@ -1011,14 +990,14 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $otherBorder = clone $helpDate;
-                $otherBorder->add(new DateInterval('PT120M'));
+                $otherBorder->add(new \DateInterval('PT120M'));
                 $failBorder = clone $helpDate;
-                $failBorder->sub(new DateInterval('PT1S'));
+                $failBorder->sub(new \DateInterval('PT1S'));
                 $failOtherBorder = clone $helpDate;
-                $failOtherBorder->add(new DateInterval('PT120M1S'));
+                $failOtherBorder->add(new \DateInterval('PT120M1S'));
                 $result[] = [
-                    'message' => 'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `'.
-                        $otherBorder->format('Y-m-d H:i:s').'` is part of the active range.',
+                    'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `' .
+                        $otherBorder->format('Y-m-d H:i:s') . '` is part of the active range.',
                     'expects' => [
                         'result' => true,
                     ],
@@ -1037,8 +1016,8 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `'.
-                        $failBorder->format('Y-m-d H:i:s').'` is NOT part of the active range.',
+                    'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `' .
+                        $failBorder->format('Y-m-d H:i:s') . '` is NOT part of the active range.',
                     'expects' => [
                         'result' => false,
                     ],
@@ -1057,8 +1036,8 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `'.
-                        $failOtherBorder->format('Y-m-d H:i:s').'` is NOT part of the active range.',
+                    'The minutes `' . $relToYomKippur . '` relative to 0:00:00 Yom Kippur will shift the two hours of active range. The border `' .
+                        $failOtherBorder->format('Y-m-d H:i:s') . '` is NOT part of the active range.',
                     'expects' => [
                         'result' => false,
                     ],
@@ -1082,13 +1061,13 @@ class JewishHolidayTimerTest extends TestCase
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The date with additional Interval miss the current Time by one second. It`s NOT active. ' .
+                    'The date with additional Interval miss the current Time by one second. It`s NOT active. ' .
                         'It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => false,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 11:59:59', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 11:59:59', new \DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 1440 min = 1d
@@ -1102,12 +1081,12 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The date with additional Interval  will be active. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The date with additional Interval  will be active. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 13:59:59', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2022-10-05 13:59:59', new \DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
                             'relMinToSelectedTimerEvent' => 720, // 1440 min = 1d
@@ -1125,26 +1104,26 @@ class JewishHolidayTimerTest extends TestCase
 
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2022-10-05 11:00:00',
-                     '2022-10-05 13:00:00',
-                     '2022-10-05 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $beginnTimeString) {
+            '0001-01-01 00:00:00',
+            '2022-10-05 11:00:00',
+            '2022-10-05 13:00:00',
+            '2022-10-05 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $beginnTimeString) {
             foreach ([
-                         '0001-01-01 00:00:00',
-                         '2022-10-05 11:00:00',
-                         '2022-10-05 13:00:00',
-                         '2022-10-05 18:00:00',
-                         '9999-12-31 23:59:59',
-                     ] as $endTimeString) {
+                '0001-01-01 00:00:00',
+                '2022-10-05 11:00:00',
+                '2022-10-05 13:00:00',
+                '2022-10-05 18:00:00',
+                '9999-12-31 23:59:59',
+            ] as $endTimeString) {
                 $check = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-10-05 11:59:59',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $result[] = [
-                    'message' => 'The date ' . $check->format('d.m.Y H:i:s') . ' miss the start-interval by one second. ' .
+                    'The date ' . $check->format('d.m.Y H:i:s') . ' miss the start-interval by one second. ' .
                         'It is independ to the ultimate-parameter. [' . $beginnTimeString . '//' . $endTimeString . ']',
                     'expects' => [
                         'result' => false,
@@ -1163,9 +1142,9 @@ class JewishHolidayTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $check->add(new DateInterval('PT2H'));
+                $check->add(new \DateInterval('PT2H'));
                 $result[] = [
-                    'message' => 'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second before ending. ' .
+                    'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second before ending. ' .
                         'It is independ to the ultimate-parameter. [' . $beginnTimeString . '//' . $endTimeString . ']',
                     'expects' => [
                         'result' => ((($beginnTimeString <= $check->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
@@ -1187,9 +1166,9 @@ class JewishHolidayTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $check->add(new DateInterval('PT2S'));
+                $check->add(new \DateInterval('PT2S'));
                 $result[] = [
-                    'message' => 'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second after ending. It`s NOT active. ' .
+                    'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second after ending. It`s NOT active. ' .
                         'It is independ to the ultimate-parameter. [' . $beginnTimeString . '//' . $endTimeString . ']',
                     'expects' => [
                         'result' => false,
@@ -1213,30 +1192,27 @@ class JewishHolidayTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderIsActive
-     * @test
-     */
+    #[DataProvider('dataProviderIsActive')]
+    #[Test]
     public function isActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = clone $params['value'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isActive($value, $setting),
                 'isActive: ' . $message
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $params['value'],
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
         }
     }
-
 
     public static function dataProviderNextActive()
     {
@@ -1249,9 +1225,9 @@ class JewishHolidayTimerTest extends TestCase
         //    2.10.2025
         $result = [];
         // rondomly Test
-        foreach (['2023-10-05 12:00:00','2023-10-05 14:00:00','2023-01-01 00:00:00','2023-09-24 11:59:59',] as $checkDate) {
+        foreach (['2023-10-05 12:00:00', '2023-10-05 14:00:00', '2023-01-01 00:00:00', '2023-09-24 11:59:59'] as $checkDate) {
             $result[] = [
-                'message' => 'The selected date for the next range is yom kippur in 2023 between 12:00 and 14:00. ' .
+                'The selected date for the next range is yom kippur in 2023 between 12:00 and 14:00. ' .
                     'It will work, because the current time is between the ranges or at least part of the previous active range.',
                 'expects' => [
                     'beginning' => '2023-09-25 12:00:00',
@@ -1262,7 +1238,7 @@ class JewishHolidayTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $checkDate,
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1283,21 +1259,21 @@ class JewishHolidayTimerTest extends TestCase
             $expectYomKippur = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2023-09-25 12:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             if ($duration > 0) {
                 $yomKippurStart = clone $expectYomKippur;
                 $yomKippurEnd = clone $expectYomKippur;
-                $yomKippurEnd->add(new DateInterval('PT' . abs($duration) . 'M'));
+                $yomKippurEnd->add(new \DateInterval('PT' . abs($duration) . 'M'));
             } else {
                 $yomKippurEnd = clone $expectYomKippur;
                 $yomKippurStart = clone $expectYomKippur;
-                $yomKippurStart->sub(new DateInterval('PT' . abs($duration) . 'M'));
+                $yomKippurStart->sub(new \DateInterval('PT' . abs($duration) . 'M'));
             }
             $check = clone $yomKippurStart;
-            $check->sub(new DateInterval('PT1S'));
+            $check->sub(new \DateInterval('PT1S'));
             $result[] = [
-                'message' => 'The nextRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) .
+                'The nextRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) .
                     '` is okay with the yom-kippur-day-Parameter.',
                 'expects' => [
                     'beginning' => $yomKippurStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1310,7 +1286,7 @@ class JewishHolidayTimerTest extends TestCase
                         'namedDateMidnight' => 'YomKippur', // Variation
                         'relMinToSelectedTimerEvent' => 720, //  12:00
                         'durationMinutes' => $duration, // Variation
-                            // general
+                        // general
                         'useTimeZoneOfFrontend' => 'true', // Variation
                         'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
                         'ultimateBeginningTimer' => '0001-01-01 00:00:00',
@@ -1325,36 +1301,36 @@ class JewishHolidayTimerTest extends TestCase
             $expectYomKippur = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2023-09-25 12:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $check2 = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2022-10-05 12:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $check3 = clone $check2;
-            $check3->add(new DateInterval('PT120M'));
-            ;
+            $check3->add(new \DateInterval('PT120M'));
+
             if ($minRelToHoliday > 0) {
-                $expectYomKippur->add(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check2->add(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check3->add(new DateInterval('PT'.abs($minRelToHoliday).'M'));
+                $expectYomKippur->add(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check2->add(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check3->add(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
             } elseif ($minRelToHoliday === 0) {
                 // nothing to do
             } else {
-                $expectYomKippur->sub(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check2->sub(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check3->sub(new DateInterval('PT'.abs($minRelToHoliday).'M'));
+                $expectYomKippur->sub(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check2->sub(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check3->sub(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
             }
             $yomKippurStart = clone $expectYomKippur;
             $yomKippurEnd = clone $expectYomKippur;
-            $yomKippurEnd->add(new DateInterval('PT120M'));
+            $yomKippurEnd->add(new \DateInterval('PT120M'));
 
             $check = clone $yomKippurStart;
-            $check->sub(new DateInterval('PT1S'));
-            foreach ([$check, $check2, $check3, ] as $testDate) {
+            $check->sub(new \DateInterval('PT1S'));
+            foreach ([$check, $check2, $check3] as $testDate) {
                 $result[] = [
-                    'message' => 'The nextRange for relativ-minuntes-to-event at time `' .
+                    'The nextRange for relativ-minuntes-to-event at time `' .
                         $testDate->format(TimerInterface::TIMER_FORMAT_DATETIME) .
                         '` is okay with the yom-kippur-day-Parameter.',
                     'expects' => [
@@ -1368,7 +1344,7 @@ class JewishHolidayTimerTest extends TestCase
                             'namedDateMidnight' => 'YomKippur', // Variation
                             'relMinToSelectedTimerEvent' => $minRelToHoliday, //  12:00
                             'durationMinutes' => 120, // Variation
-                                // general
+                            // general
                             'useTimeZoneOfFrontend' => 'true', // Variation
                             'timeZoneOfEvent' => 'Europe/Berlin',  // static se  below
                             'ultimateBeginningTimer' => '0001-01-01 00:00:00',
@@ -1382,15 +1358,15 @@ class JewishHolidayTimerTest extends TestCase
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach ([
-                         'UTC',
-                         'Europe/Berlin',
-                         'Australia/Eucla',
-                         'America/Detroit',
-                         'Pacific/Fiji',
-                         'Indian/Chagos',
-                     ] as $timezoneName) {
+                'UTC',
+                'Europe/Berlin',
+                'Australia/Eucla',
+                'America/Detroit',
+                'Pacific/Fiji',
+                'Indian/Chagos',
+            ] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
+                    'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'beginning' => '2023-09-25 12:00:00',
                         'ending' => '2023-09-25 14:00:00',
@@ -1400,7 +1376,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2022-10-05 12:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1415,7 +1391,7 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'beginning' => '2022-10-05 12:00:00',
                         'ending' => '2022-10-05 14:00:00',
@@ -1425,7 +1401,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2022-10-05 11:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1444,23 +1420,23 @@ class JewishHolidayTimerTest extends TestCase
 
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2022-10-05 11:00:00',
-                     '2022-10-05 12:00:00',
-                     '2022-10-05 13:00:00',
-                     '2022-10-05 14:00:00',
-                     '2022-10-05 18:00:00',
-                     '2023-09-25 11:00:00',
-                     '2023-09-25 12:00:00',
-                     '2023-09-25 13:00:00',
-                     '2023-09-25 14:00:00',
-                     '2023-09-25 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $timeString) {
+            '0001-01-01 00:00:00',
+            '2022-10-05 11:00:00',
+            '2022-10-05 12:00:00',
+            '2022-10-05 13:00:00',
+            '2022-10-05 14:00:00',
+            '2022-10-05 18:00:00',
+            '2023-09-25 11:00:00',
+            '2023-09-25 12:00:00',
+            '2023-09-25 13:00:00',
+            '2023-09-25 14:00:00',
+            '2023-09-25 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $timeString) {
             if ($timeString >= '2023-09-25 14:00:00') {
                 $result[] = [
-                    'message' => 'the testtime is part of an active range. The nextRange is correctly detected for the '.
-                        '`'.'2022-10-05 13:00:00'.'` with the ultimate ending `' .
+                    'the testtime is part of an active range. The nextRange is correctly detected for the ' .
+                        '`' . '2022-10-05 13:00:00' . '` with the ultimate ending `' .
                         $timeString . '`.',
                     'expects' => [
                         'beginning' => '2023-09-25 12:00:00',
@@ -1471,7 +1447,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2022-10-05 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1488,7 +1464,7 @@ class JewishHolidayTimerTest extends TestCase
             }
             if ($timeString <= '2022-10-05 13:00:00') {
                 $result[] = [
-                    'message' => 'The testtime is not part of an active Range. The nextRange is correctly detected for the '.
+                    'The testtime is not part of an active Range. The nextRange is correctly detected for the ' .
                         '`2022-10-05 13:00:00` with the beginning `' .
                         $timeString . '`.',
                     'expects' => [
@@ -1500,7 +1476,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2022-10-05 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1520,14 +1496,12 @@ class JewishHolidayTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderNextActive
-     * @test
-     */
+    #[DataProvider('dataProviderNextActive')]
+    #[Test]
     public function nextActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = $params['value'];
@@ -1550,13 +1524,12 @@ class JewishHolidayTimerTest extends TestCase
             $flag = $flag && (($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
                     (abs($diffEnd) <= 60)); // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             $flag = $flag && ($result->hasResultExist() === $expects['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects, true)
             );
         }
     }
-
 
     public static function dataProviderPrevActive()
     {
@@ -1569,9 +1542,9 @@ class JewishHolidayTimerTest extends TestCase
         //    2.10.2025
         $result = [];
         // rondomly Test
-        foreach (['2024-10-12 12:00:00','2024-10-12 14:00:00','2023-12-31 00:00:00','2023-09-24 14:00:01',] as $checkDate) {
+        foreach (['2024-10-12 12:00:00', '2024-10-12 14:00:00', '2023-12-31 00:00:00', '2023-09-24 14:00:01'] as $checkDate) {
             $result[] = [
-                'message' => 'The selected date will lead to the range between 12:00 and 14:00 of the yom kippur-day in 2023. ' .
+                'The selected date will lead to the range between 12:00 and 14:00 of the yom kippur-day in 2023. ' .
                     'It will work, because  the current time is between that and the next range or at least part of the next range.',
                 'expects' => [
                     'beginning' => '2023-09-25 12:00:00',
@@ -1582,7 +1555,7 @@ class JewishHolidayTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $checkDate,
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1603,21 +1576,21 @@ class JewishHolidayTimerTest extends TestCase
             $expectYomKippur = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2023-09-25 12:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             if ($duration > 0) {
                 $yomKippurStart = clone $expectYomKippur;
                 $yomKippurEnd = clone $expectYomKippur;
-                $yomKippurEnd->add(new DateInterval('PT' . abs($duration) . 'M'));
+                $yomKippurEnd->add(new \DateInterval('PT' . abs($duration) . 'M'));
             } else {
                 $yomKippurEnd = clone $expectYomKippur;
                 $yomKippurStart = clone $expectYomKippur;
-                $yomKippurStart->sub(new DateInterval('PT' . abs($duration) . 'M'));
+                $yomKippurStart->sub(new \DateInterval('PT' . abs($duration) . 'M'));
             }
             $check = clone $yomKippurEnd;
-            $check->add(new DateInterval('PT1S'));
+            $check->add(new \DateInterval('PT1S'));
             $result[] = [
-                'message' => 'The prevRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) .
+                'The prevRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) .
                     '` is okay with the yom-kippur-day-Parameter.',
                 'expects' => [
                     'beginning' => $yomKippurStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1645,35 +1618,35 @@ class JewishHolidayTimerTest extends TestCase
             $expectYomKippur = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2023-09-25 12:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $check2 = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2024-10-12 12:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $check3 = clone $check2;
-            $check3->add(new DateInterval('PT120M'));
+            $check3->add(new \DateInterval('PT120M'));
             if ($minRelToHoliday > 0) {
-                $expectYomKippur->add(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check2->add(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check3->add(new DateInterval('PT'.abs($minRelToHoliday).'M'));
+                $expectYomKippur->add(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check2->add(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check3->add(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
             } elseif ($minRelToHoliday === 0) {
                 // nothing to do
             } else {
-                $expectYomKippur->sub(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check2->sub(new DateInterval('PT'.abs($minRelToHoliday).'M'));
-                $check3->sub(new DateInterval('PT'.abs($minRelToHoliday).'M'));
+                $expectYomKippur->sub(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check2->sub(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
+                $check3->sub(new \DateInterval('PT' . abs($minRelToHoliday) . 'M'));
             }
             $yomKippurStart = clone $expectYomKippur;
             $yomKippurEnd = clone $expectYomKippur;
-            $yomKippurEnd->add(new DateInterval('PT120M'));
+            $yomKippurEnd->add(new \DateInterval('PT120M'));
 
             $check = clone $yomKippurEnd;
-            $check->add(new DateInterval('PT1S'));
-            foreach ([$check, $check2, $check3, ] as $testDate) {
+            $check->add(new \DateInterval('PT1S'));
+            foreach ([$check, $check2, $check3] as $testDate) {
                 $result[] = [
-                    'message' => 'The prevRange for relativ-minuntes-to-event at time `' . $testDate->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the yom-kippur-day-Parameter.',
+                    'The prevRange for relativ-minuntes-to-event at time `' . $testDate->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the yom-kippur-day-Parameter.',
                     'expects' => [
                         'beginning' => $yomKippurStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
                         'ending' => $yomKippurEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1699,15 +1672,15 @@ class JewishHolidayTimerTest extends TestCase
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach ([
-                         'UTC',
-                         'Europe/Berlin',
-                         'Australia/Eucla',
-                         'America/Detroit',
-                         'Pacific/Fiji',
-                         'Indian/Chagos',
-                     ] as $timezoneName) {
+                'UTC',
+                'Europe/Berlin',
+                'Australia/Eucla',
+                'America/Detroit',
+                'Pacific/Fiji',
+                'Indian/Chagos',
+            ] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
+                    'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'beginning' => '2023-09-25 12:00:00',
                         'ending' => '2023-09-25 14:00:00',
@@ -1717,7 +1690,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2024-10-12 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1732,7 +1705,7 @@ class JewishHolidayTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'beginning' => '2022-10-05 12:00:00',
                         'ending' => '2022-10-05 14:00:00',
@@ -1742,7 +1715,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2024-10-12 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1761,23 +1734,23 @@ class JewishHolidayTimerTest extends TestCase
 
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2022-10-05 11:00:00',
-                     '2022-10-05 12:00:00',
-                     '2022-10-05 13:00:00',
-                     '2022-10-05 14:00:00',
-                     '2022-10-05 18:00:00',
-                     '2023-09-25 11:00:00',
-                     '2023-09-25 12:00:00',
-                     '2023-09-25 13:00:00',
-                     '2023-09-25 14:00:00',
-                     '2023-09-25 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $timeString) {
+            '0001-01-01 00:00:00',
+            '2022-10-05 11:00:00',
+            '2022-10-05 12:00:00',
+            '2022-10-05 13:00:00',
+            '2022-10-05 14:00:00',
+            '2022-10-05 18:00:00',
+            '2023-09-25 11:00:00',
+            '2023-09-25 12:00:00',
+            '2023-09-25 13:00:00',
+            '2023-09-25 14:00:00',
+            '2023-09-25 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $timeString) {
             if ($timeString >= '2024-10-12 13:00:00') {
                 $result[] = [
-                    'message' => 'the testtime is part of an active range. The prevRange is correctly detected for the '.
-                        '`'.'2024-10-12 13:00:00'.'` with the ultimate ending `' .
+                    'the testtime is part of an active range. The prevRange is correctly detected for the ' .
+                        '`' . '2024-10-12 13:00:00' . '` with the ultimate ending `' .
                         $timeString . '`.',
                     'expects' => [
                         'beginning' => '2023-09-25 12:00:00',
@@ -1788,7 +1761,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2024-10-12 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1805,7 +1778,7 @@ class JewishHolidayTimerTest extends TestCase
             }
             if ($timeString <= '2023-09-25 12:00:00') {
                 $result[] = [
-                    'message' => 'The testtime is not part of an active Range. The prevRange is correctly detected for the '.
+                    'The testtime is not part of an active Range. The prevRange is correctly detected for the ' .
                         '`2024-10-12 13:00:00` with the beginning `' .
                         $timeString . '`.',
                     'expects' => [
@@ -1817,7 +1790,7 @@ class JewishHolidayTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2024-10-12 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'YomKippur', // = YomKippur
@@ -1837,14 +1810,12 @@ class JewishHolidayTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderPrevActive
-     * @test
-     */
+    #[DataProvider('dataProviderPrevActive')]
+    #[Test]
     public function prevActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = $params['value'];
@@ -1867,7 +1838,7 @@ class JewishHolidayTimerTest extends TestCase
             $flag = $flag && (($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
                     (abs($diffEnd) <= 60)); // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             $flag = $flag && ($result->hasResultExist() === $expects['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prev
                 Active: ' . $message . "\nExpected: : " . print_r($expects, true)

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\DataProcessing\Trait;
 
-use DateTime;
 use Porthd\Timer\Constants\TimerConst;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -27,15 +26,12 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Fetch records from the database, using the default .select syntax from TypoScript.
  *
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
  * Example TypoScript configuration:
- *
- *
  */
 trait GeneralDataProcessorTrait
 {
@@ -50,7 +46,7 @@ trait GeneralDataProcessorTrait
         $flagPage = isset($processedData['data']['doktype'], $processedData['data']['is_siteroot']);
         $flagContent = isset($processedData['data']['CType'], $processedData['data']['list_type']);
         $pageUid = (
-        ($flagPage) ?
+            ($flagPage) ?
             $processedData['data']['pid'] :
             $processedData['data']['uid']
         );
@@ -69,19 +65,19 @@ trait GeneralDataProcessorTrait
                 $add = 'data';
                 $pageContentOrElementUid = $processedData['data']['uid'];
                 $cType = (
-                (isset($processedData['data']['crdate'])) ?
+                    (isset($processedData['data']['crdate'])) ?
                     $processedData['data']['crdate'] :
                     'noCrdate'
                 );
                 $listType = (
-                (isset($processedData['data']['tstamp'])) ?
+                    (isset($processedData['data']['tstamp'])) ?
                     $processedData['data']['tstamp'] :
                     'noTStamp'
                 );
             }
         }
         $languageUid = (
-        (isset($processedData['data']['sys_language_uid'])) ?
+            (isset($processedData['data']['sys_language_uid'])) ?
             $processedData['data']['sys_language_uid'] :
             '_upsLang'
         );
@@ -96,9 +92,8 @@ trait GeneralDataProcessorTrait
      */
     public function detectCacheTimeSet(
         ContentObjectRenderer $cObj,
-        array                 $processorConfiguration
-    ): array
-    {
+        array $processorConfiguration
+    ): array {
         $cacheValue = (string)$cObj->stdWrapValue(
             TimerConst::ARGUMENT_CACHE,
             $processorConfiguration,
@@ -125,21 +120,19 @@ trait GeneralDataProcessorTrait
         return [$cacheTime, $cacheCalc];
     }
 
-
     /**
      * @param int $cacheTime
      * @param bool $cacheCalc
-     * @param DateTime $dateTimeStopCase
+     * @param \DateTime $dateTimeStopCase
      * @param int $currentTimestamp
      * @return int|null
      */
     public function calculateSimpleTimeDependedCacheTime(
-        int      $cacheTime,
-        bool     $cacheCalc,
-        DateTime $dateTimeStopCase,
-        int      $currentTimestamp
-    )
-    {
+        int $cacheTime,
+        bool $cacheCalc,
+        \DateTime $dateTimeStopCase,
+        int $currentTimestamp
+    ) {
         $myLifeTime = null;
         if ($cacheCalc) {
             $tempMyLifeTime = ($dateTimeStopCase->getTimestamp() - $currentTimestamp);

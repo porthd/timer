@@ -26,7 +26,6 @@ namespace Porthd\Timer\Services;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\CustomTimerUtility;
-use ResourceBundle;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -66,7 +65,6 @@ class TcaService
      * defined in the extension-constants
      *
      * @param array<mixed> $params
-     * @return void
      * @throws TimerException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
@@ -87,7 +85,7 @@ class TcaService
         array_walk($yamlCalendarList, function (&$value, $key) {
             $value = [
                 (
-                    (strpos($value[self::YAML_CALLIST_ITEM_EVENTTITLE], 'LLL:') === 0) ?
+                    (str_starts_with($value[self::YAML_CALLIST_ITEM_EVENTTITLE], 'LLL:')) ?
                         ucfirst(
                             $this->translate($value[self::YAML_CALLIST_ITEM_EVENTTITLE])
                         ) :
@@ -109,11 +107,10 @@ class TcaService
      * (big stuff)
      *
      * @param array<mixed> $params
-     * @return void
      */
     public function selectOptionsForLocalesByPhpIntlExtension(array &$params): void
     {
-        $bundle = new ResourceBundle('', 'ICUDATA');
+        $bundle = new \ResourceBundle('', 'ICUDATA');
         $locales = array_filter(
             $bundle->getLocales('')
         );

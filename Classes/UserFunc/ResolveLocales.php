@@ -33,7 +33,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
  * Example TypoScript configuration:
- *
  */
 final class ResolveLocales
 {
@@ -2043,12 +2042,11 @@ final class ResolveLocales
      * @return string
      */
     public function reduceLocalesToNationsListImplode(
-        array  $rawList = [],
+        array $rawList = [],
         string $spacer = self::DEFAULT_IMPLODE_TEXT,
         string $pretext = self::DEFAULT_IMPLODE_TEXT,
         string $posttext = self::DEFAULT_IMPLODE_TEXT
-    ): string
-    {
+    ): string {
         if (empty($rawList)) {
             return '';
         }
@@ -2060,8 +2058,6 @@ final class ResolveLocales
     }
 
     /**
-     *
-     *
      * @param array<mixed> $conf
      * @param mixed $reference
      * @return string
@@ -2094,7 +2090,7 @@ final class ResolveLocales
     {
         $item = trim($item);
         $list = explode('_', $item, 2);
-        $nation = strtolower($list[1] ?? '');;
+        $nation = strtolower($list[1] ?? '');
         $flag = sprintf(self::FLAG_TEMPLATE, $nation);
         if (array_key_exists($nation, self::ICU_NATIONCODES)) {
             $lllNationName = self::ICU_NATIONCODES[$nation]['lllnation'];

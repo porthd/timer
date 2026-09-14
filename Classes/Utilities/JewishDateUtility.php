@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\Utilities;
 
-use DateInterval;
 use DateTime;
-use DateTimeImmutable;
 use Porthd\Timer\Constants\JewishHolidayConst;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
@@ -33,9 +31,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- *
- */
 class JewishDateUtility extends JewishHolidayConst
 {
     /**
@@ -54,10 +49,10 @@ class JewishDateUtility extends JewishHolidayConst
      */
     public static function getJewishMonthName(int $jewishMonth, int $jewishYear)
     {
-        return ((self::isJewishLeapYear($jewishYear)) ?
+        return (self::isJewishLeapYear($jewishYear)) ?
             self::JEWISH_MONTH_NAMES_LEAP[($jewishMonth)] :
             self::JEWISH_MONTH_NAMES_NON_LEAP[($jewishMonth)]
-        );
+        ;
     }
 
     /**
@@ -73,7 +68,7 @@ class JewishDateUtility extends JewishHolidayConst
         // Get Jewish year of Yom Kippur in the passed Gregorian year
         $jdCur = gregoriantojd(12, 31, $year);
         $jewishCur = jdtojewish($jdCur);
-        [$jewishCurMonth, $jewishCurDay, $jewishCurYear] = explode("/", $jewishCur, 3);
+        [$jewishCurMonth, $jewishCurDay, $jewishCurYear] = explode('/', $jewishCur, 3);
         $jewishCurYearNum = (int)$jewishCurYear;
 
         // Get Last Friday before 2nd of April
@@ -92,10 +87,10 @@ class JewishDateUtility extends JewishHolidayConst
 
         // Check if the current date is between the start and end date ...
         $jdCurrent = gregoriantojd($month, $day, $year);
-        return (
+        return
             ($jdCurrent >= $jdDSTBegin) &&
             ($jdCurrent < $jdDSTEnd)
-        );
+        ;
     }
 
     /**
@@ -109,7 +104,7 @@ class JewishDateUtility extends JewishHolidayConst
      */
     public static function formatJewishDateFromDateTime($date, string $format): array
     {
-        if ((!$date instanceof DateTime) && (!$date instanceof DateTimeImmutable)) {
+        if ((!$date instanceof \DateTime) && (!$date instanceof \DateTimeImmutable)) {
             throw new TimerException(
                 'The first parameter must be an instance of `dateTime` or `DateTimeImmutable`. ' .
                 'The variable is an other type: ' . print_r($date, true) . '.',
@@ -120,33 +115,33 @@ class JewishDateUtility extends JewishHolidayConst
         // Build pattern for preg_replace
         $dateTimeParts = [];
         foreach ([
-                     'w',
-                     'D',
-                     'a',
-                     'A',
-                     'g',
-                     'G',
-                     'h',
-                     'H',
-                     'i',
-                     's',
-                     'Y',
-                     'y',
-                     'n',
-                     'm',
-                     'M',
-                     'F',
-                     'd',
-                     't',
-                     'e',
-                     'I',
-                     'O',
-                     'P',
-                     'p',
-                     'T',
-                     'Z',
-                     'U',
-                 ] as $itemFormat) {
+            'w',
+            'D',
+            'a',
+            'A',
+            'g',
+            'G',
+            'h',
+            'H',
+            'i',
+            's',
+            'Y',
+            'y',
+            'n',
+            'm',
+            'M',
+            'F',
+            'd',
+            't',
+            'e',
+            'I',
+            'O',
+            'P',
+            'p',
+            'T',
+            'Z',
+            'U',
+        ] as $itemFormat) {
             $dateTimeParts[$itemFormat] = $date->format($itemFormat);
         }
         // change entry for jewish-date
@@ -183,7 +178,6 @@ class JewishDateUtility extends JewishHolidayConst
 
         return $dateTimeParts;
     }
-
 
     /**
      * get the holyday for an given date
@@ -707,13 +701,13 @@ class JewishDateUtility extends JewishHolidayConst
      * get a list of five yearly dates for a named holiday, where the middle is defined by an reference date
      *
      * @param string $holidayNameId
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @return array<mixed>
      * @throws TimerException
      */
     public static function getJewishHolidayByName(
         string $holidayNameId,
-        DateTime $checkDate
+        \DateTime $checkDate
     ): array {
         $jdCurrent = gregoriantojd(
             ((int)$checkDate->format('m')),
@@ -762,7 +756,6 @@ class JewishDateUtility extends JewishHolidayConst
                     true
                 );
                 break;
-
 
             case self::ARG_NAMED_DATE_EREVYOMKIPPUR:
                 $resultDates = self::getListAroundCurrentYear(
@@ -975,7 +968,6 @@ class JewishDateUtility extends JewishHolidayConst
                 );
                 break;
 
-
                 // Holidays in Adar I
             case self::ARG_NAMED_DATE_PURIMKATAN:
                 $resultDates = self::getListOfLeapYearsAroundCurrentYear(
@@ -1117,7 +1109,6 @@ class JewishDateUtility extends JewishHolidayConst
                 $resultDates = self::getListForYomHashoahAroundCurrentYear($curJewishYear, $checkDate);
                 break;
 
-
                 // Holidays in Iyar
             case self::ARG_NAMED_DATE_YOMHAZIKARON:
                 $resultDates = self::getListForYomHaAtzmautAroundCurrentYear($curJewishYear, $checkDate, true);
@@ -1225,7 +1216,7 @@ class JewishDateUtility extends JewishHolidayConst
 
             default:
                 throw new TimerException(
-                    'The id `'.$holidayNameId.'`, which maps the name of the jewish holiday, is unknown. '.
+                    'The id `' . $holidayNameId . '`, which maps the name of the jewish holiday, is unknown. ' .
                     'Make a screenshot and inform the webmaster/programmer.',
                     1672394374
                 );
@@ -1237,7 +1228,7 @@ class JewishDateUtility extends JewishHolidayConst
      * @param int $jewishMonthForHoliday
      * @param int $jewishDayForHoliday
      * @param int $curJewishYear
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @param bool $flagPostPoneSaturday
      * @param int $addDays
      * @return array<mixed>
@@ -1247,7 +1238,7 @@ class JewishDateUtility extends JewishHolidayConst
         int $jewishMonthForHoliday,
         int $jewishDayForHoliday,
         int $curJewishYear,
-        DateTime $checkDate,
+        \DateTime $checkDate,
         bool $flagPostPoneSaturday = false,
         int $addDays = 0
     ): array {
@@ -1255,7 +1246,7 @@ class JewishDateUtility extends JewishHolidayConst
         foreach ([-2, -1, 0, 1, 2] as $addYear) {
             $jdNumber = jewishtojd($jewishMonthForHoliday, $jewishDayForHoliday, ($curJewishYear + $addYear));
             $gregorianDate = jdtogregorian($jdNumber);
-            $resultDates[$addYear] = DateTime::createFromFormat(
+            $resultDates[$addYear] = \DateTime::createFromFormat(
                 'm/d/Y H:i:s',
                 $gregorianDate . ' 00:00:00',
                 $checkDate->getTimezone()
@@ -1263,11 +1254,11 @@ class JewishDateUtility extends JewishHolidayConst
             if ($flagPostPoneSaturday) {
                 $weekdayNo = jddayofweek($jdNumber, 0);
                 if ($weekdayNo === self::SATURDAY) {
-                    $resultDates[$addYear]->add(new DateInterval('P1D'));
+                    $resultDates[$addYear]->add(new \DateInterval('P1D'));
                 }
             }
             if ($addDays > 0) {
-                $resultDates[$addYear]->add(new DateInterval('P' . $addDays . 'D'));
+                $resultDates[$addYear]->add(new \DateInterval('P' . $addDays . 'D'));
             }
         }
         return $resultDates;
@@ -1277,14 +1268,14 @@ class JewishDateUtility extends JewishHolidayConst
      * @param int $curJewishMonth
      * @param int $curJewishDay
      * @param int $curJewishYear
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @return array<mixed>
      */
     protected static function getListOfLeapYearsAroundCurrentYear(
         int $curJewishMonth,
         int $curJewishDay,
         int $curJewishYear,
-        DateTime $checkDate
+        \DateTime $checkDate
     ): array {
         $runYear = $curJewishYear;
         $resultDates = [];
@@ -1304,7 +1295,7 @@ class JewishDateUtility extends JewishHolidayConst
                 $jdNumber--;
             }
             $gregorianDate = jdtogregorian($jdNumber);
-            $resultDates[$addYear] = DateTime::createFromFormat(
+            $resultDates[$addYear] = \DateTime::createFromFormat(
                 'm/d/Y H:i:s',
                 $gregorianDate . ' 00:00:00',
                 $checkDate->getTimezone()
@@ -1316,7 +1307,7 @@ class JewishDateUtility extends JewishHolidayConst
     /**
      * @param int $jewishDayForHoliday
      * @param int $curJewishYear
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @param bool $flagPostPoneSaturdayTaAnithEsther
      * @param bool $postponeShushanPurimOnSaturday
      * @return array<mixed>
@@ -1324,7 +1315,7 @@ class JewishDateUtility extends JewishHolidayConst
     protected static function getListRespectLeapYearsAroundCurrentYear(
         int $jewishDayForHoliday,
         int $curJewishYear,
-        DateTime $checkDate,
+        \DateTime $checkDate,
         bool $flagPostPoneSaturdayTaAnithEsther = false,
         bool $postponeShushanPurimOnSaturday = false
     ): array {
@@ -1338,7 +1329,7 @@ class JewishDateUtility extends JewishHolidayConst
 
             $jdNumber = jewishtojd($purimMonth, $jewishDayForHoliday, ($curJewishYear + $addYear));
             $gregorianDate = jdtogregorian($jdNumber);
-            $resultDates[$addYear] = DateTime::createFromFormat(
+            $resultDates[$addYear] = \DateTime::createFromFormat(
                 'm/d/Y H:i:s',
                 $gregorianDate . ' 00:00:00',
                 $checkDate->getTimezone()
@@ -1346,13 +1337,13 @@ class JewishDateUtility extends JewishHolidayConst
             if ($flagPostPoneSaturdayTaAnithEsther) {
                 $weekdayNo = jddayofweek($jdNumber, 0);
                 if ($weekdayNo === self::SATURDAY) {
-                    $resultDates[$addYear]->sub(new DateInterval('P2D'));
+                    $resultDates[$addYear]->sub(new \DateInterval('P2D'));
                 }
             }
             if ($postponeShushanPurimOnSaturday) {
                 $weekdayNo = jddayofweek($jdNumber, 0);
                 if ($weekdayNo === self::SATURDAY) {
-                    $resultDates[$addYear]->add(new DateInterval('P1D'));
+                    $resultDates[$addYear]->add(new \DateInterval('P1D'));
                 }
             }
         }
@@ -1361,10 +1352,10 @@ class JewishDateUtility extends JewishHolidayConst
 
     /**
      * @param int $curJewishYear
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @return array<mixed>
      */
-    protected static function getListForShabbathAgadol(int $curJewishYear, DateTime $checkDate): array
+    protected static function getListForShabbathAgadol(int $curJewishYear, \DateTime $checkDate): array
     {
         $resultDates = [];
         foreach ([-2, -1, 0, 1, 2] as $addYear) {
@@ -1373,7 +1364,7 @@ class JewishDateUtility extends JewishHolidayConst
                 $jdNumber--;
             }
             $gregorianDate = jdtogregorian($jdNumber);
-            $resultDates[$addYear] = DateTime::createFromFormat(
+            $resultDates[$addYear] = \DateTime::createFromFormat(
                 'm/d/Y H:i:s',
                 $gregorianDate . ' 00:00:00',
                 $checkDate->getTimezone()
@@ -1384,13 +1375,13 @@ class JewishDateUtility extends JewishHolidayConst
 
     /**
      * @param int $curJewishYear
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @param bool $flagYomHazikaron
      * @return array<mixed>
      */
     protected static function getListForYomHaAtzmautAroundCurrentYear(
         int $curJewishYear,
-        DateTime $checkDate,
+        \DateTime $checkDate,
         bool $flagYomHazikaron = false
     ): array {
         $resultDates = [];
@@ -1399,27 +1390,27 @@ class JewishDateUtility extends JewishHolidayConst
             $jdNumber = jewishtojd(self::IYAR, 4, $refYear);
             $gregorianDate = jdtogregorian($jdNumber);
             $weekdayNo = jddayofweek($jdNumber, 0);
-            $resultDates[$addYear] = DateTime::createFromFormat(
+            $resultDates[$addYear] = \DateTime::createFromFormat(
                 'm/d/Y H:i:s',
                 $gregorianDate . ' 00:00:00',
                 $checkDate->getTimezone()
             );
             if ($weekdayNo === self::FRIDAY) {
-                $resultDates[$addYear]->sub(new DateInterval('P1D'));
+                $resultDates[$addYear]->sub(new \DateInterval('P1D'));
             } else {
                 if ($weekdayNo !== self::THURSDAY) {
                     if (
                         ($refYear >= self::JEWISH_YEAR_CALENDAR_SECOND_CHANGE) &&
                         ($weekdayNo === self::SUNDAY)
                     ) {
-                        $resultDates[$addYear]->add(new DateInterval('P2D'));
+                        $resultDates[$addYear]->add(new \DateInterval('P2D'));
                     } else {
-                        $resultDates[$addYear]->add(new DateInterval('P1D'));
+                        $resultDates[$addYear]->add(new \DateInterval('P1D'));
                     }
                 }
             }
             if ($flagYomHazikaron) {
-                $resultDates[$addYear]->sub(new DateInterval('P1D'));
+                $resultDates[$addYear]->sub(new \DateInterval('P1D'));
             }
         }
         return $resultDates;
@@ -1427,10 +1418,10 @@ class JewishDateUtility extends JewishHolidayConst
 
     /**
      * @param int $curJewishYear
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @return array<mixed>
      */
-    protected static function getListForYomHashoahAroundCurrentYear(int $curJewishYear, DateTime $checkDate): array
+    protected static function getListForYomHashoahAroundCurrentYear(int $curJewishYear, \DateTime $checkDate): array
     {
         $resultDates = [];
         foreach ([-2, -1, 0, 1, 2] as $addYear) {
@@ -1438,19 +1429,19 @@ class JewishDateUtility extends JewishHolidayConst
             $jdNumber = jewishtojd(self::NISAN, 27, $refYear);
             $gregorianDate = jdtogregorian($jdNumber);
             $weekdayNo = jddayofweek($jdNumber, 0);
-            $resultDates[$addYear] = DateTime::createFromFormat(
+            $resultDates[$addYear] = \DateTime::createFromFormat(
                 'm/d/Y H:i:s',
                 $gregorianDate . ' 00:00:00',
                 $checkDate->getTimezone()
             );
             if ($weekdayNo === self::FRIDAY) {
-                $resultDates[$addYear]->sub(new DateInterval('P1D'));
+                $resultDates[$addYear]->sub(new \DateInterval('P1D'));
             } else {
                 if (
                     ($refYear >= self::JEWISH_YEAR_CALENDAR_FIRST_CHANGE) &&
                     ($weekdayNo === self::SUNDAY)
                 ) {
-                    $resultDates[$addYear]->add(new DateInterval('P1D'));
+                    $resultDates[$addYear]->add(new \DateInterval('P1D'));
                 }
             }
         }

@@ -24,13 +24,13 @@ namespace Porthd\Timer\DataProcessing;
  ***************************************************************/
 
 use DateTime;
-use DateTimeZone;
+use Porthd\Timer\Cache\PageCacheFlusher;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
-use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Domain\Model\InternalFlow\LoopLimiter;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Services\ListOfEventsService;
 use Porthd\Timer\Utilities\DateTimeUtility;
 use Porthd\Timer\Utilities\TcaUtility;
@@ -38,7 +38,6 @@ use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -94,7 +93,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *         as = myevents
  *
  *     }
- *
  */
 class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
@@ -114,21 +112,20 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
     protected $cache;
 
     /**
-     * @var CacheService
+     * @var PageCacheFlusher
      */
     protected $cacheManager;
 
     /**
      * @param FrontendInterface $cache
-     * @param CacheService $cacheManager
+     * @param PageCacheFlusher $cacheManager
      * @param ContentDataProcessor $contentDataProcessor
      */
     public function __construct(
-        FrontendInterface    $cache,
-        CacheService         $cacheManager,
+        FrontendInterface $cache,
+        PageCacheFlusher $cacheManager,
         ContentDataProcessor $contentDataProcessor
-    )
-    {
+    ) {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
         $this->contentDataProcessor = $contentDataProcessor;
@@ -149,8 +146,7 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ): array
-    {
+    ): array {
         // The variable to be used within the result
         $targetVariableName = $cObj->stdWrapValue(
             TimerConst::ARGUMENT_AS,
@@ -188,27 +184,27 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
                 unset($processorConfiguration[self::PARAMETER_TABLE . '.']);
             }
             foreach ([  // defined by typoScript
-                         'pidInList' => $processedData['data']['pid'], // current page
-                         'uidInList' => $processedData['data']['pid'],
-                         'languageField' => null, //
-                         'selectFields' => '*',
-                         'max' => 'total',
-                         'begin' => 'total',
-                         'groupBy' => null, //
-                         'orderBy' => null, //
-                         'join' => null, //
-                         'leftjoin' => null, //
-                         'rightjoin' => null,  //
-                         'recursive' => 0,
-                         'where' => null, //
-                         'markers' => null, //
-                         'includeRecordsWithoutDefaultTranslation' => 0, //
-                     ] as $key => $defaultValue
+                'pidInList' => $processedData['data']['pid'], // current page
+                'uidInList' => $processedData['data']['pid'],
+                'languageField' => null, //
+                'selectFields' => '*',
+                'max' => 'total',
+                'begin' => 'total',
+                'groupBy' => null, //
+                'orderBy' => null, //
+                'join' => null, //
+                'leftjoin' => null, //
+                'rightjoin' => null,  //
+                'recursive' => 0,
+                'where' => null, //
+                'markers' => null, //
+                'includeRecordsWithoutDefaultTranslation' => 0, //
+            ] as $key => $defaultValue
             ) {
                 if (array_key_exists($key . '.', $processorConfiguration)) {
                     $processorConfiguration[$key] = $cObj->stdWrapValue($key, $processorConfiguration);
                     unset($processorConfiguration[$key . '.']);
-                } else if (array_key_exists($key, $processorConfiguration)) {
+                } elseif (array_key_exists($key, $processorConfiguration)) {
                     $processorConfiguration[$key] = $cObj->stdWrapValue($key, $processorConfiguration);
                 } else {
                     if ($defaultValue !== null) {
@@ -216,7 +212,6 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
                     }
                 }
             }
-
 
             // Execute a SQL statement to fetch the records
             $records = $cObj->getRecords($tableName, $processorConfiguration);
@@ -240,10 +235,9 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
                 $loopLimiter
             );
 
-
             $processedRecordVariables = [];
             $flagStopTimer = false;
-            $dateTimeStopCase = new DateTime('@' . $currentTimestamp);
+            $dateTimeStopCase = new \DateTime('@' . $currentTimestamp);
             foreach ($listOfEvents as $key => $record) {
                 $processedRecordVariables[$key] = ['data' => $record];
                 // check for more dataProcessor to act.
@@ -296,15 +290,14 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
      * @param ContentObjectRenderer $cObj
      * @param array<mixed> $arguments
      * @param string $timeFormat
-     * @return DateTime
+     * @return \DateTime
      * @throws TimerException
      */
     protected function validateInternArguments(
         ContentObjectRenderer $cObj,
-        array  $arguments,
+        array $arguments,
         string $timeFormat = TimerInterface::TIMER_FORMAT_DATETIME
-    ): DateTime
-    {
+    ): \DateTime {
         $timeZone = ((array_key_exists(TimerConst::ARGUMENT_ACTIVEZONE, $arguments)) ?: date_default_timezone_get());
         if (!TcaUtility::isTimeZoneInList($timeZone)) {
             throw new TimerException(
@@ -315,11 +308,11 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
         if (array_key_exists(TimerConst::ARGUMENT_DATETIME_START, $arguments)) {
             if (
                 (
-                $frontendDateTime = DateTime::createFromFormat(
-                    $timeFormat,
-                    $arguments[TimerConst::ARGUMENT_DATETIME_START],
-                    new DateTimeZone($timeZone)
-                )
+                    $frontendDateTime = \DateTime::createFromFormat(
+                        $timeFormat,
+                        $arguments[TimerConst::ARGUMENT_DATETIME_START],
+                        new \DateTimeZone($timeZone)
+                    )
                 ) === false
             ) {
                 throw new TimerException(
@@ -332,8 +325,8 @@ class RangeListQueryProcessor implements DataProcessorInterface, GeneralDataProc
             }
         } else {
             $utcTime = DateTimeUtility::getCurrentTime();
-            $frontendDateTime = new DateTime('@' . $utcTime);
-            $frontendDateTime->setTimezone(new DateTimeZone($timeZone));
+            $frontendDateTime = new \DateTime('@' . $utcTime);
+            $frontendDateTime->setTimezone(new \DateTimeZone($timeZone));
         }
         return $frontendDateTime;
     }

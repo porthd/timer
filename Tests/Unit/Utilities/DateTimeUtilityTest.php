@@ -23,16 +23,17 @@ namespace Porthd\Timer\Tests\Unit\Utilities;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateInterval;
 use DateTime;
 use DateTimeZone;
-use Porthd\Timer\Utilities\DateTimeUtility;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Interfaces\TimerInterface;
+use Porthd\Timer\Utilities\DateTimeUtility;
 
 class DateTimeUtilityTest extends TestCase
 {
-    public function dataProviderformatForZoneGivenDateTimeObjectAndTimeZone()
+    public static function dataProviderformatForZoneGivenDateTimeObjectAndTimeZone()
     {
         $outputFormat = TimerInterface::TIMER_FORMAT_DATETIME;
         $dateString = '2010-07-05T00:00:05';
@@ -45,9 +46,9 @@ class DateTimeUtilityTest extends TestCase
 
         $result = [
             [
-                'message' => 'Test and exspection contains the same timezone. No difference exspeted.',
+                'Test and exspection contains the same timezone. No difference exspeted.',
                 [
-                    'utcDateTimeString' => (new DateTime($dateString, new DateTimeZone("UTC")))->format($outputFormat),
+                    'utcDateTimeString' => (new \DateTime($dateString, new \DateTimeZone('UTC')))->format($outputFormat),
                     'toUtcEqual' => true,
                 ],
                 [
@@ -59,9 +60,9 @@ class DateTimeUtilityTest extends TestCase
         ];
         foreach ($timezones as $timezone) {
             $result[] = [
-                'message' => 'Test UTC-time against a recalculated datetime for simliar Timestring in the timezone `' . $timezone . '`.',
+                'Test UTC-time against a recalculated datetime for simliar Timestring in the timezone `' . $timezone . '`.',
                 [
-                    'utcDateTimeString' => (new DateTime($dateString, new DateTimeZone("UTC")))->format($outputFormat),
+                    'utcDateTimeString' => (new \DateTime($dateString, new \DateTimeZone('UTC')))->format($outputFormat),
                     'toUtcEqual' => true,
                 ],
                 [
@@ -76,37 +77,36 @@ class DateTimeUtilityTest extends TestCase
 
     /**
      * Id on't work currently, because of dependencys to TYPO3-Framework 20190315
-     *
-     * @dataProvider dataProviderformatForZoneGivenDateTimeObjectAndTimeZone
-     * @test
      */
+    #[DataProvider('dataProviderformatForZoneGivenDateTimeObjectAndTimeZone')]
+    #[Test]
     public function formatForZoneGivenDateTimeObjectAndTimeZone($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             // The DateTime does not calculate. It only makes an entry of both parameter. If you did not define a zone, php choose the zone of his system.
             // In PHP for typo3 is/should be the default timezone 'UTC'.
-            $testDateTime = new DateTime($params['dateTimeString'], new DateTimeZone($params['zone']));
-            $utcTestTime = new DateTime($params['dateTimeString'], new DateTimeZone('UTC'));
+            $testDateTime = new \DateTime($params['dateTimeString'], new \DateTimeZone($params['zone']));
+            $utcTestTime = new \DateTime($params['dateTimeString'], new \DateTimeZone('UTC'));
             // The DateTime-Object store every time the UTC-value odf Time an the TimeZone
             // The offset is relativ to the UTC-time. This implies the substraction:  Offset = Time(TimeZone)-time(UTC)[seconds]
-            $offsetToUtc = (new DateTimeZone($params['zone']))->getOffset($utcTestTime);
+            $offsetToUtc = (new \DateTimeZone($params['zone']))->getOffset($utcTestTime);
             // $offsetToZone = (new DateTimeZone('UTC'))->getOffset($testDateTime); // this is everytime zeror
             // normalize stored DateTime to UTC teime, so that in the TimeZone the Value of DateTimeString will be shown
             if ($offsetToUtc >= 0) {
-                $testDateTime->add(new DateInterval('PT' . abs($offsetToUtc) . 'S'));
+                $testDateTime->add(new \DateInterval('PT' . abs($offsetToUtc) . 'S'));
             } else {
-                $testDateTime->sub(new DateInterval('PT' . abs($offsetToUtc) . 'S'));
+                $testDateTime->sub(new \DateInterval('PT' . abs($offsetToUtc) . 'S'));
             }
 
             $resultDateTimeString = DateTimeUtility::formatForZone($testDateTime, $params['format']);
-            $this->assertEquals(
+            self::assertEquals(
                 $resultDateTimeString,
                 $expects['utcDateTimeString'],
                 'recalculated? (' . $message . ')'
             );
-            $this->assertEquals(
+            self::assertEquals(
                 ($resultDateTimeString === $expects['utcDateTimeString']),
                 $expects['toUtcEqual'],
                 'Equal to UTC-String? (' . $message . ')'

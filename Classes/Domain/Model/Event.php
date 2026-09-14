@@ -45,7 +45,6 @@ class Event extends AbstractEntity implements TimerModellInterface
      */
     protected $description = '';
 
-
     /**
      * teaserSlogan
      *
@@ -95,7 +94,6 @@ class Event extends AbstractEntity implements TimerModellInterface
      * Sets the title
      *
      * @param string $title
-     * @return void
      */
     public function setTitle($title)
     {
@@ -116,13 +114,11 @@ class Event extends AbstractEntity implements TimerModellInterface
      * Sets the description
      *
      * @param string $description
-     * @return void
      */
     public function setDescription($description)
     {
         $this->description = $description;
     }
-
 
     /**
      * Returns the teaserSlogan
@@ -138,7 +134,6 @@ class Event extends AbstractEntity implements TimerModellInterface
      * Sets the teaserSlogan
      *
      * @param string $teaserSlogan
-     * @return void
      */
     public function setTeaserSlogan($teaserSlogan)
     {
@@ -159,7 +154,6 @@ class Event extends AbstractEntity implements TimerModellInterface
      * Sets the teaserInfotext
      *
      * @param string $teaserInfotext
-     * @return void
      */
     public function setTeaserInfotext($teaserInfotext)
     {
@@ -180,7 +174,6 @@ class Event extends AbstractEntity implements TimerModellInterface
      * Sets the txTimerSelector
      *
      * @param string $txTimerSelector
-     * @return void
      */
     public function setTxTimerSelector($txTimerSelector)
     {
@@ -201,7 +194,6 @@ class Event extends AbstractEntity implements TimerModellInterface
      * Sets the txTimerTimer
      *
      * @param string $txTimerTimer
-     * @return void
      */
     public function setTxTimerTimer($txTimerTimer)
     {

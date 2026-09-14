@@ -24,14 +24,10 @@ namespace Porthd\Timer\Utilities;
  ***************************************************************/
 
 use DateTime;
-use DateTimeZone;
-use Exception;
 use IntlCalendar;
 use IntlDateFormatter;
-use IntlGregorianCalendar;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
-use ResourceBundle;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -45,7 +41,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *   thanks to `hellbringer`(https://www.php.de/member/42971-hellbringer)
  * - helpful for understanding my problem: https://github.com/php/doc-en/issues/2246
  *   thanks to `cmb69` (https://github.com/cmb69) for his/her hints
- *
  */
 class ConvertDateUtility
 {
@@ -101,7 +96,7 @@ class ConvertDateUtility
         '%x' => '-locale-m.d.y',
         '%n' => '-return',
         '%t' => '-tab',
-//        '%%'=>'\%',  // use explode, to mask this code in the mapping
+        //        '%%'=>'\%',  // use explode, to mask this code in the mapping
     ];
     protected const MAP_TRANSFORM_ICU_FORMAT_TO_PHP_FORMAT = [
         'dd' => 'd',
@@ -166,7 +161,7 @@ class ConvertDateUtility
     protected static function getAllCalendars(): array
     {
         if (empty(self::$calendars)) {
-            $bundle = new ResourceBundle('', 'ICUDATA');
+            $bundle = new \ResourceBundle('', 'ICUDATA');
             $calendarList = $bundle->get('calendar');
             foreach ($calendarList as $n => $v) {
                 self::$calendars[] = $n;
@@ -181,8 +176,8 @@ class ConvertDateUtility
     protected static function getAllLocales(): array
     {
         if (empty(self::$locales)) {
-            /** @var ResourceBundle $bundle */
-            $bundle = new ResourceBundle('', 'ICUDATA');
+            /** @var \ResourceBundle $bundle */
+            $bundle = new \ResourceBundle('', 'ICUDATA');
             self::$locales = $bundle::getLocales('');
         }
         return self::$locales;
@@ -192,7 +187,6 @@ class ConvertDateUtility
      * @param string $locale
      * @param string $calendar
      * @param string $timeZoneName
-     * @return void
      * @throws TimerException
      */
     public static function allowedLocaleCalendarTimezone(string $locale, string $calendar, string $timeZoneName)
@@ -208,7 +202,7 @@ class ConvertDateUtility
                 ' Otherwise make a screenshot and inform the webmaster.' . "\n" .
                 'Allowed Calendars: (' . implode(',', self::$calendars) . ')' . "\n" .
                 'Allowed locales: (' . implode(',', self::$locales) . ')' . "\n" .
-                'Allowed Timezones: (' . implode(',', DateTimeZone::listIdentifiers()) . ')',
+                'Allowed Timezones: (' . implode(',', \DateTimeZone::listIdentifiers()) . ')',
                 1673710564
             );
         }
@@ -220,7 +214,7 @@ class ConvertDateUtility
      * @param string $calendar
      * @param string $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss
      * @param string $timeZoneName
-     * @return DateTime
+     * @return \DateTime
      * @throws TimerException
      */
     public static function convertFromCalendarToDateTime(
@@ -228,7 +222,7 @@ class ConvertDateUtility
         string $calendar,
         string $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss,
         string $timeZoneName = TimerConst::INTERNAL_TIMEZONE
-    ): DateTime {
+    ): \DateTime {
 
         if ($calendar === TimerConst::ADDITIONAL_CALENDAR_JULIAN) {
             $calendar = TimerConst::FAKE_CALENDAR_JULIAN_BY_GREGORIAN;
@@ -255,13 +249,13 @@ class ConvertDateUtility
             $list[0] = implode('/', [$year, $month, $day]);
             $formatedDateIcuYYYYSlashMMSlashddSpaceHHColonmmColonss = implode(' ', $list);
         }
-        $timeZone = new DateTimeZone($timeZoneName);
-        $traditionalFormatter = new IntlDateFormatter(
+        $timeZone = new \DateTimeZone($timeZoneName);
+        $traditionalFormatter = new \IntlDateFormatter(
             $locale . '@calendar=' . $calendar,
-            IntlDateFormatter::SHORT,
-            IntlDateFormatter::SHORT,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::SHORT,
             $timeZone,
-            IntlDateFormatter::TRADITIONAL,
+            \IntlDateFormatter::TRADITIONAL,
             self::INTL_DATE_FORMATTER_DEFAULT_PATTERN
         );
 
@@ -275,32 +269,31 @@ class ConvertDateUtility
                 1675003765
             );
         }
-        $dateTime = new DateTime('@' . ((int)$parsedTimestamp));
-        $dateTime->setTimezone(new DateTimeZone($timeZoneName));
+        $dateTime = new \DateTime('@' . ((int)$parsedTimestamp));
+        $dateTime->setTimezone(new \DateTimeZone($timeZoneName));
         return $dateTime;
     }
 
     /**
-     * @param DateTime $dateTime
+     * @param \DateTime $dateTime
      * @param string $locale
      * @param string $format
      * @return string
      */
     public static function formatDateTimeInIcuFormat(
-        DateTime $dateTime,
+        \DateTime $dateTime,
         string $locale,
         string $format
     ): string {
         // format a gregorian-time by ICU
-        $cal = IntlCalendar::fromDateTime($dateTime);
-        return (IntlDateFormatter::formatObject($cal, $format, $locale) ?: '');
+        $cal = \IntlCalendar::fromDateTime($dateTime);
+        return \IntlDateFormatter::formatObject($cal, $format, $locale) ?: '';
     }
-
 
     /**
      * @param string $locale
      * @param string $calendar
-     * @param DateTime $dateTime
+     * @param \DateTime $dateTime
      * @param bool $flagFormat
      * @param string $icuFormat
      * @return string
@@ -308,8 +301,8 @@ class ConvertDateUtility
     public static function convertFromDateTimeToCalendar(
         string $locale,
         string $calendar,
-        DateTime $dateTime,
-        bool   $flagFormat = true,
+        \DateTime $dateTime,
+        bool $flagFormat = true,
         string $icuFormat = self::INTL_DATE_FORMATTER_DEFAULT_PATTERN
     ): string {
         $myDate = clone $dateTime;
@@ -335,12 +328,12 @@ class ConvertDateUtility
             $format = self::mapFormatPhpDateTimeToIcuDateTime($icuFormat);
         }
 
-        $traditionalFormatter = new IntlDateFormatter(
+        $traditionalFormatter = new \IntlDateFormatter(
             $locale . '@calendar=' . $calendar,
-            IntlDateFormatter::SHORT,
-            IntlDateFormatter::SHORT,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::SHORT,
             $myDate->getTimezone(),
-            IntlDateFormatter::TRADITIONAL,
+            \IntlDateFormatter::TRADITIONAL,
             $format
         );
 
@@ -354,8 +347,8 @@ class ConvertDateUtility
     protected static function isValidTimezoneId(string $timezoneId): bool
     {
         try {
-            new DateTimeZone($timezoneId);
-        } catch (Exception $e) {
+            new \DateTimeZone($timezoneId);
+        } catch (\Exception $e) {
             return false;
         }
         return true;
@@ -366,7 +359,7 @@ class ConvertDateUtility
      * @param string $locale
      * @param string $timeZone
      * @param string $pattern
-     * @return IntlDateFormatter
+     * @return \IntlDateFormatter
      * @throws TimerException
      */
     protected static function getDateFormatter(
@@ -374,7 +367,7 @@ class ConvertDateUtility
         string $locale,
         string $timeZone,
         string $pattern
-    ): IntlDateFormatter {
+    ): \IntlDateFormatter {
         if ((!in_array($calendar, self::getAllCalendars())) ||
             (!in_array($locale, self::getAllLocales())) ||
             (!self::isValidTimezoneId($timeZone))
@@ -386,26 +379,26 @@ class ConvertDateUtility
                 ' Otherwise make a screenshot and inform the webmaster.' .
                 'Allowed Calendars: (' . implode(',', self::$calendars) . ')' .
                 'Allowed locales: (' . implode(',', self::$locales) . ')' .
-                'Allowed Timezones: (' . implode(',', DateTimeZone::listIdentifiers()) . ')',
+                'Allowed Timezones: (' . implode(',', \DateTimeZone::listIdentifiers()) . ')',
                 1673711486
             );
         }
         if ($calendar === self::DEFAULT_CALENDAR) {
-            $cal = IntlGregorianCalendar::createInstance(new DateTimeZone($timeZone), $locale);
-            $formatter = new IntlDateFormatter(
+            $cal = \IntlGregorianCalendar::createInstance(new \DateTimeZone($timeZone), $locale);
+            $formatter = new \IntlDateFormatter(
                 $locale,
-                IntlDateFormatter::SHORT,
-                IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
                 $timeZone,
                 $cal,
                 $pattern
             );
         } else {
-            $cal = IntlCalendar::createInstance(new DateTimeZone($timeZone), $locale . '@calendar=' . $calendar);
-            $formatter = new IntlDateFormatter(
+            $cal = \IntlCalendar::createInstance(new \DateTimeZone($timeZone), $locale . '@calendar=' . $calendar);
+            $formatter = new \IntlDateFormatter(
                 $locale,
-                IntlDateFormatter::SHORT,
-                IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
                 $timeZone,
                 $cal,
                 $pattern
@@ -418,12 +411,12 @@ class ConvertDateUtility
     /**
      * Polyfill: planed to replace the strftime-method in the viewhelper timer:format.date
      *
-     * @param DateTime $date
+     * @param \DateTime $date
      * @param string $strftimeFormat
      * @return string
      * @throws TimerException
      */
-    public static function mapStrftimeFormatToDateTimeFormat(DateTime $date, string $strftimeFormat)
+    public static function mapStrftimeFormatToDateTimeFormat(\DateTime $date, string $strftimeFormat)
     {
         $list = explode('%%', $strftimeFormat);
         $result = [];
@@ -450,20 +443,20 @@ class ConvertDateUtility
                             switch ($action) {
                                 case '-z-increment':
                                     $dayOfYearInc = (string)((int)$date->format('z') + 1);
-                                    $resultPart .= str_pad($dayOfYearInc, 3, "0", STR_PAD_LEFT);
+                                    $resultPart .= str_pad($dayOfYearInc, 3, '0', STR_PAD_LEFT);
                                     break;
                                 case '-weekspecial':
                                     $dayOfYear = (int)$date->format('z');
                                     $weekday = (int)$date->format('w');
                                     $weekBySunday = (string)((int)ceil(($dayOfYear - $weekday + 1) / 7));
-                                    $resultPart .= str_pad($weekBySunday, 2, "0", STR_PAD_LEFT);
+                                    $resultPart .= str_pad($weekBySunday, 2, '0', STR_PAD_LEFT);
 
                                     break;
                                 case '-weekspecial2':
                                     $dayOfYear = (int)$date->format('z');
                                     $weekday = (int)$date->format('N') - 1;
                                     $weekByMonday = (string)((int)ceil(($dayOfYear - $weekday + 1) / 7));
-                                    $resultPart .= str_pad($weekByMonday, 2, "0", STR_PAD_LEFT);
+                                    $resultPart .= str_pad($weekByMonday, 2, '0', STR_PAD_LEFT);
 
                                     break;
                                 case '-locale-M':
@@ -475,7 +468,7 @@ class ConvertDateUtility
                                     break;
                                 case '-o-reduceTo2Digits':
                                     $oValue = (string)((int)$date->format('o') % 100);
-                                    $resultPart .= str_pad($oValue, 2, "0", STR_PAD_LEFT);
+                                    $resultPart .= str_pad($oValue, 2, '0', STR_PAD_LEFT);
                                     break;
                                 case '-locale-H.i.s':
                                     $resultPart .= (LocalizationUtility::translate(
@@ -561,10 +554,10 @@ class ConvertDateUtility
     }
 
     /**
-     * @param DateTime $date
+     * @param \DateTime $date
      * @return string
      */
-    protected static function getShortMonthTranlation(DateTime $date): string
+    protected static function getShortMonthTranlation(\DateTime $date): string
     {
         $month = $date->format('M');
         $helpMonth = LocalizationUtility::translate(
@@ -583,10 +576,10 @@ class ConvertDateUtility
     }
 
     /**
-     * @param DateTime $date
+     * @param \DateTime $date
      * @return string
      */
-    protected static function getFullMonthTranlation(DateTime $date): string
+    protected static function getFullMonthTranlation(\DateTime $date): string
     {
         $month = $date->format('m');
         $helpMonth = LocalizationUtility::translate(
@@ -606,11 +599,10 @@ class ConvertDateUtility
 
     /**
      * @param string $nameCalendar
-     * @return void
      */
     public static function validateCalendarNameOrThrowException(string $nameCalendar): void
     {
-        $bundle = new ResourceBundle('', 'ICUDATA');
+        $bundle = new \ResourceBundle('', 'ICUDATA');
         $calendarNames = [
             TimerConst::ADDITIONAL_CALENDAR_JULIAN,
         ];

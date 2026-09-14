@@ -23,16 +23,15 @@ namespace Porthd\Timer\Tests\Unit\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Timer\CustomTimer\SunriseRelTimer;
-use TYPO3\CMS\Core\Context\Context;
-use DateInterval;
 use DateTime;
 use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\SunriseRelTimer;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SunriseRelTimerTest extends TestCase
@@ -45,11 +44,10 @@ class SunriseRelTimerTest extends TestCase
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
 
-
     /**
      * @var SunriseRelTimer
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
@@ -83,92 +81,85 @@ class SunriseRelTimerTest extends TestCase
 
     /**
      * the ultimate green test
-     * @test
      */
+    #[Test]
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selfName()
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::NAME_TIMER,
             $this->subject::selfName(),
             'The name musst be defined.'
         );
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getSelectorItem()
     {
         $result = $this->subject::getSelectorItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             1,
             count($result),
             'The array  must contain at least two items.'
         );
-        $this->assertIsString(
-            $result[0],
+        self::assertIsString(
+            $result['label'],
             'The first item must be an string.'
         );
-        $this->assertEquals(
-            $result[1],
+        self::assertEquals(
+            $result['value'],
             self::NAME_TIMER,
             'The second term must the name of the timer.'
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             count($result),
             'The array  must contain one Item.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             array_keys($result),
             [self::NAME_TIMER],
             'The key must the name of the timer.'
         );
-        $this->assertIsString(
+        self::assertIsString(
             $result[self::NAME_TIMER],
             'The value must be type of string.'
         );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
-        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+        if (str_starts_with($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
                 );
         } else {
-            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            if (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
                 $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                     substr(
                         $filePath,
                         strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                     );
-                $this->assertTrue(
+                self::assertTrue(
                     (false),
                     'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. '
                 );
@@ -177,13 +168,13 @@ class SunriseRelTimerTest extends TestCase
             }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue(
+        self::assertTrue(
             $flag,
             'The file with the flexform content exist.'
         );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue(
+        self::assertTrue(
             (!(!$flexArray)),
             'The filecontent is valid xml.'
         );
@@ -194,17 +185,17 @@ class SunriseRelTimerTest extends TestCase
         $testDate = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
             '2020-12-31 12:00:00',
-            new DateTimeZone('Europe/Berlin')
+            new \DateTimeZone('Europe/Berlin')
         );
         $minusOneSecond = clone $testDate;
-        $minusOneSecond->sub(new DateInterval('PT1S'));
+        $minusOneSecond->sub(new \DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
-        $addOneSecond->add(new DateInterval('PT1S'));
+        $addOneSecond->add(new \DateInterval('PT1S'));
         $rest = [];
         $result = [];
 
         $result[] = [
-            'message' => 'The testdate is valid, if the testdate is in the middle of the ultimate range..',
+            'The testdate is valid, if the testdate is in the middle of the ultimate range..',
             'expects' => [
                 'result' => true,
             ],
@@ -219,7 +210,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -234,7 +225,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
+            'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
             'expects' => [
                 'result' => false,
             ],
@@ -249,7 +240,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -264,7 +255,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
+            'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
             'expects' => [
                 'result' => false,
             ],
@@ -281,18 +272,16 @@ class SunriseRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProvider_isAllowedInRange
-     * @test
-     */
+    #[DataProvider('dataProvider_isAllowedInRange')]
+    #[Test]
     public function isAllowedInRange($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
@@ -324,7 +313,7 @@ class SunriseRelTimerTest extends TestCase
         foreach ($list as $unsetParam => $expects
         ) {
             $item = [
-                'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
+                'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -343,22 +332,22 @@ class SunriseRelTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false],
-                     [false, true],
-                     ['false', true],
-                     [new Datetime(), false],
-                     ['hallo', false],
-                     ['0', true],
-                     [0.0, true],
-                     ["0.0", false],
-                     ['true', true],
-                     ['1', true],
-                     [1, true],
-                     [1.0, true],
-                     ['1.0', false],
-                 ] as $value) {
+            [null, false],
+            [false, true],
+            ['false', true],
+            [new \Datetime(), false],
+            ['hallo', false],
+            ['0', true],
+            [0.0, true],
+            ['0.0', false],
+            ['true', true],
+            ['1', true],
+            [1, true],
+            [1.0, true],
+            ['1.0', false],
+        ] as $value) {
             $result[] = [
-                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
+                'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
                     'result' => $value[1],
                 ],
@@ -375,13 +364,13 @@ class SunriseRelTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     'UTC' => true,
-                     '' => false,
-                     'Europe/Berlin' => true,
-                     'Kumpel/Dumpel' => false,
-                 ] as $zoneVal => $expects) {
+            'UTC' => true,
+            '' => false,
+            'Europe/Berlin' => true,
+            'Kumpel/Dumpel' => false,
+        ] as $zoneVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
@@ -399,13 +388,13 @@ class SunriseRelTimerTest extends TestCase
         }
         // Variation for ultimateBeginningTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -423,13 +412,13 @@ class SunriseRelTimerTest extends TestCase
         }
         // Variation for ultimateEndingTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -448,17 +437,15 @@ class SunriseRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateGeneralByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateGeneralByVariationArgumentsInParam')]
+    #[Test]
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -481,7 +468,7 @@ class SunriseRelTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The test randomly is correct.',
+            'The test randomly is correct.',
             'expects' => [
                 'result' => true,
             ],
@@ -503,7 +490,7 @@ class SunriseRelTimerTest extends TestCase
         // unset some parameters to provoke an failing
         foreach (['sunPosition', 'durationMinutes', 'latitude', 'longitude', 'durationNatural'] as $myUnset) {
             $item = [
-                'message' => 'The test fails, because the parameter `' . $myUnset . '` is missing.(being unsetted)',
+                'The test fails, because the parameter `' . $myUnset . '` is missing.(being unsetted)',
                 'expects' => [
                     'result' => false,
                 ],
@@ -526,9 +513,9 @@ class SunriseRelTimerTest extends TestCase
             $result[] = $item;
         }
         // unset some parameters to provoke an failing
-        foreach (['relMinToSelectedTimerEvent',] as $myUnset) {
+        foreach (['relMinToSelectedTimerEvent'] as $myUnset) {
             $item = [
-                'message' => 'The parameter `' . $myUnset . '` is missing, but the test is okay. The parameter is optional.',
+                'The parameter `' . $myUnset . '` is missing, but the test is okay. The parameter is optional.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -553,23 +540,23 @@ class SunriseRelTimerTest extends TestCase
         // variation of requiered parmeters
         // Variation moonrise missing
         foreach ([
-                     'sunrise' => true,
-                     'sunset' => true,
-                     'transit' => true,
-                     'civil_twilight_begin' => true,
-                     'civil_twilight_end' => true,
-                     'nautical_twilight_begin' => true,
-                     'nautical_twilight_end' => true,
-                     'astronomical_twilight_begin' => true,
-                     'astronomical_twilight_end' => true,
-                     'twilight' => false,
-                     1 => false,
-                     0 => false,
-                     'moonhigh' => false,
-                 ] as $sunPosition => $myExpects) {
+            'sunrise' => true,
+            'sunset' => true,
+            'transit' => true,
+            'civil_twilight_begin' => true,
+            'civil_twilight_end' => true,
+            'nautical_twilight_begin' => true,
+            'nautical_twilight_end' => true,
+            'astronomical_twilight_begin' => true,
+            'astronomical_twilight_end' => true,
+            'twilight' => false,
+            1 => false,
+            0 => false,
+            'moonhigh' => false,
+        ] as $sunPosition => $myExpects) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The test for sunPosition with `' . $sunPosition .
+                'The test for sunPosition with `' . $sunPosition .
                     ($myExpects ? '` is correct' : '` is NOT correct') . '.',
                 [
                     'result' => $myExpects,
@@ -592,24 +579,24 @@ class SunriseRelTimerTest extends TestCase
         }
 
         foreach ([
-                     0 => false,
-                     'sunrise' => true,
-                     'sunset' => true,
-                     'transit' => true,
-                     'civil_twilight_begin' => true,
-                     'civil_twilight_end' => true,
-                     'nautical_twilight_begin' => true,
-                     'nautical_twilight_end' => true,
-                     'astronomical_twilight_begin' => true,
-                     'astronomical_twilight_end' => true,
-                     'defined' => true,
-                     'twilight' => false,
-                     1 => false,
-                     'moonhigh' => false,
-                 ] as $naturalDuration => $myExpects) {
+            0 => false,
+            'sunrise' => true,
+            'sunset' => true,
+            'transit' => true,
+            'civil_twilight_begin' => true,
+            'civil_twilight_end' => true,
+            'nautical_twilight_begin' => true,
+            'nautical_twilight_end' => true,
+            'astronomical_twilight_begin' => true,
+            'astronomical_twilight_end' => true,
+            'defined' => true,
+            'twilight' => false,
+            1 => false,
+            'moonhigh' => false,
+        ] as $naturalDuration => $myExpects) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The test for naturalDuration with `' . $naturalDuration .
+                'The test for naturalDuration with `' . $naturalDuration .
                     ($myExpects ? '` is correct' : '` is NOT correct') . '.',
                 [
                     'result' => $myExpects,
@@ -633,26 +620,26 @@ class SunriseRelTimerTest extends TestCase
 
         // variation of durationMinutes
         foreach ([
-                     1341 => false,
-                     -1341 => false,
-                     -1340 => true,
-                     1340 => true,
-                     '-1340' => true,
-                     '1340' => true,
-                     '-100' => true,
-                     '10' => true,
-                     '-10.1' => false,
-                     '10.1' => false,
-                     '-10.0' => false,
-                     '10.0' => false,
-                     0 => true,
-                     '0.0' => false,
-                     1 => true,
-                     '-1' => true,
-                 ] as $myMin => $myExpects
+            1341 => false,
+            -1341 => false,
+            -1340 => true,
+            1340 => true,
+            '-1340' => true,
+            '1340' => true,
+            '-100' => true,
+            '10' => true,
+            '-10.1' => false,
+            '10.1' => false,
+            '-10.0' => false,
+            '10.0' => false,
+            0 => true,
+            '0.0' => false,
+            1 => true,
+            '-1' => true,
+        ] as $myMin => $myExpects
         ) {
             $result[] = [
-                'message' => 'The test for relMinToSelectedTimerEvent with `' . $myMin .
+                'The test for relMinToSelectedTimerEvent with `' . $myMin .
                     ($myExpects ? '` is correct' : '` is NOT correct') . '.',
                 'expects' => [
                     'result' => $myExpects,
@@ -676,26 +663,26 @@ class SunriseRelTimerTest extends TestCase
 
         // variation of durationMinutes
         foreach ([
-                     1341 => false,
-                     -1341 => false,
-                     -1340 => true,
-                     1340 => true,
-                     '-1340' => true,
-                     '1340' => true,
-                     '-100' => true,
-                     '10' => true,
-                     '-10.1' => false,
-                     '10.1' => false,
-                     '-10.0' => false,
-                     '10.0' => false,
-                     0 => false,
-                     '0.0' => false,
-                     1 => true,
-                     '-1' => true,
-                 ] as $myMin => $myExpects
+            1341 => false,
+            -1341 => false,
+            -1340 => true,
+            1340 => true,
+            '-1340' => true,
+            '1340' => true,
+            '-100' => true,
+            '10' => true,
+            '-10.1' => false,
+            '10.1' => false,
+            '-10.0' => false,
+            '10.0' => false,
+            0 => false,
+            '0.0' => false,
+            1 => true,
+            '-1' => true,
+        ] as $myMin => $myExpects
         ) {
             $result[] = [
-                'message' => 'The test for durationMinutes with `' . $myMin .
+                'The test for durationMinutes with `' . $myMin .
                     ($myExpects ? '` is correct' : '` is NOT correct') . '.',
                 'expects' => [
                     'result' => $myExpects,
@@ -718,24 +705,24 @@ class SunriseRelTimerTest extends TestCase
         }
         // variation of Latitude
         foreach ([
-                     91 => false,
-                     '90.01' => false,
-                     90 => true,
-                     '90' => true,
-                     '55.3' => true,
-                     '0' => true,
-                     '-0,0' => true,
-                     0 => true,
-                     '+0.0' => true,
-                     -91 => false,
-                     '-90.01' => false,
-                     -90 => true,
-                     '-90' => true,
-                     '-55.3' => true,
-                 ] as $myLati => $myExpects
+            91 => false,
+            '90.01' => false,
+            90 => true,
+            '90' => true,
+            '55.3' => true,
+            '0' => true,
+            '-0,0' => true,
+            0 => true,
+            '+0.0' => true,
+            -91 => false,
+            '-90.01' => false,
+            -90 => true,
+            '-90' => true,
+            '-55.3' => true,
+        ] as $myLati => $myExpects
         ) {
             $result[] = [
-                'message' => 'The test for latitude with `' . $myLati .
+                'The test for latitude with `' . $myLati .
                     ($myExpects ? '` is correct' : '` is NOT correct') . '.',
                 'expects' => [
                     'result' => $myExpects,
@@ -759,24 +746,24 @@ class SunriseRelTimerTest extends TestCase
 
         // variation of Latitude
         foreach ([
-                     181 => false,
-                     '180.01' => false,
-                     180 => true,
-                     '180' => true,
-                     '55.3' => true,
-                     '0' => true,
-                     '-0,0' => true,
-                     0 => true,
-                     '+0.0' => true,
-                     -181 => false,
-                     '-180.01' => false,
-                     -180 => true,
-                     '-180' => true,
-                     '-55.3' => true,
-                 ] as $myLongi => $myExpects
+            181 => false,
+            '180.01' => false,
+            180 => true,
+            '180' => true,
+            '55.3' => true,
+            '0' => true,
+            '-0,0' => true,
+            0 => true,
+            '+0.0' => true,
+            -181 => false,
+            '-180.01' => false,
+            -180 => true,
+            '-180' => true,
+            '-55.3' => true,
+        ] as $myLongi => $myExpects
         ) {
             $result[] = [
-                'message' => 'The test for latitude with `' . $myLongi .
+                'The test for latitude with `' . $myLongi .
                     ($myExpects ? '` is correct' : '` is NOT correct') . '.',
                 'expects' => [
                     'result' => $myExpects,
@@ -798,21 +785,18 @@ class SunriseRelTimerTest extends TestCase
             ];
         }
 
-
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateSpeciallByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateSpeciallByVariationArgumentsInParam')]
+    #[Test]
     public function validateSpeciallByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['required'], $params['optional'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -820,13 +804,12 @@ class SunriseRelTimerTest extends TestCase
         }
     }
 
-
     public static function dataProviderGetTimeZoneOfEvent()
     {
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -838,7 +821,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -850,7 +833,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -863,7 +846,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -876,7 +859,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the Active will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
+            'The timezone of the Active will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -890,7 +873,7 @@ class SunriseRelTimerTest extends TestCase
         ];
         foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
             $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                'The active timezone will be shown, because the parameter for it is active `' .
                     print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
                 [
                     'result' => 'Lauder/Furz',
@@ -905,7 +888,7 @@ class SunriseRelTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -918,7 +901,7 @@ class SunriseRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -933,20 +916,18 @@ class SunriseRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
+    #[DataProvider('dataProviderGetTimeZoneOfEvent')]
+    #[Test]
     public function getTimeZoneOfEvent($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
 
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $result,
                 $message
@@ -993,238 +974,237 @@ class SunriseRelTimerTest extends TestCase
         $result = [];
         //        'pos' => sunrise, sunset, transit, civil_twilight_begin, civil_twilight_end, nautical_twilight_begin, nautical_twilight_end, astronomical_twilight_begin, astronomical_twilight_end
         foreach ([
-                     [
-                         'start' => '2022-07-30 05:49:00',
-                         'time' => '2022-07-30 05:49:00',
-                         'pos' => 'sunrise',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 21:35:00',
-                         'time' => '2022-07-30 21:35:00',
-                         'pos' => 'sunset',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 13:41:00',
-                         'time' => '2022-07-30 13:41:00',
-                         'pos' => 'transit',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 05:05:00',
-                         'time' => '2022-07-30 05:05:00',
-                         'pos' => 'civil_twilight_begin',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 22:16:00',
-                         'time' => '2022-07-30 22:16:00',
-                         'pos' => 'civil_twilight_end',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 04:05:00',
-                         'time' => '2022-07-30 04:05:00',
-                         'pos' => 'nautical_twilight_begin',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 23:17:00',
-                         'time' => '2022-07-30 23:17:00',
-                         'pos' => 'nautical_twilight_end',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 02:19:00',
-                         'time' => '2022-07-30 02:19:00',
-                         'pos' => 'astronomical_twilight_begin',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-31 01:02:00',
-                         'time' => '2022-07-31 01:02:00',
-                         'pos' => 'astronomical_twilight_end',
-                         'active' => true,
-                     ],
+            [
+                'start' => '2022-07-30 05:49:00',
+                'time' => '2022-07-30 05:49:00',
+                'pos' => 'sunrise',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 21:35:00',
+                'time' => '2022-07-30 21:35:00',
+                'pos' => 'sunset',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 13:41:00',
+                'time' => '2022-07-30 13:41:00',
+                'pos' => 'transit',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 05:05:00',
+                'time' => '2022-07-30 05:05:00',
+                'pos' => 'civil_twilight_begin',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 22:16:00',
+                'time' => '2022-07-30 22:16:00',
+                'pos' => 'civil_twilight_end',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 04:05:00',
+                'time' => '2022-07-30 04:05:00',
+                'pos' => 'nautical_twilight_begin',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 23:17:00',
+                'time' => '2022-07-30 23:17:00',
+                'pos' => 'nautical_twilight_end',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 02:19:00',
+                'time' => '2022-07-30 02:19:00',
+                'pos' => 'astronomical_twilight_begin',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-31 01:02:00',
+                'time' => '2022-07-31 01:02:00',
+                'pos' => 'astronomical_twilight_end',
+                'active' => true,
+            ],
 
-                     [
-                         'start' => '2022-07-30 07:51:00',
-                         'time' => '2022-07-30 07:51:00',
-                         'pos' => 'sunrise',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 23:36:00',
-                         'time' => '2022-07-30 23:36:00',
-                         'pos' => 'sunset',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 23:37:00',
-                         'time' => '2022-07-30 23:37:00',
-                         'pos' => 'sunset',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 15:43:00',
-                         'time' => '2022-07-30 15:43:00',
-                         'pos' => 'transit',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 07:07:00',
-                         'time' => '2022-07-30 07:07:00',
-                         'pos' => 'civil_twilight_begin',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-31 00:18:00',
-                         'time' => '2022-07-31 00:18:00',
-                         'pos' => 'civil_twilight_end',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 06:07:00',
-                         'time' => '2022-07-30 06:07:00',
-                         'pos' => 'nautical_twilight_begin',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-31 01:19:00',
-                         'time' => '2022-07-31 01:19:00',
-                         'pos' => 'nautical_twilight_end',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 04:21:00',
-                         'time' => '2022-07-30 04:21:00',
-                         'pos' => 'astronomical_twilight_begin',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-31 03:07:00',
-                         'time' => '2022-07-31 03:07:00',
-                         'pos' => 'astronomical_twilight_end',
-                         'active' => false,
-                     ],
+            [
+                'start' => '2022-07-30 07:51:00',
+                'time' => '2022-07-30 07:51:00',
+                'pos' => 'sunrise',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 23:36:00',
+                'time' => '2022-07-30 23:36:00',
+                'pos' => 'sunset',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 23:37:00',
+                'time' => '2022-07-30 23:37:00',
+                'pos' => 'sunset',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 15:43:00',
+                'time' => '2022-07-30 15:43:00',
+                'pos' => 'transit',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 07:07:00',
+                'time' => '2022-07-30 07:07:00',
+                'pos' => 'civil_twilight_begin',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-31 00:18:00',
+                'time' => '2022-07-31 00:18:00',
+                'pos' => 'civil_twilight_end',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 06:07:00',
+                'time' => '2022-07-30 06:07:00',
+                'pos' => 'nautical_twilight_begin',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-31 01:19:00',
+                'time' => '2022-07-31 01:19:00',
+                'pos' => 'nautical_twilight_end',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 04:21:00',
+                'time' => '2022-07-30 04:21:00',
+                'pos' => 'astronomical_twilight_begin',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-31 03:07:00',
+                'time' => '2022-07-31 03:07:00',
+                'pos' => 'astronomical_twilight_end',
+                'active' => false,
+            ],
 
-                     [
-                         'start' => '2022-07-30 07:47:00',
-                         'time' => '2022-07-30 07:47:00',
-                         'pos' => 'sunrise',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 23:34:00',
-                         'time' => '2022-07-30 23:34:00',
-                         'pos' => 'sunset',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 15:42:00',
-                         'time' => '2022-07-30 15:42:00',
-                         'pos' => 'transit',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 07:06:00',
-                         'time' => '2022-07-30 07:06:00',
-                         'pos' => 'civil_twilight_begin',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-31 00:17:00',
-                         'time' => '2022-07-31 00:17:00',
-                         'pos' => 'civil_twilight_end',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 06:06:00',
-                         'time' => '2022-07-30 06:06:00',
-                         'pos' => 'nautical_twilight_begin',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-31 01:18:00',
-                         'time' => '2022-07-31 01:18:00',
-                         'pos' => 'nautical_twilight_end',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 04:20:00',
-                         'time' => '2022-07-30 04:20:00',
-                         'pos' => 'astronomical_twilight_begin',
-                         'active' => true,
-                     ],
-                     [
-                         'start' => '2022-07-30 03:05:00',
-                         'time' => '2022-07-30 03:05:00',
-                         'pos' => 'astronomical_twilight_end',
-                         'active' => true,
-                     ],
+            [
+                'start' => '2022-07-30 07:47:00',
+                'time' => '2022-07-30 07:47:00',
+                'pos' => 'sunrise',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 23:34:00',
+                'time' => '2022-07-30 23:34:00',
+                'pos' => 'sunset',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 15:42:00',
+                'time' => '2022-07-30 15:42:00',
+                'pos' => 'transit',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 07:06:00',
+                'time' => '2022-07-30 07:06:00',
+                'pos' => 'civil_twilight_begin',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-31 00:17:00',
+                'time' => '2022-07-31 00:17:00',
+                'pos' => 'civil_twilight_end',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 06:06:00',
+                'time' => '2022-07-30 06:06:00',
+                'pos' => 'nautical_twilight_begin',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-31 01:18:00',
+                'time' => '2022-07-31 01:18:00',
+                'pos' => 'nautical_twilight_end',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 04:20:00',
+                'time' => '2022-07-30 04:20:00',
+                'pos' => 'astronomical_twilight_begin',
+                'active' => true,
+            ],
+            [
+                'start' => '2022-07-30 03:05:00',
+                'time' => '2022-07-30 03:05:00',
+                'pos' => 'astronomical_twilight_end',
+                'active' => true,
+            ],
 
-                     [
-                         'start' => '2022-07-30 07:49:00',
-                         'time' => '2022-07-30 07:49:00',
-                         'pos' => 'sunrise',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 21:32:00',
-                         'time' => '2022-07-30 21:32:00',
-                         'pos' => 'sunset',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 13:40:00',
-                         'time' => '2022-07-30 13:40:00',
-                         'pos' => 'transit',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 05:04:00',
-                         'time' => '2022-07-30 05:04:00',
-                         'pos' => 'civil_twilight_begin',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 22:15:00',
-                         'time' => '2022-07-30 22:15:00',
-                         'pos' => 'civil_twilight_end',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 04:04:00',
-                         'time' => '2022-07-30 04:04:00',
-                         'pos' => 'nautical_twilight_begin',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 23:16:00',
-                         'time' => '2022-07-30 23:16:00',
-                         'pos' => 'nautical_twilight_end',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-30 02:18:00',
-                         'time' => '2022-07-30 02:18:00',
-                         'pos' => 'astronomical_twilight_begin',
-                         'active' => false,
-                     ],
-                     [
-                         'start' => '2022-07-31 01:01:00',
-                         'time' => '2022-07-31 01:01:00',
-                         'pos' => 'astronomical_twilight_end',
-                         'active' => false,
-                     ],
+            [
+                'start' => '2022-07-30 07:49:00',
+                'time' => '2022-07-30 07:49:00',
+                'pos' => 'sunrise',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 21:32:00',
+                'time' => '2022-07-30 21:32:00',
+                'pos' => 'sunset',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 13:40:00',
+                'time' => '2022-07-30 13:40:00',
+                'pos' => 'transit',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 05:04:00',
+                'time' => '2022-07-30 05:04:00',
+                'pos' => 'civil_twilight_begin',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 22:15:00',
+                'time' => '2022-07-30 22:15:00',
+                'pos' => 'civil_twilight_end',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 04:04:00',
+                'time' => '2022-07-30 04:04:00',
+                'pos' => 'nautical_twilight_begin',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 23:16:00',
+                'time' => '2022-07-30 23:16:00',
+                'pos' => 'nautical_twilight_end',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-30 02:18:00',
+                'time' => '2022-07-30 02:18:00',
+                'pos' => 'astronomical_twilight_begin',
+                'active' => false,
+            ],
+            [
+                'start' => '2022-07-31 01:01:00',
+                'time' => '2022-07-31 01:01:00',
+                'pos' => 'astronomical_twilight_end',
+                'active' => false,
+            ],
 
-
-                 ] as $param) {
+        ] as $param) {
             $result[] = [
-//                'message' => 'The estimates date of sunposition `' . $param['pos'] . ' is `' .
-//                    ($param['pos'] ? 'ACTIVE' : 'NOT active') . '` at time `' . $param['time'] . '`.',
-                'message' => 'hallo Welt',
+                //                'The estimates date of sunposition `' . $param['pos'] . ' is `' .
+                //                    ($param['pos'] ? 'ACTIVE' : 'NOT active') . '` at time `' . $param['time'] . '`.',
+                'hallo Welt',
                 'expects' => [
                     'result' => $param['active'],
                 ],
@@ -1232,7 +1212,7 @@ class SunriseRelTimerTest extends TestCase
                     'testvalue' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $param['start'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'required' => [
                         'sunPosition' => $param['pos'],
@@ -1369,7 +1349,7 @@ class SunriseRelTimerTest extends TestCase
         //                     ] as $param
         //            ) {
         //                $result[] = [
-        //                    'message' => 'The estimates natural timegap from `' . $startPos . '` to `' . $param['pos'] . '` is `' .
+        //                    'The estimates natural timegap from `' . $startPos . '` to `' . $param['pos'] . '` is `' .
         //                        ($param['pos'] ? 'ACTIVE' : 'NOT active') . '` at time `' . $param['time'] . '`.',
         //                    'expects' => [
         //                        'result' => $param['active'],
@@ -1395,7 +1375,7 @@ class SunriseRelTimerTest extends TestCase
         //                    ],
         //                ];
         //                $result[] = [
-        //                    'message' => 'The estimates natural timegap from `' . $startPos . '` to `' . $param['pos'] .
+        //                    'The estimates natural timegap from `' . $startPos . '` to `' . $param['pos'] .
         //                        '` is `ACTIVE` at time `' . $startTime['start'] . '`.',
         //                    'expects' => [
         //                        'result' => true, // because one minite minimum-gap
@@ -1425,30 +1405,27 @@ class SunriseRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderIsActive
-     * @test
-     */
+    #[DataProvider('dataProviderIsActive')]
+    #[Test]
     public function isActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['required'], $params['general'], $params['optional']);
             $value = clone $params['testvalue'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isActive($value, $setting),
                 'isActive: ' . $message
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $params['testvalue'],
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
         }
     }
-
 
     public static function dataProviderNextActive(): array
     {
@@ -1511,10 +1488,10 @@ class SunriseRelTimerTest extends TestCase
         $startValue = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
             '2022-07-30 05:47:00',
-            new DateTimeZone('Europe/Berlin')
+            new \DateTimeZone('Europe/Berlin')
         );
         $result[] = [
-            'message' => 'The next range relativeliy sunposition `' . 'sunrise' . ' is correctly defined for the test-time `' . '2022-07-30 05:47:00' . '`.',
+            'The next range relativeliy sunposition `' . 'sunrise' . ' is correctly defined for the test-time `' . '2022-07-30 05:47:00' . '`.',
             'expects' => [
                 'result' => [
                     'beginning' => '2022-07-31 05:48:00',
@@ -1541,101 +1518,101 @@ class SunriseRelTimerTest extends TestCase
 
         //        'pos' => sunrise, sunset, transit, civil_twilight_begin, civil_twilight_end, nautical_twilight_begin, nautical_twilight_end, astronomical_twilight_begin, astronomical_twilight_end,
         foreach ([
-                     [
-                         'start' => '2022-07-30 05:47:00',
-                         'pos' => 'sunrise',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 05:48:00',
-                             'ending' => '2022-07-31 07:49:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-30 21:35:00',
-                         'pos' => 'sunset',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 21:33:00',
-                             'ending' => '2022-07-31 23:34:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-30 13:41:00',
-                         'pos' => 'transit',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 13:41:00',
-                             'ending' => '2022-07-31 15:42:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-30 05:05:00',
-                         'pos' => 'civil_twilight_begin',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 05:07:00',
-                             'ending' => '2022-07-31 07:08:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-30 22:16:00',
-                         'pos' => 'civil_twilight_end',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 22:14:00',
-                             'ending' => '2022-08-01 00:15:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-30 04:05:00',
-                         'pos' => 'nautical_twilight_begin',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 04:08:00',
-                             'ending' => '2022-07-31 06:09:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-30 23:17:00',
-                         'pos' => 'nautical_twilight_end',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 23:14:00',
-                             'ending' => '2022-08-01 01:15:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-30 02:19:00',
-                         'pos' => 'astronomical_twilight_begin',
-                         'nextActive' => [
-                             'beginning' => '2022-07-31 02:28:00',
-                             'ending' => '2022-07-31 04:29:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-31 01:02:00',
-                         'pos' => 'astronomical_twilight_end',
-                         'nextActive' => [
-                             'beginning' => '2022-08-01 00:53:00',
-                             'ending' => '2022-08-01 02:54:00',
-                             'exist' => true,
-                         ],
-                     ],
-                 ] as $myParams) {
+            [
+                'start' => '2022-07-30 05:47:00',
+                'pos' => 'sunrise',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 05:48:00',
+                    'ending' => '2022-07-31 07:49:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-30 21:35:00',
+                'pos' => 'sunset',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 21:33:00',
+                    'ending' => '2022-07-31 23:34:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-30 13:41:00',
+                'pos' => 'transit',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 13:41:00',
+                    'ending' => '2022-07-31 15:42:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-30 05:05:00',
+                'pos' => 'civil_twilight_begin',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 05:07:00',
+                    'ending' => '2022-07-31 07:08:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-30 22:16:00',
+                'pos' => 'civil_twilight_end',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 22:14:00',
+                    'ending' => '2022-08-01 00:15:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-30 04:05:00',
+                'pos' => 'nautical_twilight_begin',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 04:08:00',
+                    'ending' => '2022-07-31 06:09:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-30 23:17:00',
+                'pos' => 'nautical_twilight_end',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 23:14:00',
+                    'ending' => '2022-08-01 01:15:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-30 02:19:00',
+                'pos' => 'astronomical_twilight_begin',
+                'nextActive' => [
+                    'beginning' => '2022-07-31 02:28:00',
+                    'ending' => '2022-07-31 04:29:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-31 01:02:00',
+                'pos' => 'astronomical_twilight_end',
+                'nextActive' => [
+                    'beginning' => '2022-08-01 00:53:00',
+                    'ending' => '2022-08-01 02:54:00',
+                    'exist' => true,
+                ],
+            ],
+        ] as $myParams) {
             $startValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 $myParams['start'],
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $stopValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 $myParams['nextActive']['beginning'],
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
-            $stopValue->sub(new DateInterval('PT1S'));
+            $stopValue->sub(new \DateInterval('PT1S'));
             $result[] = [
-                'message' => 'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
+                'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
                     $startValue->format('Y-m-d H:i:s') . '` for the next period: ' . print_r(
                         $myParams['nextActive'],
                         true
@@ -1661,7 +1638,7 @@ class SunriseRelTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
+                'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
                     $stopValue->format('Y-m-d H:i:s') . '` for the next period: ' . print_r(
                         $myParams['nextActive'],
                         true
@@ -1691,28 +1668,28 @@ class SunriseRelTimerTest extends TestCase
             $startValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2022-07-30 05:37:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             if ($duration > 0) {
                 $beginValue = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-07-31 05:38:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $endValue = clone $beginValue;
-                $endValue->add(new DateInterval('PT' . abs(($duration + 1)) . 'M'));
+                $endValue->add(new \DateInterval('PT' . abs(($duration + 1)) . 'M'));
             } else {
                 $endValue = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-07-31 05:38:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
-                $endValue->add(new DateInterval('PT1M'));
+                $endValue->add(new \DateInterval('PT1M'));
                 $beginValue = clone $endValue;
-                $beginValue->sub(new DateInterval('PT' . abs(($duration - 1)) . 'M'));
+                $beginValue->sub(new \DateInterval('PT' . abs(($duration - 1)) . 'M'));
             }
             $result[] = [
-                'message' => 'The estimates date of sunposition `sunrise` is defined for the next period ' .
+                'The estimates date of sunposition `sunrise` is defined for the next period ' .
                     'based on the time `' . $startValue->format('Y-m-d H:i:s') . '`. ' .
                     'The duration is variated',
                 'expects' => [
@@ -1740,45 +1717,45 @@ class SunriseRelTimerTest extends TestCase
             ];
         }
         foreach ([
-                     -1430,
-                     -900,
-                     -152,
-                     -50,
-                     -1,
-                     1,
-                     50,
-                     152,
-                     900,
-                     1430,
-                 ] as $relative) {
+            -1430,
+            -900,
+            -152,
+            -50,
+            -1,
+            1,
+            50,
+            152,
+            900,
+            1430,
+        ] as $relative) {
             $startValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2022-07-30 05:35:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $beginRel = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2022-07-30 05:37:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
-            ;
+
             if ($relative > 0) {
                 $startRel = clone $startValue;
-                $startRel->add(new DateInterval('PT' . abs($relative) . 'M'));
-                $beginRel->add(new DateInterval('PT' . abs($relative) . 'M'));
+                $startRel->add(new \DateInterval('PT' . abs($relative) . 'M'));
+                $beginRel->add(new \DateInterval('PT' . abs($relative) . 'M'));
                 $endRel = clone $beginRel;
-                $endRel->add(new DateInterval('PT120M'));
-                $endRel->add(new DateInterval('PT1M'));
+                $endRel->add(new \DateInterval('PT120M'));
+                $endRel->add(new \DateInterval('PT1M'));
             } else {
                 $startRel = clone $startValue;
-                $startRel->sub(new DateInterval('PT' . abs($relative) . 'M'));
-                $beginRel->sub(new DateInterval('PT' . abs($relative) . 'M'));
+                $startRel->sub(new \DateInterval('PT' . abs($relative) . 'M'));
+                $beginRel->sub(new \DateInterval('PT' . abs($relative) . 'M'));
                 $endRel = clone $beginRel;
-                $endRel->add(new DateInterval('PT120M'));
-                $endRel->add(new DateInterval('PT1M')); // round
+                $endRel->add(new \DateInterval('PT120M'));
+                $endRel->add(new \DateInterval('PT1M')); // round
             }
             $result[] = [
-                'message' => 'The estimates date of sunposition `sunrise` is defined for the next period ' .
+                'The estimates date of sunposition `sunrise` is defined for the next period ' .
                     'based on the time `' . $startRel->format('Y-m-d H:i:s') . '`. ' .
                     'The relative timegap  to the startposition is variated (current variation: `' . $relative . '` minutes).',
                 'expects' => [
@@ -1805,7 +1782,6 @@ class SunriseRelTimerTest extends TestCase
                 ],
             ];
         }
-
 
         //        Check the funktion of natural gap
         // values for sun at           2022-07-30
@@ -1834,58 +1810,58 @@ class SunriseRelTimerTest extends TestCase
         ];
         $relativeInMinutes = 10;
         foreach ([
-                     'sunrise',
-                     'sunset',
-                     'transit',
-                     'civil_twilight_begin',
-                     'civil_twilight_end',
-                     'nautical_twilight_begin',
-                     'nautical_twilight_end',
-                     'astronomical_twilight_begin',
-                     'astronomical_twilight_end',
-                 ] as $pos) {
+            'sunrise',
+            'sunset',
+            'transit',
+            'civil_twilight_begin',
+            'civil_twilight_end',
+            'nautical_twilight_begin',
+            'nautical_twilight_end',
+            'astronomical_twilight_begin',
+            'astronomical_twilight_end',
+        ] as $pos) {
             foreach ([
-                         'sunrise',
-                         'sunset',
-                         'transit',
-                         'civil_twilight_begin',
-                         'civil_twilight_end',
-                         'nautical_twilight_begin',
-                         'nautical_twilight_end',
-                         'astronomical_twilight_begin',
-                         'astronomical_twilight_end',
-                     ] as $secondPos
+                'sunrise',
+                'sunset',
+                'transit',
+                'civil_twilight_begin',
+                'civil_twilight_end',
+                'nautical_twilight_begin',
+                'nautical_twilight_end',
+                'astronomical_twilight_begin',
+                'astronomical_twilight_end',
+            ] as $secondPos
             ) {
                 $startValue = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-07-30 02:07:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $posDate = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     $mapPos[$pos],
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 if ($mapPos[$secondPos] > $mapPos[$pos]) {
                     $secondPosDate = date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $mapPos[$secondPos],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     );
                 } else {
                     $secondPosDate = date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $mapSecondPos[$secondPos],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     );
                 }
-                $secondPosDate->add(new DateInterval('PT1M')); // respect the rounding to minutes
+                $secondPosDate->add(new \DateInterval('PT1M')); // respect the rounding to minutes
                 if ($relativeInMinutes > 0) {
-                    $posDate->add(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
-                    $secondPosDate->add(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $posDate->add(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $secondPosDate->add(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
                 } else {
-                    $posDate->sub(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
-                    $secondPosDate->sub(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $posDate->sub(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $secondPosDate->sub(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
                 }
                 $currentResult = [
 
@@ -1894,7 +1870,7 @@ class SunriseRelTimerTest extends TestCase
                     'exist' => true,
                 ];
                 $result[] = [
-                    'message' => 'The starttime is `2022-07-30 02:07:00`. The main sunrise-position is `' .
+                    'The starttime is `2022-07-30 02:07:00`. The main sunrise-position is `' .
                         $posDate->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`.' .
                         ' The second sunrise-position for the natural range is `' .
                         $secondPosDate->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`. The result should be:' .
@@ -1921,19 +1897,15 @@ class SunriseRelTimerTest extends TestCase
             }
         }
 
-
         return $result;
     }
 
-    /**
-     *
-     * @dataProvider dataProviderNextActive
-     * @test
-     */
+    #[DataProvider('dataProviderNextActive')]
+    #[Test]
     public function nextActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['required'], $params['general'], $params['optional']);
             $value = $params['testvalue'];
@@ -1942,7 +1914,7 @@ class SunriseRelTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
@@ -2012,10 +1984,10 @@ class SunriseRelTimerTest extends TestCase
         $startValue = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
             '2022-07-31 07:49:00',
-            new DateTimeZone('Europe/Berlin')
+            new \DateTimeZone('Europe/Berlin')
         );
         $result[] = [
-            'message' => 'The previous range relativeliy sunposition `' . 'sunrise' . '` is correctly defined for the test-time `' . '2022-07-31 07:49:00' . '`.',
+            'The previous range relativeliy sunposition `' . 'sunrise' . '` is correctly defined for the test-time `' . '2022-07-31 07:49:00' . '`.',
             'expects' => [
                 'result' => [
                     'beginning' => '2022-07-30 05:47:00',
@@ -2042,101 +2014,101 @@ class SunriseRelTimerTest extends TestCase
 
         //        'pos' => sunrise, sunset, transit, civil_twilight_begin, civil_twilight_end, nautical_twilight_begin, nautical_twilight_end, astronomical_twilight_begin, astronomical_twilight_end,
         foreach ([
-                     [
-                         'start' => '2022-07-31 07:49:00', // end of range 2 hours and 10 minutes
-                         'pos' => 'sunrise',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 05:47:00',
-                             'ending' => '2022-07-30 07:48:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-31 23:33:00',
-                         'pos' => 'sunset',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 21:35:00',
-                             'ending' => '2022-07-30 23:36:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-31 15:41:00',
-                         'pos' => 'transit',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 13:41:00',
-                             'ending' => '2022-07-30 15:42:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-31 07:07:00',
-                         'pos' => 'civil_twilight_begin',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 05:05:00',
-                             'ending' => '2022-07-30 07:06:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-08-01 00:14:00',
-                         'pos' => 'civil_twilight_end',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 22:16:00',
-                             'ending' => '2022-07-31 00:17:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-31 06:08:00',
-                         'pos' => 'nautical_twilight_begin',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 04:05:00',
-                             'ending' => '2022-07-30 06:06:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-08-01 01:14:00',
-                         'pos' => 'nautical_twilight_end',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 23:17:00',
-                             'ending' => '2022-07-31 01:18:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-07-31 04:28:00',
-                         'pos' => 'astronomical_twilight_begin',
-                         'prevActive' => [
-                             'beginning' => '2022-07-30 02:19:00',
-                             'ending' => '2022-07-30 04:20:00',
-                             'exist' => true,
-                         ],
-                     ],
-                     [
-                         'start' => '2022-08-01 02:53:00',
-                         'pos' => 'astronomical_twilight_end',
-                         'prevActive' => [
-                             'beginning' => '2022-07-31 01:02:00',
-                             'ending' => '2022-07-31 03:03:00',
-                             'exist' => true,
-                         ],
-                     ],
-                 ] as $myParams) {
+            [
+                'start' => '2022-07-31 07:49:00', // end of range 2 hours and 10 minutes
+                'pos' => 'sunrise',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 05:47:00',
+                    'ending' => '2022-07-30 07:48:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-31 23:33:00',
+                'pos' => 'sunset',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 21:35:00',
+                    'ending' => '2022-07-30 23:36:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-31 15:41:00',
+                'pos' => 'transit',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 13:41:00',
+                    'ending' => '2022-07-30 15:42:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-31 07:07:00',
+                'pos' => 'civil_twilight_begin',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 05:05:00',
+                    'ending' => '2022-07-30 07:06:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-08-01 00:14:00',
+                'pos' => 'civil_twilight_end',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 22:16:00',
+                    'ending' => '2022-07-31 00:17:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-31 06:08:00',
+                'pos' => 'nautical_twilight_begin',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 04:05:00',
+                    'ending' => '2022-07-30 06:06:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-08-01 01:14:00',
+                'pos' => 'nautical_twilight_end',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 23:17:00',
+                    'ending' => '2022-07-31 01:18:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-07-31 04:28:00',
+                'pos' => 'astronomical_twilight_begin',
+                'prevActive' => [
+                    'beginning' => '2022-07-30 02:19:00',
+                    'ending' => '2022-07-30 04:20:00',
+                    'exist' => true,
+                ],
+            ],
+            [
+                'start' => '2022-08-01 02:53:00',
+                'pos' => 'astronomical_twilight_end',
+                'prevActive' => [
+                    'beginning' => '2022-07-31 01:02:00',
+                    'ending' => '2022-07-31 03:03:00',
+                    'exist' => true,
+                ],
+            ],
+        ] as $myParams) {
             $startValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 $myParams['start'],
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $stopValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 $myParams['prevActive']['ending'],
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
-            $stopValue->add(new DateInterval('PT1S'));
+            $stopValue->add(new \DateInterval('PT1S'));
             $result[] = [
-                'message' => 'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
+                'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
                     $startValue->format('Y-m-d H:i:s') . '` for the prev period: ' . print_r(
                         $myParams['prevActive'],
                         true
@@ -2162,7 +2134,7 @@ class SunriseRelTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
+                'The estimates date of sunposition `' . $myParams['pos'] . '` is defined at  the time `' .
                     $stopValue->format('Y-m-d H:i:s') . '` for the prev period: ' . print_r(
                         $myParams['prevActive'],
                         true
@@ -2192,28 +2164,28 @@ class SunriseRelTimerTest extends TestCase
             $startValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2022-07-31 05:38:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             if ($duration > 0) {
                 $beginValue = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-07-30 05:37:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $endValue = clone $beginValue;
-                $endValue->add(new DateInterval('PT' . abs(($duration + 1)) . 'M'));
+                $endValue->add(new \DateInterval('PT' . abs(($duration + 1)) . 'M'));
             } else {
                 $endValue = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-07-30 05:37:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
-                $endValue->add(new DateInterval('PT1M'));
+                $endValue->add(new \DateInterval('PT1M'));
                 $beginValue = clone $endValue;
-                $beginValue->sub(new DateInterval('PT' . abs(($duration - 1)) . 'M'));
+                $beginValue->sub(new \DateInterval('PT' . abs(($duration - 1)) . 'M'));
             }
             $result[] = [
-                'message' => 'The estimates date of sunposition `sunrise` is defined for the prev period ' .
+                'The estimates date of sunposition `sunrise` is defined for the prev period ' .
                     'based on the time `' . $startValue->format('Y-m-d H:i:s') . '`. ' .
                     'The duration is variated',
                 'expects' => [
@@ -2241,46 +2213,46 @@ class SunriseRelTimerTest extends TestCase
             ];
         }
         foreach ([
-                     -1430,
-                     -900,
-                     -152,
-                     -50,
-                     -1,
-                     1,
-                     50,
-                     152,
-                     900,
-                     1430,
-                 ] as $relative) {
+            -1430,
+            -900,
+            -152,
+            -50,
+            -1,
+            1,
+            50,
+            152,
+            900,
+            1430,
+        ] as $relative) {
             $startValue = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2022-07-31 07:39:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             // startvalue with rel-time = 0 and duration = 0
             $beginRel = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2022-07-30 05:37:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
-            ;
+
             if ($relative > 0) {
                 $startRel = clone $startValue;
-                $startRel->add(new DateInterval('PT' . abs($relative) . 'M'));
-                $beginRel->add(new DateInterval('PT' . abs($relative) . 'M'));
+                $startRel->add(new \DateInterval('PT' . abs($relative) . 'M'));
+                $beginRel->add(new \DateInterval('PT' . abs($relative) . 'M'));
                 $endRel = clone $beginRel;
-                $endRel->add(new DateInterval('PT120M'));
-                $endRel->add(new DateInterval('PT1M')); // effect of rounding to minutes
+                $endRel->add(new \DateInterval('PT120M'));
+                $endRel->add(new \DateInterval('PT1M')); // effect of rounding to minutes
             } else {
                 $startRel = clone $startValue;
-                $startRel->sub(new DateInterval('PT' . abs($relative) . 'M'));
-                $beginRel->sub(new DateInterval('PT' . abs($relative) . 'M'));
+                $startRel->sub(new \DateInterval('PT' . abs($relative) . 'M'));
+                $beginRel->sub(new \DateInterval('PT' . abs($relative) . 'M'));
                 $endRel = clone $beginRel;
-                $endRel->add(new DateInterval('PT120M'));
-                $endRel->add(new DateInterval('PT1M')); // effect of rounding to minutes
+                $endRel->add(new \DateInterval('PT120M'));
+                $endRel->add(new \DateInterval('PT1M')); // effect of rounding to minutes
             }
             $result[] = [
-                'message' => 'The estimates date of sunposition `sunrise` is defined for the prev period ' .
+                'The estimates date of sunposition `sunrise` is defined for the prev period ' .
                     'based on the time `' . $startRel->format('Y-m-d H:i:s') . '`. ' .
                     'The relative timegap  to the startposition is variated (current variation: `' . $relative . '` minutes).',
                 'expects' => [
@@ -2308,7 +2280,6 @@ class SunriseRelTimerTest extends TestCase
             ];
         }
 
-
         // values for sun at           2022-07-30
         $mapSecondPos = [
             'sunrise' => '2022-07-30 05:37:00',
@@ -2335,61 +2306,61 @@ class SunriseRelTimerTest extends TestCase
         ];
         $relativeInMinutes = 10;
         foreach ([
-                     'sunrise',
-                     'sunset',
-                     'transit',
-                     'civil_twilight_begin',
-                     'civil_twilight_end',
-                     'nautical_twilight_begin',
-                     'nautical_twilight_end',
-                     'astronomical_twilight_begin',
-                     'astronomical_twilight_end',
-                 ] as $pos) {
+            'sunrise',
+            'sunset',
+            'transit',
+            'civil_twilight_begin',
+            'civil_twilight_end',
+            'nautical_twilight_begin',
+            'nautical_twilight_end',
+            'astronomical_twilight_begin',
+            'astronomical_twilight_end',
+        ] as $pos) {
             foreach ([
-//                         'sunrise',
-//                         'sunset',
-//                         'transit',
-                         'civil_twilight_begin',
-                         'civil_twilight_end',
-                         'nautical_twilight_begin',
-                         'nautical_twilight_end',
-                         'astronomical_twilight_begin',
-                         'astronomical_twilight_end',
-                     ] as $secondPos
+                //                         'sunrise',
+                //                         'sunset',
+                //                         'transit',
+                'civil_twilight_begin',
+                'civil_twilight_end',
+                'nautical_twilight_begin',
+                'nautical_twilight_end',
+                'astronomical_twilight_begin',
+                'astronomical_twilight_end',
+            ] as $secondPos
             ) {
                 $startValue = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-08-01 00:45:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $secondPosDate = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     $mapPos[$secondPos],
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 if ($mapPos[$secondPos] > $mapPos[$pos]) {
                     $posDate = date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $mapPos[$pos],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     );
                 } else {
                     $posDate = date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $mapSecondPos[$pos],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     );
                 }
                 if ($relativeInMinutes > 0) {
-                    $posDate->add(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
-                    $secondPosDate->add(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
-                    $startValue->add(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $posDate->add(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $secondPosDate->add(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $startValue->add(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
                 } else {
-                    $posDate->sub(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
-                    $secondPosDate->sub(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
-                    $startValue->sub(new DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $posDate->sub(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $secondPosDate->sub(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
+                    $startValue->sub(new \DateInterval('PT' . abs($relativeInMinutes) . 'M'));
                 }
-                $secondPosDate->add(new DateInterval('PT1M')); // respect the rounding to minutes
+                $secondPosDate->add(new \DateInterval('PT1M')); // respect the rounding to minutes
                 $currentResult = [
 
                     'beginning' => $posDate->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -2397,7 +2368,7 @@ class SunriseRelTimerTest extends TestCase
                     'exist' => true,
                 ];
                 $result[] = [
-                    'message' => 'The starttime is `' . $startValue->format(TimerInterface::TIMER_FORMAT_DATETIME) .
+                    'The starttime is `' . $startValue->format(TimerInterface::TIMER_FORMAT_DATETIME) .
                         '`. The main ' . $pos . '-position is `' .
                         $posDate->format(TimerInterface::TIMER_FORMAT_DATETIME) . '`.' .
                         ' The second ' . $secondPos . '-position for the natural range is `' .
@@ -2424,19 +2395,15 @@ class SunriseRelTimerTest extends TestCase
             }
         }
 
-
         return $result;
     }
 
-    /**
-     *
-     * @dataProvider dataProviderPrevActive
-     * @test
-     */
+    #[DataProvider('dataProviderPrevActive')]
+    #[Test]
     public function prevActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['required'], $params['general'], $params['optional']);
             $value = $params['testvalue'];
@@ -2445,7 +2412,7 @@ class SunriseRelTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );

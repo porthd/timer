@@ -34,7 +34,6 @@ use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 
 /**
  * The concept of the DateTime-Object in Frameworks is horrible. You can selectect bewtween a PHP
@@ -61,13 +60,11 @@ use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
  *
  * Problem you cant use Format, to generate the Output for a wisched Time-Zone
  * Class DateTimeUtility
- * @package Porthd\Timer\Utilities
  */
 class CustomTimerUtility
 {
-    protected const DEFAULT_BEGIN_PERIOD = "1753-01-01 00:00:00";  // Because of calandar-relaunch (Julian, modern-counting
-    protected const DEFAULT_ENDING_PERIOD = "9999-12-31 23:59:59";
-
+    protected const DEFAULT_BEGIN_PERIOD = '1753-01-01 00:00:00';  // Because of calandar-relaunch (Julian, modern-counting
+    protected const DEFAULT_ENDING_PERIOD = '9999-12-31 23:59:59';
 
     /**
      * @param string $startDateTime
@@ -146,10 +143,10 @@ class CustomTimerUtility
             }
         }
         if (empty($cascade)) {
-            return (LocalizationUtility::translate(
+            return LocalizationUtility::translate(
                 'content.timer.periodMessage.general.timeparts.zero',
                 TimerConst::EXTENSION_NAME
-            ) ?? '0 min');
+            ) ?? '0 min';
         }
         if (count($cascade) === 1) {
             return array_pop($cascade);
@@ -157,12 +154,12 @@ class CustomTimerUtility
 
         $last = array_pop($cascade);
         $rest = implode(', ', $cascade);
-        return (LocalizationUtility::translate(
+        return LocalizationUtility::translate(
             'content.timer.periodMessage.general.timeparts.combine.2',
             TimerConst::EXTENSION_NAME,
             [$rest, $last]
         ) ?? $rest . ', ' . $last
-        );
+        ;
     }
 
     /**
@@ -194,13 +191,12 @@ class CustomTimerUtility
      * @return array<mixed>
      */
     public static function readListsFromFalFiles(
-        string           $yamlFalParam,
-        string           $relationTable,
-        int              $relationUid,
-        YamlFileLoader   $yamlFileLoader,
+        string $yamlFalParam,
+        string $relationTable,
+        int $relationUid,
+        YamlFileLoader $yamlFileLoader,
         ?LoggerInterface $logger = null
-    ): array
-    {
+    ): array {
         if ($yamlFalParam < 1) {
             return [];
         }
@@ -244,12 +240,11 @@ class CustomTimerUtility
      * @throws TimerException
      */
     public static function readListFromFileOrUrl(
-        string           $filePath,
-        YamlFileLoader   $yamlFileLoader,
+        string $filePath,
+        YamlFileLoader $yamlFileLoader,
         ?ValidateYamlInterface $validatorObject = null,
         ?LoggerInterface $logger = null
-    ): array
-    {
+    ): array {
         if (file_exists($filePath)) {
             $filePathNew = realpath($filePath);
             if (!file_exists($filePathNew)) {
@@ -259,7 +254,7 @@ class CustomTimerUtility
         } else {
             // Don't allow relative pathes or pathes with '//' or pathes with '\\'
             if (GeneralUtility::validPathStr($filePath)) {
-                if (strpos($filePath, 'FILE:') === 0) {
+                if (str_starts_with($filePath, 'FILE:')) {
                     $filePath = substr($filePath, strlen('FILE:'));
                 }
                 $filePathNew = GeneralUtility::getFileAbsFileName($filePath);
@@ -290,8 +285,8 @@ class CustomTimerUtility
                 if ((count($splitList) !== 3) ||
                     (empty($splitList[0])) ||
                     (empty($splitList[1])) ||
-                    (strpos($splitList[2], 'https://') === 0) ||
-                    (strpos($filePath, 'http://') === 0)
+                    (str_starts_with($splitList[2], 'https://')) ||
+                    (str_starts_with($filePath, 'http://'))
                 ) {
                     throw new TimerException(
                         'The parameter `' . $filePath . '` is not correctly defined. ' .
@@ -358,7 +353,7 @@ class CustomTimerUtility
             case 'yaml':
             case 'yml':
                 $flags = YamlFileLoader::PROCESS_PLACEHOLDERS | YamlFileLoader::PROCESS_IMPORTS;
-            $result = $yamlFileLoader->load($filePathNew, $flags);
+                $result = $yamlFileLoader->load($filePathNew, $flags);
                 break;
             case 'csv':
                 $csvString = CsvYamlJsonMapperUtility::readCsvFile($filePathNew);

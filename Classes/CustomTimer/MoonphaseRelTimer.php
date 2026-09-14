@@ -23,12 +23,8 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 use DateTime;
-use DateTimeZone;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\CustomTimer\StrangerCode\MoonPhase\Solaris\MoonPhase;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
@@ -49,12 +45,21 @@ class MoonphaseRelTimer implements TimerInterface
         'last_quarter',
     ];
     protected const ARG_REL_MIN_TO_EVENT = 'relMinToSelectedTimerEvent';
-    protected const ARG_REQ_REL_TO_MIN = -37439;
-    protected const ARG_REQ_REL_TO_MAX = 37439;
+    // PURPOSE: Bound the relative offset/duration to ±28800 minutes (= 20 days).
+    //
+    // EDGE CASES:
+    //   - Bounds are inclusive: ±28800 is valid, ±28801 is not.
+    //   - 0 is a forbidden duration (a zero-length range is meaningless here).
+    //
+    // NOTE: Restored from an incidental ±37439 regression introduced by commit
+    //       24d7fd18 (flexform DurationMinutesFieldElement) that never updated
+    //       the unit tests, which assert the ±28800 boundary.
+    protected const ARG_REQ_REL_TO_MIN = -28800;
+    protected const ARG_REQ_REL_TO_MAX = 28800;
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_REQ_DURMIN_MIN = -37439;
+    protected const ARG_REQ_DURMIN_MIN = -28800;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 37439;
+    protected const ARG_REQ_DURMIN_MAX = 28800;
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     protected const TIMER_FLEXFORM_ITEM = [
         self::TIMER_NAME => 'FILE:EXT:timer/Configuration/FlexForms/TimerDef/MoonphaseRelTimer.flexform',
@@ -134,11 +139,11 @@ class MoonphaseRelTimer implements TimerInterface
     /**
      * tested 20201226
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -178,7 +183,6 @@ class MoonphaseRelTimer implements TimerInterface
         return $this->countParamsInList(self::ARG_REQ_LIST, $params);
     }
 
-
     /**
      * This method are introduced for easy build of unittests
      * @param array<mixed> $params
@@ -187,10 +191,10 @@ class MoonphaseRelTimer implements TimerInterface
     protected function validateMoonPhase(array $params = []): bool
     {
         $string = $params[self::ARG_MOON_PHASE];
-        return ((!empty($string)) &&
+        return (!empty($string)) &&
             (is_string($string)) &&
             (in_array($string, self::LIST_MOON_PHASE))
-        );
+        ;
     }
 
     /**
@@ -209,12 +213,12 @@ class MoonphaseRelTimer implements TimerInterface
         if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
             $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
         }
-        return (
-            ($flagCheck) &&
+        return
+            $flagCheck &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
-        );
+        ;
     }
 
     /**
@@ -225,7 +229,7 @@ class MoonphaseRelTimer implements TimerInterface
     protected function validateRelMinToEvent(array $params = []): bool
     {
         $value = (
-        isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
+            isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
             $params[self::ARG_REL_MIN_TO_EVENT] :
             0
         );
@@ -255,11 +259,11 @@ class MoonphaseRelTimer implements TimerInterface
      * [Time(current)-Time(rel)-TimeGape, Time(current)-Time(rel)-0];
      * The method use the resprective-Way of Check.
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -274,10 +278,10 @@ class MoonphaseRelTimer implements TimerInterface
             return $result->getResultExist();
         }
 
-        $utcDateTime = new DateTime(
+        $utcDateTime = new \DateTime(
             '@' .
             ($dateLikeEventZone->getTimestamp() - (int)($params[self::ARG_REL_MIN_TO_EVENT] ?? 0) * 60),
-            new DateTimeZone('UTC')
+            new \DateTimeZone('UTC')
         );
 
         /** the result in  $moonPhaseCalculator is the GMT-timestamp relative to the calculation */
@@ -312,11 +316,11 @@ class MoonphaseRelTimer implements TimerInterface
     /**
      * tested:
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -326,15 +330,15 @@ class MoonphaseRelTimer implements TimerInterface
      *
      * calculate the next range related to moon-shifts relative to a given date
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $relSeconds = (int)$params[self::ARG_REL_MIN_TO_EVENT] * 60;
         $baseTStamp = $dateLikeEventZone->getTimestamp() - $relSeconds;
-        $utcDateTime = new DateTime('@' . $baseTStamp, new DateTimeZone('UTC'));
+        $utcDateTime = new \DateTime('@' . $baseTStamp, new \DateTimeZone('UTC'));
         $moonPhaseCalculator = new MoonPhase($utcDateTime);
         $moonPhase = $params[self::ARG_MOON_PHASE];
         $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
@@ -382,11 +386,11 @@ class MoonphaseRelTimer implements TimerInterface
      *
      * calculate the previous range related to moon-shifts relative to a given date
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $relSeconds = (int)$params[self::ARG_REL_MIN_TO_EVENT] * 60;
         $rangeSec = (int)$params[self::ARG_REQ_DURATION_MINUTES] * 60;
@@ -401,7 +405,7 @@ class MoonphaseRelTimer implements TimerInterface
             $dateLikeEventZone->getTimestamp()
         );
         for ($i = 0; $i < 4; $i++) {
-            $refMooningDate = new DateTime('@' . $refStamp);
+            $refMooningDate = new \DateTime('@' . $refStamp);
             $moonPhaseCalculator = new MoonPhase($refMooningDate);
             $moonPhaseTStamp = $moonPhaseCalculator->get_phase($moonPhase);
             if ($moonPhaseTStamp === null) {
@@ -444,15 +448,15 @@ class MoonphaseRelTimer implements TimerInterface
      * @param int $rangeSec
      * @param float $moonPhaseTStamp
      * @param int $relSeconds
-     * @param DateTime $dateLikeEventZone
-     * @return DateTime[]
-     * @throws Exception
+     * @param \DateTime $dateLikeEventZone
+     * @return \DateTime[]
+     * @throws \Exception
      */
     protected function calculateRangeRoundToMinute(
         int $rangeSec,
         float $moonPhaseTStamp,
         int $relSeconds,
-        DateTime $dateLikeEventZone
+        \DateTime $dateLikeEventZone
     ): array {
         if ($rangeSec > 0) {
             $lower = ceil($moonPhaseTStamp) + $relSeconds;
@@ -463,9 +467,9 @@ class MoonphaseRelTimer implements TimerInterface
         }
         $lower = $lower - $lower % 60; // Normalize the seconds down to zero in the dateTime-format
         $upper = $upper + (60 - $upper % 60); // Normalize the seconds up to zero in the dateTime-format
-        $lowerLimit = new DateTime('@' . $lower);
+        $lowerLimit = new \DateTime('@' . $lower);
         $lowerLimit->setTimezone($dateLikeEventZone->getTimezone());
-        $upperLimit = new DateTime('@' . $upper);
+        $upperLimit = new \DateTime('@' . $upper);
         $upperLimit->setTimezone($dateLikeEventZone->getTimezone());
         return [$lowerLimit, $upperLimit];
     }
@@ -498,19 +502,19 @@ class MoonphaseRelTimer implements TimerInterface
      * @param int $dateStartStamp
      * @param int $dateStopStamp
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @throws Exception
+     * @throws \Exception
      */
     protected function setIsActiveResult(
         int $dateStartStamp,
         int $dateStopStamp,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         $params = []
     ): void {
-        $dateStart = new DateTime('@' . $dateStartStamp, $dateLikeEventZone->getTimezone());
-        $dateStop = new DateTime('@' . $dateStopStamp, $dateLikeEventZone->getTimezone());
+        $dateStart = new \DateTime('@' . $dateStartStamp, $dateLikeEventZone->getTimezone());
+        $dateStop = new \DateTime('@' . $dateStopStamp, $dateLikeEventZone->getTimezone());
 
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
@@ -523,11 +527,11 @@ class MoonphaseRelTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

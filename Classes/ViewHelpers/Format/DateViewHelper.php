@@ -24,9 +24,6 @@ namespace Porthd\Timer\ViewHelpers\Format;
  ***************************************************************/
 
 use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
-use DateTimeZone;
 use Porthd\Timer\Utilities\ConvertDateUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -130,8 +127,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  */
 class DateViewHelper extends AbstractViewHelper
 {
-
-
     /**
      * Needed as child node's output can return a DateTime object which can't be escaped
      *
@@ -211,11 +206,11 @@ class DateViewHelper extends AbstractViewHelper
             $date = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp', 'now');
         }
 
-        if ((!$date instanceof DateTime) && (!$date instanceof DateTimeImmutable)) {
+        if ((!$date instanceof \DateTime) && (!$date instanceof \DateTimeImmutable)) {
             try {
-                $base = $base instanceof DateTimeInterface ? (int)$base->format('U') : (int)strtotime((MathUtility::canBeInterpretedAsInteger($base) ? '@' : '') . $base);
+                $base = $base instanceof \DateTimeInterface ? (int)$base->format('U') : (int)strtotime((MathUtility::canBeInterpretedAsInteger($base) ? '@' : '') . $base);
                 $dateTimestamp = strtotime((MathUtility::canBeInterpretedAsInteger($date) ? '@' : '') . $date, $base);
-                $date = new DateTime();
+                $date = new \DateTime();
                 $date->setTimestamp($dateTimestamp);
             } catch (\Exception $exception) {
                 throw new Exception('"' . print_r($date, true) . '" could not be parsed by \DateTime ' .
@@ -225,7 +220,7 @@ class DateViewHelper extends AbstractViewHelper
                     ) . '` is wrong/unallowed: ' . $exception->getMessage(), 1241722579);
             }
         }
-        $date->setTimezone(new DateTimeZone($timezone));
+        $date->setTimezone(new \DateTimeZone($timezone));
 
         if (str_contains($format, '%')) {
             // @todo Replace deprecated strftime in php 8.1. Suppress warning in v11.

@@ -23,16 +23,8 @@ namespace Porthd\Timer\Constants;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Svt\Domain\Model\TimerBaseParameter;
-use Porthd\Svt\Service\Timer\CrontimeCheckService;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-
 /**
  * Class for extension-wide constants
- *
  */
 class TimerConst
 {
@@ -59,7 +51,6 @@ class TimerConst
     /**
      * needed in repositorys and repository-related classes
      * and needed in cronjob for updating startime and endtime
-     *
      */
     public const TIMER_FIELD_FLEX_ACTIVE = 'tx_timer_timer';
     public const TIMER_FIELD_SCHEDULER = 'tx_timer_scheduler';
@@ -104,13 +95,12 @@ class TimerConst
     public const ADDITIONAL_CALENDAR_JULIAN = 'julian';
     public const FAKE_CALENDAR_JULIAN_BY_GREGORIAN = 'gregorian';
 
-    public const DEFAULT_FLATTEN_KEYS_LIST = ['data', 'general', 'timer', 'sDEF', 'lDEF', 'vDEF',];
+    public const DEFAULT_FLATTEN_KEYS_LIST = ['data', 'general', 'timer', 'sDEF', 'lDEF', 'vDEF'];
 
     public const LIST_SEASON_OF_YEAR = ['spring', 'summer', 'autumn', 'winter'];
 
     public const TCA_ITEMS_LABEL = 'label';
     public const TCA_ITEMS_VALUE = 'value';
     public const TCA_ITEMS = 'items';
-
 
 }

@@ -524,7 +524,7 @@ anzugeben sind:
   wieviel Tage
   ein Feiertag verschoben wird, wenn der Feiertag zum Beispiel auf einen
   Mittwoch fällt. In der Liste repräsentiert die
-  erste Zahl den Montag und die letzte Zahlden Sonntag. In dem Beispiel '
+  erste Zahl den Montag und die letzte Zahl den Sonntag. In dem Beispiel '
   0,1,2,0,3,2,1' würde ein Feiertag um drei Tage (5.ter Eintrag) verschoben,
   wenn er auf einen Freitag (5.ter Tag in der Woche) fällt.
   Technisch funktioniert die Mechanik analog zu `_fixed_`.

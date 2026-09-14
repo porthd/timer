@@ -23,9 +23,6 @@ namespace Porthd\Timer\ViewHelpers;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateTime;
-use DateTimeZone;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Services\ListOfTimerService;
@@ -47,8 +44,6 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
 
     /**
      * Initializes the arguments for the viewHelper
-     *
-     * @return void
      */
     public function initializeArguments(): void
     {
@@ -88,14 +83,13 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
         );
     }
 
-
     /**
      * @param array<mixed> $arguments
      * @param RenderingContextInterface $renderingContext
      * @return bool
      * @throws TimerException
      */
-    public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
         $flagActive = false;
         try {
@@ -133,7 +127,8 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
             }
             $selector = $arguments[self::ARGUMENT_SELECTOR];
 
-            $activeZone = ((empty($arguments[self::ARGUMENT_ACTIVEZONE])) ?
+            $activeZone = (
+                (empty($arguments[self::ARGUMENT_ACTIVEZONE])) ?
                 date_default_timezone_get() :
                 $arguments[self::ARGUMENT_ACTIVEZONE]
             );
@@ -145,17 +140,17 @@ class IsActiveViewHelper extends AbstractConditionViewHelper
             ) {
                 $timestamp = $arguments[self::ARGUMENT_REF_TIMESTAMP] ?? '';
                 if (MathUtility::canBeInterpretedAsInteger($timestamp)) {
-                    $dateValue = new DateTime('@' . $timestamp);
-                    $dateValue->setTimezone(new DateTimeZone($activeZone));
+                    $dateValue = new \DateTime('@' . $timestamp);
+                    $dateValue->setTimezone(new \DateTimeZone($activeZone));
                 } else {
-                    $dateValue = DateTimeUtility::getCurrentExecTime() ?: new DateTime('now');
-                    $dateValue->setTimezone(new DateTimeZone($activeZone));
+                    $dateValue = DateTimeUtility::getCurrentExecTime() ?: new \DateTime('now');
+                    $dateValue->setTimezone(new \DateTimeZone($activeZone));
                 }
 
                 $flagActive = $timerList->isAllowedInRange($selector, $dateValue, $params);
                 $flagActive = $flagActive && $timerList->isActive($selector, $dateValue, $params);
             }
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             throw new TimerException(
                 'The isActive-viewhelper requires the following parameters: (`' .
                 self::ARGUMENT_FLEXFORM_STRING . '` xor `' . self::ARGUMENT_PARAM_LIST . '`) and `' . self::ARGUMENT_SELECTOR . '. ' .

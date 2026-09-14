@@ -1,3 +1,0 @@
-@import 'EXT:timer/Configuration/TypoScript/Periodlist/PeriodlistSetup/LibFluidPeriodlist.typoscript'
-@import 'EXT:timer/Configuration/TypoScript/Periodlist/PeriodlistSetup/PeriodlistFrontend.typoscript'
-@import 'EXT:timer/Configuration/TypoScript/Periodlist/PeriodlistSetup/PeriodlistBackend.typoscript'

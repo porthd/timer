@@ -23,8 +23,8 @@ namespace Porthd\Timer\ViewHelpers;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 
 /**
  * CommaList-viewhelper is a loop ViewHelper which can be used to iterate over comma-separated list.
@@ -92,16 +92,12 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class ForCommaListViewHelper extends AbstractViewHelper
 {
-
     /**
      * @var bool
      */
     protected $escapeOutput = false;
 
-    /**
-     * @return void
-     */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('each', 'string', 'The list which will be converted to an arry to iterated over', true);

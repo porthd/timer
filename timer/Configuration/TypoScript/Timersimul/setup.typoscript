@@ -1,3 +1,0 @@
-@import 'EXT:timer/Configuration/TypoScript/Timersimul/TimersimulSetup/LibFluidContent.typoscript'
-@import 'EXT:timer/Configuration/TypoScript/Timersimul/TimersimulSetup/TimersimulFrontend.typoscript'
-@import 'EXT:timer/Configuration/TypoScript/Timersimul/TimersimulSetup/TimersimulBackend.typoscript'

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 defined('TYPO3') || die();
 
-
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -22,7 +21,7 @@ $tmp_timer_columns = [
                 [
                     'invertStateDisplay' => false,
                     TimerConst::TCA_ITEMS_LABEL => '',
-                ]
+                ],
             ],
             'default' => true,
         ],

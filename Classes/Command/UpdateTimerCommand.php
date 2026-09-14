@@ -23,7 +23,6 @@ namespace Porthd\Timer\Command;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateTime;
 use Exception;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
@@ -49,10 +48,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class UpdateTimesByTimerCommand
- * @package Porthd\Timer\Command
- *
- * command-task to update the values in starttime and endtime
- *   if the datarow contains timerdefinition used by this extension
  */
 class UpdateTimerCommand extends Command implements LoggerAwareInterface
 {
@@ -64,7 +59,6 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     public const YAML_SUBWHERE_TYPE = 'type';
     public const YAML_SUBWHERE_VALUE = 'type';
     public const YAML_SUBWHERE_COMPARE = 'compare';
-
 
     protected const ARGUMENT_YAML_TABLE_LIST = 'yamlfile';
 
@@ -96,11 +90,10 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
 
     public function __construct(
         ListOfTimerService $listOfTimerService,
-        DataHandler    $dataHandler,
+        DataHandler $dataHandler,
         YamlFileLoader $yamlLoader,
         PageTreeRepository $pageTreeRepository
-    )
-    {
+    ) {
         parent::__construct();
         $this->timerService = $listOfTimerService;
         $this->dataHandler = $dataHandler;
@@ -110,8 +103,6 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
 
     /**
      * define the required argument `yamlfile`, which contains the list of updatable models (tt_content, ...)
-     *
-     * @return void
      */
     public function configure(): void
     {
@@ -136,7 +127,6 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         );
     }
 
-
     /**
      * the controller for the updates of `starttime` and `endtime` in the selected models
      *
@@ -147,8 +137,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     public function execute(
         InputInterface $input,
         OutputInterface $output
-    ): int
-    {
+    ): int {
         try {
 
             $yamlFilePath = $this->getMyArgument($input);
@@ -168,7 +157,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             $flagSuccessGeneral = array_reduce($flagSuccessTable, function ($carry, $item) {
                 return $carry && $item;
             }, true);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // @todo use flashmessages, to make infos on the scheduler
             $output->writeln(
                 $e->getMessage()
@@ -207,8 +196,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      */
     protected function getMyArgument(
         InputInterface $input
-    ): string
-    {
+    ): string {
         if (empty($input->hasArgument(self::ARGUMENT_YAML_TABLE_LIST))) {
             throw new TimerException(
                 LocalizationUtility::translate(
@@ -226,11 +214,9 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      * @param array<mixed> $pidList
      * @return array<mixed>
      */
-
     protected function allowedPids(
         $pidList
-    )
-    {
+    ) {
         $result = [];
         foreach ($pidList as $pid) {
             $myTree = $this->pageTreeRepository->getTree($pid);
@@ -250,10 +236,9 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
      */
     protected function updateTables(
         array $yamlConfig
-    )
-    {
+    ) {
         $flagSuccess = [];
-        $refDateTime = new DateTime('now');
+        $refDateTime = new \DateTime('now');
         foreach ($yamlConfig as $key => $tableConfig) {
             $this->validateYamlDefinition($tableConfig, (string)$key);
             $listPids = [];
@@ -265,23 +250,21 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         return $flagSuccess;
     }
 
-
     /**
      * the main updater are splittet in tow steps:
      * 1. Get the datas from the database (allow Signal for custom intervention - extend more fields)
      * 2. Update the data with the datamapper (allow Signals for custom intervention - change text in update fields )
      *
      * @param array<mixed> $yamlTableConfig
-     * @param DateTime $refDateTime
+     * @param \DateTime $refDateTime
      * @param array<mixed> $listPids
      * @return int
      */
     protected function updateTable(
         array $yamlTableConfig,
-        DateTime $refDateTime,
-              $listPids = []
-    ): int
-    {
+        \DateTime $refDateTime,
+        $listPids = []
+    ): int {
         if (!class_exists($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY]) ||
             (!in_array(
                 TimerRepositoryInterface::class,
@@ -295,9 +278,8 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             );
         }
 
-
         $className = (
-        (!empty($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY])) ?
+            (!empty($yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY])) ?
             $yamlTableConfig[self::YAML_SUBGROUP_REPOSITORY] :
             GeneralRepository::class
         );
@@ -353,10 +335,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
         foreach ($listOfRows as $timerUpRow) {
             $xmlParam = GeneralUtility::xml2array($timerUpRow[TimerConst::TIMER_FIELD_FLEX_ACTIVE]);
             $normParams = TcaUtility::flexformArrayFlatten($xmlParam);
-            if ((!is_array($normParams)) ||
-                (!is_array($yamlTableConfig))
-            ) {
-                $hello = 'ups';
+            if (!is_array($normParams)) {
                 continue;
             }
             // include informations about the relations for FAL-files in Flexform-Array for each timer
@@ -404,7 +383,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
             $count++;
         }
 
-        return (($count > 0) ? Command::SUCCESS : Command::FAILURE);
+        return ($count > 0) ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**
@@ -418,8 +397,7 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
     protected function validateYamlDefinition(
         array $tableConfig,
         string $tableKey
-    ): bool
-    {
+    ): bool {
         if (!array_key_exists(self::YAML_SUBGROUP_TEXT_TABLE, $tableConfig)) {
             throw new TimerException(
                 'The table is not defined in your ' . $tableKey . 'th definition. Please check your yaml-file.',
@@ -433,20 +411,19 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                 'th definition. Please check your yaml-file.',
                 1602228775
             );
-        } else {
-            if ((!class_exists($tableConfig[self::YAML_SUBGROUP_REPOSITORY])) ||
-                (!in_array(
-                    TimerRepositoryInterface::class,
-                    class_implements($tableConfig[self::YAML_SUBGROUP_REPOSITORY])
-                ))
-            ) {
-                throw new TimerException(
-                    'The repository, defined in yaml-file, must implement the interface `' . TimerRepositoryInterface::class .
-                    '`. Please check your code of the repository-class `' . $tableConfig[self::YAML_SUBGROUP_REPOSITORY] .
-                    '` in your ' . $tableKey . 'th definition.',
-                    1602228776
-                );
-            }
+        }
+        if ((!class_exists($tableConfig[self::YAML_SUBGROUP_REPOSITORY])) ||
+            (!in_array(
+                TimerRepositoryInterface::class,
+                class_implements($tableConfig[self::YAML_SUBGROUP_REPOSITORY])
+            ))
+        ) {
+            throw new TimerException(
+                'The repository, defined in yaml-file, must implement the interface `' . TimerRepositoryInterface::class .
+                '`. Please check your code of the repository-class `' . $tableConfig[self::YAML_SUBGROUP_REPOSITORY] .
+                '` in your ' . $tableKey . 'th definition.',
+                1602228776
+            );
         }
 
         if (!array_key_exists(self::YAML_SUBGROUP_LIST_ROOTLINE, $tableConfig)) {
@@ -455,15 +432,13 @@ class UpdateTimerCommand extends Command implements LoggerAwareInterface
                 'th definition. Please check your yaml-file.',
                 1602228685
             );
-        } else {
-            if (!is_array($tableConfig[self::YAML_SUBGROUP_LIST_ROOTLINE])) {
-                throw new TimerException(
-                    'The paramater for rootline is not an array. Please check your yaml-file',
-                    1602239675
-                );
-            }
         }
-
+        if (!is_array($tableConfig[self::YAML_SUBGROUP_LIST_ROOTLINE])) {
+            throw new TimerException(
+                'The paramater for rootline is not an array. Please check your yaml-file',
+                1602239675
+            );
+        }
 
         if (array_key_exists(self::YAML_SUBGROUP_WHERE, $tableConfig)) {
             if (!is_array($tableConfig[self::YAML_SUBGROUP_WHERE])) {

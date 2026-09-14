@@ -22,11 +22,9 @@ namespace Porthd\Timer\Domain\Model\InternalFlow;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Context\Context;
-use DateTime;
-use Exception;
 use Porthd\Timer\Interfaces\TimerInterface;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * LoopLimiter is a helpful getter/setter-model for the datapocessors `RangeListQueryProcessor` and `SortListQueryProcessor`.
@@ -73,7 +71,7 @@ class LoopLimiter
     /**
      * maxLate
      *
-     * @var DateTime|null
+     * @var \DateTime|null
      */
     protected $maxLate;
 
@@ -96,15 +94,15 @@ class LoopLimiter
     /**
      * LoopLimiter constructor generate a stable set of valifd Parameters.
      *
-     * @param DateTime|null $date
-     * @throws Exception
+     * @param \DateTime|null $date
+     * @throws \Exception
      */
-    public function __construct(DateTime $date = null)
+    public function __construct(\DateTime $date = null)
     {
         $this->maxLate = (
             ($date !== null) ?
             $date :
-            new DateTime('@' . self::getCurrentTStamp())
+            new \DateTime('@' . self::getCurrentTStamp())
         );
     }
 
@@ -122,7 +120,6 @@ class LoopLimiter
      * Sets the datetimeFormat
      *
      * @param string $datetimeFormat
-     * @return void
      */
     public function setDatetimeFormat($datetimeFormat)
     {
@@ -153,7 +150,6 @@ class LoopLimiter
      * Sets the flagReserve
      *
      * @param bool $flagReserve
-     * @return void
      */
     public function setFlagReserve($flagReserve)
     {
@@ -184,7 +180,6 @@ class LoopLimiter
      * Sets the flagMaxType
      *
      * @param bool $flagMaxType
-     * @return void
      */
     public function setFlagMaxType($flagMaxType)
     {
@@ -205,7 +200,6 @@ class LoopLimiter
      * Sets the flagMaxCount
      *
      * @param bool $flagMaxCount
-     * @return void
      */
     public function setFlagMaxCount($flagMaxCount)
     {
@@ -226,18 +220,16 @@ class LoopLimiter
      * Sets the maxCount
      *
      * @param int $maxCount
-     * @return void
      */
     public function setMaxCount($maxCount)
     {
         $this->maxCount = (int)$maxCount;
     }
 
-
     /**
      * Returns the maxLate
      *
-     * @return DateTime|null $maxLate
+     * @return \DateTime|null $maxLate
      */
     public function getMaxLate()
     {
@@ -247,10 +239,9 @@ class LoopLimiter
     /**
      * Sets the maxLate
      *
-     * @param DateTime|null $maxLate
-     * @return void
+     * @param \DateTime|null $maxLate
      */
-    public function setMaxLate(?DateTime $maxLate)
+    public function setMaxLate(?\DateTime $maxLate)
     {
         $this->maxLate = (($maxLate !== null) ?
             clone $maxLate :
@@ -271,7 +262,6 @@ class LoopLimiter
      * Sets the userCompareFunction
      *
      * @param string $userCompareFunction
-     * @return void
      */
     public function setUserCompareFunction(string $userCompareFunction)
     {

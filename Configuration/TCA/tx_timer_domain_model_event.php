@@ -23,19 +23,12 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'searchFields' => 'title, description, ' .
-            TimerConst::TIMER_FIELD_FLEX_ACTIVE . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ' .
-            'teaser_slogan, teaser_infotext,',
         'typeicon_classes' => [
             'default' => 'tx_timer_timericon',
         ],
         'security' => [
             'ignorePageTypeRestriction' => true,
         ],
-    ],
-    'interface' => [
-        'maxDBListItems' => 50,
-        'maxSingleDBListItems' => 200
     ],
     'types' => [
         '1' => ['showitem' => '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer_domain_model_event.tab.single,' .
@@ -88,6 +81,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'max' => 255,
+                'searchable' => false,
             ],
         ],
         'hidden' => [
@@ -110,6 +104,7 @@ return [
             'config' => [
                 'type' => 'datetime',
                 'default' => 0,
+                'searchable' => false,
             ],
         ],
         'endtime' => [
@@ -118,6 +113,7 @@ return [
             'config' => [
                 'type' => 'datetime',
                 'default' => 0,
+                'searchable' => false,
             ],
         ],
 
@@ -152,7 +148,7 @@ return [
                     [
                         'invertStateDisplay' => false,
                         TimerConst::TCA_ITEMS_LABEL => '',
-                    ]
+                    ],
                 ],
             ],
         ],

@@ -23,13 +23,8 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-use DateInterval;
 use DateTime;
-use DateTimeZone;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -54,11 +49,24 @@ class SunriseRelTimer implements TimerInterface
         'astronomical_twilight_begin',
         'astronomical_twilight_end',
     ];
-    protected const LIST_DURATION_NATURAL_ADD = [self::ITEM_DURATION_NATURAL_DEFAULT,];
+    protected const LIST_DURATION_NATURAL_ADD = [self::ITEM_DURATION_NATURAL_DEFAULT];
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_REQ_DURMIN_MIN = -1319;
+    // PURPOSE: Bound the relative duration/offset to the documented ±1340-minute
+    //          window (see Documentation/ReadMe.md and de.ReadMe.md).
+    //
+    // PRECONDITIONS (data requirements):
+    //   - value is an integer (or an integer-valued numeric string) of minutes.
+    //
+    // EDGE CASES:
+    //   - The bounds are inclusive: ±1340 is valid, ±1341 is not.
+    //   - 0 is forbidden (a zero-length duration/offset is meaningless here).
+    //
+    // NOTE: Restored from an incidental ±1319 regression introduced by commit
+    //       24d7fd18 (flexform DurationMinutesFieldElement) that never updated
+    //       the documentation or the unit tests, both of which state ±1340.
+    protected const ARG_REQ_DURMIN_MIN = -1340;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 1319;
+    protected const ARG_REQ_DURMIN_MAX = 1340;
     protected const ARG_LATITUDE = 'latitude';
     protected const DEFAULT_LATITUDE = 47.599329;// see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
     protected const ARG_LATITUDE_MAX = 90;// see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
@@ -68,9 +76,10 @@ class SunriseRelTimer implements TimerInterface
     protected const ARG_LONGITUDE_MAX = 180; // see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
     protected const ARG_LONGITUDE_MIN = -180; // see geolocation of anus in the wolrd https://www.gps-latitude-longitude.com/gps-coordinates-of-anus visited 2020-12-04
     protected const ARG_REL_TO_TIMEREVENT = 'relMinToSelectedTimerEvent';
-    protected const ARG_REQ_RELTOEVENT_MIN = -1319;
-    protected const ARG_REQ_RELTOEVENT_MAX = 1319;
-
+    // Same documented ±1340-minute window as durationMinutes; see the constant
+    // block above for the ±1319 regression note.
+    protected const ARG_REQ_RELTOEVENT_MIN = -1340;
+    protected const ARG_REQ_RELTOEVENT_MAX = 1340;
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     protected const TIMER_FLEXFORM_ITEM = [
@@ -158,11 +167,11 @@ class SunriseRelTimer implements TimerInterface
     /**
      * tested 20201226
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -195,7 +204,6 @@ class SunriseRelTimer implements TimerInterface
             ($countOptions <= count(self::ARG_OPT_LIST));
     }
 
-
     /**
      * This method are introduced for easy build of unittests
      * @param array<mixed> $params
@@ -204,15 +212,15 @@ class SunriseRelTimer implements TimerInterface
     protected function validateSunPosition(array $params = []): bool
     {
         $string = (
-        (array_key_exists(self::ARG_SUN_POSITION, $params)) ?
+            (array_key_exists(self::ARG_SUN_POSITION, $params)) ?
             $params[self::ARG_SUN_POSITION] :
             ''
         );
-        return (
+        return
             (!empty($string)) &&
             (is_string($string)) &&
             (in_array($string, self::LIST_SUN_POSITION))
-        );
+        ;
     }
 
     /**
@@ -231,12 +239,12 @@ class SunriseRelTimer implements TimerInterface
         if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
             $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
         }
-        return (
-            ($flagCheck) &&
+        return
+            $flagCheck &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
-        );
+        ;
     }
 
     /**
@@ -247,7 +255,7 @@ class SunriseRelTimer implements TimerInterface
     protected function validateDurationNatural(array $params = []): bool
     {
         $value = (
-        array_key_exists(self::ARG_DURATION_NATURAL, $params) ?
+            array_key_exists(self::ARG_DURATION_NATURAL, $params) ?
             $params[self::ARG_DURATION_NATURAL] :
             'fail'
         );
@@ -262,17 +270,17 @@ class SunriseRelTimer implements TimerInterface
     protected function validateRelToEvent(array $params = []): bool
     {
         $value = (
-        array_key_exists(self::ARG_REL_TO_TIMEREVENT, $params) ?
+            array_key_exists(self::ARG_REL_TO_TIMEREVENT, $params) ?
             $params[self::ARG_REL_TO_TIMEREVENT] :
             0
         );
         $number = (int)$value;
-        return (
-            (is_int($number)) &&
+        return
+            is_int($number) &&
             (($number - $value) === 0) &&
             ($number >= self::ARG_REQ_RELTOEVENT_MIN) &&
             ($number <= self::ARG_REQ_RELTOEVENT_MAX)
-        );
+        ;
     }
 
     /**
@@ -283,11 +291,11 @@ class SunriseRelTimer implements TimerInterface
     protected function validateLatitude(array $params = []): bool
     {
         $number = (float)($params[self::ARG_LATITUDE] ?: self::DEFAULT_LATITUDE);
-        return (
-            (is_float($number)) &&
+        return
+            is_float($number) &&
             ($number >= self::ARG_LATITUDE_MIN) &&
             ($number <= self::ARG_LATITUDE_MAX)
-        );
+        ;
     }
 
     /**
@@ -298,11 +306,11 @@ class SunriseRelTimer implements TimerInterface
     protected function validateLongitude(array $params = []): bool
     {
         $number = (float)($params[self::ARG_LONGITUDE] ?: self::DEFAULT_LATITUDE);
-        return (
-            (is_float($number)) &&
+        return
+            is_float($number) &&
             ($number >= self::ARG_LONGITUDE_MIN) &&
             ($number <= self::ARG_LONGITUDE_MAX)
-        );
+        ;
     }
 
     /**
@@ -330,11 +338,11 @@ class SunriseRelTimer implements TimerInterface
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -384,11 +392,11 @@ class SunriseRelTimer implements TimerInterface
     /**
      * tested:
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -396,11 +404,11 @@ class SunriseRelTimer implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -412,7 +420,7 @@ class SunriseRelTimer implements TimerInterface
         [$latitude, $longitude] = $this->defineLongitudeLatitudeByParams($params, $dateLikeEventZone->getOffset());
         if (($sunInfoList = date_sun_info($tStamp, $latitude, $longitude)) === false) { // @phpstan-ignore-line
             $noDate = clone $dateLikeEventZone;
-            $noDate->sub(new DateInterval('P1D'));
+            $noDate->sub(new \DateInterval('P1D'));
             $result->failAllActive($noDate);
             return $result;
         }
@@ -433,7 +441,7 @@ class SunriseRelTimer implements TimerInterface
             }
         } else {
             while (is_bool($sunInfoList[$params[self::ARG_SUN_POSITION]])) {
-                $dateLikeEventZone->add(new DateInterval('P1D'));
+                $dateLikeEventZone->add(new \DateInterval('P1D'));
                 $tStamp = $dateLikeEventZone->getTimestamp();
                 $sunInfoList = date_sun_info($tStamp, $latitude, $longitude);  // result `false` should not happen here
             }
@@ -473,11 +481,11 @@ class SunriseRelTimer implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $flagPrev = false;
         /** @var TimerStartStopRange $result */
@@ -486,7 +494,7 @@ class SunriseRelTimer implements TimerInterface
         [$latitude, $longitude] = $this->defineLongitudeLatitudeByParams($params, $dateLikeEventZone->getOffset());
         if (($sunInfoList = date_sun_info($tStamp, $latitude, $longitude)) === false) { // @phpstan-ignore-line
             $noDate = clone $dateLikeEventZone;
-            $noDate->add(new DateInterval('P1D'));
+            $noDate->add(new \DateInterval('P1D'));
             $result->failAllActive($noDate);
             return $result;
         }
@@ -538,10 +546,9 @@ class SunriseRelTimer implements TimerInterface
         }
         if ($flagPrev === false) {
             $noDate = clone $dateLikeEventZone;
-            $noDate->add(new DateInterval('P1D'));
+            $noDate->add(new \DateInterval('P1D'));
             $result->failOnlyNextActive($noDate);
         }
-
 
         return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
@@ -549,7 +556,7 @@ class SunriseRelTimer implements TimerInterface
     /**
      * @param array<mixed> $params
      * @param int $sunPosTStamp
-     * @param DateTime $dateTimeEventZone
+     * @param \DateTime $dateTimeEventZone
      * @param array<mixed> $sunInfoList
      * @return array<mixed>
      * @throws TimerException
@@ -557,7 +564,7 @@ class SunriseRelTimer implements TimerInterface
     protected function getUpperLowerRangeRelToSunPos(
         array $params,
         int $sunPosTStamp,
-        DateTime $dateTimeEventZone,
+        \DateTime $dateTimeEventZone,
         array $sunInfoList
     ): array {
         $relMin = (int)($params[self::ARG_REL_TO_TIMEREVENT] ?? 0);
@@ -589,7 +596,7 @@ class SunriseRelTimer implements TimerInterface
             ((int)$upperLimit->format('i')),
             00
         );
-        $upperLimit->add(new DateInterval('PT1M'));
+        $upperLimit->add(new \DateInterval('PT1M'));
         return [$lowerLimit, $upperLimit];
     }
 
@@ -598,16 +605,16 @@ class SunriseRelTimer implements TimerInterface
      * @param float $latitude
      * @param float $longitude
      * @param array<mixed> $params
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @return bool
-     * @throws Exception
+     * @throws \Exception
      */
     protected function secondTestForActiveInclusion(
         int $tStamp,
         float $latitude,
         float $longitude,
         array $params,
-        DateTime $dateLikeEventZone
+        \DateTime $dateLikeEventZone
     ): bool {
         $sunInfoList = date_sun_info(
             $tStamp,
@@ -639,7 +646,7 @@ class SunriseRelTimer implements TimerInterface
     protected function defineLongitudeLatitudeByParams(array $params, int $gap): array
     {
         $latitude = (float)(
-        ((array_key_exists(
+            ((array_key_exists(
                 self::ARG_LATITUDE,
                 $params
             )) && ($params[self::ARG_LATITUDE] >= -90) && ($params[self::ARG_LATITUDE] <= 90)) ?
@@ -714,37 +721,37 @@ class SunriseRelTimer implements TimerInterface
     /**
      * @param int $durationMin
      * @param int $sunPosTStamp
-     * @param DateTimeZone $eventZone
+     * @param \DateTimeZone $eventZone
      * @param int $relMin
-     * @return DateTime[]
-     * @throws Exception
+     * @return \DateTime[]
+     * @throws \Exception
      */
     protected function getFixedUpperLowerRangeRelToSunPos(
         int $durationMin,
         int $sunPosTStamp,
-        DateTimeZone $eventZone,
+        \DateTimeZone $eventZone,
         int $relMin
     ): array {
         if (($durationMinutes = $durationMin) > 0) {
-            $lowerLimit = new DateTime('@' . $sunPosTStamp);
+            $lowerLimit = new \DateTime('@' . $sunPosTStamp);
             $lowerLimit->setTimezone($eventZone);
             if (($relToEventInMinutes = (int)$relMin) > 0) {
-                $lowerLimit->add(new DateInterval('PT' . $relToEventInMinutes . 'M'));
+                $lowerLimit->add(new \DateInterval('PT' . $relToEventInMinutes . 'M'));
             } else {
-                $lowerLimit->sub(new DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
+                $lowerLimit->sub(new \DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
             }
             $upperLimit = clone $lowerLimit;
-            $upperLimit->add(new DateInterval('PT' . $durationMinutes . 'M'));
+            $upperLimit->add(new \DateInterval('PT' . $durationMinutes . 'M'));
         } else {
-            $upperLimit = new DateTime('@' . $sunPosTStamp);
+            $upperLimit = new \DateTime('@' . $sunPosTStamp);
             $upperLimit->setTimezone($eventZone);
             if (($relToEventInMinutes = (int)$relMin) > 0) {
-                $upperLimit->add(new DateInterval('PT' . $relToEventInMinutes . 'M'));
+                $upperLimit->add(new \DateInterval('PT' . $relToEventInMinutes . 'M'));
             } else {
-                $upperLimit->sub(new DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
+                $upperLimit->sub(new \DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
             }
             $lowerLimit = clone $upperLimit;
-            $lowerLimit->sub(new DateInterval('PT' . abs($durationMinutes) . 'M'));
+            $lowerLimit->sub(new \DateInterval('PT' . abs($durationMinutes) . 'M'));
         }
         return [$lowerLimit, $upperLimit];
     }
@@ -753,66 +760,90 @@ class SunriseRelTimer implements TimerInterface
      * @param array<mixed> $params
      * @param array<mixed> $sunInfoList
      * @param int $sunPosTStamp
-     * @param DateTime $dateTimeEventZone
+     * @param \DateTime $dateTimeEventZone
      * @param int $relMin
-     * @return DateTime[]
+     * @return \DateTime[]
      * @throws TimerException
      */
     protected function getNaturalUpperLowerRangeRelToSunPos(
         array $params,
         array $sunInfoList,
         int $sunPosTStamp,
-        DateTime $dateTimeEventZone,
+        \DateTime $dateTimeEventZone,
         int $relMin
     ): array {
         $nextSunStatusStamp = $this->getDurationstatusOrThrowExcept($params, $sunInfoList);
         if ($nextSunStatusStamp <= $sunPosTStamp) {
+            // PURPOSE: Locate the first "natural end" sun position that lies strictly
+            //          after the main sun position, walking forward day by day from the
+            //          main position's OWN calendar day.
+            //
+            // PRECONDITIONS (data requirements):
+            //   - $sunPosTStamp is the timestamp of the already-resolved main position.
+            //
+            // EDGE CASES:
+            //   - Positions that roll past midnight (e.g. astronomical_twilight_end at
+            //     high latitudes in summer) carry a timestamp on the FOLLOWING calendar
+            //     day. Anchoring the day-walk on $sunPosTStamp's own day instead of
+            //     blindly adding one full day (former `$sunPosTStamp + DAY_IN_SECONDS`)
+            //     avoids overshooting the end position by a whole day.
+            //   - date_sun_info() may report a position as bool (never rises/sets);
+            //     such days are skipped, with a +1-day fallback if none is ever found.
             [$latitude, $longitude] = $this->defineLongitudeLatitudeByParams($params, $dateTimeEventZone->getOffset());
-            $nextSunInfoList = date_sun_info(($sunPosTStamp + self::DAY_IN_SECONDS), $latitude, $longitude);
-            if ($nextSunInfoList === false) { // @phpstan-ignore-line
-                throw new TimerException(
-                    'The detection of the sun-status caused an error. This exception should not arise. ' .
-                    'Make a screenshot and inform the programmer! The parameter are params (' . print_r($params, true) .
-                    '), longitude (' . $longitude . ') and latitude (' . $latitude . ').',
-                    1672238637
-                );
+            $probeTStamp = $sunPosTStamp;
+            $nextSunStatusStamp = false;
+            $countAgainstInfinity = 0;
+            while (
+                ($countAgainstInfinity <= self::MAXIMUM_DAYS_FOR_CALCULATE) &&
+                (is_bool($nextSunStatusStamp) || ($nextSunStatusStamp <= $sunPosTStamp))
+            ) {
+                $probeSunInfoList = date_sun_info($probeTStamp, $latitude, $longitude);
+                if ($probeSunInfoList === false) { // @phpstan-ignore-line
+                    throw new TimerException(
+                        'The detection of the sun-status caused an error. This exception should not arise. ' .
+                        'Make a screenshot and inform the programmer! The parameter are params (' . print_r($params, true) .
+                        '), longitude (' . $longitude . ') and latitude (' . $latitude . ').',
+                        1672238637
+                    );
+                }
+                $nextSunStatusStamp = $this->getDurationstatusOrThrowExcept($params, $probeSunInfoList);
+                $probeTStamp += self::DAY_IN_SECONDS;
+                $countAgainstInfinity++;
             }
-            $nextSunStatusStamp = $this->getDurationstatusOrThrowExcept($params, $nextSunInfoList);
             if (is_bool($nextSunStatusStamp)) {
                 $nextSunStatusStamp = ($sunPosTStamp + self::DAY_IN_SECONDS);
             }
         }
         // now $nextSunStatusStamp > $sunPosTStamp
-        $lowerLimit = new DateTime('@' . (int)$sunPosTStamp);
+        $lowerLimit = new \DateTime('@' . (int)$sunPosTStamp);
         $lowerLimit->setTimezone($dateTimeEventZone->getTimezone());
         if (($relToEventInMinutes = $relMin) > 0) {
-            $lowerLimit->add(new DateInterval('PT' . $relToEventInMinutes . 'M'));
+            $lowerLimit->add(new \DateInterval('PT' . $relToEventInMinutes . 'M'));
         } else {
-            $lowerLimit->sub(new DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
+            $lowerLimit->sub(new \DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
         }
-        $upperLimit = new DateTime('@' . (int)$nextSunStatusStamp);
+        $upperLimit = new \DateTime('@' . (int)$nextSunStatusStamp);
         $upperLimit->setTimezone($dateTimeEventZone->getTimezone());
         if (($relToEventInMinutes = $relMin) > 0) {
-            $upperLimit->add(new DateInterval('PT' . $relToEventInMinutes . 'M'));
+            $upperLimit->add(new \DateInterval('PT' . $relToEventInMinutes . 'M'));
         } else {
-            $upperLimit->sub(new DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
+            $upperLimit->sub(new \DateInterval('PT' . abs($relToEventInMinutes) . 'M'));
         }
         return [$lowerLimit, $upperLimit];
     }
 
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -826,11 +857,11 @@ class SunriseRelTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

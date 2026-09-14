@@ -4,7 +4,6 @@ namespace Porthd\Timer\CustomTimer\StrangerCode\MoonPhase\Solaris;
 
 // http://www.github.com/solarissmoke/php-moon-phase last visited 20201230
 // rename the namespace for easy wiring with timer-extension for TYPO3
-use DateTime;
 
 /**
  * php-moon-phase - A PHP class for calculating the phase of the Moon, and other related variables.
@@ -27,14 +26,11 @@ use DateTime;
  */
 
 /**
- *
  * Moon phase calculation class
  * Adapted for PHP from Moontool for Windows (http://www.fourmilab.ch/moontoolw/)
  * by Samir Shah (http://rayofsolaris.net)
  * License: MIT
- *
  */
-
 
 /**
  * MoonPhase class
@@ -77,13 +73,13 @@ class MoonPhase
     /**
      * Constructor
      *
-     * @param DateTime|null $date
+     * @param \DateTime|null $date
      */
     public function __construct($date = null)
     {
         if (is_null($date)) {
             $date = time();
-        } elseif ($date instanceof DateTime) {
+        } elseif ($date instanceof \DateTime) {
             $date = $date->getTimestamp();
         }
 
@@ -178,7 +174,7 @@ class MoonPhase
      */
     protected function fixangle(float $a): float
     {
-        return ($a - 360 * floor($a / 360));
+        return $a - 360 * floor($a / 360);
     }
 
     /**
@@ -219,11 +215,11 @@ class MoonPhase
         $t2 = $jt * $jt;
         $t3 = $t2 * $jt;
 
-        return (2415020.75933 + $this->synmonth * $k
+        return 2415020.75933 + $this->synmonth * $k
             + 0.0001178 * $t2
             - 0.000000155 * $t3
             + 0.00033 * sin(deg2rad(166.56 + 132.87 * $jt - 0.009173 * $t2))
-        );
+        ;
     }
 
     /**
@@ -301,8 +297,6 @@ class MoonPhase
     /**
      * Find time of phases of the moon which surround the current date. Five phases are found, starting and
      *     ending with the new moons which bound the current lunation.
-     *
-     * @return void
      */
     protected function phasehunt(): void
     {

@@ -23,13 +23,11 @@ namespace Porthd\Timer\Tests\Unit\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Timer\CustomTimer\DefaultTimer;
-use TYPO3\CMS\Core\Context\Context;
-use DateInterval;
-use DateTime;
-use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\DefaultTimer;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -44,11 +42,10 @@ class DefaultTimerTest extends TestCase
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
 
-
     /**
      * @var DefaultTimer
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
@@ -84,47 +81,42 @@ class DefaultTimerTest extends TestCase
 
     /**
      * the ultimate green test
-     * @test
      */
+    #[Test]
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selfName()
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::NAME_TIMER,
             $this->subject::selfName(),
             'The name musst be defined.'
         );
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getSelectorItem()
     {
         $result = $this->subject::getSelectorItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             1,
             count($result),
             'The array  must contain at least two items.'
         );
-        $this->assertIsString(
-            $result[0],
+        self::assertIsString(
+            $result['label'],
             'The first item must be an string.'
         );
-        $this->assertEquals(
-            $result[1],
+        self::assertEquals(
+            $result['value'],
             self::NAME_TIMER,
             'The second term must the name of the timer.'
         );
@@ -132,88 +124,85 @@ class DefaultTimerTest extends TestCase
 
     /**
      * tested 20201230
-     * @test
      */
+    #[Test]
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertEquals(
-            2,
+        self::assertEquals(
+            1,
             count($result),
-            'The array  must contain two Item, to handle teh case `default` and the case ``(empty).'
+            'The array must contain exactly one item: the `default` selector key. '
+            . 'An empty `` key must NOT be present — it would be enumerated as an empty '
+            . 'flexform dataStructureKey and break FlexFormTools cache warmup (see commit 504c5b37).'
         );
-        $this->assertEquals(
+        self::assertEquals(
             array_keys($result),
-            ['default',''],
-            'The key must in this special case `default` and the case ``(empty) .'
+            ['default'],
+            'The only key must be `default`; the field selector defaults to `default`, so no empty-key entry is needed.'
         );
-        $this->assertIsString(
+        self::assertIsString(
             $result['default'],
             'The value must be type of string.'
         );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result['default'];
-        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+        if (str_starts_with($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
                 );
-        } elseif (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+        } elseif (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                 );
-            $this->assertTrue((false), 'The File-path should contain `'.TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH.'`, so that the TCA-attribute-action `onChange` will work correctly. ');
+            self::assertTrue((false), 'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. ');
         } else {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . $filePath;
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue(
+        self::assertTrue(
             $flag,
             'The file with the flexform content exist.'
         );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue(
+        self::assertTrue(
             (!(!$flexArray)),
             'The filecontent is valid xml.'
         );
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function validate()
     {
         $params = [];
         $result = $this->subject->validate($params);
-        $this->assertEquals(
-            true,
+        self::assertTrue(
             $result,
             'This method deliver with each parameter a true.'
         );
     }
 
-
     public static function dataProvider_isAllowedInRange()
     {
-        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new DateTimeZone('Europe/Berlin'));
+        $testDate = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-31 12:00:00', new \DateTimeZone('Europe/Berlin'));
         $minusOneSecond = clone $testDate;
-        $minusOneSecond->sub(new DateInterval('PT1S'));
+        $minusOneSecond->sub(new \DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
-        $addOneSecond->add(new DateInterval('PT1S'));
+        $addOneSecond->add(new \DateInterval('PT1S'));
         $rest = [];
         $result = [];
 
         $result[] = [
-            'message' => 'In the default-timer the ultimate range is everytime okay. The testdate is valid, if the testdate is in the middle of the ultimate range..',
+            'In the default-timer the ultimate range is everytime okay. The testdate is valid, if the testdate is in the middle of the ultimate range..',
             'expects' => [
                 'result' => true,
             ],
@@ -228,7 +217,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'In the default-timer the ultimate range is everytime okay. The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
+            'In the default-timer the ultimate range is everytime okay. The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -243,7 +232,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'In the default-timer the ultimate range is everytime okay. The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
+            'In the default-timer the ultimate range is everytime okay. The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
             'expects' => [
                 'result' => true,
             ],
@@ -258,7 +247,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'In the default-timer the ultimate range is everytime okay. The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
+            'In the default-timer the ultimate range is everytime okay. The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -273,7 +262,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'In the default-timer the ultimate range is everytime okay. The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
+            'In the default-timer the ultimate range is everytime okay. The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
             'expects' => [
                 'result' => true,
             ],
@@ -295,7 +284,7 @@ class DefaultTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -307,7 +296,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -319,7 +308,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -332,7 +321,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -345,7 +334,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -359,7 +348,7 @@ class DefaultTimerTest extends TestCase
         ];
         foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
             $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                'The active timezone will be shown, because the parameter for it is active `' .
                     print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
                 [
                     'result' => 'Lauder/Furz',
@@ -374,7 +363,7 @@ class DefaultTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -387,7 +376,7 @@ class DefaultTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -402,20 +391,18 @@ class DefaultTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
+    #[DataProvider('dataProviderGetTimeZoneOfEvent')]
+    #[Test]
     public function getTimeZoneOfEvent($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
 
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $result,
                 $message
@@ -423,48 +410,40 @@ class DefaultTimerTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAllowedInRange()
     {
         $params = [];
         foreach ([0, 1610000000, 2900000000] as $tstamp) {
-            $testTime = new DateTime('@' . $tstamp);
+            $testTime = new \DateTime('@' . $tstamp);
             $result = $this->subject->isAllowedInRange($testTime, $params);
-            $this->assertEquals(
-                true,
+            self::assertTrue(
                 $result,
                 'This method deliver with each parameter a true.'
             );
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isActive()
     {
         $params = [];
         foreach ([0, 1610000000, 2900000000] as $tstamp) {
-            $testTime = new DateTime('@' . $tstamp);
+            $testTime = new \DateTime('@' . $tstamp);
             $result = $this->subject->isActive($testTime, $params);
-            $this->assertEquals(
-                true,
+            self::assertTrue(
                 $result,
                 'This method deliver with each parameter a true.'
             );
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nextActive()
     {
         $params = [];
         foreach ([0, 1610000000, 2900000000] as $tstamp) {
-            $testTime = new DateTime('@' . $tstamp);
+            $testTime = new \DateTime('@' . $tstamp);
             $result = $this->subject->nextActive($testTime, $params);
             /** @var TimerStartStopRange $expects */
             $expects = new TimerStartStopRange();
@@ -473,7 +452,7 @@ class DefaultTimerTest extends TestCase
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME));
             $flag = $flag && ($result->hasResultExist() === $expects->hasResultExist());
 
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r(
                     $expects,
@@ -483,14 +462,12 @@ class DefaultTimerTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function prevActive()
     {
         $params = [];
         foreach ([0, 1610000000, 2900000000] as $tstamp) {
-            $testTime = new DateTime('@' . $tstamp);
+            $testTime = new \DateTime('@' . $tstamp);
             $result = $this->subject->prevActive($testTime, $params);
             /** @var TimerStartStopRange $expects */
             $expects = new TimerStartStopRange();
@@ -499,7 +476,7 @@ class DefaultTimerTest extends TestCase
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME));
             $flag = $flag && ($result->hasResultExist() === $expects->hasResultExist());
 
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prevActive: will get everytime the initial value for the object of `TimerStartStopRange`' . "\nExpected: : " . print_r(
                     $expects,

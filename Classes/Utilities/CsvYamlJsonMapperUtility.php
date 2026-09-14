@@ -26,7 +26,7 @@ use Porthd\Timer\Exception\TimerException;
  ***************************************************************/
 class CsvYamlJsonMapperUtility
 {
-    protected const INDENT = "    ";
+    protected const INDENT = '    ';
     protected const NEW_LINE = "\n";
     protected const COLON = ': ';
     protected const COLON_NL = self::COLON . self::NEW_LINE;
@@ -36,7 +36,6 @@ class CsvYamlJsonMapperUtility
     protected const SINGLE_QUOTE_ESCAPE = self::SINGLE_QUOTE . '"' . self::SINGLE_QUOTE . '"' . self::SINGLE_QUOTE;
 
     /**
-     *
      * see example https://www.php.net/manual/en/function.file-get-contents.php for POST-requests
      *
      * @param string $realFilePathOrUri
@@ -54,7 +53,6 @@ class CsvYamlJsonMapperUtility
     }
 
     /**
-     *
      * @param string $realFilePathOrUri
      * @param mixed|null $context
      * @return string
@@ -70,7 +68,6 @@ class CsvYamlJsonMapperUtility
     }
 
     /**
-     *
      * @param array<mixed> $rawListWithHeadline
      * @param string $separator
      * @param string $analyseLeaf
@@ -136,7 +133,6 @@ class CsvYamlJsonMapperUtility
         return $result;
     }
 
-
     /**
      * @param array<mixed> $ary
      * @param int $checkColumnForEmpty
@@ -147,13 +143,12 @@ class CsvYamlJsonMapperUtility
         if ($checkColumnForEmpty >= 0) {
             $result = array_filter($ary, function ($value) use ($checkColumnForEmpty) {
                 $flag = (!empty($value[$checkColumnForEmpty]));
-                return (!empty($value[$checkColumnForEmpty]));
+                return !empty($value[$checkColumnForEmpty]);
             });
             return $result;
         }
         return $ary;
     }
-
 
     /**
      * @param string $csvString
@@ -239,7 +234,7 @@ class CsvYamlJsonMapperUtility
             return '';
         }
         $yaml = (
-        (empty($startAttribute)) ?
+            (empty($startAttribute)) ?
             '' :
             $startAttribute . self::COLON_NL
         );

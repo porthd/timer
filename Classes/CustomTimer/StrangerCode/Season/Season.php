@@ -52,9 +52,9 @@ class Season
     {
         if ($x > 0.0) {
             return floor($x);
-        } else {
-            return ceil($x);
         }
+        return ceil($x);
+
     }
 
     protected function JJDATEJ()
@@ -108,13 +108,13 @@ class Season
 
     protected function affsai($n)
     {
-        $nomsai = ["spring", "summer", "autumn", "winter"];
+        $nomsai = ['spring', 'summer', 'autumn', 'winter'];
         $FDJ = ($this->JJD + 0.5E0) - floor($this->JJD + 0.5E0);
         $HH = floor($FDJ * 24);
         $FDJ -= $HH / 24.0;
         $MM = floor($FDJ * 1440);
         $temp = date_default_timezone_get();
-        date_default_timezone_set("UTC");
+        date_default_timezone_set('UTC');
         $this->JZ[$nomsai[$n]] = mktime($HH, $MM, 0, $this->MONAT, $this->TAG, $this->JAHR);
         date_default_timezone_set($temp);
     }

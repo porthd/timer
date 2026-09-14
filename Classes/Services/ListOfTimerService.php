@@ -23,14 +23,11 @@ namespace Porthd\Timer\Services;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateInterval;
-use DateTime;
-use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\DefaultTimer;
-use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -41,7 +38,6 @@ class ListOfTimerService implements SingletonInterface
     // Hold the class instance of the various timers
     /** @var array<mixed> */
     private $list = [];
-
 
     /**
      * @throws TimerException
@@ -74,8 +70,8 @@ class ListOfTimerService implements SingletonInterface
         $flag = false;
         foreach ($result as $item) {
             $flag = $flag || (
-                    DefaultTimer::TIMER_SELECTOR_DEFAULT[TimerConst::TCA_ITEMS_VALUE] === $item[TimerConst::TCA_ITEMS_VALUE]
-                );
+                DefaultTimer::TIMER_SELECTOR_DEFAULT[TimerConst::TCA_ITEMS_VALUE] === $item[TimerConst::TCA_ITEMS_VALUE]
+            );
         }
         if (!$flag) {
             array_unshift($result, DefaultTimer::TIMER_SELECTOR_DEFAULT);
@@ -125,7 +121,6 @@ class ListOfTimerService implements SingletonInterface
         return $this->list[$selector]->validate($params);
     }
 
-
     /**
      * @param string $selectorName
      * @return bool
@@ -137,11 +132,11 @@ class ListOfTimerService implements SingletonInterface
 
     /**
      * @param string $selector
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(string $selector, DateTime $checkDate, array $params = []): bool
+    public function isAllowedInRange(string $selector, \DateTime $checkDate, array $params = []): bool
     {
         if ((!is_array($this->list)) ||
             (!array_key_exists($selector, $this->list))
@@ -155,11 +150,11 @@ class ListOfTimerService implements SingletonInterface
      *  check, if the range is active in the range defined by the selector
      *
      * @param string $selector
-     * @param DateTime $checkDate contains the time-zone of the current User or the timezone of the CLI-Process
+     * @param \DateTime $checkDate contains the time-zone of the current User or the timezone of the CLI-Process
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive($selector, DateTime $checkDate, $params = []): bool
+    public function isActive($selector, \DateTime $checkDate, $params = []): bool
     {
         if (!array_key_exists($selector, $this->list)) {
             return false;
@@ -174,22 +169,22 @@ class ListOfTimerService implements SingletonInterface
             );
         }
         $eventTimeZoneName = $this->getTimeZoneOfEvent($selector, $activeZoneName, $params);
-        $dateLikeEventZone = new DateTime('@' . $checkDate->getTimestamp(), new DateTimeZone('UTC'));
-        $dateLikeEventZone->setTimezone(new DateTimeZone($eventTimeZoneName));
+        $dateLikeEventZone = new \DateTime('@' . $checkDate->getTimestamp(), new \DateTimeZone('UTC'));
+        $dateLikeEventZone->setTimezone(new \DateTimeZone($eventTimeZoneName));
         return $this->list[$selector]->isActive($dateLikeEventZone, $params);
     }
 
     /**
      * @param string $selector
-     * @param DateTime $checkDate
+     * @param \DateTime $checkDate
      * @param array<mixed> $params
      * @return TimerStartStopRange
      * @throws TimerException
      */
     public function getLastIsActiveRangeResult(
         string $selector,
-        DateTime $checkDate,
-        array  $params = []
+        \DateTime $checkDate,
+        array $params = []
     ): TimerStartStopRange {
         if (!array_key_exists($selector, $this->list)) {
             $failAll = new TimerStartStopRange();
@@ -207,8 +202,8 @@ class ListOfTimerService implements SingletonInterface
             );
         }
         $eventTimeZoneName = $this->getTimeZoneOfEvent($selector, $activeZoneName, $params);
-        $dateLikeEventZone = new DateTime('@' . $checkDate->getTimestamp(), new DateTimeZone('UTC'));
-        $dateLikeEventZone->setTimezone(new DateTimeZone($eventTimeZoneName));
+        $dateLikeEventZone = new \DateTime('@' . $checkDate->getTimestamp(), new \DateTimeZone('UTC'));
+        $dateLikeEventZone->setTimezone(new \DateTimeZone($eventTimeZoneName));
         return $this->list[$selector]->getLastIsActiveRangeResult($dateLikeEventZone, $params);
     }
 
@@ -216,11 +211,11 @@ class ListOfTimerService implements SingletonInterface
      * validate the parameter of the timer
      *
      * @param string $selector
-     * @param DateTime $eventTimeZone
+     * @param \DateTime $eventTimeZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive($selector, DateTime $eventTimeZone, $params = []): TimerStartStopRange
+    public function nextActive($selector, \DateTime $eventTimeZone, $params = []): TimerStartStopRange
     {
         return $this->rangeActive($selector, 'nextActive', $eventTimeZone, $params);
     }
@@ -229,11 +224,11 @@ class ListOfTimerService implements SingletonInterface
      * validate the parameter of the timer
      *
      * @param string $selector
-     * @param DateTime $eventTimeZone
+     * @param \DateTime $eventTimeZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive($selector, DateTime $eventTimeZone, $params = []): TimerStartStopRange
+    public function prevActive($selector, \DateTime $eventTimeZone, $params = []): TimerStartStopRange
     {
         return $this->rangeActive($selector, 'prevActive', $eventTimeZone, $params);
     }
@@ -243,11 +238,11 @@ class ListOfTimerService implements SingletonInterface
      *
      * @param string $selector
      * @param string $rangeAction take one of the values: 'prevRange' or'nextRange'
-     * @param DateTime $eventTimeZone
+     * @param \DateTime $eventTimeZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function rangeActive($selector, $rangeAction, DateTime $eventTimeZone, $params = []): TimerStartStopRange
+    public function rangeActive($selector, $rangeAction, \DateTime $eventTimeZone, $params = []): TimerStartStopRange
     {
         if (!in_array($eventTimeZone->getTimezone()->getName(), TcaUtility::listBaseZoneItems())) {
             throw new TimerException(

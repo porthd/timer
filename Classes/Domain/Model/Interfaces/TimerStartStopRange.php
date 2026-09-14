@@ -22,10 +22,8 @@ namespace Porthd\Timer\Domain\Model\Interfaces;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Context\Context;
-use DateInterval;
-use DateTime;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * TimerStartStopRange contains getter and setter für data-exchanges in this extension `timer`
@@ -35,21 +33,21 @@ final class TimerStartStopRange
     /**
      * flag for Result
      *
-     * @var boolean
+     * @var bool
      */
     protected $resultExist = true;
 
     /**
      * beginning
      *
-     * @var DateTime
+     * @var \DateTime
      */
     protected $beginning;
 
     /**
      * ending
      *
-     * @var DateTime
+     * @var \DateTime
      */
     protected $ending;
 
@@ -59,72 +57,68 @@ final class TimerStartStopRange
     public function __construct()
     {
         $currentTStamp = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ?? time();
-        $now = new DateTime('@' . $currentTStamp);
+        $now = new \DateTime('@' . $currentTStamp);
         $this->reMilleniumActive($now);
     }
 
-    /**
-     *
-     */
     public function setZero(): void
     {
-        $this->beginning = new DateTime('@0');
-        $this->ending = new DateTime('@0');
+        $this->beginning = new \DateTime('@0');
+        $this->ending = new \DateTime('@0');
     }
 
     /**
-     * @param DateTime $dateBelowNextActive
+     * @param \DateTime $dateBelowNextActive
      */
-    public function reMilleniumActive(DateTime $dateBelowNextActive): void
+    public function reMilleniumActive(\DateTime $dateBelowNextActive): void
     {
         $this->beginning = clone $dateBelowNextActive;
-        $this->beginning->sub(new DateInterval('P10000Y'));
+        $this->beginning->sub(new \DateInterval('P10000Y'));
         $this->ending = clone $dateBelowNextActive;
-        $this->ending->add(new DateInterval('P10000Y'));
+        $this->ending->add(new \DateInterval('P10000Y'));
         $this->resultExist = true;
     }
 
     /**
-     * @param DateTime $dateBelowNextActive
+     * @param \DateTime $dateBelowNextActive
      */
-    public function failOnlyPrevActive(DateTime $dateBelowNextActive): void
+    public function failOnlyPrevActive(\DateTime $dateBelowNextActive): void
     {
         $this->beginning = clone $dateBelowNextActive;
-        $this->beginning->sub(new DateInterval('P10000Y'));
+        $this->beginning->sub(new \DateInterval('P10000Y'));
         $this->ending = clone $dateBelowNextActive;
-        $this->ending->sub(new DateInterval('PT1S'));
+        $this->ending->sub(new \DateInterval('PT1S'));
         $this->resultExist = false;
     }
 
     /**
-     * @param DateTime $dateAbovePrevActive
+     * @param \DateTime $dateAbovePrevActive
      */
-    public function failOnlyNextActive(DateTime $dateAbovePrevActive): void
+    public function failOnlyNextActive(\DateTime $dateAbovePrevActive): void
     {
         $this->beginning = clone $dateAbovePrevActive;
-        $this->beginning->add(new DateInterval('PT1S'));
+        $this->beginning->add(new \DateInterval('PT1S'));
         $this->ending = clone $dateAbovePrevActive;
-        $this->ending->add(new DateInterval('P10000Y'));
+        $this->ending->add(new \DateInterval('P10000Y'));
         $this->resultExist = false;
     }
 
     /**
-     * @param DateTime $referenceDateForFailActive
-     * @return void
+     * @param \DateTime $referenceDateForFailActive
      */
-    public function failAllActive(DateTime $referenceDateForFailActive): void
+    public function failAllActive(\DateTime $referenceDateForFailActive): void
     {
         $this->beginning = clone $referenceDateForFailActive;
-        $this->beginning->add(new DateInterval('PT1S'));
+        $this->beginning->add(new \DateInterval('PT1S'));
         $this->ending = clone $referenceDateForFailActive;
-        $this->ending->sub(new DateInterval('PT1S'));
+        $this->ending->sub(new \DateInterval('PT1S'));
         $this->resultExist = false;
     }
 
     /**
      * Returns the beginning
      *
-     * @return DateTime $beginning
+     * @return \DateTime $beginning
      */
     public function getBeginning()
     {
@@ -134,10 +128,9 @@ final class TimerStartStopRange
     /**
      * Sets the beginning
      *
-     * @param DateTime $beginning
-     * @return void
+     * @param \DateTime $beginning
      */
-    public function setBeginning(DateTime $beginning)
+    public function setBeginning(\DateTime $beginning)
     {
         $this->beginning = clone $beginning;
     }
@@ -145,7 +138,7 @@ final class TimerStartStopRange
     /**
      * Returns the ending
      *
-     * @return DateTime $ending
+     * @return \DateTime $ending
      */
     public function getEnding()
     {
@@ -155,10 +148,9 @@ final class TimerStartStopRange
     /**
      * Sets the ending
      *
-     * @param DateTime $ending
-     * @return void
+     * @param \DateTime $ending
      */
-    public function setEnding(DateTime $ending)
+    public function setEnding(\DateTime $ending)
     {
         $this->ending = clone $ending;
     }
@@ -188,7 +180,6 @@ final class TimerStartStopRange
      * Sets the resultExist
      *
      * @param bool $resultExist
-     * @return void
      */
     public function setResultExist(bool $resultExist)
     {

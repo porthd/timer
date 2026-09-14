@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Porthd\Timer\Exception;
 
 use Exception;
-use Throwable;
 
 /***************************************************************
  *
@@ -29,21 +28,20 @@ use Throwable;
 /**
  * An exception thrown if the return value type of a signal is not the expected one.
  */
-class MappingException extends Exception
+class MappingException extends \Exception
 {
     /**
      * add some defaulttext to every erxception in this extension
      *
      * @param string $message
      * @param int $code
-     * @param null|Throwable $previous
+     * @param \Throwable|null $previous
      */
     public function __construct(
-        string $message = "",
-        int    $code = 0,
+        string $message = '',
+        int $code = 0,
         $previous = null
-    )
-    {
+    ) {
         $message .= ' Make a Screenshot, write a short report of your last actions and inform the webmaster via email.';
         parent::__construct($message, $code, $previous);
     }

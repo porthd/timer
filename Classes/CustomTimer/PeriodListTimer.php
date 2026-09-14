@@ -23,9 +23,7 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 use DateTime;
-use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
@@ -37,12 +35,8 @@ use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- *
- */
 class PeriodListTimer implements TimerInterface, LoggerAwareInterface, ValidateYamlInterface
 {
     use LoggerAwareTrait;
@@ -79,12 +73,10 @@ INFOSYNTAX;
     public const YAML_ITEMS_KEY_TITLE = 'title';
     public const YAML_ITEMS_KEY_ZONE = 'zone';
 
-
     public const TIMER_NAME = 'txTimerPeriodList';
 
     public const ARG_YAML_PERIOD_FILE_PATH = 'yamlPeriodFilePath';
     public const ARG_YAML_PERIOD_FAL_INFO = 'yamlPeriodFalRelation';
-
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     protected const TIMER_FLEXFORM_ITEM = [
@@ -114,7 +106,7 @@ INFOSYNTAX;
      * the null is a flag, that no range have generated after the instantiation of this object
      * @var int|null
      */
-    protected $lastIsActiveTimestamp = null; // = 1.1.1970 00:00:00
+    protected $lastIsActiveTimestamp; // = 1.1.1970 00:00:00
 
     /**
      * @var array<mixed>
@@ -131,7 +123,6 @@ INFOSYNTAX;
         $this->yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
     }
 
-
     /**
      * tested 20221007
      *
@@ -141,7 +132,6 @@ INFOSYNTAX;
     {
         return self::TIMER_NAME;
     }
-
 
     /**
      * tested 20221114
@@ -181,11 +171,11 @@ INFOSYNTAX;
     /**
      * tested 20221009
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -208,14 +198,24 @@ INFOSYNTAX;
         $countRequired = $this->validateCountArguments($params);
         $flag = ($flag && ($countRequired === count(self::ARG_REQ_LIST)));
         $flag = $flag && $this->validateFilePath(self::ARG_YAML_PERIOD_FILE_PATH, $params);
-        $flag = $flag && $this->validateFileFalIdIfExist(self::ARG_YAML_PERIOD_FAL_INFO, $params);
+        // PURPOSE: The YAML file path is the primary data source; the FAL relation
+        //          is an optional alternative. An empty FAL field (Flexform default
+        //          '0'/'' — note empty('0') === true in PHP) means "no FAL attached"
+        //          and must stay valid instead of being rejected by the >0 id check.
+        //
+        // EDGE CASES:
+        //   - '0' / '' => no FAL => valid (the file path supplies the periods).
+        //   - '12' / '12,13' => validated as positive FAL id(s).
+        $flag = $flag && (
+            empty($params[self::ARG_YAML_PERIOD_FAL_INFO]) ||
+            $this->validateFileFalIdIfExist(self::ARG_YAML_PERIOD_FAL_INFO, $params)
+        );
         $countOptions = $this->validateOptional($params);
         return $flag && ($countOptions >= 1) &&
             ($countOptions <= count(self::ARG_OPT_LIST));
     }
 
     /**
-     *
      * The method test, if the parameter in the yaml for the periodlist are okay
      * remark: This method must not be tested, if the sub-methods are valid.
      *
@@ -235,7 +235,7 @@ INFOSYNTAX;
                 'Check the structure of your YAML-file `' . $infoAboutYamlFile . '` for your `periodListTimer`.',
                 1668234195
             );
-        };
+        }
         $timeZone = TcaUtility::getListOfTimezones();
         foreach ($yamlArray[self::YAML_MAIN_KEY_PERIODLIST] as $item) {
             $start = date_create_from_format(
@@ -323,11 +323,11 @@ INFOSYNTAX;
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         $result = new TimerStartStopRange();
         $result->failAllActive($dateLikeEventZone);
@@ -343,7 +343,7 @@ INFOSYNTAX;
         $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
             if ($flagTimeZoneByFrontend) {
-                $timeZone = new DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
+                $timeZone = new \DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
             }
             $start = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
@@ -372,11 +372,11 @@ INFOSYNTAX;
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -386,11 +386,11 @@ INFOSYNTAX;
      *
      * tested 20221120
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $result = new TimerStartStopRange();
         $result->failAllActive($dateLikeEventZone);
@@ -406,7 +406,7 @@ INFOSYNTAX;
         $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
             if ($flagTimeZoneByFrontend) {
-                $timeZone = new DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
+                $timeZone = new \DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
             }
             $start = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
@@ -440,11 +440,11 @@ INFOSYNTAX;
      *
      * tested 20221120
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $result = new TimerStartStopRange();
         $result->failAllActive($dateLikeEventZone);
@@ -460,7 +460,7 @@ INFOSYNTAX;
         $timeZone = $dateLikeEventZone->getTimezone();
         foreach ($listOfSeparatedDates as $singleDate) {
             if ($flagTimeZoneByFrontend) {
-                $timeZone = new DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
+                $timeZone = new \DateTimeZone($singleDate[self::YAML_ITEMS_KEY_ZONE]);
             }
             $stop = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
@@ -495,7 +495,6 @@ INFOSYNTAX;
      * @return array<mixed>
      * @throws TimerException
      */
-
     protected function readPeriodListFromFileOrUrl(array $params): array
     {
         if ((!array_key_exists(self::ARG_YAML_PERIOD_FILE_PATH, $params)) &&
@@ -532,20 +531,18 @@ INFOSYNTAX;
         return array_merge($fileResult, ...$resultList);
     }
 
-
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -559,11 +556,11 @@ INFOSYNTAX;
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

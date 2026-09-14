@@ -1,3 +1,0 @@
--- https://stackoverflow.com/questions/20971680/sql-server-insert-if-not-exists
--- insert Test-datas one one time
---

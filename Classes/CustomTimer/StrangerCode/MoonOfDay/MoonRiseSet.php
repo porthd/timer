@@ -30,7 +30,6 @@ namespace Porthd\Timer\CustomTimer\StrangerCode\MoonOfDay;
 /**
  * small Modifications 2020 by Dr. Dieter Porthd <info@mobger.de>
  * Class MoonRiseSet
- * @package Porthd\Timer\CustomTimer\StrangerCode\MoonOfDay
  */
 class MoonRiseSet
 {
@@ -63,7 +62,7 @@ class MoonRiseSet
         $ym = self::sinAlt($date, $hour - 1, $lon, $cglat, $sglat) - $sinho;
 
         $above = $ym > 0;
-        while ($hour < 25 && (false == $set || false == $rise)) {
+        while ($hour < 25 && ($set == false || $rise == false)) {
             $yz = self::sinAlt($date, $hour, $lon, $cglat, $sglat) - $sinho;
             $yp = self::sinAlt($date, $hour + 1, $lon, $cglat, $sglat) - $sinho;
 
@@ -101,10 +100,14 @@ class MoonRiseSet
         $retVal = [];
         $utrise = self::convertTime($utrise);
         $utset = self::convertTime($utset);
+        // $utrise/$utset are Universal Time (UTC) values, so build the timestamps
+        // with gmmktime(): mktime() would interpret them in the server's local
+        // timezone and shift every moon time by that offset (2h in CEST, 1h in
+        // CET), making moon-relative timers fire at the wrong moment.
         $retVal['flagMoonrise'] = $rise;
-        $retVal['moonrise'] = $rise ? mktime($utrise['hrs'], $utrise['min'], 0, $month, $day, $year) : mktime(0, 0, 0, $month, $day + 1, $year);
+        $retVal['moonrise'] = $rise ? gmmktime($utrise['hrs'], $utrise['min'], 0, $month, $day, $year) : gmmktime(0, 0, 0, $month, $day + 1, $year);
         $retVal['flagMoonset'] = $set;
-        $retVal['moonset'] = $set ? mktime($utset['hrs'], $utset['min'], 0, $month, $day, $year) : mktime(0, 0, 0, $month, $day + 1, $year);
+        $retVal['moonset'] = $set ? gmmktime($utset['hrs'], $utset['min'], 0, $month, $day, $year) : gmmktime(0, 0, 0, $month, $day + 1, $year);
         return $retVal;
     }
 
@@ -180,7 +183,7 @@ class MoonRiseSet
     {
         $b = $x / 360;
         $a = 360 * ($b - (int)$b);
-        return ($a < 0 ? $a + 360.0 : $a);
+        return $a < 0 ? $a + 360.0 : $a;
     }
 
     /**

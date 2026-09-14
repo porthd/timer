@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\CustomTimer;
 
-use DateInterval;
-use DateTime;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
@@ -33,12 +31,6 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-/**
- * @package GeneralTimerTrait
- * trait for timerclasses to use the datas, defined by the flexforms in
- * EXT:timer\Configuration\FlexForms\TimerDef\General\GeneralTimer.flexform
- */
 trait GeneralTimerTrait
 {
     /**
@@ -70,16 +62,16 @@ trait GeneralTimerTrait
             [$ultimateBeginn, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
             $flag = (
                 (
-                    false !== date_create_from_format(
+                    date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $ultimateBeginn
-                    )
+                    ) !== false
                 ) &&
                 (
-                    false !== date_create_from_format(
+                    date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $ultimateEnd
-                    )
+                    ) !== false
                 )
             );
         }
@@ -93,7 +85,7 @@ trait GeneralTimerTrait
      */
     protected function validateFlagZone(array $params = []): bool
     {
-        return ((array_key_exists(TimerInterface::ARG_USE_ACTIVE_TIMEZONE, $params)) &&
+        return array_key_exists(TimerInterface::ARG_USE_ACTIVE_TIMEZONE, $params) &&
             (
                 !is_array($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE]) &&
                 !is_object($params[TimerInterface::ARG_USE_ACTIVE_TIMEZONE]) &&
@@ -103,7 +95,7 @@ trait GeneralTimerTrait
                 TimerInterface::ARGVALUE_USE_ACTIVE_TIMEZONE,
                 true
             ))
-        );
+        ;
     }
 
     /**
@@ -122,15 +114,14 @@ trait GeneralTimerTrait
     /**
      * @param TimerStartStopRange $nextRange
      * @param array<mixed> $params
-     * @param DateTime $dateBelowNextActive
+     * @param \DateTime $dateBelowNextActive
      * @return TimerStartStopRange
      */
     protected function validateUltimateRangeForNextRange(
         TimerStartStopRange $nextRange,
-        array    $params,
-        DateTime $dateBelowNextActive
-    ): TimerStartStopRange
-    {
+        array $params,
+        \DateTime $dateBelowNextActive
+    ): TimerStartStopRange {
         [$ultimateBeginn, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
         if ((!$this->isAllowedInRange($nextRange->getBeginning(), $params)) ||
             (!$this->isAllowedInRange($nextRange->getEnding(), $params))
@@ -168,11 +159,11 @@ trait GeneralTimerTrait
                 if (
                     ($nextEndingFormat <= $ultimateBeginn) // case 1
                 ) { // case 4
-                    $testBegin = DateTime::createFromFormat(
+                    $testBegin = \DateTime::createFromFormat(
                         self::TIMER_FORMAT_DATETIME,
                         $ultimateBeginn
                     );
-                    $testBegin->sub(new DateInterval('PT1S'));
+                    $testBegin->sub(new \DateInterval('PT1S'));
                     $nextRange = $this->nextActive($testBegin, $params);
                 } else {
                     if (
@@ -196,16 +187,15 @@ trait GeneralTimerTrait
     /**
      * @param TimerStartStopRange $prevRange
      * @param array<mixed> $params
-     * @param DateTime $dateAbovePrevActive
+     * @param \DateTime $dateAbovePrevActive
      * @return TimerStartStopRange
      * @throws TimerException
      */
     protected function validateUltimateRangeForPrevRange(
         TimerStartStopRange $prevRange,
-        array    $params,
-        DateTime $dateAbovePrevActive
-    ): TimerStartStopRange
-    {
+        array $params,
+        \DateTime $dateAbovePrevActive
+    ): TimerStartStopRange {
         [$ultimateBeginn, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
         // `isAllowedInRange` is part of the interface for the timer
         if ((!$this->isAllowedInRange($prevRange->getBeginning(), $params)) ||
@@ -244,11 +234,11 @@ trait GeneralTimerTrait
                 if (
                     ($prevBeginningFormat >= $ultimateEnd) // case 1
                 ) { // case 0
-                    $testBegin = DateTime::createFromFormat(
+                    $testBegin = \DateTime::createFromFormat(
                         self::TIMER_FORMAT_DATETIME,
                         $ultimateEnd
                     );
-                    $testBegin->add(new DateInterval('PT1S'));
+                    $testBegin->add(new \DateInterval('PT1S'));
                     // `prevActive` is part of the interface for the timer
                     $prevRange = $this->prevActive($testBegin, $params);
                 } else {
@@ -274,18 +264,17 @@ trait GeneralTimerTrait
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    protected function generalIsAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    protected function generalIsAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // change in the flex-formdefinition in version-change 11 -> 12
         [$ultimateBegin, $ultimateEnd] = $this->normalizeUltimateBeginnEnd($params);
         return ($ultimateBegin <= $dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
             ($dateLikeEventZone->format(TimerInterface::TIMER_FORMAT_DATETIME) <= $ultimateEnd);
     }
-
 
     /**
      * This method are introduced for easy build of unittests
@@ -300,7 +289,7 @@ trait GeneralTimerTrait
         }
         $filePath = $params[$key];
         if (!empty($filePath)) {
-            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            if (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
                 $extPath = $this->getExtentionPathByEnviroment();
                 $filePath = substr($filePath, strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH));
                 $flag = file_exists($extPath . DIRECTORY_SEPARATOR . $filePath);
@@ -340,7 +329,6 @@ trait GeneralTimerTrait
         return true;
     }
 
-
     /**
      * @return string
      */
@@ -348,7 +336,6 @@ trait GeneralTimerTrait
     {
         return Environment::getPublicPath();
     }
-
 
     /**
      * for testing approches
@@ -370,11 +357,11 @@ trait GeneralTimerTrait
     {
         $ultimateBeginn = $params[self::ARG_ULTIMATE_RANGE_BEGINN];
         if (MathUtility::canBeInterpretedAsInteger($ultimateBeginn)) {
-            $ultimateBeginn = (new DateTime())->setTimestamp((int)$ultimateBeginn)->format(self::TIMER_FORMAT_DATETIME);
+            $ultimateBeginn = (new \DateTime())->setTimestamp((int)$ultimateBeginn)->format(self::TIMER_FORMAT_DATETIME);
         }
         $ultimateEnd = $params[self::ARG_ULTIMATE_RANGE_END];
         if (MathUtility::canBeInterpretedAsInteger($ultimateEnd)) {
-            $ultimateEnd = (new DateTime())->setTimestamp((int)$ultimateEnd)->format(self::TIMER_FORMAT_DATETIME);
+            $ultimateEnd = (new \DateTime())->setTimestamp((int)$ultimateEnd)->format(self::TIMER_FORMAT_DATETIME);
         }
         return [$ultimateBeginn, $ultimateEnd];
     }

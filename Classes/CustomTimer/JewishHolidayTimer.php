@@ -23,10 +23,7 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-use DateInterval;
 use DateTime;
-use Exception;
 use Porthd\Timer\Constants\JewishHolidayConst;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
@@ -38,22 +35,24 @@ use Porthd\Timer\Utilities\JewishDateUtility;
 /**
  * Most of the holiday depends on a specific date in the calendar.
  * I plan to develop a general HolidayTimer, which contains a more genral list of holidays.
- *
  */
 class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
 {
     use GeneralTimerTrait;
 
-
     public const TIMER_NAME = 'txTimerJewishHoliday';
 
     protected const ARG_REL_MIN_TO_SELECTED_TIMER_EVENT = 'relMinToSelectedTimerEvent';
-    protected const ARG_REQ_REL_TO_MIN = -462240;
-    protected const ARG_REQ_REL_TO_MAX = 462240;
+    // NOTE: restored intended bound +-475200 (= 330 days). Commit 24d7fd18
+    // narrowed these to +-462240 (= 321 days, no doc/flexform reference) while
+    // it only meant to add a flexform input element. The tests (shared provider
+    // with EasterRelTimerTest) encode 475200 as the last valid boundary.
+    protected const ARG_REQ_REL_TO_MIN = -475200;
+    protected const ARG_REQ_REL_TO_MAX = 475200;
     protected const ARG_REQ_DURATION_MINUTES = 'durationMinutes';
-    protected const ARG_REQ_DURMIN_MIN = -462240;
+    protected const ARG_REQ_DURMIN_MIN = -475200;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
-    protected const ARG_REQ_DURMIN_MAX = 462240;
+    protected const ARG_REQ_DURMIN_MAX = 475200;
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     protected const TIMER_FLEXFORM_ITEM = [
@@ -73,7 +72,6 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
         self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT,
     ];
 
-
     /**
      * @var TimerStartStopRange|null
      */
@@ -82,7 +80,7 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     /**
      * @var int|null
      */
-    protected $lastIsActiveTimestamp = null;
+    protected $lastIsActiveTimestamp;
 
     /**
      * @var array<mixed>
@@ -134,7 +132,6 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
         return self::TIMER_FLEXFORM_ITEM;
     }
 
-
     /**
      * tested special
      * tested general 20221229
@@ -183,14 +180,16 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
         $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
         $flagCheck = ($number - $floatNumber == 0);
         if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
-            $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
+            // Allow an optional leading minus so negative duration strings ('-10')
+            // behave like negative integer durations (-10), which are valid too.
+            $flagCheck = (bool)preg_match('/^-?\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
         }
-        return (
-            ($flagCheck) &&
+        return
+            $flagCheck &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
-        );
+        ;
     }
 
     /**
@@ -201,13 +200,12 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     protected function validateNamedDateMidnight(array $params = []): bool
     {
         $key = (
-        array_key_exists(self::ARG_NAMED_DATE_MIDNIGHT, $params) ?
+            array_key_exists(self::ARG_NAMED_DATE_MIDNIGHT, $params) ?
             $params[self::ARG_NAMED_DATE_MIDNIGHT] :
             self::ARG_NAMED_DATE_MIDNIGHT_DEFAULT
         );
         return in_array($key, self::ARG_NAMED_DATE_LIST, true);
     }
-
 
     /**
      * This method are introduced for easy build of unittests
@@ -218,11 +216,11 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     {
         $number = (int)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0; // what will happen with float
         $floatNumber = (float)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0;
-        return (
+        return
             ($number - $floatNumber == 0) &&
             ($number >= self::ARG_REQ_REL_TO_MIN) &&
             ($number <= self::ARG_REQ_REL_TO_MAX)
-        );
+        ;
     }
 
     /**
@@ -238,11 +236,11 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     /**
      * tested 20221229
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -253,11 +251,11 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -270,9 +268,9 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
 
         $flag = false;
         $start = clone $dateLikeEventZone;
-        $start->sub(new DateInterval('PT30S'));
+        $start->sub(new \DateInterval('PT30S'));
         $stop = clone $dateLikeEventZone;
-        $stop->add(new DateInterval('PT30S'));
+        $stop->add(new \DateInterval('PT30S'));
         $flagFirst = true;
         foreach ($testRanges as $testrange) {
             if ($testrange['begin'] <= $dateLikeEventZone) {
@@ -296,11 +294,11 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -308,18 +306,17 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $result = new TimerStartStopRange();
         $result->failAllActive($dateLikeEventZone);
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             return $result;
         }
-
 
         $start = 3;
         $refDate = clone $dateLikeEventZone;
@@ -351,18 +348,17 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $result = new TimerStartStopRange();
         $result->failAllActive($dateLikeEventZone);
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             return $result;
         }
-
 
         $start = 3;
         $refDate = clone $dateLikeEventZone;
@@ -394,21 +390,21 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return array<mixed>
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
+    protected function calcDefinedRangesByStartDateTime(\DateTime $dateLikeEventZone, array $params): array
     {
         $relToDateMin = (int)(
-        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
-        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
+        $relInterval = new \DateInterval('PT' . abs($relToDateMin) . 'M');
         $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
+        $durInterval = new \DateInterval('PT' . abs($durationMin) . 'M');
         $startDateRanges = JewishDateUtility::getJewishHolidayByName(
             $params[self::ARG_NAMED_DATE_MIDNIGHT],
             $dateLikeEventZone
@@ -435,18 +431,17 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -460,11 +455,11 @@ class JewishHolidayTimer extends JewishHolidayConst implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

@@ -23,8 +23,6 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-use DateInterval;
 use DateTime;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
@@ -36,12 +34,8 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- *
- */
 class HolidayTimer implements TimerInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
@@ -60,7 +54,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
 
     protected const LOCALE_EN_GB_UTF = 'en_GB.utf-8';
 
-
     protected const ARG_REL_MIN_TO_EVENT = 'relMinToSelectedTimerEvent';
     protected const ARG_REQ_REL_TO_MIN = -37439;
     protected const ARG_REQ_REL_TO_MAX = 37439;
@@ -68,7 +61,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     protected const ARG_REQ_DURMIN_MIN = -37439;
     protected const ARG_REQ_DURMIN_FORBIDDEN = 0;
     protected const ARG_REQ_DURMIN_MAX = 37439;
-
 
     // needed as default-value in `Porthd\Timer\Services\ListOfTimerService`
     protected const TIMER_FLEXFORM_ITEM = [
@@ -116,7 +108,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
      */
     protected $lastIsActiveParams = [];
 
-
     public function __construct(?HolidaycalendarService $holidaycalendarService = null, ?YamlFileLoader $yamlFileLoader = null)
     {
         if ($yamlFileLoader === null) {
@@ -140,7 +131,6 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     {
         return self::TIMER_NAME;
     }
-
 
     /**
      * tested 20230923
@@ -180,11 +170,11 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     /**
      * tested 20230923
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -244,7 +234,7 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     protected function validateRelMinToEvent(array $params = []): bool
     {
         $value = (
-        isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
+            isset($params[self::ARG_REL_MIN_TO_EVENT]) ?
             $params[self::ARG_REL_MIN_TO_EVENT] :
             0
         );
@@ -269,25 +259,24 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
             $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
         }
-        return (
-            ($flagCheck) &&
+        return
+            $flagCheck &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
-        );
+        ;
     }
-
 
     /**
      * tested 20231001
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -311,16 +300,16 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         }
         $relMin = (int)($params[self::ARG_REL_MIN_TO_EVENT] ?? 0);
         if ($relMin > 0) {
-            $startDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
+            $startDate->sub(new \DateInterval('PT' . abs($relMin) . 'M'));
         } elseif ($relMin < 0) {
-            $startDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
+            $startDate->add(new \DateInterval('PT' . abs($relMin) . 'M'));
         }
         if ($durationMin > 0) {
             $stopDate = clone $startDate;
-            $startDate->sub(new DateInterval('PT' . abs($durationMin) . 'M'));
+            $startDate->sub(new \DateInterval('PT' . abs($durationMin) . 'M'));
         } else {
             $stopDate = clone $startDate;
-            $stopDate->add(new DateInterval('PT' . abs($durationMin) . 'M'));
+            $stopDate->add(new \DateInterval('PT' . abs($durationMin) . 'M'));
         }
 
         // check, if there is one definition of holiday, which works
@@ -382,11 +371,11 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -396,11 +385,11 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
      *
      * tested 20231001
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -424,16 +413,16 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         }
         $relMin = (int)($params[self::ARG_REL_MIN_TO_EVENT] ?? 0);
         if ($relMin > 0) {
-            $startDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
+            $startDate->sub(new \DateInterval('PT' . abs($relMin) . 'M'));
         } elseif ($relMin < 0) {
-            $startDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
+            $startDate->add(new \DateInterval('PT' . abs($relMin) . 'M'));
         }
         if ($durationMin > 0) {
             $stopDate = clone $startDate;
-            $startDate->sub(new DateInterval('PT' . abs($durationMin) . 'M'));
+            $startDate->sub(new \DateInterval('PT' . abs($durationMin) . 'M'));
         } else {
             $stopDate = clone $startDate;
-            $stopDate->add(new DateInterval('PT' . abs($durationMin) . 'M'));
+            $stopDate->add(new \DateInterval('PT' . abs($durationMin) . 'M'));
         }
 
         // check, if there is one definition of holiday, which works
@@ -474,16 +463,16 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         ) {
             $refStartDate = $result->getBeginning();
             if ($relMin > 0) {
-                $refStartDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
+                $refStartDate->add(new \DateInterval('PT' . abs($relMin) . 'M'));
             } elseif ($relMin < 0) {
-                $refStartDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
+                $refStartDate->sub(new \DateInterval('PT' . abs($relMin) . 'M'));
             }
             if ($durationMin < 0) {
                 $refStopDate = clone $refStartDate;
-                $refStartDate->sub(new DateInterval('PT' . abs($durationMin) . 'M'));
+                $refStartDate->sub(new \DateInterval('PT' . abs($durationMin) . 'M'));
             } else {
                 $refStopDate = clone $refStartDate;
-                $refStopDate->add(new DateInterval('PT' . abs($durationMin) . 'M'));
+                $refStopDate->add(new \DateInterval('PT' . abs($durationMin) . 'M'));
             }
             $result->setBeginning($refStartDate);
             $result->setEnding($refStopDate);
@@ -496,11 +485,11 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
      *
      * tested 20231001
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -523,16 +512,16 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         }
         $relMin = (int)($params[self::ARG_REL_MIN_TO_EVENT] ?? 0);
         if ($relMin > 0) {
-            $startDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
+            $startDate->sub(new \DateInterval('PT' . abs($relMin) . 'M'));
         } elseif ($relMin < 0) {
-            $startDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
+            $startDate->add(new \DateInterval('PT' . abs($relMin) . 'M'));
         }
         if ($durationMin > 0) {
             $stopDate = clone $startDate;
-            $startDate->sub(new DateInterval('PT' . abs($durationMin) . 'M'));
+            $startDate->sub(new \DateInterval('PT' . abs($durationMin) . 'M'));
         } else {
             $stopDate = clone $startDate;
-            $stopDate->add(new DateInterval('PT' . abs($durationMin) . 'M'));
+            $stopDate->add(new \DateInterval('PT' . abs($durationMin) . 'M'));
         }
 
         // check, if there is one definition of holiday, which works
@@ -572,16 +561,16 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         ) {
             $refStartDate = $result->getBeginning();
             if ($relMin > 0) {
-                $refStartDate->add(new DateInterval('PT' . abs($relMin) . 'M'));
+                $refStartDate->add(new \DateInterval('PT' . abs($relMin) . 'M'));
             } elseif ($relMin < 0) {
-                $refStartDate->sub(new DateInterval('PT' . abs($relMin) . 'M'));
+                $refStartDate->sub(new \DateInterval('PT' . abs($relMin) . 'M'));
             }
             if ($durationMin < 0) {
                 $refStopDate = clone $refStartDate;
-                $refStartDate->sub(new DateInterval('PT' . abs($durationMin) . 'M'));
+                $refStartDate->sub(new \DateInterval('PT' . abs($durationMin) . 'M'));
             } else {
                 $refStopDate = clone $refStartDate;
-                $refStopDate->add(new DateInterval('PT' . abs($durationMin) . 'M'));
+                $refStopDate->add(new \DateInterval('PT' . abs($durationMin) . 'M'));
             }
             $result->setBeginning($refStartDate);
             $result->setEnding($refStopDate);
@@ -652,23 +641,20 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
         return $finalList;
     }
 
-
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
-        bool     $flag,
-        DateTime $dateLikeEventZone,
-        array    $params = []
-    ): void
-    {
+        \DateTime $dateStart,
+        \DateTime $dateStop,
+        bool $flag,
+        \DateTime $dateLikeEventZone,
+        array $params = []
+    ): void {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
         }
@@ -680,11 +666,11 @@ class HolidayTimer implements TimerInterface, LoggerAwareInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

@@ -23,16 +23,13 @@ namespace Porthd\Timer\Tests\Unit\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Timer\CustomTimer\DailyTimer;
-use TYPO3\CMS\Core\Context\Context;
-use DateInterval;
-use DateTime;
-use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\DailyTimer;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class DailyTimerTest extends TestCase
@@ -41,11 +38,10 @@ class DailyTimerTest extends TestCase
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
 
-
     /**
      * @var DailyTimer
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
@@ -79,92 +75,85 @@ class DailyTimerTest extends TestCase
 
     /**
      * the ultimate green test
-     * @test
      */
+    #[Test]
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selfNameForCorrectOutput()
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::NAME_TIMER,
             $this->subject::selfName(),
             'The name musst be defined.'
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSelectorItemForCorrectOutput()
     {
         $result = $this->subject::getSelectorItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             1,
             count($result),
             'The array  must contain at least two items.'
         );
-        $this->assertIsString(
-            $result[0],
+        self::assertIsString(
+            $result['label'],
             'The first item must be an string.'
         );
-        $this->assertEquals(
-            $result[1],
+        self::assertEquals(
+            $result['value'],
             self::NAME_TIMER,
             'The second term must the name of the timer.'
         );
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             count($result),
             'The array  must contain one Item.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             array_keys($result),
             [self::NAME_TIMER],
             'The key must the name of the timer.'
         );
-        $this->assertIsString(
+        self::assertIsString(
             $result[self::NAME_TIMER],
             'The value must be type of string.'
         );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
-        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+        if (str_starts_with($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
                 );
         } else {
-            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            if (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
                 $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                     substr(
                         $filePath,
                         strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                     );
-                $this->assertTrue(
+                self::assertTrue(
                     (false),
                     'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. '
                 );
@@ -173,25 +162,24 @@ class DailyTimerTest extends TestCase
             }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue(
+        self::assertTrue(
             $flag,
             'The file with the flexform content exist.'
         );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue(
+        self::assertTrue(
             (!(!$flexArray)),
             'The filecontent is valid xml.'
         );
     }
-
 
     public static function dataProviderGetTimeZoneOfEvent()
     {
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -203,7 +191,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -215,7 +203,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -228,7 +216,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -241,7 +229,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is PHP-empty (Zero). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -255,7 +243,7 @@ class DailyTimerTest extends TestCase
         ];
         foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
             $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                'The active timezone will be shown, because the parameter for it is active `' .
                     print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
                 [
                     'result' => 'Lauder/Furz',
@@ -270,7 +258,7 @@ class DailyTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -283,7 +271,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -298,20 +286,18 @@ class DailyTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
+    #[DataProvider('dataProviderGetTimeZoneOfEvent')]
+    #[Test]
     public function getTimeZoneOfEvent($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
 
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $result,
                 $message
@@ -333,7 +319,7 @@ class DailyTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The test is correct, because all needed arguments are used.',
+            'The test is correct, because all needed arguments are used.',
             [
                 'result' => true,
             ],
@@ -352,9 +338,9 @@ class DailyTimerTest extends TestCase
             ],
         ];
         // variation of requiered parmeters
-        foreach (['startTimeSeconds', 'durationMinutes',] as $item) {
+        foreach (['startTimeSeconds', 'durationMinutes'] as $item) {
             $undefined = [
-                'message' => 'The test is incorrect, because `' . $item . '` in the needed arguments is missing.',
+                'The test is incorrect, because `' . $item . '` in the needed arguments is missing.',
                 [
                     'result' => false,
                 ],
@@ -372,17 +358,21 @@ class DailyTimerTest extends TestCase
                     ],
                 ],
             ];
-            unset($undefined[1]['required'][$item]);   // test
+            // The provider row is positional [message, expects, params]; the params
+            // live at index [2]. The mutation must target [2], not the expects at [1],
+            // otherwise the corrupted/missing required argument never reaches validate()
+            // and the negative case silently passes valid params.
+            unset($undefined[2]['required'][$item]);   // test
             $result[] = $undefined;
             foreach ([
-                         'null' => null,
-                         'zero' => 'zero',
-                         'false' => 'false',
-                         'false' => false,
-                         'empty' => '',
-                     ] as $key => $value) {
+                'null' => null,
+                'zero' => 'zero',
+                'false' => 'false',
+                'false' => false,
+                'empty' => '',
+            ] as $key => $value) {
                 $failDefined = [
-                    'message' => 'The test is not correct, because `' . $item . '` in the needed arguments is set to `' . $key . '`.',
+                    'The test is not correct, because `' . $item . '` in the needed arguments is set to `' . $key . '`.',
                     [
                         'result' => false,
                     ],
@@ -400,14 +390,14 @@ class DailyTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $failDefined[1]['required'][$item] = $value;  // test special types
+                $failDefined[2]['required'][$item] = $value;  // test special types (params at index [2], not expects at [1])
                 $result[] = $failDefined;
             }
         }
         // single variation of optional parmeters and variation of all optional-parameters
-        foreach (['activeWeekday' => 96,] as $item => $value) {
+        foreach (['activeWeekday' => 96] as $item => $value) {
             $singleOptional = [
-                'message' => 'The test is okay, because one of the optional arguments (`' . $item . '`) is present.',
+                'The test is okay, because one of the optional arguments (`' . $item . '`) is present.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -431,24 +421,24 @@ class DailyTimerTest extends TestCase
         // single variation of optional parmeters `activeWeekday`
 
         foreach ([
-                     1 => true,
-                     2 => true,
-                     4 => true,
-                     8 => true,
-                     16 => true,
-                     32 => true,
-                     64 => true,
-                     127 => true,
-                     67 => true,
-                     '32.1' => false,
-                     0 => false,
-                     128 => false,
-                     -1 => false,
-                     -2 => false,
-                 ] as $value => $res
+            1 => true,
+            2 => true,
+            4 => true,
+            8 => true,
+            16 => true,
+            32 => true,
+            64 => true,
+            127 => true,
+            67 => true,
+            '32.1' => false,
+            0 => false,
+            128 => false,
+            -1 => false,
+            -2 => false,
+        ] as $value => $res
         ) {
             $singleOptional = [
-                'message' => 'The test for `activeWeekday` ' . ($res ? 'is okay' : 'failed') .
+                'The test for `activeWeekday` ' . ($res ? 'is okay' : 'failed') .
                     ', because `activeWeekday` has the numeric value `' . $value . '`.',
                 'expects' => [
                     'result' => $res,
@@ -469,7 +459,7 @@ class DailyTimerTest extends TestCase
             ];
             $result[] = $singleOptional;
             $singleOptional = [
-                'message' => 'The test for `activeWeekday` ' . ($res ? 'is okay' : 'failed') .
+                'The test for `activeWeekday` ' . ($res ? 'is okay' : 'failed') .
                     ', because `activeWeekday` has the string value `' . $value . '`.',
                 'expects' => [
                     'result' => $res,
@@ -490,9 +480,9 @@ class DailyTimerTest extends TestCase
             ];
             $result[] = $singleOptional;
         }
-        foreach ([[12], new DateTime('now')] as $value) {
+        foreach ([[12], new \DateTime('now')] as $value) {
             $result[] = [
-                'message' => 'The test for `activeWeekday` failed' .
+                'The test for `activeWeekday` failed' .
                     ', because `activeWeekday` must be an integer between 1 and 128 not a `' . print_r(
                         $value,
                         true
@@ -516,7 +506,7 @@ class DailyTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The test for `activeWeekday` will NOT be okay' .
+            'The test for `activeWeekday` will NOT be okay' .
                 ', because a `null` in `activeWeekday` is not allowed.',
             'expects' => [
                 'result' => false,
@@ -536,7 +526,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The test for `activeWeekday` will be okay' .
+            'The test for `activeWeekday` will be okay' .
                 ', because a float-number  in `activeWeekday` is not allowed.',
             'expects' => [
                 'result' => false,
@@ -557,9 +547,9 @@ class DailyTimerTest extends TestCase
         ];
 
         // single variation of optional parmeters and variation of all optional-parameters
-        foreach (['activeWeekday' => 96,] as $item => $res) {
+        foreach (['activeWeekday' => 96] as $item => $res) {
             $singleOptional = [
-                'message' => 'The test is okay, because one of the optional arguments (`' . $item . '`) is present.',
+                'The test is okay, because one of the optional arguments (`' . $item . '`) is present.',
                 [
                     'result' => true,
                 ],
@@ -581,7 +571,7 @@ class DailyTimerTest extends TestCase
         }
         // all variations of optional parmeters and variation of all optional-parameters
         $allOptionalTogether = [
-            'message' => 'The test is okay, because all optional arguments are present.',
+            'The test is okay, because all optional arguments are present.',
             [
                 'result' => true,
             ],
@@ -603,7 +593,7 @@ class DailyTimerTest extends TestCase
 
         // variation of requiered parmeters
         $result[] = [
-            'message' => 'The test results is okay, because the item `obsolete` parameters should be ignored as an undefined parameter.',
+            'The test results is okay, because the item `obsolete` parameters should be ignored as an undefined parameter.',
             [
                 'result' => true,
             ],
@@ -625,7 +615,7 @@ class DailyTimerTest extends TestCase
         /// Attention second argument
         foreach (['12:35:00' => false, '26:35:00' => false, 'asdfaf' => false, 43200 => true] as $value => $expected) {
             $result[] = [
-                'message' => 'The test ' . ($expected ? 'is okay' : 'failed') . ' with the value `' . $value . '` in the parameter `starttime`.',
+                'The test ' . ($expected ? 'is okay' : 'failed') . ' with the value `' . $value . '` in the parameter `starttime`.',
                 [
                     'result' => $expected, // variation
                 ],
@@ -646,14 +636,14 @@ class DailyTimerTest extends TestCase
         }
         // variation of startTimeSeconds
         foreach ([
-                     '-1440' => false,
-                     '-1439' => true,
-                     '0' => false,
-                     '1439' => true,
-                     '1440' => false,
-                 ] as $value => $expected) {
+            '-1440' => false,
+            '-1439' => true,
+            '0' => false,
+            '1439' => true,
+            '1440' => false,
+        ] as $value => $expected) {
             $result[] = [
-                'message' => 'The test ' . ($expected ? 'is okay' : 'failed') . ' with the value `' . $value . '` in the parameter `durationMinutes`.',
+                'The test ' . ($expected ? 'is okay' : 'failed') . ' with the value `' . $value . '` in the parameter `durationMinutes`.',
                 [
                     'result' => $expected, // variation
                 ],
@@ -674,7 +664,7 @@ class DailyTimerTest extends TestCase
         }
         // variation of obsolete parameter
         $result[] = [
-            'message' => 'The test results is okay, because the item `obsolete` parameters should be ignored as an undefined parameter.',
+            'The test results is okay, because the item `obsolete` parameters should be ignored as an undefined parameter.',
             [
                 'result' => true,
             ],
@@ -696,17 +686,15 @@ class DailyTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateSpecialByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateSpecialByVariationArgumentsInParam')]
+    #[Test]
     public function validateSpecialByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['required'], $params['optional'], $params['general'], $params['obsolete']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -735,7 +723,7 @@ class DailyTimerTest extends TestCase
         foreach ($list as $unsetParam => $expects
         ) {
             $item = [
-                'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
+                'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -754,22 +742,22 @@ class DailyTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false],
-                     [false, true],
-                     ['false', true],
-                     [new Datetime(), false],
-                     ['hallo', false],
-                     ['0', true],
-                     [0.0, true],
-                     ["0.0", false],
-                     ['true', true],
-                     ['1', true],
-                     [1, true],
-                     [1.0, true],
-                     ['1.0', false],
-                 ] as $value) {
+            [null, false],
+            [false, true],
+            ['false', true],
+            [new \Datetime(), false],
+            ['hallo', false],
+            ['0', true],
+            [0.0, true],
+            ['0.0', false],
+            ['true', true],
+            ['1', true],
+            [1, true],
+            [1.0, true],
+            ['1.0', false],
+        ] as $value) {
             $result[] = [
-                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
+                'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
                     'result' => $value[1],
                 ],
@@ -786,13 +774,13 @@ class DailyTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     'UTC' => true,
-                     '' => false,
-                     'Europe/Berlin' => true,
-                     'Kumpel/Dumpel' => false,
-                 ] as $zoneVal => $expects) {
+            'UTC' => true,
+            '' => false,
+            'Europe/Berlin' => true,
+            'Kumpel/Dumpel' => false,
+        ] as $zoneVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
@@ -810,13 +798,13 @@ class DailyTimerTest extends TestCase
         }
         // Variation for ultimateBeginningTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -834,13 +822,13 @@ class DailyTimerTest extends TestCase
         }
         // Variation for ultimateEndingTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -859,17 +847,15 @@ class DailyTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateGeneralByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateGeneralByVariationArgumentsInParam')]
+    #[Test]
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -882,17 +868,17 @@ class DailyTimerTest extends TestCase
         $testDate = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
             '2020-12-31 12:00:00',
-            new DateTimeZone('Europe/Berlin')
+            new \DateTimeZone('Europe/Berlin')
         );
         $minusOneSecond = clone $testDate;
-        $minusOneSecond->sub(new DateInterval('PT1S'));
+        $minusOneSecond->sub(new \DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
-        $addOneSecond->add(new DateInterval('PT1S'));
+        $addOneSecond->add(new \DateInterval('PT1S'));
         $rest = [];
         $result = [];
 
         $result[] = [
-            'message' => 'The testdate is valid, if the testdate is in the middle of the ultimate range..',
+            'The testdate is valid, if the testdate is in the middle of the ultimate range..',
             'expects' => [
                 'result' => true,
             ],
@@ -907,7 +893,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -922,7 +908,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
+            'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
             'expects' => [
                 'result' => false,
             ],
@@ -937,7 +923,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -952,7 +938,7 @@ class DailyTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
+            'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
             'expects' => [
                 'result' => false,
             ],
@@ -969,18 +955,16 @@ class DailyTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderIsAllowedInRange
-     * @test
-     */
+    #[DataProvider('dataProviderIsAllowedInRange')]
+    #[Test]
     public function isAllowedInRange($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
@@ -988,21 +972,20 @@ class DailyTimerTest extends TestCase
         }
     }
 
-
     public static function dataProviderIsActive()
     {
         $result = [];
         foreach ([
-                     1 => '2021-01-04',
-                     2 => '2021-01-05',
-                     4 => '2021-01-06',
-                     8 => '2021-01-07',
-                     16 => '2021-01-08',
-                     32 => '2021-01-09',
-                     64 => '2021-01-10',
-                 ] as $activeWeekday => $dateString) {
+            1 => '2021-01-04',
+            2 => '2021-01-05',
+            4 => '2021-01-06',
+            8 => '2021-01-07',
+            16 => '2021-01-08',
+            32 => '2021-01-09',
+            64 => '2021-01-10',
+        ] as $activeWeekday => $dateString) {
             $result[] = [
-                'message' => 'The date  `' . $dateString . '` will be active for the key `' . $activeWeekday . '`.',
+                'The date  `' . $dateString . '` will be active for the key `' . $activeWeekday . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -1010,7 +993,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $dateString . ' 13:00:00',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00
@@ -1025,7 +1008,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The date  `' . $dateString . '` will be NOT active for the key `' . $activeWeekday . '`.',
+                'The date  `' . $dateString . '` will be NOT active for the key `' . $activeWeekday . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -1033,7 +1016,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $dateString . ' 11:00:00',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 50400, // =12:00
@@ -1052,12 +1035,12 @@ class DailyTimerTest extends TestCase
             $check = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2021-01-04 ' . '00:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
-            $check->add(new DateInterval('PT' . $starttimeSeconds . 'S'));
-            $check->sub(new DateInterval('PT60M'));
+            $check->add(new \DateInterval('PT' . $starttimeSeconds . 'S'));
+            $check->sub(new \DateInterval('PT60M'));
             $result[] = [
-                'message' => 'The startime in seconds `' . $starttimeSeconds . '` will be active for the day 4. Jan 2020.',
+                'The startime in seconds `' . $starttimeSeconds . '` will be active for the day 4. Jan 2020.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -1076,7 +1059,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The startime in seconds `' . $starttimeSeconds . '` will NOT be active for the day 4. Jan 2020..',
+                'The startime in seconds `' . $starttimeSeconds . '` will NOT be active for the day 4. Jan 2020..',
                 'expects' => [
                     'result' => false,
                 ],
@@ -1101,17 +1084,17 @@ class DailyTimerTest extends TestCase
                 $check = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2021-01-04 ' . '12:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 if ($corDayCheck > 0) {
                     if ($factor < 0) {
-                        $check->sub(new DateInterval('P1D'));
+                        $check->sub(new \DateInterval('P1D'));
                     } else {
-                        $check->add(new DateInterval('P1D'));
+                        $check->add(new \DateInterval('P1D'));
                     }
                 }
                 $result[] = [
-                    'message' => 'The Range in minutes `' . ($factor * $durMin) . '` will be active for the day 4. Jan 2020 12:00:00.',
+                    'The Range in minutes `' . ($factor * $durMin) . '` will be active for the day 4. Jan 2020 12:00:00.',
                     'expects' => [
                         'result' => true,
                     ],
@@ -1130,7 +1113,7 @@ class DailyTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The Range in minutes `' . ($factor * $durMin) . '` will NOT be active for the day 4. Jan 2020 12:00:00.',
+                    'The Range in minutes `' . ($factor * $durMin) . '` will NOT be active for the day 4. Jan 2020 12:00:00.',
                     'expects' => [
                         'result' => false,
                     ],
@@ -1157,36 +1140,36 @@ class DailyTimerTest extends TestCase
         // 1. Test with variation of Time and positive durationminutes
         // + 5. Test the Day-Overlay for the active period
         foreach ([
-                     'PT1M' => false,
-                     'PT1H' => true,
-                     'PT2H' => true,
-                     'PT3H' => true,
-                     'PT3H1S' => false,
-                     'P1DT2H' => false,
-                     'P5DT2H' => false,
-                     'P6DT2H' => true,
-                     'P6DT3H1S' => false,
-                 ] as $diff => $expects) {
+            'PT1M' => false,
+            'PT1H' => true,
+            'PT2H' => true,
+            'PT3H' => true,
+            'PT3H1S' => false,
+            'P1DT2H' => false,
+            'P5DT2H' => false,
+            'P6DT2H' => true,
+            'P6DT3H1S' => false,
+        ] as $diff => $expects) {
             $check = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2020-12-27 11:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $checkOverlayStart = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2020-12-27 22:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $checkOverlayEnd = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2020-12-26 22:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
-            $check->add(new DateInterval($diff));
-            $checkOverlayStart->add(new DateInterval($diff));
-            $checkOverlayEnd->add(new DateInterval($diff));
+            $check->add(new \DateInterval($diff));
+            $checkOverlayStart->add(new \DateInterval($diff));
+            $checkOverlayEnd->add(new \DateInterval($diff));
             $result[] = [
-                'message' => 'The date with additional Interval `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.'),
+                'The date with additional Interval `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.'),
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -1205,7 +1188,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The date with additional Interval `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.') .
+                'The date with additional Interval `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.') .
                     'The active period has an day-overflow with positive durationminutes. Remarkable is the Day of the start. ',
                 'expects' => [
                     'result' => $expects,
@@ -1225,7 +1208,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The date with minus-duration-time  `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.') .
+                'The date with minus-duration-time  `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.') .
                     'The active period has an day-overflow with negative durationminutes. Remarkable is the Day of the start. ',
                 'expects' => [
                     'result' => $expects,
@@ -1248,24 +1231,24 @@ class DailyTimerTest extends TestCase
 
         // 2. Test with variation of Time and negative durationminutes
         foreach ([
-                     'PT1M' => false,
-                     'PT1H' => true,
-                     'PT2H' => true,
-                     'PT3H' => true,
-                     'PT3H1S' => false,
-                     'P1DT2H' => false,
-                     'P5DT2H' => false,
-                     'P6DT2H' => true,
-                     'P6DT3H1S' => false,
-                 ] as $diff => $expects) {
+            'PT1M' => false,
+            'PT1H' => true,
+            'PT2H' => true,
+            'PT3H' => true,
+            'PT3H1S' => false,
+            'P1DT2H' => false,
+            'P5DT2H' => false,
+            'P6DT2H' => true,
+            'P6DT3H1S' => false,
+        ] as $diff => $expects) {
             $check = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2020-12-27 11:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
-            $check->add(new DateInterval($diff));
+            $check->add(new \DateInterval($diff));
             $result[] = [
-                'message' => 'The date with minus-duration-time  `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.'),
+                'The date with minus-duration-time  `' . $diff . '` will ' . ($expects ? 'be active.' : 'be NOT active.'),
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -1288,20 +1271,20 @@ class DailyTimerTest extends TestCase
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach ([
-                         'UTC',
-                         'Europe/Berlin',
-                         'Australia/Eucla',
-                         'America/Detroit',
-                         'Pacific/Fiji',
-                         'Indian/Chagos',
-                     ] as $timezoneName) {
+                'UTC',
+                'Europe/Berlin',
+                'Australia/Eucla',
+                'America/Detroit',
+                'Pacific/Fiji',
+                'Indian/Chagos',
+            ] as $timezoneName) {
                 $check = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-27 11:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $result[] = [
-                    'message' => 'The date with additional Interval  will be NOT active. It works independently to the timezone `' . $timezoneName . '`. ',
+                    'The date with additional Interval  will be NOT active. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => false,
                     ],
@@ -1319,9 +1302,9 @@ class DailyTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $check->add(new DateInterval('PT2H'));
+                $check->add(new \DateInterval('PT2H'));
                 $result[] = [
-                    'message' => 'The date with additional Interval  will be active. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The date with additional Interval  will be active. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => true,
                     ],
@@ -1344,19 +1327,19 @@ class DailyTimerTest extends TestCase
 
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2020-12-27 11:00:00',
-                     '2020-12-27 13:00:00',
-                     '2020-12-27 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $timeString) {
+            '0001-01-01 00:00:00',
+            '2020-12-27 11:00:00',
+            '2020-12-27 13:00:00',
+            '2020-12-27 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $timeString) {
             $check = date_create_from_format(
                 TimerInterface::TIMER_FORMAT_DATETIME,
                 '2020-12-27 11:00:00',
-                new DateTimeZone('Europe/Berlin')
+                new \DateTimeZone('Europe/Berlin')
             );
             $result[] = [
-                'message' => 'The date with additional Interval  will be NOT active. It is independ to the ultimate-parameter. ',
+                'The date with additional Interval  will be NOT active. It is independ to the ultimate-parameter. ',
                 'expects' => [
                     'result' => false,
                 ],
@@ -1374,9 +1357,9 @@ class DailyTimerTest extends TestCase
                     ],
                 ],
             ];
-            $check->add(new DateInterval('PT2H'));
+            $check->add(new \DateInterval('PT2H'));
             $result[] = [
-                'message' => 'The date with additional Interval  will be active. It is independ to the ultimate-parameter. ',
+                'The date with additional Interval  will be active. It is independ to the ultimate-parameter. ',
                 'expects' => [
                     'result' => ($timeString <= '2020-12-27 13:00:00') ? true : false,
                 ],
@@ -1396,27 +1379,24 @@ class DailyTimerTest extends TestCase
             ];
         }
 
-
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderIsActive
-     * @test
-     */
+    #[DataProvider('dataProviderIsActive')]
+    #[Test]
     public function isActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = clone $params['value'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isActive($value, $setting),
                 'isActive: ' . $message
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $params['value'],
                 $value,
                 'isActive: The object of Date is unchanged.'
@@ -1429,7 +1409,7 @@ class DailyTimerTest extends TestCase
         $result = [];
         // 1. rondomly Test
         $result[] = [
-            'message' => 'The nextRange in this example is correctly detected. ',
+            'The nextRange in this example is correctly detected. ',
             'expects' => [
                 'result' => [
                     'beginning' => '2020-12-27 12:00:00',
@@ -1441,7 +1421,7 @@ class DailyTimerTest extends TestCase
                 'value' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-27 11:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'setting' => [
                     'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1457,14 +1437,14 @@ class DailyTimerTest extends TestCase
         ];
         // 1.b check the weekend-Funktion
         foreach ([
-                     '2020-12-27 12:00:00',
-                     '2020-12-27 15:00:00',
-                     '2020-12-30 12:00:00',
-                     '2021-01-01 12:00:00',
-                     '2021-01-02 11:59:59',
-                 ] as $testTime) {
+            '2020-12-27 12:00:00',
+            '2020-12-27 15:00:00',
+            '2020-12-30 12:00:00',
+            '2021-01-01 12:00:00',
+            '2021-01-02 11:59:59',
+        ] as $testTime) {
             $result[] = [
-                'message' => 'The nextRange is detected correctly for the date `' . $testTime . '` because the days are not part of the allowed weekdays. ',
+                'The nextRange is detected correctly for the date `' . $testTime . '` because the days are not part of the allowed weekdays. ',
                 'expects' => [
                     'result' => [
                         'beginning' => '2021-01-02 12:00:00',
@@ -1476,7 +1456,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testTime,
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1493,18 +1473,18 @@ class DailyTimerTest extends TestCase
         }
         // 2 check each weekday separately
         foreach ([
-                     64 => '2020-12-27',
-                     1 => '2020-12-28',
-                     2 => '2020-12-29',
-                     4 => '2020-12-30',
-                     8 => '2020-12-31',
-                     16 => '2021-01-01',
-                     32 => '2021-01-02',
-                 ] as $weekday => $testDate) {
-            $nextWeek = DateTime::createFromFormat('Y-m-d', $testDate);
-            $nextWeek->add(new DateInterval('P7D'));
+            64 => '2020-12-27',
+            1 => '2020-12-28',
+            2 => '2020-12-29',
+            4 => '2020-12-30',
+            8 => '2020-12-31',
+            16 => '2021-01-01',
+            32 => '2021-01-02',
+        ] as $weekday => $testDate) {
+            $nextWeek = \DateTime::createFromFormat('Y-m-d', $testDate);
+            $nextWeek->add(new \DateInterval('P7D'));
             $result[] = [
-                'message' => 'The nextRange is detected correctly on the same day for the date `' . $testDate . ' 11:59:59`, because it lies in the future.',
+                'The nextRange is detected correctly on the same day for the date `' . $testDate . ' 11:59:59`, because it lies in the future.',
                 'expects' => [
                     'result' => [
                         'beginning' => $testDate . ' 12:00:00',
@@ -1516,7 +1496,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testDate . ' 11:59:59',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1531,7 +1511,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The nextRange (next week) is detected correctly for the date `' . $testDate . ' 13:00:00`, because the range on the current date ist touched.',
+                'The nextRange (next week) is detected correctly for the date `' . $testDate . ' 13:00:00`, because the range on the current date ist touched.',
                 'expects' => [
                     'result' => [
                         'beginning' => $nextWeek->format('Y-m-d') . ' 12:00:00',
@@ -1543,7 +1523,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testDate . ' 13:00:00',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1558,7 +1538,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The randomly selected nextRange (next week) is detected correctly for the date `' . $testDate . ' 14:00:01`, because the range of the current day ended earlier. with the ',
+                'The randomly selected nextRange (next week) is detected correctly for the date `' . $testDate . ' 14:00:01`, because the range of the current day ended earlier. with the ',
                 'expects' => [
                     'result' => [
                         'beginning' => $nextWeek->format('Y-m-d') . ' 12:00:00',
@@ -1570,7 +1550,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testDate . ' 14:00:01',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1590,20 +1570,20 @@ class DailyTimerTest extends TestCase
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach ([
-                         'UTC',
-                         'Europe/Berlin',
-                         'Australia/Eucla',
-                         'America/Detroit',
-                         'Pacific/Fiji',
-                         'Indian/Chagos',
-                     ] as $timezoneName) {
+                'UTC',
+                'Europe/Berlin',
+                'Australia/Eucla',
+                'America/Detroit',
+                'Pacific/Fiji',
+                'Indian/Chagos',
+            ] as $timezoneName) {
                 $check = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-27 11:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
+                    'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 12:00:00',
@@ -1615,7 +1595,7 @@ class DailyTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-27 11:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1629,9 +1609,9 @@ class DailyTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $check->add(new DateInterval('PT2H'));
+                $check->add(new \DateInterval('PT2H'));
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 12:00:00',
@@ -1643,7 +1623,7 @@ class DailyTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-27 11:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'startTimeSeconds' => 50400, // =14:00 //// in seconds relative to 0:00
@@ -1661,18 +1641,18 @@ class DailyTimerTest extends TestCase
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2020-12-27 11:00:00',
-                     '2020-12-27 13:00:00',
-                     '2020-12-27 18:00:00',
-                     '2022-12-27 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $timeString) {
+            '0001-01-01 00:00:00',
+            '2020-12-27 11:00:00',
+            '2020-12-27 13:00:00',
+            '2020-12-27 18:00:00',
+            '2022-12-27 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $timeString) {
             if (($timeString >= '2020-12-28 13:00:00') &&
                 ($timeString >= '2020-12-27 11:00:00')
             ) {
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected with ultimate-ending `' . $timeString .
+                    'The nextRange is correctly detected with ultimate-ending `' . $timeString .
                         '` with checkdate `2020-12-27 11:00:00`. ',
                     'expects' => [
                         'result' => [
@@ -1685,7 +1665,7 @@ class DailyTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-27 11:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1704,7 +1684,7 @@ class DailyTimerTest extends TestCase
                 ($timeString <= '2020-12-27 11:00:00')
             ) {
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected with ultimate-beginning `' . $timeString .
+                    'The nextRange is correctly detected with ultimate-beginning `' . $timeString .
                         '` with checkdate `2020-12-27 11:00:00`. ',
                     'expects' => [
                         'result' => [
@@ -1717,7 +1697,7 @@ class DailyTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-27 11:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'startTimeSeconds' => 50400, // =14:00 //// in seconds relative to 0:00
@@ -1737,17 +1717,15 @@ class DailyTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderNextActive
-     * @test
-     */
+    #[DataProvider('dataProviderNextActive')]
+    #[Test]
     public function nextActive(
         $message,
         $expects,
         $params
     ) {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = $params['value'];
@@ -1756,7 +1734,7 @@ class DailyTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
@@ -1768,7 +1746,7 @@ class DailyTimerTest extends TestCase
         $result = [];
         // 1. rondomly Test
         $result[] = [
-            'message' => 'The prevRange in this example is correctly detected. ',
+            'The prevRange in this example is correctly detected. ',
             'expects' => [
                 'result' => [
                     'beginning' => '2020-12-27 12:00:00',
@@ -1780,7 +1758,7 @@ class DailyTimerTest extends TestCase
                 'value' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-27 15:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'setting' => [
                     'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1796,14 +1774,14 @@ class DailyTimerTest extends TestCase
         ];
         // 1.b check the weekend-Funktion
         foreach ([
-                     '2020-12-27 15:00:00',
-                     '2020-12-27 15:00:00',
-                     '2020-12-30 12:00:00',
-                     '2021-01-01 12:00:00',
-                     '2021-01-02 11:59:59',
-                 ] as $testTime) {
+            '2020-12-27 15:00:00',
+            '2020-12-27 15:00:00',
+            '2020-12-30 12:00:00',
+            '2021-01-01 12:00:00',
+            '2021-01-02 11:59:59',
+        ] as $testTime) {
             $result[] = [
-                'message' => 'The prevRange is detected correctly for the date `' . $testTime . '` because the days are not part of the allowed weekdays. ',
+                'The prevRange is detected correctly for the date `' . $testTime . '` because the days are not part of the allowed weekdays. ',
                 'expects' => [
                     'result' => [
                         'beginning' => '2020-12-27 12:00:00',
@@ -1815,7 +1793,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testTime,
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1832,18 +1810,18 @@ class DailyTimerTest extends TestCase
         }
         // 2 check each weekday separately
         foreach ([
-                     64 => '2020-12-27',
-                     1 => '2020-12-28',
-                     2 => '2020-12-29',
-                     4 => '2020-12-30',
-                     8 => '2020-12-31',
-                     16 => '2021-01-01',
-                     32 => '2021-01-02',
-                 ] as $weekday => $testDate) {
-            $prevWeek = DateTime::createFromFormat('Y-m-d', $testDate);
-            $prevWeek->sub(new DateInterval('P7D'));
+            64 => '2020-12-27',
+            1 => '2020-12-28',
+            2 => '2020-12-29',
+            4 => '2020-12-30',
+            8 => '2020-12-31',
+            16 => '2021-01-01',
+            32 => '2021-01-02',
+        ] as $weekday => $testDate) {
+            $prevWeek = \DateTime::createFromFormat('Y-m-d', $testDate);
+            $prevWeek->sub(new \DateInterval('P7D'));
             $result[] = [
-                'message' => 'The prevRange is detected correctly on the same day for the date `' . $testDate . ' 11:59:59`, because it lies in the future.',
+                'The prevRange is detected correctly on the same day for the date `' . $testDate . ' 11:59:59`, because it lies in the future.',
                 'expects' => [
                     'result' => [
                         'beginning' => $testDate . ' 12:00:00',
@@ -1855,7 +1833,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testDate . ' 14:00:01',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1870,7 +1848,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The prevRange (next week) is detected correctly for the date `' . $testDate . ' 13:00:00`, because the range on the current date ist touched.',
+                'The prevRange (next week) is detected correctly for the date `' . $testDate . ' 13:00:00`, because the range on the current date ist touched.',
                 'expects' => [
                     'result' => [
                         'beginning' => $prevWeek->format('Y-m-d') . ' 12:00:00',
@@ -1882,7 +1860,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testDate . ' 13:00:00',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1897,7 +1875,7 @@ class DailyTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The randomly selected prevRange (next week) is detected correctly for the date `' . $testDate . ' 11:59:59`, because the range of the current day ended earlier. with the ',
+                'The randomly selected prevRange (next week) is detected correctly for the date `' . $testDate . ' 11:59:59`, because the range of the current day ended earlier. with the ',
                 'expects' => [
                     'result' => [
                         'beginning' => $prevWeek->format('Y-m-d') . ' 12:00:00',
@@ -1909,7 +1887,7 @@ class DailyTimerTest extends TestCase
                     'value' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $testDate . ' 11:59:59',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'setting' => [
                         'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1927,20 +1905,20 @@ class DailyTimerTest extends TestCase
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach ([
-                         'UTC',
-                         'Europe/Berlin',
-                         'Australia/Eucla',
-                         'America/Detroit',
-                         'Pacific/Fiji',
-                         'Indian/Chagos',
-                     ] as $timezoneName) {
+                'UTC',
+                'Europe/Berlin',
+                'Australia/Eucla',
+                'America/Detroit',
+                'Pacific/Fiji',
+                'Indian/Chagos',
+            ] as $timezoneName) {
                 $check = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-27 15:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
+                    'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 12:00:00',
@@ -1952,7 +1930,7 @@ class DailyTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-27 15:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -1966,9 +1944,9 @@ class DailyTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $check->add(new DateInterval('PT2H'));
+                $check->add(new \DateInterval('PT2H'));
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => [
                             'beginning' => '2020-12-27 12:00:00',
@@ -1980,7 +1958,7 @@ class DailyTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-27 15:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'startTimeSeconds' => 50400, // =14:00 //// in seconds relative to 0:00
@@ -1998,15 +1976,15 @@ class DailyTimerTest extends TestCase
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2020-12-27 11:00:00',
-                     '2020-12-27 13:00:00',
-                     '2020-12-27 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $timeString) {
+            '0001-01-01 00:00:00',
+            '2020-12-27 11:00:00',
+            '2020-12-27 13:00:00',
+            '2020-12-27 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $timeString) {
             if ($timeString >= '2020-12-27 14:00:00') {
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected with the ultimate ending at `'.$timeString.
+                    'The prevRange is correctly detected with the ultimate ending at `' . $timeString .
                         '` and with the startvalue `2020-12-27 15:00:00`.',
                     'expects' => [
                         'result' => [
@@ -2019,7 +1997,7 @@ class DailyTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-27 15:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'startTimeSeconds' => 43200, // =12:00 // in seconds relative to 0:00
@@ -2036,50 +2014,48 @@ class DailyTimerTest extends TestCase
             }
             if ($timeString <= '2020-12-27 12:00:00') {
                 $result[] = [
-                'message' => 'The prevRange is correctly detected with the ultimate beginning at `'.$timeString.
-                    '` and with the startvalue `2020-12-27 15:00:00`.',
-                'expects' => [
-                    'result' => [
-                        'beginning' => '2020-12-27 12:00:00',
-                        'ending' => '2020-12-27 14:00:00',
-                        'exist' => true,
+                    'The prevRange is correctly detected with the ultimate beginning at `' . $timeString .
+                        '` and with the startvalue `2020-12-27 15:00:00`.',
+                    'expects' => [
+                        'result' => [
+                            'beginning' => '2020-12-27 12:00:00',
+                            'ending' => '2020-12-27 14:00:00',
+                            'exist' => true,
+                        ],
                     ],
-                ],
-                'params' => [
-                    'value' => date_create_from_format(
-                        TimerInterface::TIMER_FORMAT_DATETIME,
-                        '2020-12-27 15:00:00',
-                        new DateTimeZone('Europe/Berlin')
-                    ),
-                    'setting' => [
-                        'startTimeSeconds' => 50400, // =14:00 //// in seconds relative to 0:00
-                        'durationMinutes' => -120, // =2Std
-                        'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
-                        // general
-                        'useTimeZoneOfFrontend' => false,
-                        'timeZoneOfEvent' => 'Europe/Berlin',
-                        'ultimateBeginningTimer' => $timeString, // Variation
-                        'ultimateEndingTimer' => '2020-12-27 15:00:00',
+                    'params' => [
+                        'value' => date_create_from_format(
+                            TimerInterface::TIMER_FORMAT_DATETIME,
+                            '2020-12-27 15:00:00',
+                            new \DateTimeZone('Europe/Berlin')
+                        ),
+                        'setting' => [
+                            'startTimeSeconds' => 50400, // =14:00 //// in seconds relative to 0:00
+                            'durationMinutes' => -120, // =2Std
+                            'activeWeekday' => 96, // =only sunday and saturday 2020-12-27 is a sunday
+                            // general
+                            'useTimeZoneOfFrontend' => false,
+                            'timeZoneOfEvent' => 'Europe/Berlin',
+                            'ultimateBeginningTimer' => $timeString, // Variation
+                            'ultimateEndingTimer' => '2020-12-27 15:00:00',
+                        ],
                     ],
-                ],
-            ];
+                ];
             }
         }
 
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderPrevActive
-     * @test
-     */
+    #[DataProvider('dataProviderPrevActive')]
+    #[Test]
     public function prevActive(
         $message,
         $expects,
         $params
     ) {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = $params['value'];
@@ -2088,7 +2064,7 @@ class DailyTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );

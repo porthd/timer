@@ -1,3 +1,0 @@
-@import 'EXT:timer/Configuration/TypoScript/Holidaycalendar/HolidaycalendarSetup/LibFluidHolidaycalendar.typoscript'
-@import 'EXT:timer/Configuration/TypoScript/Holidaycalendar/HolidaycalendarSetup/HolidaycalendarFrontend.typoscript'
-@import 'EXT:timer/Configuration/TypoScript/Holidaycalendar/HolidaycalendarSetup/HolidaycalendarBackend.typoscript'

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\DataProcessing\Trait;
 
-use DateTime;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /***************************************************************
@@ -26,15 +25,12 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * Fetch records from the database, using the default .select syntax from TypoScript.
  *
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
  * Example TypoScript configuration:
- *
- *
  */
 interface GeneralDataProcessorTraitInterface
 {
@@ -55,15 +51,14 @@ interface GeneralDataProcessorTraitInterface
     /**
      * @param int $cacheTime
      * @param bool $cacheCalc
-     * @param DateTime $dateTimeStopCase
+     * @param \DateTime $dateTimeStopCase
      * @param int $currentTimestamp
      * @return int|null
-     *
      */
     public function calculateSimpleTimeDependedCacheTime(
-        int      $cacheTime,
-        bool     $cacheCalc,
-        DateTime $dateTimeStopCase,
-        int      $currentTimestamp
+        int $cacheTime,
+        bool $cacheCalc,
+        \DateTime $dateTimeStopCase,
+        int $currentTimestamp
     );
 }

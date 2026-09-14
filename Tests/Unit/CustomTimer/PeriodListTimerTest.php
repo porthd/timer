@@ -23,6 +23,10 @@ namespace Porthd\Timer\Tests\Unit\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\DailyTimer;
 use Porthd\Timer\CustomTimer\DatePeriodTimer;
 use Porthd\Timer\CustomTimer\DefaultTimer;
@@ -34,23 +38,17 @@ use Porthd\Timer\CustomTimer\RangeListTimer;
 use Porthd\Timer\CustomTimer\SunriseRelTimer;
 use Porthd\Timer\CustomTimer\WeekdayInMonthTimer;
 use Porthd\Timer\CustomTimer\WeekdaylyTimer;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Core\Bootstrap;
-use DateInterval;
-use DateTime;
-
-use DateTimeZone;
-use PHPUnit\Framework\TestCase;
-use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
+
 use Porthd\Timer\Domain\Repository\ListingRepository;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\ConfigurationUtility;
-use Porthd\Timer\Utilities\GeneralTimerUtility;
+use Psr\Log\NullLogger;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Core\ApplicationContext;
+use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\FailsafePackageManager;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -68,11 +66,10 @@ class PeriodListTimerTest extends TestCase
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
 
-
     /**
      * @var PeriodListTimer
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
@@ -133,7 +130,6 @@ class PeriodListTimerTest extends TestCase
         );
     }
 
-
     protected function initializeCachingConfiguration(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][TimerConst::CACHE_IDENT_TIMER_YAMLLIST] ??= [];
@@ -147,13 +143,17 @@ class PeriodListTimerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // Serve YamlFileLoader for every makeInstance() the timer + sub-timers make
+        // (see RangeListTimerTest): a one-shot addInstance() cannot cover the
+        // unbounded sub-timer resolutions.
+        GeneralUtility::setContainer($this->buildYamlFileLoaderContainer());
         $this->initializeEnvoiroment();
         $this->initializeCachingConfiguration();
         //        $myCacheInstance->flushCaches(); // flush caches to create them
         //        $myCacheInstance->getCache(TimerConst::CACHE_IDENT_TIMER_YAMLLIST);
         $this->simulatePartOfGlobalsTypo3Array();
         /** @var ListingRepository $listingRepository */
-        $yamlFileLoader = new YamlFileLoader();
+        $yamlFileLoader = new YamlFileLoader(new NullLogger());
         $this->subject = new PeriodListTimer(null, $yamlFileLoader);
 
         ExtensionManagementUtility::setPackageManager(new PackageManager(new DependencyOrderingService()));
@@ -161,65 +161,89 @@ class PeriodListTimerTest extends TestCase
 
     protected function tearDown(): void
     {
+        GeneralUtility::setContainer(new class () implements \Psr\Container\ContainerInterface {
+            public function get(string $id): mixed
+            {
+                throw new class ('Empty container') extends \RuntimeException implements \Psr\Container\NotFoundExceptionInterface {};
+            }
+            public function has(string $id): bool
+            {
+                return false;
+            }
+        });
         $this->resolveGlobalsTypo3Array();
         parent::tearDown();
     }
 
-    /**
-     * the ultimate green test
-     * @test
-     */
-    public function checkIfIAmGreen()
+    private function buildYamlFileLoaderContainer(): \Psr\Container\ContainerInterface
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        return new class (new YamlFileLoader(new NullLogger())) implements \Psr\Container\ContainerInterface {
+            public function __construct(private readonly YamlFileLoader $yamlFileLoader) {}
+
+            public function get(string $id): mixed
+            {
+                if ($id === YamlFileLoader::class) {
+                    return $this->yamlFileLoader;
+                }
+                throw new class ('Container has no entry for ' . $id) extends \RuntimeException implements \Psr\Container\NotFoundExceptionInterface {};
+            }
+
+            public function has(string $id): bool
+            {
+                return $id === YamlFileLoader::class;
+            }
+        };
     }
 
     /**
-     * @test
+     * the ultimate green test
      */
+    #[Test]
+    public function checkIfIAmGreen()
+    {
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+    }
+
+    #[Test]
     public function selfName()
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::NAME_TIMER,
             $this->subject::selfName(),
             'The name musst be defined.'
         );
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getSelectorItem()
     {
         $result = $this->subject::getSelectorItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             1,
             count($result),
             'The array  must contain at least two items.'
         );
-        $this->assertIsString(
-            $result[0],
+        self::assertIsString(
+            $result['label'],
             'The first item must be an string.'
         );
-        $this->assertEquals(
-            $result[1],
+        self::assertEquals(
+            $result['value'],
             self::NAME_TIMER,
             'The second term must the name of the timer.'
         );
     }
-
 
     public static function dataProviderGetTimeZoneOfEvent()
     {
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -231,7 +255,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -243,7 +267,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -256,7 +280,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is 0. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -269,7 +293,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active frontend will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
+            'The timezone of the active frontend will be shown, because the active-part of the parameter is 1. The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -283,7 +307,7 @@ class PeriodListTimerTest extends TestCase
         ];
         foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
             $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                'The active timezone will be shown, because the parameter for it is active `' .
                     print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
                 [
                     'result' => 'Lauder/Furz',
@@ -298,7 +322,7 @@ class PeriodListTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -311,7 +335,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -326,20 +350,18 @@ class PeriodListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
+    #[DataProvider('dataProviderGetTimeZoneOfEvent')]
+    #[Test]
     public function getTimeZoneOfEvent($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
 
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $result,
                 $message
@@ -347,46 +369,44 @@ class PeriodListTimerTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             count($result),
             'The array  must contain one Item.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             array_keys($result),
             [self::NAME_TIMER],
             'The key must the name of the timer.'
         );
-        $this->assertIsString(
+        self::assertIsString(
             $result[self::NAME_TIMER],
             'The value must be type of string.'
         );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
-        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+        if (str_starts_with($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
                 );
         } else {
-            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            if (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
                 $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                     substr(
                         $filePath,
                         strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                     );
-                $this->assertTrue(
+                self::assertTrue(
                     (false),
                     'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. '
                 );
@@ -395,13 +415,13 @@ class PeriodListTimerTest extends TestCase
             }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue(
+        self::assertTrue(
             $flag,
             'The file with the flexform content exist.'
         );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue(
+        self::assertTrue(
             (!(!$flexArray)),
             'The filecontent is valid xml.'
         );
@@ -412,17 +432,17 @@ class PeriodListTimerTest extends TestCase
         $testDate = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
             '2020-12-31 12:00:00',
-            new DateTimeZone('Europe/Berlin')
+            new \DateTimeZone('Europe/Berlin')
         );
         $minusOneSecond = clone $testDate;
-        $minusOneSecond->sub(new DateInterval('PT1S'));
+        $minusOneSecond->sub(new \DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
-        $addOneSecond->add(new DateInterval('PT1S'));
+        $addOneSecond->add(new \DateInterval('PT1S'));
         $rest = [];
         $result = [];
 
         $result[] = [
-            'message' => 'The testdate is valid, if the testdate is in the middle of the ultimate range..',
+            'The testdate is valid, if the testdate is in the middle of the ultimate range..',
             'expects' => [
                 'result' => true,
             ],
@@ -437,7 +457,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -452,7 +472,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
+            'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
             'expects' => [
                 'result' => false,
             ],
@@ -467,7 +487,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -482,7 +502,7 @@ class PeriodListTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
+            'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
             'expects' => [
                 'result' => false,
             ],
@@ -499,18 +519,16 @@ class PeriodListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProvider_isAllowedInRange
-     * @test
-     */
+    #[DataProvider('dataProvider_isAllowedInRange')]
+    #[Test]
     public function isAllowedInRange($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
@@ -524,14 +542,14 @@ class PeriodListTimerTest extends TestCase
     public static function dataProviderValidateGeneralByVariationArgumentsInParam()
     {
         $rest = [
-            'yamlPeriodFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/',)),
+            'yamlPeriodFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/')),
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
-            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
-            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
-            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/')),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/')),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/')),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/')),
         ];
         $result = [];
         // variation of obsolete parameter
@@ -544,7 +562,7 @@ class PeriodListTimerTest extends TestCase
         foreach ($list as $unsetParam => $expects
         ) {
             $item = [
-                'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
+                'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -564,22 +582,22 @@ class PeriodListTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false],
-                     [false, true],
-                     ['false', true],
-                     [new Datetime(), false],
-                     ['hallo', false],
-                     ['0', true],
-                     [0.0, true],
-                     ["0.0", false],
-                     ['true', true],
-                     ['1', true],
-                     [1, true],
-                     [1.0, true],
-                     ['1.0', false],
-                 ] as $value) {
+            [null, false],
+            [false, true],
+            ['false', true],
+            [new \Datetime(), false],
+            ['hallo', false],
+            ['0', true],
+            [0.0, true],
+            ['0.0', false],
+            ['true', true],
+            ['1', true],
+            [1, true],
+            [1.0, true],
+            ['1.0', false],
+        ] as $value) {
             $result[] = [
-                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
+                'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
                     'result' => $value[1],
                 ],
@@ -597,13 +615,13 @@ class PeriodListTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     'UTC' => true,
-                     '' => false,
-                     'Europe/Berlin' => true,
-                     'Kumpel/Dumpel' => false,
-                 ] as $zoneVal => $expects) {
+            'UTC' => true,
+            '' => false,
+            'Europe/Berlin' => true,
+            'Kumpel/Dumpel' => false,
+        ] as $zoneVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
@@ -622,13 +640,13 @@ class PeriodListTimerTest extends TestCase
         }
         // Variation for ultimateBeginningTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -647,13 +665,13 @@ class PeriodListTimerTest extends TestCase
         }
         // Variation for ultimateEndingTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -673,17 +691,15 @@ class PeriodListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateGeneralByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateGeneralByVariationArgumentsInParam')]
+    #[Test]
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['rest'], $params['optional'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -703,20 +719,20 @@ class PeriodListTimerTest extends TestCase
             'ultimateEndingTimer' => '9999-12-31 23:59:59',
         ];
         $rest = [
-            'yamlPeriodFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/',)),
+            'yamlPeriodFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Yaml/Example_PeriodListTimer.yaml'), strlen('var/www/html/')),
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
-            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
-            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
-            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/')),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/')),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/')),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/')),
         ];
 
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The test randomly is correct.',
+            'The test randomly is correct.',
             'expects' => [
                 'result' => true,
             ],
@@ -729,7 +745,7 @@ class PeriodListTimerTest extends TestCase
         // check for optional
         foreach ($optional as $myUnset) {
             $item = [
-                'message' => 'The test does not fails, because only one parameter `' . $myUnset . '` is missing.The list is already defined.',
+                'The test does not fails, because only one parameter `' . $myUnset . '` is missing.The list is already defined.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -745,18 +761,16 @@ class PeriodListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateSpeciallByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateSpeciallByVariationArgumentsInParam')]
+    #[Test]
     public function validateSpeciallByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $testPath = realpath(__DIR__ . '/../../../../');
             $testRealPath = realpath(__DIR__ . '/../../../../../web/');
-            $yamlFileLoader = new YamlFileLoader();
+            $yamlFileLoader = new YamlFileLoader(new NullLogger());
 
             $TestIncludeFinder = $this->getMockBuilder(PeriodListTimer::class)
                 ->setConstructorArgs([$yamlFileLoader])
@@ -765,13 +779,13 @@ class PeriodListTimerTest extends TestCase
             $TestIncludeFinder
                 ->expects(self::any())
                 ->method('getExtentionPathByEnviroment')
-                ->will(self::returnValue($testPath));
+                ->willReturn($testPath);
             $TestIncludeFinder
                 ->expects(self::any())
                 ->method('getPublicPathByEnviroment')
-                ->will(self::returnValue($testRealPath));
+                ->willReturn($testRealPath);
             $paramTest = array_merge($params['required'], $params['optional'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $TestIncludeFinder->validate($paramTest),
                 $message
@@ -793,10 +807,10 @@ class PeriodListTimerTest extends TestCase
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
-            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
-            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
-            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/')),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/')),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/')),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/')),
         ];
 
         //                -
@@ -830,17 +844,17 @@ class PeriodListTimerTest extends TestCase
          * Aktiv            hidden
          */
         foreach ([
-                     ['date' => '2022-08-24 00:00:00', 'expects' => true],
-                     ['date' => '2022-08-24 23:59:59', 'expects' => true],
-                     ['date' => '2022-08-25 00:00:00', 'expects' => false],
-                     ['date' => '2022-10-16 23:59:59', 'expects' => false],
-                     ['date' => '2022-10-17 00:00:00', 'expects' => true],
-                     ['date' => '2022-10-28 23:59:59', 'expects' => true],
-                     ['date' => '2022-10-29 00:00:00', 'expects' => false],
-                 ] as $params
+            ['date' => '2022-08-24 00:00:00', 'expects' => true],
+            ['date' => '2022-08-24 23:59:59', 'expects' => true],
+            ['date' => '2022-08-25 00:00:00', 'expects' => false],
+            ['date' => '2022-10-16 23:59:59', 'expects' => false],
+            ['date' => '2022-10-17 00:00:00', 'expects' => true],
+            ['date' => '2022-10-28 23:59:59', 'expects' => true],
+            ['date' => '2022-10-29 00:00:00', 'expects' => false],
+        ] as $params
         ) {
             $result[] = [
-                'message' => 'The testValue `' . $params['date'] . '` defines an ' .
+                'The testValue `' . $params['date'] . '` defines an ' .
                     ($params['expects'] ? 'ACTIVE' : 'INACTIVE') . ' time. The testvalue is ' .
                     ($params['expects'] ? '' : 'not ') . 'part of an active interval.',
                 'expects' => [
@@ -851,7 +865,7 @@ class PeriodListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $params['date'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'general' => $general,
                     'required' => $rest,
@@ -862,14 +876,12 @@ class PeriodListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderIsActive
-     * @test
-     */
+    #[DataProvider('dataProviderIsActive')]
+    #[Test]
     public function isActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $coreCache = Bootstrap::createCache('core', false);
             $packageCache = Bootstrap::createPackageCache($coreCache);
@@ -879,19 +891,18 @@ class PeriodListTimerTest extends TestCase
             );
             $configParams = array_merge($params['required'], $params['optional'], $params['general']);
             $value = clone $params['testValueObj'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isActive($value, $configParams),
                 'isActive: ' . $message
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $params['testValueObj'],
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
         }
     }
-
 
     public static function dataProviderNextActive()
     {
@@ -906,10 +917,10 @@ class PeriodListTimerTest extends TestCase
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
-            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
-            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
-            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/')),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/')),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/')),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/')),
         ];
 
         $result = [];
@@ -943,19 +954,19 @@ class PeriodListTimerTest extends TestCase
         //            zone: 'Europe/Berlin'
 
         foreach ([
-                     ['date' => '2022-07-13 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-                     ['date' => '2022-07-14 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                     ['date' => '2022-07-15 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                     ['date' => '2022-08-24 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                     ['date' => '2022-10-16 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-                     ['date' => '2022-10-17 00:01:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-                     ['date' => '2022-10-18 00:00:01', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-                 ] as $item
+            ['date' => '2022-07-13 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+            ['date' => '2022-07-14 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+            ['date' => '2022-07-15 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+            ['date' => '2022-08-24 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+            ['date' => '2022-08-25 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+            ['date' => '2022-10-16 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+            ['date' => '2022-10-17 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
+            ['date' => '2022-10-17 00:01:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
+            ['date' => '2022-10-18 00:00:01', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
+        ] as $item
         ) {
             $result[] = [
-                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].',
+                'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].',
                 'expects' => [
                     'result' => [
                         'beginning' => $item['begin'],
@@ -968,7 +979,7 @@ class PeriodListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $item['date'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'general' => $general,
                     'required' => $rest,
@@ -979,14 +990,12 @@ class PeriodListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderNextActive
-     * @test
-     */
+    #[DataProvider('dataProviderNextActive')]
+    #[Test]
     public function nextActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['required'], $params['optional'], $params['general']);
             $testValue = clone $params['testValueObj'];
@@ -995,7 +1004,7 @@ class PeriodListTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );
@@ -1015,10 +1024,10 @@ class PeriodListTimerTest extends TestCase
             'yamlPeriodFalRelation' => '0',
         ];
         $optional = [
-            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/',)),
-            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/',)),
-            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/',)),
-            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/',)),
+            'calendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/js/caleandar.js'), strlen('var/www/html/')),
+            'customCalendarJsFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.js'), strlen('var/www/html/')),
+            'calendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/caleandar-master/css/theme1.css'), strlen('var/www/html/')),
+            'customCalendarCssFilePath' => '/..' . substr(realpath(__DIR__ . '/../../../../timer/Resources/Public/Javascript/CustomCalendar.css'), strlen('var/www/html/')),
         ];
 
         $result = [];
@@ -1052,17 +1061,17 @@ class PeriodListTimerTest extends TestCase
         //            zone: 'Europe/Berlin'
 
         foreach ([
-                     ['date' => '2023-01-07 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
-                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                     ['date' => '2022-10-29 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                     ['date' => '2022-10-28 23:59:59', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-                     ['date' => '2022-10-17 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-                     ['date' => '2022-08-25 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
-                     ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
-                 ] as $item
+            ['date' => '2023-01-07 00:00:00', 'begin' => '2022-12-23 00:00:00', 'end' => '2023-01-06 23:59:59'],
+            ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+            ['date' => '2022-10-29 00:00:00', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+            ['date' => '2022-10-28 23:59:59', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+            ['date' => '2022-10-17 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+            ['date' => '2022-08-25 00:00:00', 'begin' => '2022-07-14 00:00:00', 'end' => '2022-08-24 23:59:59'],
+            ['date' => '2023-01-06 23:59:59', 'begin' => '2022-10-17 00:00:00', 'end' => '2022-10-28 23:59:59'],
+        ] as $item
         ) {
             $result[] = [
-                'message' => 'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].'
+                'The testValue `' . $item['date'] . '` leads to the next range [`' . $item['begin'] . '`, `' . $item['end'] . '`].'
                     . ' ' . (empty($item['msg']) ? '' : $item['msg']),
                 'expects' => [
                     'result' => [
@@ -1076,7 +1085,7 @@ class PeriodListTimerTest extends TestCase
                     'testValueObj' => date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $item['date'],
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     ),
                     'general' => $general,
                     'required' => $rest,
@@ -1087,14 +1096,12 @@ class PeriodListTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderPrevActive
-     * @test
-     */
+    #[DataProvider('dataProviderPrevActive')]
+    #[Test]
     public function prevActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['required'], $params['optional'], $params['general']);
             $testValue = clone $params['testValueObj'];
@@ -1103,7 +1110,7 @@ class PeriodListTimerTest extends TestCase
             $flag = ($result->getBeginning()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['beginning']);
             $flag = $flag && ($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['result']['ending']);
             $flag = $flag && ($result->hasResultExist() === $expects['result']['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prevActive: ' . $message . "\nExpected: : " . print_r($expects['result'], true)
             );

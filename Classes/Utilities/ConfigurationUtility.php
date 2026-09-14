@@ -24,8 +24,8 @@ namespace Porthd\Timer\Utilities;
  ***************************************************************/
 
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Exception\TimerException;
+use Porthd\Timer\Interfaces\TimerInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -42,7 +42,6 @@ class ConfigurationUtility
      * $listOfCustomTimerClasses[YearlyTimer::timerIndexValue()] = DailyTimer::class;
      *
      * @param array<mixed> $listOfTimerClasses
-     * @return void
      * @throws TimerException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
@@ -56,6 +55,7 @@ class ConfigurationUtility
                 ExtensionConfiguration::class
             )->get(TimerConst::EXTENSION_NAME);
         }
+        $configBeforeMerge = TcaUtility::$timerConfig;
 
         // add hooks for the datadigger to the configuration
         foreach ($listOfTimerClasses as $key => $className) {
@@ -69,9 +69,28 @@ class ConfigurationUtility
                 true
             );
         }
-        GeneralUtility::makeInstance(
-            ExtensionConfiguration::class
-        )->set(TimerConst::EXTENSION_NAME, TcaUtility::$timerConfig);
+
+        // PURPOSE: Persist the merged timer configuration only when the merge really changed something.
+        //
+        // ADVANTAGES:
+        //   - No write to config/system/settings.php on every single request
+        //   - Removes the read/write race that made concurrent requests read a half-written
+        //     settings file (ConfigurationManager::getLocalConfiguration() then returns int
+        //     instead of array and the request dies with a TypeError)
+        //
+        // DISADVANTAGES / TRADE-OFFS:
+        //   - One additional array copy per call
+        //
+        // PRECONDITIONS (data requirements):
+        //   - TcaUtility::$timerConfig holds the stored extension configuration before merging
+        //
+        // EDGE CASES:
+        //   - First call after adding a custom timer still writes once, all later calls do not
+        if (TcaUtility::$timerConfig !== $configBeforeMerge) {
+            GeneralUtility::makeInstance(
+                ExtensionConfiguration::class
+            )->set(TimerConst::EXTENSION_NAME, TcaUtility::$timerConfig);
+        }
     }
 
     /**
@@ -83,12 +102,12 @@ class ConfigurationUtility
      *
      * @param mixed &$check
      * @param array<mixed> $nestList
-     * @param string $leaf
+     * @param mixed $leaf the value to insert; may be a scalar (e.g. class name) or a nested array subtree
      * @param bool $flagException
      * @return bool
      * @throws TimerException
      */
-    public static function expandNestedArray(&$check, array $nestList, string $leaf = '', bool $flagException = false)
+    public static function expandNestedArray(&$check, array $nestList, mixed $leaf = '', bool $flagException = false)
     {
         $helper = &$check;  // the & is needed to get a point on a array getting by reference
         $flag = true;
@@ -126,12 +145,10 @@ class ConfigurationUtility
         return $flag;
     }
 
-
     /**
      * @param int $addTimerFlags
      * @param array<mixed> $listOfTimerClasses
      * @param bool $throwException
-     * @return void
      * @throws TimerException
      */
     public static function addExtLocalconfTimerAdding(

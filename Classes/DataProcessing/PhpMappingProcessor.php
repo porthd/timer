@@ -23,7 +23,6 @@ namespace Porthd\Timer\DataProcessing;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Exception\MappingException;
@@ -43,7 +42,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
  *
  * Example TypoScript configuration:
- *
  */
 class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
@@ -104,7 +102,6 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
     protected const CHECKER_FUNC_STATIC = '::'; // only one allowed, but escapable by '\::' in strings
     protected const OUTPUT_REMAPPED_DATA = 'remapped';
 
-
     /**
      * @var string[]
      */
@@ -155,9 +152,8 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
      */
     public function __construct(
         FrontendInterface $cache,
-        YamlFileLoader    $yamlFileLoader
-    )
-    {
+        YamlFileLoader $yamlFileLoader
+    ) {
         $this->cache = $cache;
         $this->yamlFileLoader = $yamlFileLoader;
     }
@@ -174,11 +170,10 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
      */
     public function process(
         ContentObjectRenderer $cObj,
-        array                 $contentObjectConfiguration,
-        array                 $processorConfiguration,
-        array                 $processedData
-    )
-    {
+        array $contentObjectConfiguration,
+        array $processorConfiguration,
+        array $processedData
+    ) {
         $this->setParameter($cObj);
 
         // import the config from a file
@@ -219,7 +214,7 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
             );
         }
         $dataType = $this->getArgument($processorConfiguration, self::ATTR_INPUT_TYPE);
-        [$limiterInput, $limiterData,] = $this->getLimiterArgument($processorConfiguration);
+        [$limiterInput, $limiterData] = $this->getLimiterArgument($processorConfiguration);
         if (!empty($limiterData)) {
             // override the default-definition
             $this->lim = array_merge($this->lim, $limiterData);
@@ -250,7 +245,6 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
             );
         }
 
-
         // use variable by reference to prevent the array-copy-actions of PHP bei definig the input-data
         $listInput = array_filter(
             array_map(
@@ -274,7 +268,6 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
         }
         // reference of $data has changed
 
-
         // the results derived from the mapping and the origin-datas
         $result = [];
         // The data are type of record or list of rows
@@ -294,7 +287,6 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
             );
 
         }
-
 
         // the caching-times is defined or depends on default-value
         if (($cacheCalc !== false) ||
@@ -351,13 +343,11 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
 
     /**
      * @param ContentObjectRenderer $cObj
-     * @return void
      */
     protected function setParameter(ContentObjectRenderer $cObj)
     {
         $this->cObj = $cObj;
     }
-
 
     /**
      * @param array<mixed> $configurationPart
@@ -418,7 +408,6 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
 
     /**
      * @param string[] $limiter
-     * @return void
      */
     public function updateLimiter(array $limiter)
     {
@@ -493,7 +482,7 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
             }
 
             if ((is_string($origin)) &&
-                (strpos($origin, 'LLL:') === 0)
+                (str_starts_with($origin, 'LLL:'))
             ) {
                 return LocalizationUtility::translate($origin);
             }
@@ -507,7 +496,7 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
                 1720122142
             );
         }
-        if (strpos($path, $this->lim[self::ATTR_LIMITER_SUB_PART]) !== false) {
+        if (str_contains($path, $this->lim[self::ATTR_LIMITER_SUB_PART])) {
             $help = explode($this->lim[self::ATTR_LIMITER_SUB_PART], $path, 2);
             $rest = isset($help[1]) ? $help[1] : '';
             $partPath = $help[0];
@@ -523,7 +512,7 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
                 }
                 throw new MappingException(
                     'The expected value does not exist. Check your path `' . $refPath . '` in your origin `' .
-                    print_r($origin) . '`. ',
+                    print_r($origin, true) . '`. ',
                     1720122692
                 );
 
@@ -600,8 +589,8 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
                 $item = $this->checkForFunktion($partParam, $origin);
                 if ((is_string($item)) &&
                     (
-                        ((strpos($item, "'") === 0) && (strrpos($item, "'") === strlen($item) - 1)) ||
-                        ((strpos($item, '"') === 0) && (strrpos($item, '"') === strlen($item) - 1))
+                        ((str_starts_with($item, "'")) && (strrpos($item, "'") === strlen($item) - 1)) ||
+                        ((str_starts_with($item, '"')) && (strrpos($item, '"') === strlen($item) - 1))
                     )
                 ) {
                     $item = substr($item, 1, (strlen($item) - 2));
@@ -611,7 +600,7 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
             }
         }
         try {
-            if (strpos($methodString, $this->lim[self::ATTR_LIMITER_SUB_DYNFUNC]) !== false) {
+            if (str_contains($methodString, $this->lim[self::ATTR_LIMITER_SUB_DYNFUNC])) {
                 [$namespace, $method] = explode($this->lim[self::ATTR_LIMITER_SUB_DYNFUNC], $methodString, 2);
                 /** @phpstan-ignore-next-line */
                 $object = GeneralUtility::makeInstance($namespace);
@@ -627,7 +616,7 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
                         1720854727
                     );
                 }
-            } elseif (strpos($methodString, $this->lim[self::ATTR_LIMITER_SUB_STATFUNC]) !== false) {
+            } elseif (str_contains($methodString, $this->lim[self::ATTR_LIMITER_SUB_STATFUNC])) {
                 $limiter = $this->lim[self::ATTR_LIMITER_SUB_STATFUNC];
                 [$namespace, $method] = explode($limiter, $methodString, 2);
                 if ((method_exists($namespace, $method)) &&
@@ -687,7 +676,7 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
         // startID contains the char-number for the unused uni-code-character, which will represent the
         // escaped combination $this->lim[self::ATTR_LIMITER_SUB_ESCAPE] . $this->lim[self::ATTR_LIMITER_SUB_PATH]
         $startID = 128023;
-        if (strpos($input, $this->lim[self::ATTR_LIMITER_SUB_ESCAPE] . $this->lim[self::ATTR_LIMITER_SUB_PATH]) !== false) {
+        if (str_contains($input, $this->lim[self::ATTR_LIMITER_SUB_ESCAPE] . $this->lim[self::ATTR_LIMITER_SUB_PATH])) {
             // replace the escaped character aby an unused character in the input-string
             // Beginn the code-definition with the elefant.
             do {
@@ -739,7 +728,11 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
                 implode('', $resultList)
             );
         } else {
-            $result = $resultList[0];
+            // $resultList stays empty when the whole input resolves to nothing
+            // (e.g. an empty input string or only empty path-parts); fall back to
+            // an empty string to honour the declared string return type instead
+            // of reading an undefined key 0 and returning null.
+            $result = $resultList[0] ?? '';
             if (is_string($result)) {
                 $result = str_replace(
                     mb_chr($startID),
@@ -765,12 +758,11 @@ class PhpMappingProcessor implements DataProcessorInterface, GeneralDataProcesso
         $inputLen = strlen($input);
         $splitStop = strrpos($input, $this->lim[self::ATTR_LIMITER_SUB_END]);
         $splitStopNot = strrpos($input, $this->lim[self::ATTR_LIMITER_SUB_ESCAPE] . $this->lim[self::ATTR_LIMITER_SUB_END]);
-        return (($splitPos > 0) &&
+        return ($splitPos > 0) &&
             ($splitStop === ($inputLen - 1)) && // ) at the end of the string &&
             (($splitStopNot === false) || ($splitStopNot < ($splitStop - 1))) &&
             (($splitPosNot === false) || ($splitPosNot > $splitPos))
-        );
+        ;
     }
-
 
 }

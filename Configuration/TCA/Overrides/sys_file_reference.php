@@ -19,7 +19,7 @@ call_user_func(function () {
                     [
                         'invertStateDisplay' => false,
                         TimerConst::TCA_ITEMS_LABEL => '',
-                    ]
+                    ],
                 ],
                 'default' => false,
             ],
@@ -81,7 +81,6 @@ call_user_func(function () {
         '--div--;LLL:EXT:timer/Resources/Private/Language/locallang_db.xlf:tx_timer.tca.general.div.timerParams.label,' .
         TimerConst::TIMER_FIELD_SCHEDULER . ', ' . TimerConst::TIMER_FIELD_SELECTOR . ', ' . TimerConst::TIMER_FIELD_FLEX_ACTIVE . ',starttime,endtime,'
     );
-
 
     $GLOBALS['TCA']['sys_file_reference']['palettes']['imageoverlayPalette']['showitem'] .= ',--linebreak--,' .
         TimerConst::TIMER_FIELD_FLEX_ACTIVE . ',' . TimerConst::TIMER_FIELD_SELECTOR . ',--linebreak--,starttime,endtime,';

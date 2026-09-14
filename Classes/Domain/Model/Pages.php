@@ -59,7 +59,6 @@ class Pages extends AbstractEntity implements TimerModellInterface
      * Sets the txTimerSelector
      *
      * @param string $txTimerSelector
-     * @return void
      */
     public function setTxTimerSelector($txTimerSelector)
     {
@@ -80,7 +79,6 @@ class Pages extends AbstractEntity implements TimerModellInterface
      * Sets the txTimerTimer
      *
      * @param string $txTimerTimer
-     * @return void
      */
     public function setTxTimerTimer($txTimerTimer)
     {

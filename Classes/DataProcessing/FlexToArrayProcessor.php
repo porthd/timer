@@ -23,17 +23,15 @@ namespace Porthd\Timer\DataProcessing;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Porthd\Timer\Cache\PageCacheFlusher;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\PeriodListTimer;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTraitInterface;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentDataProcessor;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -71,13 +69,11 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *              }
  *          }
  *     }
- *
  */
 class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
     use GeneralDataProcessorTrait;
     use LoggerAwareTrait;
-
 
     protected const ATTR_FLEX_FIELD = 'field';
     protected const DEFAULT_FLEX_FIELD = TimerConst::TIMER_FIELD_FLEX_ACTIVE;
@@ -86,7 +82,6 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
     protected const DEFAULT_RESULT_VARIABLE_NAME = 'flattenflex';
     protected const ATTR_FLATTENKEYS = 'flattenkeys';
     protected const DEFAULT_FLATTENKEYS = 'data,general,timer,sDEF,lDEF,vDEF';
-
 
     /**
      * @var ContentDataProcessor
@@ -99,26 +94,24 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
     protected $cache;
 
     /**
-     * @var CacheService
+     * @var PageCacheFlusher
      */
     protected $cacheManager;
 
     /**
      * @param FrontendInterface $cache
-     * @param CacheService $cacheManager
+     * @param PageCacheFlusher $cacheManager
      * @param ContentDataProcessor $contentDataProcessor
      */
     public function __construct(
-        FrontendInterface    $cache,
-        CacheService         $cacheManager,
+        FrontendInterface $cache,
+        PageCacheFlusher $cacheManager,
         ContentDataProcessor $contentDataProcessor
-    )
-    {
+    ) {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
         $this->contentDataProcessor = $contentDataProcessor;
     }
-
 
     /**
      * Fetches records from the database as an array
@@ -135,8 +128,7 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    )
-    {
+    ) {
         $targetVariableName = $cObj->stdWrapValue(
             TimerConst::ARGUMENT_AS,
             $processorConfiguration,
@@ -199,7 +191,6 @@ class FlexToArrayProcessor implements DataProcessorInterface, GeneralDataProcess
                     $singleElement = TcaUtility::flexformArrayFlatten($singleElementRaw, $listFlatKeys);
                 }
             }
-
 
             // the caching-times is defined or depends on default-value
             if (($cacheCalc !== false) ||

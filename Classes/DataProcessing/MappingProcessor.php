@@ -109,7 +109,6 @@ class MappingProcessor implements DataProcessorInterface
     ];
     protected const DEFAULT_OUTPUT_FORMAT = self::VAL_OUTPUT_FORMAT_JSON;
 
-
     /**
      * @var ContentDataProcessor
      */

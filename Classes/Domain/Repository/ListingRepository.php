@@ -47,6 +47,6 @@ class ListingRepository
             ->where(
                 $queryBuilder->expr()->in('uid', $commaList)
             );
-        return $queryBuilder->execute()->fetchAllAssociative();
+        return $queryBuilder->executeQuery()->fetchAllAssociative();
     }
 }

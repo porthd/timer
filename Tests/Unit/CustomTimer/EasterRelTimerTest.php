@@ -23,17 +23,14 @@ namespace Porthd\Timer\Tests\Unit\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Porthd\Timer\CustomTimer\EasterRelTimer;
-use TYPO3\CMS\Core\Context\Context;
 use Cassandra\Date;
-use DateInterval;
-use DateTime;
-use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Constants\TimerConst;
+use Porthd\Timer\CustomTimer\EasterRelTimer;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
-use Porthd\Timer\Utilities\GeneralTimerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class EasterRelTimerTest extends TestCase
@@ -46,11 +43,10 @@ class EasterRelTimerTest extends TestCase
     protected const SOME_NOT_EMPTY_VALUE = 'some value';
     protected const ALLOWED_TIME_ZONE = 'UTC';
 
-
     /**
      * @var EasterRelTimer
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function simulatePartOfGlobalsTypo3Array()
     {
@@ -84,92 +80,85 @@ class EasterRelTimerTest extends TestCase
 
     /**
      * the ultimate green test
-     * @test
      */
+    #[Test]
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function selfName()
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::NAME_TIMER,
             $this->subject::selfName(),
             'The name musst be defined.'
         );
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getSelectorItem()
     {
         $result = $this->subject::getSelectorItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             1,
             count($result),
             'The array  must contain at least two items.'
         );
-        $this->assertIsString(
-            $result[0],
+        self::assertIsString(
+            $result['label'],
             'The first item must be an string.'
         );
-        $this->assertEquals(
-            $result[1],
+        self::assertEquals(
+            $result['value'],
             self::NAME_TIMER,
             'The second term must the name of the timer.'
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFlexformItem()
     {
         $result = $this->subject->getFlexformItem();
-        $this->assertIsArray(
+        self::assertIsArray(
             $result,
             'The result must be an array.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             count($result),
             'The array  must contain one Item.'
         );
-        $this->assertEquals(
+        self::assertEquals(
             array_keys($result),
             [self::NAME_TIMER],
             'The key must the name of the timer.'
         );
-        $this->assertIsString(
+        self::assertIsString(
             $result[self::NAME_TIMER],
             'The value must be type of string.'
         );
         $rootPath = $_ENV['TYPO3_PATH_ROOT']; //Test relative to root-Path beginning in  ...web/
         $filePath = $result[self::NAME_TIMER];
-        if (strpos($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH) === 0) {
+        if (str_starts_with($filePath, TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)) {
             $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                 substr(
                     $filePath,
                     strlen(TimerConst::MARK_OF_FILE_EXT_FOLDER_IN_FILEPATH)
                 );
         } else {
-            if (strpos($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH) === 0) {
+            if (str_starts_with($filePath, TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)) {
                 $resultPath = $rootPath . DIRECTORY_SEPARATOR . 'typo3conf' . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR .
                     substr(
                         $filePath,
                         strlen(TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH)
                     );
-                $this->assertTrue(
+                self::assertTrue(
                     (false),
                     'The File-path should contain `' . TimerConst::MARK_OF_EXT_FOLDER_IN_FILEPATH . '`, so that the TCA-attribute-action `onChange` will work correctly. '
                 );
@@ -178,35 +167,34 @@ class EasterRelTimerTest extends TestCase
             }
         }
         $flag = (!empty($resultPath)) && file_exists($resultPath);
-        $this->assertTrue(
+        self::assertTrue(
             $flag,
             'The file with the flexform content exist.'
         );
         $fileContent = GeneralUtility::getURL($resultPath);
         $flexArray = simplexml_load_string($fileContent);
-        $this->assertTrue(
+        self::assertTrue(
             (!(!$flexArray)),
             'The filecontent is valid xml.'
         );
     }
-
 
     public static function dataProvider_isAllowedInRange()
     {
         $testDate = date_create_from_format(
             TimerInterface::TIMER_FORMAT_DATETIME,
             '2020-12-31 12:00:00',
-            new DateTimeZone('Europe/Berlin')
+            new \DateTimeZone('Europe/Berlin')
         );
         $minusOneSecond = clone $testDate;
-        $minusOneSecond->sub(new DateInterval('PT1S'));
+        $minusOneSecond->sub(new \DateInterval('PT1S'));
         $addOneSecond = clone $testDate;
-        $addOneSecond->add(new DateInterval('PT1S'));
+        $addOneSecond->add(new \DateInterval('PT1S'));
         $rest = [];
         $result = [];
 
         $result[] = [
-            'message' => 'The testdate is valid, if the testdate is in the middle of the ultimate range..',
+            'The testdate is valid, if the testdate is in the middle of the ultimate range..',
             'expects' => [
                 'result' => true,
             ],
@@ -221,7 +209,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone start at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -236,7 +224,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
+            'The validation will be fail. if the ultimate start DateTime-Zone starts one second later.',
             'expects' => [
                 'result' => false,
             ],
@@ -251,7 +239,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
+            'The validation will be okay. if the ultimate start DateTime-Zone end at the same time.',
             'expects' => [
                 'result' => true,
             ],
@@ -266,7 +254,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
+            'The validation will be okay. if the ultimate start DateTime-Zone ends one second earlier.',
             'expects' => [
                 'result' => false,
             ],
@@ -283,25 +271,22 @@ class EasterRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProvider_isAllowedInRange
-     * @test
-     */
+    #[DataProvider('dataProvider_isAllowedInRange')]
+    #[Test]
     public function isAllowedInRange($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
             $testValue = $params['testValue'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isAllowedInRange($testValue, $paramTest),
                 $message
             );
         }
     }
-
 
     /**
      * @return array[]
@@ -325,7 +310,7 @@ class EasterRelTimerTest extends TestCase
         foreach ($list as $unsetParam => $expects
         ) {
             $item = [
-                'message' => 'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
+                'The validation will ' . ($expects ? 'be okay' : 'fail') . ', if the parameter `' . $unsetParam . '` is missing.',
                 'expects' => [
                     'result' => $expects,
                 ],
@@ -344,22 +329,22 @@ class EasterRelTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     [null, false],
-                     [false, true],
-                     ['false', true],
-                     [new Datetime(), false],
-                     ['hallo', false],
-                     ['0', true],
-                     [0.0, true],
-                     ["0.0", false],
-                     ['true', true],
-                     ['1', true],
-                     [1, true],
-                     [1.0, true],
-                     ['1.0', false],
-                 ] as $value) {
+            [null, false],
+            [false, true],
+            ['false', true],
+            [new \Datetime(), false],
+            ['hallo', false],
+            ['0', true],
+            [0.0, true],
+            ['0.0', false],
+            ['true', true],
+            ['1', true],
+            [1, true],
+            [1.0, true],
+            ['1.0', false],
+        ] as $value) {
             $result[] = [
-                'message' => 'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
+                'The validation is okay, because the parameter `useTimeZoneOfFrontend` is required and will tested for type.',
                 [
                     'result' => $value[1],
                 ],
@@ -376,13 +361,13 @@ class EasterRelTimerTest extends TestCase
         }
         // Variation for useTimeZoneOfFrontend
         foreach ([
-                     'UTC' => true,
-                     '' => false,
-                     'Europe/Berlin' => true,
-                     'Kumpel/Dumpel' => false,
-                 ] as $zoneVal => $expects) {
+            'UTC' => true,
+            '' => false,
+            'Europe/Berlin' => true,
+            'Kumpel/Dumpel' => false,
+        ] as $zoneVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `timeZoneOfEvent` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter for `timeZoneOfEvent` is ' . $zoneVal . '.',
                 [
                     'result' => $expects,
@@ -400,13 +385,13 @@ class EasterRelTimerTest extends TestCase
         }
         // Variation for ultimateBeginningTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateBeginningTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -424,13 +409,13 @@ class EasterRelTimerTest extends TestCase
         }
         // Variation for ultimateEndingTimer
         foreach ([
-                     '0002-01-01 13:00:00' => true,
-                     '0000-01-01 00:00:00' => true,
-                     '-1111-01-01 00:00:00' => false,
-                     '' => false,
-                 ] as $timeVal => $expects) {
+            '0002-01-01 13:00:00' => true,
+            '0000-01-01 00:00:00' => true,
+            '-1111-01-01 00:00:00' => false,
+            '' => false,
+        ] as $timeVal => $expects) {
             $result[] = [
-                'message' => 'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
+                'The validation of `ultimateEndingTimer` will ' . ($expects ? 'be okay' : 'fail') .
                     ', if the parameter is `' . $timeVal . '`.',
                 [
                     'result' => $expects,
@@ -449,24 +434,21 @@ class EasterRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateGeneralByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateGeneralByVariationArgumentsInParam')]
+    #[Test]
     public function validateGeneralByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['rest'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
             );
         }
     }
-
 
     /**
      * @return array[]
@@ -483,7 +465,7 @@ class EasterRelTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The test is correct, because all needed arguments are used.',
+            'The test is correct, because all needed arguments are used.',
             [
                 'result' => true,
             ],
@@ -499,20 +481,20 @@ class EasterRelTimerTest extends TestCase
         ];
         //        variation of allowed `namedDateMidnight`
         foreach ([
-                     'easter',
-                     'ascension',
-                     'pentecost',
-                     'firstadvent',
-                     'christmas',
-                     'rosemonday',
-                     'goodfriday',
-                     'towlday',
-                     'stupidday',
-                     'newyear' ,'silvester', 'labourday',
-                 ] as $dateIdentifier) {
+            'easter',
+            'ascension',
+            'pentecost',
+            'firstadvent',
+            'christmas',
+            'rosemonday',
+            'goodfriday',
+            'towlday',
+            'stupidday',
+            'newyear' , 'silvester', 'labourday',
+        ] as $dateIdentifier) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `namedDateMidnight` is correct by using the id `' . $dateIdentifier . '`.',
+                'The variation of the `namedDateMidnight` is correct by using the id `' . $dateIdentifier . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -531,7 +513,7 @@ class EasterRelTimerTest extends TestCase
         foreach ([7, -1, -2, 'kennIchNicht'] as $dateIdentifier) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `namedDateMidnight` is NOT correct by using the number `' . $dateIdentifier . '`.',
+                'The variation of the `namedDateMidnight` is NOT correct by using the number `' . $dateIdentifier . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -548,27 +530,27 @@ class EasterRelTimerTest extends TestCase
         }
         // variation of `relMinToSelectedTimerEvent`
         foreach ([
-                     null,
-                     '',
-                     -475200,
-                     -10000,
-                     -1000,
-                     '-100',
-                     -10,
-                     -2,
-                     -1,
-                     0,
-                     '0',
-                     1,
-                     2,
-                     10,
-                     100,
-                     100000,
-                     '475200',
-                 ] as $DateNumber) {
+            null,
+            '',
+            -475200,
+            -10000,
+            -1000,
+            '-100',
+            -10,
+            -2,
+            -1,
+            0,
+            '0',
+            1,
+            2,
+            10,
+            100,
+            100000,
+            '475200',
+        ] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `relMinToSelectedTimerEvent` is  correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `relMinToSelectedTimerEvent` is  correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -587,7 +569,7 @@ class EasterRelTimerTest extends TestCase
         foreach ([-475201, 475201, -10.1, 10.1, '-10.1', '10.1'] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `relMinToSelectedTimerEvent` is NOT  correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `relMinToSelectedTimerEvent` is NOT  correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -606,7 +588,7 @@ class EasterRelTimerTest extends TestCase
         foreach (['475200', 120, 1, -1, '-10', -475200] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `durationMinutes` is correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `durationMinutes` is correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -622,10 +604,10 @@ class EasterRelTimerTest extends TestCase
             ];
         }
         //        variation of `durationMinutes`
-        foreach (['', null, 0, '0', -1.2, '-10.1',] as $DateNumber) {
+        foreach (['', null, 0, '0', -1.2, '-10.1'] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `durationMinutes` is NOT correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `durationMinutes` is NOT correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -642,7 +624,7 @@ class EasterRelTimerTest extends TestCase
         }
         //        variation of `calendarUse`
         $result[] = [
-            'message' => 'The variation of the `calendarUse` is optional.',
+            'The variation of the `calendarUse` is optional.',
             'expects' => [
                 'result' => true,
             ],
@@ -656,12 +638,11 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
 
-
         //        variation of `calendarUse`
         foreach (['', null, 0, 1, 2, '2', 3] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `calendarUse` is correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `calendarUse` is correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => true,
                 ],
@@ -677,10 +658,10 @@ class EasterRelTimerTest extends TestCase
             ];
         }
         //        variation of `durationMinutes`
-        foreach ([-1.2, '-1.1',] as $DateNumber) {
+        foreach ([-1.2, '-1.1'] as $DateNumber) {
             /* test allowed minimal structure */
             $result[] = [
-                'message' => 'The variation of the `calendarUse` is NOT correct by using the number `' . $DateNumber . '`.',
+                'The variation of the `calendarUse` is NOT correct by using the number `' . $DateNumber . '`.',
                 'expects' => [
                     'result' => false,
                 ],
@@ -699,17 +680,15 @@ class EasterRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderValidateSpeciallByVariationArgumentsInParam
-     * @test
-     */
+    #[DataProvider('dataProviderValidateSpeciallByVariationArgumentsInParam')]
+    #[Test]
     public function validateSpeciallByVariationArgumentsInParam($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $paramTest = array_merge($params['required'], $params['general']);
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->validate($paramTest),
                 $message
@@ -717,18 +696,17 @@ class EasterRelTimerTest extends TestCase
         }
     }
 
-
     public static function dataProviderIsActive()
     {
         $result = [];
         //         random active
         $result[] = [
-            'message' => 'The selected date is christmas between 12:00 and 14:00  `. It is active.',
+            'The selected date is christmas between 12:00 and 14:00  `. It is active.',
             'expects' => [
                 'result' => true,
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 13:00:00', new \DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 720, //  12:00
@@ -743,12 +721,12 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The selected date is christmas between 12:00 and 14:00  `. It is NOT active.',
+            'The selected date is christmas between 12:00 and 14:00  `. It is NOT active.',
             'expects' => [
                 'result' => false,
             ],
             'params' => [
-                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00', new DateTimeZone('Europe/Berlin')),
+                'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:00:00', new \DateTimeZone('Europe/Berlin')),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
                     'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -765,17 +743,17 @@ class EasterRelTimerTest extends TestCase
 
         // dates-variation see http://www.kleiner-kalender.de/rubrik/christentum.html
         foreach (['easter' => '2021-04-04', 'stupidday' => '2021-04-16', 'ascension' => '2021-05-13', 'pentecost' => '2021-05-23', 'firstadvent' => '2021-11-28',
-                     'towlday' => '2021-05-25', 'christmas' => '2021-12-25','rosemonday' => '2022-02-28',
-                     'newyear' => '2021-01-01','silvester' => '2020-12-31', 'labourday' => '2022-05-01',
-                     'goodfriday' => '2022-04-15',] as $dateIndex => $testDate
+            'towlday' => '2021-05-25', 'christmas' => '2021-12-25', 'rosemonday' => '2022-02-28',
+            'newyear' => '2021-01-01', 'silvester' => '2020-12-31', 'labourday' => '2022-05-01',
+            'goodfriday' => '2022-04-15', ] as $dateIndex => $testDate
         ) {
             $result[] = [
-                'message' => 'The dateIndex `' . $dateIndex . '` will be active for the testDate `' . $testDate . '`. It is NOT active. ',
+                'The dateIndex `' . $dateIndex . '` will be active for the testDate `' . $testDate . '`. It is NOT active. ',
                 'expects' => [
                     'result' => false,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' 13:00:00', new \DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $dateIndex, // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -790,12 +768,12 @@ class EasterRelTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The dateIndex `' . $dateIndex . '` will be active for the testDate `' . $testDate . '`. It is active. ',
+                'The dateIndex `' . $dateIndex . '` will be active for the testDate `' . $testDate . '`. It is active. ',
                 'expects' => [
                     'result' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $testDate . ' 13:00:00', new \DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $dateIndex, // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -814,32 +792,32 @@ class EasterRelTimerTest extends TestCase
         // see remarks at https://www.php.net/manual/de/calendar.constants.php visited 20201231
         // julian calendar see https://www.nvf.ch/ostern.asp visited 20201231
         foreach ([
-                     ['index' => 'easter', 'date' => '2050-04-10', 'type' => 0, 'info' => ' Check 2038-problem of php-function `easter_date`',],
-                     ['index' => 'easter', 'date' => '1753-04-22', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian',],
-                     ['index' => 'easter', 'date' => '1753-04-22', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)',],
-                     ['index' => 'easter', 'date' => '1753-04-22', 'type' => 2, 'info' => ' easter uses grepor calendar for ever',],
-                     ['index' => 'easter', 'date' => '1753-04-11', 'type' => 3, 'info' => ' easter uses Julian calendar for ever',],
-                     ['index' => 'easter', 'date' => '1752-03-29', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian',],
-                     ['index' => 'easter', 'date' => '1752-04-02', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)',],
-                     ['index' => 'easter', 'date' => '1752-04-02', 'type' => 2, 'info' => ' easter uses grepor calendar for ever',],
-                     ['index' => 'easter', 'date' => '1752-03-29', 'type' => 3, 'info' => ' easter uses Julian calendar for ever',],
-                     ['index' => 'easter', 'date' => '1584-04-19', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian',],
-                     ['index' => 'easter', 'date' => '1584-04-01', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)',],
-                     ['index' => 'easter', 'date' => '1584-04-01', 'type' => 2, 'info' => ' easter uses grepor calendar for ever',],
-                     ['index' => 'easter', 'date' => '1584-04-19', 'type' => 3, 'info' => ' easter uses Julian calendar for ever',],
-                     ['index' => 'easter', 'date' => '1500-04-19', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian',],
-                     ['index' => 'easter', 'date' => '1500-04-19', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)',],
-                     ['index' => 'easter', 'date' => '1500-03-25', 'type' => 2, 'info' => ' easter uses grepor calendar for ever. There was no reference-calulation fond in Internet for this. ',],
-                     ['index' => 'easter', 'date' => '1500-04-19', 'type' => 3, 'info' => ' easter uses Julian calendar for ever',],
-                 ] as $test
+            ['index' => 'easter', 'date' => '2050-04-10', 'type' => 0, 'info' => ' Check 2038-problem of php-function `easter_date`'],
+            ['index' => 'easter', 'date' => '1753-04-22', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian'],
+            ['index' => 'easter', 'date' => '1753-04-22', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)'],
+            ['index' => 'easter', 'date' => '1753-04-22', 'type' => 2, 'info' => ' easter uses grepor calendar for ever'],
+            ['index' => 'easter', 'date' => '1753-04-11', 'type' => 3, 'info' => ' easter uses Julian calendar for ever'],
+            ['index' => 'easter', 'date' => '1752-03-29', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian'],
+            ['index' => 'easter', 'date' => '1752-04-02', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)'],
+            ['index' => 'easter', 'date' => '1752-04-02', 'type' => 2, 'info' => ' easter uses grepor calendar for ever'],
+            ['index' => 'easter', 'date' => '1752-03-29', 'type' => 3, 'info' => ' easter uses Julian calendar for ever'],
+            ['index' => 'easter', 'date' => '1584-04-19', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian'],
+            ['index' => 'easter', 'date' => '1584-04-01', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)'],
+            ['index' => 'easter', 'date' => '1584-04-01', 'type' => 2, 'info' => ' easter uses grepor calendar for ever'],
+            ['index' => 'easter', 'date' => '1584-04-19', 'type' => 3, 'info' => ' easter uses Julian calendar for ever'],
+            ['index' => 'easter', 'date' => '1500-04-19', 'type' => 0, 'info' => ' Julian above 1752 in britannien too, ab 1753 gregorian'],
+            ['index' => 'easter', 'date' => '1500-04-19', 'type' => 1, 'info' => ' Julian abowe 1582 in modern europe, ab 1583 (gregorian)'],
+            ['index' => 'easter', 'date' => '1500-03-25', 'type' => 2, 'info' => ' easter uses grepor calendar for ever. There was no reference-calulation fond in Internet for this. '],
+            ['index' => 'easter', 'date' => '1500-04-19', 'type' => 3, 'info' => ' easter uses Julian calendar for ever'],
+        ] as $test
         ) {
             $result[] = [
-                'message' => 'The dateIndex `' . $test['index'] . '` will be active for the testDate `' . $test['date'] . '`. It is NOT active. ' . $test['info'],
+                'The dateIndex `' . $test['index'] . '` will be active for the testDate `' . $test['date'] . '`. It is NOT active. ' . $test['info'],
                 'expects' => [
                     'result' => false,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $test['date'] . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $test['date'] . ' 13:00:00', new \DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $test['index'], // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -854,12 +832,12 @@ class EasterRelTimerTest extends TestCase
                 ],
             ];
             $result[] = [
-                'message' => 'The dateIndex `' . $test['index'] . '` will be active for the testDate `' . $test['date'] . '`. It is NOT active. ' . $test['info'],
+                'The dateIndex `' . $test['index'] . '` will be active for the testDate `' . $test['date'] . '`. It is NOT active. ' . $test['info'],
                 'expects' => [
                     'result' => true,
                 ],
                 'params' => [
-                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $test['date'] . ' 13:00:00', new DateTimeZone('Europe/Berlin')),
+                    'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $test['date'] . ' 13:00:00', new \DateTimeZone('Europe/Berlin')),
                     'setting' => [
                         'namedDateMidnight' => $test['index'], // Variation
                         'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -883,12 +861,12 @@ class EasterRelTimerTest extends TestCase
                 $duration *= $factor;
                 $flag = ($duration > 0);
                 $result[] = [
-                    'message' => 'The duratioonminute `' . $duration . '` will make it active by including. at 12:01:',
+                    'The duratioonminute `' . $duration . '` will make it active by including. at 12:01:',
                     'expects' => [
                         'result' => $flag,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:01:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:01:00', new \DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'easter', // Variation
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00
@@ -903,12 +881,12 @@ class EasterRelTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The duratioonminute `' . $duration . '` will make it active by including. at 11:59',
+                    'The duratioonminute `' . $duration . '` will make it active by including. at 11:59',
                     'expects' => [
                         'result' => (!$flag),
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 11:59:00', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 11:59:00', new \DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'easter', // Variation
                             'relMinToSelectedTimerEvent' => 720, // 720 min = 12:00
@@ -933,18 +911,18 @@ class EasterRelTimerTest extends TestCase
             foreach ([-400000, -2003, 10, 1440, 400000] as $relative) {
                 $diff = $duration + $relative;
                 if ($diff > 0) {
-                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
-                    $first->add(new DateInterval('PT' . $diff . 'M'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new \DateTimeZone('Europe/Berlin'));
+                    $first->add(new \DateInterval('PT' . $diff . 'M'));
                 } elseif ($diff < 0) {
-                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
-                    $first->sub(new DateInterval('PT' . abs($diff) . 'M'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new \DateTimeZone('Europe/Berlin'));
+                    $first->sub(new \DateInterval('PT' . abs($diff) . 'M'));
                 } else {
-                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new \DateTimeZone('Europe/Berlin'));
                 }
                 $flagSecond = (($diff < 0) && (abs($diff) > abs($relative))) || (($diff > 0) && (abs($diff) > abs($relative))) || (($diff === 0) && ($relative < $duration));
                 $flagThird = (!$flagSecond);
                 $result[] = [
-                    'message' => 'First: The duratioonminute `' . $duration . '` and relative `' . ($relative) . '` will make it active by including. at ' . $first->format('d.m.Y H:i:s'),
+                    'First: The duratioonminute `' . $duration . '` and relative `' . ($relative) . '` will make it active by including. at ' . $first->format('d.m.Y H:i:s'),
                     'expects' => [
                         'result' => true,
                     ],
@@ -974,25 +952,25 @@ class EasterRelTimerTest extends TestCase
             foreach ([-400000, -2003, 10, 1440, 400000] as $relative) {
                 $diff = $duration + $relative;
                 if ($diff > 0) {
-                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
-                    $first->add(new DateInterval('PT' . $diff . 'M'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new \DateTimeZone('Europe/Berlin'));
+                    $first->add(new \DateInterval('PT' . $diff . 'M'));
                 } elseif ($diff < 0) {
-                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
-                    $first->sub(new DateInterval('PT' . abs($diff) . 'M'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new \DateTimeZone('Europe/Berlin'));
+                    $first->sub(new \DateInterval('PT' . abs($diff) . 'M'));
                 } else {
-                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new DateTimeZone('Europe/Berlin'));
+                    $first = date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2050-04-10 12:00:00', new \DateTimeZone('Europe/Berlin'));
                 }
                 if ($duration < 0) {
                     $second = clone $first;
-                    $second->sub(new DateInterval('PT2M'));
-                    $first->add(new DateInterval('PT2M'));
+                    $second->sub(new \DateInterval('PT2M'));
+                    $first->add(new \DateInterval('PT2M'));
                 } else {
                     $second = clone $first;
-                    $second->add(new DateInterval('PT2M'));
-                    $first->sub(new DateInterval('PT2M'));
+                    $second->add(new \DateInterval('PT2M'));
+                    $first->sub(new \DateInterval('PT2M'));
                 }
                 $result[] = [
-                    'message' => 'The date is two minutes away from the active border in the active part. ' .
+                    'The date is two minutes away from the active border in the active part. ' .
                         'The duratioonminute `' . $duration . '` and relative `' . ($relative) .
                         '` will make it active by including. at ' . $first->format('d.m.Y H:i:s'),
                     'expects' => [
@@ -1014,7 +992,7 @@ class EasterRelTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The date is two minutes away from the active border outside of the active part. ' .
+                    'The date is two minutes away from the active border outside of the active part. ' .
                         'The duratioonminute `' . $duration . '` and relative `' . ($relative) .
                         '` will make it active by including. at ' . $second->format('d.m.Y H:i:s'),
                     'expects' => [
@@ -1042,13 +1020,13 @@ class EasterRelTimerTest extends TestCase
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach (['UTC', 'Europe/Berlin', 'Australia/Eucla', 'America/Detroit', 'Pacific/Fiji', 'Indian/Chagos'] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The date with additional Interval miss the current Time by one second. It`s NOT active. ' .
+                    'The date with additional Interval miss the current Time by one second. It`s NOT active. ' .
                         'It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'result' => false,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:59:59', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2020-12-25 11:59:59', new \DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
                             'relMinToSelectedTimerEvent' => 840, //  14:00
@@ -1063,12 +1041,12 @@ class EasterRelTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The date with additional Interval  will be active. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The date with additional Interval  will be active. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'result' => true,
                     ],
                     'params' => [
-                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-04-05 13:59:59', new DateTimeZone('Europe/Berlin')),
+                        'value' => date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, '2021-04-05 13:59:59', new \DateTimeZone('Europe/Berlin')),
                         'setting' => [
                             'namedDateMidnight' => 'easter', // easter 4.4.21
                             'relMinToSelectedTimerEvent' => 2160, //  Oster Montag 12:00
@@ -1087,26 +1065,26 @@ class EasterRelTimerTest extends TestCase
 
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2020-12-27 11:00:00',
-                     '2020-12-27 13:00:00',
-                     '2020-12-27 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $beginnTimeString) {
+            '0001-01-01 00:00:00',
+            '2020-12-27 11:00:00',
+            '2020-12-27 13:00:00',
+            '2020-12-27 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $beginnTimeString) {
             foreach ([
-                         '0001-01-01 00:00:00',
-                         '2020-12-27 11:00:00',
-                         '2020-12-27 13:00:00',
-                         '2020-12-27 18:00:00',
-                         '9999-12-31 23:59:59',
-                     ] as $endTimeString) {
+                '0001-01-01 00:00:00',
+                '2020-12-27 11:00:00',
+                '2020-12-27 13:00:00',
+                '2020-12-27 18:00:00',
+                '9999-12-31 23:59:59',
+            ] as $endTimeString) {
                 $check = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2021-04-05 11:59:59',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $result[] = [
-                    'message' => 'The date ' . $check->format('d.m.Y H:i:s') . ' miss the start-interval by one second. ' .
+                    'The date ' . $check->format('d.m.Y H:i:s') . ' miss the start-interval by one second. ' .
                         'It is independ to the ultimate-parameter. [' . $beginnTimeString . '//' . $endTimeString . ']',
                     'expects' => [
                         'result' => false,
@@ -1126,9 +1104,9 @@ class EasterRelTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $check->add(new DateInterval('PT2H'));
+                $check->add(new \DateInterval('PT2H'));
                 $result[] = [
-                    'message' => 'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second before ending. ' .
+                    'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second before ending. ' .
                         'It is independ to the ultimate-parameter. [' . $beginnTimeString . '//' . $endTimeString . ']',
                     'expects' => [
                         'result' => ((($beginnTimeString <= $check->format(TimerInterface::TIMER_FORMAT_DATETIME)) &&
@@ -1151,9 +1129,9 @@ class EasterRelTimerTest extends TestCase
                         ],
                     ],
                 ];
-                $check->add(new DateInterval('PT2S'));
+                $check->add(new \DateInterval('PT2S'));
                 $result[] = [
-                    'message' => 'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second after ending. It`s NOT active. ' .
+                    'The date ' . $check->format('d.m.Y H:i:s') . ' is  one second after ending. It`s NOT active. ' .
                         'It is independ to the ultimate-parameter. [' . $beginnTimeString . '//' . $endTimeString . ']',
                     'expects' => [
                         'result' => false,
@@ -1183,7 +1161,7 @@ class EasterRelTimerTest extends TestCase
         $result = [];
         /* test allowed minimal structure */
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -1195,7 +1173,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
+            'The timezone is missing in the parameter. The Active-Timezone  will be returned.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -1207,7 +1185,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
+            'The active timezone will be shown, because the defined-part ofist not part of the allowed Timezonelist. The active Timezone itself will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -1220,7 +1198,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is `0`. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is `0`. The value of the timezone will not be validated.',
             [
                 'result' => 'Kauderwelsch/Murz',
             ],
@@ -1233,7 +1211,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the parameter will be shown, because the active-part of the parameter is `1`. The value of the timezone will not be validated.',
+            'The timezone of the parameter will be shown, because the active-part of the parameter is `1`. The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -1247,7 +1225,7 @@ class EasterRelTimerTest extends TestCase
         ];
         foreach (['true', true, 'TRUE', 1, '1'] as $testAllowActive) {
             $result[] = [
-                'message' => 'The active timezone will be shown, because the parameter for it is active `' .
+                'The active timezone will be shown, because the parameter for it is active `' .
                     print_r($testAllowActive, true) . '`. The value of the timezone will not be validated.',
                 [
                     'result' => 'Lauder/Furz',
@@ -1262,7 +1240,7 @@ class EasterRelTimerTest extends TestCase
             ];
         }
         $result[] = [
-            'message' => 'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
+            'The active zone will be shown instead of The timezone of the parameter, because the parameter is not a string (=name). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -1275,7 +1253,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
+            'The timezone of the active zone will be show, because the active-part of the parameter is not PHP-empty (true). The value of the timezone will not be validated.',
             [
                 'result' => 'Lauder/Furz',
             ],
@@ -1290,20 +1268,18 @@ class EasterRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderGetTimeZoneOfEvent
-     * @test
-     */
+    #[DataProvider('dataProviderGetTimeZoneOfEvent')]
+    #[Test]
     public function getTimeZoneOfEvent($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or emopty dataprovider');
+            self::assertTrue(true, 'empty-data at the end of the provider or emopty dataprovider');
         } else {
             $myParams = $params['params'];
             $activeZone = $params['active'];
             $result = $this->subject->getTimeZoneOfEvent($activeZone, $myParams);
 
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $result,
                 $message
@@ -1311,31 +1287,27 @@ class EasterRelTimerTest extends TestCase
         }
     }
 
-
-    /**
-     * @dataProvider dataProviderIsActive
-     * @test
-     */
+    #[DataProvider('dataProviderIsActive')]
+    #[Test]
     public function isActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = clone $params['value'];
-            $this->assertEquals(
+            self::assertEquals(
                 $expects['result'],
                 $this->subject->isActive($value, $setting),
                 'isActive: ' . $message
             );
-            $this->assertEquals(
+            self::assertEquals(
                 $params['value'],
                 $value,
                 'isActive: The object of Date is unchanged.'
             );
         }
     }
-
 
     public static function dataProviderNextActive()
     {
@@ -1354,7 +1326,7 @@ class EasterRelTimerTest extends TestCase
         $result = [];
         // rondomly Test
         $result[] = [
-            'message' => 'The selected date is christmas between 12:00 and 14:00 in the next year, ' .
+            'The selected date is christmas between 12:00 and 14:00 in the next year, ' .
                 'because the current time is in an active part.',
             'expects' => [
                 'beginning' => '2021-12-25 12:00:00',
@@ -1365,7 +1337,7 @@ class EasterRelTimerTest extends TestCase
                 'value' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-25 13:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
@@ -1381,7 +1353,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The selected date is christmas between 12:00 and 14:00 in the next year, ' .
+            'The selected date is christmas between 12:00 and 14:00 in the next year, ' .
                 'because the current time is before the  active part in the current year.',
             'expects' => [
                 'beginning' => '2020-12-25 12:00:00',
@@ -1392,7 +1364,7 @@ class EasterRelTimerTest extends TestCase
                 'value' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-25 11:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
@@ -1469,7 +1441,7 @@ class EasterRelTimerTest extends TestCase
         ) {
             foreach ($list as $testDate => $expectDate) {
                 $result[] = [
-                    'message' => 'The nextRange for ' . $mapName[$namedDate] . ' is correctly detected for the Startdate `' . $testDate . '`. ',
+                    'The nextRange for ' . $mapName[$namedDate] . ' is correctly detected for the Startdate `' . $testDate . '`. ',
                     'expects' => [
                         'beginning' => $expectDate . ' 12:00:00',
                         'ending' => $expectDate . ' 14:00:00',
@@ -1479,7 +1451,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             $testDate,
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ), // Variation
                         'setting' => [
                             'namedDateMidnight' => $namedDate, // variation
@@ -1500,33 +1472,33 @@ class EasterRelTimerTest extends TestCase
         // Variation for duration with systematic variation of datekey and corrosponding date
         foreach ([-430000, -43000, -400, -4, 4, 40, 4000, 430000] as $duration) {
             foreach ([
-                         'easter' => '2020-04-12',
-                         'ascension' => '2020-05-21',
-                         'pentecost' => '2020-05-31',
-                         'firstadvent' => '2020-11-29',
-                         'christmas' => '2020-12-25',
-                         'rosemonday' => '2020-02-24',
-                         'goodfriday' => '2020-04-10',
-                     ] as $dateKey => $dateString
+                'easter' => '2020-04-12',
+                'ascension' => '2020-05-21',
+                'pentecost' => '2020-05-31',
+                'firstadvent' => '2020-11-29',
+                'christmas' => '2020-12-25',
+                'rosemonday' => '2020-02-24',
+                'goodfriday' => '2020-04-10',
+            ] as $dateKey => $dateString
             ) {
                 $expectEaster = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     $dateString . ' 12:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 if ($duration > 0) {
                     $easterStart = clone $expectEaster;
                     $easterEnd = clone $expectEaster;
-                    $easterEnd->add(new DateInterval('PT' . abs($duration) . 'M'));
+                    $easterEnd->add(new \DateInterval('PT' . abs($duration) . 'M'));
                 } else {
                     $easterEnd = clone $expectEaster;
                     $easterStart = clone $expectEaster;
-                    $easterStart->sub(new DateInterval('PT' . abs($duration) . 'M'));
+                    $easterStart->sub(new \DateInterval('PT' . abs($duration) . 'M'));
                 }
                 $check = clone $easterStart;
-                $check->sub(new DateInterval('PT1M'));
+                $check->sub(new \DateInterval('PT1M'));
                 $result[] = [
-                    'message' => 'The nextRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the easter-day-Parameter.',
+                    'The nextRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the easter-day-Parameter.',
                     'expects' => [
                         'beginning' => $easterStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
                         'ending' => $easterEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1554,37 +1526,37 @@ class EasterRelTimerTest extends TestCase
         foreach ([-430000, -400, -4, 40, 430000] as $relToInMin) {
             foreach ([-430001, -43001, -401, 5, 41, 430001] as $duration) {
                 foreach ([
-                             'easter' => '2020-04-12',
-                             'ascension' => '2020-05-21',
-                             'pentecost' => '2020-05-31',
-                             'firstadvent' => '2020-11-29',
-                             'christmas' => '2020-12-25',
-                             'rosemonday' => '2020-02-24',
-                             'goodfriday' => '2020-04-10',
-                         ] as $dateKey => $dateString) {
+                    'easter' => '2020-04-12',
+                    'ascension' => '2020-05-21',
+                    'pentecost' => '2020-05-31',
+                    'firstadvent' => '2020-11-29',
+                    'christmas' => '2020-12-25',
+                    'rosemonday' => '2020-02-24',
+                    'goodfriday' => '2020-04-10',
+                ] as $dateKey => $dateString) {
                     $expectEaster = date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $dateString . ' 12:00:00',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     );
                     if ($relToInMin > 0) {
-                        $expectEaster->add(new DateInterval(('PT' . $relToInMin . 'M')));
+                        $expectEaster->add(new \DateInterval(('PT' . $relToInMin . 'M')));
                     } else {
-                        $expectEaster->sub(new DateInterval(('PT' . abs($relToInMin) . 'M')));
+                        $expectEaster->sub(new \DateInterval(('PT' . abs($relToInMin) . 'M')));
                     }
                     if ($duration > 0) {
                         $easterStart = clone $expectEaster;
                         $easterEnd = clone $expectEaster;
-                        $easterEnd->add(new DateInterval('PT' . abs($duration) . 'M'));
+                        $easterEnd->add(new \DateInterval('PT' . abs($duration) . 'M'));
                     } else {
                         $easterEnd = clone $expectEaster;
                         $easterStart = clone $expectEaster;
-                        $easterStart->sub(new DateInterval('PT' . abs($duration) . 'M'));
+                        $easterStart->sub(new \DateInterval('PT' . abs($duration) . 'M'));
                     }
                     $check = clone $easterEnd;
-                    $check->add(new DateInterval('PT1M'));
+                    $check->add(new \DateInterval('PT1M'));
                     $result[] = [
-                        'message' => 'The nextRange for duration `' . $duration .
+                        'The nextRange for duration `' . $duration .
                             '` at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the variation of the relative-gap `' .
                             $relToInMin . '` and with the date-type-parameter.',
                         'expects' => [
@@ -1630,65 +1602,65 @@ class EasterRelTimerTest extends TestCase
         // Methode 3 easter ever julian calendar
         // the first two items in '2'=> list were manually calculated
         foreach ([
-                     '0' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-19',
-                         'firstadvent' => '1752-11-29',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-10',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                     '1' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-29',
-                         'firstadvent' => '1752-12-03',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-11',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                     '2' => [
-                         'easter' => '1400-04-20',
-                         'ascension' => '1582-05-27',
-                         'pentecost' => '1583-05-29',
-                         'firstadvent' => '1752-12-03',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-11',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                     '3' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-19',
-                         'firstadvent' => '1752-11-29',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-10',
-                         'goodfriday' => '2020-04-04',
-                     ],
-                     'null' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-19',
-                         'firstadvent' => '1752-11-29',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-10',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                 ] as $method => $list) {
+            '0' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-19',
+                'firstadvent' => '1752-11-29',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-10',
+                'goodfriday' => '2020-04-10',
+            ],
+            '1' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-29',
+                'firstadvent' => '1752-12-03',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-11',
+                'goodfriday' => '2020-04-10',
+            ],
+            '2' => [
+                'easter' => '1400-04-20',
+                'ascension' => '1582-05-27',
+                'pentecost' => '1583-05-29',
+                'firstadvent' => '1752-12-03',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-11',
+                'goodfriday' => '2020-04-10',
+            ],
+            '3' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-19',
+                'firstadvent' => '1752-11-29',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-10',
+                'goodfriday' => '2020-04-04',
+            ],
+            'null' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-19',
+                'firstadvent' => '1752-11-29',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-10',
+                'goodfriday' => '2020-04-10',
+            ],
+        ] as $method => $list) {
             foreach ($list as $dateKey => $dateString) {
                 $start = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     $dateString . ' 12:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $end = clone $start;
-                $end->add(new DateInterval('PT120M'));
+                $end->add(new \DateInterval('PT120M'));
                 // below  the estimated start-border
                 $check = clone $start;
-                $check->sub(new DateInterval('PT1M'));
+                $check->sub(new \DateInterval('PT1M'));
                 $myItem = [
-                    'message' => 'The nextRange for variationof  method `' . print_r($method, true) .
+                    'The nextRange for variationof  method `' . print_r($method, true) .
                         '` at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` with definition of date `' . $myMapName[$dateKey] . '` .',
                     'expects' => [
                         'beginning' => $start->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -1717,21 +1689,20 @@ class EasterRelTimerTest extends TestCase
             }
         }
 
-
         // okay 20210109
 
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach ([
-                         'UTC',
-                         'Europe/Berlin',
-                         'Australia/Eucla',
-                         'America/Detroit',
-                         'Pacific/Fiji',
-                         'Indian/Chagos',
-                     ] as $timezoneName) {
+                'UTC',
+                'Europe/Berlin',
+                'Australia/Eucla',
+                'America/Detroit',
+                'Pacific/Fiji',
+                'Indian/Chagos',
+            ] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
+                    'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'beginning' => '2021-12-25 12:00:00',
                         'ending' => '2021-12-25 14:00:00',
@@ -1741,7 +1712,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -1757,7 +1728,7 @@ class EasterRelTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The nextRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'beginning' => '2020-12-25 12:00:00',
                         'ending' => '2020-12-25 14:00:00',
@@ -1767,7 +1738,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 11:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -1786,22 +1757,22 @@ class EasterRelTimerTest extends TestCase
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2020-12-25 11:00:00',
-                     '2020-12-25 12:00:00',
-                     '2020-12-25 13:00:00',
-                     '2020-12-25 14:00:00',
-                     '2020-12-25 18:00:00',
-                     '2021-12-25 11:00:00',
-                     '2021-12-25 12:00:00',
-                     '2021-12-25 13:00:00',
-                     '2021-12-25 14:00:00',
-                     '2021-12-25 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $timeString) {
+            '0001-01-01 00:00:00',
+            '2020-12-25 11:00:00',
+            '2020-12-25 12:00:00',
+            '2020-12-25 13:00:00',
+            '2020-12-25 14:00:00',
+            '2020-12-25 18:00:00',
+            '2021-12-25 11:00:00',
+            '2021-12-25 12:00:00',
+            '2021-12-25 13:00:00',
+            '2021-12-25 14:00:00',
+            '2021-12-25 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $timeString) {
             if ($timeString >= '2021-12-25 14:00:00') {
                 $result[] = [
-                    'message' => 'the testtime ist part of an active range. The nextRange is correctly detected for the `2020-12-25 13:00:00` with the ultimate ending `' .
+                    'the testtime ist part of an active range. The nextRange is correctly detected for the `2020-12-25 13:00:00` with the ultimate ending `' .
                         $timeString . '`.',
                     'expects' => [
                         'beginning' => '2021-12-25 12:00:00',
@@ -1812,7 +1783,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -1830,7 +1801,7 @@ class EasterRelTimerTest extends TestCase
             }
             if ($timeString <= '2020-12-25 11:00:00') {
                 $result[] = [
-                    'message' => 'The tsttime is not part of an active Range. The nextRange is correctly detected for the `2020-12-25 11:00:00` with the beginning `' .
+                    'The tsttime is not part of an active Range. The nextRange is correctly detected for the `2020-12-25 11:00:00` with the beginning `' .
                         $timeString . '`.',
                     'expects' => [
                         'beginning' => '2020-12-25 12:00:00',
@@ -1841,7 +1812,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 11:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -1859,18 +1830,15 @@ class EasterRelTimerTest extends TestCase
             }
         }
 
-
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderNextActive
-     * @test
-     */
+    #[DataProvider('dataProviderNextActive')]
+    #[Test]
     public function nextActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = $params['value'];
@@ -1893,20 +1861,19 @@ class EasterRelTimerTest extends TestCase
             $flag = $flag && (($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
                     (abs($diffEnd) <= 60)); // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             $flag = $flag && ($result->hasResultExist() === $expects['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'nextActive: ' . $message . "\nExpected: : " . print_r($expects, true)
             );
         }
     }
 
-
     public static function dataProviderPrevActive()
     {
         $result = [];
         // rondomly Test
         $result[] = [
-            'message' => 'The selected date is christmas between 12:00 and 14:00 in the prev year, ' .
+            'The selected date is christmas between 12:00 and 14:00 in the prev year, ' .
                 'because the current time is in an active part.',
             'expects' => [
                 'beginning' => '2021-12-25 12:00:00',
@@ -1917,7 +1884,7 @@ class EasterRelTimerTest extends TestCase
                 'value' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2022-12-25 11:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
@@ -1933,7 +1900,7 @@ class EasterRelTimerTest extends TestCase
             ],
         ];
         $result[] = [
-            'message' => 'The selected date is christmas between 12:00 and 14:00 in the prev year, ' .
+            'The selected date is christmas between 12:00 and 14:00 in the prev year, ' .
                 'because the current time is before the  active part in the current year.',
             'expects' => [
                 'beginning' => '2020-12-25 12:00:00',
@@ -1944,7 +1911,7 @@ class EasterRelTimerTest extends TestCase
                 'value' => date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     '2020-12-25 15:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 ),
                 'setting' => [
                     'namedDateMidnight' => 'christmas', // Christmas
@@ -2033,7 +2000,7 @@ class EasterRelTimerTest extends TestCase
         ) {
             foreach ($list as $testDate => $expectDate) {
                 $result[] = [
-                    'message' => 'The prevRange for ' . $mapName[$namedDate] . ' is correctly detected for the Startdate `' . $testDate . '`. ',
+                    'The prevRange for ' . $mapName[$namedDate] . ' is correctly detected for the Startdate `' . $testDate . '`. ',
                     'expects' => [
                         'beginning' => $expectDate . ' 12:00:00',
                         'ending' => $expectDate . ' 14:00:00',
@@ -2043,7 +2010,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             $testDate,
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ), // Variation
                         'setting' => [
                             'namedDateMidnight' => $namedDate, // variation
@@ -2061,36 +2028,35 @@ class EasterRelTimerTest extends TestCase
             }
         }
 
-
         // Variation for duration with systematic variation of datekey and corrosponding date
         foreach ([-430000, -43000, -400, -4, 4, 40, 4000, 430000] as $duration) {
             foreach ([
-                         'easter' => '2020-04-12',
-                         'ascension' => '2020-05-21',
-                         'pentecost' => '2020-05-31',
-                         'firstadvent' => '2020-11-29',
-                         'christmas' => '2020-12-25',
-                         'rosemonday' => '2020-02-24',
-                         'goodfriday' => '2020-04-10',
-                     ] as $dateKey => $dateString) {
+                'easter' => '2020-04-12',
+                'ascension' => '2020-05-21',
+                'pentecost' => '2020-05-31',
+                'firstadvent' => '2020-11-29',
+                'christmas' => '2020-12-25',
+                'rosemonday' => '2020-02-24',
+                'goodfriday' => '2020-04-10',
+            ] as $dateKey => $dateString) {
                 $expectEaster = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     $dateString . ' 12:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 if ($duration > 0) {
                     $easterStart = clone $expectEaster;
                     $easterEnd = clone $expectEaster;
-                    $easterEnd->add(new DateInterval('PT' . abs($duration) . 'M'));
+                    $easterEnd->add(new \DateInterval('PT' . abs($duration) . 'M'));
                 } else {
                     $easterEnd = clone $expectEaster;
                     $easterStart = clone $expectEaster;
-                    $easterStart->sub(new DateInterval('PT' . abs($duration) . 'M'));
+                    $easterStart->sub(new \DateInterval('PT' . abs($duration) . 'M'));
                 }
                 $check = clone $easterStart;
-                $check->sub(new DateInterval('PT1M'));
+                $check->sub(new \DateInterval('PT1M'));
                 $result[] = [
-                    'message' => 'The prevRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the easter-day-Parameter.',
+                    'The prevRange for duration at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the easter-day-Parameter.',
                     'expects' => [
                         'beginning' => $easterStart->format(TimerInterface::TIMER_FORMAT_DATETIME),
                         'ending' => $easterEnd->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -2118,37 +2084,37 @@ class EasterRelTimerTest extends TestCase
         foreach ([-430000, -400, -4, 40, 430000] as $relToInMin) {
             foreach ([-430001, -43001, -401, 5, 41, 430001] as $duration) {
                 foreach ([
-                             'easter' => '2020-04-12',
-                             'ascension' => '2020-05-21',
-                             'pentecost' => '2020-05-31',
-                             'firstadvent' => '2020-11-29',
-                             'christmas' => '2020-12-25',
-                             'rosemonday' => '2020-02-24',
-                             'goodfriday' => '2020-04-10',
-                         ] as $dateKey => $dateString) {
+                    'easter' => '2020-04-12',
+                    'ascension' => '2020-05-21',
+                    'pentecost' => '2020-05-31',
+                    'firstadvent' => '2020-11-29',
+                    'christmas' => '2020-12-25',
+                    'rosemonday' => '2020-02-24',
+                    'goodfriday' => '2020-04-10',
+                ] as $dateKey => $dateString) {
                     $expectEaster = date_create_from_format(
                         TimerInterface::TIMER_FORMAT_DATETIME,
                         $dateString . ' 12:00:00',
-                        new DateTimeZone('Europe/Berlin')
+                        new \DateTimeZone('Europe/Berlin')
                     );
                     if ($relToInMin > 0) {
-                        $expectEaster->add(new DateInterval(('PT' . $relToInMin . 'M')));
+                        $expectEaster->add(new \DateInterval(('PT' . $relToInMin . 'M')));
                     } else {
-                        $expectEaster->sub(new DateInterval(('PT' . abs($relToInMin) . 'M')));
+                        $expectEaster->sub(new \DateInterval(('PT' . abs($relToInMin) . 'M')));
                     }
                     if ($duration > 0) {
                         $easterStart = clone $expectEaster;
                         $easterEnd = clone $expectEaster;
-                        $easterEnd->add(new DateInterval('PT' . abs($duration) . 'M'));
+                        $easterEnd->add(new \DateInterval('PT' . abs($duration) . 'M'));
                     } else {
                         $easterEnd = clone $expectEaster;
                         $easterStart = clone $expectEaster;
-                        $easterStart->sub(new DateInterval('PT' . abs($duration) . 'M'));
+                        $easterStart->sub(new \DateInterval('PT' . abs($duration) . 'M'));
                     }
                     $check = clone $easterEnd;
-                    $check->add(new DateInterval('PT1M'));
+                    $check->add(new \DateInterval('PT1M'));
                     $result[] = [
-                        'message' => 'The prevRange for duration `' . $duration .
+                        'The prevRange for duration `' . $duration .
                             '` at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` is okay with the variation of the relative-gap `' .
                             $relToInMin . '` and with the date-type-parameter.',
                         'expects' => [
@@ -2192,65 +2158,65 @@ class EasterRelTimerTest extends TestCase
         // Methode 2 easter ever gregorian calendar
         // Methode 3 easter ever julian calendar
         foreach ([
-                     '0' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-19',
-                         'firstadvent' => '1752-11-29',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-10',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                     '1' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-29',
-                         'firstadvent' => '1752-12-03',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-11',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                     '2' => [
-                         'easter' => '1400-04-20',
-                         'ascension' => '1582-05-27',
-                         'pentecost' => '1583-05-29',
-                         'firstadvent' => '1752-12-03',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-11',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                     '3' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-19',
-                         'firstadvent' => '1752-11-29',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-10',
-                         'goodfriday' => '2020-04-04',
-                     ],
-                     'null' => [
-                         'easter' => '1400-04-18',
-                         'ascension' => '1582-05-24',
-                         'pentecost' => '1583-05-19',
-                         'firstadvent' => '1752-11-29',
-                         'christmas' => '1752-12-25',
-                         'rosemonday' => '1752-02-10',
-                         'goodfriday' => '2020-04-10',
-                     ],
-                 ] as $method => $list) {
+            '0' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-19',
+                'firstadvent' => '1752-11-29',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-10',
+                'goodfriday' => '2020-04-10',
+            ],
+            '1' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-29',
+                'firstadvent' => '1752-12-03',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-11',
+                'goodfriday' => '2020-04-10',
+            ],
+            '2' => [
+                'easter' => '1400-04-20',
+                'ascension' => '1582-05-27',
+                'pentecost' => '1583-05-29',
+                'firstadvent' => '1752-12-03',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-11',
+                'goodfriday' => '2020-04-10',
+            ],
+            '3' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-19',
+                'firstadvent' => '1752-11-29',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-10',
+                'goodfriday' => '2020-04-04',
+            ],
+            'null' => [
+                'easter' => '1400-04-18',
+                'ascension' => '1582-05-24',
+                'pentecost' => '1583-05-19',
+                'firstadvent' => '1752-11-29',
+                'christmas' => '1752-12-25',
+                'rosemonday' => '1752-02-10',
+                'goodfriday' => '2020-04-10',
+            ],
+        ] as $method => $list) {
             foreach ($list as $dateKey => $dateString) {
                 $start = date_create_from_format(
                     TimerInterface::TIMER_FORMAT_DATETIME,
                     $dateString . ' 12:00:00',
-                    new DateTimeZone('Europe/Berlin')
+                    new \DateTimeZone('Europe/Berlin')
                 );
                 $end = clone $start;
-                $end->add(new DateInterval('PT120M'));
+                $end->add(new \DateInterval('PT120M'));
                 // above the estimated end-border
                 $check = clone $end;
-                $check->add(new DateInterval('PT1M'));
+                $check->add(new \DateInterval('PT1M'));
                 $myItem = [
-                    'message' => 'The nextRange for variationof  method `' . print_r($method, true) .
+                    'The nextRange for variationof  method `' . print_r($method, true) .
                         '` at time `' . $check->format(TimerInterface::TIMER_FORMAT_DATETIME) . '` with definition of date `' . $myMapName[$dateKey] . '` .',
                     'expects' => [
                         'beginning' => $start->format(TimerInterface::TIMER_FORMAT_DATETIME),
@@ -2279,20 +2245,19 @@ class EasterRelTimerTest extends TestCase
             }
         }
 
-
         // okay 20210110
         // 3. The Variation of `timeZoneOfEvent` and `useTimeZoneOfFrontend` is not relevant
         foreach ([true, false] as $useTimeZoneOfFrontend) {
             foreach ([
-                         'UTC',
-                         'Europe/Berlin',
-                         'Australia/Eucla',
-                         'America/Detroit',
-                         'Pacific/Fiji',
-                         'Indian/Chagos',
-                     ] as $timezoneName) {
+                'UTC',
+                'Europe/Berlin',
+                'Australia/Eucla',
+                'America/Detroit',
+                'Pacific/Fiji',
+                'Indian/Chagos',
+            ] as $timezoneName) {
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
+                    'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`. ',
                     'expects' => [
                         'beginning' => '2019-12-25 12:00:00',
                         'ending' => '2019-12-25 14:00:00',
@@ -2302,7 +2267,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -2318,7 +2283,7 @@ class EasterRelTimerTest extends TestCase
                     ],
                 ];
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
+                    'The prevRange is correctly detected. It works independently to the timezone `' . $timezoneName . '`.',
                     'expects' => [
                         'beginning' => '2020-12-25 12:00:00',
                         'ending' => '2020-12-25 14:00:00',
@@ -2328,7 +2293,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 15:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -2347,18 +2312,18 @@ class EasterRelTimerTest extends TestCase
         }
         // 4. The variation of Variate third Parameter `ultimateBeginningTimer` and `ultimateEndingTimer`
         foreach ([
-                     '0001-01-01 00:00:00',
-                     '2019-12-25 11:00:00',
-                     '2019-12-25 14:00:00',
-                     '2019-12-25 18:00:00',
-                     '2020-12-25 11:00:00',
-                     '2020-12-25 13:00:00',
-                     '2020-12-25 18:00:00',
-                     '9999-12-31 23:59:59',
-                 ] as $timeString) {
+            '0001-01-01 00:00:00',
+            '2019-12-25 11:00:00',
+            '2019-12-25 14:00:00',
+            '2019-12-25 18:00:00',
+            '2020-12-25 11:00:00',
+            '2020-12-25 13:00:00',
+            '2020-12-25 18:00:00',
+            '9999-12-31 23:59:59',
+        ] as $timeString) {
             if ($timeString >= '2019-12-25 14:00:00') {
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected with the endinglimit `' . $timeString .
+                    'The prevRange is correctly detected with the endinglimit `' . $timeString .
                         '`. The testtime is part of an active range. ',
                     'expects' => [
                         'beginning' => '2019-12-25 12:00:00',
@@ -2369,7 +2334,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 13:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -2387,7 +2352,7 @@ class EasterRelTimerTest extends TestCase
             }
             if ($timeString <= '2019-12-25 12:00:00') {
                 $result[] = [
-                    'message' => 'The prevRange is correctly detected with the endinglimit `' . $timeString .
+                    'The prevRange is correctly detected with the endinglimit `' . $timeString .
                         '`. The testtime is part of an active range. ',
                     'expects' => [
                         'beginning' => '2020-12-25 12:00:00',
@@ -2398,7 +2363,7 @@ class EasterRelTimerTest extends TestCase
                         'value' => date_create_from_format(
                             TimerInterface::TIMER_FORMAT_DATETIME,
                             '2020-12-25 15:00:00',
-                            new DateTimeZone('Europe/Berlin')
+                            new \DateTimeZone('Europe/Berlin')
                         ),
                         'setting' => [
                             'namedDateMidnight' => 'christmas', // Christmas
@@ -2419,14 +2384,12 @@ class EasterRelTimerTest extends TestCase
         return $result;
     }
 
-    /**
-     * @dataProvider dataProviderPrevActive
-     * @test
-     */
+    #[DataProvider('dataProviderPrevActive')]
+    #[Test]
     public function prevActive($message, $expects, $params)
     {
         if (!isset($expects) && empty($expects)) {
-            $this->assertSame(true, true, 'empty-data at the end of the provider or empty data-provider');
+            self::assertTrue(true, 'empty-data at the end of the provider or empty data-provider');
         } else {
             $setting = array_merge($params['setting']);
             $value = $params['value'];
@@ -2449,7 +2412,7 @@ class EasterRelTimerTest extends TestCase
             $flag = $flag && (($result->getEnding()->format(TimerInterface::TIMER_FORMAT_DATETIME) === $expects['ending']) ||
                     (abs($diffEnd) <= 60)); // The second paert is addexd to prevend errors because of the missing hour on summertime // see comment an the end of the code
             $flag = $flag && ($result->hasResultExist() === $expects['exist']);
-            $this->assertTrue(
+            self::assertTrue(
                 ($flag),
                 'prev
                 Active: ' . $message . "\nExpected: : " . print_r($expects, true)

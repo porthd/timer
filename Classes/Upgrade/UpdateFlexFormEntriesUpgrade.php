@@ -9,12 +9,9 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
-#[UpgradeWizard('timer_updateFlexFormEntriesUpgrade')]
-final class UpdateFlexFormEntriesUpgrade implements UpgradeWizardInterface
+#[\TYPO3\CMS\Core\Attribute\UpgradeWizard('timer_updateFlexFormEntriesUpgrade')]
+final class UpdateFlexFormEntriesUpgrade implements \TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface
 {
     private const TYPO3_VERSION_ALLOWED = 13;
 
@@ -51,7 +48,6 @@ final class UpdateFlexFormEntriesUpgrade implements UpgradeWizardInterface
 
     /**
      * define default-Values
-     *
      */
     public function executeUpdate(): bool
     {
@@ -61,11 +57,11 @@ final class UpdateFlexFormEntriesUpgrade implements UpgradeWizardInterface
          */
         $success = true;
         foreach (['tt_content' => $this->ttContent,
-                     'pages' => $this->pages,
-                     'sys_file_reference' => $this->sysFileReference,
-                     'tx_timer_domain_model_listing' => $this->txTimerDomainModelListing,
-                     'tx_timer_domain_model_event' => $this->txTimerDomainModelEvent,
-                 ] as $table => $queryBuilder) {
+            'pages' => $this->pages,
+            'sys_file_reference' => $this->sysFileReference,
+            'tx_timer_domain_model_listing' => $this->txTimerDomainModelListing,
+            'tx_timer_domain_model_event' => $this->txTimerDomainModelEvent,
+        ] as $table => $queryBuilder) {
             $queryBuilder->select('uid', 'tx_timer_timer')
                 ->from($table)
                 ->where(
@@ -77,11 +73,16 @@ final class UpdateFlexFormEntriesUpgrade implements UpgradeWizardInterface
                 );
             $list = $queryBuilder->executeQuery()->fetchAllAssociative();
             if (!empty($list)) {
-                foreach ($list as [$uid, $flexformString]) {
+                foreach ($list as ['uid' => $uid, 'tx_timer_timer' => $flexformString]) {
                     $helpQuery = (GeneralUtility::makeInstance(ConnectionPool::class))
                         ->getQueryBuilderForTable($table);
-                    $help = preg_replace('/\<TCEFORM>/i', '', $flexformString);
-                    $newFlexformString = preg_replace('/\</TCEFORM>/i', '', $help);
+                    // Strip the superfluous opening and closing <TCEFORM> tags.
+                    // The closing pattern must escape the slash, otherwise it
+                    // ends the regex delimiter and "TCEFORM>" is parsed as
+                    // (invalid) modifiers, making preg_replace return null and
+                    // NULLing the flexform column instead of cleaning it.
+                    $help = preg_replace('/<TCEFORM>/i', '', $flexformString);
+                    $newFlexformString = preg_replace('/<\/TCEFORM>/i', '', $help);
                     $helpQuery->update($table)
                         ->set('tx_timer_timer', $newFlexformString)
                         ->where(
@@ -110,7 +111,7 @@ final class UpdateFlexFormEntriesUpgrade implements UpgradeWizardInterface
     {
         /** @var Typo3Version $typo3Version */
         $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-        return ((int)$typo3Version->getMajorVersion() === self::TYPO3_VERSION_ALLOWED);
+        return (int)$typo3Version->getMajorVersion() === self::TYPO3_VERSION_ALLOWED;
     }
 
     /**
@@ -124,7 +125,7 @@ final class UpdateFlexFormEntriesUpgrade implements UpgradeWizardInterface
     public function getPrerequisites(): array
     {
         return [
-            DatabaseUpdatedPrerequisite::class,
+            \TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite::class,
         ];
     }
 }

@@ -24,6 +24,7 @@ namespace Porthd\Timer\DataProcessing;
  ***************************************************************/
 
 use DateTime;
+use Porthd\Timer\Cache\PageCacheFlusher;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\CustomTimer\PeriodListTimer;
 use Porthd\Timer\DataProcessing\Trait\GeneralDataProcessorTrait;
@@ -36,7 +37,6 @@ use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
@@ -97,7 +97,6 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
  *          #tablename = tx_something
  *
  *     }
- *
  */
 class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcessorTraitInterface
 {
@@ -125,7 +124,6 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
         self::ADDITIONAL_POST_KEY_FOR_DIFF_DAYS,
     ];
 
-
     protected const OUTPUT_KEY_DATA = 'data';
     protected const DEFAULT_MAX_COUNT = '25';
     protected const DEFAULT_RESULT_VARIABLE_NAME = 'periodlist';
@@ -140,7 +138,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
     protected $cache;
 
     /**
-     * @var CacheService
+     * @var PageCacheFlusher
      */
     protected $cacheManager;
 
@@ -156,21 +154,19 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
 
     /**
      * @param FrontendInterface $cache
-     * @param CacheService $cacheManager
+     * @param PageCacheFlusher $cacheManager
      */
     public function __construct(
         FrontendInterface $cache,
-        CacheService      $cacheManager,
-        PeriodListTimer   $periodListTimer,
-        YamlFileLoader    $yamlFileLoader
-    )
-    {
+        PageCacheFlusher $cacheManager,
+        PeriodListTimer $periodListTimer,
+        YamlFileLoader $yamlFileLoader
+    ) {
         $this->cache = $cache;
         $this->cacheManager = $cacheManager;
         $this->periodListTimer = $periodListTimer;
         $this->yamlFileLoader = $yamlFileLoader;
     }
-
 
     /**
      * Fetches records from the database as an array
@@ -187,8 +183,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    )
-    {
+    ) {
         $targetVariableName = $cObj->stdWrapValue(
             TimerConst::ARGUMENT_AS,
             $processorConfiguration,
@@ -310,7 +305,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
                     null
                 );
                 $lower = (
-                ($lowerDateString !== null) ?
+                    ($lowerDateString !== null) ?
                     date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $lowerDateString) :
                     null
                 );
@@ -320,7 +315,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
                     null
                 );
                 $upper = (
-                ($lowerDateString !== null) ?
+                    ($upperDateString !== null) ?
                     date_create_from_format(TimerInterface::TIMER_FORMAT_DATETIME, $upperDateString) :
                     null
                 );
@@ -329,7 +324,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
             if (array_key_exists(self::ATTR_FLAG_START, $processorConfiguration)) {
                 $flagValue = $cObj->stdWrapValue(self::ATTR_FLAG_START, $processorConfiguration, true);
                 $flagValue = is_string($flagValue) ? trim(strtolower($flagValue)) : $flagValue;
-                $flagStart = (in_array($flagValue, [0, '', '0', false, null, 'false', 0.0, [],], true) ?
+                $flagStart = (in_array($flagValue, [0, '', '0', false, null, 'false', 0.0, []], true) ?
                     false :
                     true);
             }
@@ -338,7 +333,7 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
 
             // sortiere $rawResult
             $referenceKey = (
-            ($flagStart) ?
+                ($flagStart) ?
                 PeriodListTimer::YAML_ITEMS_KEY_START :
                 PeriodListTimer::YAML_ITEMS_KEY_STOP
             );
@@ -354,13 +349,9 @@ class PeriodlistProcessor implements DataProcessorInterface, GeneralDataProcesso
                     break;
                 }
                 if (($lower === null) ||
-                    (
-                        ($lowerDateString !== null) &&
-                        ($lowerDateString < $item[$referenceKey])
-                    )
+                    ($lowerDateString < $item[$referenceKey])
                 ) {
                     if (($upper !== null) &&
-                        ($upperDateString !== null) &&
                         ($upperDateString > $item[$referenceKey])
                     ) {
                         break;

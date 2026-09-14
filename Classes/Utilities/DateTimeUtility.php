@@ -23,7 +23,6 @@ namespace Porthd\Timer\Utilities;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Porthd\Timer\Constants\TimerConst;
@@ -57,12 +56,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * Problem you cant use Format, to generate the Output for a wisched Time-Zone
  * Class DateTimeUtility
- * @package Porthd\Timer\Utilities
  */
 class DateTimeUtility
 {
     public const BASE_TEST_DATE = '1980/1/1';
-
 
     protected const KEY_UNIT_MINUTE = 'TM';
     protected const KEY_UNIT_HOUR = 'TH';
@@ -76,20 +73,20 @@ class DateTimeUtility
      *
      * format a date including for the inherit zone of the date
      *
-     * @param DateTime $date
+     * @param \DateTime $date
      * @param string $format
      * @return string
      * @throws TimerException
      */
-    public static function formatForZone(DateTime $date, string $format): string
+    public static function formatForZone(\DateTime $date, string $format): string
     {
-        /** @var DateTime $clone */
+        /** @var \DateTime $clone */
         $clone = clone $date;
-        /** @var DateTimeZone $cloneZone */
+        /** @var \DateTimeZone $cloneZone */
         $cloneZone = $clone->getTimezone();
         $seconds = $cloneZone->getOffset($clone);
-        /** @var DateInterval $offset */
-        $offset = new DateInterval('PT' . abs($seconds) . 'S');
+        /** @var \DateInterval $offset */
+        $offset = new \DateInterval('PT' . abs($seconds) . 'S');
         if ($seconds > 0) {
             $clone->sub($offset);
         } else {
@@ -100,28 +97,26 @@ class DateTimeUtility
         return $clone->format($format);
     }
 
-
     /**
      * * test: ?
      *
-     * @param DateTime $dateValue
+     * @param \DateTime $dateValue
      * @param string $eventZone
      * @param string $activeZone
-     * @return DateTime
+     * @return \DateTime
      * @throws TimerException
      */
-    public static function normalizeTimezoneGap(DateTime $dateValue, $eventZone, $activeZone = '')
+    public static function normalizeTimezoneGap(\DateTime $dateValue, $eventZone, $activeZone = '')
     {
         $myDate = clone $dateValue;
         $offset = DateTimeUtility::getTimezoneOffset($eventZone, $activeZone);
         if ($offset > 0) {
-            $myDate->add(new DateInterval('PT' . $offset . 'S'));
+            $myDate->add(new \DateInterval('PT' . $offset . 'S'));
         } else {
-            $myDate->sub(new DateInterval('PT' . abs($offset) . 'S'));
+            $myDate->sub(new \DateInterval('PT' . abs($offset) . 'S'));
         }
         return $myDate;
     }
-
 
     /**
      * test: ?
@@ -141,14 +136,14 @@ class DateTimeUtility
         if ((empty($frontendTimeZone)) || ($frontendTimeZone === $eventTimeZone)) {
             return 0;
         }
-        $eventTimeZoneObj = new DateTimeZone($eventTimeZone);
-        $frontendTimeZoneObj = new DateTimeZone($frontendTimeZone);
-        $eventTime = new DateTime(
+        $eventTimeZoneObj = new \DateTimeZone($eventTimeZone);
+        $frontendTimeZoneObj = new \DateTimeZone($frontendTimeZone);
+        $eventTime = new \DateTime(
             DateTimeUtility::BASE_TEST_DATE,
             $eventTimeZoneObj
         ); // php does not calculate the GMT timestimp
-        $frontendTime = new DateTime(DateTimeUtility::BASE_TEST_DATE, $frontendTimeZoneObj);
-        return ($eventTimeZoneObj->getOffset($eventTime) - $frontendTimeZoneObj->getOffset($frontendTime));
+        $frontendTime = new \DateTime(DateTimeUtility::BASE_TEST_DATE, $frontendTimeZoneObj);
+        return $eventTimeZoneObj->getOffset($eventTime) - $frontendTimeZoneObj->getOffset($frontendTime);
     }
 
     /**
@@ -223,14 +218,14 @@ class DateTimeUtility
     //    }
 
     /**
-     * @param DateTime $destDateTime
-     * @param DateTime $startTime
+     * @param \DateTime $destDateTime
+     * @param \DateTime $startTime
      * @param int $periodLength
      * @param string $periodUnit
      * @return int
      * @throws TimerException
      */
-    public static function diffPeriod(DateTime $destDateTime, DateTime $startTime, int $periodLength, string $periodUnit): int
+    public static function diffPeriod(\DateTime $destDateTime, \DateTime $startTime, int $periodLength, string $periodUnit): int
     {
         $calcDateTime = clone $destDateTime;
         $differenz = $calcDateTime->diff($startTime);
@@ -277,12 +272,14 @@ class DateTimeUtility
                 );
         }
         if ($flagSeconds) {
-            if ($rawCount < 0) {
-                $toZeroCountPeriod = -$rawCount + 1;
-            } else {
-                $toZeroCountPeriod = $rawCount;
-            }
-
+            // Mirror the calendar-unit branch (below) for the second-based units
+            // (minute/hour/day/week): when the destination lies *before* the anchor
+            // ($rawCount > 0, i.e. positive $diffSeconds) the count must become
+            // negative, so the caller steps backwards instead of forwards. Without
+            // this the week-based period stepping ran the wrong direction for a
+            // requested time far before the startDateTime anchor. Only $rawCount == 0
+            // (destination within one period of the anchor) stays 0.
+            $toZeroCountPeriod = ($rawCount == 0) ? 0 : (-$rawCount + 1);
         } else {
             if ($differenz->invert) {
                 $toZeroCountPeriod = -$rawCount + 1;
@@ -294,7 +291,7 @@ class DateTimeUtility
     }
 
     /**
-     * @return DateTime|false
+     * @return \DateTime|false
      * @throws AspectNotFoundException
      */
     public static function getCurrentExecTime()
@@ -302,6 +299,6 @@ class DateTimeUtility
         $execTimeIso = GeneralUtility::makeInstance(Context::class)
             ->getPropertyFromAspect('date', 'iso');
         // Reading the current data instead of $GLOBALS['EXEC_TIME']
-        return DateTime::createFromFormat(DATE_ATOM, $execTimeIso);
+        return \DateTime::createFromFormat(DATE_ATOM, $execTimeIso);
     }
 }

@@ -23,11 +23,8 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-use DateInterval;
 use DateTime;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Interfaces\TimerInterface;
@@ -140,11 +137,11 @@ class WeekdayInMonthTimer implements TimerInterface
     /**
      * tested 20201226
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -176,7 +173,6 @@ class WeekdayInMonthTimer implements TimerInterface
         return $flag && ($countOptions >= 0) &&
             ($countOptions <= count(self::ARG_OPT_LIST));
     }
-
 
     /**
      * This method are introduced for easy build of unittests
@@ -222,7 +218,7 @@ class WeekdayInMonthTimer implements TimerInterface
     protected function validateActiveMonth(array $params = []): bool
     {
         $value = (
-        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );
@@ -257,12 +253,12 @@ class WeekdayInMonthTimer implements TimerInterface
         if (is_string($params[self::ARG_REQ_DURATION_MINUTES])) {
             $flagCheck = (bool)preg_match('/^\d+$/', $params[self::ARG_REQ_DURATION_MINUTES]);
         }
-        return (
-            ($flagCheck) &&
+        return
+            $flagCheck &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
-        );
+        ;
     }
 
     /**
@@ -282,11 +278,11 @@ class WeekdayInMonthTimer implements TimerInterface
      * example. "every first tuesday in may beginning ad 22:00 for 4 hours." The date wendesday 4.5.2022 01:00 is part of an allowed range,
      * because the start of the range is the tuesday 3.5.2022 at 22:00 and the by the startpoint allowed range will end at 4.5.2022 02:00.
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -298,7 +294,7 @@ class WeekdayInMonthTimer implements TimerInterface
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);
         $allowedMonths = (int)(
-        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );
@@ -331,12 +327,12 @@ class WeekdayInMonthTimer implements TimerInterface
                 $numberOfDay = ($rangeStartRelativeToDate->format('j'));
             }
 
-            $rangeStopRelativeToDate->add(new DateInterval('PT' . $durationMinutes . 'M'));
+            $rangeStopRelativeToDate->add(new \DateInterval('PT' . $durationMinutes . 'M'));
             if ($rangeStopRelativeToDate->format('j') !== $dateLikeEventZone->format('j')) {
                 $rangeStartBefore = clone $rangeStartRelativeToDate;
-                $rangeStartBefore->sub(new DateInterval('P1D'));
+                $rangeStartBefore->sub(new \DateInterval('P1D'));
                 $rangeStopBefore = clone $rangeStopRelativeToDate;
-                $rangeStopBefore->sub(new DateInterval('P1D'));
+                $rangeStopBefore->sub(new \DateInterval('P1D'));
                 $flagRangeOtherDay = (
                     ($rangeStartBefore <= $dateLikeEventZone) &&
                     ($dateLikeEventZone <= $rangeStopBefore)
@@ -372,12 +368,12 @@ class WeekdayInMonthTimer implements TimerInterface
             } else {
                 $numberOfDay = (int)$rangeStopRelativeToDate->format('j');
             }
-            $rangeStartRelativeToDate->sub(new DateInterval('PT' . $durationMinutes . 'M'));
+            $rangeStartRelativeToDate->sub(new \DateInterval('PT' . $durationMinutes . 'M'));
             if ($rangeStartRelativeToDate->format('j') !== $dateLikeEventZone->format('j')) {
                 $rangeStartBefore = clone $rangeStartRelativeToDate;
-                $rangeStartBefore->add(new DateInterval('P1D'));
+                $rangeStartBefore->add(new \DateInterval('P1D'));
                 $rangeStopBefore = clone $rangeStopRelativeToDate;
-                $rangeStopBefore->add(new DateInterval('P1D'));
+                $rangeStopBefore->add(new \DateInterval('P1D'));
                 $flagRangeOtherDay = (
                     ($rangeStartBefore <= $dateLikeEventZone) &&
                     ($dateLikeEventZone <= $rangeStopBefore)
@@ -436,11 +432,11 @@ class WeekdayInMonthTimer implements TimerInterface
     /**
      * tested:
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -448,11 +444,11 @@ class WeekdayInMonthTimer implements TimerInterface
     /**
      * tested 20221012
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -461,7 +457,7 @@ class WeekdayInMonthTimer implements TimerInterface
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);
         $allowedMonths = (int)(
-        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );
@@ -479,14 +475,13 @@ class WeekdayInMonthTimer implements TimerInterface
         if ($durationMinutes > 0) {
             $lower = clone $checkDate;
             $upper = clone $checkDate;
-            $upper->add(new DateInterval('PT' . $durationMinutes . 'M'));
+            $upper->add(new \DateInterval('PT' . $durationMinutes . 'M'));
         } else {
             $lower = clone $checkDate;
             $upper = clone $checkDate;
-            $lower->sub(new DateInterval('PT' . $durationMinutes . 'M'));
+            $lower->sub(new \DateInterval('PT' . $durationMinutes . 'M'));
         }
         $maxCountDown = self::MAX_COUNT_NEXT_PREV_CALCS;
-        $flagChange = false;
         while ($maxCountDown > 0) {
             $flagCheckMonth = (
                 (2 ** ($checkDate->format('n') - 1)) & $allowedMonths
@@ -513,11 +508,10 @@ class WeekdayInMonthTimer implements TimerInterface
             $flagActive = $flagActive && $flagNumerberOfDayInMonth;
             // build last range used. if no valid range exist, then use the next range relative to the current
             if ($flagActive) {
-                $flagChange = true;
                 break;
             }
             if (!$flagCheckMonth) {
-                $checkDate->add(new DateInterval('P1M'));
+                $checkDate->add(new \DateInterval('P1M'));
                 // reset to the first on month
                 $checkDate->setDate(
                     ((int)$checkDate->format('Y')),
@@ -527,16 +521,16 @@ class WeekdayInMonthTimer implements TimerInterface
                 if ($durationMinutes > 0) {
                     $lower = clone $checkDate;
                     $upper = clone $checkDate;
-                    $upper->add(new DateInterval('PT' . $durationMinutes . 'M'));
+                    $upper->add(new \DateInterval('PT' . $durationMinutes . 'M'));
                 } else {
                     $lower = clone $checkDate;
                     $upper = clone $checkDate;
-                    $lower->sub(new DateInterval('PT' . $durationMinutes . 'M'));
+                    $lower->sub(new \DateInterval('PT' . $durationMinutes . 'M'));
                 }
             } else {
-                $checkDate->add(new DateInterval('P1D'));
-                $upper->add(new DateInterval('P1D'));
-                $lower->add(new DateInterval('P1D'));
+                $checkDate->add(new \DateInterval('P1D'));
+                $upper->add(new \DateInterval('P1D'));
+                $lower->add(new \DateInterval('P1D'));
             }
             $maxCountDown--;
         }
@@ -551,21 +545,19 @@ class WeekdayInMonthTimer implements TimerInterface
             );
         }
 
-        if ($flagChange) {
-            $result->setBeginning($lower);
-            $result->setEnding($upper);
-            $result->setResultExist(true);
-        }
+        $result->setBeginning($lower);
+        $result->setEnding($upper);
+        $result->setResultExist(true);
 
         return $this->validateUltimateRangeForNextRange($result, $params, $dateLikeEventZone);
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -574,7 +566,7 @@ class WeekdayInMonthTimer implements TimerInterface
         $durationMinutes = (int)$params[self::ARG_REQ_DURATION_MINUTES];
         $allowedWeekdays = (int)($params[self::ARG_ACTIVE_WEEKDAY] ?? 127);
         $allowedMonths = (int)(
-        (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
+            (array_key_exists(self::ARG_ACTIVE_MONTH, $params)) ?
             $params[self::ARG_ACTIVE_MONTH] :
             self::ARG_ACTIVE_MONTH_ALL
         );
@@ -592,14 +584,13 @@ class WeekdayInMonthTimer implements TimerInterface
         if ($durationMinutes > 0) {
             $lower = clone $checkDate;
             $upper = clone $checkDate;
-            $upper->add(new DateInterval('PT' . $durationMinutes . 'M'));
+            $upper->add(new \DateInterval('PT' . $durationMinutes . 'M'));
         } else {
             $lower = clone $checkDate;
             $upper = clone $checkDate;
-            $lower->sub(new DateInterval('PT' . $durationMinutes . 'M'));
+            $lower->sub(new \DateInterval('PT' . $durationMinutes . 'M'));
         }
         $maxCountDown = self::MAX_COUNT_NEXT_PREV_CALCS;
-        $flagChange = false;
         while ($maxCountDown > 0) {
             $flagCheckMonth = (
                 (2 ** ($checkDate->format('n') - 1)) & $allowedMonths
@@ -626,7 +617,6 @@ class WeekdayInMonthTimer implements TimerInterface
             $flagActive = $flagActive && $flagNumerberOfDayInMonth;
             // build last range used. if no valid range exist, then use the next range relative to the current
             if ($flagActive) {
-                $flagChange = true;
                 break;
             }
             if (!$flagCheckMonth) {
@@ -636,20 +626,20 @@ class WeekdayInMonthTimer implements TimerInterface
                     ((int)$checkDate->format('m')),
                     1
                 );
-                $checkDate->sub(new DateInterval('P1D'));
+                $checkDate->sub(new \DateInterval('P1D'));
                 if ($durationMinutes > 0) {
                     $lower = clone $checkDate;
                     $upper = clone $checkDate;
-                    $upper->add(new DateInterval('PT' . $durationMinutes . 'M'));
+                    $upper->add(new \DateInterval('PT' . $durationMinutes . 'M'));
                 } else {
                     $lower = clone $checkDate;
                     $upper = clone $checkDate;
-                    $lower->sub(new DateInterval('PT' . $durationMinutes . 'M'));
+                    $lower->sub(new \DateInterval('PT' . $durationMinutes . 'M'));
                 }
             } else {
-                $checkDate->sub(new DateInterval('P1D'));
-                $upper->sub(new DateInterval('P1D'));
-                $lower->sub(new DateInterval('P1D'));
+                $checkDate->sub(new \DateInterval('P1D'));
+                $upper->sub(new \DateInterval('P1D'));
+                $lower->sub(new \DateInterval('P1D'));
             }
             $maxCountDown--;
         }
@@ -664,27 +654,24 @@ class WeekdayInMonthTimer implements TimerInterface
             );
         }
 
-        if ($flagChange) {
-            $result->setBeginning($lower);
-            $result->setEnding($upper);
-            $result->setResultExist(true);
-        }
+        $result->setBeginning($lower);
+        $result->setEnding($upper);
+        $result->setResultExist(true);
         return $this->validateUltimateRangeForPrevRange($result, $params, $dateLikeEventZone);
     }
 
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -698,11 +685,11 @@ class WeekdayInMonthTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

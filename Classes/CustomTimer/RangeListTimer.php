@@ -23,11 +23,8 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
-use DateInterval;
 use DateTime;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Domain\Model\Listing;
 use Porthd\Timer\Domain\Repository\ListingRepository;
@@ -41,7 +38,6 @@ use Porthd\Timer\Utilities\TcaUtility;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Loader\YamlFileLoader;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYamlInterface
@@ -69,7 +65,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     protected $lastIsActiveParams = [];
 
-
     /**
      * @var ListingRepository
      */
@@ -85,7 +80,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $this->listingRepository = GeneralUtility::makeInstance(ListingRepository::class);
         $this->yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
     }
-
 
     public const TIMER_NAME = 'txTimerRangeList';
     protected const ARG_YAML_RECURSIVE_LOOP_LIMIT = 'recursiveLoopLimit';
@@ -122,7 +116,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         self::ARG_DATABASE_FORBIDDEN_RANGE_LIST,
     ];
 
-
     /**
      * tested 20210116
      *
@@ -132,7 +125,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     {
         return self::TIMER_NAME;
     }
-
 
     /**
      * tested 20221114
@@ -171,18 +163,17 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     /**
      * tested 20201226
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
     }
 
     /**
-     *
      * The method test, if the parameter in the yaml for the periodlist are okay
      * remark: This method must not be tested, if the sub-methods are valid.
      *
@@ -221,18 +212,18 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
                     'Check the timer-definitions in your YAML-file `' . $pathOfYamlFile . '`.',
                     1668247251
                 );
-            };
+            }
             $flag = ((!array_key_exists(self::YAML_LIST_ITEM_TITLE, $item)) ||
                 (!empty($item[self::YAML_LIST_ITEM_TITLE])));
             $flag = $flag && ((!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
                     (!empty($item[self::YAML_LIST_ITEM_DESCRIPTION])));
             $flag = $flag && (
-                    (!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
+                (!array_key_exists(self::YAML_LIST_ITEM_DESCRIPTION, $item)) ||
                     (
                         (is_array($item[self::YAML_LIST_ITEM_PARAMS])) &&
                         (!empty($item[self::YAML_LIST_ITEM_PARAMS]))
                     )
-                );
+            );
             if (!$flag) {
                 throw new TimerException(
                     'The optional attributes `' . self::YAML_LIST_ITEM_TITLE . '`, `' . self::YAML_LIST_ITEM_DESCRIPTION .
@@ -241,7 +232,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
                     print_r($item, true),
                     1668247500
                 );
-            };
+            }
             $flag = $timerList->validate(
                 $item[self::YAML_LIST_ITEM_SELECTOR],
                 $item[self::YAML_LIST_ITEM_PARAMS]
@@ -253,7 +244,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
                     print_r($item, true),
                     1668247500
                 );
-            };
+            }
         }
     }
 
@@ -300,7 +291,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         return $this->countParamsInList(self::ARG_OPT_LIST, $params);
     }
 
-
     /**
      * This method are introduced for easy build of unittests
      * @param array<mixed> $params
@@ -315,8 +305,21 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         // !!! allow the FAL-defintion as an substitute
         $flag = $flag || (!empty($params[self::ARG_DATABASE_ACTIVE_RANGE_LIST]));
 
-        // check for optional existing forbiddenpath
-        $flag = $flag && $this->validateFilePath(self::ARG_YAML_FORBIDDEN_FILE_PATH, $params);
+        // PURPOSE: Validate the *optional* forbidden-list YAML path without
+        //          rejecting the common "no forbidden list configured" case.
+        //
+        // PRECONDITIONS (data requirements):
+        //   - Flexform always emits `yamlForbiddenFilePath` as a (possibly empty)
+        //     string, so the key is present even when unconfigured.
+        //
+        // EDGE CASES:
+        //   - Empty string => treated as "not provided" => valid. validateFilePath()
+        //     returns false for a present-but-empty key, which would otherwise make
+        //     every database-only RangeList config invalid; skip it when empty.
+        $flag = $flag && (
+            empty($params[self::ARG_YAML_FORBIDDEN_FILE_PATH]) ||
+            $this->validateFilePath(self::ARG_YAML_FORBIDDEN_FILE_PATH, $params)
+        );
 
         return $flag;
     }
@@ -331,7 +334,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $flag = true;
         foreach ([self::ARG_DATABASE_ACTIVE_RANGE_LIST, self::ARG_DATABASE_FORBIDDEN_RANGE_LIST] as $paramKey) {
             $commaList = (
-            array_key_exists($paramKey, $params) ?
+                array_key_exists($paramKey, $params) ?
                 $params[$paramKey] :
                 ''
             );
@@ -350,17 +353,16 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         return $flag;
     }
 
-
     /**
      * tested: 20220910
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
             $result = new TimerStartStopRange();
@@ -368,7 +370,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             $this->setIsActiveResult($result->getBeginning(), $result->getEnding(), false, $dateLikeEventZone, $params);
             return $result->getResultExist();
         }
-
 
         $yamlActiveConfig = $this->readRangeListFromFileOrUrl(
             $this->yamlFileLoader,
@@ -440,17 +441,17 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
                 }
             }
         }
-        return (is_null($this->lastIsActiveResult) ? false : $this->lastIsActiveResult->getResultExist());
+        return is_null($this->lastIsActiveResult) ? false : $this->lastIsActiveResult->getResultExist();
     }
 
     /**
      * tested:
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -460,14 +461,14 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      *
      * tested 20221225
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         $this->loopRecursiveLimiter = (int)(
-        (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
+            (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
             $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
             self::MAX_TIME_LIMIT_MERGE_COUNT
         );
@@ -486,13 +487,13 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     /**
      * find the next range of a active timegap depending on the defined list
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @param int $recursiveLimiter
      * @return TimerStartStopRange
      */
     protected function nextActiveRecursive(
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = [],
         int $recursiveLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT,
         bool $flagInitial = true
@@ -538,7 +539,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * find the next range of a active timegap depending on the defined list
      *
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param ListOfTimerService $timerList
      * @param array<mixed> $activeTimerList
      * @param array<mixed> $forbiddenTimerList
@@ -547,7 +548,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @throws TimerException
      */
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @param ListOfTimerService $timerList
      * @param array<mixed> $activeTimerList
@@ -558,7 +559,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @throws TimerException
      */
     protected function nextActiveRecursiveWithForbidden(
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params,
         ListOfTimerService $timerList,
         array $activeTimerList,
@@ -574,9 +575,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         );
         if ($flagDateInForbiddenRange) {
             $forbiddenRange = $this->expandRangeAtEnding($result, $forbiddenTimerList, $timerList);
-            /** @var DateTime $newStart */
+            /** @var \DateTime $newStart */
             $newStart = clone $forbiddenRange->getEnding();
-            $newStart->add(new DateInterval('PT1S'));
+            $newStart->add(new \DateInterval('PT1S'));
             // is testtime in forbidden range?
             [$resultAfterForbidden, $flagDateInActiveRange] = $this->detectActiveRangeAndShowIncludeFlag(
                 $activeTimerList,
@@ -658,7 +659,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             } else {
                 $newStartRange = $rangeActiveWithoutForbidden->getEnding();
             }
-            $newStartRange->add(new DateInterval('PT1S'));
+            $newStartRange->add(new \DateInterval('PT1S'));
             return $this->nextActiveRecursive(
                 $newStartRange,
                 $params,
@@ -686,7 +687,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             ) {
                 // wenn ja, dann suche rekursive ab dem Ende vom Forbiddenbereich
                 $newStartDate = $rangeForbidden->getEnding();
-                $newStartDate->add(new DateInterval('PT1S'));
+                $newStartDate->add(new \DateInterval('PT1S'));
                 return $this->nextActiveRecursive(
                     $newStartDate,
                     $params,
@@ -730,7 +731,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     /**
      * find the next range of a active timegap depending on the defined list
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @param ListOfTimerService $timerList
      * @param array<mixed> $activeTimerList
@@ -741,7 +742,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @throws TimerException
      */
     protected function prevActiveRecursiveWithForbidden(
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params,
         ListOfTimerService $timerList,
         array $activeTimerList,
@@ -757,9 +758,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         );
         if ($flagDateInForbiddenRange) {
             $forbiddenRange = $this->expandRangeAtBeginning($result, $forbiddenTimerList, $timerList);
-            /** @var DateTime $newStart */
+            /** @var \DateTime $newStart */
             $newStart = clone $forbiddenRange->getBeginning();
-            $newStart->sub(new DateInterval('PT1S'));
+            $newStart->sub(new \DateInterval('PT1S'));
             // is testtime in forbidden range?
             [$resultBeforeForbidden, $flagDateInActiveRange] = $this->detectActiveRangeAndShowIncludeFlag(
                 $activeTimerList,
@@ -843,7 +844,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             } else {
                 $newStartRange = $rangeActiveWithoutForbidden->getBeginning();
             }
-            $newStartRange->sub(new DateInterval(('PT1S')));
+            $newStartRange->sub(new \DateInterval(('PT1S')));
             return $this->prevActiveRecursive(
                 $newStartRange,
                 $params,
@@ -871,7 +872,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             ) {
                 // wenn ja, dann suche rekursive ab dem Ende vom Forbiddenbereich
                 $newStartDate = $rangeForbidden->getBeginning();
-                $newStartDate->sub(new DateInterval('PT1S'));
+                $newStartDate->sub(new \DateInterval('PT1S'));
                 return $this->prevActiveRecursive(
                     $newStartDate,
                     $params,
@@ -916,7 +917,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * find the next range of a active timegap depending on the defined list
      *
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @param ListOfTimerService $timerList
      * @param array<mixed> $activeTimerList
@@ -926,7 +927,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @throws TimerException
      */
     protected function nextActiveRecursiveOnlyActive(
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params,
         ListOfTimerService $timerList,
         array $activeTimerList,
@@ -943,9 +944,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             if (!$flagIntial) {
                 return $result;
             }
-            /** @var DateTime $newStart */
+            /** @var \DateTime $newStart */
             $newStart = clone $result->getEnding();
-            $newStart->add(new DateInterval('PT1S'));
+            $newStart->add(new \DateInterval('PT1S'));
             return $this->nextActiveRecursive(
                 $newStart,
                 $params,
@@ -964,7 +965,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * find the next range of a active timegap depending on the defined list
      *
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @param ListOfTimerService $timerList
      * @param array<mixed> $activeTimerList
@@ -974,7 +975,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @throws TimerException
      */
     protected function prevActiveRecursiveOnlyActive(
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params,
         ListOfTimerService $timerList,
         array $activeTimerList,
@@ -991,9 +992,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
             if (!$flagInitial) {
                 return $this->expandRangeAtBeginning($result, $activeTimerList, $timerList);
             }
-            /** @var DateTime $newStart */
+            /** @var \DateTime $newStart */
             $newStart = clone $result->getBeginning();
-            $newStart->sub(new DateInterval('PT1S'));
+            $newStart->sub(new \DateInterval('PT1S'));
             return $this->prevActiveRecursive(
                 $newStart,
                 $params,
@@ -1187,13 +1188,13 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      *
      * @param array<mixed> $activeTimerList
      * @param ListOfTimerService $timerList
-     * @param DateTime $refDateNotInActive
+     * @param \DateTime $refDateNotInActive
      * @return TimerStartStopRange
      */
     protected function detectNearestRange(
         array $activeTimerList,
         ListOfTimerService $timerList,
-        DateTime $refDateNotInActive
+        \DateTime $refDateNotInActive
     ) {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -1237,13 +1238,13 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      *
      * @param array<mixed> $activeTimerList
      * @param ListOfTimerService $timerList
-     * @param DateTime $refDateNotInActive
+     * @param \DateTime $refDateNotInActive
      * @return TimerStartStopRange
      */
     protected function detectPrevioustRange(
         array $activeTimerList,
         ListOfTimerService $timerList,
-        DateTime $refDateNotInActive
+        \DateTime $refDateNotInActive
     ) {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -1288,14 +1289,16 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      *
      * tested 20220925
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
-        $loopRecursiveLimiter = (
-        (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
+        // Cast like nextActive() does: the YAML/flexform value arrives as a string
+        // but prevActiveRecursive() declares int $recursiveLimiter (strict types).
+        $loopRecursiveLimiter = (int)(
+            (array_key_exists(self::ARG_YAML_RECURSIVE_LOOP_LIMIT, $params)) ?
             $params[self::ARG_YAML_RECURSIVE_LOOP_LIMIT] :
             self::MAX_TIME_LIMIT_MERGE_COUNT
         );
@@ -1314,7 +1317,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     /**
      * find the next range of a active timegap depending on the defined list
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @param int $recursiveLimiter
      * @param bool $flagInitial
@@ -1322,7 +1325,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @throws TimerException
      */
     protected function prevActiveRecursive(
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = [],
         int $recursiveLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT,
         bool $flagInitial = true
@@ -1366,12 +1369,12 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
 
     /**
      * @param array<mixed> $activeTimerList
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @return TimerStartStopRange
      */
     protected function getActiveRangeWithLowestBeginRefDate(
         array $activeTimerList,
-        DateTime $dateLikeEventZone
+        \DateTime $dateLikeEventZone
     ): TimerStartStopRange {
         $loopLimiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
 
@@ -1445,7 +1448,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     /**
      * @param array<mixed> $activeTimerList
      * @param array<mixed> $forbiddenTimerList
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param int $recursionCount
      * @return TimerStartStopRange
      * @throws TimerException
@@ -1453,7 +1456,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     protected function getActivePartialRangeWithLowestBeginRefDate(
         array $activeTimerList,
         array $forbiddenTimerList,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         ListOfTimerService $timerList,
         $recursionCount = self::MAX_TIME_LIMIT_MERGE_COUNT
     ): TimerStartStopRange {
@@ -1512,7 +1515,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         return $result;
     }
 
-
     /**
      * @param YamlFileLoader $yamlFileLoader
      * @param array<mixed> $params
@@ -1522,10 +1524,9 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      */
     protected function readRangeListFromFileOrUrl(
         YamlFileLoader $yamlFileLoader,
-        array  $params,
+        array $params,
         string $key
-    ): array
-    {
+    ): array {
         //        $yamlFileLoader = GeneralUtility::makeInstance(YamlFileLoader::class);
 
         if (empty($params[$key])) {
@@ -1625,18 +1626,17 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     }
 
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -1650,11 +1650,11 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();
@@ -1671,14 +1671,14 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
 
     /**
      * @param array<mixed> $activeTimerList
-     * @param DateTime $refDateForRange
+     * @param \DateTime $refDateForRange
      * @param ListOfTimerService $timerList
      * @return array<mixed>
      * @throws TimerException
      */
     protected function isRefdateInActiveRange(
         array $activeTimerList,
-        DateTime $refDateForRange,
+        \DateTime $refDateForRange,
         ListOfTimerService $timerList
     ): array {
         $flagIsInActive = false;
@@ -1717,7 +1717,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     }
 
     /**
-     * @param DateTime $startTestDate
+     * @param \DateTime $startTestDate
      * @param array<mixed> $activeTimerList
      * @param array<mixed> $forbiddenTimerList
      * @param int $recursionCount
@@ -1725,7 +1725,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @throws TimerException
      */
     protected function reduceActiveRangeByNearestForbiddenRange(
-        DateTime $startTestDate,
+        \DateTime $startTestDate,
         array $activeTimerList,
         array $forbiddenTimerList,
         ListOfTimerService $timerList,
@@ -1734,7 +1734,7 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $limiter = self::MAX_TIME_LIMIT_MERGE_COUNT;
         while ($limiter > 0) {
             $refDate = clone $startTestDate;
-            $refDate->add(new DateInterval('PT1S'));
+            $refDate->add(new \DateInterval('PT1S'));
             $result = $this->getActiveRangeWithLowestBeginRefDate(
                 $activeTimerList,
                 $refDate
@@ -1878,14 +1878,14 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
     /**
      * @param array<mixed> $listOfTimer
      * @param ListOfTimerService $timerList
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @return array<mixed>
      * @throws TimerException
      */
     protected function detectActiveRangeAndShowIncludeFlag(
         array $listOfTimer,
         ListOfTimerService $timerList,
-        DateTime $dateLikeEventZone
+        \DateTime $dateLikeEventZone
     ): array {
         $flag = false;
         $currentRange = new TimerStartStopRange();
@@ -1935,7 +1935,6 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
      * @param array<mixed> $activeTimerList
      * @param ListOfTimerService $timerList
      * @param array<mixed> $forbiddenTimerList
-     * @return void
      * @throws TimerException
      */
     protected function exceptionIfBeginningGreaterEqualThanEnding(
@@ -1980,10 +1979,10 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
         $flagParamFailure = (!array_key_exists(self::YAML_LIST_ITEM_SELECTOR, $singleTimerParams)) ||
             (!array_key_exists(self::YAML_LIST_ITEM_PARAMS, $singleTimerParams)) ||
             (
-            !$timerList->validate(
-                $singleTimerParams[self::YAML_LIST_ITEM_SELECTOR],
-                $singleTimerParams[self::YAML_LIST_ITEM_PARAMS]
-            )
+                !$timerList->validate(
+                    $singleTimerParams[self::YAML_LIST_ITEM_SELECTOR],
+                    $singleTimerParams[self::YAML_LIST_ITEM_PARAMS]
+                )
             );
         return $flagParamFailure;
     }
@@ -2096,6 +2095,4 @@ class RangeListTimer implements TimerInterface, LoggerAwareInterface, ValidateYa
  *                 •   yes:
  *                     expand the forbidden range as long as overlapping is possible
  *                     retunr NextRange (ForbiddenEnd time+1s) [recursive]
- *
- *
  */

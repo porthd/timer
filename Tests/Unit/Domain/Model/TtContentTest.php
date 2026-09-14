@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
 
+use PHPUnit\Framework\Attributes\Test;
 use Porthd\Timer\Domain\Model\TtContent;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
@@ -31,22 +32,20 @@ class TtContentTest extends UnitTestCase
     /**
      * @var TtContent
      */
-    protected $subject = null;
+    protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->subject = new TtContent();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTxTimerTimerReturnsInitialValueForString()
     {
         self::assertSame(
@@ -55,17 +54,14 @@ class TtContentTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTxTimerTimerForStringSetsTxTimerTimer()
     {
         $this->subject->setTxTimerTimer('Conceived at T3CON10');
 
-        self::assertAttributeEquals(
+        self::assertSame(
             'Conceived at T3CON10',
-            'txTimerTimer',
-            $this->subject
+            $this->subject->getTxTimerTimer()
         );
     }
 }

@@ -29,7 +29,6 @@ interface ValidateYamlInterface
      *
      * @param array<mixed> $yamlConfig
      * @param string $infoAboutYamlFile
-     *
      */
     public function validateYamlOrException(array $yamlConfig, string $infoAboutYamlFile = ''): void;
 }

@@ -23,7 +23,6 @@ namespace Porthd\Timer\ViewHelpers;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Closure;
 use Porthd\Timer\Exception\TimerException;
 use Porthd\Timer\Utilities\TcaUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -48,22 +47,18 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class FlexViewHelper extends AbstractViewHelper
 {
-
     protected const ATTR_FLEXFORM_STRING = 'flexstring';
     protected const ATTR_RESULT_AS = 'as';
     protected const ATTR_FLATTEN_KEYS = 'flattenkeys';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
     //   the attributes `timer` and `general` are used as sheet-names in my customTimer-flexforms
     protected const DEFAULT_FLATTEN_KEYS = 'data,general,timer,sDEF,lDEF,vDEF';
 
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -107,7 +102,7 @@ class FlexViewHelper extends AbstractViewHelper
         }
 
         $stringFlatKeys = (
-        (!empty($this->arguments[self::ATTR_FLATTEN_KEYS])) ?
+            (!empty($this->arguments[self::ATTR_FLATTEN_KEYS])) ?
             $this->arguments[self::ATTR_FLATTEN_KEYS] :
                 self::DEFAULT_FLATTEN_KEYS
         );

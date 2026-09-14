@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Domain\Model;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Porthd\Timer\Domain\Model\Pages;
-use ReflectionException;
 
 /***************************************************************
  *
@@ -32,7 +32,7 @@ class PagesTest extends TestCase
     /**
      * @var Pages
      */
-    protected $subject = null;
+    protected $subject;
 
     protected function setUp(): void
     {
@@ -40,20 +40,16 @@ class PagesTest extends TestCase
         $this->subject = new Pages();
     }
 
-
     /**
      * the ultimate green test
-     * @test
      */
+    #[Test]
     public function checkIfIAmGreen()
     {
-        $this->assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
+        self::assertEquals((true), (true), 'I should an evergreen, but I am incomplete! :-)');
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getTxTimerTimerReturnsInitialValueForString()
     {
         self::assertSame(
@@ -63,9 +59,9 @@ class PagesTest extends TestCase
     }
 
     /**
-     * @test
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
+    #[Test]
     public function setTxTimerTimerForStringSetsTxTimerTimer()
     {
         $this->subject->setTxTimerTimer('Conceived at T3CON10');

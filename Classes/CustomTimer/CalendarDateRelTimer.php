@@ -23,13 +23,9 @@ namespace Porthd\Timer\CustomTimer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 use DateInterval;
 use DateTime;
-use DateTimeZone;
-use Exception;
 use Porthd\Timer\Constants\TimerConst;
-use Porthd\Timer\CustomTimer\GeneralTimerTrait;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
 use Porthd\Timer\Interfaces\TimerInterface;
 use Porthd\Timer\Utilities\GeneralTimerUtility;
@@ -199,7 +195,6 @@ class CalendarDateRelTimer implements TimerInterface
         return self::TIMER_FLEXFORM_ITEM;
     }
 
-
     /**
      * tested
      * tested
@@ -246,12 +241,12 @@ class CalendarDateRelTimer implements TimerInterface
         }
         $number = (int)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0); // what will happen with float
         $floatNumber = (float)($params[self::ARG_REQ_DURATION_MINUTES] ?: 0);
-        return (
+        return
             (($number - $floatNumber) == 0) &&
             ($number >= self::ARG_REQ_DURMIN_MIN) &&
             ($number !== self::ARG_REQ_DURMIN_FORBIDDEN) &&
             ($number <= self::ARG_REQ_DURMIN_MAX)
-        );
+        ;
     }
 
     /**
@@ -284,11 +279,11 @@ class CalendarDateRelTimer implements TimerInterface
     {
         $number = (int)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0; // what will happen with float
         $floatNumber = (float)$params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] ?: 0;
-        return (
+        return
             ($number - $floatNumber == 0) &&
             ($number >= self::ARG_REQ_REL_TO_MIN) &&
             ($number <= self::ARG_REQ_REL_TO_MAX)
-        );
+        ;
     }
 
     /**
@@ -304,11 +299,11 @@ class CalendarDateRelTimer implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return bool
      */
-    public function isAllowedInRange(DateTime $dateLikeEventZone, $params = []): bool
+    public function isAllowedInRange(\DateTime $dateLikeEventZone, $params = []): bool
     {
         // use of the trait-function
         return $this->generalIsAllowedInRange($dateLikeEventZone, $params);
@@ -319,11 +314,11 @@ class CalendarDateRelTimer implements TimerInterface
      *
      * check, if the timer ist for this time active
      *
-     * @param DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return bool
      */
-    public function isActive(DateTime $dateLikeEventZone, $params = []): bool
+    public function isActive(\DateTime $dateLikeEventZone, $params = []): bool
     {
         return true;
         //        if (!$this->isAllowedInRange($dateLikeEventZone, $params)) {
@@ -363,11 +358,11 @@ class CalendarDateRelTimer implements TimerInterface
     /**
      * tested:
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function getLastIsActiveRangeResult(DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
+    public function getLastIsActiveRangeResult(\DateTime $dateLikeEventZone, array $params = []): TimerStartStopRange
     {
         return $this->getLastIsActiveResult($dateLikeEventZone, $params);
     }
@@ -375,11 +370,11 @@ class CalendarDateRelTimer implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
+     * @param \DateTime $dateLikeEventZone lower or equal to the next starttime & convention: the datetime is normalized to the timezone by paramas
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function nextActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function nextActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -435,11 +430,11 @@ class CalendarDateRelTimer implements TimerInterface
     /**
      * tested
      *
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    public function prevActive(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    public function prevActive(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         /** @var TimerStartStopRange $result */
         $result = new TimerStartStopRange();
@@ -499,7 +494,7 @@ class CalendarDateRelTimer implements TimerInterface
     protected function detectCalendar($params = []): int
     {
         $calendar = (
-        (array_key_exists(self::ARG_CALENDAR_USE, $params)) ?
+            (array_key_exists(self::ARG_CALENDAR_USE, $params)) ?
             ($params[self::ARG_CALENDAR_USE]) :
             0
         );
@@ -525,13 +520,13 @@ class CalendarDateRelTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $testDateTime
+     * @param \DateTime $testDateTime
      * @param string $dateName
      * @param int $methodId
-     * @return DateTime
-     * @throws Exception
+     * @return \DateTime
+     * @throws \Exception
      */
-    protected function detectDefinedDayInYear(DateTime $testDateTime, string $dateName, int $methodId): DateTime
+    protected function detectDefinedDayInYear(\DateTime $testDateTime, string $dateName, int $methodId): \DateTime
     {
         $result = $this->getEasterDatetime(
             $testDateTime->getTimezone(),
@@ -540,42 +535,42 @@ class CalendarDateRelTimer implements TimerInterface
         );
         switch ($dateName) {
             case self::ARG_NAMED_DATE_GOOD_FRIDAY:
-                $result->sub(new DateInterval('P2D'));
+                $result->sub(new \DateInterval('P2D'));
                 break;
             case self::ARG_NAMED_DATE_EASTER:
                 //                $result = $easter;
                 break;
             case self::ARG_NAMED_DATE_ASCENSION_OF_CHRIST:
-                $result->add(new DateInterval('P39D'));
+                $result->add(new \DateInterval('P39D'));
                 break;
             case self::ARG_NAMED_DATE_PENTECOST:
-                $result->add(new DateInterval('P49D'));
+                $result->add(new \DateInterval('P49D'));
                 break;
             case self::ARG_NAMED_DATE_FIRST_ADVENT:
-                $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
+                $result = new \DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
                 $diff = (((int)$result->format('w') === 0) ? 7 : $result->format('w')) + 21;
-                $result->sub(new DateInterval('P' . $diff . 'D'));
+                $result->sub(new \DateInterval('P' . $diff . 'D'));
                 break;
             case self::ARG_NAMED_DATE_STUPID_DAY:
-                $result = new DateTime($testDateTime->format('Y') . '-04-16 00:00:00', $testDateTime->getTimezone());
+                $result = new \DateTime($testDateTime->format('Y') . '-04-16 00:00:00', $testDateTime->getTimezone());
                 break;
             case self::ARG_NAMED_DATE_TOWL_DAY:
-                $result = new DateTime($testDateTime->format('Y') . '-05-25 00:00:00', $testDateTime->getTimezone());
+                $result = new \DateTime($testDateTime->format('Y') . '-05-25 00:00:00', $testDateTime->getTimezone());
                 break;
             case self::ARG_NAMED_DATE_NEW_YEAR:
-                $result = new DateTime($testDateTime->format('Y') . '-01-01 00:00:00', $testDateTime->getTimezone());
+                $result = new \DateTime($testDateTime->format('Y') . '-01-01 00:00:00', $testDateTime->getTimezone());
                 break;
             case self::ARG_NAMED_DATE_SILVESTER:
-                $result = new DateTime($testDateTime->format('Y') . '-12-31 00:00:00', $testDateTime->getTimezone());
+                $result = new \DateTime($testDateTime->format('Y') . '-12-31 00:00:00', $testDateTime->getTimezone());
                 break;
             case self::ARG_NAMED_DATE_LABOURDAY:
-                $result = new DateTime($testDateTime->format('Y') . '-05-01 00:00:00', $testDateTime->getTimezone());
+                $result = new \DateTime($testDateTime->format('Y') . '-05-01 00:00:00', $testDateTime->getTimezone());
                 break;
             case self::ARG_NAMED_DATE_CHRISTMAS:
-                $result = new DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
+                $result = new \DateTime($testDateTime->format('Y') . '-12-25 00:00:00', $testDateTime->getTimezone());
                 break;
             case self::ARG_NAMED_DATE_ROSE_MONDAY:
-                $result->sub(new DateInterval('P48D'));
+                $result->sub(new \DateInterval('P48D'));
                 break;
             default:
                 //                $result = $easter;
@@ -584,41 +579,40 @@ class CalendarDateRelTimer implements TimerInterface
         return $result;
     }
 
-
     /**
-     * @param DateTimeZone $timezone
+     * @param \DateTimeZone $timezone
      * @param int|string $year
      * @param string|int $method
-     * @return DateTime
-     * @throws Exception
+     * @return \DateTime
+     * @throws \Exception
      */
-    protected function getEasterDatetime(DateTimeZone $timezone, $year, $method): DateTime
+    protected function getEasterDatetime(\DateTimeZone $timezone, $year, $method): \DateTime
     {
-        $base = new DateTime("$year-03-21 00:00:00", $timezone);
+        $base = new \DateTime("$year-03-21 00:00:00", $timezone);
         $days = easter_days($year, $method);
 
-        return $base->add(new DateInterval('P' . $days . 'D'));
+        return $base->add(new \DateInterval('P' . $days . 'D'));
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return array<mixed>
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function calcDefinedRangesByStartDateTime(DateTime $dateLikeEventZone, array $params): array
+    protected function calcDefinedRangesByStartDateTime(\DateTime $dateLikeEventZone, array $params): array
     {
         $relToDateMin = (int)(
-        array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
+            array_key_exists(self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT, $params) ?
             $params[self::ARG_REL_MIN_TO_SELECTED_TIMER_EVENT] :
             0
         );
-        $relInterval = new DateInterval('PT' . abs($relToDateMin) . 'M');
+        $relInterval = new \DateInterval('PT' . abs($relToDateMin) . 'M');
         $durationMin = (int)$params[self::ARG_REQ_DURATION_MINUTES];
-        $durInterval = new DateInterval('PT' . abs($durationMin) . 'M');
+        $durInterval = new \DateInterval('PT' . abs($durationMin) . 'M');
         $methodId = $this->detectCalendar($params);
         $testDay = clone $dateLikeEventZone;
-        $yearInterval = new DateInterval(('P1Y'));
+        $yearInterval = new \DateInterval(('P1Y'));
         $testDay->sub($yearInterval);
         $testDay->sub($yearInterval);
         $ranges = [];
@@ -645,18 +639,17 @@ class CalendarDateRelTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateStart
-     * @param DateTime $dateStop
+     * @param \DateTime $dateStart
+     * @param \DateTime $dateStop
      * @param bool $flag
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
-     * @return void
      */
     protected function setIsActiveResult(
-        DateTime $dateStart,
-        DateTime $dateStop,
+        \DateTime $dateStart,
+        \DateTime $dateStop,
         bool $flag,
-        DateTime $dateLikeEventZone,
+        \DateTime $dateLikeEventZone,
         array $params = []
     ): void {
         if (empty($this->lastIsActiveResult)) {
@@ -670,11 +663,11 @@ class CalendarDateRelTimer implements TimerInterface
     }
 
     /**
-     * @param DateTime $dateLikeEventZone
+     * @param \DateTime $dateLikeEventZone
      * @param array<mixed> $params
      * @return TimerStartStopRange
      */
-    protected function getLastIsActiveResult(DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
+    protected function getLastIsActiveResult(\DateTime $dateLikeEventZone, $params = []): TimerStartStopRange
     {
         if (empty($this->lastIsActiveResult)) {
             $this->lastIsActiveResult = new TimerStartStopRange();

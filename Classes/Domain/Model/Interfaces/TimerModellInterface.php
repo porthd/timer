@@ -23,7 +23,6 @@ namespace Porthd\Timer\Domain\Model\Interfaces;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 /**
  * interface for general needed function in getter/setter models to tables, which should be used by the timer-extension
  * it may be helpful to extend i.e. the table for the news-extension
@@ -41,7 +40,6 @@ interface TimerModellInterface
      * Sets the txTimerSelector
      *
      * @param string $txTimerSelector
-     * @return void
      */
     public function setTxTimerSelector($txTimerSelector);
 
@@ -56,7 +54,6 @@ interface TimerModellInterface
      * Sets the txTimerTimer
      *
      * @param string $txTimerTimer
-     * @return void
      */
     public function setTxTimerTimer($txTimerTimer);
 }

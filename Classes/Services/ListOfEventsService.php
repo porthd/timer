@@ -23,10 +23,6 @@ namespace Porthd\Timer\Services;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DateInterval;
-use DateTime;
-use Exception;
-use Porthd\Timer\Services\ListOfTimerService;
 use Porthd\Ichschauweg\Utilities\FlexFormUtility;
 use Porthd\Timer\Constants\TimerConst;
 use Porthd\Timer\Domain\Model\Interfaces\TimerStartStopRange;
@@ -55,16 +51,15 @@ class ListOfEventsService
 
     /**
      * @param array<mixed> $eventsTimerList
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param LoopLimiter $loopLimiter
-     * @return DateTime
+     * @return \DateTime
      */
     public static function detectNextChangeListFromTimerList(
-        array       $eventsTimerList,
-        DateTime    $timerEventZone,
+        array $eventsTimerList,
+        \DateTime $timerEventZone,
         LoopLimiter $loopLimiter
-    ): DateTime
-    {
+    ): \DateTime {
         /** @var ListOfTimerService $timerResolver */
         $timerResolver = GeneralUtility::makeInstance(ListOfTimerService::class);
         if ($loopLimiter->isFlagReserve()) {
@@ -85,14 +80,14 @@ class ListOfEventsService
 
     /**
      * @param array<mixed> $eventsTimerList
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param LoopLimiter $loopLimiter
      * @return array<mixed>
      * @throws TimerException
      */
     public static function generateEventsListFromTimerList(
-        array    $eventsTimerList,
-        DateTime $timerEventZone,
+        array $eventsTimerList,
+        \DateTime $timerEventZone,
         LoopLimiter $loopLimiter
     ): array {
         /** @var ListOfTimerService $timerResolver */
@@ -114,14 +109,14 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @return array<mixed>
      */
     protected static function timerListBelowStartDate(
-        DateTime $timerEventZone,
-        array    $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
@@ -163,17 +158,16 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @return array<mixed>
      */
     protected static function timerListNextToBelowStartDate(
-        DateTime           $timerEventZone,
-        array              $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver
-    ): array
-    {
+    ): array {
         $listOfTimers = [];
         [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         foreach ($eventsTimerList as $key => $item) {
@@ -218,14 +212,14 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @return array<mixed>
      */
     protected static function timerListAboveStartDate(
-        DateTime $timerEventZone,
-        array    $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver
     ): array {
         $listOfTimers = [];
@@ -268,17 +262,16 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @return array<mixed>
      */
     protected static function timerListPrevToAboveStartDate(
-        DateTime           $timerEventZone,
-        array              $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver
-    ): array
-    {
+    ): array {
         $listOfTimers = [];
         [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         foreach ($eventsTimerList as $key => $item) {
@@ -323,15 +316,15 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
      * @return array<mixed>
      */
     protected static function listOfEventsBelowStartTime(
-        DateTime    $timerEventZone,
-        array       $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver,
         LoopLimiter $loopLimiter
     ): array {
@@ -340,7 +333,7 @@ class ListOfEventsService
             $eventsTimerList,
             $timerResolver
         );
-        $limitInfos = new stdClass();
+        $limitInfos = new \stdClass();
         self::reinitBelowLimitInfos($limitInfos, $timerEventZone);
         [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
 
@@ -441,19 +434,18 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param \Porthd\Timer\Services\ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
-     * @return DateTime
+     * @return \DateTime
      */
     protected static function nextStartTimeForListOfEventsBelowStartTime(
-        DateTime           $timerEventZone,
-        array              $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver,
-        LoopLimiter        $loopLimiter
-    ): DateTime
-    {
+        LoopLimiter $loopLimiter
+    ): \DateTime {
         $listOfTimers = self::timerListNextToBelowStartDate(
             $timerEventZone,
             $eventsTimerList,
@@ -481,19 +473,18 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param \Porthd\Timer\Services\ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
-     * @return DateTime
+     * @return \DateTime
      */
     protected static function nextStartTimeForListOfEventsAboveStartTime(
-        DateTime           $timerEventZone,
-        array              $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver,
-        LoopLimiter        $loopLimiter
-    ): DateTime
-    {
+        LoopLimiter $loopLimiter
+    ): \DateTime {
         $listOfTimers = self::timerListPrevToAboveStartDate(
             $timerEventZone,
             $eventsTimerList,
@@ -521,15 +512,15 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
+     * @param \DateTime $timerEventZone
      * @param array<mixed> $eventsTimerList
      * @param ListOfTimerService $timerResolver
      * @param LoopLimiter $loopLimiter
      * @return array<mixed>
      */
     protected static function listOfEventsAboveStartTime(
-        DateTime    $timerEventZone,
-        array       $eventsTimerList,
+        \DateTime $timerEventZone,
+        array $eventsTimerList,
         ListOfTimerService $timerResolver,
         LoopLimiter $loopLimiter
     ): array {
@@ -538,7 +529,7 @@ class ListOfEventsService
             $eventsTimerList,
             $timerResolver
         );
-        $limitInfos = new stdClass();
+        $limitInfos = new \stdClass();
         self::reinitAboveLimitInfos($limitInfos, $timerEventZone);
         [$getterSelectName, $getterFlexParameter] = self::generateGetterNamesForTimerFields();
         $listOfEvents = [];
@@ -641,11 +632,10 @@ class ListOfEventsService
      * @param ContentObjectRenderer $cObj
      * @param array<mixed> $arguments
      * @param LoopLimiter $loopLimiter
-     * @return void
      */
     public static function getDatetimeRestrictions(
         ContentObjectRenderer $cObj,
-        array       $arguments,
+        array $arguments,
         LoopLimiter $loopLimiter
     ) {
         $dateTimeFormat = $cObj->stdWrapValue(
@@ -662,15 +652,15 @@ class ListOfEventsService
      * @param ContentObjectRenderer $cObj
      * @param array<mixed> $arguments
      * @param LoopLimiter $loopLimiter
-     * @param DateTime $basicDateTime
+     * @param \DateTime $basicDateTime
      * @return LoopLimiter
      * @throws TimerException
      */
     public static function getListRestrictions(
         ContentObjectRenderer $cObj,
-        array       $arguments,
+        array $arguments,
         LoopLimiter $loopLimiter,
-        DateTime    $basicDateTime
+        \DateTime $basicDateTime
     ): LoopLimiter {
         /**
          * 1. detect the existence of the three variable
@@ -709,9 +699,9 @@ class ListOfEventsService
             self::DEFAULT_MAX_GAP
         );
         if ($loopLimiter->getFlagReserve()) {
-            $defaultLate->sub(new DateInterval($defaultMaxGapString));
+            $defaultLate->sub(new \DateInterval($defaultMaxGapString));
         } else {
-            $defaultLate->add(new DateInterval($defaultMaxGapString));
+            $defaultLate->add(new \DateInterval($defaultMaxGapString));
         }
 
         $maxLateString = $cObj->stdWrapValue(
@@ -719,7 +709,7 @@ class ListOfEventsService
             $arguments,
             $defaultLate->format($loopLimiter->getDatetimeFormat())
         );
-        $myDate = DateTime::createFromFormat(
+        $myDate = \DateTime::createFromFormat(
             $loopLimiter->getDatetimeFormat(),
             $maxLateString,
             $basicDateTime->getTimezone()
@@ -757,53 +747,53 @@ class ListOfEventsService
     }
 
     /**
-     * @param DateTime $timerEventZone
-     * @param stdClass $limitInfos
+     * @param \DateTime $timerEventZone
+     * @param \stdClass $limitInfos
      */
-    protected static function reinitAboveLimitInfos(stdClass $limitInfos, DateTime $timerEventZone): void
+    protected static function reinitAboveLimitInfos(\stdClass $limitInfos, \DateTime $timerEventZone): void
     {
         $limitInfos->index = -1;
         $limitInfos->base = clone $timerEventZone;
         $limitInfos->beginning = clone $timerEventZone;
-        $limitInfos->beginning->add(new DateInterval('P10001Y'));
+        $limitInfos->beginning->add(new \DateInterval('P10001Y'));
         $limitInfos->ending = clone $limitInfos->beginning;
-        $limitInfos->ending->add(new DateInterval('P10Y'));
+        $limitInfos->ending->add(new \DateInterval('P10Y'));
     }
 
     /**
-     * @param DateTime $timerEventZone
-     * @param stdClass $limitInfos
+     * @param \DateTime $timerEventZone
+     * @param \stdClass $limitInfos
      */
-    protected static function reinitBelowLimitInfos(stdClass $limitInfos, DateTime $timerEventZone): void
+    protected static function reinitBelowLimitInfos(\stdClass $limitInfos, \DateTime $timerEventZone): void
     {
         $limitInfos->index = -1;
         $limitInfos->base = clone $timerEventZone;
         $limitInfos->beginning = clone $timerEventZone;
-        $limitInfos->beginning->sub(new DateInterval('P10001Y'));
+        $limitInfos->beginning->sub(new \DateInterval('P10001Y'));
         $limitInfos->ending = clone $limitInfos->beginning;
-        $limitInfos->ending->sub(new DateInterval('P10Y'));
+        $limitInfos->ending->sub(new \DateInterval('P10Y'));
     }
 
     /**
      * @param LoopLimiter $loopLimiter
      * @param int $count
-     * @param DateTime $baseDate
+     * @param \DateTime $baseDate
      * @param bool $flagAbove
      * @return bool
      */
     protected static function limitsAllowOneMoreLoop(
         LoopLimiter $loopLimiter,
-        int      $count,
-        DateTime $baseDate,
-        bool     $flagAbove
+        int $count,
+        \DateTime $baseDate,
+        bool $flagAbove
     ): bool {
         if ($loopLimiter->isFlagMaxType()) {
-            return ($count < $loopLimiter->getMaxCount());
+            return $count < $loopLimiter->getMaxCount();
         }
         if ($flagAbove === true) {
-            return ($baseDate <= $loopLimiter->getMaxLate());
+            return $baseDate <= $loopLimiter->getMaxLate();
         }
-        return ($loopLimiter->getMaxLate() <= $baseDate);
+        return $loopLimiter->getMaxLate() <= $baseDate;
     }
 
     // Call by magic String
@@ -817,12 +807,12 @@ class ListOfEventsService
      */
     public static function compareForBelowList(TimerStartStopRange $range, $limitInfos)
     {
-        return (($range->getEnding() > $limitInfos->ending) ||
+        return ($range->getEnding() > $limitInfos->ending) ||
             (
                 ($range->getEnding() == $limitInfos->ending) &&
                 ($range->getBeginning() < $limitInfos->beginning)
             )
-        );
+        ;
     }
 
     // Call by magic String
@@ -836,12 +826,12 @@ class ListOfEventsService
      */
     public static function compareForAboveList(TimerStartStopRange $range, $limitInfos): bool
     {
-        return (($range->getBeginning() < $limitInfos->beginning) ||
+        return ($range->getBeginning() < $limitInfos->beginning) ||
             (
                 ($range->getBeginning() == $limitInfos->beginning) &&
                 ($range->getEnding() > $limitInfos->ending)
             )
-        );
+        ;
     }
 
     /**

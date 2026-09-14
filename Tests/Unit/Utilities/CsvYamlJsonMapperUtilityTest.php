@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Porthd\Timer\Tests\Unit\Utilities;
 
-use Porthd\Timer\Utilities\CsvYamlJsonMapperUtility;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Porthd\Timer\Utilities\CsvYamlJsonMapperUtility;
 
 class CsvYamlJsonMapperUtilityTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function mapCsvToRawArray()
     {
         $myTestString = <<<DOMTEST
@@ -75,11 +74,1257 @@ Gedenktag an die Opfer der Schoa (Jom Haschoa),LLL:EXT:timer/Resources/Private/L
 Unabhängigkeitstag (Jom Ha’azma’ut),LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.jomHaAzmaUt ,hebr-jomHaAzmaUt,fixed,8,5,hebrew,,,,politics,jewish,4,he_IL,,
 Jerusalemtag (Jom Jeruschalajim),LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.jomJeruschalajim ,hebr-jomJeruschalajim,fixed,8,28,hebrew,,,,historical,jewish,4,he_IL,,
 DOMTEST;
-        $testYaml = '';
+        $testYaml = <<<EXPECTYAML
+mapped: 
+    - 
+        title: 'Heiligabend'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmasEve'
+        identifier: 'greg-christmasEve'
+        type: 'fixed'
+        arg: 
+            month: '12'
+            day: '24'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '3'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Weihnachten'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmas'
+        identifier: 'greg-christmas'
+        type: 'fixed'
+        arg: 
+            month: '12'
+            day: '25'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '4'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Weihnachten (2. Tag)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.christmasSecondDay'
+        identifier: 'greg-christmasSecondDay'
+        type: 'fixed'
+        arg: 
+            month: '12'
+            day: '26'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Silvester'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.silvester'
+        identifier: 'greg-silvester'
+        type: 'fixed'
+        arg: 
+            month: '31'
+            day: '12'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+            rank: '4'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Neujahr'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.newyear'
+        identifier: 'greg-newYear'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '1'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Valentinstag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.eco.greg.valentinsday'
+        identifier: 'greg-valentinsDay '
+        type: 'fixed'
+        arg: 
+            month: '14'
+            day: '2'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'economic'
+        add: 
+            category: 
+            rank: '2'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Rosenmontag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.rosemonday'
+        identifier: 'greg-roseMonday'
+        type: 'easterly'
+        arg: 
+            month: ''
+            day: ''
+            calendar: 'gregorian'
+            status: 'easter'
+            statusCount: '-48'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '3'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Fasching'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.carnival'
+        identifier: 'greg-carnival'
+        type: 'easterly'
+        arg: 
+            month: ''
+            day: ''
+            calendar: 'gregorian'
+            status: 'easter'
+            statusCount: '-47'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '3'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Karfreitag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.goodfriday'
+        identifier: 'greg-goodFriday'
+        type: 'easterly'
+        arg: 
+            month: ''
+            day: ''
+            calendar: 'gregorian'
+            status: 'easter'
+            statusCount: '-3'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '4'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Ostern'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.easter'
+        identifier: 'greg-easter'
+        type: 'easterly'
+        arg: 
+            month: ''
+            day: ''
+            calendar: 'gregorian'
+            status: 'easter'
+            statusCount: '0'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Ostermontag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.eastermonday'
+        identifier: 'greg-easterMonday'
+        type: 'easterly'
+        arg: 
+            month: ''
+            day: ''
+            calendar: 'gregorian'
+            status: 'easter'
+            statusCount: '1'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Welttag der Dummheit'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.stupidity'
+        identifier: 'greg-stupidityDay'
+        type: 'fixed'
+        arg: 
+            month: '16'
+            day: '4'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+                - 'philosophy'
+            rank: '1'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Tag der Arbeit'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.labourday'
+        identifier: 'greg-labourDay'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '5'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'politics'
+        add: 
+            category: 
+                - 'communist'
+                - 'laborunion'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Muttertag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.mothersday'
+        identifier: 'greg-mothersDay'
+        type: 'weekdayinmonth'
+        arg: 
+            month: '5'
+            day: ''
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '2'
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+                - 'politics'
+                - 'gender'
+            rank: '2'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Welthandtuchtag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.towlday'
+        identifier: 'greg-towlDay'
+        type: 'fixed'
+        arg: 
+            month: '25'
+            day: '5'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+                - 'houmoristic'
+            rank: '1'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Pfingsten'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.pentecost'
+        identifier: 'greg-pentecost'
+        type: 'easterly'
+        arg: 
+            month: ''
+            day: ''
+            calendar: 'gregorian'
+            status: 'easter'
+            statusCount: '49'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Pfingstmontag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.pentecostmonday'
+        identifier: 'greg-pentecostMonday'
+        type: 'easterly'
+        arg: 
+            month: ''
+            day: ''
+            calendar: 'gregorian'
+            status: 'easter'
+            statusCount: '50'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: ''
+    - 
+        title: 'Tag der Deutschen Einheit'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.germanunity'
+        identifier: 'greg-germanUnity'
+        type: 'fixed'
+        arg: 
+            month: '3'
+            day: '10'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'historical'
+        add: 
+            category: 
+                - 'politics'
+                - 'government'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+            freelocale: 
+                - 'de_DE'
+            alias: ''
+    - 
+        title: 'Reformationstag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.reformationDay'
+        identifier: 'greg-reformationDay'
+        type: 'fixed'
+        arg: 
+            month: '31'
+            day: '10'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+                - 'lutherans'
+                - 'calvians'
+            rank: '3'
+            locale: 
+                - 'de_DE'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Allerheiligen'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.allSaintsDay'
+        identifier: 'greg-allSaintsDay'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '11'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+                - 'catholics'
+            rank: '3'
+            locale: 
+                - 'de_DE'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Mauerfall'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.hist.greg.fallOfTheWall'
+        identifier: 'greg-fallOfTheWall'
+        type: ''
+        arg: 
+            month: '9'
+            day: '11'
+            calendar: 'gregorian'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'politics'
+        add: 
+            category: 
+                - 'revolution'
+                - 'resistance'
+            rank: '4'
+            locale: 
+                - 'de_DE'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Buß und Betttag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.dayOfPrayerAndRepentance'
+        identifier: 'greg-prayerAndRepentance'
+        type: 'weekdayly'
+        arg: 
+            month: '12'
+            day: '25'
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '-5'
+            secDayCount: '-4'
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+                - 'lutherans'
+                - 'calvians'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: 'europe'
+    - 
+        title: 'Totensonntag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.deadSunday'
+        identifier: 'greg-deadSunday'
+        type: 'weekdayly'
+        arg: 
+            month: '12'
+            day: '25'
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '-5'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: 'europe'
+    - 
+        title: '1. Advent'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.firstAdvent'
+        identifier: 'greg-firstAdvent'
+        type: 'weekdayly'
+        arg: 
+            month: '12'
+            day: '25'
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '-4'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: 'europe'
+    - 
+        title: '2. Advent'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.secondAdvent'
+        identifier: 'greg-secondAdvent'
+        type: 'weekdayly'
+        arg: 
+            month: '12'
+            day: '25'
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '-3'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: 'europe'
+    - 
+        title: '3. Advent'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.thirdAdvent'
+        identifier: 'greg-thirdAdvent'
+        type: 'weekdayly'
+        arg: 
+            month: '12'
+            day: '25'
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '-2'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: 'europe'
+    - 
+        title: '4. Advent'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.christ.greg.forthAdvent'
+        identifier: 'greg-forthAdvent'
+        type: 'weekdayly'
+        arg: 
+            month: '12'
+            day: '25'
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '-1'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'christian'
+            rank: '5'
+            locale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            freelocale: 
+                - 'de_DE'
+                - 'de_AT'
+                - 'de_CH'
+            alias: 'europe'
+    - 
+        title: 'Chin. Neujahr'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.chin.newyear'
+        identifier: 'chin-newYear'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '1'
+            calendar: 'chinese'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+            rank: '5'
+            locale: 
+                - 'zh_CN'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Vesakh'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.buddh.indean.vesakh'
+        identifier: 'ind-vesakh'
+        type: 'moonly'
+        arg: 
+            month: '2'
+            day: ''
+            calendar: 'indian'
+            status: 'fullmoon'
+            statusCount: '1'
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'buddhist'
+            rank: '5'
+            locale: 
+                - '_all'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Laylat Al Baraat (Nacht der Vergebung)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.lailatAlBaraa'
+        identifier: 'isl-lailatAlBaraa'
+        type: 'fixed'
+        arg: 
+            month: '14'
+            day: '8'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+                - 'schiits'
+            rank: '5'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Ramadan (Beginn der Fastenzeit)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.ramadan'
+        identifier: 'isl-ramadan'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '9'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+                - 'schiits'
+            rank: '5'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Laylat al-Qadr (Nacht der Bestimmung)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.laylatulQadr'
+        identifier: 'isl-laylatAlQadr'
+        type: 'fixed'
+        arg: 
+            month: '27'
+            day: '9'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+                - 'schiits'
+            rank: '4'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Eid al-Fitr (Tag des Fastenbrechens)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidAlFitr'
+        identifier: 'isl-eidAlFitr'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '10'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+                - 'schiits'
+            rank: '4'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Eid ul-Adha (Opferfest)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.eidUlAdha'
+        identifier: 'isl-eidUlAdha'
+        type: 'fixed'
+        arg: 
+            month: '10'
+            day: '12'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+                - 'schiits'
+            rank: '4'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Aschura'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.aschura'
+        identifier: 'isl-aschura'
+        type: 'fixed'
+        arg: 
+            month: '10'
+            day: '1'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+                - 'schiits'
+            rank: '2'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Isl. Neujahr'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.newYear'
+        identifier: 'isl-newYear'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '1'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+                - 'schiits'
+            rank: '4'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Sunniten: Geburtstag des Propheten (Maulid an-Nabī) '
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.sunnit.MaulidAnNabi'
+        identifier: 'isl-sunnit-maulidAnNabi'
+        type: 'fixed'
+        arg: 
+            month: '17'
+            day: '3'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'sunnits'
+            rank: '3'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Schiiten: Geburtstag des Propheten (Maulid an-Nabī) '
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.isl.schiit.MaulidAnNabi'
+        identifier: 'isl-schiit-maulidAnNabi'
+        type: 'fixed'
+        arg: 
+            month: '12'
+            day: '3'
+            calendar: 'islamic'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'islamic'
+                - 'schiits'
+            rank: '3'
+            locale: 
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Eidgenössischer Dank-, Buss- und Bettag'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.cult.greg.ch.dayOfThanksPrayerAndRepentance'
+        identifier: 'greg-ch-thanksPrayerAndRepentance'
+        type: 'weekdayinmonth'
+        arg: 
+            month: '9'
+            day: ''
+            calendar: 'gregorian'
+            status: 'sunday'
+            statusCount: '3'
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+            rank: '4'
+            locale: 
+                - 'de_CH'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Jüd. Neujahrsfest (Rosch Haschana)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.roschHaschana'
+        identifier: 'hebr-roschHaschana'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '1'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '3'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Jüd. Neujahrsfest 2. Tag  (Rosch Haschana II)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.roschHaschanaIi'
+        identifier: 'hebr-roschHaschanaIi'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '2'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'culture'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '3'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Versöhnungstag (Jom Kippur)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.jomKippur'
+        identifier: 'hebr-jomKippur'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '10'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '3'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Laubhüttenfest (Sukkot)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.sukkot'
+        identifier: 'hebr-sukkot'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '15'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '3'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Schlussfest (Schemini Azeret)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.scheminiAzeret'
+        identifier: 'hebr-scheminiAzeret'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '23'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '3'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Torafreudenfest (Simchat Tora)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.simchatTora'
+        identifier: 'hebr-simchatTora'
+        type: 'fixed'
+        arg: 
+            month: '1'
+            day: '24'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Tempelweihfest (Chanukka)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.chanukka'
+        identifier: 'hebr-chanukka'
+        type: 'fixed'
+        arg: 
+            month: '3'
+            day: '25'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Neujahrsfest der Bäume (Tu Bischwat)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.tuBischwat'
+        identifier: 'hebr-tuBischwat'
+        type: 'fixed'
+        arg: 
+            month: '5'
+            day: '15'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Errettung der Juden in Persien (Purim)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.purim'
+        identifier: 'hebr-purim'
+        type: 'leapmonth'
+        arg: 
+            month: '6'
+            day: '14'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Beginn des 1. Wallfahrtfestes (Pessach / Überschreitung)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.pessach '
+        identifier: 'hebr-pessach'
+        type: 'fixed'
+        arg: 
+            month: '7'
+            day: '15'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: '1. Tag des Wochenfests (Schawuot)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.firstSchawuot '
+        identifier: 'hebr-firstSchawuot'
+        type: 'fixed'
+        arg: 
+            month: '9'
+            day: '6'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: '2. Tag des Wochenfests (Schawuot)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.secondSchawuot  '
+        identifier: 'hebr-secondSchawuot'
+        type: 'fixed'
+        arg: 
+            month: '9'
+            day: '7'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'religion'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Gedenktag an die Opfer der Schoa (Jom Haschoa)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.jomHaschoa '
+        identifier: 'hebr-jomHaschoa'
+        type: 'fixed'
+        arg: 
+            month: '7'
+            day: '27'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'historical'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Unabhängigkeitstag (Jom Ha’azma’ut)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.jomHaAzmaUt '
+        identifier: 'hebr-jomHaAzmaUt'
+        type: 'fixed'
+        arg: 
+            month: '8'
+            day: '5'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'politics'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+    - 
+        title: 'Jerusalemtag (Jom Jeruschalajim)'
+        eventtitle: 'LLL:EXT:timer/Resources/Private/Language/locallang_cal.xlf:calendarDate.rel.hebr.jomJeruschalajim '
+        identifier: 'hebr-jomJeruschalajim'
+        type: 'fixed'
+        arg: 
+            month: '8'
+            day: '28'
+            calendar: 'hebrew'
+            status: ''
+            statusCount: ''
+            secDayCount: ''
+        tag: 'historical'
+        add: 
+            category: 
+                - 'jewish'
+            rank: '4'
+            locale: 
+                - 'he_IL'
+            freelocale: 
+            alias: ''
+
+EXPECTYAML;
         $rawArray = CsvYamlJsonMapperUtility::mapCsvToRawArray($myTestString);
         $filteredArray = CsvYamlJsonMapperUtility::removeEmptyRowCsv($rawArray, 0);
         $checkedArray = CsvYamlJsonMapperUtility::reorganizeSimpleArrayByHeadline($filteredArray);
         $checkYaml = CsvYamlJsonMapperUtility::mapAssoativeArrayToYaml($checkedArray);
-        $this->assertEquals($testYaml, $checkYaml, 'use a simple csv-string to check various specific cases.');
+        self::assertEquals($testYaml, $checkYaml, 'use a simple csv-string to check various specific cases.');
     }
 }

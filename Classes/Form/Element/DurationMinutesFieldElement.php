@@ -41,12 +41,6 @@ use TYPO3\CMS\Core\Utility\StringUtility;
  *                             </rangeDays>
  *                         </parameters>
  *                     </config>
- *
- *
- *
- *
- *
- *
  */
 
 /**
@@ -63,66 +57,65 @@ class DurationMinutesFieldElement extends AbstractFormElement
         $row = $this->data['databaseRow'];
         $parameterArray = $this->data['parameterArray'];
         $flagWarningZero = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['warningZero'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['warningZero'])) ?
             $parameterArray['fieldConf']['config']['parameters']['warningZero'] :
             1
         );
         $defaultMinutes = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['default'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['default'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['default'] :
             0
         );
         $minMinutes = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['lower'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['lower'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['lower'] :
             -59
         );
         $maxMinutes = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['upper'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['upper'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeMinutes']['upper'] :
             +59
         );
         $flagHours = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['flagHours'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['flagHours'])) ?
             (!empty($parameterArray['fieldConf']['config']['parameters']['flagHours'])) :
             false
         );
         $flagDays = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['flagDays'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['flagDays'])) ?
             (!empty($parameterArray['fieldConf']['config']['parameters']['flagDays'])) :
             false
         );
         $minHours = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'] :
             -23
         );
         $maxHours = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'] :
             23
         );
         $defaultHours = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['default'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['default'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['default'] :
             0
         );
         $minDays = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['lower'] :
             -10
         );
         $maxDays = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeHours']['upper'] :
             10
         );
         $defaultDays = (
-        (isset($parameterArray['fieldConf']['config']['parameters']['rangeDays']['default'])) ?
+            (isset($parameterArray['fieldConf']['config']['parameters']['rangeDays']['default'])) ?
             $parameterArray['fieldConf']['config']['parameters']['rangeDays']['default'] :
             0
         );
-
 
         $fieldInformationResult = $this->renderFieldInformation();
         $fieldInformationHtml = $fieldInformationResult['html'];
@@ -140,13 +133,13 @@ class DurationMinutesFieldElement extends AbstractFormElement
         $languageService = GeneralUtility::makeInstance(LanguageServiceFactory::class)
             ->createFromUserPreferences($GLOBALS['BE_USER']);
         $labelMinutes = $languageService->sL(
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:module.backend.flexform.field.durationMinutes.minutes'
+            'timer.flex:module.backend.flexform.field.durationMinutes.minutes'
         );
         $labelHours = $languageService->sL(
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:module.backend.flexform.field.durationMinutes.hours'
+            'timer.flex:module.backend.flexform.field.durationMinutes.hours'
         );
         $labelDays = $languageService->sL(
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:module.backend.flexform.field.durationMinutes.days'
+            'timer.flex:module.backend.flexform.field.durationMinutes.days'
         );
         if (!empty($parameterArray['fieldConf']['label'])) {
             $labelMain = $languageService->sL(
@@ -154,7 +147,7 @@ class DurationMinutesFieldElement extends AbstractFormElement
             );
         } else {
             $labelMain = $languageService->sL(
-                'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:flexform.timer.general.field.durationMinutes'
+                'timer.flex:flexform.timer.general.field.durationMinutes'
             );
         }
         if ($GLOBALS['TYPO3_CONF_VARS']['BE']['debug']) {
@@ -162,7 +155,7 @@ class DurationMinutesFieldElement extends AbstractFormElement
             $labelMain = $labelMain . " <code>[$fieldName]</code>";
         }
         $labelField = $languageService->sL(
-            'LLL:EXT:timer/Resources/Private/Language/locallang_flex.xlf:module.backend.flexform.field.durationMinutes.main'
+            'timer.flex:module.backend.flexform.field.durationMinutes.main'
         );
 
         $attributes['placeholder'] =
@@ -176,7 +169,6 @@ class DurationMinutesFieldElement extends AbstractFormElement
             $curMinutes = $defaultMinutes;
             $curHours = $defaultHours;
             $curDays = $defaultDays;
-
 
         } else {
             $value = (int)$itemValue;
