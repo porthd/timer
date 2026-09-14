@@ -65,7 +65,7 @@ final class FlexFormParsingModifyEventListener
 
     /**
      * Normalize a FlexForm datetime `default` into the integer UTC timestamp that the
-     * TYPO3 v13 FormEngine expects.
+     * TYPO3 FormEngine expects (since v13).
      *
      * @param array<mixed> $item the parsed FlexForm `config` array of a single field
      * @return array<mixed>
@@ -73,7 +73,7 @@ final class FlexFormParsingModifyEventListener
     protected function normalizeTimestampDefault(array $item): array
     {
         // PURPOSE: Hand DatetimeElement a clean integer UTC timestamp as the FlexForm
-        //          datetime default, so TYPO3 v13 renders it as a valid ISO-8601 value.
+        //          datetime default, so the FormEngine renders it as a valid ISO-8601 value.
         //
         // PRECONDITIONS (data requirements):
         //   - $item[DefaultTimer::TIMER_NAME] is either a UNIX timestamp (e.g. "32535212340")

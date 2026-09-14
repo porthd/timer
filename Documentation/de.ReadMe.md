@@ -1,4 +1,4 @@
-# Extension Timer - Version 13.x
+# Extension Timer - Version 14.x
 
 <a name="Inhaltsverzeichnis"></a>
 
@@ -34,6 +34,8 @@ Für die Version 13 wurde die Dokumentation gestrafft und überarbeitet.
 
 ## Installation
 
+- Die Extension benötigt TYPO3 14.3 oder höher (nur TYPO3 14). Für TYPO3 13
+  verwenden Sie die Version 13.0.1.
 - Installieren sie auf einen der beiden klassischen Wege:
     - mit dem Extensionmanager bei den TYPO3 Admin-Tools
     - mit dem Composer ``composer require porthd/timer``

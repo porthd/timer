@@ -35,8 +35,8 @@ use TYPO3\CMS\Core\Configuration\Event\BeforeFlexFormDataStructureParsedEvent;
 // replacement are these two FlexFormTools events.
 //
 // ADVANTAGES:
-//   - Works identically on TYPO3 13 and 14 (events exist since v12), so the
-//     dual-core constraint of the extension stays intact.
+//   - Uses the documented core events (available since v12) instead of the
+//     removed TCA option, so no TCA hacks are needed on TYPO3 14.
 //   - Keeps the dynamic timer list (custom timers via extension settings)
 //     as single source for the ds mapping.
 //

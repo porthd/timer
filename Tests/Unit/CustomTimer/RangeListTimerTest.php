@@ -146,7 +146,7 @@ class RangeListTimerTest extends TestCase
         // resolve YamlFileLoader via GeneralUtility::makeInstance() an unbounded
         // number of times. A one-shot addInstance() cannot cover that, so register
         // a minimal PSR-11 container that always serves a NullLogger-backed
-        // YamlFileLoader (the TYPO3 13 constructor now requires a logger); any
+        // YamlFileLoader (its constructor requires a logger since TYPO3 13); any
         // other class falls through to the normal makeInstance reflection path.
         GeneralUtility::setContainer($this->buildYamlFileLoaderContainer());
         $this->initializeEnvoiroment();
